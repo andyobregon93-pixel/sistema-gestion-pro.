@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA GESTIÓN PRO</title>
+    <title>SISTEMA GESTIÓN PRO - ANDY</title>
     <style>
         :root { --primary: #2563eb; --bg: #0f172a; --card-bg: #1e293b; --text: #f8fafc; --danger: #ef4444; --success: #22c55e; }
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
@@ -19,16 +19,20 @@
         .msg-v { background: #334155; align-self: flex-start; }
         .msg-a { background: var(--primary); align-self: flex-end; }
         .msg b { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 4px; }
-        .chat-img { max-width: 100%; border-radius: 8px; margin-top: 5px; display: block; border: 1px solid #334155; }
 
+        /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); }
         
         input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
         button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 5px; }
         .btn-add { background: var(--primary); color: white; }
-        .btn-img { background: #4b5563; color: white; }
         .btn-cerrar { background: var(--danger); color: white; margin-top: 20px; }
+        
+        /* Lista de Perfiles */
+        .list-item { background: #334155; padding: 12px; margin: 5px 0; border-radius: 8px; cursor: pointer; text-align: left; border: 1px solid transparent; }
+        .list-item:hover { border-color: var(--primary); }
+        .lista-info { background: #0f172a; padding: 10px; margin-top: 5px; border-radius: 5px; font-size: 0.8rem; }
     </style>
 </head>
 <body>
@@ -37,7 +41,7 @@
     <div id="loginScreen">
         <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
             <div style="background:var(--card-bg); padding:30px; border-radius:15px; border:1px solid var(--primary); width:100%; max-width:350px; text-align:center;">
-                <h2>SISTEMA PRO</h2>
+                <h2>SISTEMA ANDY</h2>
                 <input type="email" id="logEmail" placeholder="Correo">
                 <input type="password" id="logPass" placeholder="Clave">
                 <button class="btn-add" onclick="validarAcceso()">ENTRAR</button>
@@ -46,9 +50,9 @@
         </div>
     </div>
 
-    <!-- PANEL -->
+    <!-- PANEL PRINCIPAL -->
     <div id="mainDashboard" class="hidden">
-        <header><h3 id="userTitle">PANEL DE CONTROL</h3></header>
+        <header><h3 id="userTitle">PANEL</h3></header>
         <div class="grid-menu">
             <div class="card" onclick="abrirModal('modalVentas')">📦 Entregar Cuenta</div>
             <div class="card" onclick="checkChatAccess()">💬 Chat del Grupo</div>
@@ -63,39 +67,47 @@
         <button onclick="location.reload()" style="background:var(--danger); margin: 20px auto; display:block; width:80%">CERRAR SESIÓN</button>
     </div>
 
-    <!-- REGISTRO CHAT -->
+    <!-- SELECCIÓN DE PERFIL CHAT -->
+    <div id="modalProfiles" class="modal">
+        <div class="modal-content">
+            <h3>¿Quién eres?</h3>
+            <div id="profilesList" style="max-height: 300px; overflow-y: auto; margin-bottom: 15px;"></div>
+            <button class="btn-add" style="background: var(--success);" onclick="abrirRegistroNuevo()">+ SOY NUEVO / REGISTRARME</button>
+            <button class="btn-cerrar" onclick="cerrarModal('modalProfiles')">VOLVER</button>
+        </div>
+    </div>
+
+    <!-- REGISTRO NUEVO CHAT -->
     <div id="chatRegister" class="modal">
         <div class="modal-content">
-            <h3>Identifícate para el Grupo</h3>
-            <input type="text" id="chatNick" placeholder="Tu Nombre / Nick">
+            <h3>Registro Nuevo</h3>
+            <input type="text" id="chatNick" placeholder="Tu Nombre">
             <input type="text" id="chatPhone" placeholder="Tu WhatsApp">
-            <button class="btn-add" onclick="finalizarRegistroChat()">ENTRAR AL CHAT</button>
-            <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">CANCELAR</button>
+            <button class="btn-add" onclick="finalizarRegistroChat()">REGISTRAR Y ENTRAR</button>
+            <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">VOLVER</button>
         </div>
     </div>
 
     <!-- MODAL CHAT -->
     <div id="modalChat" class="modal">
         <div class="modal-content">
-            <h3>Chat de Trabajo</h3>
+            <h3 id="chatHeaderTitle">Chat de Trabajo</h3>
             <div id="chatBox"></div>
-            <input type="text" id="msgInput" placeholder="Escribe aquí...">
             <div style="display: flex; gap: 5px;">
-                <button class="btn-add" id="btnSend" onclick="enviarMensaje()">ENVIAR</button>
-                <button class="btn-img" id="btnFoto" onclick="document.getElementById('fileInput').click()">📷 SUBIR FOTO</button>
+                <input type="text" id="msgInput" placeholder="Mensaje...">
+                <button class="btn-add" style="width: 80px;" onclick="enviarMensaje()">OK</button>
             </div>
-            <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="subirFoto(this)">
             <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR</button>
         </div>
     </div>
 
-    <!-- MODALES ADMIN (PRESERVADOS) -->
-    <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Roles</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><select id="uR"><option value="vendedor">Vendedor</option><option value="admin">Admin</option></select><button class="btn-add" onclick="guardarUsuario()">CREAR</button><div id="listaU"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button></div></div>
+    <!-- MODALES ADMINISTRATIVOS -->
+    <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Usuarios</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><select id="uR"><option value="vendedor">Vendedor</option><option value="admin">Admin</option></select><button class="btn-add" onclick="guardarUsuario()">CREAR</button><div id="listaU"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button></div></div>
     <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Plataformas</h3><input type="text" id="pN" placeholder="Nombre"><input type="number" id="pP" placeholder="Precio"><button class="btn-add" onclick="guardarPlataforma()">AÑADIR</button><div id="listaP"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button></div></div>
     <div id="modalClientes" class="modal"><div class="modal-content"><h3>Clientes</h3><input type="text" id="cN" placeholder="Nombre"><input type="text" id="cW" placeholder="WhatsApp"><button class="btn-add" onclick="guardarCliente()">GUARDAR</button><div id="listaC"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button></div></div>
     <div id="modalVentas" class="modal"><div class="modal-content"><h3>Entregar</h3><input type="text" id="vWS" placeholder="WhatsApp Cliente"><input type="text" id="vPlat" placeholder="Plataforma"><input type="text" id="vDatos" placeholder="Cuenta:Clave"><button class="btn-add" onclick="guardarEntrega()">NOTIFICAR</button><button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button></div></div>
 
-    <!-- CLIENTE -->
+    <!-- PORTAL CLIENTE -->
     <div id="clienteDashboard" class="hidden"><header><h3>RECLAMAR CUENTA</h3></header><div style="padding:20px"><input type="text" id="wsConsulta" placeholder="Tu WhatsApp"><button class="btn-add" onclick="consultarCuenta()">BUSCAR</button><div id="resConsulta"></div><button class="btn-cerrar" onclick="location.reload()">VOLVER</button></div></div>
 
     <script type="module">
@@ -113,8 +125,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let userLogueado = { nombre: "", rol: "", nick: "", tel: "" };
+        let userLogueado = { nombre: "", rol: "" };
+        let userChat = { nick: localStorage.getItem('chatNick') || "", tel: localStorage.getItem('chatTel') || "" };
 
+        // ACCESO PANEL
         window.validarAcceso = async () => {
             const e = document.getElementById('logEmail').value;
             const p = document.getElementById('logPass').value;
@@ -139,83 +153,69 @@
         window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
 
+        // LÓGICA DE MIEMBROS Y CHAT
         window.checkChatAccess = () => {
-            const sn = localStorage.getItem('chatNick');
-            const st = localStorage.getItem('chatTel');
-            if(sn) { userLogueado.nick = sn; userLogueado.tel = st; abrirModal('modalChat', cargarChat); }
-            else { abrirModal('chatRegister'); }
+            if(userChat.nick && userChat.tel) { abrirChat(); } 
+            else { cargarListaPerfiles(); }
         };
 
-        window.finalizarRegistroChat = () => {
+        async function cargarListaPerfiles() {
+            const listDiv = document.getElementById('profilesList');
+            listDiv.innerHTML = "Cargando miembros...";
+            abrirModal('modalProfiles');
+            const querySnapshot = await getDocs(collection(db, "miembros_chat"));
+            listDiv.innerHTML = "";
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const item = document.createElement('div');
+                item.className = 'list-item';
+                item.innerHTML = `<b>${data.nick}</b><br><small>${data.tel}</small>`;
+                item.onclick = () => seleccionarPerfil(data.nick, data.tel);
+                listDiv.appendChild(item);
+            });
+        }
+
+        window.seleccionarPerfil = (nick, tel) => {
+            userChat.nick = nick; userChat.tel = tel;
+            localStorage.setItem('chatNick', nick); localStorage.setItem('chatTel', tel);
+            cerrarModal('modalProfiles'); abrirChat();
+        };
+
+        window.abrirRegistroNuevo = () => { cerrarModal('modalProfiles'); abrirModal('chatRegister'); };
+
+        window.finalizarRegistroChat = async () => {
             const n = document.getElementById('chatNick').value;
             const t = document.getElementById('chatPhone').value;
-            if(!n || !t) return alert("Completa tus datos");
-            userLogueado.nick = n; userLogueado.tel = t;
-            localStorage.setItem('chatNick', n); localStorage.setItem('chatTel', t);
-            cerrarModal('chatRegister'); abrirModal('modalChat', cargarChat);
+            if(!n || !t) return alert("Completa los datos");
+            await addDoc(collection(db, "miembros_chat"), { nick: n, tel: t });
+            seleccionarPerfil(n, t);
+            cerrarModal('chatRegister');
         };
 
-        // CHAT CON CLOUDINARY
-        window.enviarMensaje = async (imgUrl = "") => {
-            const m = document.getElementById('msgInput').value;
-            if(!m && !imgUrl) return;
-            try {
-                await addDoc(collection(db, "chat"), { 
-                    emisor: userLogueado.nick || userLogueado.nombre, 
-                    telefono: userLogueado.tel || "Admin",
-                    msg: m, foto: imgUrl, fecha: serverTimestamp() 
-                });
-                document.getElementById('msgInput').value = "";
-            } catch(e) { console.error(e); }
-        };
-
-        window.subirFoto = async (input) => {
-            const file = input.files[0];
-            if(!file) return;
-            const btn = document.getElementById('btnFoto');
-            btn.innerText = "SUBIENDO...";
-            btn.disabled = true;
-
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("upload_preset", "ml_default"); // Preset genérico
-
-            try {
-                // Cambiado a Cloudinary para mayor estabilidad
-                const res = await fetch("https://api.cloudinary.com/v1_1/demo/image/upload", {
-                    method: "POST",
-                    body: formData
-                });
-                const data = await res.json();
-                if(data.secure_url) { await enviarMensaje(data.secure_url); } 
-                else { alert("Error al procesar la imagen"); }
-            } catch(e) { alert("Error de red al subir foto"); }
-            
-            btn.innerText = "📷 SUBIR FOTO";
-            btn.disabled = false;
-            input.value = "";
-        };
-
-        window.cargarChat = () => {
+        function abrirChat() {
+            document.getElementById('chatHeaderTitle').innerText = "Grupo: " + userChat.nick;
+            abrirModal('modalChat');
             const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(50));
             onSnapshot(q, (snapshot) => {
                 const box = document.getElementById('chatBox');
                 box.innerHTML = "";
                 snapshot.forEach(doc => {
                     const d = doc.data();
-                    const ident = userLogueado.nick || userLogueado.nombre;
-                    const estilo = (d.emisor === ident) ? 'msg-a' : 'msg-v';
-                    let h = `<div class="msg ${estilo}"><b>${d.emisor} (${d.telefono})</b>`;
-                    if(d.msg) h += `<div>${d.msg}</div>`;
-                    if(d.foto) h += `<img src="${d.foto}" class="chat-img" onclick="window.open('${d.foto}')">`;
-                    h += `</div>`;
-                    box.innerHTML += h;
+                    const estilo = (d.emisor === userChat.nick) ? 'msg-a' : 'msg-v';
+                    box.innerHTML += `<div class="msg ${estilo}"><b>${d.emisor}</b>${d.msg}</div>`;
                 });
                 box.scrollTop = box.scrollHeight;
             });
+        }
+
+        window.enviarMensaje = async () => {
+            const m = document.getElementById('msgInput').value;
+            if(!m) return;
+            await addDoc(collection(db, "chat"), { emisor: userChat.nick, msg: m, fecha: serverTimestamp() });
+            document.getElementById('msgInput').value = "";
         };
 
-        // ADMIN FUNCTIONS
+        // FUNCIONES ADMIN (CLIENTES, PLATAFORMAS, ETC)
         window.guardarUsuario = async () => { await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: document.getElementById('uR').value }); cargarVendedores(); };
         window.cargarVendedores = async () => { const s = await getDocs(collection(db, "usuarios")); const list = document.getElementById('listaU'); list.innerHTML = ""; s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} (${d.data().rol})</div>`; }); };
         window.guardarPlataforma = async () => { await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value }); cargarPlataformas(); };
