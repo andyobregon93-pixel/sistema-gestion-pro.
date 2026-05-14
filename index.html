@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Pro</title>
+    <!-- Estilos rápidos para que se vea profesional en móvil -->
+    <style>
+        :root {
+            --primary: #2563eb;
+            --bg: #0f172a;
+            --card-bg: #1e293b;
+            --text: #f8fafc;
+            --danger: #ef4444;
+        }
+        body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
+        .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .card { 
+            background: var(--card-bg); 
+            padding: 25px 10px; 
+            text-align: center; 
+            border-radius: 12px; 
+            font-weight: bold;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
+            border: 1px solid #334155;
+        }
+        .card:active { transform: scale(0.95); background: var(--primary); }
+        .deudores { border: 1px solid var(--danger); color: var(--danger); }
+        .admin-section { grid-column: span 2; margin-top: 10px; background: #334155; }
+        .status-bar { font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="status-bar">Panel de Control General</div>
+        <h2>SISTEMA GESTIÓN PRO</h2>
+        <small>Bienvenido: <b>Andy</b></small>
+    </header>
+
+    <div class="grid-menu">
+        <!-- Vendedores y Dueño pueden usar estos -->
+        <div class="card" onclick="alert('Módulo Ventas')">📦 Registrar Venta</div>
+        <div class="card" onclick="alert('Lista Clientes')">👥 Clientes</div>
+        
+        <!-- Especial para deudores -->
+        <div class="card deudores" onclick="alert('Lista Deudores')">⚠️ Deudores</div>
+        
+        <!-- Solo para el Dueño -->
+        <div class="card" onclick="alert('Ganancias')">💰 Mis Ganancias</div>
+
+        <!-- Panel de Administración -->
+        <div class="card admin-section" onclick="alert('Panel Admin')">
+            ⚙️ ADMINISTRAR TRABAJADORES Y ROLES
+        </div>
+    </div>
+
+    <!-- Firebase SDK (Para conectar la base de datos después) -->
+    <script type="module">
+        // Aquí pegaremos las credenciales de tu Firebase más adelante
+        console.log("Sistema listo para conectar a Firebase");
+    </script>
+</body>
+</html>
