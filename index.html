@@ -3,133 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA GESTIÓN PRO - ANDY</title>
+    <title>SISTEMA ANDY - FIX TOTAL</title>
     <style>
-        :root { 
-            --primary: #2563eb; --bg: #0b141a; --card-bg: #1e293b; 
-            --text: #f8fafc; --danger: #ef4444; --success: #22c55e; 
-            --wa-bg: #0b141a; --wa-msg-in: #202c33; --wa-msg-out: #005c4b; 
-        }
+        :root { --primary: #2563eb; --bg: #0b141a; --card-bg: #1e293b; --text: #f8fafc; --wa-msg-out: #005c4b; --wa-msg-in: #202c33; }
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
         .hidden { display: none !important; }
-        
-        header { text-align: center; padding: 15px; border-bottom: 1px solid #334155; }
-        .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
-        .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
-        
-        /* CHAT ESTILO WHATSAPP */
-        #chatBox { 
-            background: var(--wa-bg); height: 400px; overflow-y: auto; padding: 15px; 
-            border-radius: 8px; border: 1px solid #334155; margin-bottom: 5px; 
-            display: flex; flex-direction: column; 
-            background-image: radial-gradient(#ffffff10 1px, transparent 1px); background-size: 20px 20px; 
-        }
-        .msg-container { display: flex; align-items: flex-end; margin-bottom: 8px; gap: 8px; width: 100%; }
-        .msg-a-container { flex-direction: row-reverse; }
-        .pfp-mini { width: 35px; height: 35px; border-radius: 50%; object-fit: cover; background: #334155; border: 1px solid var(--primary); }
-        
-        .msg { padding: 8px 12px; border-radius: 10px; font-size: 0.9rem; max-width: 70%; position: relative; box-shadow: 0 1px 2px rgba(0,0,0,0.3); cursor: pointer; }
-        .msg-v { background: var(--wa-msg-in); border-bottom-left-radius: 2px; }
-        .msg-a { background: var(--wa-msg-out); border-bottom-right-radius: 2px; }
-        
-        .msg-info { display: flex; justify-content: flex-end; align-items: center; margin-top: 4px; }
-        .msg-time { font-size: 0.65rem; color: #94a3b8; }
-        .reply-box { background: rgba(0,0,0,0.2); border-left: 3px solid var(--success); padding: 5px; margin-bottom: 5px; font-size: 0.75rem; border-radius: 4px; color: #cbd5e1; }
-        
-        /* MODALES */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
-        .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); }
-        input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; }
-        .btn-add { background: var(--primary); color: white; }
-        .btn-cerrar { background: var(--danger); color: white; margin-top: 10px; }
-        
-        .btn-mic { background: #5f27cd; color: white; width: 50px; font-size: 1.2rem; }
-        .recording { background: var(--danger) !important; animation: blink 1s infinite; }
-        #recordTimer { color: var(--danger); font-weight: bold; font-size: 0.9rem; margin-right: 10px; }
-        @keyframes blink { 50% { opacity: 0.5; } }
+        #chatBox { background: #0b141a; height: 400px; overflow-y: auto; padding: 15px; border-radius: 8px; border: 1px solid #334155; display: flex; flex-direction: column; }
+        .msg { padding: 8px 12px; border-radius: 10px; font-size: 0.9rem; max-width: 80%; margin-bottom: 8px; position: relative; }
+        .msg-a { background: var(--wa-msg-out); align-self: flex-end; }
+        .msg-v { background: var(--wa-msg-in); align-self: flex-start; }
+        .reply-box { background: rgba(0,0,0,0.3); padding: 5px; border-left: 3px solid #22c55e; margin-bottom: 5px; font-size: 0.7rem; }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; padding: 10px; box-sizing: border-box; }
+        .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 5px; }
+        .btn-ok { background: var(--primary); color: white; }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE LOGUEO -->
     <div id="loginScreen">
-        <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
-            <div style="background:var(--card-bg); padding:30px; border-radius:15px; border:1px solid var(--primary); width:100%; max-width:350px; text-align:center;">
+        <div style="height:90vh; display:flex; justify-content:center; align-items:center;">
+            <div class="modal-content" style="text-align:center; width:100%;">
                 <h2>SISTEMA ANDY</h2>
                 <input type="email" id="logEmail" placeholder="Correo">
-                <input type="password" id="logPass" placeholder="Contraseña">
-                <button class="btn-add" onclick="validarAcceso()">ENTRAR</button>
+                <input type="password" id="logPass" placeholder="Clave">
+                <button class="btn-ok" onclick="validarAcceso()">ENTRAR</button>
             </div>
         </div>
     </div>
 
-    <!-- PANEL PRINCIPAL -->
     <div id="mainDashboard" class="hidden">
-        <header><h3 id="welcomeUser">BIENVENIDO</h3></header>
-        <div class="grid-menu">
-            <div class="card" onclick="checkChatAccess()">💬 CHAT VIP</div>
-            <div id="adminTools" class="hidden" style="display: contents;">
-                <div class="card" onclick="abrirModal('modalAdminMiembros', cargarTodosLosMiembros)">👥 GESTIÓN MIEMBROS</div>
-                <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)">⚙️ USUARIOS</div>
-            </div>
-        </div>
-        <button onclick="location.reload()" style="background:var(--danger); width:80%; margin:20px auto; display:block;">CERRAR SESIÓN</button>
+        <h3 id="welcomeUser" style="text-align:center;">PANEL</h3>
+        <button class="btn-ok" onclick="checkChatAccess()" style="height:100px; font-size:1.5rem;">💬 ENTRAR AL CHAT VIP</button>
+        <button onclick="location.reload()" style="background:#ef4444; margin-top:20px;">SALIR</button>
     </div>
 
-    <!-- VENTANA DE CHAT -->
     <div id="modalChat" class="modal">
-        <div class="modal-content" style="max-width: 600px; height: 95vh; display: flex; flex-direction: column;">
-            <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
-                <div id="statusIndicator" style="font-size: 0.8rem;"></div>
-                <button style="width:auto; font-size:0.7rem; background:#4f46e5; padding:5px 10px;" onclick="abrirEdicionPerfil()">⚙️ MI FOTO</button>
-            </div>
-            
+        <div class="modal-content" style="height: 90vh; display: flex; flex-direction: column; padding: 10px;">
             <div id="chatBox"></div>
             
-            <!-- Vista previa de respuesta (solo aparece si etiquetas) -->
-            <div id="replyPreviewContainer" class="hidden" style="background:#1e293b; padding:10px; border-left:4px solid var(--success);">
-                <div id="replyText" style="font-size:0.8rem;"></div>
-                <button onclick="cancelarRespuesta()" style="background:var(--danger); height:20px; width:20px; padding:0; float:right;">X</button>
+            <div id="replyPreview" class="hidden" style="background:#1e293b; padding:8px; border-left:4px solid #22c55e;">
+                <small id="replyTxt"></small>
+                <button onclick="cancelarRespuesta()" style="width:20px; float:right; background:red; padding:0;">X</button>
             </div>
 
-            <div style="display: flex; gap: 5px; margin-top: 5px; align-items: center;">
-                <span id="recordTimer" class="hidden">0:00</span>
-                <input type="text" id="msgInput" placeholder="Escribe un mensaje...">
-                <button id="btnVoice" class="btn-mic" onclick="toggleAudio()">🎤</button>
-                <button class="btn-add" style="width: 60px;" onclick="enviarMensaje()">OK</button>
+            <div style="display: flex; gap: 5px; margin-top: 10px;">
+                <input type="text" id="msgInput" placeholder="Mensaje...">
+                <button class="btn-ok" style="width:70px;" onclick="enviarMensaje()">OK</button>
             </div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">VOLVER AL PANEL</button>
+            <button onclick="cerrarModal('modalChat')" style="background:#334155;">VOLVER</button>
         </div>
     </div>
 
-    <!-- MODALES DE GESTIÓN -->
-    <div id="modalProfiles" class="modal"><div class="modal-content"><h3>Elige tu Perfil</h3><div id="profilesList"></div><button class="btn-add" onclick="abrirRegistroNuevo()">+ REGISTRARSE</button></div></div>
-    
-    <div id="chatRegister" class="modal">
-        <div class="modal-content">
-            <h3>Registro</h3>
-            <input type="text" id="chatNick" placeholder="Nombre">
-            <input type="number" id="chatPhone" placeholder="Celular">
-            <input type="file" id="chatImg" accept="image/*">
-            <button class="btn-add" onclick="finalizarRegistroChat()">GUARDAR</button>
-        </div>
-    </div>
-
-    <div id="modalAdminMiembros" class="modal"><div class="modal-content"><h3>Miembros</h3><div id="fullMembersList"></div><button class="btn-cerrar" onclick="cerrarModal('modalAdminMiembros')">CERRAR</button></div></div>
-
-    <div id="modalPedido" class="modal">
-        <div class="modal-content">
-            <h3 id="pedidoTitle">Anotar Pedido</h3>
-            <textarea id="pedidoTexto"></textarea>
-            <button class="btn-add" id="btnGuardarPedido">GUARDAR</button>
-            <button class="btn-cerrar" onclick="cerrarModal('modalPedido')">X</button>
-        </div>
-    </div>
+    <div id="modalProfiles" class="modal"><div class="modal-content"><h3>¿Quién eres?</h3><div id="profilesList"></div></div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, onSnapshot, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -141,145 +72,107 @@
         };
         const db = getFirestore(initializeApp(firebaseConfig));
 
-        let userChat = { id: localStorage.getItem('chatUserId') || "", nick: localStorage.getItem('chatNick') || "", foto: localStorage.getItem('chatFoto') || "" };
+        let userChat = { id: localStorage.getItem('chatUserId') || "", nick: localStorage.getItem('chatNick') || "" };
         let respuestaActiva = null;
-        let mediaRecorder, chunks = [];
-
-        const getCol = (str) => ['#ff9f43', '#ee5253', '#10ac84', '#5f27cd', '#0abde3'][str.length % 5];
-        window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
-        window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
-        async function toBase64(file) { return new Promise((r) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = () => r(reader.result); }); }
 
         window.validarAcceso = async () => {
-            const c = document.getElementById('logEmail').value, p = document.getElementById('logPass').value;
-            if(c === "Andyobregon799@gmail.com" && p === "123456") { mostrarDashboard("ADMIN", true); return; }
-            const s = await getDocs(collection(db, "usuarios"));
-            s.forEach(d => { if(d.data().correo === c && d.data().clave === p) mostrarDashboard(d.data().nombre, d.data().rol === "admin"); });
+            const c = document.getElementById('logEmail').value;
+            const p = document.getElementById('logPass').value;
+            if(c === "Andyobregon799@gmail.com" && p === "123456") {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('mainDashboard').classList.remove('hidden');
+            } else { alert("Error"); }
         };
 
-        function mostrarDashboard(n, a) {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('mainDashboard').classList.remove('hidden');
-            document.getElementById('welcomeUser').innerText = "HOLA, " + n;
-            if(a) document.getElementById('adminTools').classList.remove('hidden');
-        }
+        window.checkChatAccess = () => { if(userChat.id) abrirChat(); else cargarPerfiles(); };
 
-        window.checkChatAccess = () => { if(userChat.id) abrirChat(); else cargarListaPerfiles(); };
-
-        async function cargarListaPerfiles() {
-            const list = document.getElementById('profilesList'); list.innerHTML = ""; abrirModal('modalProfiles');
+        async function cargarPerfiles() {
+            const list = document.getElementById('profilesList');
+            list.innerHTML = "Cargando...";
+            document.getElementById('modalProfiles').style.display = "block";
             const s = await getDocs(collection(db, "miembros_chat"));
+            list.innerHTML = "";
             s.forEach(d => {
-                const div = document.createElement('div'); div.className = "card"; div.style.marginBottom="5px";
-                div.innerHTML = `<b>${d.data().nick}</b>`;
-                div.onclick = () => { userChat = { id: d.id, nick: d.data().nick, foto: d.data().foto || "" }; localStorage.setItem('chatUserId', d.id); localStorage.setItem('chatNick', d.data().nick); localStorage.setItem('chatFoto', d.data().foto || ""); abrirChat(); cerrarModal('modalProfiles'); };
-                list.appendChild(div);
+                const b = document.createElement('button');
+                b.innerText = d.data().nick;
+                b.onclick = () => {
+                    userChat = { id: d.id, nick: d.data().nick };
+                    localStorage.setItem('chatUserId', d.id);
+                    localStorage.setItem('chatNick', d.data().nick);
+                    abrirChat();
+                    document.getElementById('modalProfiles').style.display = "none";
+                };
+                list.appendChild(b);
             });
         }
 
-        window.finalizarRegistroChat = async () => {
-            const nick = document.getElementById('chatNick').value;
-            const cel = document.getElementById('chatPhone').value;
-            const file = document.getElementById('chatImg').files[0];
-            let img = file ? await toBase64(file) : "";
-            const docRef = await addDoc(collection(db, "miembros_chat"), { nick, celular: cel, foto: img, pedido: "" });
-            userChat = { id: docRef.id, nick, foto: img };
-            localStorage.setItem('chatUserId', docRef.id);
-            localStorage.setItem('chatNick', nick);
-            localStorage.setItem('chatFoto', img);
-            cerrarModal('chatRegister'); abrirChat();
-        };
-
         function abrirChat() {
-            document.getElementById('statusIndicator').innerText = `● ${userChat.nick} (Online)`;
-            abrirModal('modalChat');
-            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(70));
+            document.getElementById('modalChat').style.display = "block";
+            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(50));
             onSnapshot(q, (sn) => {
-                const box = document.getElementById('chatBox'); box.innerHTML = "";
+                const box = document.getElementById('chatBox');
+                box.innerHTML = "";
                 sn.forEach(docS => {
                     const d = docS.data();
                     const esMio = d.emisorId === userChat.id;
-                    const h = d.fecha ? new Date(d.fecha.seconds * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '...';
-                    const container = document.createElement('div');
-                    container.className = `msg-container ${esMio ? 'msg-a-container' : ''}`;
-                    let content = `<div class="msg ${esMio ? 'msg-a' : 'msg-v'}" onclick="prepararRespuesta('${d.emisor}', '${d.msg || 'Audio'}')">`;
-                    content += `<b style="font-size:0.7rem; color:${getCol(d.emisor)}">${d.emisor}</b>`;
-                    if(d.respA) content += `<div class="reply-box">↩️ ${d.respA}: ${d.respM}</div>`;
-                    content += d.audio ? `<audio controls src="${d.audio}" style="width:180px; height:35px;"></audio>` : `<div>${d.msg}</div>`;
-                    content += `<div class="msg-info"><span class="msg-time">${h}</span></div></div>`;
-                    container.innerHTML = `<img src="${d.foto || 'https://cdn-icons-png.flaticon.com/512/149/149071.png'}" class="pfp-mini">${content}`;
-                    box.appendChild(container);
+                    const div = document.createElement('div');
+                    div.className = `msg ${esMio ? 'msg-a' : 'msg-v'}`;
+                    div.onclick = () => prepararRespuesta(d.emisor, d.msg);
+                    
+                    let html = `<b style="font-size:0.7rem; color:#ffa500;">${d.emisor}</b><br>`;
+                    if(d.respA) html += `<div class="reply-box">↩️ ${d.respA}: ${d.respM}</div>`;
+                    html += `<span>${d.msg}</span>`;
+                    
+                    div.innerHTML = html;
+                    box.appendChild(div);
                 });
                 box.scrollTop = box.scrollHeight;
             });
         }
 
-        // --- FUNCIÓN CORREGIDA PARA ENVIAR SIN ETIQUETAS ---
         window.enviarMensaje = async () => {
             const input = document.getElementById('msgInput');
             const texto = input.value.trim();
             if(!texto) return;
-            input.value = "";
 
-            // Creamos el mensaje básico que SIEMPRE se envía
-            const nuevoMensaje = {
-                emisor: userChat.nick,
-                emisorId: userChat.id,
-                foto: userChat.foto || "",
-                msg: texto,
+            // OBJETO ULTRA-SEGURO (Sin valores nulos)
+            const m = {
+                emisor: String(userChat.nick),
+                emisorId: String(userChat.id),
+                msg: String(texto),
                 fecha: serverTimestamp()
             };
 
-            // Solo agregamos la respuesta si el usuario activó una etiqueta
-            if(respuestaActiva) {
-                nuevoMensaje.respA = respuestaActiva.autor;
-                nuevoMensaje.respM = respuestaActiva.msg;
+            // Solo agrega estos campos si realmente hay una respuesta
+            if (respuestaActiva) {
+                m.respA = String(respuestaActiva.autor);
+                m.respM = String(respuestaActiva.msg);
             }
 
+            input.value = "";
+            cancelarRespuesta();
+
             try {
-                await addDoc(collection(db, "chat"), nuevoMensaje);
-                cancelarRespuesta();
-            } catch(e) { console.error(e); }
+                // Intento directo a la colección "chat"
+                await addDoc(collection(db, "chat"), m);
+            } catch(e) {
+                console.error("Error crítico:", e);
+                alert("Error de conexión con Firebase. Revisa tu internet.");
+            }
         };
 
-        window.toggleAudio = async () => {
-            const btn = document.getElementById('btnVoice');
-            if(!mediaRecorder || mediaRecorder.state === "inactive") {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                mediaRecorder = new MediaRecorder(stream); chunks = [];
-                mediaRecorder.ondataavailable = e => chunks.push(e.data);
-                mediaRecorder.onstop = async () => {
-                    const b64 = await toBase64(new Blob(chunks, { type: 'audio/mp3' }));
-                    await addDoc(collection(db, "chat"), { emisor: userChat.nick, emisorId: userChat.id, foto: userChat.foto || "", audio: b64, fecha: serverTimestamp() });
-                };
-                mediaRecorder.start(); btn.classList.add('recording');
-            } else { mediaRecorder.stop(); btn.classList.remove('recording'); }
+        window.prepararRespuesta = (a, m) => {
+            respuestaActiva = { autor: a, msg: m };
+            document.getElementById('replyTxt').innerText = "Respondiendo a: " + a;
+            document.getElementById('replyPreview').classList.remove('hidden');
         };
 
-        window.prepararRespuesta = (a, m) => { respuestaActiva = { autor: a, msg: m }; document.getElementById('replyText').innerText = `R: ${a}`; document.getElementById('replyPreviewContainer').classList.remove('hidden'); };
-        window.cancelarRespuesta = () => { respuestaActiva = null; document.getElementById('replyPreviewContainer').classList.add('hidden'); };
-
-        window.cargarTodosLosMiembros = async () => {
-            const cont = document.getElementById('fullMembersList'); cont.innerHTML = "";
-            const s = await getDocs(collection(db, "miembros_chat"));
-            s.forEach(m => {
-                const d = m.data();
-                cont.innerHTML += `<div style="border-bottom:1px solid #333; padding:10px;">
-                    <b>${d.nick}</b> - ${d.celular}<br><small>Pedido: ${d.pedido || 'N/A'}</small>
-                    <button style="width:auto; padding:5px; background:var(--primary); font-size:0.6rem;" onclick="abrirAnotarPedido('${m.id}', '${d.nick}', '${d.pedido || ''}')">NOTAR</button>
-                </div>`;
-            });
+        window.cancelarRespuesta = () => {
+            respuestaActiva = null;
+            document.getElementById('replyPreview').classList.add('hidden');
         };
 
-        window.abrirAnotarPedido = (id, nick, actual) => {
-            abrirModal('modalPedido');
-            document.getElementById('pedidoTitle').innerText = nick;
-            document.getElementById('pedidoTexto').value = actual;
-            document.getElementById('btnGuardarPedido').onclick = async () => {
-                await updateDoc(doc(db, "miembros_chat", id), { pedido: document.getElementById('pedidoTexto').value });
-                cerrarModal('modalPedido'); cargarTodosLosMiembros();
-            };
-        };
+        window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
     </script>
 </body>
 </html>
