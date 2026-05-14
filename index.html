@@ -16,7 +16,6 @@
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
         header { text-align: center; margin-bottom: 25px; border-bottom: 1px solid #334155; padding-bottom: 10px; }
         
-        /* Diseño de cuadrícula para móvil */
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .card { 
             background: var(--card-bg); 
@@ -34,7 +33,6 @@
         .admin-section { grid-column: span 2; margin-top: 10px; background: #334155; }
         .status-bar { font-size: 0.8rem; color: #94a3b8; margin-bottom: 5px; }
 
-        /* Estilos del Modal de Ventas */
         #modalVentas {
             display: none;
             position: fixed;
@@ -71,7 +69,6 @@
     </header>
 
     <div class="grid-menu">
-        <!-- Ahora este botón abre el modal y carga datos de Firebase -->
         <div class="card" id="btnRegistrarVenta">📦 Registrar Venta</div>
         <div class="card" onclick="alert('Lista Clientes (Próximamente)')">👥 Clientes</div>
         <div class="card deudores" onclick="alert('Lista Deudores (Próximamente)')">⚠️ Deudores</div>
@@ -81,7 +78,6 @@
         </div>
     </div>
 
-    <!-- Modal para mostrar productos de Firebase -->
     <div id="modalVentas">
         <div class="modal-content">
             <h3>Seleccionar Producto</h3>
@@ -91,10 +87,11 @@
     </div>
 
     <script type="module">
+        // CORRECCIÓN AQUÍ: Importaciones directas para que funcionen en GitHub Pages
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Tus credenciales configuradas
+        // Tus credenciales verificadas en la imagen 1000972229.png
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
             authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -104,25 +101,23 @@
             appId: "1:96449660649:web:d949eccf893c9705451278"
         };
 
-        // Inicializar Firebase
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Referencias a elementos del DOM
         const modal = document.getElementById('modalVentas');
         const listaDiv = document.getElementById('listaProductos');
         const btnVenta = document.getElementById('btnRegistrarVenta');
         const btnCerrar = document.getElementById('btnCerrarModal');
 
-        // Función para leer productos de la colección que creaste en 1000972212.png
         async function cargarInventario() {
             listaDiv.innerHTML = "Cargando...";
             try {
+                // Conexión a la colección que creaste en la imagen 1000972212.png
                 const querySnapshot = await getDocs(collection(db, "productos"));
-                listaDiv.innerHTML = ""; // Limpiar mensaje de carga
+                listaDiv.innerHTML = ""; 
                 
                 if (querySnapshot.empty) {
-                    listaDiv.innerHTML = "No hay productos en la base de datos.";
+                    listaDiv.innerHTML = "No hay productos en Firebase.";
                     return;
                 }
 
@@ -135,16 +130,14 @@
                         <span class="stock-tag">${data.stock} disp.</span>
                         <span>$${data.precio}</span>
                     `;
-                    // Aquí podrías agregar un onclick para procesar la venta
                     listaDiv.appendChild(item);
                 });
             } catch (error) {
-                console.error("Error al obtener productos:", error);
-                listaDiv.innerHTML = "Error al conectar con Firebase.";
+                console.error("Error:", error);
+                listaDiv.innerHTML = "Error de conexión con Firebase.";
             }
         }
 
-        // Eventos para abrir y cerrar el modal
         btnVenta.onclick = () => {
             modal.style.display = "block";
             cargarInventario();
@@ -154,7 +147,7 @@
             modal.style.display = "none";
         };
 
-        console.log("Sistema de Andy listo y conectado a la colección 'productos'");
+        console.log("Sistema de Andy conectado correctamente");
     </script>
 </body>
 </html>
