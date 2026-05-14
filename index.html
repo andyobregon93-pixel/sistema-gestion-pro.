@@ -23,7 +23,7 @@
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
         
-        /* CHAT WHATSAPP STYLE */
+        /* CHAT WHATSAPP */
         #chatBox { 
             background: var(--wa-bg); 
             height: 400px; 
@@ -50,7 +50,7 @@
         .msg-time { font-size: 0.65rem; color: #94a3b8; text-align: right; }
         .reply-box { background: rgba(0,0,0,0.2); border-left: 3px solid var(--success); padding: 5px; margin-bottom: 5px; font-size: 0.75rem; border-radius: 4px; color: #cbd5e1; }
         
-        /* BOTONES Y MODALES */
+        /* MODALES */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); }
         input, select, textarea { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
@@ -58,34 +58,31 @@
         .btn-add { background: var(--primary); color: white; }
         .btn-cerrar { background: var(--danger); color: white; margin-top: 15px; }
         
-        /* NOTAS DE VOZ */
+        /* NOTA DE VOZ Y TIMER */
         .btn-mic { background: #5f27cd; color: white; width: 50px; font-size: 1.2rem; }
         .recording { background: var(--danger) !important; animation: blink 1s infinite; }
+        #recordTimer { color: var(--danger); font-weight: bold; font-size: 0.9rem; margin-right: 10px; }
         @keyframes blink { 50% { opacity: 0.5; } }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE INICIO / LOGIN -->
     <div id="loginScreen">
         <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
             <div style="background:var(--card-bg); padding:30px; border-radius:15px; border:1px solid var(--primary); width:100%; max-width:350px; text-align:center;">
                 <h2>SISTEMA ANDY</h2>
-                <input type="email" id="logEmail" placeholder="Correo de Acceso">
-                <input type="password" id="logPass" placeholder="Clave de Acceso">
-                <button class="btn-add" onclick="validarAcceso()">INGRESAR AL PANEL</button>
-                <p style="font-size: 0.7rem; margin-top: 10px; opacity: 0.5;">Acceso para Admin y Vendedores</p>
+                <input type="email" id="logEmail" placeholder="Correo Electrónico">
+                <input type="password" id="logPass" placeholder="Contraseña">
+                <button class="btn-add" onclick="validarAcceso()">ENTRAR AL SISTEMA</button>
             </div>
         </div>
     </div>
 
-    <!-- DASHBOARD PRINCIPAL -->
     <div id="mainDashboard" class="hidden">
         <header><h3 id="welcomeUser">BIENVENIDO</h3></header>
         <div class="grid-menu">
             <div class="card" onclick="checkChatAccess()">💬 CHAT VIP</div>
             
-            <!-- Herramientas Administrativas (Solo visibles para Admin) -->
             <div id="adminTools" class="hidden" style="display: contents;">
                 <div class="card" onclick="abrirModal('modalAdminMiembros', cargarTodosLosMiembros)">👥 GESTIÓN MIEMBROS</div>
                 <div class="card" onclick="abrirModal('modalClientes', cargarClientes)">👥 MIS CLIENTES</div>
@@ -96,65 +93,59 @@
         <button onclick="location.reload()" style="background:var(--danger); width:80%; margin:20px auto; display:block;">CERRAR SESIÓN</button>
     </div>
 
-    <!-- SELECCIÓN DE PERFIL PARA CHAT -->
     <div id="modalProfiles" class="modal">
         <div class="modal-content">
-            <h3>Selecciona tu Perfil</h3>
+            <h3>Selecciona tu Perfil de Chat</h3>
             <div id="profilesList" style="max-height: 300px; overflow-y: auto;"></div>
-            <hr>
-            <button class="btn-add" onclick="abrirRegistroNuevo()">+ REGISTRARME NUEVO</button>
+            <button class="btn-add" onclick="abrirRegistroNuevo()">+ REGISTRAR MI PERFIL</button>
             <button class="btn-cerrar" onclick="cerrarModal('modalProfiles')">VOLVER</button>
         </div>
     </div>
 
-    <!-- REGISTRO DE DATOS (CHATS) -->
     <div id="chatRegister" class="modal">
         <div class="modal-content">
-            <h3 id="regTitle">Mis Datos de Chat</h3>
-            <input type="text" id="chatNick" placeholder="Nombre o Apodo">
-            <input type="text" id="chatPhone" placeholder="Número de WhatsApp">
-            <p style="font-size: 0.7rem;">Foto de Perfil (Opcional):</p>
+            <h3 id="regTitle">Configura tu Perfil</h3>
+            <input type="text" id="chatNick" placeholder="Tu Apodo">
+            <input type="text" id="chatPhone" placeholder="WhatsApp">
+            <p style="font-size: 0.7rem;">Foto de Perfil:</p>
             <input type="file" id="chatImg" accept="image/*">
-            <button class="btn-add" onclick="finalizarRegistroChat()">GUARDAR Y ENTRAR</button>
+            <button class="btn-add" onclick="finalizarRegistroChat()">GUARDAR CAMBIOS</button>
             <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">CANCELAR</button>
         </div>
     </div>
 
-    <!-- MODAL DEL CHAT (ESTILO WHATSAPP) -->
     <div id="modalChat" class="modal">
         <div class="modal-content" style="max-width: 600px; height: 90vh; display: flex; flex-direction: column;">
             <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
                 <div id="statusIndicator" style="font-size: 0.8rem; font-weight: bold;"></div>
-                <button style="width:auto; font-size:0.7rem; background:#4f46e5; padding:5px 10px;" onclick="abrirEdicionPerfil()">⚙️ EDITAR PERFIL</button>
+                <button style="width:auto; font-size:0.7rem; background:#4f46e5; padding:5px 10px;" onclick="abrirEdicionPerfil()">⚙️ MI FOTO</button>
             </div>
             
             <div id="chatBox"></div>
             
-            <!-- Vista previa de respuesta -->
             <div id="replyPreviewContainer" class="hidden" style="background:#1e293b; padding:10px; border-left:4px solid var(--success);">
                 <div id="replyText" style="font-size:0.8rem;"></div>
                 <button onclick="cancelarRespuesta()" style="background:var(--danger); height:20px; width:20px; padding:0; float:right;">X</button>
             </div>
 
-            <div style="display: flex; gap: 5px; margin-top: 5px;">
-                <input type="text" id="msgInput" placeholder="Escribe un mensaje...">
+            <div style="display: flex; gap: 5px; margin-top: 5px; align-items: center;">
+                <span id="recordTimer" class="hidden">0:00</span>
+                <input type="text" id="msgInput" placeholder="Escribe aquí...">
                 <button id="btnVoice" class="btn-mic" onclick="toggleAudio()">🎤</button>
                 <button class="btn-add" style="width: 60px;" onclick="enviarMensaje()">OK</button>
             </div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR DEL CHAT</button>
+            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR AL PANEL</button>
         </div>
     </div>
 
-    <!-- MODALES DE ADMINISTRACIÓN -->
-    <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Usuarios del Sistema</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><select id="uR"><option value="vendedor">Vendedor</option><option value="admin">Admin</option></select><button class="btn-add" onclick="guardarUsuario()">CREAR USUARIO</button><div id="listaU" style="margin-top:15px;"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button></div></div>
+    <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Vendedores / Usuarios</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><select id="uR"><option value="vendedor">Vendedor</option><option value="admin">Admin</option></select><button class="btn-add" onclick="guardarUsuario()">REGISTRAR USUARIO</button><div id="listaU" style="margin-top:10px;"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button></div></div>
     
-    <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Gestión de Plataformas</h3><input type="text" id="pN" placeholder="Nombre de Plataforma"><input type="number" id="pP" placeholder="Precio ($)"><button class="btn-add" onclick="guardarPlataforma()">AÑADIR</button><div id="listaP" style="margin-top:15px;"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button></div></div>
+    <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Plataformas Disponibles</h3><input type="text" id="pN" placeholder="Nombre"><input type="number" id="pP" placeholder="Precio"><button class="btn-add" onclick="guardarPlataforma()">AÑADIR</button><div id="listaP" style="margin-top:10px;"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button></div></div>
     
-    <div id="modalClientes" class="modal"><div class="modal-content"><h3>Mis Clientes</h3><input type="text" id="cN" placeholder="Nombre del Cliente"><input type="text" id="cW" placeholder="WhatsApp"><button class="btn-add" onclick="guardarCliente()">GUARDAR CLIENTE</button><div id="listaC" style="margin-top:15px;"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button></div></div>
+    <div id="modalClientes" class="modal"><div class="modal-content"><h3>Directorio de Clientes</h3><input type="text" id="cN" placeholder="Nombre del Cliente"><input type="text" id="cW" placeholder="WhatsApp"><button class="btn-add" onclick="guardarCliente()">REGISTRAR CLIENTE</button><div id="listaC" style="margin-top:10px;"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button></div></div>
     
-    <div id="modalAdminMiembros" class="modal"><div class="modal-content"><h3>Estado de Miembros</h3><div id="fullMembersList"></div><button class="btn-cerrar" onclick="cerrarModal('modalAdminMiembros')">CERRAR</button></div></div>
+    <div id="modalAdminMiembros" class="modal"><div class="modal-content"><h3>Estado de Miembros del Chat</h3><div id="fullMembersList"></div><button class="btn-cerrar" onclick="cerrarModal('modalAdminMiembros')">CERRAR LISTA</button></div></div>
 
-    <!-- LÓGICA DE FIREBASE Y FUNCIONES -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, onSnapshot, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -170,16 +161,13 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Variables de Usuario y Audio
         let userChat = { id: localStorage.getItem('chatUserId') || "", nick: localStorage.getItem('chatNick') || "", foto: localStorage.getItem('chatFoto') || "" };
         let respuestaActiva = null;
-        let esEdicion = false;
-        let mediaRecorder, audioChunks = [], isRecording = false;
+        let mediaRecorder, chunks = [], timerInterval, seconds = 0;
 
         const colores = ['#ff9f43', '#ee5253', '#10ac84', '#5f27cd', '#0abde3', '#f368e0'];
         const getCol = (str) => colores[str.length % colores.length];
 
-        // Auxiliares
         window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
         async function toBase64(file) { return new Promise((r, j) => { const reader = new FileReader(); reader.readAsDataURL(file); reader.onload = () => r(reader.result); reader.onerror = e => j(e); }); }
@@ -189,13 +177,11 @@
             const correo = document.getElementById('logEmail').value;
             const clave = document.getElementById('logPass').value;
             
-            // Acceso Maestro (Tú)
             if(correo === "Andyobregon799@gmail.com" && clave === "123456") {
                 mostrarDashboard("ADMIN", true);
                 return;
             }
 
-            // Acceso Vendedores
             const s = await getDocs(collection(db, "usuarios"));
             let enc = false;
             s.forEach(d => {
@@ -205,7 +191,7 @@
                     enc = true;
                 }
             });
-            if(!enc) alert("Credenciales incorrectas o usuario no existe.");
+            if(!enc) alert("Datos incorrectos");
         };
 
         function mostrarDashboard(nombre, esAdmin) {
@@ -215,86 +201,41 @@
             if(esAdmin) document.getElementById('adminTools').classList.remove('hidden');
         }
 
-        // --- ESTADO ONLINE ---
-        async function setOnline(status) {
-            if(userChat.id) { await updateDoc(doc(db, "miembros_chat", userChat.id), { online: status }); }
-        }
-
-        // --- ACCESO AL CHAT VIP ---
+        // --- CHAT LOGIC ---
         window.checkChatAccess = () => { if(userChat.id) { abrirChat(); setOnline(true); } else cargarListaPerfiles(); };
 
+        async function setOnline(s) { if(userChat.id) await updateDoc(doc(db, "miembros_chat", userChat.id), { online: s }); }
+
         async function cargarListaPerfiles() {
-            const list = document.getElementById('profilesList'); list.innerHTML = "Buscando perfiles..."; abrirModal('modalProfiles');
+            const list = document.getElementById('profilesList'); list.innerHTML = ""; abrirModal('modalProfiles');
             const s = await getDocs(collection(db, "miembros_chat"));
-            list.innerHTML = "";
             s.forEach(dSnap => {
                 const d = dSnap.data();
                 const div = document.createElement('div');
                 div.style = "background:#202c33; padding:10px; margin-bottom:8px; border-radius:10px; cursor:pointer; display:flex; align-items:center; gap:10px;";
-                div.innerHTML = `<img src="${d.foto || ''}" class="pfp-mini" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'"> <div><b>${d.nick}</b> <span style="color:${d.online?'#22c55e':'#ef4444'}">●</span></div>`;
-                div.onclick = () => { 
-                    userChat = { id: dSnap.id, nick: d.nick, foto: d.foto }; 
-                    localStorage.setItem('chatUserId', dSnap.id); 
-                    localStorage.setItem('chatNick', d.nick);
-                    localStorage.setItem('chatFoto', d.foto || "");
-                    abrirChat(); setOnline(true); cerrarModal('modalProfiles'); 
-                };
+                div.innerHTML = `<img src="${d.foto || ''}" class="pfp-mini" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'"> <b>${d.nick}</b> <span style="color:${d.online?'#22c55e':'#ef4444'}">●</span>`;
+                div.onclick = () => { userChat = { id: dSnap.id, nick: d.nick, foto: d.foto }; localStorage.setItem('chatUserId', dSnap.id); abrirChat(); setOnline(true); cerrarModal('modalProfiles'); };
                 list.appendChild(div);
             });
         }
 
-        window.abrirEdicionPerfil = () => { esEdicion = true; document.getElementById('chatNick').value = userChat.nick; abrirModal('chatRegister'); };
-        window.abrirRegistroNuevo = () => { esEdicion = false; document.getElementById('chatNick').value=""; cerrarModal('modalProfiles'); abrirModal('chatRegister'); };
-
-        window.finalizarRegistroChat = async () => {
-            const n = document.getElementById('chatNick').value;
-            const t = document.getElementById('chatPhone').value;
-            const f = document.getElementById('chatImg').files[0];
-            if(!n) return alert("El nombre es obligatorio");
-            
-            let imgB64 = userChat.foto;
-            if(f) imgB64 = await toBase64(f);
-
-            if(esEdicion) {
-                await updateDoc(doc(db, "miembros_chat", userChat.id), { nick: n, tel: t, foto: imgB64 });
-            } else {
-                const res = await addDoc(collection(db, "miembros_chat"), { nick: n, tel: t, foto: imgB64, online: true, fecha: serverTimestamp() });
-                userChat.id = res.id;
-            }
-            userChat.nick = n; userChat.foto = imgB64;
-            localStorage.setItem('chatUserId', userChat.id);
-            localStorage.setItem('chatNick', n);
-            localStorage.setItem('chatFoto', imgB64);
-            cerrarModal('chatRegister'); abrirChat(); setOnline(true);
-        };
-
-        // --- LÓGICA DEL CHAT ---
         function abrirChat() {
-            document.getElementById('statusIndicator').innerHTML = `<span class="status-dot" style="background:#22c55e"></span> ${userChat.nick} (En Línea)`;
+            document.getElementById('statusIndicator').innerHTML = `<span class="status-dot" style="background:#22c55e"></span> ${userChat.nick} (Online)`;
             abrirModal('modalChat');
-            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(50));
+            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(60));
             onSnapshot(q, (sn) => {
                 const box = document.getElementById('chatBox'); box.innerHTML = "";
                 sn.forEach(docS => {
                     const d = docS.data();
                     const esMio = d.emisorId === userChat.id;
-                    const t = d.fecha ? new Date(d.fecha.seconds * 1000).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) : '--:--';
-                    
                     const container = document.createElement('div');
                     container.className = `msg-container ${esMio ? 'msg-a-container' : ''}`;
-                    
                     let content = `<div class="msg ${esMio ? 'msg-a' : 'msg-v'}" onclick="prepararRespuesta('${d.emisor}', '${d.msg || 'Audio'}')">`;
                     content += `<b style="font-size:0.7rem; color:${getCol(d.emisor)}">${d.emisor}</b>`;
-                    
                     if(d.respA) content += `<div class="reply-box">↩️ ${d.respA}: ${d.respM}</div>`;
-                    
-                    if(d.audio) {
-                        content += `<audio controls src="${d.audio}" style="width:200px; height:35px; margin-top:5px;"></audio>`;
-                    } else {
-                        content += `<div>${d.msg}</div>`;
-                    }
-                    
-                    content += `<div class="msg-info"><span class="msg-time">${t}</span></div></div>`;
+                    if(d.audio) content += `<audio controls src="${d.audio}" style="width:200px; height:35px;"></audio>`;
+                    else content += `<div>${d.msg}</div>`;
+                    content += `</div>`;
                     container.innerHTML = `<img src="${d.foto || ''}" class="pfp-mini" onerror="this.src='https://cdn-icons-png.flaticon.com/512/149/149071.png'">${content}`;
                     box.appendChild(container);
                 });
@@ -302,91 +243,80 @@
             });
         }
 
-        // --- NOTAS DE VOZ ---
+        // --- NOTA DE VOZ CON CRONÓMETRO ---
         window.toggleAudio = async () => {
             const btn = document.getElementById('btnVoice');
-            if(!isRecording) {
+            const timerSpan = document.getElementById('recordTimer');
+            if(!mediaRecorder || mediaRecorder.state === "inactive") {
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 mediaRecorder = new MediaRecorder(stream);
-                audioChunks = [];
-                mediaRecorder.ondataavailable = e => audioChunks.push(e.data);
+                chunks = []; seconds = 0;
+                timerSpan.classList.remove('hidden');
+                timerInterval = setInterval(() => {
+                    seconds++;
+                    let m = Math.floor(seconds / 60);
+                    let s = seconds % 60;
+                    timerSpan.innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+                }, 1000);
+                mediaRecorder.ondataavailable = e => chunks.push(e.data);
                 mediaRecorder.onstop = async () => {
-                    const audioBlob = new Blob(audioChunks, { type: 'audio/mp3' });
-                    const b64 = await toBase64(audioBlob);
-                    await addDoc(collection(db, "chat"), { 
-                        emisor: userChat.nick, emisorId: userChat.id, foto: userChat.foto, audio: b64, fecha: serverTimestamp() 
-                    });
+                    clearInterval(timerInterval);
+                    timerSpan.classList.add('hidden');
+                    const blob = new Blob(chunks, { type: 'audio/mp3' });
+                    const b64 = await toBase64(blob);
+                    await addDoc(collection(db, "chat"), { emisor: userChat.nick, emisorId: userChat.id, foto: userChat.foto, audio: b64, fecha: serverTimestamp() });
                 };
-                mediaRecorder.start(); isRecording = true; btn.classList.add('recording'); btn.innerText = "🛑";
+                mediaRecorder.start();
+                btn.classList.add('recording'); btn.innerText = "🛑";
             } else {
-                mediaRecorder.stop(); isRecording = false; btn.classList.remove('recording'); btn.innerText = "🎤";
+                mediaRecorder.stop();
+                btn.classList.remove('recording'); btn.innerText = "🎤";
             }
         };
 
         window.enviarMensaje = async () => {
             const m = document.getElementById('msgInput').value; if(!m) return;
-            await addDoc(collection(db, "chat"), { 
-                emisor: userChat.nick, emisorId: userChat.id, foto: userChat.foto, msg: m, fecha: serverTimestamp(),
-                respA: respuestaActiva ? respuestaActiva.autor : null, respM: respuestaActiva ? respuestaActiva.msg : null
-            });
+            await addDoc(collection(db, "chat"), { emisor: userChat.nick, emisorId: userChat.id, foto: userChat.foto, msg: m, fecha: serverTimestamp(), respA: respuestaActiva?.autor, respM: respuestaActiva?.msg });
             document.getElementById('msgInput').value = ""; cancelarRespuesta();
         };
 
-        window.prepararRespuesta = (a, m) => { 
-            respuestaActiva = { autor: a, msg: m }; 
-            document.getElementById('replyText').innerText = `Respondiendo a ${a}...`; 
-            document.getElementById('replyPreviewContainer').classList.remove('hidden'); 
-        };
+        window.prepararRespuesta = (a, m) => { respuestaActiva = { autor: a, msg: m }; document.getElementById('replyText').innerText = `R: ${a}`; document.getElementById('replyPreviewContainer').classList.remove('hidden'); };
         window.cancelarRespuesta = () => { respuestaActiva = null; document.getElementById('replyPreviewContainer').classList.add('hidden'); };
 
-        // --- FUNCIONES ADMIN (CRUD) ---
+        // --- FUNCIONES ADMIN COMPLETAS ---
         window.guardarUsuario = async () => {
-            await addDoc(collection(db, "usuarios"), { 
-                nombre: document.getElementById('uN').value, 
-                correo: document.getElementById('uE').value, 
-                clave: document.getElementById('uP').value, 
-                rol: document.getElementById('uR').value 
-            });
-            alert("Usuario Guardado"); cargarVendedores();
+            await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: document.getElementById('uR').value });
+            alert("Usuario registrado"); cargarVendedores();
         };
-
         window.cargarVendedores = async () => {
             const l = document.getElementById('listaU'); l.innerHTML = "";
             const s = await getDocs(collection(db, "usuarios"));
             s.forEach(d => { l.innerHTML += `<div style="background:#0f172a; padding:8px; margin:5px 0;">👤 ${d.data().nombre} (${d.data().rol})</div>`; });
         };
-
         window.guardarPlataforma = async () => {
             await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value });
             cargarPlataformas();
         };
-
         window.cargarPlataformas = async () => {
             const l = document.getElementById('listaP'); l.innerHTML = "";
             const s = await getDocs(collection(db, "productos"));
             s.forEach(d => { l.innerHTML += `<div>📺 ${d.data().nombre} - $${d.data().precio}</div>`; });
         };
-
         window.guardarCliente = async () => {
             await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value });
             cargarClientes();
         };
-
         window.cargarClientes = async () => {
             const l = document.getElementById('listaC'); l.innerHTML = "";
             const s = await getDocs(collection(db, "clientes"));
             s.forEach(d => { l.innerHTML += `<div>👤 ${d.data().nombre}</div>`; });
         };
-
         window.cargarTodosLosMiembros = async () => {
-            const cont = document.getElementById('fullMembersList'); cont.innerHTML = "Cargando...";
+            const cont = document.getElementById('fullMembersList'); cont.innerHTML = "";
             const s = await getDocs(collection(db, "miembros_chat"));
-            cont.innerHTML = "";
             s.forEach(m => {
                 const d = m.data();
-                cont.innerHTML += `<div style="padding:10px; border-bottom:1px solid #334155;">
-                    <b>${d.nick}</b> <span style="color:${d.online?'#22c55e':'#ef4444'}">${d.online?'[Online]':'[Offline]'}</span>
-                </div>`;
+                cont.innerHTML += `<div style="padding:10px; border-bottom:1px solid #334155;"><b>${d.nick}</b> <span style="color:${d.online?'#22c55e':'#ef4444'}">${d.online?'[Online]':'[Offline]'}</span></div>`;
             });
         };
     </script>
