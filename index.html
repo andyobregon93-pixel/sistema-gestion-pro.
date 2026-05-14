@@ -5,107 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SISTEMA GESTIÓN PRO</title>
     <style>
-        :root { --primary: #2563eb; --bg: #0f172a; --card-bg: #1e293b; --text: #f8fafc; --danger: #ef4444; --success: #22c55e; --warning: #f59e0b; }
+        :root { --primary: #2563eb; --bg: #0f172a; --card-bg: #1e293b; --text: #f8fafc; --danger: #ef4444; --success: #22c55e; }
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
-        header { text-align: center; margin-bottom: 20px; padding: 10px; border-bottom: 1px solid #334155; }
+        .hidden { display: none !important; }
         
-        .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
-        .card { 
-            background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; font-size: 0.9rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3); border: 1px solid #334155; cursor: pointer; transition: 0.2s;
-        }
-        .card:active { transform: scale(0.95); background: var(--primary); }
-        .admin-section { grid-column: span 2; background: #334155; border: 1px solid var(--primary); margin-top: 10px; }
-
+        /* Login Design */
+        #loginScreen { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
+        .login-card { background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 100%; max-width: 350px; text-align: center; }
+        
+        /* Dashboard */
+        header { text-align: center; padding: 15px; border-bottom: 1px solid #334155; }
+        .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
+        .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; }
+        
         /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
-        .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); position: relative; }
+        .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); }
         
         input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.2s; }
-        .btn-add { background: var(--success); color: white; }
+        button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .btn-add { background: var(--primary); color: white; }
         .btn-cerrar { background: var(--danger); color: white; margin-top: 20px; }
-        
-        .tab-btn { background: #334155; color: white; width: auto; padding: 8px 15px; margin-right: 5px; font-size: 0.8rem; }
-        .tab-active { background: var(--primary); }
-        
-        .lista-item { background: #0f172a; padding: 12px; border-radius: 8px; margin-bottom: 8px; border-left: 4px solid var(--primary); display: flex; justify-content: space-between; align-items: center; }
-        .sub-text { font-size: 0.75rem; color: #94a3b8; display: block; }
-        .badge { background: var(--success); padding: 2px 6px; border-radius: 4px; font-size: 0.7rem; }
+        .entrega-box { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid var(--success); margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
 
-    <header>
-        <h2>SISTEMA GESTIÓN PRO</h2>
-        <small>Control Total: <b>Andy Obregón</b></small>
-    </header>
-
-    <div class="grid-menu">
-        <div class="card" onclick="abrirModal('modalVentas', cargarInventario)">📦 Registrar Venta</div>
-        <div class="card" onclick="abrirModal('modalClientes', cargarClientes)">👥 Ver Clientes</div>
-        <div class="card" onclick="abrirModal('modalAdmin')">⚙️ PANEL CONTROL</div>
+    <!-- PANTALLA DE LOGIN -->
+    <div id="loginScreen">
+        <div class="login-card">
+            <h2>BIENVENIDO</h2>
+            <p>Ingresa tus credenciales</p>
+            <input type="email" id="logEmail" placeholder="Correo electrónico">
+            <input type="password" id="logPass" placeholder="Contraseña">
+            <button class="btn-add" onclick="validarAcceso()">Entrar al Sistema</button>
+            <hr style="margin: 20px 0; opacity: 0.2;">
+            <button style="background:transparent; color:var(--primary)" onclick="abrirInterfazCliente()">Soy Cliente (Ver mi cuenta)</button>
+        </div>
     </div>
 
-    <!-- MODAL VENTAS -->
+    <!-- PANEL ADMIN (SOLO ANDY) -->
+    <div id="adminDashboard" class="hidden">
+        <header>
+            <h2>SISTEMA GESTIÓN PRO</h2>
+            <small>Admin: <b>Andy Obregón</b></small>
+            <button onclick="location.reload()" style="width:auto; padding:5px 10px; font-size:10px; background:var(--danger)">Salir</button>
+        </header>
+
+        <div class="grid-menu">
+            <div class="card" onclick="abrirModal('modalVentas', cargarDatosAdmin)">📦 Registrar Venta / Entrega</div>
+            <div class="card" onclick="abrirModal('modalAdmin')">⚙️ Panel Productos</div>
+        </div>
+    </div>
+
+    <!-- INTERFAZ CLIENTE -->
+    <div id="clienteDashboard" class="hidden">
+        <header>
+            <h2>RECLAMAR MI CUENTA</h2>
+            <p>Ingresa tu WhatsApp para ver tu pedido</p>
+        </header>
+        <div style="padding: 20px;">
+            <input type="text" id="wsCliente" placeholder="Ej: 0987654321">
+            <button class="btn-add" id="btnConsultarCuenta">Ver mis Datos</button>
+            <div id="resultadoEntrega"></div>
+            <button class="btn-cerrar" onclick="location.reload()">Volver</button>
+        </div>
+    </div>
+
+    <!-- MODAL VENTAS (ADMIN) -->
     <div id="modalVentas" class="modal">
         <div class="modal-content">
-            <h3>Nueva Venta</h3>
-            <select id="selectCliente"><option>Cargando clientes...</option></select>
-            <select id="selectProducto"><option>Cargando plataformas...</option></select>
-            <button class="btn-add" id="btnGuardarVenta">Confirmar Venta</button>
-            <div id="listaProductosVenta" style="margin-top:20px"></div>
+            <h3>Entregar Cuenta</h3>
+            <input type="text" id="wsRegistro" placeholder="WhatsApp del Cliente">
+            <input type="text" id="plataformaReg" placeholder="Nombre de Plataforma">
+            <input type="text" id="datosCuenta" placeholder="Correo:Clave de la cuenta">
+            <button class="btn-add" id="btnRegistrarVenta">Autorizar Entrega</button>
             <button class="btn-cerrar" onclick="cerrarModal('modalVentas')">Cerrar</button>
-        </div>
-    </div>
-
-    <!-- MODAL CLIENTES -->
-    <div id="modalClientes" class="modal">
-        <div class="modal-content">
-            <h3>Gestión de Clientes</h3>
-            <input type="text" id="cNombre" placeholder="Nombre del Cliente">
-            <input type="text" id="cWhatsApp" placeholder="WhatsApp">
-            <button class="btn-add" id="btnGuardarCliente">+ Agregar Cliente</button>
-            <div id="listaClientesContenedor" style="margin-top:20px"></div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalClientes')">Cerrar</button>
-        </div>
-    </div>
-
-    <!-- MODAL ADMIN (PLATAFORMAS Y USUARIOS) -->
-    <div id="modalAdmin" class="modal">
-        <div class="modal-content">
-            <div style="display:flex">
-                <button class="tab-btn tab-active" onclick="switchAdminTab('p')">Plataformas</button>
-                <button class="tab-btn" onclick="switchAdminTab('u')">Vendedores</button>
-            </div>
-            
-            <div id="tabPlataformas">
-                <h4>Agregar Plataforma</h4>
-                <input type="text" id="pNombre" placeholder="Nombre (ej: Netflix)">
-                <input type="number" id="pPrecio" placeholder="Precio ($)">
-                <input type="number" id="pStock" placeholder="Stock">
-                <button class="btn-add" id="btnGuardarP">Guardar Plataforma</button>
-                <div id="adminListaP" style="margin-top:15px"></div>
-            </div>
-
-            <div id="tabUsuarios" style="display:none">
-                <h4>Agregar Vendedor</h4>
-                <input type="text" id="uNombre" placeholder="Nombre del Vendedor">
-                <select id="uRol">
-                    <option value="vendedor">Vendedor</option>
-                    <option value="admin">Administrador</option>
-                </select>
-                <button class="btn-add" id="btnGuardarU">Registrar Vendedor</button>
-                <div id="adminListaU" style="margin-top:15px"></div>
-            </div>
-
-            <button class="btn-cerrar" onclick="cerrarModal('modalAdmin')">Cerrar</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -119,89 +100,70 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- UTILIDADES ---
-        window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
+        // --- LÓGICA DE ACCESO ---
+        window.validarAcceso = () => {
+            const email = document.getElementById('logEmail').value;
+            const pass = document.getElementById('logPass').value;
+
+            if(email === "Andyobregon799@gmail.com" && pass === "123456") {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+            } else {
+                alert("Acceso denegado. Solo Andy puede entrar aquí.");
+            }
+        };
+
+        window.abrirInterfazCliente = () => {
+            document.getElementById('loginScreen').classList.add('hidden');
+            document.getElementById('clienteDashboard').classList.remove('hidden');
+        };
+
+        // --- FUNCIONES ADMIN ---
+        window.abrirModal = (id) => document.getElementById(id).style.display = "block";
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
-        window.switchAdminTab = (tab) => {
-            document.getElementById('tabPlataformas').style.display = tab === 'p' ? 'block' : 'none';
-            document.getElementById('tabUsuarios').style.display = tab === 'u' ? 'block' : 'none';
-            if(tab === 'p') cargarInventario(); else cargarUsuarios();
-        };
 
-        // --- GESTIÓN DE CLIENTES ---
-        window.cargarClientes = async () => {
-            const snap = await getDocs(collection(db, "clientes"));
-            const cont = document.getElementById('listaClientesContenedor');
-            const select = document.getElementById('selectCliente');
-            cont.innerHTML = ""; select.innerHTML = "";
-            snap.forEach(doc => {
-                const d = doc.data();
-                cont.innerHTML += `<div class="lista-item"><div>${d.nombre}<span class="sub-text">${d.whatsapp}</span></div></div>`;
-                select.innerHTML += `<option value="${doc.id}">${d.nombre}</option>`;
+        document.getElementById('btnRegistrarVenta').onclick = async () => {
+            const ws = document.getElementById('wsRegistro').value;
+            const plat = document.getElementById('plataformaReg').value;
+            const info = document.getElementById('datosCuenta').value;
+
+            if(!ws || !info) return alert("Faltan datos");
+
+            await addDoc(collection(db, "entregas"), {
+                whatsapp: ws,
+                plataforma: plat,
+                datos: info,
+                fecha: new Date()
             });
-        };
-
-        document.getElementById('btnGuardarCliente').onclick = async () => {
-            const n = document.getElementById('cNombre').value;
-            const w = document.getElementById('cWhatsApp').value;
-            if(!n || !w) return alert("Completa datos");
-            await addDoc(collection(db, "clientes"), { nombre: n, whatsapp: w });
-            alert("Cliente Agregado"); cargarClientes();
-        };
-
-        // --- GESTIÓN DE PLATAFORMAS (PRODUCTOS) ---
-        window.cargarInventario = async () => {
-            const snap = await getDocs(collection(db, "productos"));
-            const adminLista = document.getElementById('adminListaP');
-            const selectP = document.getElementById('selectProducto');
-            adminLista.innerHTML = ""; selectP.innerHTML = "";
-            snap.forEach(doc => {
-                const d = doc.data();
-                adminLista.innerHTML += `<div class="lista-item"><div>${d.nombre} <span class="badge">$${d.precio}</span></div> <span>Stock: ${d.stock}</span></div>`;
-                selectP.innerHTML += `<option value="${doc.id}">${d.nombre} ($${d.precio})</option>`;
-            });
-        };
-
-        document.getElementById('btnGuardarP').onclick = async () => {
-            const n = document.getElementById('pNombre').value;
-            const p = document.getElementById('pPrecio').value;
-            const s = document.getElementById('pStock').value;
-            await addDoc(collection(db, "productos"), { nombre: n, precio: p, stock: s });
-            alert("Plataforma Creada"); cargarInventario();
-        };
-
-        // --- GESTIÓN DE VENDEDORES (USUARIOS) ---
-        window.cargarUsuarios = async () => {
-            const snap = await getDocs(collection(db, "vendedores"));
-            const cont = document.getElementById('adminListaU');
-            cont.innerHTML = "";
-            snap.forEach(doc => {
-                const d = doc.data();
-                cont.innerHTML += `<div class="lista-item"><div>${d.nombre}</div> <span class="badge">${d.rol}</span></div>`;
-            });
-        };
-
-        document.getElementById('btnGuardarU').onclick = async () => {
-            const n = document.getElementById('uNombre').value;
-            const r = document.getElementById('uRol').value;
-            await addDoc(collection(db, "vendedores"), { nombre: n, rol: r });
-            alert("Vendedor Registrado"); cargarUsuarios();
-        };
-
-        // --- REGISTRAR VENTA ---
-        document.getElementById('btnGuardarVenta').onclick = async () => {
-            const c = document.getElementById('selectCliente').value;
-            const p = document.getElementById('selectProducto').value;
-            await addDoc(collection(db, "ventas"), { 
-                clienteId: c, 
-                productoId: p, 
-                vendedor: "Andy Obregón", 
-                fecha: serverTimestamp() 
-            });
-            alert("¡Venta Registrada Exitosamente!");
+            alert("Cuenta autorizada para el cliente");
             cerrarModal('modalVentas');
         };
 
+        // --- FUNCIONES CLIENTE ---
+        document.getElementById('btnConsultarCuenta').onclick = async () => {
+            const ws = document.getElementById('wsCliente').value;
+            const res = document.getElementById('resultadoEntrega');
+            res.innerHTML = "Buscando...";
+
+            const q = query(collection(db, "entregas"), where("whatsapp", "==", ws));
+            const querySnapshot = await getDocs(q);
+
+            if (querySnapshot.empty) {
+                res.innerHTML = "<p style='color:red'>No hay cuentas autorizadas para este número.</p>";
+            } else {
+                res.innerHTML = "";
+                querySnapshot.forEach((doc) => {
+                    const d = doc.data();
+                    res.innerHTML += `
+                        <div class="entrega-box">
+                            <h4 style="color:var(--success)">¡Cuenta Lista!</h4>
+                            <p><b>Plataforma:</b> ${d.plataforma}</p>
+                            <p><b>Tus Datos:</b> <br><span style="background:#fff; color:#000; padding:2px 5px">${d.datos}</span></p>
+                        </div>
+                    `;
+                });
+            }
+        };
     </script>
 </body>
 </html>
