@@ -9,15 +9,17 @@
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
         .hidden { display: none !important; }
         
-        /* Login Design */
+        /* Login */
         #loginScreen { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
         .login-card { background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 100%; max-width: 350px; text-align: center; }
         
         /* Dashboard */
         header { text-align: center; padding: 15px; border-bottom: 1px solid #334155; }
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
-        .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; }
-        
+        .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.85rem; }
+        .card:active { background: var(--primary); }
+        .admin-btn { grid-column: span 2; background: #334155; border-color: var(--primary); }
+
         /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); }
@@ -26,61 +28,92 @@
         button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .btn-add { background: var(--primary); color: white; }
         .btn-cerrar { background: var(--danger); color: white; margin-top: 20px; }
-        .entrega-box { background: #0f172a; padding: 15px; border-radius: 8px; border: 1px solid var(--success); margin-top: 10px; text-align: center; }
+        .lista-info { background: #0f172a; padding: 10px; margin-top: 10px; border-radius: 8px; font-size: 0.9rem; border-left: 3px solid var(--primary); }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE LOGIN -->
+    <!-- PANTALLA DE ACCESO -->
     <div id="loginScreen">
         <div class="login-card">
-            <h2>BIENVENIDO</h2>
-            <p>Ingresa tus credenciales</p>
-            <input type="email" id="logEmail" placeholder="Correo electrónico">
-            <input type="password" id="logPass" placeholder="Contraseña">
-            <button class="btn-add" onclick="validarAcceso()">Entrar al Sistema</button>
-            <hr style="margin: 20px 0; opacity: 0.2;">
-            <button style="background:transparent; color:var(--primary)" onclick="abrirInterfazCliente()">Soy Cliente (Ver mi cuenta)</button>
+            <h2>SISTEMA PRO</h2>
+            <input type="email" id="logEmail" placeholder="Tu Correo">
+            <input type="password" id="logPass" placeholder="Tu Clave">
+            <button class="btn-add" onclick="validarAcceso()">ENTRAR COMO ADMIN</button>
+            <button style="background:var(--success); color:white; margin-top:15px" onclick="mostrarSeccion('clienteDashboard')">RECLAMAR MI CUENTA</button>
         </div>
     </div>
 
-    <!-- PANEL ADMIN (SOLO ANDY) -->
+    <!-- DASHBOARD ADMIN -->
     <div id="adminDashboard" class="hidden">
         <header>
-            <h2>SISTEMA GESTIÓN PRO</h2>
-            <small>Admin: <b>Andy Obregón</b></small>
-            <button onclick="location.reload()" style="width:auto; padding:5px 10px; font-size:10px; background:var(--danger)">Salir</button>
+            <h3>PANEL DE ANDY</h3>
+            <button onclick="location.reload()" style="width:auto; padding:5px; background:var(--danger); font-size:10px">CERRAR SESIÓN</button>
         </header>
-
         <div class="grid-menu">
-            <div class="card" onclick="abrirModal('modalVentas', cargarDatosAdmin)">📦 Registrar Venta / Entrega</div>
-            <div class="card" onclick="abrirModal('modalAdmin')">⚙️ Panel Productos</div>
+            <div class="card" onclick="abrirModal('modalVentas')">📦 Registrar Venta</div>
+            <div class="card" onclick="abrirModal('modalClientes', cargarClientes)">👥 Mis Clientes</div>
+            <div class="card" onclick="abrirModal('modalPlataformas', cargarPlataformas)">📺 Plataformas</div>
+            <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)">👷 Vendedores</div>
         </div>
     </div>
 
-    <!-- INTERFAZ CLIENTE -->
+    <!-- INTERFAZ PARA CLIENTES -->
     <div id="clienteDashboard" class="hidden">
-        <header>
-            <h2>RECLAMAR MI CUENTA</h2>
-            <p>Ingresa tu WhatsApp para ver tu pedido</p>
-        </header>
-        <div style="padding: 20px;">
-            <input type="text" id="wsCliente" placeholder="Ej: 0987654321">
-            <button class="btn-add" id="btnConsultarCuenta">Ver mis Datos</button>
-            <div id="resultadoEntrega"></div>
-            <button class="btn-cerrar" onclick="location.reload()">Volver</button>
+        <header><h3>CLIENTE: RECLAMA TU CUENTA</h3></header>
+        <div style="padding:20px">
+            <input type="text" id="wsCliente" placeholder="Tu número de WhatsApp">
+            <button class="btn-add" onclick="consultarCuenta()">BUSCAR MI CUENTA</button>
+            <div id="resCliente"></div>
+            <button class="btn-cerrar" onclick="location.reload()">VOLVER AL INICIO</button>
         </div>
     </div>
 
-    <!-- MODAL VENTAS (ADMIN) -->
+    <!-- MODAL VENTAS (ENTREGA) -->
     <div id="modalVentas" class="modal">
         <div class="modal-content">
-            <h3>Entregar Cuenta</h3>
-            <input type="text" id="wsRegistro" placeholder="WhatsApp del Cliente">
-            <input type="text" id="plataformaReg" placeholder="Nombre de Plataforma">
-            <input type="text" id="datosCuenta" placeholder="Correo:Clave de la cuenta">
-            <button class="btn-add" id="btnRegistrarVenta">Autorizar Entrega</button>
-            <button class="btn-cerrar" onclick="cerrarModal('modalVentas')">Cerrar</button>
+            <h3>Registrar y Entregar</h3>
+            <input type="text" id="vWS" placeholder="WhatsApp del Cliente">
+            <input type="text" id="vPlat" placeholder="Nombre de Plataforma">
+            <input type="text" id="vDatos" placeholder="Correo:Clave de la cuenta">
+            <button class="btn-add" onclick="guardarVenta()">AUTORIZAR ENTREGA</button>
+            <button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button>
+        </div>
+    </div>
+
+    <!-- MODAL CLIENTES -->
+    <div id="modalClientes" class="modal">
+        <div class="modal-content">
+            <h3>Nuevo Cliente</h3>
+            <input type="text" id="cN" placeholder="Nombre">
+            <input type="text" id="cW" placeholder="WhatsApp">
+            <button class="btn-add" onclick="guardarCliente()">GUARDAR CLIENTE</button>
+            <div id="listaC"></div>
+            <button class="btn-cerrar" onclick="cerrarModal('modalClientes')">CERRAR</button>
+        </div>
+    </div>
+
+    <!-- MODAL PLATAFORMAS -->
+    <div id="modalPlataformas" class="modal">
+        <div class="modal-content">
+            <h3>Nueva Plataforma</h3>
+            <input type="text" id="pN" placeholder="Nombre">
+            <input type="number" id="pP" placeholder="Precio">
+            <button class="btn-add" onclick="guardarPlat()">GUARDAR</button>
+            <div id="listaP"></div>
+            <button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">CERRAR</button>
+        </div>
+    </div>
+
+    <!-- MODAL VENDEDORES -->
+    <div id="modalVendedores" class="modal">
+        <div class="modal-content">
+            <h3>Nuevo Vendedor</h3>
+            <input type="text" id="uN" placeholder="Nombre">
+            <input type="text" id="uR" placeholder="Rol">
+            <button class="btn-add" onclick="guardarVend()">REGISTRAR</button>
+            <div id="listaU"></div>
+            <button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">CERRAR</button>
         </div>
     </div>
 
@@ -100,69 +133,69 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // --- LÓGICA DE ACCESO ---
+        // NAVEGACIÓN
         window.validarAcceso = () => {
-            const email = document.getElementById('logEmail').value;
-            const pass = document.getElementById('logPass').value;
-
-            if(email === "Andyobregon799@gmail.com" && pass === "123456") {
-                document.getElementById('loginScreen').classList.add('hidden');
-                document.getElementById('adminDashboard').classList.remove('hidden');
-            } else {
-                alert("Acceso denegado. Solo Andy puede entrar aquí.");
-            }
+            if(document.getElementById('logEmail').value === "Andyobregon799@gmail.com" && document.getElementById('logPass').value === "123456") {
+                mostrarSeccion('adminDashboard');
+            } else { alert("Datos incorrectos"); }
         };
-
-        window.abrirInterfazCliente = () => {
+        window.mostrarSeccion = (id) => {
             document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('clienteDashboard').classList.remove('hidden');
+            document.getElementById(id).classList.remove('hidden');
         };
-
-        // --- FUNCIONES ADMIN ---
-        window.abrirModal = (id) => document.getElementById(id).style.display = "block";
+        window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
 
-        document.getElementById('btnRegistrarVenta').onclick = async () => {
-            const ws = document.getElementById('wsRegistro').value;
-            const plat = document.getElementById('plataformaReg').value;
-            const info = document.getElementById('datosCuenta').value;
-
-            if(!ws || !info) return alert("Faltan datos");
-
-            await addDoc(collection(db, "entregas"), {
-                whatsapp: ws,
-                plataforma: plat,
-                datos: info,
-                fecha: new Date()
-            });
-            alert("Cuenta autorizada para el cliente");
-            cerrarModal('modalVentas');
+        // ACCIONES FIREBASE (ANDY)
+        window.guardarVenta = async () => {
+            await addDoc(collection(db, "entregas"), { whatsapp: document.getElementById('vWS').value, plataforma: document.getElementById('vPlat').value, datos: document.getElementById('vDatos').value });
+            alert("Cuenta enviada al sistema de clientes"); cerrarModal('modalVentas');
         };
 
-        // --- FUNCIONES CLIENTE ---
-        document.getElementById('btnConsultarCuenta').onclick = async () => {
+        window.guardarCliente = async () => {
+            await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value });
+            cargarClientes();
+        };
+
+        window.cargarClientes = async () => {
+            const s = await getDocs(collection(db, "clientes"));
+            document.getElementById('listaC').innerHTML = "";
+            s.forEach(d => { document.getElementById('listaC').innerHTML += `<div class='lista-info'>${d.data().nombre} - ${d.data().whatsapp}</div>`; });
+        };
+
+        window.guardarPlat = async () => {
+            await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value });
+            cargarPlataformas();
+        };
+
+        window.cargarPlataformas = async () => {
+            const s = await getDocs(collection(db, "productos"));
+            document.getElementById('listaP').innerHTML = "";
+            s.forEach(d => { document.getElementById('listaP').innerHTML += `<div class='lista-info'>${d.data().nombre} - $${d.data().precio}</div>`; });
+        };
+
+        window.guardarVend = async () => {
+            await addDoc(collection(db, "vendedores"), { nombre: document.getElementById('uN').value, rol: document.getElementById('uR').value });
+            cargarVendedores();
+        };
+
+        window.cargarVendedores = async () => {
+            const s = await getDocs(collection(db, "vendedores"));
+            document.getElementById('listaU').innerHTML = "";
+            s.forEach(d => { document.getElementById('listaU').innerHTML += `<div class='lista-info'>${d.data().nombre} (${d.data().rol})</div>`; });
+        };
+
+        // ACCIÓN CLIENTE
+        window.consultarCuenta = async () => {
             const ws = document.getElementById('wsCliente').value;
-            const res = document.getElementById('resultadoEntrega');
-            res.innerHTML = "Buscando...";
-
             const q = query(collection(db, "entregas"), where("whatsapp", "==", ws));
-            const querySnapshot = await getDocs(q);
-
-            if (querySnapshot.empty) {
-                res.innerHTML = "<p style='color:red'>No hay cuentas autorizadas para este número.</p>";
-            } else {
-                res.innerHTML = "";
-                querySnapshot.forEach((doc) => {
-                    const d = doc.data();
-                    res.innerHTML += `
-                        <div class="entrega-box">
-                            <h4 style="color:var(--success)">¡Cuenta Lista!</h4>
-                            <p><b>Plataforma:</b> ${d.plataforma}</p>
-                            <p><b>Tus Datos:</b> <br><span style="background:#fff; color:#000; padding:2px 5px">${d.datos}</span></p>
-                        </div>
-                    `;
-                });
-            }
+            const s = await getDocs(q);
+            const res = document.getElementById('resCliente');
+            res.innerHTML = s.empty ? "No hay cuentas para este número" : "";
+            s.forEach(doc => {
+                res.innerHTML += `<div style='background:var(--success); color:white; padding:15px; border-radius:10px; margin-top:10px'>
+                    <b>${doc.data().plataforma}</b><br>Tus datos: ${doc.data().datos}</div>`;
+            });
         };
     </script>
 </body>
