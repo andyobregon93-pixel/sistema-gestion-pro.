@@ -13,15 +13,19 @@
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
         
-        /* Chat */
+        /* Estilos de Chat y Perfil */
         #chatBox { background: #0f172a; height: 350px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 5px; display: flex; flex-direction: column; }
-        .msg { margin-bottom: 12px; padding: 10px; border-radius: 10px; font-size: 0.85rem; max-width: 85%; position: relative; cursor: pointer; transition: 0.2s; }
-        .msg:active { background: #475569; }
-        .msg-v { background: #334155; align-self: flex-start; }
-        .msg-a { background: var(--primary); align-self: flex-end; }
+        .msg-container { display: flex; align-items: flex-end; margin-bottom: 12px; gap: 8px; }
+        .msg-a-container { flex-direction: row-reverse; }
+        
+        .pfp-mini { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; background: #334155; border: 1px solid var(--primary); }
+        
+        .msg { padding: 10px; border-radius: 12px; font-size: 0.85rem; max-width: 75%; position: relative; cursor: pointer; }
+        .msg-v { background: #334155; }
+        .msg-a { background: var(--primary); }
         .msg b { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 4px; }
         
-        .reply-box { background: rgba(0,0,0,0.3); border-left: 3px solid var(--success); padding: 5px; margin-bottom: 5px; font-size: 0.75rem; border-radius: 4px; pointer-events: none; }
+        .reply-box { background: rgba(0,0,0,0.3); border-left: 3px solid var(--success); padding: 5px; margin-bottom: 5px; font-size: 0.75rem; border-radius: 4px; }
         .reply-preview { background: #1e293b; padding: 8px; border-left: 4px solid var(--success); display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; border-radius: 4px; font-size: 0.8rem; }
 
         /* Modales */
@@ -33,8 +37,8 @@
         .btn-add { background: var(--primary); color: white; }
         .btn-cerrar { background: var(--danger); color: white; margin-top: 20px; }
         
-        .list-item { background: #334155; padding: 12px; margin: 5px 0; border-radius: 8px; cursor: pointer; text-align: left; }
-        .member-card { background: #0f172a; padding: 10px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid var(--primary); }
+        .list-item { background: #334155; padding: 12px; margin: 5px 0; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .member-card { background: #0f172a; padding: 10px; margin-bottom: 10px; border-radius: 8px; border-left: 4px solid var(--primary); display: flex; gap: 10px; align-items: center; }
     </style>
 </head>
 <body>
@@ -66,12 +70,26 @@
         <button onclick="location.reload()" style="background:var(--danger); margin: 20px auto; display:block; width:80%">CERRAR SESIÓN</button>
     </div>
 
-    <!-- MODALES -->
+    <!-- MODALES DE ADMIN -->
     <div id="modalAdminMiembros" class="modal"><div class="modal-content"><h3>Miembros</h3><div id="fullMembersList"></div><button class="btn-cerrar" onclick="cerrarModal('modalAdminMiembros')">VOLVER</button></div></div>
-    <div id="modalAnotarPedido" class="modal"><div class="modal-content"><h3 id="pedidoTitle">Anotar</h3><textarea id="pedidoTexto" rows="4"></textarea><button class="btn-add" onclick="guardarPedidoFirebase()">GUARDAR</button></div></div>
-    <div id="modalProfiles" class="modal"><div class="modal-content"><h3>¿Quién eres?</h3><div id="profilesList"></div><button class="btn-add" onclick="abrirRegistroNuevo()">+ REGISTRARME</button></div></div>
-    <div id="chatRegister" class="modal"><div class="modal-content"><h3>Nuevo Registro</h3><input type="text" id="chatNick" placeholder="Nombre"><input type="text" id="chatPhone" placeholder="WhatsApp"><button class="btn-add" onclick="finalizarRegistroChat()">LISTO</button></div></div>
+    <div id="modalAnotarPedido" class="modal"><div class="modal-content"><h3 id="pedidoTitle">Anotar Pedido</h3><textarea id="pedidoTexto" rows="4"></textarea><button class="btn-add" onclick="guardarPedidoFirebase()">GUARDAR</button></div></div>
 
+    <!-- REGISTRO Y PERFILES -->
+    <div id="modalProfiles" class="modal"><div class="modal-content"><h3>¿Quién eres?</h3><div id="profilesList"></div><button class="btn-add" onclick="abrirRegistroNuevo()">+ REGISTRARME</button></div></div>
+    
+    <div id="chatRegister" class="modal">
+        <div class="modal-content">
+            <h3>Nuevo Registro</h3>
+            <input type="text" id="chatNick" placeholder="Tu Nombre">
+            <input type="text" id="chatPhone" placeholder="Tu WhatsApp">
+            <p style="font-size: 0.7rem; margin-bottom: 2px;">Foto de Perfil (Opcional):</p>
+            <input type="file" id="chatImg" accept="image/*" style="font-size: 0.8rem;">
+            <button class="btn-add" id="btnRegChat" onclick="finalizarRegistroChat()">LISTO</button>
+            <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">CANCELAR</button>
+        </div>
+    </div>
+
+    <!-- CHAT -->
     <div id="modalChat" class="modal">
         <div class="modal-content" style="max-width: 600px;">
             <h3 id="chatHeaderTitle">Chat</h3>
@@ -83,13 +101,14 @@
                 </div>
             </div>
             <div style="display: flex; gap: 5px;">
-                <input type="text" id="msgInput" placeholder="Mensaje... (Toca otro para responder)">
+                <input type="text" id="msgInput" placeholder="Mensaje...">
                 <button class="btn-add" style="width: 70px;" onclick="enviarMensaje()">OK</button>
             </div>
             <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR</button>
         </div>
     </div>
 
+    <!-- OTROS MODALES -->
     <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Usuarios</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><select id="uR"><option value="vendedor">Vendedor</option><option value="admin">Admin</option></select><button class="btn-add" onclick="guardarUsuario()">CREAR</button><div id="listaU"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button></div></div>
     <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Plataformas</h3><input type="text" id="pN" placeholder="Nombre"><input type="number" id="pP" placeholder="Precio"><button class="btn-add" onclick="guardarPlataforma()">AÑADIR</button><div id="listaP"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button></div></div>
     <div id="modalClientes" class="modal"><div class="modal-content"><h3>Clientes</h3><input type="text" id="cN" placeholder="Nombre"><input type="text" id="cW" placeholder="WhatsApp"><button class="btn-add" onclick="guardarCliente()">GUARDAR</button><div id="listaC"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button></div></div>
@@ -109,38 +128,65 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let userChat = { nick: localStorage.getItem('chatNick') || "", tel: localStorage.getItem('chatTel') || "" };
+        let userChat = { 
+            nick: localStorage.getItem('chatNick') || "", 
+            tel: localStorage.getItem('chatTel') || "",
+            foto: localStorage.getItem('chatFoto') || ""
+        };
         let memberSeleccionadoId = "";
         let respuestaActiva = null;
 
         window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
 
-        // CHAT Y RESPUESTAS (Universal)
+        // --- SUBIDA DE IMAGEN (Base64 para evitar errores de Storage) ---
+        async function toBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => resolve(reader.result);
+                reader.onerror = error => reject(error);
+            });
+        }
+
+        // --- CHAT Y REGISTRO ---
         window.checkChatAccess = () => { if(userChat.nick && userChat.tel) abrirChat(); else cargarListaPerfiles(); };
         
         async function cargarListaPerfiles() {
             const listDiv = document.getElementById('profilesList'); listDiv.innerHTML = ""; abrirModal('modalProfiles');
             const s = await getDocs(collection(db, "miembros_chat"));
             s.forEach((doc) => {
-                const data = doc.data();
+                const d = doc.data();
                 const item = document.createElement('div'); item.className = 'list-item';
-                item.innerHTML = `<b>${data.nick}</b><br><small>${data.tel}</small>`;
-                item.onclick = () => seleccionarPerfil(data.nick, data.tel);
+                const img = d.foto ? `<img src="${d.foto}" class="pfp-mini">` : `<div class="pfp-mini" style="background:#475569"></div>`;
+                item.innerHTML = `${img} <div><b>${d.nick}</b><br><small>${d.tel}</small></div>`;
+                item.onclick = () => seleccionarPerfil(d.nick, d.tel, d.foto);
                 listDiv.appendChild(item);
             });
         }
 
-        window.seleccionarPerfil = (nick, tel) => {
-            userChat.nick = nick; userChat.tel = tel;
-            localStorage.setItem('chatNick', nick); localStorage.setItem('chatTel', tel);
+        window.seleccionarPerfil = (nick, tel, foto) => {
+            userChat = { nick, tel, foto };
+            localStorage.setItem('chatNick', nick); localStorage.setItem('chatTel', tel); localStorage.setItem('chatFoto', foto || "");
             cerrarModal('modalProfiles'); abrirChat();
         };
 
+        window.abrirRegistroNuevo = () => { cerrarModal('modalProfiles'); abrirModal('chatRegister'); };
+
         window.finalizarRegistroChat = async () => {
-            const n = document.getElementById('chatNick').value; const t = document.getElementById('chatPhone').value;
-            await addDoc(collection(db, "miembros_chat"), { nick: n, tel: t, ultimoPedido: "" });
-            seleccionarPerfil(n, t); cerrarModal('chatRegister');
+            const n = document.getElementById('chatNick').value;
+            const t = document.getElementById('chatPhone').value;
+            const f = document.getElementById('chatImg').files[0];
+            if(!n || !t) return alert("Nombre y WhatsApp obligatorios");
+            
+            document.getElementById('btnRegChat').innerText = "SUBIENDO...";
+            let fotoUrl = "";
+            if(f) { fotoUrl = await toBase64(f); }
+
+            await addDoc(collection(db, "miembros_chat"), { nick: n, tel: t, foto: fotoUrl, ultimoPedido: "" });
+            seleccionarPerfil(n, t, fotoUrl);
+            cerrarModal('chatRegister');
+            document.getElementById('btnRegChat').innerText = "LISTO";
         };
 
         function abrirChat() {
@@ -151,17 +197,20 @@
                 const box = document.getElementById('chatBox'); box.innerHTML = "";
                 snapshot.forEach(docSnap => {
                     const d = docSnap.data();
-                    const estilo = (d.emisor === userChat.nick) ? 'msg-a' : 'msg-v';
-                    const div = document.createElement('div');
-                    div.className = `msg ${estilo}`;
+                    const esMio = (d.emisor === userChat.nick);
                     
-                    let contenido = `<b>${d.emisor}</b>`;
-                    if(d.respuestaA) { contenido += `<div class="reply-box">↩️ ${d.respuestaA}: ${d.respuestaMsg}</div>`; }
-                    contenido += d.msg;
+                    const container = document.createElement('div');
+                    container.className = `msg-container ${esMio ? 'msg-a-container' : ''}`;
                     
-                    div.innerHTML = contenido;
-                    div.onclick = () => { respuestaActiva = { autor: d.emisor, texto: d.msg }; document.getElementById('replyText').innerText = `Respondiendo a ${d.emisor}`; document.getElementById('replyPreviewContainer').classList.remove('hidden'); };
-                    box.appendChild(div);
+                    const img = d.fotoEmisor ? `<img src="${d.fotoEmisor}" class="pfp-mini">` : `<div class="pfp-mini" style="background:#475569"></div>`;
+                    
+                    let htmlMsg = `<div class="msg ${esMio ? 'msg-a' : 'msg-v'}"><b>${d.emisor}</b>`;
+                    if(d.respuestaA) htmlMsg += `<div class="reply-box">↩️ ${d.respuestaA}: ${d.respuestaMsg}</div>`;
+                    htmlMsg += `${d.msg}</div>`;
+                    
+                    container.innerHTML = img + htmlMsg;
+                    container.onclick = () => { respuestaActiva = { autor: d.emisor, texto: d.msg }; document.getElementById('replyText').innerText = `Respondiendo a ${d.emisor}`; document.getElementById('replyPreviewContainer').classList.remove('hidden'); };
+                    box.appendChild(container);
                 });
                 box.scrollTop = box.scrollHeight;
             });
@@ -173,7 +222,10 @@
             const m = document.getElementById('msgInput').value;
             if(!m) return;
             await addDoc(collection(db, "chat"), { 
-                emisor: userChat.nick, msg: m, fecha: serverTimestamp(),
+                emisor: userChat.nick, 
+                fotoEmisor: userChat.foto,
+                msg: m, 
+                fecha: serverTimestamp(),
                 respuestaA: respuestaActiva ? respuestaActiva.autor : null,
                 respuestaMsg: respuestaActiva ? respuestaActiva.texto : null
             });
@@ -181,25 +233,28 @@
             cancelarRespuesta();
         };
 
-        // ADMIN FUNCTIONS (ADMIN ONLY)
+        // --- FUNCIONES ADMIN ---
         window.validarAcceso = async () => {
             const e = document.getElementById('logEmail').value; const p = document.getElementById('logPass').value;
             if(e === "Andyobregon799@gmail.com" && p === "123456") { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('mainDashboard').classList.remove('hidden'); document.getElementById('menuAdminOnly').classList.remove('hidden'); }
         };
-        window.guardarUsuario = async () => { await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: document.getElementById('uR').value }); alert("Guardado"); };
-        window.guardarPlataforma = async () => { await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value }); alert("Guardado"); };
-        window.guardarCliente = async () => { await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value }); alert("Guardado"); };
         window.cargarTodosLosMiembros = async () => {
             const container = document.getElementById('fullMembersList'); container.innerHTML = "";
             const s = await getDocs(collection(db, "miembros_chat"));
             s.forEach(m => {
                 const d = m.data();
                 const div = document.createElement('div'); div.className = 'member-card';
-                div.innerHTML = `<b>${d.nick}</b><br><small>Pedido: ${d.ultimoPedido || 'Ninguno'}</small><br><button onclick="memberSeleccionadoId='${m.id}'; abrirModal('modalAnotarPedido')">ANOTAR PEDIDO</button>`;
+                const img = d.foto ? `<img src="${d.foto}" class="pfp-mini">` : `<div class="pfp-mini" style="background:#475569"></div>`;
+                div.innerHTML = `${img} <div><b>${d.nick}</b><br><small>Pedido: ${d.ultimoPedido || 'Ninguno'}</small><br><button onclick="memberSeleccionadoId='${m.id}'; abrirModal('modalAnotarPedido')">ANOTAR PEDIDO</button></div>`;
                 container.appendChild(div);
             });
         };
-        window.guardarPedidoFirebase = async () => { await updateDoc(doc(db, "miembros_chat", memberSeleccionadoId), { ultimoPedido: document.getElementById('pedidoTexto').value }); cerrarModal('modalAnotarPedido'); };
+        window.guardarPedidoFirebase = async () => { await updateDoc(doc(db, "miembros_chat", memberSeleccionadoId), { ultimoPedido: document.getElementById('pedidoTexto').value }); cerrarModal('modalAnotarPedido'); cargarTodosLosMiembros(); };
+        
+        // Configs basicas restantes
+        window.guardarUsuario = async () => { await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: document.getElementById('uR').value }); };
+        window.guardarPlataforma = async () => { await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value }); };
+        window.guardarCliente = async () => { await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value }); };
     </script>
 </body>
 </html>
