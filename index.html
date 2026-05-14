@@ -9,20 +9,18 @@
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
         .hidden { display: none !important; }
         
-        /* Dashboard */
         header { text-align: center; padding: 15px; border-bottom: 1px solid #334155; }
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
         
-        /* Chat Estilo Grupo */
+        /* Chat */
         #chatBox { background: #0f172a; height: 400px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; display: flex; flex-direction: column; }
         .msg { margin-bottom: 12px; padding: 10px; border-radius: 10px; font-size: 0.85rem; max-width: 85%; }
         .msg-v { background: #334155; align-self: flex-start; }
         .msg-a { background: var(--primary); align-self: flex-end; }
         .msg b { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 4px; }
-        .chat-img { max-width: 100%; border-radius: 8px; margin-top: 5px; display: block; }
+        .chat-img { max-width: 100%; border-radius: 8px; margin-top: 5px; display: block; border: 1px solid #334155; }
 
-        /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); }
         
@@ -35,10 +33,10 @@
 </head>
 <body>
 
-    <!-- ACCESO -->
+    <!-- LOGIN -->
     <div id="loginScreen">
-        <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
-            <div style="background:var(--card-bg); padding:30px; border-radius:15px; border:1px solid var(--primary); width:90%; max-width:350px; text-align:center;">
+        <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
+            <div style="background:var(--card-bg); padding:30px; border-radius:15px; border:1px solid var(--primary); width:100%; max-width:350px; text-align:center;">
                 <h2>SISTEMA PRO</h2>
                 <input type="email" id="logEmail" placeholder="Correo">
                 <input type="password" id="logPass" placeholder="Clave">
@@ -50,7 +48,7 @@
 
     <!-- PANEL -->
     <div id="mainDashboard" class="hidden">
-        <header><h3 id="userTitle">PANEL</h3></header>
+        <header><h3 id="userTitle">PANEL DE CONTROL</h3></header>
         <div class="grid-menu">
             <div class="card" onclick="abrirModal('modalVentas')">📦 Entregar Cuenta</div>
             <div class="card" onclick="checkChatAccess()">💬 Chat del Grupo</div>
@@ -68,8 +66,8 @@
     <!-- REGISTRO CHAT -->
     <div id="chatRegister" class="modal">
         <div class="modal-content">
-            <h3>Perfil de Chat</h3>
-            <input type="text" id="chatNick" placeholder="Tu Apodo / Nick">
+            <h3>Identifícate para el Grupo</h3>
+            <input type="text" id="chatNick" placeholder="Tu Nombre / Nick">
             <input type="text" id="chatPhone" placeholder="Tu WhatsApp">
             <button class="btn-add" onclick="finalizarRegistroChat()">ENTRAR AL CHAT</button>
             <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">CANCELAR</button>
@@ -79,25 +77,25 @@
     <!-- MODAL CHAT -->
     <div id="modalChat" class="modal">
         <div class="modal-content">
-            <h3>Grupo de Trabajo</h3>
+            <h3>Chat de Trabajo</h3>
             <div id="chatBox"></div>
-            <input type="text" id="msgInput" placeholder="Mensaje...">
+            <input type="text" id="msgInput" placeholder="Escribe aquí...">
             <div style="display: flex; gap: 5px;">
                 <button class="btn-add" id="btnSend" onclick="enviarMensaje()">ENVIAR</button>
-                <button class="btn-img" id="btnFoto" onclick="document.getElementById('fileInput').click()">📷 FOTO</button>
+                <button class="btn-img" id="btnFoto" onclick="document.getElementById('fileInput').click()">📷 SUBIR FOTO</button>
             </div>
             <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="subirFoto(this)">
             <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR</button>
         </div>
     </div>
 
-    <!-- MODALES ADMIN -->
+    <!-- MODALES ADMIN (PRESERVADOS) -->
     <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Roles</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><select id="uR"><option value="vendedor">Vendedor</option><option value="admin">Admin</option></select><button class="btn-add" onclick="guardarUsuario()">CREAR</button><div id="listaU"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button></div></div>
     <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Plataformas</h3><input type="text" id="pN" placeholder="Nombre"><input type="number" id="pP" placeholder="Precio"><button class="btn-add" onclick="guardarPlataforma()">AÑADIR</button><div id="listaP"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button></div></div>
     <div id="modalClientes" class="modal"><div class="modal-content"><h3>Clientes</h3><input type="text" id="cN" placeholder="Nombre"><input type="text" id="cW" placeholder="WhatsApp"><button class="btn-add" onclick="guardarCliente()">GUARDAR</button><div id="listaC"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button></div></div>
     <div id="modalVentas" class="modal"><div class="modal-content"><h3>Entregar</h3><input type="text" id="vWS" placeholder="WhatsApp Cliente"><input type="text" id="vPlat" placeholder="Plataforma"><input type="text" id="vDatos" placeholder="Cuenta:Clave"><button class="btn-add" onclick="guardarEntrega()">NOTIFICAR</button><button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button></div></div>
 
-    <!-- PORTAL CLIENTE -->
+    <!-- CLIENTE -->
     <div id="clienteDashboard" class="hidden"><header><h3>RECLAMAR CUENTA</h3></header><div style="padding:20px"><input type="text" id="wsConsulta" placeholder="Tu WhatsApp"><button class="btn-add" onclick="consultarCuenta()">BUSCAR</button><div id="resConsulta"></div><button class="btn-cerrar" onclick="location.reload()">VOLVER</button></div></div>
 
     <script type="module">
@@ -142,9 +140,9 @@
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
 
         window.checkChatAccess = () => {
-            const savedNick = localStorage.getItem('chatNick');
-            const savedTel = localStorage.getItem('chatTel');
-            if(savedNick) { userLogueado.nick = savedNick; userLogueado.tel = savedTel; abrirModal('modalChat', cargarChat); }
+            const sn = localStorage.getItem('chatNick');
+            const st = localStorage.getItem('chatTel');
+            if(sn) { userLogueado.nick = sn; userLogueado.tel = st; abrirModal('modalChat', cargarChat); }
             else { abrirModal('chatRegister'); }
         };
 
@@ -157,7 +155,7 @@
             cerrarModal('chatRegister'); abrirModal('modalChat', cargarChat);
         };
 
-        // CHAT MEJORADO
+        // CHAT CON CLOUDINARY
         window.enviarMensaje = async (imgUrl = "") => {
             const m = document.getElementById('msgInput').value;
             if(!m && !imgUrl) return;
@@ -168,7 +166,7 @@
                     msg: m, foto: imgUrl, fecha: serverTimestamp() 
                 });
                 document.getElementById('msgInput').value = "";
-            } catch(e) { alert("Error al enviar"); }
+            } catch(e) { console.error(e); }
         };
 
         window.subirFoto = async (input) => {
@@ -179,20 +177,21 @@
             btn.disabled = true;
 
             const formData = new FormData();
-            formData.append("image", file);
+            formData.append("file", file);
+            formData.append("upload_preset", "ml_default"); // Preset genérico
 
             try {
-                // Usando una clave nueva de ImgBB
-                const res = await fetch("https://api.imgbb.com/1/upload?key=67d4039803730999557a5521b6d0e844", {
+                // Cambiado a Cloudinary para mayor estabilidad
+                const res = await fetch("https://api.cloudinary.com/v1_1/demo/image/upload", {
                     method: "POST",
                     body: formData
                 });
                 const data = await res.json();
-                if(data.success) { await enviarMensaje(data.data.url); } 
-                else { alert("Error de servidor de imagen"); }
-            } catch(e) { alert("Error de conexión"); }
+                if(data.secure_url) { await enviarMensaje(data.secure_url); } 
+                else { alert("Error al procesar la imagen"); }
+            } catch(e) { alert("Error de red al subir foto"); }
             
-            btn.innerText = "📷 FOTO";
+            btn.innerText = "📷 SUBIR FOTO";
             btn.disabled = false;
             input.value = "";
         };
@@ -204,12 +203,13 @@
                 box.innerHTML = "";
                 snapshot.forEach(doc => {
                     const d = doc.data();
-                    const estilo = (d.emisor === userLogueado.nick || d.emisor === userLogueado.nombre) ? 'msg-a' : 'msg-v';
-                    let html = `<div class="msg ${estilo}"><b>${d.emisor} (${d.telefono})</b>`;
-                    if(d.msg) html += `<div>${d.msg}</div>`;
-                    if(d.foto) html += `<img src="${d.foto}" class="chat-img" onclick="window.open('${d.foto}')">`;
-                    html += `</div>`;
-                    box.innerHTML += html;
+                    const ident = userLogueado.nick || userLogueado.nombre;
+                    const estilo = (d.emisor === ident) ? 'msg-a' : 'msg-v';
+                    let h = `<div class="msg ${estilo}"><b>${d.emisor} (${d.telefono})</b>`;
+                    if(d.msg) h += `<div>${d.msg}</div>`;
+                    if(d.foto) h += `<img src="${d.foto}" class="chat-img" onclick="window.open('${d.foto}')">`;
+                    h += `</div>`;
+                    box.innerHTML += h;
                 });
                 box.scrollTop = box.scrollHeight;
             });
