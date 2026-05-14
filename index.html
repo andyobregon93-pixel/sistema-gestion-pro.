@@ -16,9 +16,14 @@
         /* Dashboard */
         header { text-align: center; padding: 15px; border-bottom: 1px solid #334155; }
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
-        .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.85rem; }
+        .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
         .card:active { background: var(--primary); }
-        .admin-btn { grid-column: span 2; background: #334155; border-color: var(--primary); }
+
+        /* Chat */
+        #chatBox { background: #0f172a; height: 200px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; }
+        .msg { margin-bottom: 8px; padding: 8px; border-radius: 5px; font-size: 0.85rem; }
+        .msg-v { background: #334155; color: white; text-align: left; }
+        .msg-a { background: var(--primary); color: white; text-align: right; }
 
         /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
@@ -28,98 +33,79 @@
         button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
         .btn-add { background: var(--primary); color: white; }
         .btn-cerrar { background: var(--danger); color: white; margin-top: 20px; }
-        .lista-info { background: #0f172a; padding: 10px; margin-top: 10px; border-radius: 8px; font-size: 0.9rem; border-left: 3px solid var(--primary); }
+        .lista-info { background: #0f172a; padding: 10px; margin-top: 5px; border-radius: 8px; font-size: 0.8rem; border-left: 3px solid var(--primary); }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE ACCESO -->
+    <!-- ACCESO -->
     <div id="loginScreen">
         <div class="login-card">
             <h2>SISTEMA PRO</h2>
-            <input type="email" id="logEmail" placeholder="Tu Correo">
-            <input type="password" id="logPass" placeholder="Tu Clave">
-            <button class="btn-add" onclick="validarAcceso()">ENTRAR COMO ADMIN</button>
-            <button style="background:var(--success); color:white; margin-top:15px" onclick="mostrarSeccion('clienteDashboard')">RECLAMAR MI CUENTA</button>
+            <input type="email" id="logEmail" placeholder="Correo">
+            <input type="password" id="logPass" placeholder="Clave">
+            <button class="btn-add" onclick="validarAcceso()">ENTRAR</button>
+            <button style="background:var(--success); color:white; margin-top:10px" onclick="mostrarSeccion('clienteDashboard')">RECLAMAR MI CUENTA</button>
         </div>
     </div>
 
-    <!-- DASHBOARD ADMIN -->
-    <div id="adminDashboard" class="hidden">
+    <!-- PANEL PRINCIPAL -->
+    <div id="mainDashboard" class="hidden">
         <header>
-            <h3>PANEL DE ANDY</h3>
-            <button onclick="location.reload()" style="width:auto; padding:5px; background:var(--danger); font-size:10px">CERRAR SESIÓN</button>
+            <h3 id="userTitle">PANEL</h3>
+            <button onclick="location.reload()" style="width:auto; padding:5px; background:var(--danger); font-size:10px">SALIR</button>
         </header>
+        
         <div class="grid-menu">
-            <div class="card" onclick="abrirModal('modalVentas')">📦 Registrar Venta</div>
-            <div class="card" onclick="abrirModal('modalClientes', cargarClientes)">👥 Mis Clientes</div>
-            <div class="card" onclick="abrirModal('modalPlataformas', cargarPlataformas)">📺 Plataformas</div>
-            <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)">👷 Vendedores</div>
+            <div class="card" onclick="abrirModal('modalVentas')">📦 Entregar Cuenta</div>
+            <div class="card" onclick="abrirModal('modalChat', cargarChat)">💬 Pedir Cuentas / Chat</div>
+            <div id="menuAdminOnly" class="hidden" style="display: contents;">
+                <div class="card" onclick="abrirModal('modalClientes', cargarClientes)">👥 Clientes</div>
+                <div class="card" onclick="abrirModal('modalPlataformas', cargarPlataformas)">📺 Plataformas</div>
+                <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)" style="grid-column: span 2; border-color:var(--primary)">👷 Gestionar Roles y Vendedores</div>
+            </div>
         </div>
     </div>
 
-    <!-- INTERFAZ PARA CLIENTES -->
-    <div id="clienteDashboard" class="hidden">
-        <header><h3>CLIENTE: RECLAMA TU CUENTA</h3></header>
-        <div style="padding:20px">
-            <input type="text" id="wsCliente" placeholder="Tu número de WhatsApp">
-            <button class="btn-add" onclick="consultarCuenta()">BUSCAR MI CUENTA</button>
-            <div id="resCliente"></div>
-            <button class="btn-cerrar" onclick="location.reload()">VOLVER AL INICIO</button>
-        </div>
-    </div>
-
-    <!-- MODAL VENTAS (ENTREGA) -->
-    <div id="modalVentas" class="modal">
+    <!-- CHAT / PEDIDOS -->
+    <div id="modalChat" class="modal">
         <div class="modal-content">
-            <h3>Registrar y Entregar</h3>
-            <input type="text" id="vWS" placeholder="WhatsApp del Cliente">
-            <input type="text" id="vPlat" placeholder="Nombre de Plataforma">
-            <input type="text" id="vDatos" placeholder="Correo:Clave de la cuenta">
-            <button class="btn-add" onclick="guardarVenta()">AUTORIZAR ENTREGA</button>
-            <button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button>
+            <h3>Centro de Mensajes</h3>
+            <div id="chatBox">Cargando mensajes...</div>
+            <input type="text" id="msgInput" placeholder="Escribe tu pedido o respuesta...">
+            <button class="btn-add" onclick="enviarMensaje()">Enviar Mensaje</button>
+            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">Cerrar</button>
         </div>
     </div>
 
-    <!-- MODAL CLIENTES -->
-    <div id="modalClientes" class="modal">
-        <div class="modal-content">
-            <h3>Nuevo Cliente</h3>
-            <input type="text" id="cN" placeholder="Nombre">
-            <input type="text" id="cW" placeholder="WhatsApp">
-            <button class="btn-add" onclick="guardarCliente()">GUARDAR CLIENTE</button>
-            <div id="listaC"></div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalClientes')">CERRAR</button>
-        </div>
-    </div>
-
-    <!-- MODAL PLATAFORMAS -->
-    <div id="modalPlataformas" class="modal">
-        <div class="modal-content">
-            <h3>Nueva Plataforma</h3>
-            <input type="text" id="pN" placeholder="Nombre">
-            <input type="number" id="pP" placeholder="Precio">
-            <button class="btn-add" onclick="guardarPlat()">GUARDAR</button>
-            <div id="listaP"></div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">CERRAR</button>
-        </div>
-    </div>
-
-    <!-- MODAL VENDEDORES -->
+    <!-- MODAL VENDEDORES (ROLES) -->
     <div id="modalVendedores" class="modal">
         <div class="modal-content">
-            <h3>Nuevo Vendedor</h3>
+            <h3>Nuevo Usuario</h3>
             <input type="text" id="uN" placeholder="Nombre">
-            <input type="text" id="uR" placeholder="Rol">
-            <button class="btn-add" onclick="guardarVend()">REGISTRAR</button>
+            <input type="email" id="uE" placeholder="Correo de acceso">
+            <input type="text" id="uP" placeholder="Contraseña">
+            <select id="uR">
+                <option value="vendedor">Rol: Vendedor</option>
+                <option value="admin">Rol: Administrador</option>
+            </select>
+            <button class="btn-add" onclick="guardarUsuario()">REGISTRAR USUARIO</button>
             <div id="listaU"></div>
             <button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">CERRAR</button>
         </div>
     </div>
 
+    <!-- OTROS MODALES (Simplificados para no dañar nada) -->
+    <div id="modalVentas" class="modal"><div class="modal-content"><h3>Entregar Cuenta</h3><input type="text" id="vWS" placeholder="WhatsApp Cliente"><input type="text" id="vD" placeholder="Correo:Clave"><button class="btn-add" onclick="guardarEntrega()">AUTORIZAR</button><button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button></div></div>
+    <div id="modalClientes" class="modal"><div class="modal-content"><h3>Clientes</h3><input type="text" id="cN" placeholder="Nombre"><button class="btn-add" onclick="guardarC()">GUARDAR</button><div id="listaC"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">CERRAR</button></div></div>
+    <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Plataformas</h3><input type="text" id="pN" placeholder="Nombre"><button class="btn-add" onclick="guardarP()">GUARDAR</button><div id="listaP"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">CERRAR</button></div></div>
+
+    <!-- CLIENTE -->
+    <div id="clienteDashboard" class="hidden"><header><h3>RECLAMA TU CUENTA</h3></header><div style="padding:20px"><input type="text" id="wsC" placeholder="Tu WhatsApp"><button class="btn-add" onclick="verCuenta()">VER DATOS</button><div id="resC"></div><button class="btn-cerrar" onclick="location.reload()">VOLVER</button></div></div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -129,74 +115,96 @@
             messagingSenderId: "96449660649",
             appId: "1:96449660649:web:d949eccf893c9705451278"
         };
-
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // NAVEGACIÓN
-        window.validarAcceso = () => {
-            if(document.getElementById('logEmail').value === "Andyobregon799@gmail.com" && document.getElementById('logPass').value === "123456") {
-                mostrarSeccion('adminDashboard');
-            } else { alert("Datos incorrectos"); }
+        let userLogueado = { nombre: "", rol: "" };
+
+        // LOGIN CON ROLES
+        window.validarAcceso = async () => {
+            const e = document.getElementById('logEmail').value;
+            const p = document.getElementById('logPass').value;
+
+            if(e === "Andyobregon799@gmail.com" && p === "123456") {
+                entrarComo("Andy (Dueño)", "admin");
+            } else {
+                const q = query(collection(db, "usuarios"), where("correo", "==", e), where("clave", "==", p));
+                const s = await getDocs(q);
+                if(!s.empty) {
+                    const d = s.docs[0].data();
+                    entrarComo(d.nombre, d.rol);
+                } else { alert("Usuario no encontrado"); }
+            }
         };
-        window.mostrarSeccion = (id) => {
+
+        function entrarComo(nombre, rol) {
+            userLogueado = { nombre, rol };
             document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById(id).classList.remove('hidden');
-        };
+            document.getElementById('mainDashboard').classList.remove('hidden');
+            document.getElementById('userTitle').innerText = "BIENVENIDO: " + nombre.toUpperCase();
+            if(rol !== 'admin') document.getElementById('menuAdminOnly').classList.add('hidden');
+        }
+
+        window.mostrarSeccion = (id) => { document.getElementById('loginScreen').classList.add('hidden'); document.getElementById(id).classList.remove('hidden'); };
         window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
 
-        // ACCIONES FIREBASE (ANDY)
-        window.guardarVenta = async () => {
-            await addDoc(collection(db, "entregas"), { whatsapp: document.getElementById('vWS').value, plataforma: document.getElementById('vPlat').value, datos: document.getElementById('vDatos').value });
-            alert("Cuenta enviada al sistema de clientes"); cerrarModal('modalVentas');
+        // CHAT
+        window.enviarMensaje = async () => {
+            const txt = document.getElementById('msgInput').value;
+            if(!txt) return;
+            await addDoc(collection(db, "chat"), {
+                emisor: userLogueado.nombre,
+                rol: userLogueado.rol,
+                msg: txt,
+                fecha: serverTimestamp()
+            });
+            document.getElementById('msgInput').value = "";
+            cargarChat();
         };
 
-        window.guardarCliente = async () => {
-            await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value });
-            cargarClientes();
+        window.cargarChat = async () => {
+            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(20));
+            const s = await getDocs(q);
+            const box = document.getElementById('chatBox');
+            box.innerHTML = "";
+            s.forEach(doc => {
+                const d = doc.data();
+                const clase = d.rol === 'admin' ? 'msg-a' : 'msg-v';
+                box.innerHTML += `<div class="msg ${clase}"><b>${d.emisor}:</b><br>${d.msg}</div>`;
+            });
+            box.scrollTop = box.scrollHeight;
         };
 
-        window.cargarClientes = async () => {
-            const s = await getDocs(collection(db, "clientes"));
-            document.getElementById('listaC').innerHTML = "";
-            s.forEach(d => { document.getElementById('listaC').innerHTML += `<div class='lista-info'>${d.data().nombre} - ${d.data().whatsapp}</div>`; });
-        };
-
-        window.guardarPlat = async () => {
-            await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value });
-            cargarPlataformas();
-        };
-
-        window.cargarPlataformas = async () => {
-            const s = await getDocs(collection(db, "productos"));
-            document.getElementById('listaP').innerHTML = "";
-            s.forEach(d => { document.getElementById('listaP').innerHTML += `<div class='lista-info'>${d.data().nombre} - $${d.data().precio}</div>`; });
-        };
-
-        window.guardarVend = async () => {
-            await addDoc(collection(db, "vendedores"), { nombre: document.getElementById('uN').value, rol: document.getElementById('uR').value });
-            cargarVendedores();
+        // GESTIÓN USUARIOS
+        window.guardarUsuario = async () => {
+            await addDoc(collection(db, "usuarios"), { 
+                nombre: document.getElementById('uN').value,
+                correo: document.getElementById('uE').value,
+                clave: document.getElementById('uP').value,
+                rol: document.getElementById('uR').value
+            });
+            alert("Usuario creado"); cargarVendedores();
         };
 
         window.cargarVendedores = async () => {
-            const s = await getDocs(collection(db, "vendedores"));
+            const s = await getDocs(collection(db, "usuarios"));
             document.getElementById('listaU').innerHTML = "";
-            s.forEach(d => { document.getElementById('listaU').innerHTML += `<div class='lista-info'>${d.data().nombre} (${d.data().rol})</div>`; });
+            s.forEach(d => { document.getElementById('listaU').innerHTML += `<div class='lista-info'>${d.data().nombre} [${d.data().rol.toUpperCase()}]</div>`; });
         };
 
-        // ACCIÓN CLIENTE
-        window.consultarCuenta = async () => {
-            const ws = document.getElementById('wsCliente').value;
-            const q = query(collection(db, "entregas"), where("whatsapp", "==", ws));
+        // FUNCIONES AUXILIARES
+        window.guardarEntrega = async () => { await addDoc(collection(db, "entregas"), { whatsapp: document.getElementById('vWS').value, datos: document.getElementById('vD').value }); alert("OK"); cerrarModal('modalVentas'); };
+        window.verCuenta = async () => {
+            const q = query(collection(db, "entregas"), where("whatsapp", "==", document.getElementById('wsC').value));
             const s = await getDocs(q);
-            const res = document.getElementById('resCliente');
-            res.innerHTML = s.empty ? "No hay cuentas para este número" : "";
-            s.forEach(doc => {
-                res.innerHTML += `<div style='background:var(--success); color:white; padding:15px; border-radius:10px; margin-top:10px'>
-                    <b>${doc.data().plataforma}</b><br>Tus datos: ${doc.data().datos}</div>`;
-            });
+            document.getElementById('resC').innerHTML = s.empty ? "Sin datos" : "";
+            s.forEach(doc => { document.getElementById('resC').innerHTML += `<div style='background:var(--success); padding:10px; margin-top:5px'>${doc.data().datos}</div>`; });
         };
+        window.guardarC = async () => { await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value }); cargarClientes(); };
+        window.cargarClientes = async () => { const s = await getDocs(collection(db, "clientes")); document.getElementById('listaC').innerHTML = ""; s.forEach(d => { document.getElementById('listaC').innerHTML += `<div class='lista-info'>${d.data().nombre}</div>`; }); };
+        window.guardarP = async () => { await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value }); cargarPlataformas(); };
+        window.cargarPlataformas = async () => { const s = await getDocs(collection(db, "productos")); document.getElementById('listaP').innerHTML = ""; s.forEach(d => { document.getElementById('listaP').innerHTML += `<div class='lista-info'>${d.data().nombre}</div>`; }); };
     </script>
 </body>
 </html>
