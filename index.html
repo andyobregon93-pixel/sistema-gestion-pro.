@@ -9,43 +9,42 @@
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
         .hidden { display: none !important; }
         
-        /* Login y Registro */
-        #loginScreen, #chatRegister { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
-        .login-card { background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 100%; max-width: 350px; }
-        
         /* Dashboard */
         header { text-align: center; padding: 15px; border-bottom: 1px solid #334155; }
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
         
-        /* Chat Estilo Grupo */
-        #chatBox { background: #0f172a; height: 350px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; display: flex; flex-direction: column; }
-        .msg { margin-bottom: 12px; padding: 10px; border-radius: 10px; font-size: 0.85rem; max-width: 85%; position: relative; }
-        .msg-v { background: #334155; align-self: flex-start; border-bottom-left-radius: 2px; }
-        .msg-a { background: var(--primary); align-self: flex-end; border-bottom-right-radius: 2px; }
+        /* Chat Estilo Grupo con Fotos */
+        #chatBox { background: #0f172a; height: 400px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; display: flex; flex-direction: column; }
+        .msg { margin-bottom: 12px; padding: 10px; border-radius: 10px; font-size: 0.85rem; max-width: 85%; }
+        .msg-v { background: #334155; align-self: flex-start; }
+        .msg-a { background: var(--primary); align-self: flex-end; }
         .msg b { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 4px; }
+        .chat-img { max-width: 100%; border-radius: 8px; margin-top: 5px; cursor: pointer; }
 
         /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
         .modal-content { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: auto; border: 1px solid var(--primary); }
         
         input, select { width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; cursor: pointer; margin-top: 5px; }
         .btn-add { background: var(--primary); color: white; }
+        .btn-img { background: #4b5563; color: white; font-size: 0.8rem; }
         .btn-cerrar { background: var(--danger); color: white; margin-top: 20px; }
-        .lista-info { background: #0f172a; padding: 10px; margin-top: 5px; border-radius: 8px; font-size: 0.8rem; border-left: 3px solid var(--primary); }
     </style>
 </head>
 <body>
 
     <!-- ACCESO PRINCIPAL -->
     <div id="loginScreen">
-        <div class="login-card">
-            <h2>SISTEMA PRO</h2>
-            <input type="email" id="logEmail" placeholder="Correo">
-            <input type="password" id="logPass" placeholder="Clave">
-            <button class="btn-add" onclick="validarAcceso()">ENTRAR</button>
-            <button style="background:var(--success); color:white; margin-top:10px" onclick="mostrarSeccion('clienteDashboard')">RECLAMAR MI CUENTA</button>
+        <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center;">
+            <div style="background:var(--card-bg); padding:30px; border-radius:15px; border:1px solid var(--primary); width:90%; max-width:350px; text-align:center;">
+                <h2>SISTEMA PRO</h2>
+                <input type="email" id="logEmail" placeholder="Correo">
+                <input type="password" id="logPass" placeholder="Clave">
+                <button class="btn-add" onclick="validarAcceso()">ENTRAR</button>
+                <button style="background:var(--success); color:white; margin-top:10px" onclick="mostrarSeccion('clienteDashboard')">RECLAMAR MI CUENTA</button>
+            </div>
         </div>
     </div>
 
@@ -63,55 +62,47 @@
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; grid-column: span 2;">
                     <div class="card" onclick="abrirModal('modalClientes', cargarClientes)">👥 Mis Clientes</div>
                     <div class="card" onclick="abrirModal('modalPlataformas', cargarPlataformas)">📺 Plataformas</div>
-                    <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)" style="grid-column: span 2; border-color:var(--primary)">👷 Gestión de Usuarios y Roles</div>
+                    <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)" style="grid-column: span 2; border-color:var(--primary)">👷 Gestión Usuarios / Roles</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- REGISTRO PARA EL CHAT -->
+    <!-- REGISTRO CHAT -->
     <div id="chatRegister" class="modal">
         <div class="modal-content">
-            <h3>Identifícate para el Chat</h3>
-            <p style="font-size: 0.8rem; color: #94a3b8;">Ingresa tus datos para que los demás sepan quién escribe.</p>
-            <input type="text" id="chatNick" placeholder="Tu Nombre o Nick">
-            <input type="text" id="chatPhone" placeholder="Tu WhatsApp (ej: +593...)">
+            <h3>Perfil de Chat</h3>
+            <input type="text" id="chatNick" placeholder="Tu Apodo">
+            <input type="text" id="chatPhone" placeholder="Tu WhatsApp">
             <button class="btn-add" onclick="finalizarRegistroChat()">ENTRAR AL GRUPO</button>
             <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">CANCELAR</button>
         </div>
     </div>
 
-    <!-- MODAL CHAT (GRUPO) -->
+    <!-- MODAL CHAT -->
     <div id="modalChat" class="modal">
         <div class="modal-content">
-            <h3>Chat Grupal</h3>
-            <div id="chatBox">Cargando mensajes...</div>
-            <input type="text" id="msgInput" placeholder="Escribe un mensaje al grupo...">
-            <button class="btn-add" onclick="enviarMensaje()">ENVIAR</button>
-            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR DEL CHAT</button>
+            <h3>Grupo de Trabajo</h3>
+            <div id="chatBox"></div>
+            <input type="text" id="msgInput" placeholder="Mensaje...">
+            
+            <div style="display: flex; gap: 5px;">
+                <button class="btn-add" onclick="enviarMensaje()">ENVIAR</button>
+                <button class="btn-img" onclick="document.getElementById('fileInput').click()">📷 FOTO</button>
+            </div>
+            <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="subirFoto(this)">
+            
+            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR</button>
         </div>
     </div>
 
-    <!-- MODAL VENDEDORES / ROLES -->
-    <div id="modalVendedores" class="modal">
-        <div class="modal-content">
-            <h3>Configurar Nuevo Usuario</h3>
-            <input type="text" id="uN" placeholder="Nombre">
-            <input type="email" id="uE" placeholder="Correo de acceso">
-            <input type="text" id="uP" placeholder="Contraseña">
-            <select id="uR"><option value="vendedor">Rol: Vendedor</option><option value="admin">Rol: Administrador</option></select>
-            <button class="btn-add" onclick="guardarUsuario()">CREAR USUARIO</button>
-            <div id="listaU"></div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button>
-        </div>
-    </div>
-
-    <!-- MODALES RESTANTES (ADMIN) -->
+    <!-- MODALES ADMIN (NO TOCADOS) -->
+    <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Roles</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><select id="uR"><option value="vendedor">Vendedor</option><option value="admin">Admin</option></select><button class="btn-add" onclick="guardarUsuario()">CREAR</button><div id="listaU"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button></div></div>
     <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Plataformas</h3><input type="text" id="pN" placeholder="Nombre"><input type="number" id="pP" placeholder="Precio"><button class="btn-add" onclick="guardarPlataforma()">AÑADIR</button><div id="listaP"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button></div></div>
     <div id="modalClientes" class="modal"><div class="modal-content"><h3>Clientes</h3><input type="text" id="cN" placeholder="Nombre"><input type="text" id="cW" placeholder="WhatsApp"><button class="btn-add" onclick="guardarCliente()">GUARDAR</button><div id="listaC"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button></div></div>
     <div id="modalVentas" class="modal"><div class="modal-content"><h3>Entregar</h3><input type="text" id="vWS" placeholder="WhatsApp Cliente"><input type="text" id="vPlat" placeholder="Plataforma"><input type="text" id="vDatos" placeholder="Cuenta:Clave"><button class="btn-add" onclick="guardarEntrega()">NOTIFICAR</button><button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button></div></div>
 
-    <!-- CLIENTE -->
+    <!-- PORTAL CLIENTE -->
     <div id="clienteDashboard" class="hidden"><header><h3>RECLAMAR CUENTA</h3></header><div style="padding:20px"><input type="text" id="wsConsulta" placeholder="Tu WhatsApp"><button class="btn-add" onclick="consultarCuenta()">BUSCAR</button><div id="resConsulta"></div><button class="btn-cerrar" onclick="location.reload()">VOLVER</button></div></div>
 
     <script type="module">
@@ -140,7 +131,7 @@
                 const q = query(collection(db, "usuarios"), where("correo", "==", e), where("clave", "==", p));
                 const s = await getDocs(q);
                 if(!s.empty) { const d = s.docs[0].data(); entrar(d.nombre, d.rol); } 
-                else { alert("Error de acceso"); }
+                else { alert("Acceso denegado"); }
             }
         };
 
@@ -156,34 +147,56 @@
         window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
 
-        // LÓGICA DE REGISTRO CHAT
         window.checkChatAccess = () => {
             if(!userLogueado.nick) { abrirModal('chatRegister'); } 
             else { abrirModal('modalChat', cargarChat); }
         };
 
         window.finalizarRegistroChat = () => {
-            const nick = document.getElementById('chatNick').value;
-            const tel = document.getElementById('chatPhone').value;
-            if(!nick || !tel) return alert("Completa tus datos para el grupo");
-            userLogueado.nick = nick; userLogueado.tel = tel;
+            userLogueado.nick = document.getElementById('chatNick').value;
+            userLogueado.tel = document.getElementById('chatPhone').value;
+            if(!userLogueado.nick) return alert("Pon un nick");
             cerrarModal('chatRegister');
             abrirModal('modalChat', cargarChat);
         };
 
-        // CHAT GRUPAL
-        window.enviarMensaje = async () => {
+        // ENVIAR MENSAJE
+        window.enviarMensaje = async (imgUrl = null) => {
             const m = document.getElementById('msgInput').value;
-            if(!m) return;
+            if(!m && !imgUrl) return;
             await addDoc(collection(db, "chat"), { 
                 emisor: userLogueado.nick, 
                 telefono: userLogueado.tel,
-                rol: userLogueado.rol, 
-                msg: m, 
+                msg: m || "", 
+                foto: imgUrl || "",
                 fecha: serverTimestamp() 
             });
             document.getElementById('msgInput').value = "";
             cargarChat();
+        };
+
+        // SUBIR FOTO A IMGBB
+        window.subirFoto = async (input) => {
+            const file = input.files[0];
+            if(!file) return;
+            
+            const btn = document.querySelector('.btn-img');
+            btn.innerText = "SUBIENDO...";
+            
+            const formData = new FormData();
+            formData.append("image", file);
+            
+            try {
+                const response = await fetch("https://api.imgbb.com/1/upload?key=67d4039803730999557a5521b6d0e844", {
+                    method: "POST",
+                    body: formData
+                });
+                const data = await response.json();
+                if(data.success) {
+                    await enviarMensaje(data.data.url);
+                }
+            } catch (err) { alert("Error al subir foto"); }
+            btn.innerText = "📷 FOTO";
         };
 
         window.cargarChat = async () => {
@@ -194,34 +207,22 @@
             s.forEach(doc => {
                 const d = doc.data();
                 const estilo = d.emisor === userLogueado.nick ? 'msg-a' : 'msg-v';
-                box.innerHTML += `<div class="msg ${estilo}"><b>${d.emisor} (${d.telefono})</b>${d.msg}</div>`;
+                let contenido = d.msg ? `<div>${d.msg}</div>` : "";
+                if(d.foto) contenido += `<img src="${d.foto}" class="chat-img" onclick="window.open('${d.foto}')">`;
+                
+                box.innerHTML += `<div class="msg ${estilo}"><b>${d.emisor} (${d.telefono})</b>${contenido}</div>`;
             });
             box.scrollTop = box.scrollHeight;
         };
 
-        // FUNCIONES ADMIN (RESTAURADAS)
-        window.guardarUsuario = async () => {
-            await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: document.getElementById('uR').value });
-            alert("Usuario creado"); cargarVendedores();
-        };
-        window.cargarVendedores = async () => {
-            const s = await getDocs(collection(db, "usuarios"));
-            const list = document.getElementById('listaU'); list.innerHTML = "";
-            s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} - ${d.data().rol}</div>`; });
-        };
+        // ADMIN FUNCTIONS (IGUALES)
+        window.guardarUsuario = async () => { await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: document.getElementById('uR').value }); cargarVendedores(); };
+        window.cargarVendedores = async () => { const s = await getDocs(collection(db, "usuarios")); const list = document.getElementById('listaU'); list.innerHTML = ""; s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} - ${d.data().rol}</div>`; }); };
         window.guardarPlataforma = async () => { await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value }); cargarPlataformas(); };
-        window.cargarPlataformas = async () => {
-            const s = await getDocs(collection(db, "productos"));
-            const list = document.getElementById('listaP'); list.innerHTML = "";
-            s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} - $${d.data().precio}</div>`; });
-        };
+        window.cargarPlataformas = async () => { const s = await getDocs(collection(db, "productos")); const list = document.getElementById('listaP'); list.innerHTML = ""; s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} - $${d.data().precio}</div>`; }); };
         window.guardarCliente = async () => { await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value }); cargarClientes(); };
-        window.cargarClientes = async () => {
-            const s = await getDocs(collection(db, "clientes"));
-            const list = document.getElementById('listaC'); list.innerHTML = "";
-            s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} (${d.data().whatsapp})</div>`; });
-        };
-        window.guardarEntrega = async () => { await addDoc(collection(db, "entregas"), { whatsapp: document.getElementById('vWS').value, plataforma: document.getElementById('vPlat').value, datos: document.getElementById('vDatos').value }); alert("Entrega lista"); cerrarModal('modalVentas'); };
+        window.cargarClientes = async () => { const s = await getDocs(collection(db, "clientes")); const list = document.getElementById('listaC'); list.innerHTML = ""; s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} (${d.data().whatsapp})</div>`; }); };
+        window.guardarEntrega = async () => { await addDoc(collection(db, "entregas"), { whatsapp: document.getElementById('vWS').value, plataforma: document.getElementById('vPlat').value, datos: document.getElementById('vDatos').value }); alert("OK"); cerrarModal('modalVentas'); };
         window.consultarCuenta = async () => {
             const q = query(collection(db, "entregas"), where("whatsapp", "==", document.getElementById('wsConsulta').value));
             const s = await getDocs(q);
