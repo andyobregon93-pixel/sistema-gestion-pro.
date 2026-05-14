@@ -17,7 +17,7 @@
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
         
-        /* CHAT */
+        /* CHAT ESTILO WHATSAPP */
         #chatBox { 
             background: var(--wa-bg); height: 400px; overflow-y: auto; padding: 15px; 
             border-radius: 8px; border: 1px solid #334155; margin-bottom: 5px; 
@@ -48,13 +48,11 @@
         .recording { background: var(--danger) !important; animation: blink 1s infinite; }
         #recordTimer { color: var(--danger); font-weight: bold; font-size: 0.9rem; margin-right: 10px; }
         @keyframes blink { 50% { opacity: 0.5; } }
-        
-        .member-item { border-bottom: 1px solid #334155; padding: 10px 0; }
     </style>
 </head>
 <body>
 
-    <!-- ACCESO -->
+    <!-- PANTALLA DE LOGUEO -->
     <div id="loginScreen">
         <div style="height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:20px;">
             <div style="background:var(--card-bg); padding:30px; border-radius:15px; border:1px solid var(--primary); width:100%; max-width:350px; text-align:center;">
@@ -79,7 +77,7 @@
         <button onclick="location.reload()" style="background:var(--danger); width:80%; margin:20px auto; display:block;">CERRAR SESIÓN</button>
     </div>
 
-    <!-- CHAT VIP -->
+    <!-- VENTANA DE CHAT -->
     <div id="modalChat" class="modal">
         <div class="modal-content" style="max-width: 600px; height: 95vh; display: flex; flex-direction: column;">
             <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px;">
@@ -89,6 +87,7 @@
             
             <div id="chatBox"></div>
             
+            <!-- Vista previa de respuesta (solo aparece si etiquetas) -->
             <div id="replyPreviewContainer" class="hidden" style="background:#1e293b; padding:10px; border-left:4px solid var(--success);">
                 <div id="replyText" style="font-size:0.8rem;"></div>
                 <button onclick="cancelarRespuesta()" style="background:var(--danger); height:20px; width:20px; padding:0; float:right;">X</button>
@@ -96,45 +95,34 @@
 
             <div style="display: flex; gap: 5px; margin-top: 5px; align-items: center;">
                 <span id="recordTimer" class="hidden">0:00</span>
-                <input type="text" id="msgInput" placeholder="Escribe aquí...">
+                <input type="text" id="msgInput" placeholder="Escribe un mensaje...">
                 <button id="btnVoice" class="btn-mic" onclick="toggleAudio()">🎤</button>
                 <button class="btn-add" style="width: 60px;" onclick="enviarMensaje()">OK</button>
             </div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR AL PANEL</button>
+            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">VOLVER AL PANEL</button>
         </div>
     </div>
 
-    <!-- MODALES GESTIÓN -->
-    <div id="modalProfiles" class="modal"><div class="modal-content"><h3>Elige tu Perfil</h3><div id="profilesList"></div><button class="btn-add" onclick="abrirRegistroNuevo()">+ REGISTRARSE NUEVO</button></div></div>
+    <!-- MODALES DE GESTIÓN -->
+    <div id="modalProfiles" class="modal"><div class="modal-content"><h3>Elige tu Perfil</h3><div id="profilesList"></div><button class="btn-add" onclick="abrirRegistroNuevo()">+ REGISTRARSE</button></div></div>
     
     <div id="chatRegister" class="modal">
         <div class="modal-content">
-            <h3>Registro Nuevo</h3>
-            <input type="text" id="chatNick" placeholder="Nombre Completo">
-            <input type="number" id="chatPhone" placeholder="Número de Celular">
-            <p style="font-size: 0.7rem;">Foto de Perfil:</p>
+            <h3>Registro</h3>
+            <input type="text" id="chatNick" placeholder="Nombre">
+            <input type="number" id="chatPhone" placeholder="Celular">
             <input type="file" id="chatImg" accept="image/*">
-            <button class="btn-add" onclick="finalizarRegistroChat()">FINALIZAR REGISTRO</button>
-            <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">CANCELAR</button>
+            <button class="btn-add" onclick="finalizarRegistroChat()">GUARDAR</button>
         </div>
     </div>
 
-    <div id="modalVendedores" class="modal"><div class="modal-content"><h3>Usuarios del Sistema</h3><input type="text" id="uN" placeholder="Nombre"><input type="email" id="uE" placeholder="Correo"><input type="text" id="uP" placeholder="Clave"><button class="btn-add" onclick="guardarUsuario()">CREAR USUARIO</button><hr><div id="listaU"></div><button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">X</button></div></div>
-    
-    <div id="modalAdminMiembros" class="modal">
-        <div class="modal-content">
-            <h3>Lista de Miembros</h3>
-            <div id="fullMembersList"></div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalAdminMiembros')">CERRAR</button>
-        </div>
-    </div>
+    <div id="modalAdminMiembros" class="modal"><div class="modal-content"><h3>Miembros</h3><div id="fullMembersList"></div><button class="btn-cerrar" onclick="cerrarModal('modalAdminMiembros')">CERRAR</button></div></div>
 
-    <!-- MODAL ANOTAR PEDIDO -->
     <div id="modalPedido" class="modal">
         <div class="modal-content">
             <h3 id="pedidoTitle">Anotar Pedido</h3>
-            <textarea id="pedidoTexto" placeholder="Ej: Pidió cuenta Netflix 1 mes..."></textarea>
-            <button class="btn-add" id="btnGuardarPedido">GUARDAR ANOTACIÓN</button>
+            <textarea id="pedidoTexto"></textarea>
+            <button class="btn-add" id="btnGuardarPedido">GUARDAR</button>
             <button class="btn-cerrar" onclick="cerrarModal('modalPedido')">X</button>
         </div>
     </div>
@@ -155,7 +143,7 @@
 
         let userChat = { id: localStorage.getItem('chatUserId') || "", nick: localStorage.getItem('chatNick') || "", foto: localStorage.getItem('chatFoto') || "" };
         let respuestaActiva = null;
-        let mediaRecorder, chunks = [], timerInterval, seconds = 0;
+        let mediaRecorder, chunks = [];
 
         const getCol = (str) => ['#ff9f43', '#ee5253', '#10ac84', '#5f27cd', '#0abde3'][str.length % 5];
         window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
@@ -166,9 +154,7 @@
             const c = document.getElementById('logEmail').value, p = document.getElementById('logPass').value;
             if(c === "Andyobregon799@gmail.com" && p === "123456") { mostrarDashboard("ADMIN", true); return; }
             const s = await getDocs(collection(db, "usuarios"));
-            let enc = false;
-            s.forEach(d => { if(d.data().correo === c && d.data().clave === p) { mostrarDashboard(d.data().nombre, d.data().rol === "admin"); enc = true; } });
-            if(!enc) alert("Datos incorrectos");
+            s.forEach(d => { if(d.data().correo === c && d.data().clave === p) mostrarDashboard(d.data().nombre, d.data().rol === "admin"); });
         };
 
         function mostrarDashboard(n, a) {
@@ -181,37 +167,26 @@
         window.checkChatAccess = () => { if(userChat.id) abrirChat(); else cargarListaPerfiles(); };
 
         async function cargarListaPerfiles() {
-            const list = document.getElementById('profilesList'); list.innerHTML = "Cargando..."; abrirModal('modalProfiles');
+            const list = document.getElementById('profilesList'); list.innerHTML = ""; abrirModal('modalProfiles');
             const s = await getDocs(collection(db, "miembros_chat"));
-            list.innerHTML = "";
             s.forEach(d => {
                 const div = document.createElement('div'); div.className = "card"; div.style.marginBottom="5px";
-                div.innerHTML = `<b>${d.data().nick}</b><br><small>${d.data().celular || ''}</small>`;
-                div.onclick = () => { 
-                    userChat = { id: d.id, nick: d.data().nick, foto: d.data().foto || "" }; 
-                    localStorage.setItem('chatUserId', d.id); 
-                    localStorage.setItem('chatNick', d.data().nick);
-                    localStorage.setItem('chatFoto', d.data().foto || "");
-                    abrirChat(); cerrarModal('modalProfiles'); 
-                };
+                div.innerHTML = `<b>${d.data().nick}</b>`;
+                div.onclick = () => { userChat = { id: d.id, nick: d.data().nick, foto: d.data().foto || "" }; localStorage.setItem('chatUserId', d.id); localStorage.setItem('chatNick', d.data().nick); localStorage.setItem('chatFoto', d.data().foto || ""); abrirChat(); cerrarModal('modalProfiles'); };
                 list.appendChild(div);
             });
         }
-
-        window.abrirRegistroNuevo = () => { cerrarModal('modalProfiles'); abrirModal('chatRegister'); };
 
         window.finalizarRegistroChat = async () => {
             const nick = document.getElementById('chatNick').value;
             const cel = document.getElementById('chatPhone').value;
             const file = document.getElementById('chatImg').files[0];
-            if(!nick || !cel) return alert("Nombre y celular obligatorios");
-            let imgB64 = "";
-            if(file) imgB64 = await toBase64(file);
-            const docRef = await addDoc(collection(db, "miembros_chat"), { nick: nick, celular: cel, foto: imgB64, pedido: "" });
-            userChat = { id: docRef.id, nick: nick, foto: imgB64 };
+            let img = file ? await toBase64(file) : "";
+            const docRef = await addDoc(collection(db, "miembros_chat"), { nick, celular: cel, foto: img, pedido: "" });
+            userChat = { id: docRef.id, nick, foto: img };
             localStorage.setItem('chatUserId', docRef.id);
             localStorage.setItem('chatNick', nick);
-            localStorage.setItem('chatFoto', imgB64);
+            localStorage.setItem('chatFoto', img);
             cerrarModal('chatRegister'); abrirChat();
         };
 
@@ -239,94 +214,72 @@
             });
         }
 
+        // --- FUNCIÓN CORREGIDA PARA ENVIAR SIN ETIQUETAS ---
         window.enviarMensaje = async () => {
             const input = document.getElementById('msgInput');
-            const m = input.value.trim(); 
-            if(!m) return;
-            const tempMsg = m; 
+            const texto = input.value.trim();
+            if(!texto) return;
             input.value = "";
-            
-            // Construimos el objeto del mensaje. Solo agregamos respuestas si existen.
-            const mensajeData = {
+
+            // Creamos el mensaje básico que SIEMPRE se envía
+            const nuevoMensaje = {
                 emisor: userChat.nick,
                 emisorId: userChat.id,
                 foto: userChat.foto || "",
-                msg: tempMsg,
+                msg: texto,
                 fecha: serverTimestamp()
             };
 
-            if(respuestaActiva && respuestaActiva.autor && respuestaActiva.msg) {
-                mensajeData.respA = respuestaActiva.autor;
-                mensajeData.respM = respuestaActiva.msg;
+            // Solo agregamos la respuesta si el usuario activó una etiqueta
+            if(respuestaActiva) {
+                nuevoMensaje.respA = respuestaActiva.autor;
+                nuevoMensaje.respM = respuestaActiva.msg;
             }
 
             try {
-                await addDoc(collection(db, "chat"), mensajeData);
+                await addDoc(collection(db, "chat"), nuevoMensaje);
                 cancelarRespuesta();
-            } catch(e) {
-                console.error("Error al enviar:", e);
-                alert("No se pudo enviar el mensaje. Intenta de nuevo.");
-            }
+            } catch(e) { console.error(e); }
         };
 
         window.toggleAudio = async () => {
-            const btn = document.getElementById('btnVoice'), timer = document.getElementById('recordTimer');
+            const btn = document.getElementById('btnVoice');
             if(!mediaRecorder || mediaRecorder.state === "inactive") {
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                    mediaRecorder = new MediaRecorder(stream); chunks = []; seconds = 0;
-                    timer.classList.remove('hidden');
-                    timerInterval = setInterval(() => { seconds++; timer.innerText = `0:${seconds < 10 ? '0' : ''}${seconds}`; }, 1000);
-                    mediaRecorder.ondataavailable = e => chunks.push(e.data);
-                    mediaRecorder.onstop = async () => {
-                        clearInterval(timerInterval); timer.classList.add('hidden');
-                        const b64 = await toBase64(new Blob(chunks, { type: 'audio/mp3' }));
-                        await addDoc(collection(db, "chat"), { emisor: userChat.nick, emisorId: userChat.id, foto: userChat.foto || "", audio: b64, fecha: serverTimestamp() });
-                    };
-                    mediaRecorder.start(); btn.classList.add('recording');
-                } catch(e) { alert("Error al acceder al micro"); }
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream); chunks = [];
+                mediaRecorder.ondataavailable = e => chunks.push(e.data);
+                mediaRecorder.onstop = async () => {
+                    const b64 = await toBase64(new Blob(chunks, { type: 'audio/mp3' }));
+                    await addDoc(collection(db, "chat"), { emisor: userChat.nick, emisorId: userChat.id, foto: userChat.foto || "", audio: b64, fecha: serverTimestamp() });
+                };
+                mediaRecorder.start(); btn.classList.add('recording');
             } else { mediaRecorder.stop(); btn.classList.remove('recording'); }
         };
 
-        window.prepararRespuesta = (a, m) => { respuestaActiva = { autor: a, msg: m }; document.getElementById('replyText').innerText = `Respondiendo a ${a}`; document.getElementById('replyPreviewContainer').classList.remove('hidden'); };
+        window.prepararRespuesta = (a, m) => { respuestaActiva = { autor: a, msg: m }; document.getElementById('replyText').innerText = `R: ${a}`; document.getElementById('replyPreviewContainer').classList.remove('hidden'); };
         window.cancelarRespuesta = () => { respuestaActiva = null; document.getElementById('replyPreviewContainer').classList.add('hidden'); };
 
         window.cargarTodosLosMiembros = async () => {
-            const cont = document.getElementById('fullMembersList'); cont.innerHTML = "Cargando...";
+            const cont = document.getElementById('fullMembersList'); cont.innerHTML = "";
             const s = await getDocs(collection(db, "miembros_chat"));
-            cont.innerHTML = "";
             s.forEach(m => {
-                const data = m.data();
-                const div = document.createElement('div');
-                div.className = "member-item";
-                div.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <div>
-                            <b>${data.nick}</b><br>
-                            <small>${data.celular || 'Sin número'}</small><br>
-                            <span style="color:var(--success); font-size:0.7rem;">Nota: ${data.pedido || 'Ninguna'}</span>
-                        </div>
-                        <button style="width:auto; padding:5px; background:var(--primary); font-size:0.7rem;" onclick="abrirAnotarPedido('${m.id}', '${data.nick}', '${data.pedido || ''}')">ANOTAR</button>
-                    </div>
-                `;
-                cont.appendChild(div);
+                const d = m.data();
+                cont.innerHTML += `<div style="border-bottom:1px solid #333; padding:10px;">
+                    <b>${d.nick}</b> - ${d.celular}<br><small>Pedido: ${d.pedido || 'N/A'}</small>
+                    <button style="width:auto; padding:5px; background:var(--primary); font-size:0.6rem;" onclick="abrirAnotarPedido('${m.id}', '${d.nick}', '${d.pedido || ''}')">NOTAR</button>
+                </div>`;
             });
         };
 
         window.abrirAnotarPedido = (id, nick, actual) => {
             abrirModal('modalPedido');
-            document.getElementById('pedidoTitle').innerText = "Pedido de " + nick;
+            document.getElementById('pedidoTitle').innerText = nick;
             document.getElementById('pedidoTexto').value = actual;
             document.getElementById('btnGuardarPedido').onclick = async () => {
-                const texto = document.getElementById('pedidoTexto').value;
-                await updateDoc(doc(db, "miembros_chat", id), { pedido: texto });
-                cerrarModal('modalPedido');
-                cargarTodosLosMiembros();
+                await updateDoc(doc(db, "miembros_chat", id), { pedido: document.getElementById('pedidoTexto').value });
+                cerrarModal('modalPedido'); cargarTodosLosMiembros();
             };
         };
-
-        window.guardarUsuario = async () => { await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: "vendedor" }); cargarVendedores(); };
-        window.cargarVendedores = async () => { const l = document.getElementById('listaU'); l.innerHTML = ""; const s = await getDocs(collection(db, "usuarios")); s.forEach(d => l.innerHTML += `<div style="padding:5px;">👤 ${d.data().nombre} (${d.data().rol})</div>`); };
     </script>
 </body>
 </html>
