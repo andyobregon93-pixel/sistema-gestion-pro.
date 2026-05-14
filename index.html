@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sistema de Gestión Pro</title>
-    <!-- Estilos rápidos para que se vea profesional en móvil -->
     <style>
         :root {
             --primary: #2563eb;
@@ -24,6 +23,7 @@
             font-weight: bold;
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3);
             border: 1px solid #334155;
+            cursor: pointer;
         }
         .card:active { transform: scale(0.95); background: var(--primary); }
         .deudores { border: 1px solid var(--danger); color: var(--danger); }
@@ -40,26 +40,38 @@
     </header>
 
     <div class="grid-menu">
-        <!-- Vendedores y Dueño pueden usar estos -->
-        <div class="card" onclick="alert('Módulo Ventas')">📦 Registrar Venta</div>
-        <div class="card" onclick="alert('Lista Clientes')">👥 Clientes</div>
-        
-        <!-- Especial para deudores -->
-        <div class="card deudores" onclick="alert('Lista Deudores')">⚠️ Deudores</div>
-        
-        <!-- Solo para el Dueño -->
-        <div class="card" onclick="alert('Ganancias')">💰 Mis Ganancias</div>
-
-        <!-- Panel de Administración -->
-        <div class="card admin-section" onclick="alert('Panel Admin')">
+        <div class="card" onclick="alert('Módulo Ventas (Próximamente)')">📦 Registrar Venta</div>
+        <div class="card" onclick="alert('Lista Clientes (Próximamente)')">👥 Clientes</div>
+        <div class="card deudores" onclick="alert('Lista Deudores (Próximamente)')">⚠️ Deudores</div>
+        <div class="card" onclick="alert('Mis Ganancias (Próximamente)')">💰 Mis Ganancias</div>
+        <div class="card admin-section" onclick="alert('Panel Admin (Próximamente)')">
             ⚙️ ADMINISTRAR TRABAJADORES Y ROLES
         </div>
     </div>
 
-    <!-- Firebase SDK (Para conectar la base de datos después) -->
+    <!-- Conexión a Firebase configurada con tus llaves -->
     <script type="module">
-        // Aquí pegaremos las credenciales de tu Firebase más adelante
-        console.log("Sistema listo para conectar a Firebase");
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Tus credenciales de la imagen 1000972188.png
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
+            authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
+            projectId: "gestion-ventas-pro-f8de4",
+            storageBucket: "gestion-ventas-pro-f8de4.firebasestorage.app",
+            messagingSenderId: "96449660649",
+            appId: "1:96449660649:web:d949eccf893c9705451278"
+        };
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        console.log("Sistema de Andy conectado correctamente a Firebase");
+        
+        // Exponer la base de datos para funciones futuras
+        window.db = db;
     </script>
 </body>
 </html>
