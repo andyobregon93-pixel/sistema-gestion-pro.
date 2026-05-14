@@ -9,20 +9,21 @@
         body { font-family: sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 10px; }
         .hidden { display: none !important; }
         
-        /* Login */
-        #loginScreen { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; }
-        .login-card { background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 100%; max-width: 350px; text-align: center; }
+        /* Login y Registro */
+        #loginScreen, #chatRegister { height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; }
+        .login-card { background: var(--card-bg); padding: 30px; border-radius: 15px; border: 1px solid var(--primary); width: 100%; max-width: 350px; }
         
         /* Dashboard */
         header { text-align: center; padding: 15px; border-bottom: 1px solid #334155; }
         .grid-menu { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; padding: 15px; }
         .card { background: var(--card-bg); padding: 20px 5px; text-align: center; border-radius: 12px; font-weight: bold; border: 1px solid #334155; cursor: pointer; font-size: 0.8rem; }
         
-        /* Chat */
-        #chatBox { background: #0f172a; height: 250px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; display: flex; flex-direction: column; }
-        .msg { margin-bottom: 8px; padding: 8px; border-radius: 5px; font-size: 0.85rem; max-width: 80%; }
-        .msg-v { background: #334155; align-self: flex-start; }
-        .msg-a { background: var(--primary); align-self: flex-end; }
+        /* Chat Estilo Grupo */
+        #chatBox { background: #0f172a; height: 350px; overflow-y: auto; padding: 10px; border-radius: 8px; border: 1px solid #334155; margin-bottom: 10px; display: flex; flex-direction: column; }
+        .msg { margin-bottom: 12px; padding: 10px; border-radius: 10px; font-size: 0.85rem; max-width: 85%; position: relative; }
+        .msg-v { background: #334155; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg-a { background: var(--primary); align-self: flex-end; border-bottom-right-radius: 2px; }
+        .msg b { display: block; font-size: 0.7rem; color: #94a3b8; margin-bottom: 4px; }
 
         /* Modales */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; padding: 15px; box-sizing: border-box; overflow-y: auto; }
@@ -37,7 +38,7 @@
 </head>
 <body>
 
-    <!-- ACCESO -->
+    <!-- ACCESO PRINCIPAL -->
     <div id="loginScreen">
         <div class="login-card">
             <h2>SISTEMA PRO</h2>
@@ -57,92 +58,61 @@
         
         <div class="grid-menu">
             <div class="card" onclick="abrirModal('modalVentas')">📦 Entregar Cuenta</div>
-            <div class="card" onclick="abrirModal('modalChat', cargarChat)">💬 Pedir Cuentas / Chat</div>
+            <div class="card" onclick="checkChatAccess()">💬 Chat del Grupo</div>
             <div id="menuAdminOnly" class="hidden">
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; grid-column: span 2;">
                     <div class="card" onclick="abrirModal('modalClientes', cargarClientes)">👥 Mis Clientes</div>
                     <div class="card" onclick="abrirModal('modalPlataformas', cargarPlataformas)">📺 Plataformas</div>
-                    <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)" style="grid-column: span 2; border-color:var(--primary)">👷 Gestión de Roles / Usuarios</div>
+                    <div class="card" onclick="abrirModal('modalVendedores', cargarVendedores)" style="grid-column: span 2; border-color:var(--primary)">👷 Gestión de Usuarios y Roles</div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL CHAT -->
-    <div id="modalChat" class="modal">
+    <!-- REGISTRO PARA EL CHAT -->
+    <div id="chatRegister" class="modal">
         <div class="modal-content">
-            <h3>Centro de Pedidos</h3>
-            <div id="chatBox">Cargando...</div>
-            <input type="text" id="msgInput" placeholder="¿Qué cuenta necesitas?">
-            <button class="btn-add" onclick="enviarMensaje()">ENVIAR</button>
-            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">CERRAR</button>
+            <h3>Identifícate para el Chat</h3>
+            <p style="font-size: 0.8rem; color: #94a3b8;">Ingresa tus datos para que los demás sepan quién escribe.</p>
+            <input type="text" id="chatNick" placeholder="Tu Nombre o Nick">
+            <input type="text" id="chatPhone" placeholder="Tu WhatsApp (ej: +593...)">
+            <button class="btn-add" onclick="finalizarRegistroChat()">ENTRAR AL GRUPO</button>
+            <button class="btn-cerrar" onclick="cerrarModal('chatRegister')">CANCELAR</button>
         </div>
     </div>
 
-    <!-- MODAL VENDEDORES Y ROLES -->
+    <!-- MODAL CHAT (GRUPO) -->
+    <div id="modalChat" class="modal">
+        <div class="modal-content">
+            <h3>Chat Grupal</h3>
+            <div id="chatBox">Cargando mensajes...</div>
+            <input type="text" id="msgInput" placeholder="Escribe un mensaje al grupo...">
+            <button class="btn-add" onclick="enviarMensaje()">ENVIAR</button>
+            <button class="btn-cerrar" onclick="cerrarModal('modalChat')">SALIR DEL CHAT</button>
+        </div>
+    </div>
+
+    <!-- MODAL VENDEDORES / ROLES -->
     <div id="modalVendedores" class="modal">
         <div class="modal-content">
             <h3>Configurar Nuevo Usuario</h3>
-            <input type="text" id="uN" placeholder="Nombre del usuario">
+            <input type="text" id="uN" placeholder="Nombre">
             <input type="email" id="uE" placeholder="Correo de acceso">
             <input type="text" id="uP" placeholder="Contraseña">
-            <select id="uR">
-                <option value="vendedor">Rol: Vendedor (Limitado)</option>
-                <option value="admin">Rol: Administrador (Todo)</option>
-            </select>
+            <select id="uR"><option value="vendedor">Rol: Vendedor</option><option value="admin">Rol: Administrador</option></select>
             <button class="btn-add" onclick="guardarUsuario()">CREAR USUARIO</button>
-            <hr style="margin: 20px 0; border: 0.5px solid #334155;">
             <div id="listaU"></div>
             <button class="btn-cerrar" onclick="cerrarModal('modalVendedores')">VOLVER</button>
         </div>
     </div>
 
-    <!-- MODAL PLATAFORMAS -->
-    <div id="modalPlataformas" class="modal">
-        <div class="modal-content">
-            <h3>Nueva Plataforma</h3>
-            <input type="text" id="pN" placeholder="Ej: Netflix, Disney+">
-            <input type="number" id="pP" placeholder="Precio de venta">
-            <button class="btn-add" onclick="guardarPlataforma()">AÑADIR PLATAFORMA</button>
-            <div id="listaP"></div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button>
-        </div>
-    </div>
+    <!-- MODALES RESTANTES (ADMIN) -->
+    <div id="modalPlataformas" class="modal"><div class="modal-content"><h3>Plataformas</h3><input type="text" id="pN" placeholder="Nombre"><input type="number" id="pP" placeholder="Precio"><button class="btn-add" onclick="guardarPlataforma()">AÑADIR</button><div id="listaP"></div><button class="btn-cerrar" onclick="cerrarModal('modalPlataformas')">VOLVER</button></div></div>
+    <div id="modalClientes" class="modal"><div class="modal-content"><h3>Clientes</h3><input type="text" id="cN" placeholder="Nombre"><input type="text" id="cW" placeholder="WhatsApp"><button class="btn-add" onclick="guardarCliente()">GUARDAR</button><div id="listaC"></div><button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button></div></div>
+    <div id="modalVentas" class="modal"><div class="modal-content"><h3>Entregar</h3><input type="text" id="vWS" placeholder="WhatsApp Cliente"><input type="text" id="vPlat" placeholder="Plataforma"><input type="text" id="vDatos" placeholder="Cuenta:Clave"><button class="btn-add" onclick="guardarEntrega()">NOTIFICAR</button><button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button></div></div>
 
-    <!-- MODAL CLIENTES -->
-    <div id="modalClientes" class="modal">
-        <div class="modal-content">
-            <h3>Registrar Cliente</h3>
-            <input type="text" id="cN" placeholder="Nombre completo">
-            <input type="text" id="cW" placeholder="Número de WhatsApp">
-            <button class="btn-add" onclick="guardarCliente()">GUARDAR CLIENTE</button>
-            <div id="listaC"></div>
-            <button class="btn-cerrar" onclick="cerrarModal('modalClientes')">VOLVER</button>
-        </div>
-    </div>
-
-    <!-- MODAL VENTAS (ENTREGA) -->
-    <div id="modalVentas" class="modal">
-        <div class="modal-content">
-            <h3>Entregar a Cliente</h3>
-            <input type="text" id="vWS" placeholder="WhatsApp del Cliente">
-            <input type="text" id="vPlat" placeholder="Plataforma">
-            <input type="text" id="vDatos" placeholder="Cuenta:Clave">
-            <button class="btn-add" onclick="guardarEntrega()">NOTIFICAR ENTREGA</button>
-            <button class="btn-cerrar" onclick="cerrarModal('modalVentas')">CERRAR</button>
-        </div>
-    </div>
-
-    <!-- PORTAL CLIENTE -->
-    <div id="clienteDashboard" class="hidden">
-        <header><h3>RECLAMAR MI CUENTA</h3></header>
-        <div style="padding:20px">
-            <input type="text" id="wsConsulta" placeholder="Ingresa tu WhatsApp">
-            <button class="btn-add" onclick="consultarCuenta()">BUSCAR MI COMPRA</button>
-            <div id="resConsulta"></div>
-            <button class="btn-cerrar" onclick="location.reload()">VOLVER AL INICIO</button>
-        </div>
-    </div>
+    <!-- CLIENTE -->
+    <div id="clienteDashboard" class="hidden"><header><h3>RECLAMAR CUENTA</h3></header><div style="padding:20px"><input type="text" id="wsConsulta" placeholder="Tu WhatsApp"><button class="btn-add" onclick="consultarCuenta()">BUSCAR</button><div id="resConsulta"></div><button class="btn-cerrar" onclick="location.reload()">VOLVER</button></div></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -159,27 +129,23 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        let userLogueado = { nombre: "", rol: "" };
+        let userLogueado = { nombre: "", rol: "", nick: "", tel: "" };
 
         // ACCESO
         window.validarAcceso = async () => {
             const e = document.getElementById('logEmail').value;
             const p = document.getElementById('logPass').value;
-
-            if(e === "Andyobregon799@gmail.com" && p === "123456") {
-                entrar("Andy (Admin)", "admin");
-            } else {
+            if(e === "Andyobregon799@gmail.com" && p === "123456") { entrar("Andy", "admin"); } 
+            else {
                 const q = query(collection(db, "usuarios"), where("correo", "==", e), where("clave", "==", p));
                 const s = await getDocs(q);
-                if(!s.empty) {
-                    const d = s.docs[0].data();
-                    entrar(d.nombre, d.rol);
-                } else { alert("Correo o Clave incorrecta"); }
+                if(!s.empty) { const d = s.docs[0].data(); entrar(d.nombre, d.rol); } 
+                else { alert("Error de acceso"); }
             }
         };
 
         function entrar(nombre, rol) {
-            userLogueado = { nombre, rol };
+            userLogueado.nombre = nombre; userLogueado.rol = rol;
             document.getElementById('loginScreen').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
             document.getElementById('userTitle').innerText = "HOLA, " + nombre.toUpperCase();
@@ -190,93 +156,77 @@
         window.abrirModal = (id, cb) => { document.getElementById(id).style.display = "block"; if(cb) cb(); };
         window.cerrarModal = (id) => document.getElementById(id).style.display = "none";
 
-        // CHAT
+        // LÓGICA DE REGISTRO CHAT
+        window.checkChatAccess = () => {
+            if(!userLogueado.nick) { abrirModal('chatRegister'); } 
+            else { abrirModal('modalChat', cargarChat); }
+        };
+
+        window.finalizarRegistroChat = () => {
+            const nick = document.getElementById('chatNick').value;
+            const tel = document.getElementById('chatPhone').value;
+            if(!nick || !tel) return alert("Completa tus datos para el grupo");
+            userLogueado.nick = nick; userLogueado.tel = tel;
+            cerrarModal('chatRegister');
+            abrirModal('modalChat', cargarChat);
+        };
+
+        // CHAT GRUPAL
         window.enviarMensaje = async () => {
             const m = document.getElementById('msgInput').value;
             if(!m) return;
-            await addDoc(collection(db, "chat"), { emisor: userLogueado.nombre, rol: userLogueado.rol, msg: m, fecha: serverTimestamp() });
+            await addDoc(collection(db, "chat"), { 
+                emisor: userLogueado.nick, 
+                telefono: userLogueado.tel,
+                rol: userLogueado.rol, 
+                msg: m, 
+                fecha: serverTimestamp() 
+            });
             document.getElementById('msgInput').value = "";
             cargarChat();
         };
 
         window.cargarChat = async () => {
-            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(30));
+            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(50));
             const s = await getDocs(q);
             const box = document.getElementById('chatBox');
             box.innerHTML = "";
             s.forEach(doc => {
                 const d = doc.data();
-                const estilo = d.rol === 'admin' ? 'msg-a' : 'msg-v';
-                box.innerHTML += `<div class="msg ${estilo}"><b>${d.emisor}:</b><br>${d.msg}</div>`;
+                const estilo = d.emisor === userLogueado.nick ? 'msg-a' : 'msg-v';
+                box.innerHTML += `<div class="msg ${estilo}"><b>${d.emisor} (${d.telefono})</b>${d.msg}</div>`;
             });
             box.scrollTop = box.scrollHeight;
         };
 
-        // GUARDADO DE DATOS (REPARADO)
+        // FUNCIONES ADMIN (RESTAURADAS)
         window.guardarUsuario = async () => {
-            await addDoc(collection(db, "usuarios"), { 
-                nombre: document.getElementById('uN').value,
-                correo: document.getElementById('uE').value,
-                clave: document.getElementById('uP').value,
-                rol: document.getElementById('uR').value
-            });
-            alert("Usuario registrado con éxito");
-            cargarVendedores();
+            await addDoc(collection(db, "usuarios"), { nombre: document.getElementById('uN').value, correo: document.getElementById('uE').value, clave: document.getElementById('uP').value, rol: document.getElementById('uR').value });
+            alert("Usuario creado"); cargarVendedores();
         };
-
         window.cargarVendedores = async () => {
             const s = await getDocs(collection(db, "usuarios"));
-            const list = document.getElementById('listaU');
-            list.innerHTML = "<h4>Usuarios en el sistema:</h4>";
-            s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} - Rol: ${d.data().rol}</div>`; });
+            const list = document.getElementById('listaU'); list.innerHTML = "";
+            s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} - ${d.data().rol}</div>`; });
         };
-
-        window.guardarPlataforma = async () => {
-            await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value });
-            alert("Plataforma añadida");
-            cargarPlataformas();
-        };
-
+        window.guardarPlataforma = async () => { await addDoc(collection(db, "productos"), { nombre: document.getElementById('pN').value, precio: document.getElementById('pP').value }); cargarPlataformas(); };
         window.cargarPlataformas = async () => {
             const s = await getDocs(collection(db, "productos"));
-            const list = document.getElementById('listaP');
-            list.innerHTML = "";
+            const list = document.getElementById('listaP'); list.innerHTML = "";
             s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} - $${d.data().precio}</div>`; });
         };
-
-        window.guardarCliente = async () => {
-            await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value });
-            alert("Cliente guardado");
-            cargarClientes();
-        };
-
+        window.guardarCliente = async () => { await addDoc(collection(db, "clientes"), { nombre: document.getElementById('cN').value, whatsapp: document.getElementById('cW').value }); cargarClientes(); };
         window.cargarClientes = async () => {
             const s = await getDocs(collection(db, "clientes"));
-            const list = document.getElementById('listaC');
-            list.innerHTML = "";
+            const list = document.getElementById('listaC'); list.innerHTML = "";
             s.forEach(d => { list.innerHTML += `<div class='lista-info'>${d.data().nombre} (${d.data().whatsapp})</div>`; });
         };
-
-        window.guardarEntrega = async () => {
-            await addDoc(collection(db, "entregas"), { 
-                whatsapp: document.getElementById('vWS').value, 
-                plataforma: document.getElementById('vPlat').value,
-                datos: document.getElementById('vDatos').value 
-            });
-            alert("Entrega registrada");
-            cerrarModal('modalVentas');
-        };
-
+        window.guardarEntrega = async () => { await addDoc(collection(db, "entregas"), { whatsapp: document.getElementById('vWS').value, plataforma: document.getElementById('vPlat').value, datos: document.getElementById('vDatos').value }); alert("Entrega lista"); cerrarModal('modalVentas'); };
         window.consultarCuenta = async () => {
-            const ws = document.getElementById('wsConsulta').value;
-            const q = query(collection(db, "entregas"), where("whatsapp", "==", ws));
+            const q = query(collection(db, "entregas"), where("whatsapp", "==", document.getElementById('wsConsulta').value));
             const s = await getDocs(q);
-            const res = document.getElementById('resConsulta');
-            res.innerHTML = s.empty ? "No se encontraron compras" : "";
-            s.forEach(doc => {
-                res.innerHTML += `<div style='background:var(--success); color:white; padding:15px; border-radius:10px; margin-top:10px'>
-                    <b>${doc.data().plataforma}</b><br>Cuenta: ${doc.data().datos}</div>`;
-            });
+            const res = document.getElementById('resConsulta'); res.innerHTML = s.empty ? "Sin datos" : "";
+            s.forEach(doc => { res.innerHTML += `<div style='background:var(--success); color:white; padding:15px; border-radius:10px; margin-top:10px'><b>${doc.data().plataforma}</b><br>${doc.data().datos}</div>`; });
         };
     </script>
 </body>
