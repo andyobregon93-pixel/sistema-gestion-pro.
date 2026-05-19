@@ -31,7 +31,7 @@
         
         .hidden { display: none !important; }
 
-        /* PANTALLAS DE ACCESO */
+        /* PANTALLAS DE ACCESO Y CONFIGURACIÓN */
         .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
         .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .auth-card h2 { color: var(--wa-teal); margin-bottom: 5px; font-size: 1.4rem; }
@@ -56,12 +56,12 @@
             height: 60px; background: var(--panel-header); padding: 0 14px; 
             display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;
         }
-        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: #2a3942; border: 1px solid var(--wa-teal); }
         .user-text { display: flex; flex-direction: column; }
         .user-text .title { font-weight: bold; font-size: 0.95rem; color: var(--text-main); }
         .user-text .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
-        .header-actions { display: flex; gap: 8px; }
+        .header-actions { display: flex; gap: 6px; align-items: center; }
         .btn-action { background: #2a3942; color: white; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; border: none; }
 
         /* CHAT */
@@ -103,6 +103,15 @@
         .action-sheet { width:100%; background:#202c33; border-top-left-radius:16px; border-top-right-radius:16px; padding: 12px 0; padding-bottom: calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 10px rgba(0,0,0,0.3); }
         .action-option { width:100%; padding:15px 20px; text-align:left; background:none; border:none; color:white; font-size:16px; display:flex; align-items:center; gap:12px; }
         .action-option:active { background:#2a3942; }
+
+        /* VISTA CONFIGURACIÓN PERFIL LOCAL STYLE WHATSAPP */
+        .profile-view { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
+        .profile-avatar-container { position: relative; width: 140px; height: 140px; margin-bottom: 10px; }
+        .profile-avatar-img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid var(--wa-teal); background: #2a3942; }
+        .profile-avatar-badge { position: absolute; bottom: 5px; right: 5px; background: var(--wa-teal); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #111b21; box-shadow: 0 2px 5px rgba(0,0,0,0.3); cursor: pointer; }
+        .profile-field-box { width: 100%; background: var(--panel-header); padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 5px; }
+        .profile-field-box label { font-size: 0.8rem; color: var(--wa-teal); font-weight: bold; text-transform: uppercase; }
+        .profile-field-value { font-size: 1rem; color: white; padding: 5px 0; }
 
         /* PANEL ADMIN */
         .admin-view { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
@@ -146,7 +155,7 @@
 
     <div id="appScreen" class="app-container hidden">
         <div class="app-header">
-            <div class="user-info">
+            <div class="user-info" id="btnIrAPerfil" title="Configurar mi Perfil">
                 <img id="myHeaderAvatar" class="header-avatar" src="">
                 <div class="user-text">
                     <span id="headerTitle" class="title">💬 GRUPO VIP - ANDY</span>
@@ -154,8 +163,8 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button id="btnToggleAdmin" class="btn-action hidden">🔧 Panel Admin</button>
-                <button id="btnToggleChat" class="btn-action hidden">💬 Ver Chat</button>
+                <button id="btnToggleAdmin" class="btn-action hidden">🔧 Admin</button>
+                <button id="btnToggleChat" class="btn-action hidden">💬 Chat</button>
                 <button id="btnSalir" class="btn-action" style="color:var(--danger)">Salir</button>
             </div>
         </div>
@@ -187,6 +196,28 @@
                     <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor"><path d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
                 </button>
             </div>
+        </div>
+
+        <div id="profileView" class="profile-view hidden">
+            <div class="profile-avatar-container">
+                <img id="editProfilePreview" class="profile-avatar-img" src="">
+                <div class="profile-avatar-badge" id="btnCambiarFotoPerfil">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"/></svg>
+                </div>
+                <input type="file" id="fileEditAvatar" accept="image/*" class="hidden">
+            </div>
+
+            <div class="profile-field-box">
+                <label>Tu Nombre / Apodo</label>
+                <input type="text" id="editProfileNombre" style="margin:0;">
+            </div>
+
+            <div class="profile-field-box">
+                <label>Número de Celular</label>
+                <div id="lblProfileTelefono" class="profile-field-value" style="color:var(--text-muted)"></div>
+            </div>
+
+            <button class="btn-wa" id="btnGuardarPerfil" style="margin-top:10px;">GUARDAR CAMBIOS</button>
         </div>
 
         <div id="actionSheetMenu" class="action-sheet-backdrop hidden">
@@ -252,6 +283,7 @@
         let sesionUsuario = JSON.parse(localStorage.getItem('sys_session')) || null;
         let respuestaActiva = null;
         let base64AvatarStr = "";
+        let base64EditAvatarStr = "";
         let mensajesBorradosLocalmente = JSON.parse(localStorage.getItem('sys_deleted_local')) || [];
 
         function obtenerColorUsuario(nombre) {
@@ -262,7 +294,7 @@
 
         if (sesionUsuario) verificarYEntrar();
 
-        // Control Foto de Perfil Galería
+        // Control Foto Registro Inicial
         document.getElementById('avatarBtn').onclick = () => document.getElementById('fileAvatar').click();
         document.getElementById('fileAvatar').onchange = (e) => {
             const file = e.target.files[0];
@@ -273,6 +305,20 @@
                     document.getElementById('avatarImgPreview').src = base64AvatarStr;
                     document.getElementById('avatarImgPreview').classList.remove('hidden');
                     document.getElementById('avatarPlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Control Foto Panel Editar Perfil Estilo WhatsApp
+        document.getElementById('btnCambiarFotoPerfil').onclick = () => document.getElementById('fileEditAvatar').click();
+        document.getElementById('fileEditAvatar').onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    base64EditAvatarStr = event.target.result;
+                    document.getElementById('editProfilePreview').src = base64EditAvatarStr;
                 };
                 reader.readAsDataURL(file);
             }
@@ -351,8 +397,7 @@
             document.getElementById('registerScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
             
-            document.getElementById('myHeaderAvatar').src = sesionUsuario.photo || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-            document.getElementById('userStatus').innerText = `${sesionUsuario.nombre} (${sesionUsuario.telefono})`;
+            refrescarCabeceraUI();
 
             if (sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin') {
                 document.getElementById('btnToggleAdmin').classList.remove('hidden');
@@ -361,8 +406,36 @@
             iniciarEscuchaChat();
         }
 
+        function refrescarCabeceraUI() {
+            document.getElementById('myHeaderAvatar').src = sesionUsuario.photo || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+            document.getElementById('userStatus').innerText = `${sesionUsuario.nombre} (${sesionUsuario.telefono})`;
+        }
+
+        // CONTROL NAV VISTAS (CHAT / ADMIN / PERFIL)
+        document.getElementById('btnIrAPerfil').onclick = () => {
+            document.getElementById('chatView').classList.add('hidden');
+            document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('profileView').classList.remove('hidden');
+            
+            document.getElementById('btnToggleChat').classList.remove('hidden');
+            if (sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin') {
+                document.getElementById('btnToggleAdmin').classList.remove('hidden');
+            } else {
+                document.getElementById('btnToggleAdmin').classList.add('hidden');
+            }
+
+            // Cargar datos actuales en los inputs
+            document.getElementById('editProfilePreview').src = sesionUsuario.photo || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+            document.getElementById('editProfileNombre').value = sesionUsuario.nombre;
+            document.getElementById('lblProfileTelefono').innerText = sesionUsuario.telefono;
+            base64EditAvatarStr = sesionUsuario.photo || "";
+
+            document.getElementById('headerTitle').innerText = "⚙️ MI PERFIL";
+        };
+
         document.getElementById('btnToggleAdmin').onclick = () => {
             document.getElementById('chatView').classList.add('hidden');
+            document.getElementById('profileView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
             document.getElementById('btnToggleAdmin').classList.add('hidden');
             document.getElementById('btnToggleChat').classList.remove('hidden');
@@ -371,11 +444,28 @@
 
         document.getElementById('btnToggleChat').onclick = () => {
             document.getElementById('adminView').classList.add('hidden');
+            document.getElementById('profileView').classList.add('hidden');
             document.getElementById('chatView').classList.remove('hidden');
             document.getElementById('btnToggleChat').classList.add('hidden');
             document.getElementById('btnToggleAdmin').classList.remove('hidden');
             document.getElementById('headerTitle').innerText = "💬 GRUPO VIP - ANDY";
-            setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
+            setTimeout(() => { const cb = document.getElementById('chatBox'); cb.scrollTop = cb.scrollHeight; }, 50);
+        };
+
+        // GUARDAR CAMBIOS DE PERFIL
+        document.getElementById('btnGuardarPerfil').onclick = () => {
+            const nuevoNombre = document.getElementById('editProfileNombre').value.trim();
+            if(!nuevoNombre) { alert("El nombre no puede estar vacío."); return; }
+
+            sesionUsuario.nombre = nuevoNombre;
+            if (base64EditAvatarStr) {
+                sesionUsuario.photo = base64EditAvatarStr;
+            }
+
+            localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
+            refrescarCabeceraUI();
+            alert("✅ Perfil actualizado correctamente.");
+            document.getElementById('btnToggleChat').click(); // Regresa al chat de una
         };
 
         function configurarPanelAdmin() {
@@ -422,7 +512,7 @@
             if(confirm("¿Eliminar acceso?")) await deleteDoc(doc(db, "usuarios", id));
         };
 
-        // ESCUCHA DEL CHAT CON LOGICA MULTIMEDIA Y ELIMINACIONES
+        // ESCUCHA DEL CHAT
         function iniciarEscuchaChat() {
             const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(120));
             const box = document.getElementById('chatBox');
@@ -433,7 +523,6 @@
                     const d = docS.data();
                     const idMsg = docS.id;
 
-                    // Si está borrado localmente por el usuario ("Eliminar para mí")
                     if (mensajesBorradosLocalmente.includes(idMsg)) return;
                     
                     let textoMensaje = d.audio || d.msg || d.mensaje || "";
@@ -453,7 +542,6 @@
                     const div = document.createElement('div');
                     div.className = `msg ${esMio ? 'msg-a' : 'msg-v'}`;
                     
-                    // Al tocar abre la Action Sheet
                     div.onclick = () => abrirMenuMensaje(idMsg, d.emisor, textoMensaje, esMio || soyAdmin, d.eliminado);
                     
                     let html = "";
@@ -465,7 +553,6 @@
                         html += `<div class="reply-box"><b>${d.respA}</b><br>${d.respM}</div>`;
                     }
                     
-                    // Evalúa estados de renderizado
                     if(d.eliminado) {
                         html += `<span class="msg-deleted">🚫 Este mensaje fue eliminado</span>`;
                     } else if(d.isSticker) {
@@ -489,7 +576,7 @@
             });
         }
 
-        // LÓGICA DE MENÚ FLOTANTE ACCIONES MENSAJE
+        // CONTROL MENÚ MENSAJE
         function abrirMenuMensaje(idMsg, autor, mensaje, puedeBorrarTodos, yaEliminado) {
             const menu = document.getElementById('actionSheetMenu');
             const btnTodos = document.getElementById('optEliminarTodos');
@@ -523,13 +610,13 @@
                 mensajesBorradosLocalmente.push(idMsg);
                 localStorage.setItem('sys_deleted_local', JSON.stringify(mensajesBorradosLocalmente));
                 menu.classList.add('hidden');
-                iniciarEscuchaChat(); // Refresca vista local
+                iniciarEscuchaChat();
             };
 
             document.getElementById('optCancelar').onclick = () => menu.classList.add('hidden');
         }
 
-        // CONTROL DE ENVIADOS
+        // ESTRUCTURA DE ENVÍO
         async function enviarMensajeEstructura(contenido, esSticker = false, esFoto = false) {
             const m = {
                 emisor: String(sesionUsuario.nombre),
