@@ -17,7 +17,7 @@
             --panel-header: #202c33;
         }
         
-        /* BLOQUEO DE PANTALLA MÓVIL: Fija los bordes y el tamaño */
+        /* DISEÑO MÓVIL FIJO CONTROLADO: Cero gestos raros */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         
         html, body { 
@@ -31,7 +31,7 @@
         
         .hidden { display: none !important; }
 
-        /* REGISTRO */
+        /* PANTALLA DE ACCESO */
         .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; }
         .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; }
         .auth-card h2 { color: var(--wa-teal); margin-bottom: 10px; font-size: 1.4rem; }
@@ -41,7 +41,7 @@
         button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; }
         .btn-wa { width: 100%; background: var(--wa-teal); color: #111b21; }
 
-        /* INTERFAZ DEL CHAT INMÓVIL */
+        /* CONTENEDOR DEL CHAT GENERAL */
         .chat-container { 
             display: flex; 
             flex-direction: column; 
@@ -50,6 +50,7 @@
             background: var(--bg-chat); 
         }
         
+        /* Encabezado Fijo superior */
         .chat-header { 
             height: 60px; 
             background: var(--panel-header); 
@@ -65,7 +66,7 @@
         .user-info .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
         .btn-logout { background: transparent; color: #ef4444; width: auto; padding: 4px 8px; font-size: 0.8rem; }
 
-        /* SCROLL INTERNO AJUSTADO */
+        /* Caja de mensajes con scroll fluido */
         #chatBox { 
             flex: 1; 
             overflow-y: auto; 
@@ -78,7 +79,7 @@
             WebkitOverflowScrolling: touch;
         }
         
-        /* BURBUJAS ESTILO REAL */
+        /* Estilos de burbujas */
         .msg { padding: 6px 10px 8px 10px; border-radius: 8px; font-size: 0.92rem; max-width: 85%; position: relative; word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.2); }
         .msg-a { background: var(--wa-msg-out); align-self: flex-end; border-top-right-radius: 0; }
         .msg-v { background: var(--wa-msg-in); align-self: flex-start; border-top-left-radius: 0; }
@@ -91,7 +92,7 @@
         
         #replyPreview { background: #1f2c34; padding: 8px 12px; border-left: 4px solid var(--wa-teal); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         
-        /* BARRA INFERIOR FIJA ADAPTADA AL TECLADO */
+        /* Barra de Escritura Inferior Bloqueada */
         .chat-footer { 
             height: 60px; 
             background: #202c33; 
@@ -147,7 +148,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -195,35 +196,16 @@
             iniciarEscuchaChat();
         }
 
-        // CONTROLADOR DE TIEMPO RESISTENTE A FALLOS
-        function obtenerMilisegundos(fechaCampo) {
-            if (!fechaCampo) return 0;
-            // Si viene con un campo secundario de milisegundos propio
-            if (fechaCampo.ms) return Number(fechaCampo.ms);
-            // Intentar procesar texto o timestamp nativo
-            const t = fechaCampo.toDate ? fechaCampo.toDate().getTime() : Date.parse(fechaCampo);
-            return isNaN(t) ? 0 : t;
-        }
-
         function iniciarEscuchaChat() {
-            // Traemos los últimos 80 mensajes sin forzar el orderBy problemático del servidor
-            const q = query(collection(db, "chat"), limit(80));
+            // RECUPERADO: El ordenamiento nativo vuelve a funcionar de forma ultra veloz al estar limpia la base de datos
+            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(80));
             const box = document.getElementById('chatBox');
             
             onSnapshot(q, (snapshot) => {
                 box.innerHTML = "";
-                let listaMensajes = [];
                 
                 snapshot.forEach(docS => {
-                    let datos = docS.data();
-                    listaMensajes.push(datos);
-                });
-
-                // FIX DE ORDEN SEGURO: Organizamos cronológicamente en el teléfono usando milisegundos nativos
-                listaMensajes.sort((a, b) => obtenerMilisegundos(a.fecha) - obtenerMilisegundos(b.fecha));
-
-                // Dibujar en pantalla con la línea de tiempo limpia
-                listaMensajes.forEach(d => {
+                    const d = docS.data();
                     let textoMensaje = d.audio || d.msg || d.mensaje || "";
                     if (!textoMensaje) return; 
 
@@ -249,10 +231,6 @@
                             const date = d.fecha.toDate ? d.fecha.toDate() : new Date(d.fecha);
                             if(!isNaN(date.getTime())) {
                                 horaTexto = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                            } else if (typeof d.fecha === 'string' && d.fecha.includes(",")) {
-                                // Extrae la hora si es formato texto plano guardado viejo
-                                const partes = d.fecha.split(",");
-                                if(partes[1]) horaTexto = partes[1].trim().substring(0,5);
                             }
                         } catch(e) {}
                     }
@@ -266,10 +244,10 @@
                     box.appendChild(div);
                 });
                 
-                // Hace scroll automático inmediato sin movimientos bruscos
+                // Desplazamiento automático limpio al fondo
                 setTimeout(() => {
                     box.scrollTop = box.scrollHeight;
-                }, 40);
+                }, 50);
             });
         }
 
@@ -278,16 +256,13 @@
             const texto = input.value.trim();
             if(!texto) return;
 
-            const ahora = new Date();
-            
-            // Guardamos la fecha en formato ISO y añadimos propiedad numérica ms para el ordenamiento perfecto
+            // Restablecemos el timestamp nativo de servidor oficial de Google
             const m = {
                 emisor: String(miUsuario.nombre),
                 emisorId: String(miUsuario.telefono),
                 audio: String(texto), 
                 foto: "",
-                fecha: ahora.toISOString(),
-                ms: ahora.getTime() // Milisegundos puros para la ordenación matemática
+                fecha: serverTimestamp() 
             };
 
             if (respuestaActiva) {
