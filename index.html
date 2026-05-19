@@ -32,11 +32,16 @@
         .hidden { display: none !important; }
 
         /* PANTALLAS DE ACCESO */
-        .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; }
+        .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
         .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .auth-card h2 { color: var(--wa-teal); margin-bottom: 5px; font-size: 1.4rem; }
         .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
         
+        /* Selector de Imagen de Perfil */
+        .avatar-picker { width: 90px; height: 90px; border-radius: 50%; background: #2a3942; margin: 10px auto; position: relative; cursor: pointer; overflow: hidden; border: 3px solid var(--wa-teal); display: flex; align-items: center; justify-content: center; }
+        .avatar-picker img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-picker span { font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 5px; }
+
         input, select { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: none; background: var(--input-bg); color: white; font-size: 15px; outline: none; }
         input::placeholder { color: var(--text-muted); }
         
@@ -53,43 +58,55 @@
             height: 60px; background: var(--panel-header); padding: 0 14px; 
             display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;
         }
-        .user-info { display: flex; flex-direction: column; }
-        .user-info .title { font-weight: bold; font-size: 0.95rem; color: var(--text-main); }
-        .user-info .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: #2a3942; border: 1px solid var(--wa-teal); }
+        .user-text { display: flex; flex-direction: column; }
+        .user-text .title { font-weight: bold; font-size: 0.95rem; color: var(--text-main); }
+        .user-text .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
         .header-actions { display: flex; gap: 8px; }
         .btn-action { background: #2a3942; color: white; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; border: none; }
 
         /* VISTA CHAT */
         .chat-view { flex: 1; display: flex; flex-direction: column; overflow: hidden; height: 100%; }
         #chatBox { 
-            flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 6px; 
+            flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; 
             background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-repeat: repeat; 
         }
         
-        /* Burbujas */
-        .msg { padding: 6px 10px 8px 10px; border-radius: 8px; font-size: 0.92rem; max-width: 85%; position: relative; word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.2); }
-        .msg-a { background: var(--wa-msg-out); align-self: flex-end; border-top-right-radius: 0; }
-        .msg-v { background: var(--wa-msg-in); align-self: flex-start; border-top-left-radius: 0; }
-        .msg-meta { display: flex; align-items: center; justify-content: flex-end; gap: 3px; font-size: 0.65rem; color: var(--text-muted); margin-top: 3px; float: right; margin-left: 10px; }
-        .msg-sender { font-size: 0.75rem; color: #ffbc34; font-weight: bold; display: block; margin-bottom: 2px; }
-        .reply-box { background: rgba(0,0,0,0.2); padding: 5px; border-left: 3px solid var(--wa-teal); margin-bottom: 4px; font-size: 0.75rem; border-radius: 4px; }
+        /* Contenedores de Burbujas */
+        .msg-wrapper { display: flex; gap: 8px; width: 100%; margin-bottom: 2px; }
+        .msg-wrapper.my-msg { justify-content: flex-end; }
+        .chat-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; align-self: flex-end; background: #2a3942; }
+
+        .msg { padding: 6px 10px 8px 10px; border-radius: 8px; font-size: 0.92rem; max-width: 75%; position: relative; word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.2); display: flex; flex-direction: column; }
+        .msg-a { background: var(--wa-msg-out); border-bottom-right-radius: 0; }
+        .msg-v { background: var(--wa-msg-in); border-bottom-left-radius: 0; }
+        
+        /* Imagen de Sticker Limpio */
+        .sticker-img { max-width: 140px; max-height: 140px; object-fit: contain; margin: 4px 0; border-radius: 4px; }
+
+        .msg-meta { display: flex; align-items: center; justify-content: flex-end; gap: 3px; font-size: 0.65rem; color: var(--text-muted); margin-top: 3px; align-self: flex-end; }
+        .msg-sender { font-size: 0.78rem; font-weight: bold; display: block; margin-bottom: 3px; }
+        .reply-box { background: rgba(0,0,0,0.2); padding: 5px; border-left: 3px solid var(--wa-teal); margin-bottom: 4px; font-size: 0.75rem; border-radius: 4px; color: white; }
         
         #replyPreview { background: #1f2c34; padding: 8px 12px; border-left: 4px solid var(--wa-teal); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         
-        /* Barra Inferior Entrada */
+        /* Barra de Entrada */
         .chat-footer { 
             height: 60px; background: #202c33; padding: 0 8px; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
             padding-bottom: env(safe-area-inset-bottom);
         }
         .chat-footer input { margin: 0; background: #2a3942; padding: 10px 14px; border-radius: 20px; flex: 1; color: white; border: none; font-size: 15px; outline: none; }
-        .chat-footer button { width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: var(--wa-teal); color: #111b21; border: none; flex-shrink: 0; }
+        
+        /* Botón de Multimedia/Stickers */
+        .btn-media { width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #2a3942; color: var(--text-muted); border: none; flex-shrink: 0; }
+        .chat-footer button.btn-send { width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: var(--wa-teal); color: #111b21; border: none; flex-shrink: 0; }
 
         /* VISTA PANEL ADMINISTRADOR */
         .admin-view { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
         .admin-section { background: var(--panel-header); padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .admin-section h3 { font-size: 1.1rem; color: var(--wa-teal); margin-bottom: 10px; border-bottom: 1px solid #2a3942; padding-bottom: 5px; }
         
-        /* Lista de Miembros */
         .member-item { display: flex; align-items: center; justify-content: space-between; background: #2a3942; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.88rem; }
         .member-info { display: flex; flex-direction: column; gap: 2px; }
         .member-name { font-weight: bold; color: white; }
@@ -105,7 +122,7 @@
 
     <div id="authScreen" class="auth-container">
         <div class="auth-card">
-            <h2>GRUPO VIP - ANDY</h2>
+            <h2>SISTEMA ANDY PRO</h2>
             <p>Ingresa la Llave de Acceso del Grupo</p>
             <input type="email" id="loginEmail" placeholder="Correo de Acceso">
             <input type="password" id="loginPass" placeholder="Contraseña">
@@ -115,8 +132,15 @@
 
     <div id="registerScreen" class="auth-container hidden">
         <div class="auth-card">
-            <h2>REGISTRO DE MIEMBRO</h2>
-            <p>Configura tu perfil para el Chat</p>
+            <h2>PERFIL DE MIEMBRO</h2>
+            <p>Sube tu foto y configura tu nombre</p>
+            
+            <div class="avatar-picker" id="avatarBtn">
+                <img id="avatarImgPreview" class="hidden" src="">
+                <span id="avatarPlaceholder">Presiona aquí para subir tu Foto</span>
+            </div>
+            <input type="file" id="fileAvatar" accept="image/*" class="hidden">
+
             <input type="text" id="regNombre" placeholder="Tu Nombre o Apodo">
             <input type="tel" id="regTelefono" placeholder="Tu Número de Celular">
             <button class="btn-wa" id="btnCompletarRegistro">ENTRAR AL CHAT</button>
@@ -126,8 +150,11 @@
     <div id="appScreen" class="app-container hidden">
         <div class="app-header">
             <div class="user-info">
-                <span id="headerTitle" class="title">💬 GRUPO VIP - ANDY</span>
-                <span id="userStatus" class="status">Cargando...</span>
+                <img id="myHeaderAvatar" class="header-avatar" src="">
+                <div class="user-text">
+                    <span id="headerTitle" class="title">💬 GRUPO VIP - ANDY</span>
+                    <span id="userStatus" class="status">Cargando...</span>
+                </div>
             </div>
             <div class="header-actions">
                 <button id="btnToggleAdmin" class="btn-action hidden">🔧 Panel Admin</button>
@@ -138,6 +165,7 @@
 
         <div id="chatView" class="chat-view">
             <div id="chatBox"></div>
+            
             <div id="replyPreview" class="hidden">
                 <div style="display:flex; flex-direction:column; max-width: 80%;">
                     <small id="replyTxt" style="color: var(--wa-teal); font-weight:bold;"></small>
@@ -145,9 +173,15 @@
                 </div>
                 <button id="btnCancelarResp" style="background:none; color:var(--danger); width:auto; font-size:1.3rem; border:none; padding: 0 5px;">×</button>
             </div>
+            
             <div class="chat-footer">
+                <button class="btn-media" id="btnSticker" title="Enviar Sticker">
+                    <svg viewBox="0 0 24 24" height="24" width="24" fill="currentColor"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 3c-3.87 0-7 3.13-7 7 0 1.27.34 2.46.94 3.5l-.03.03 1.06 1.06.03-.03c1.04.6 2.23.94 3.5.94 3.87 0 7-3.13 7-7s-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm-1.5 2.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zM12 14.5c1.33 0 2.42.74 2.96 1.72-.1.09-.23.15-.36.21-.4-.53-1.04-.93-1.78-.93s-1.38.4-1.78.93c-.13-.06-.26-.12-.36-.21.54-.98 1.63-1.72 2.96-1.72z"></path></svg>
+                </button>
+                <input type="file" id="fileSticker" accept="image/*" class="hidden">
+
                 <input type="text" id="msgInput" placeholder="Escribe un mensaje aquí...">
-                <button id="btnEnviar">
+                <button class="btn-send" id="btnEnviar">
                     <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor"><path d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
                 </button>
             </div>
@@ -156,7 +190,7 @@
         <div id="adminView" class="admin-view hidden">
             <div class="admin-section">
                 <h3>Crear Nueva Cuenta / Llave</h3>
-                <input type="text" id="newMemberName" placeholder="Nombre de Identificación (Ej: Grupo VIP)">
+                <input type="text" id="newMemberName" placeholder="Nombre de Identificación">
                 <input type="email" id="newMemberEmail" placeholder="Correo General de Acceso">
                 <input type="text" id="newMemberPass" placeholder="Clave General de Acceso">
                 <select id="newMemberRole">
@@ -189,33 +223,71 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Cuenta Absoluta de Andy
+        // Cuenta Dueño de Andy
         const ADMIN_REAL = {
             email: "andyobregon799@gmail.com",
             pass: "123456",
             nombre: "Andy Obregón",
             role: "owner",
-            telefono: "0990434546"
+            telefono: "0990434546",
+            photo: "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"
         };
+
+        const COLORES_PRESETS = [
+            "#ffbc34", "#34b7f1", "#e53935", "#d81b60", "#8e24aa", 
+            "#5e35b1", "#3949ab", "#1e88e5", "#039be5", "#00acc1", 
+            "#00897b", "#43a047", "#7cb342", "#f4511e", "#fdd835"
+        ];
 
         let sesionUsuario = JSON.parse(localStorage.getItem('sys_session')) || null;
         let respuestaActiva = null;
+        let base64AvatarStr = "";
 
-        // AUTO-LOGIN: Si ya se registró antes en este cel, entra directo sin preguntar nada
-        if (sesionUsuario) {
-            verificarYEntrar();
+        function obtenerColorUsuario(nombre) {
+            let hash = 0;
+            for (let i = 0; i < nombre.length; i++) {
+                hash = nombre.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return COLORES_PRESETS[Math.abs(hash) % COLORES_PRESETS.length];
         }
+
+        if (sesionUsuario) verificarYEntrar();
+
+        // Control de Carga de Imagen de Perfil
+        document.getElementById('avatarBtn').onclick = () => document.getElementById('fileAvatar').click();
+        document.getElementById('fileAvatar').onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    base64AvatarStr = event.target.result;
+                    document.getElementById('avatarImgPreview').src = base64AvatarStr;
+                    document.getElementById('avatarImgPreview').classList.remove('hidden');
+                    document.getElementById('avatarPlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        // Enviar Sticker desde Galería
+        document.getElementById('btnSticker').onclick = () => document.getElementById('fileSticker').click();
+        document.getElementById('fileSticker').onchange = (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function(event) {
+                    await enviarMensajeEstructura(event.target.result, true);
+                };
+                reader.readAsDataURL(file);
+            }
+        };
 
         document.getElementById('btnIngresar').onclick = async () => {
             const email = document.getElementById('loginEmail').value.trim().toLowerCase();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if(!email || !pass) {
-                alert("Por favor ingresa las credenciales");
-                return;
-            }
+            if(!email || !pass) { alert("Completa las credenciales"); return; }
 
-            // Si eres tú como Dueño
             if(email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
                 sesionUsuario = ADMIN_REAL;
                 localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
@@ -224,56 +296,34 @@
             }
 
             document.getElementById('btnIngresar').innerText = "Verificando...";
-            
             try {
-                const docRef = doc(db, "usuarios", email);
-                const docSnap = await getDoc(docRef);
-
-                if (docSnap.exists()) {
-                    const u = docSnap.data();
-                    if(u.pass === pass) {
-                        if(u.estado === "bloqueado") {
-                            alert("⛔ Esta llave de acceso ha sido suspendida.");
-                            document.getElementById('btnIngresar').innerText = "VERIFICAR ACCESO";
-                            return;
-                        }
-                        
-                        // Pasó el filtro general, ahora va al Paso 2 (Crear su propio Perfil)
-                        document.getElementById('authScreen').classList.add('hidden');
-                        document.getElementById('registerScreen').classList.remove('hidden');
-                    } else {
-                        alert("❌ Contraseña incorrecta.");
+                const docSnap = await getDoc(doc(db, "usuarios", email));
+                if (docSnap.exists() && docSnap.data().pass === pass) {
+                    if(docSnap.data().estado === "bloqueado") {
+                        alert("⛔ Acceso bloqueado por el Administrador.");
+                        return;
                     }
-                } else {
-                    alert("❌ Credenciales inválidas para este grupo.");
-                }
-            } catch (error) {
-                alert("Error de conexión.");
-            } finally {
-                document.getElementById('btnIngresar').innerText = "VERIFICAR ACCESO";
-            }
+                    document.getElementById('authScreen').classList.add('hidden');
+                    document.getElementById('registerScreen').classList.remove('hidden');
+                } else { alert("❌ Credenciales incorrectas."); }
+            } catch (e) { alert("Error de red."); } 
+            finally { document.getElementById('btnIngresar').innerText = "VERIFICAR ACCESO"; }
         };
 
-        // Guardar su Perfil Único Personalizado
         document.getElementById('btnCompletarRegistro').onclick = () => {
             const nombre = document.getElementById('regNombre').value.trim();
             const telefono = document.getElementById('regTelefono').value.trim();
 
-            if(!nombre || !telefono) {
-                alert("Debes poner tu Nombre y tu Celular para identificarte en el grupo.");
-                return;
-            }
+            if(!nombre || !telefono) { alert("Llena tu Nombre y Celular."); return; }
 
-            // Estructura guardada de forma local e intransferible en el teléfono del usuario
             sesionUsuario = {
                 nombre: nombre,
                 telefono: telefono,
-                role: "vendedor", // Rol por defecto
-                email: "miembro_grupo"
+                role: "vendedor",
+                photo: base64AvatarStr || "https://cdn-icons-png.flaticon.com/512/149/149071.png"
             };
 
             localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
-            document.getElementById('registerScreen').classList.add('hidden');
             verificarYEntrar();
         };
 
@@ -281,17 +331,17 @@
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('registerScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
+            
+            document.getElementById('myHeaderAvatar').src = sesionUsuario.photo || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
             document.getElementById('userStatus').innerText = `${sesionUsuario.nombre} (${sesionUsuario.telefono})`;
 
             if (sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin') {
                 document.getElementById('btnToggleAdmin').classList.remove('hidden');
                 configurarPanelAdmin();
             }
-
             iniciarEscuchaChat();
         }
 
-        // PANEL CONTROL
         document.getElementById('btnToggleAdmin').onclick = () => {
             document.getElementById('chatView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
@@ -316,47 +366,31 @@
                 const pass = document.getElementById('newMemberPass').value.trim();
                 const role = document.getElementById('newMemberRole').value;
 
-                if(!nombre || !email || !pass) {
-                    alert("Rellena todos los campos");
-                    return;
-                }
-
+                if(!nombre || !email || !pass) { alert("Rellena todos los campos"); return; }
                 try {
-                    await setDoc(doc(db, "usuarios", email), {
-                        nombre, telefono: "General", email, pass, role, estado: "activo"
-                    });
-                    alert(`✅ Llave maestra guardada correctamente.`);
+                    await setDoc(doc(db, "usuarios", email), { nombre, telefono: "General", email, pass, role, estado: "activo" });
+                    alert(`✅ Llave guardada.`);
                     document.getElementById('newMemberName').value = "";
                     document.getElementById('newMemberEmail').value = "";
                     document.getElementById('newMemberPass').value = "";
-                } catch(e) { alert("Error: " + e); }
+                } catch(e) { alert("Error"); }
             };
 
             onSnapshot(collection(db, "usuarios"), (snap) => {
-                const container = document.getElementById('membersList');
-                container.innerHTML = "";
-                
+                const container = document.getElementById('membersList'); container.innerHTML = "";
                 snap.forEach(docS => {
-                    const u = docS.data();
-                    const id = docS.id;
-
-                    const item = document.createElement('div');
-                    item.className = "member-item";
-                    
+                    const u = docS.data(); const id = docS.id;
+                    const item = document.createElement('div'); item.className = "member-item";
                     item.innerHTML = `
                         <div class="member-info">
                             <span class="member-name">${u.nombre}</span>
                             <span class="member-meta">📧 Acceso: ${u.email}</span>
                             <span class="member-meta">🔑 Clave: <b>${u.pass}</b></span>
-                            <span class="member-badge ${u.estado === 'activo' ? 'badge-active' : 'badge-blocked'}">${u.role.toUpperCase()} - ${u.estado.toUpperCase()}</span>
                         </div>
                         <div class="member-actions">
-                            <button class="btn-sm btn-wa" onclick="cambiarEstadoUsuario('${id}', '${u.estado}')">
-                                ${u.estado === 'activo' ? 'Bloquear' : 'Activar'}
-                            </button>
+                            <button class="btn-sm btn-wa" onclick="cambiarEstadoUsuario('${id}', '${u.estado}')">${u.estado === 'activo' ? 'Bloquear' : 'Activar'}</button>
                             <button class="btn-sm btn-danger" onclick="eliminarUsuario('${id}')">Eliminar</button>
-                        </div>
-                    `;
+                        </div>`;
                     container.appendChild(item);
                 });
             });
@@ -364,17 +398,13 @@
 
         window.cambiarEstadoUsuario = async (id, estadoActual) => {
             const nuevoEstado = estadoActual === "activo" ? "bloqueado" : "activo";
-            if(confirm(`¿Quieres cambiar el estado a ${nuevoEstado}?`)) {
-                await updateDoc(doc(db, "usuarios", id), { estado: nuevoEstado });
-            }
+            if(confirm(`¿Cambiar estado a ${nuevoEstado}?`)) await updateDoc(doc(db, "usuarios", id), { estado: nuevoEstado });
         };
-
         window.eliminarUsuario = async (id) => {
-            if(confirm("⚠️ ¿Estás seguro de eliminar este acceso?")) {
-                await deleteDoc(doc(db, "usuarios", id));
-            }
+            if(confirm("¿Eliminar acceso?")) await deleteDoc(doc(db, "usuarios", id));
         };
 
+        // ESCUCHA CONSERVANDO TODOS LOS CAMPOS BASE (AUDIO, MSG, ISSTICKER)
         function iniciarEscuchaChat() {
             const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(120));
             const box = document.getElementById('chatBox');
@@ -383,52 +413,67 @@
                 box.innerHTML = "";
                 snapshot.forEach(docS => {
                     const d = docS.data();
+                    
+                    // RETROCOMPATIBILIDAD ABSOLUTA: Muestra el texto ya sea desde el campo audio, msg o mensaje sin romper nada anterior
                     let textoMensaje = d.audio || d.msg || d.mensaje || "";
-                    if (!textoMensaje) return; 
+                    if (!textoMensaje) return;
 
                     const esMio = String(d.emisorId).trim() === String(sesionUsuario.telefono).trim();
                     
+                    const wrapper = document.createElement('div');
+                    wrapper.className = `msg-wrapper ${esMio ? 'my-msg' : ''}`;
+
+                    if(!esMio) {
+                        const imgAv = document.createElement('img');
+                        imgAv.className = "chat-avatar";
+                        imgAv.src = d.emisorFoto || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
+                        wrapper.appendChild(imgAv);
+                    }
+                    
                     const div = document.createElement('div');
                     div.className = `msg ${esMio ? 'msg-a' : 'msg-v'}`;
-                    
-                    div.onclick = () => window.prepararRespuesta(d.emisor || "Usuario", textoMensaje);
+                    div.onclick = () => window.prepararRespuesta(d.emisor, d.isSticker ? "[Sticker]" : textoMensaje);
                     
                     let html = "";
                     if(!esMio) {
-                        html += `<span class="msg-sender">${d.emisor || 'Anónimo'}</span>`;
+                        const colorUnico = obtenerColorUsuario(d.emisor);
+                        html += `<span class="msg-sender" style="color:${colorUnico}">${d.emisor}</span>`;
                     }
                     if(d.respA) {
                         html += `<div class="reply-box"><b>${d.respA}</b><br>${d.respM}</div>`;
                     }
                     
-                    let horaTexto = "Hoy";
-                    if(d.fecha) {
-                        try {
-                            const date = d.fecha.toDate();
-                            horaTexto = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                        } catch(e) {}
+                    if(d.isSticker) {
+                        html += `<img src="${textoMensaje}" class="sticker-img">`;
+                    } else {
+                        html += `<span>${textoMensaje}</span>`;
                     }
+                    
+                    let horaTexto = "Hoy";
+                    if(d.fecha) { try { horaTexto = d.fecha.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); } catch(e) {} }
 
-                    html += `<span>${textoMensaje}</span>`;
                     html += `<div class="msg-meta"><span>${horaTexto}</span>${esMio ? '<span style="color:#53bdeb; font-weight:bold;"> ✓✓</span>':''}</div>`;
                     
                     div.innerHTML = html;
-                    box.appendChild(div);
+                    wrapper.appendChild(div);
+                    box.appendChild(wrapper);
                 });
                 box.scrollTop = box.scrollHeight;
             });
         }
 
-        const enviarMensaje = async () => {
-            const input = document.getElementById('msgInput');
-            const texto = input.value.trim();
-            if(!texto) return;
-
+        // FUNCIÓN CENTRALIZADA INTEGRADA PARA MANTENER LA BASE DE DATOS TRADICIONAL
+        async function enviarMensajeEstructura(contenido, esSticker = false) {
             const m = {
                 emisor: String(sesionUsuario.nombre),
                 emisorId: String(sesionUsuario.telefono),
-                audio: String(texto), 
+                emisorFoto: String(sesionUsuario.photo || ""),
+                
+                // Mantiene tus campos históricos de Firebase al unísono para que bots e historiales externos sigan leyendo
+                audio: String(contenido), 
+                msg: String(contenido),
                 foto: "",
+                isSticker: esSticker,
                 fecha: serverTimestamp()
             };
 
@@ -437,36 +482,35 @@
                 m.respM = String(respuestaActiva.msg);
             }
 
-            input.value = "";
             window.cancelarRespuesta();
+            try { await addDoc(collection(db, "chat"), m); } catch(e) { console.error(e); }
+        }
 
-            try {
-                await addDoc(collection(db, "chat"), m);
-            } catch(e) { console.error(e); }
+        document.getElementById('btnEnviar').onclick = () => {
+            const input = document.getElementById('msgInput');
+            const txt = input.value.trim();
+            if(!txt) return;
+            enviarMensajeEstructura(txt, false);
+            input.value = "";
         };
 
-        document.getElementById('btnEnviar').onclick = enviarMensaje;
-        document.getElementById('msgInput').onkeypress = (e) => { if(e.key === 'Enter') enviarMensaje(); };
+        document.getElementById('msgInput').onkeypress = (e) => { 
+            if(e.key === 'Enter') { document.getElementById('btnEnviar').click(); } 
+        };
 
         window.prepararRespuesta = (autor, mensaje) => {
-            respuestaActiva = { autor: autor, msg: mensaje };
+            respuestaActiva = { autor, msg: mensaje };
             document.getElementById('replyTxt').innerText = autor;
             document.getElementById('replyContent').innerText = mensaje.length > 35 ? mensaje.substring(0,35) + "..." : mensaje;
             document.getElementById('replyPreview').classList.remove('hidden');
             document.getElementById('msgInput').focus();
         };
 
-        window.cancelarRespuesta = () => {
-            respuestaActiva = null;
-            document.getElementById('replyPreview').classList.add('hidden');
-        };
+        window.cancelarRespuesta = () => { respuestaActiva = null; document.getElementById('replyPreview').classList.add('hidden'); };
         document.getElementById('btnCancelarResp').onclick = window.cancelarRespuesta;
 
         document.getElementById('btnSalir').onclick = () => {
-            if(confirm("¿Quieres cerrar sesión? Esto requerirá que vuelvas a registrar tus datos en este equipo.")) {
-                localStorage.clear();
-                location.reload();
-            }
+            if(confirm("¿Cerrar sesión por completo? Requerirá que configures tu perfil de nuevo.")) { localStorage.clear(); location.reload(); }
         };
     </script>
 </body>
