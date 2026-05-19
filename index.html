@@ -17,6 +17,7 @@
             --panel-header: #202c33;
         }
         
+        /* BLOQUEO DE PANTALLA MÓVIL: Fija los bordes y el tamaño */
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
         
         html, body { 
@@ -40,7 +41,7 @@
         button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; }
         .btn-wa { width: 100%; background: var(--wa-teal); color: #111b21; }
 
-        /* INTERFAZ DEL CHAT AJUSTADA */
+        /* INTERFAZ DEL CHAT INMÓVIL */
         .chat-container { 
             display: flex; 
             flex-direction: column; 
@@ -64,6 +65,7 @@
         .user-info .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
         .btn-logout { background: transparent; color: #ef4444; width: auto; padding: 4px 8px; font-size: 0.8rem; }
 
+        /* SCROLL INTERNO AJUSTADO */
         #chatBox { 
             flex: 1; 
             overflow-y: auto; 
@@ -76,6 +78,7 @@
             WebkitOverflowScrolling: touch;
         }
         
+        /* BURBUJAS ESTILO REAL */
         .msg { padding: 6px 10px 8px 10px; border-radius: 8px; font-size: 0.92rem; max-width: 85%; position: relative; word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.2); }
         .msg-a { background: var(--wa-msg-out); align-self: flex-end; border-top-right-radius: 0; }
         .msg-v { background: var(--wa-msg-in); align-self: flex-start; border-top-left-radius: 0; }
@@ -88,6 +91,7 @@
         
         #replyPreview { background: #1f2c34; padding: 8px 12px; border-left: 4px solid var(--wa-teal); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         
+        /* BARRA INFERIOR FIJA ADAPTADA AL TECLADO */
         .chat-footer { 
             height: 60px; 
             background: #202c33; 
@@ -191,21 +195,34 @@
             iniciarEscuchaChat();
         }
 
+        // CONTROLADOR DE TIEMPO RESISTENTE A FALLOS
+        function obtenerMilisegundos(fechaCampo) {
+            if (!fechaCampo) return 0;
+            // Si viene con un campo secundario de milisegundos propio
+            if (fechaCampo.ms) return Number(fechaCampo.ms);
+            // Intentar procesar texto o timestamp nativo
+            const t = fechaCampo.toDate ? fechaCampo.toDate().getTime() : Date.parse(fechaCampo);
+            return isNaN(t) ? 0 : t;
+        }
+
         function iniciarEscuchaChat() {
-            // FIX CRUCIAL: Eliminamos 'orderBy' para evitar que Firebase rompa la consulta por culpa del conflicto de textos viejos
+            // Traemos los últimos 80 mensajes sin forzar el orderBy problemático del servidor
             const q = query(collection(db, "chat"), limit(80));
             const box = document.getElementById('chatBox');
             
             onSnapshot(q, (snapshot) => {
                 box.innerHTML = "";
-                
-                // Leemos los datos y los ordenamos de forma segura directamente en la memoria del celular
                 let listaMensajes = [];
+                
                 snapshot.forEach(docS => {
-                    listaMensajes.push(docS.data());
+                    let datos = docS.data();
+                    listaMensajes.push(datos);
                 });
 
-                // Renderizado ordenado seguro
+                // FIX DE ORDEN SEGURO: Organizamos cronológicamente en el teléfono usando milisegundos nativos
+                listaMensajes.sort((a, b) => obtenerMilisegundos(a.fecha) - obtenerMilisegundos(b.fecha));
+
+                // Dibujar en pantalla con la línea de tiempo limpia
                 listaMensajes.forEach(d => {
                     let textoMensaje = d.audio || d.msg || d.mensaje || "";
                     if (!textoMensaje) return; 
@@ -230,10 +247,12 @@
                     if(d.fecha) {
                         try {
                             const date = d.fecha.toDate ? d.fecha.toDate() : new Date(d.fecha);
-                            if(!isNaN(date)) {
+                            if(!isNaN(date.getTime())) {
                                 horaTexto = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                            } else {
-                                horaTexto = String(d.fecha).substring(11,16) || "Hoy";
+                            } else if (typeof d.fecha === 'string' && d.fecha.includes(",")) {
+                                // Extrae la hora si es formato texto plano guardado viejo
+                                const partes = d.fecha.split(",");
+                                if(partes[1]) horaTexto = partes[1].trim().substring(0,5);
                             }
                         } catch(e) {}
                     }
@@ -241,15 +260,16 @@
                     let textoMostrar = textoMensaje.startsWith("data:audio") ? "🎵 Audio" : textoMensaje;
 
                     html += `<span>${textoMostrar}</span>`;
-                    html += `<div class="msg-meta"><span>${horaTexto}</span>${esMio ? '<span> ✓✓</span>':''}</div>`;
+                    html += `<div class="msg-meta"><span>${horaTexto}</span>${esMio ? '<span style="color:#53bdeb; font-weight:bold;"> ✓✓</span>':''}</div>`;
                     
                     div.innerHTML = html;
                     box.appendChild(div);
                 });
                 
+                // Hace scroll automático inmediato sin movimientos bruscos
                 setTimeout(() => {
                     box.scrollTop = box.scrollHeight;
-                }, 50);
+                }, 40);
             });
         }
 
@@ -258,15 +278,16 @@
             const texto = input.value.trim();
             if(!texto) return;
 
-            // Formato de texto plano compatible para no romper tu historial
-            const tiempoFormateado = new Date().toLocaleString();
-
+            const ahora = new Date();
+            
+            // Guardamos la fecha en formato ISO y añadimos propiedad numérica ms para el ordenamiento perfecto
             const m = {
                 emisor: String(miUsuario.nombre),
                 emisorId: String(miUsuario.telefono),
                 audio: String(texto), 
                 foto: "",
-                fecha: tiempoFormateado
+                fecha: ahora.toISOString(),
+                ms: ahora.getTime() // Milisegundos puros para la ordenación matemática
             };
 
             if (respuestaActiva) {
@@ -278,7 +299,6 @@
             window.cancelarRespuesta();
 
             try {
-                // Envío directo libre de trabas
                 await addDoc(collection(db, "chat"), m);
             } catch(e) {
                 console.error("Error al enviar:", e);
