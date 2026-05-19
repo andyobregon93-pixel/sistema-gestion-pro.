@@ -470,7 +470,7 @@
 
             // 2. Sincronizar en Firebase para cambiar el avatar de tus mensajes viejos y nuevos de cara al resto del grupo
             try {
-                const qMsg = query(collection(db, "chat"), where("emisorId", "==", String(sesionUsuario.telefono)));
+                const qMsg = query(collection(db, "chat"), where("emisorId", "==", String(sesionUsuario.telefono).trim()));
                 const querySnapshot = await getDocs(qMsg);
                 
                 // Actualiza en lote todos los mensajes enviados por este usuario
@@ -537,21 +537,25 @@
             if(confirm("¿Eliminar acceso?")) await deleteDoc(doc(db, "usuarios", id));
         };
 
-        // ESCUCHA DEL CHAT
+        // ESCUCHA DEL CHAT EN TIEMPO REAL OPTIMIZADA (Vea los mensajes al instante)
+        let desvincularEscuchaChat = null;
         function iniciarEscuchaChat() {
-            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(120));
+            if (desvincularEscuchaChat) desvincularEscuchaChat();
+            
+            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(150));
             const box = document.getElementById('chatBox');
             
-            onSnapshot(q, (snapshot) => {
+            desvincularEscuchaChat = onSnapshot(q, (snapshot) => {
                 box.innerHTML = "";
                 snapshot.forEach(docS => {
                     const d = docS.data();
                     const idMsg = docS.id;
 
+                    // Corregido filtro: Solo salta el mensaje si fue borrado intencionalmente para este dispositivo
                     if (mensajesBorradosLocalmente.includes(idMsg)) return;
                     
                     let textoMensaje = d.audio || d.msg || d.mensaje || "";
-                    const esMio = String(d.emisorId).trim() === String(sesionUsuario.telefono).trim();
+                    const esMio = d.emisorId && String(d.emisorId).trim() === String(sesionUsuario.telefono).trim();
                     const soyAdmin = sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin';
                     
                     const wrapper = document.createElement('div');
@@ -571,8 +575,8 @@
                     
                     let html = "";
                     if(!esMio) {
-                        const colorUnico = obtenerColorUsuario(d.emisor);
-                        html += `<span class="msg-sender" style="color:${colorUnico}">${d.emisor}</span>`;
+                        const colorUnico = obtenerColorUsuario(d.emisor || "Usuario");
+                        html += `<span class="msg-sender" style="color:${colorUnico}">${d.emisor || "Usuario"}</span>`;
                     }
                     if(d.respA) {
                         html += `<div class="reply-box"><b>${d.respA}</b><br>${d.respM}</div>`;
@@ -597,7 +601,10 @@
                     wrapper.appendChild(div);
                     box.appendChild(wrapper);
                 });
-                box.scrollTop = box.scrollHeight;
+                // Auto-scroll inmediato con renderizado forzado para evitar quedarse trabado arriba
+                box.scrollTo({ top: box.scrollHeight, behavior: 'instant' });
+            }, (error) => {
+                console.error("Fallo en enlace en vivo del chat:", error);
             });
         }
 
@@ -645,7 +652,7 @@
         async function enviarMensajeEstructura(contenido, esSticker = false, esFoto = false) {
             const m = {
                 emisor: String(sesionUsuario.nombre),
-                emisorId: String(sesionUsuario.telefono),
+                emisorId: String(sesionUsuario.telefono).trim(),
                 emisorFoto: String(sesionUsuario.photo || ""),
                 audio: String(contenido), 
                 msg: String(contenido),
