@@ -31,7 +31,7 @@
         
         .hidden { display: none !important; }
 
-        /* PANTALLA DE LOGIN */
+        /* PANTALLAS DE ACCESO */
         .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; }
         .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .auth-card h2 { color: var(--wa-teal); margin-bottom: 5px; font-size: 1.4rem; }
@@ -105,18 +105,28 @@
 
     <div id="authScreen" class="auth-container">
         <div class="auth-card">
-            <h2>SISTEMA ANDY PRO</h2>
-            <p>Panel de Acceso Privado</p>
-            <input type="email" id="loginEmail" placeholder="Correo Electrónico">
+            <h2>GRUPO VIP - ANDY</h2>
+            <p>Ingresa la Llave de Acceso del Grupo</p>
+            <input type="email" id="loginEmail" placeholder="Correo de Acceso">
             <input type="password" id="loginPass" placeholder="Contraseña">
-            <button class="btn-wa" id="btnIngresar">INICIAR SESIÓN</button>
+            <button class="btn-wa" id="btnIngresar">VERIFICAR ACCESO</button>
+        </div>
+    </div>
+
+    <div id="registerScreen" class="auth-container hidden">
+        <div class="auth-card">
+            <h2>REGISTRO DE MIEMBRO</h2>
+            <p>Configura tu perfil para el Chat</p>
+            <input type="text" id="regNombre" placeholder="Tu Nombre o Apodo">
+            <input type="tel" id="regTelefono" placeholder="Tu Número de Celular">
+            <button class="btn-wa" id="btnCompletarRegistro">ENTRAR AL CHAT</button>
         </div>
     </div>
 
     <div id="appScreen" class="app-container hidden">
         <div class="app-header">
             <div class="user-info">
-                <span id="headerTitle" class="title">💬 CHAT GENERAL</span>
+                <span id="headerTitle" class="title">💬 GRUPO VIP - ANDY</span>
                 <span id="userStatus" class="status">Cargando...</span>
             </div>
             <div class="header-actions">
@@ -136,7 +146,7 @@
                 <button id="btnCancelarResp" style="background:none; color:var(--danger); width:auto; font-size:1.3rem; border:none; padding: 0 5px;">×</button>
             </div>
             <div class="chat-footer">
-                <input type="text" id="msgInput" placeholder="Escribe un mensaje...">
+                <input type="text" id="msgInput" placeholder="Escribe un mensaje aquí...">
                 <button id="btnEnviar">
                     <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor"><path d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
                 </button>
@@ -145,20 +155,19 @@
 
         <div id="adminView" class="admin-view hidden">
             <div class="admin-section">
-                <h3>Crear Nuevo Miembro / Vendedor</h3>
-                <input type="text" id="newMemberName" placeholder="Nombre completo">
-                <input type="tel" id="newMemberPhone" placeholder="Número de Celular">
-                <input type="email" id="newMemberEmail" placeholder="Correo de ingreso">
-                <input type="text" id="newMemberPass" placeholder="Clave de ingreso">
+                <h3>Crear Nueva Cuenta / Llave</h3>
+                <input type="text" id="newMemberName" placeholder="Nombre de Identificación (Ej: Grupo VIP)">
+                <input type="email" id="newMemberEmail" placeholder="Correo General de Acceso">
+                <input type="text" id="newMemberPass" placeholder="Clave General de Acceso">
                 <select id="newMemberRole">
-                    <option value="vendedor">Rol: Vendedor / Miembro</option>
+                    <option value="vendedor">Rol: Miembro Autorizado</option>
                     <option value="admin">Rol: Administrador Secundario</option>
                 </select>
-                <button class="btn-wa" id="btnCrearMiembro">REGISTRAR EN EL SISTEMA</button>
+                <button class="btn-wa" id="btnCrearMiembro">GUARDAR LLAVE MAESTRA</button>
             </div>
 
             <div class="admin-section">
-                <h3>Miembros Registrados</h3>
+                <h3>Llaves Maestras y Miembros</h3>
                 <div id="membersList"></div>
             </div>
         </div>
@@ -180,6 +189,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Cuenta Absoluta de Andy
         const ADMIN_REAL = {
             email: "andyobregon799@gmail.com",
             pass: "123456",
@@ -191,6 +201,7 @@
         let sesionUsuario = JSON.parse(localStorage.getItem('sys_session')) || null;
         let respuestaActiva = null;
 
+        // AUTO-LOGIN: Si ya se registró antes en este cel, entra directo sin preguntar nada
         if (sesionUsuario) {
             verificarYEntrar();
         }
@@ -200,10 +211,11 @@
             const pass = document.getElementById('loginPass').value.trim();
 
             if(!email || !pass) {
-                alert("Completa tus credenciales");
+                alert("Por favor ingresa las credenciales");
                 return;
             }
 
+            // Si eres tú como Dueño
             if(email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
                 sesionUsuario = ADMIN_REAL;
                 localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
@@ -214,7 +226,6 @@
             document.getElementById('btnIngresar').innerText = "Verificando...";
             
             try {
-                // MODIFICACIÓN DE ALTO RENDIMIENTO: Búsqueda directa por ID para evitar que se quede colgado
                 const docRef = doc(db, "usuarios", email);
                 const docSnap = await getDoc(docRef);
 
@@ -222,31 +233,55 @@
                     const u = docSnap.data();
                     if(u.pass === pass) {
                         if(u.estado === "bloqueado") {
-                            alert("⛔ Tu cuenta ha sido bloqueada por Andy.");
-                            document.getElementById('btnIngresar').innerText = "INICIAR SESIÓN";
+                            alert("⛔ Esta llave de acceso ha sido suspendida.");
+                            document.getElementById('btnIngresar').innerText = "VERIFICAR ACCESO";
                             return;
                         }
-                        sesionUsuario = { id: docSnap.id, ...u };
-                        localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
-                        verificarYEntrar();
+                        
+                        // Pasó el filtro general, ahora va al Paso 2 (Crear su propio Perfil)
+                        document.getElementById('authScreen').classList.add('hidden');
+                        document.getElementById('registerScreen').classList.remove('hidden');
                     } else {
                         alert("❌ Contraseña incorrecta.");
                     }
                 } else {
-                    alert("❌ El correo ingresado no está registrado ni autorizado.");
+                    alert("❌ Credenciales inválidas para este grupo.");
                 }
             } catch (error) {
-                console.error("Error al autenticar: ", error);
-                alert("Error de conexión. Intenta de nuevo.");
+                alert("Error de conexión.");
             } finally {
-                document.getElementById('btnIngresar').innerText = "INICIAR SESIÓN";
+                document.getElementById('btnIngresar').innerText = "VERIFICAR ACCESO";
             }
+        };
+
+        // Guardar su Perfil Único Personalizado
+        document.getElementById('btnCompletarRegistro').onclick = () => {
+            const nombre = document.getElementById('regNombre').value.trim();
+            const telefono = document.getElementById('regTelefono').value.trim();
+
+            if(!nombre || !telefono) {
+                alert("Debes poner tu Nombre y tu Celular para identificarte en el grupo.");
+                return;
+            }
+
+            // Estructura guardada de forma local e intransferible en el teléfono del usuario
+            sesionUsuario = {
+                nombre: nombre,
+                telefono: telefono,
+                role: "vendedor", // Rol por defecto
+                email: "miembro_grupo"
+            };
+
+            localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
+            document.getElementById('registerScreen').classList.add('hidden');
+            verificarYEntrar();
         };
 
         function verificarYEntrar() {
             document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('registerScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
-            document.getElementById('userStatus').innerText = `${sesionUsuario.nombre} (${sesionUsuario.role.toUpperCase()})`;
+            document.getElementById('userStatus').innerText = `${sesionUsuario.nombre} (${sesionUsuario.telefono})`;
 
             if (sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin') {
                 document.getElementById('btnToggleAdmin').classList.remove('hidden');
@@ -256,6 +291,7 @@
             iniciarEscuchaChat();
         }
 
+        // PANEL CONTROL
         document.getElementById('btnToggleAdmin').onclick = () => {
             document.getElementById('chatView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
@@ -269,34 +305,31 @@
             document.getElementById('chatView').classList.remove('hidden');
             document.getElementById('btnToggleChat').classList.add('hidden');
             document.getElementById('btnToggleAdmin').classList.remove('hidden');
-            document.getElementById('headerTitle').innerText = "💬 CHAT GENERAL";
+            document.getElementById('headerTitle').innerText = "💬 GRUPO VIP - ANDY";
             setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
         };
 
         function configurarPanelAdmin() {
             document.getElementById('btnCrearMiembro').onclick = async () => {
                 const nombre = document.getElementById('newMemberName').value.trim();
-                const telefono = document.getElementById('newMemberPhone').value.trim();
                 const email = document.getElementById('newMemberEmail').value.trim().toLowerCase();
                 const pass = document.getElementById('newMemberPass').value.trim();
                 const role = document.getElementById('newMemberRole').value;
 
-                if(!nombre || !telefono || !email || !pass) {
-                    alert("Rellena todos los campos del nuevo miembro");
+                if(!nombre || !email || !pass) {
+                    alert("Rellena todos los campos");
                     return;
                 }
 
                 try {
-                    // SEGURO FIJO: El documento se guarda usando el correo electrónico como ID directo
                     await setDoc(doc(db, "usuarios", email), {
-                        nombre, telefono, email, pass, role, estado: "activo"
+                        nombre, telefono: "General", email, pass, role, estado: "activo"
                     });
-                    alert(`✅ Miembro ${nombre} guardado exitosamente.`);
+                    alert(`✅ Llave maestra guardada correctamente.`);
                     document.getElementById('newMemberName').value = "";
-                    document.getElementById('newMemberPhone').value = "";
                     document.getElementById('newMemberEmail').value = "";
                     document.getElementById('newMemberPass').value = "";
-                } catch(e) { alert("Error al registrar: " + e); }
+                } catch(e) { alert("Error: " + e); }
             };
 
             onSnapshot(collection(db, "usuarios"), (snap) => {
@@ -313,7 +346,7 @@
                     item.innerHTML = `
                         <div class="member-info">
                             <span class="member-name">${u.nombre}</span>
-                            <span class="member-meta">📞 ${u.telefono} | 📧 ${u.email}</span>
+                            <span class="member-meta">📧 Acceso: ${u.email}</span>
                             <span class="member-meta">🔑 Clave: <b>${u.pass}</b></span>
                             <span class="member-badge ${u.estado === 'activo' ? 'badge-active' : 'badge-blocked'}">${u.role.toUpperCase()} - ${u.estado.toUpperCase()}</span>
                         </div>
@@ -331,19 +364,19 @@
 
         window.cambiarEstadoUsuario = async (id, estadoActual) => {
             const nuevoEstado = estadoActual === "activo" ? "bloqueado" : "activo";
-            if(confirm(`¿Quieres cambiar el estado de este miembro a ${nuevoEstado}?`)) {
+            if(confirm(`¿Quieres cambiar el estado a ${nuevoEstado}?`)) {
                 await updateDoc(doc(db, "usuarios", id), { estado: nuevoEstado });
             }
         };
 
         window.eliminarUsuario = async (id) => {
-            if(confirm("⚠️ ¿Estás seguro de eliminar a este miembro por completo?")) {
+            if(confirm("⚠️ ¿Estás seguro de eliminar este acceso?")) {
                 await deleteDoc(doc(db, "usuarios", id));
             }
         };
 
         function iniciarEscuchaChat() {
-            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(80));
+            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(120));
             const box = document.getElementById('chatBox');
             
             onSnapshot(q, (snapshot) => {
@@ -430,8 +463,10 @@
         document.getElementById('btnCancelarResp').onclick = window.cancelarRespuesta;
 
         document.getElementById('btnSalir').onclick = () => {
-            localStorage.clear();
-            location.reload();
+            if(confirm("¿Quieres cerrar sesión? Esto requerirá que vuelvas a registrar tus datos en este equipo.")) {
+                localStorage.clear();
+                location.reload();
+            }
         };
     </script>
 </body>
