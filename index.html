@@ -251,7 +251,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, limit, onSnapshot, serverTimestamp, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, limit, onSnapshot, serverTimestamp, updateDoc, deleteDoc, getDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -452,20 +452,45 @@
             setTimeout(() => { const cb = document.getElementById('chatBox'); cb.scrollTop = cb.scrollHeight; }, 50);
         };
 
-        // GUARDAR CAMBIOS DE PERFIL
-        document.getElementById('btnGuardarPerfil').onclick = () => {
+        // GUARDAR CAMBIOS DE PERFIL Y DEJARLOS VISIBLES EN LOS MENSAJES PARA LOS DEMÁS MIEMBROS
+        document.getElementById('btnGuardarPerfil').onclick = async () => {
             const nuevoNombre = document.getElementById('editProfileNombre').value.trim();
             if(!nuevoNombre) { alert("El nombre no puede estar vacío."); return; }
+
+            document.getElementById('btnGuardarPerfil').innerText = "Sincronizando...";
 
             sesionUsuario.nombre = nuevoNombre;
             if (base64EditAvatarStr) {
                 sesionUsuario.photo = base64EditAvatarStr;
             }
 
+            // 1. Guardar cambios en el almacenamiento local del teléfono
             localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
             refrescarCabeceraUI();
-            alert("✅ Perfil actualizado correctamente.");
-            document.getElementById('btnToggleChat').click(); // Regresa al chat de una
+
+            // 2. Sincronizar en Firebase para cambiar el avatar de tus mensajes viejos y nuevos de cara al resto del grupo
+            try {
+                const qMsg = query(collection(db, "chat"), where("emisorId", "==", String(sesionUsuario.telefono)));
+                const querySnapshot = await getDocs(qMsg);
+                
+                // Actualiza en lote todos los mensajes enviados por este usuario
+                const promesas = [];
+                querySnapshot.forEach((docMsg) => {
+                    promesas.push(updateDoc(doc(db, "chat", docMsg.id), {
+                        emisor: nuevoNombre,
+                        emisorFoto: sesionUsuario.photo
+                    }));
+                });
+                if(promesas.length > 0) await Promise.all(promesas);
+                
+                alert("✅ Perfil sincronizado con el grupo exitosamente.");
+            } catch(e) {
+                console.error("Error sincronizando avatar:", e);
+                alert("✅ Cambios locales listos (Los nuevos mensajes saldrán actualizados).");
+            } finally {
+                document.getElementById('btnGuardarPerfil').innerText = "GUARDAR CAMBIOS";
+                document.getElementById('btnToggleChat').click(); // Regresa al chat de una
+            }
         };
 
         function configurarPanelAdmin() {
