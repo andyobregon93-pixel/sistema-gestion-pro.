@@ -31,8 +31,8 @@
         
         .hidden { display: none !important; }
 
-        /* PANTALLA DE LOGIN (RESPONSIVE CELULAR) */
-        .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
+        /* PANTALLA DE LOGIN */
+        .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; }
         .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
         .auth-card h2 { color: var(--wa-teal); margin-bottom: 5px; font-size: 1.4rem; }
         .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
@@ -57,9 +57,9 @@
         .user-info .title { font-weight: bold; font-size: 0.95rem; color: var(--text-main); }
         .user-info .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
         .header-actions { display: flex; gap: 8px; }
-        .btn-action { background: #2a3942; color: white; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; }
+        .btn-action { background: #2a3942; color: white; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; border: none; }
 
-        /* PANTALLA: CONTENEDOR DEL CHAT */
+        /* VISTA CHAT */
         .chat-view { flex: 1; display: flex; flex-direction: column; overflow: hidden; height: 100%; }
         #chatBox { 
             flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 6px; 
@@ -81,10 +81,10 @@
             height: 60px; background: #202c33; padding: 0 8px; display: flex; align-items: center; gap: 6px; flex-shrink: 0;
             padding-bottom: env(safe-area-inset-bottom);
         }
-        .chat-footer input { margin: 0; background: #2a3942; padding: 10px 14px; border-radius: 20px; flex: 1; color: white; border: none; font-size: 15px; }
+        .chat-footer input { margin: 0; background: #2a3942; padding: 10px 14px; border-radius: 20px; flex: 1; color: white; border: none; font-size: 15px; outline: none; }
         .chat-footer button { width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: var(--wa-teal); color: #111b21; border: none; flex-shrink: 0; }
 
-        /* VISTA: PANEL DE ADMINISTRACIÓN */
+        /* VISTA PANEL ADMINISTRADOR */
         .admin-view { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
         .admin-section { background: var(--panel-header); padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
         .admin-section h3 { font-size: 1.1rem; color: var(--wa-teal); margin-bottom: 10px; border-bottom: 1px solid #2a3942; padding-bottom: 5px; }
@@ -98,7 +98,7 @@
         .badge-active { background: rgba(0, 168, 132, 0.2); color: var(--wa-teal); }
         .badge-blocked { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
         .member-actions { display: flex; gap: 5px; }
-        .btn-sm { padding: 5px 8px; font-size: 0.75rem; border-radius: 4px; }
+        .btn-sm { padding: 5px 8px; font-size: 0.75rem; border-radius: 4px; border: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -166,7 +166,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, limit, onSnapshot, serverTimestamp, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, limit, onSnapshot, serverTimestamp, updateDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -180,13 +180,12 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Cuenta del Administrador General (Tú)
         const ADMIN_REAL = {
             email: "andyobregon799@gmail.com",
             pass: "123456",
             nombre: "Andy Obregón",
             role: "owner",
-            telefono: "Admin Gral"
+            telefono: "0990434546"
         };
 
         let sesionUsuario = JSON.parse(localStorage.getItem('sys_session')) || null;
@@ -205,7 +204,6 @@
                 return;
             }
 
-            // Validación Dueño Absoluto
             if(email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
                 sesionUsuario = ADMIN_REAL;
                 localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
@@ -213,31 +211,36 @@
                 return;
             }
 
-            // Validación en Firebase para Miembros Comunes
             document.getElementById('btnIngresar').innerText = "Verificando...";
-            const membersRef = collection(db, "usuarios");
             
-            onSnapshot(membersRef, (snap) => {
-                let encontrado = false;
-                snap.forEach(docS => {
-                    const u = docS.data();
-                    if(u.email.toLowerCase() === email && u.pass === pass) {
-                        encontrado = true;
+            try {
+                // MODIFICACIÓN DE ALTO RENDIMIENTO: Búsqueda directa por ID para evitar que se quede colgado
+                const docRef = doc(db, "usuarios", email);
+                const docSnap = await getDoc(docRef);
+
+                if (docSnap.exists()) {
+                    const u = docSnap.data();
+                    if(u.pass === pass) {
                         if(u.estado === "bloqueado") {
-                            alert("⛔ Tu cuenta ha sido bloqueada por el Administrador.");
+                            alert("⛔ Tu cuenta ha sido bloqueada por Andy.");
                             document.getElementById('btnIngresar').innerText = "INICIAR SESIÓN";
                             return;
                         }
-                        sesionUsuario = { id: docS.id, ...u };
+                        sesionUsuario = { id: docSnap.id, ...u };
                         localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
                         verificarYEntrar();
+                    } else {
+                        alert("❌ Contraseña incorrecta.");
                     }
-                });
-                if(!encontrado && document.getElementById('btnIngresar').innerText === "Verificando...") {
-                    alert("❌ Correo o clave incorrectos o no estás autorizado.");
-                    document.getElementById('btnIngresar').innerText = "INICIAR SESIÓN";
+                } else {
+                    alert("❌ El correo ingresado no está registrado ni autorizado.");
                 }
-            }, { onlyOnce: true });
+            } catch (error) {
+                console.error("Error al autenticar: ", error);
+                alert("Error de conexión. Intenta de nuevo.");
+            } finally {
+                document.getElementById('btnIngresar').innerText = "INICIAR SESIÓN";
+            }
         };
 
         function verificarYEntrar() {
@@ -245,7 +248,6 @@
             document.getElementById('appScreen').classList.remove('hidden');
             document.getElementById('userStatus').innerText = `${sesionUsuario.nombre} (${sesionUsuario.role.toUpperCase()})`;
 
-            // Si eres Dueño o Admin, se te habilita el botón del panel
             if (sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin') {
                 document.getElementById('btnToggleAdmin').classList.remove('hidden');
                 configurarPanelAdmin();
@@ -254,7 +256,6 @@
             iniciarEscuchaChat();
         }
 
-        // CONTROL DE PANTALLAS (CHAT VS PANEL)
         document.getElementById('btnToggleAdmin').onclick = () => {
             document.getElementById('chatView').classList.add('hidden');
             document.getElementById('adminView').classList.remove('hidden');
@@ -272,9 +273,7 @@
             setTimeout(() => { chatBox.scrollTop = chatBox.scrollHeight; }, 50);
         };
 
-        // LÓGICA DEL PANEL DE ADMINISTRACIÓN
         function configurarPanelAdmin() {
-            // Registrar miembro nuevo
             document.getElementById('btnCrearMiembro').onclick = async () => {
                 const nombre = document.getElementById('newMemberName').value.trim();
                 const telefono = document.getElementById('newMemberPhone').value.trim();
@@ -288,12 +287,11 @@
                 }
 
                 try {
-                    const userId = "user_" + Date.now();
-                    await setDoc(doc(db, "usuarios", userId), {
+                    // SEGURO FIJO: El documento se guarda usando el correo electrónico como ID directo
+                    await setDoc(doc(db, "usuarios", email), {
                         nombre, telefono, email, pass, role, estado: "activo"
                     });
-                    alert(`✅ Miembro ${nombre} creado exitosamente.`);
-                    // Limpiar campos
+                    alert(`✅ Miembro ${nombre} guardado exitosamente.`);
                     document.getElementById('newMemberName').value = "";
                     document.getElementById('newMemberPhone').value = "";
                     document.getElementById('newMemberEmail').value = "";
@@ -301,7 +299,6 @@
                 } catch(e) { alert("Error al registrar: " + e); }
             };
 
-            // Escuchar y renderizar lista de miembros
             onSnapshot(collection(db, "usuarios"), (snap) => {
                 const container = document.getElementById('membersList');
                 container.innerHTML = "";
@@ -332,7 +329,6 @@
             });
         }
 
-        // FUNCIONES GLOBALES DE ADMINISTRACIÓN CONECTADAS A BOTONES
         window.cambiarEstadoUsuario = async (id, estadoActual) => {
             const nuevoEstado = estadoActual === "activo" ? "bloqueado" : "activo";
             if(confirm(`¿Quieres cambiar el estado de este miembro a ${nuevoEstado}?`)) {
@@ -341,12 +337,11 @@
         };
 
         window.eliminarUsuario = async (id) => {
-            if(confirm("⚠️ ¿Estás seguro de eliminar por completo a este miembro del sistema? Ya no podrá ingresar.")) {
+            if(confirm("⚠️ ¿Estás seguro de eliminar a este miembro por completo?")) {
                 await deleteDoc(doc(db, "usuarios", id));
             }
         };
 
-        // LÓGICA DEL CHAT EN TIEMPO REAL
         function iniciarEscuchaChat() {
             const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(80));
             const box = document.getElementById('chatBox');
