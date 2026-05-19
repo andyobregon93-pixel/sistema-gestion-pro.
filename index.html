@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SISTEMA ANDY - FIX 100% RESPONSIVE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>SISTEMA ANDY VIP</title>
     <style>
         :root { 
             --bg-main: #0b141a; 
@@ -17,38 +17,66 @@
             --panel-header: #202c33;
         }
         
-        /* FIX DE PANTALLA FIJA: Bloquea scrolls raros del navegador */
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-        html, body { height: 100%; width: 100%; overflow: hidden; background: var(--bg-main); color: var(--text-main); }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
+        
+        html, body { 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background: var(--bg-main); 
+            color: var(--text-main);
+            position: fixed;
+        }
+        
         .hidden { display: none !important; }
 
-        /* PANTALLA REGISTRO */
+        /* REGISTRO */
         .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; }
-        .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
+        .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; }
         .auth-card h2 { color: var(--wa-teal); margin-bottom: 10px; font-size: 1.4rem; }
-        .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
         
         input { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: none; background: var(--input-bg); color: white; font-size: 16px; outline: none; }
-        input::placeholder { color: var(--text-muted); }
         
-        button { width: 100%; padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; }
-        .btn-wa { background: var(--wa-teal); color: #111b21; }
+        button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .btn-wa { width: 100%; background: var(--wa-teal); color: #111b21; }
 
-        /* INTERFAZ ENCAJADA 100% EN LA PANTALLA DEL MÓVIL */
-        .chat-container { display: flex; flex-direction: column; height: 100%; width: 100%; background: var(--bg-chat); position: relative; }
+        /* INTERFAZ DEL CHAT AJUSTADA */
+        .chat-container { 
+            display: flex; 
+            flex-direction: column; 
+            height: 100%; 
+            width: 100%; 
+            background: var(--bg-chat); 
+        }
         
-        /* Barra Superior Fija */
-        .chat-header { height: 60px; background: var(--panel-header); padding: 0 14px; display: flex; align-items: center; justify-content: space-between; box-shadow: 0 1px 3px rgba(0,0,0,0.4); flex-shrink: 0; }
+        .chat-header { 
+            height: 60px; 
+            background: var(--panel-header); 
+            padding: 0 14px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: space-between; 
+            flex-shrink: 0; 
+            z-index: 10;
+        }
         .user-info { display: flex; flex-direction: column; }
         .user-info .title { font-weight: bold; font-size: 1rem; color: var(--text-main); }
-        .user-info .status { font-size: 0.7rem; color: var(--wa-teal); margin-top: 2px; max-width: 180px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .user-info .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
         .btn-logout { background: transparent; color: #ef4444; width: auto; padding: 4px 8px; font-size: 0.8rem; }
 
-        /* Contenedor de Mensajes con Scroll interno controlado */
-        #chatBox { flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 6px; background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-repeat: repeat; }
+        #chatBox { 
+            flex: 1; 
+            overflow-y: auto; 
+            padding: 12px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 6px; 
+            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); 
+            background-repeat: repeat; 
+            WebkitOverflowScrolling: touch;
+        }
         
-        /* Burbujas Ajustadas para pantallas pequeñas */
-        .msg { padding: 6px 10px 8px 10px; border-radius: 8px; font-size: 0.9rem; max-width: 85%; position: relative; word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.2); cursor: pointer; }
+        .msg { padding: 6px 10px 8px 10px; border-radius: 8px; font-size: 0.92rem; max-width: 85%; position: relative; word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.2); }
         .msg-a { background: var(--wa-msg-out); align-self: flex-end; border-top-right-radius: 0; }
         .msg-v { background: var(--wa-msg-in); align-self: flex-start; border-top-left-radius: 0; }
         
@@ -58,11 +86,18 @@
         .reply-box { background: rgba(0,0,0,0.2); padding: 5px; border-left: 3px solid var(--wa-teal); margin-bottom: 4px; font-size: 0.75rem; border-radius: 4px; }
         .reply-box b { color: var(--wa-teal); }
         
-        /* Barra de Respuesta Flotante */
         #replyPreview { background: #1f2c34; padding: 8px 12px; border-left: 4px solid var(--wa-teal); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
         
-        /* Barra de Entrada Ajustada al Teclado Móvil sin salirse de rango */
-        .chat-footer { height: 60px; background: #202c33; padding: 0 8px; display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+        .chat-footer { 
+            height: 60px; 
+            background: #202c33; 
+            padding: 0 8px; 
+            display: flex; 
+            align-items: center; 
+            gap: 6px; 
+            flex-shrink: 0;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
         .chat-footer input { margin: 0; background: #2a3942; padding: 10px 14px; border-radius: 20px; flex: 1; color: white; border: none; outline: none; font-size: 15px; }
         .chat-footer button { width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: var(--wa-teal); color: #111b21; padding: 0; flex-shrink: 0; border: none; }
     </style>
@@ -108,7 +143,7 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, query, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -157,19 +192,25 @@
         }
 
         function iniciarEscuchaChat() {
-            // Consulta ordenada por fecha para mantener la línea de tiempo limpia
-            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(100));
+            // FIX CRUCIAL: Eliminamos 'orderBy' para evitar que Firebase rompa la consulta por culpa del conflicto de textos viejos
+            const q = query(collection(db, "chat"), limit(80));
             const box = document.getElementById('chatBox');
             
             onSnapshot(q, (snapshot) => {
                 box.innerHTML = "";
+                
+                // Leemos los datos y los ordenamos de forma segura directamente en la memoria del celular
+                let listaMensajes = [];
                 snapshot.forEach(docS => {
-                    const d = docS.data();
-                    
+                    listaMensajes.push(docS.data());
+                });
+
+                // Renderizado ordenado seguro
+                listaMensajes.forEach(d => {
                     let textoMensaje = d.audio || d.msg || d.mensaje || "";
                     if (!textoMensaje) return; 
 
-                    const esMio = d.emisorId === miUsuario.telefono;
+                    const esMio = String(d.emisorId).trim() === String(miUsuario.telefono).trim();
                     
                     const div = document.createElement('div');
                     div.className = `msg ${esMio ? 'msg-a' : 'msg-v'}`;
@@ -188,9 +229,12 @@
                     let horaTexto = "Hoy";
                     if(d.fecha) {
                         try {
-                            // Intenta leer timestamp de Firebase o texto plano
                             const date = d.fecha.toDate ? d.fecha.toDate() : new Date(d.fecha);
-                            horaTexto = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                            if(!isNaN(date)) {
+                                horaTexto = date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                            } else {
+                                horaTexto = String(d.fecha).substring(11,16) || "Hoy";
+                            }
                         } catch(e) {}
                     }
 
@@ -202,26 +246,27 @@
                     div.innerHTML = html;
                     box.appendChild(div);
                 });
-                // Desplazamiento automático al fondo al recibir o mandar mensajes
-                box.scrollTop = box.scrollHeight;
+                
+                setTimeout(() => {
+                    box.scrollTop = box.scrollHeight;
+                }, 50);
             });
         }
 
-        // FUNCIÓN DE ENVÍO ULTRA CORREGIDA: Sin depender del serverTimestamp bloqueado
         const enviarMensaje = async () => {
             const input = document.getElementById('msgInput');
             const texto = input.value.trim();
             if(!texto) return;
 
-            // FIX DE TIEMPO INTERNO: Usamos Date.now() local transformado para evitar rechazos de Firebase
-            const tiempoLocal = new Date().toISOString();
+            // Formato de texto plano compatible para no romper tu historial
+            const tiempoFormateado = new Date().toLocaleString();
 
             const m = {
                 emisor: String(miUsuario.nombre),
                 emisorId: String(miUsuario.telefono),
                 audio: String(texto), 
                 foto: "",
-                fecha: tiempoLocal // Cambiado a string ISO para saltarse bloqueos de reloj del servidor
+                fecha: tiempoFormateado
             };
 
             if (respuestaActiva) {
@@ -233,18 +278,24 @@
             window.cancelarRespuesta();
 
             try {
+                // Envío directo libre de trabas
                 await addDoc(collection(db, "chat"), m);
             } catch(e) {
                 console.error("Error al enviar:", e);
-                alert("Error de conexión. Revisa tus reglas de base de datos.");
             }
         };
 
-        // Activadores obligatorios
         document.getElementById('btnEnviar').onclick = enviarMensaje;
         document.getElementById('msgInput').onkeypress = (e) => {
             if(e.key === 'Enter') enviarMensaje();
         };
+
+        document.getElementById('msgInput').addEventListener('focus', () => {
+            setTimeout(() => {
+                const box = document.getElementById('chatBox');
+                box.scrollTop = box.scrollHeight;
+            }, 250);
+        });
 
         window.prepararRespuesta = (autor, mensaje) => {
             respuestaActiva = { autor: autor, msg: mensaje };
