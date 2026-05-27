@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SISTEMA ANDY PRO</title>
+    <title>SISTEMA ANDY PRO - Global Multi-Admin</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&display=swap');
+
         :root { 
             --bg-main: #0b141a; 
-            --bg-chat: #0b141a; 
-            --wa-teal: #00a884; 
-            --wa-msg-out: #005c4b; 
-            --wa-msg-in: #202c33; 
+            --panel-header: #202c33;
+            --input-bg: #2a3942;
             --text-main: #e9edef; 
             --text-muted: #8696a0;
-            --input-bg: #2a3942;
-            --panel-header: #202c33;
+            --wa-teal: #FFDD00; /* Oro temático unificado */
             --danger: #ef4444;
+            --success: #00a884;
+            --blue-sub: #0033A0;
+            --red-sub: #D52B1E;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -23,236 +25,201 @@
         html, body { 
             height: 100%; 
             width: 100%; 
-            overflow: hidden; 
-            background: var(--bg-main); 
+            background: linear-gradient(135deg, #FFDD00 0%, #0033A0 50%, #D52B1E 100%);
             color: var(--text-main);
+            overflow: hidden;
             position: fixed;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #FFDD00 0%, #FFDD00 50%, #0033A0 50%, #0033A0 75%, #D52B1E 75%, #D52B1E 100%);
+            z-index: 9999;
         }
         
         .hidden { display: none !important; }
 
-        /* PANTALLAS DE ACCESO Y CONFIGURACIÓN */
+        /* PANTALLA DE ACCESO */
         .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
-        .auth-card { background: var(--panel-header); padding: 25px; border-radius: 12px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.5); }
-        .auth-card h2 { color: var(--wa-teal); margin-bottom: 5px; font-size: 1.4rem; }
-        .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; }
-        
-        .avatar-picker { width: 90px; height: 90px; border-radius: 50%; background: #2a3942; margin: 10px auto; position: relative; cursor: pointer; overflow: hidden; border: 3px solid var(--wa-teal); display: flex; align-items: center; justify-content: center; }
-        .avatar-picker img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-picker span { font-size: 0.7rem; color: var(--text-muted); text-align: center; padding: 5px; }
+        .auth-card { background: rgba(10,10,10,0.95); padding: 30px; border-radius: 15px; width: 100%; max-width: 380px; text-align: center; border: 3px solid var(--wa-teal); box-shadow: 0 0 20px rgba(255, 221, 0, 0.3); }
+        .auth-card h2 { font-family: 'Cinzel', serif; color: var(--wa-teal); margin-bottom: 5px; font-size: 1.8rem; text-shadow: 2px 2px 0px var(--blue-sub); }
+        .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; font-weight: bold; }
 
-        input, select { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: none; background: var(--input-bg); color: white; font-size: 15px; outline: none; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 2px solid #333; background: var(--input-bg); color: white; font-size: 15px; outline: none; font-weight: bold; }
+        input:focus, select:focus, textarea:focus { border-color: var(--blue-sub); }
         input::placeholder { color: var(--text-muted); }
         
-        button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 15px; cursor: pointer; transition: opacity 0.2s; }
-        button:active { opacity: 0.7; }
-        .btn-wa { width: 100%; background: var(--wa-teal); color: #111b21; margin-top: 5px; }
-        .btn-danger { background: var(--danger); color: white; }
+        button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 15px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
+        button:active { transform: scale(0.98); opacity: 0.8; }
+        .btn-wa { width: 100%; background: var(--blue-sub); color: white; margin-top: 5px; }
+        .btn-wa:hover { background: #002270; }
+        .btn-danger { background: var(--red-sub); color: white; }
+        .btn-danger:hover { background: #b82016; }
+        .btn-success { background: var(--success); color: white; }
 
-        /* INTERFAZ PRINCIPAL */
-        .app-container { display: flex; flex-direction: column; height: 100%; width: 100%; background: var(--bg-chat); }
+        /* INTERFAZ PRINCIPAL CON CONTENEDOR AJUSTADO */
+        .app-container { display: flex; flex-direction: column; height: 100%; width: 100%; }
         
         .app-header { 
-            height: 60px; background: var(--panel-header); padding: 0 14px; 
+            height: 60px; background: rgba(10,10,10,0.94); padding: 0 14px; 
             display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;
+            border-bottom: 2px solid var(--wa-teal);
         }
-        .user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .header-avatar { width: 38px; height: 38px; border-radius: 50%; object-fit: cover; background: #2a3942; border: 1px solid var(--wa-teal); }
-        .user-text { display: flex; flex-direction: column; }
-        .user-text .title { font-weight: bold; font-size: 0.95rem; color: var(--text-main); }
-        .user-text .status { font-size: 0.72rem; color: var(--wa-teal); margin-top: 2px; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .user-text .title { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.3rem; color: var(--wa-teal); text-shadow: 1px 1px 0px var(--red-sub); }
+        .user-text .status { font-size: 0.72rem; color: #00ff9d; display: block; font-family: monospace; }
         .header-actions { display: flex; gap: 6px; align-items: center; }
-        .btn-action { background: #2a3942; color: white; padding: 6px 12px; font-size: 0.8rem; border-radius: 6px; border: none; }
+        .btn-action { background: #2a3942; color: white; padding: 8px 12px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--wa-teal); }
 
-        /* CHAT */
-        .chat-view { flex: 1; display: flex; flex-direction: column; overflow: hidden; height: 100%; }
-        #chatBox { 
-            flex: 1; overflow-y: auto; padding: 12px; display: flex; flex-direction: column; gap: 8px; 
-            background-image: url('https://user-images.githubusercontent.com/15075759/28719144-86dc0f70-73b1-11e7-911d-60d70fcded21.png'); background-repeat: repeat; 
-        }
+        /* NAVEGACIÓN DE SECCIONES */
+        .nav-tabs { display: flex; background: rgba(20,20,20,0.95); border-bottom: 1px solid #333; flex-shrink: 0; }
+        .tab-item { flex: 1; padding: 12px 5px; text-align: center; font-size: 0.85rem; font-weight: bold; color: var(--text-muted); cursor: pointer; text-transform: uppercase; border-bottom: 3px solid transparent; }
+        .tab-item.active { color: var(--wa-teal); border-bottom-color: var(--wa-teal); background: rgba(255,221,0,0.05); }
+
+        /* CONTENEDOR DE TRABAJO */
+        .main-content { flex: 1; overflow-y: auto; background: rgba(10,10,10,0.92); padding: 15px; display: flex; flex-direction: column; padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
         
-        .msg-wrapper { display: flex; gap: 8px; width: 100%; margin-bottom: 2px; }
-        .msg-wrapper.my-msg { justify-content: flex-end; }
-        .chat-avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; align-self: flex-end; background: #2a3942; }
+        /* SECCIÓN BLOC DE NOTAS */
+        .note-form { background: var(--panel-header); padding: 12px; border-radius: 10px; border-left: 4px solid var(--wa-teal); margin-bottom: 15px; }
+        .notes-grid { display: flex; flex-direction: column; gap: 10px; }
+        .note-card { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 6px; position: relative; }
+        .note-card p { font-family: 'Courier New', Courier, monospace; color: #00ff9d; font-size: 0.9rem; word-break: break-all; white-space: pre-wrap; }
+        .note-meta { font-size: 0.7rem; color: var(--text-muted); text-align: right; }
+        .note-actions { display: flex; gap: 6px; justify-content: flex-end; margin-top: 4px; }
+        .btn-mini { padding: 5px 10px; font-size: 0.75rem; border-radius: 4px; border: none; font-weight: bold; color: white; text-transform: uppercase; cursor: pointer; }
 
-        .msg { padding: 6px 10px 8px 10px; border-radius: 8px; font-size: 0.92rem; max-width: 75%; position: relative; word-wrap: break-word; box-shadow: 0 1px 1px rgba(0,0,0,0.2); display: flex; flex-direction: column; cursor: pointer; }
-        .msg-a { background: var(--wa-msg-out); border-bottom-right-radius: 0; }
-        .msg-v { background: var(--wa-msg-in); border-bottom-left-radius: 0; }
-        
-        .sticker-img { max-width: 140px; max-height: 140px; object-fit: contain; margin: 4px 0; border-radius: 4px; }
-        .chat-foto-img { max-width: 200px; max-height: 200px; object-fit: cover; border-radius: 6px; margin: 4px 0; border: 1px solid rgba(255,255,255,0.1); }
-        .msg-deleted { color: var(--text-muted) !important; font-style: italic; font-size: 0.88rem; display: flex; align-items: center; gap: 4px; }
+        /* SECCIÓN GENERADOR DE COMBOS */
+        .gen-section h3 { font-family: 'Cinzel', serif; color: var(--wa-teal); text-align: center; margin-bottom: 10px; font-size: 1.3rem; }
+        .gen-container { width: 100%; max-width: 500px; margin: 0 auto; }
+        .gen-label { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; display: block; margin-top: 6px; text-align: left; }
+        textarea.resultado-box { height: 220px; color: #00ff9d; background: #050505; border: 2px solid var(--blue-sub); font-family: 'Courier New', Courier, monospace; margin-top: 10px; }
 
-        .msg-meta { display: flex; align-items: center; justify-content: flex-end; gap: 3px; font-size: 0.65rem; color: var(--text-muted); margin-top: 3px; align-self: flex-end; }
-        .msg-sender { font-size: 0.78rem; font-weight: bold; display: block; margin-bottom: 3px; }
-        .reply-box { background: rgba(0,0,0,0.2); padding: 5px; border-left: 3px solid var(--wa-teal); margin-bottom: 4px; font-size: 0.75rem; border-radius: 4px; color: white; }
-        
-        #replyPreview { background: #1f2c34; padding: 8px 12px; border-left: 4px solid var(--wa-teal); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
-        
-        /* FOOTER DE ENTRADA */
-        .chat-footer { 
-            height: 60px; background: #202c33; padding: 0 6px; display: flex; align-items: center; gap: 5px; flex-shrink: 0;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-        .chat-footer input { margin: 0; background: #2a3942; padding: 10px 14px; border-radius: 20px; flex: 1; color: white; border: none; font-size: 15px; outline: none; }
-        .btn-media { width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: #2a3942; color: var(--text-muted); border: none; flex-shrink: 0; }
-        .chat-footer button.btn-send { width: 42px; height: 42px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background: var(--wa-teal); color: #111b21; border: none; flex-shrink: 0; }
-
-        /* MENÚ FLOTANTE MÓVIL ACCIONES MENSAJE */
-        .action-sheet-backdrop { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:100; display:flex; align-items:flex-end; }
-        .action-sheet { width:100%; background:#202c33; border-top-left-radius:16px; border-top-right-radius:16px; padding: 12px 0; padding-bottom: calc(12px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 10px rgba(0,0,0,0.3); }
-        .action-option { width:100%; padding:15px 20px; text-align:left; background:none; border:none; color:white; font-size:16px; display:flex; align-items:center; gap:12px; }
-        .action-option:active { background:#2a3942; }
-
-        /* VISTA CONFIGURACIÓN PERFIL LOCAL STYLE WHATSAPP */
-        .profile-view { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 20px; }
-        .profile-avatar-container { position: relative; width: 140px; height: 140px; margin-bottom: 10px; }
-        .profile-avatar-img { width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid var(--wa-teal); background: #2a3942; }
-        .profile-avatar-badge { position: absolute; bottom: 5px; right: 5px; background: var(--wa-teal); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #111b21; box-shadow: 0 2px 5px rgba(0,0,0,0.3); cursor: pointer; }
-        .profile-field-box { width: 100%; background: var(--panel-header); padding: 15px; border-radius: 10px; display: flex; flex-direction: column; gap: 5px; }
-        .profile-field-box label { font-size: 0.8rem; color: var(--wa-teal); font-weight: bold; text-transform: uppercase; }
-        .profile-field-value { font-size: 1rem; color: white; padding: 5px 0; }
-
-        /* PANEL ADMIN */
-        .admin-view { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 15px; }
-        .admin-section { background: var(--panel-header); padding: 15px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
-        .admin-section h3 { font-size: 1.1rem; color: var(--wa-teal); margin-bottom: 10px; border-bottom: 1px solid #2a3942; padding-bottom: 5px; }
-        
-        .member-item { display: flex; align-items: center; justify-content: space-between; background: #2a3942; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.88rem; }
-        .member-info { display: flex; flex-direction: column; gap: 2px; }
-        .member-name { font-weight: bold; color: white; }
-        .member-meta { font-size: 0.75rem; color: var(--text-muted); }
+        /* SECCIÓN MULTI-ADMINISTRADORES */
+        .admin-box { background: var(--panel-header); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--wa-teal); }
+        .admin-box h4 { font-family: 'Cinzel', serif; color: var(--wa-teal); margin-bottom: 8px; }
+        .member-item { display: flex; flex-direction: column; background: #2a3942; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem; border-left: 3px solid var(--success); }
+        .member-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
     </style>
 </head>
 <body>
 
     <div id="authScreen" class="auth-container">
         <div class="auth-card">
-            <h2>SISTEMA ANDY PRO</h2>
-            <p>Ingresa la Llave de Acceso del Grupo</p>
+            <h2> GEN ANDY </h2>
+            <p>Premium System &amp; Credentials</p>
             <input type="email" id="loginEmail" placeholder="Correo de Acceso">
             <input type="password" id="loginPass" placeholder="Contraseña">
             <button class="btn-wa" id="btnIngresar">VERIFICAR ACCESO</button>
         </div>
     </div>
 
-    <div id="registerScreen" class="auth-container hidden">
-        <div class="auth-card">
-            <h2>PERFIL DE MIEMBRO</h2>
-            <p>Sube tu foto y configura tu nombre</p>
-            
-            <div class="avatar-picker" id="avatarBtn">
-                <img id="avatarImgPreview" class="hidden" src="">
-                <span id="avatarPlaceholder">Presiona aquí para subir tu Foto</span>
-            </div>
-            <input type="file" id="fileAvatar" accept="image/*" class="hidden">
-
-            <input type="text" id="regNombre" placeholder="Tu Nombre o Apodo">
-            <input type="tel" id="regTelefono" placeholder="Tu Número de Celular">
-            <button class="btn-wa" id="btnCompletarRegistro">ENTRAR AL CHAT</button>
-        </div>
-    </div>
-
     <div id="appScreen" class="app-container hidden">
         <div class="app-header">
-            <div class="user-info" id="btnIrAPerfil" title="Configurar mi Perfil">
-                <img id="myHeaderAvatar" class="header-avatar" src="">
+            <div class="user-info">
                 <div class="user-text">
-                    <span id="headerTitle" class="title">💬 GRUPO VIP - ANDY</span>
-                    <span id="userStatus" class="status">Cargando...</span>
+                    <span class="title"> SYS ANDY PRO</span>
+                    <span id="userStatus" class="status">Cargando Administrador...</span>
                 </div>
             </div>
             <div class="header-actions">
-                <button id="btnToggleAdmin" class="btn-action hidden">🔧 Admin</button>
-                <button id="btnToggleChat" class="btn-action hidden">💬 Chat</button>
-                <button id="btnSalir" class="btn-action" style="color:var(--danger)">Salir</button>
+                <a href="https://hisradioperu.com/hermanos-vip/index.html" target="_blank" class="btn-action" style="background:var(--red-sub); text-decoration:none;"> Scan IPTV</a>
+                <button id="btnSalir" class="btn-action" style="background:var(--input-bg); color:var(--danger); border-color:var(--danger)">Salir</button>
             </div>
         </div>
 
-        <div id="chatView" class="chat-view">
-            <div id="chatBox"></div>
+        <div class="nav-tabs">
+            <div class="tab-item active" id="tabBloc" onclick="switchTab('bloc')">📝 Bloc de Notas</div>
+            <div class="tab-item" id="tabGen" onclick="switchTab('gen')">⚙️ Generador</div>
+            <div class="tab-item" id="tabAdmins" onclick="switchTab('admins')">👥 Administradores</div>
+        </div>
+
+        <div class="main-content">
             
-            <div id="replyPreview" class="hidden">
-                <div style="display:flex; flex-direction:column; max-width: 80%;">
-                    <small id="replyTxt" style="color: var(--wa-teal); font-weight:bold;"></small>
-                    <small id="replyContent" style="color: var(--text-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></small>
+            <div id="secBloc" class="view-section">
+                <div class="note-form">
+                    <input type="text" id="noteTitle" placeholder="Título o etiqueta (Ej: URL Escaneo / Cuentas)">
+                    <textarea id="noteContent" placeholder="Escribe o pega tus datos, URLs o texto aquí..." style="height:100px; font-family:sans-serif;"></textarea>
+                    <input type="hidden" id="editNoteId" value="">
+                    <button class="btn-wa" id="btnGuardarNota" style="background:var(--success); margin-top:5px;">Guardar Registro</button>
+                    <button class="btn-wa hidden" id="btnCancelarEdit" style="background:var(--input-bg); margin-top:5px;">Cancelar Edición</button>
                 </div>
-                <button id="btnCancelarResp" style="background:none; color:var(--danger); width:auto; font-size:1.3rem; border:none; padding: 0 5px;">×</button>
+                <div class="notes-grid" id="notesList">
+                    </div>
             </div>
-            
-            <div class="chat-footer">
-                <button class="btn-media" id="btnSticker" title="Enviar Sticker">
-                    <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm0 3c-3.87 0-7 3.13-7 7 0 1.27.34 2.46.94 3.5l-.03.03 1.06 1.06.03-.03c1.04.6 2.23.94 3.5.94 3.87 0 7-3.13 7-7s-3.13-7-7-7zm0 2c2.76 0 5 2.24 5 5s-2.24 5-5 5-5-2.24-5-5 2.24-5 5-5zm-1.5 2.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm3 0c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zM12 14.5c1.33 0 2.42.74 2.96 1.72-.1.09-.23.15-.36.21-.4-.53-1.04-.93-1.78-.93s-1.38.4-1.78.93c-.13-.06-.26-.12-.36-.21.54-.98 1.63-1.72 2.96-1.72z"></path></svg>
-                </button>
-                <input type="file" id="fileSticker" accept="image/*" class="hidden">
 
-                <button class="btn-media" id="btnFoto" title="Enviar Foto">
-                    <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.83 6l-3 3.82L9 11.25l-2.5 3.3h11l-3.33-4.55z"></path></svg>
-                </button>
-                <input type="file" id="fileFoto" accept="image/*" class="hidden">
+            <div id="secGen" class="view-section hidden">
+                <div class="gen-section">
+                    <h3> Generador de Combos</h3>
+                    <div class="gen-container">
+                        <span class="gen-label">Cantidad de Combos</span>
+                        <input type="number" id="cantidad" value="100">
 
-                <input type="text" id="msgInput" placeholder="Escribe un mensaje aquí...">
-                <button class="btn-send" id="btnEnviar">
-                    <svg viewBox="0 0 24 24" height="22" width="22" fill="currentColor"><path d="M1.101 21.757L23.8 12.028 1.101 2.3l.011 7.912 13.623 1.816-13.623 1.817-.011 7.912z"></path></svg>
-                </button>
-            </div>
-        </div>
+                        <span class="gen-label">Longitud Contraseña</span>
+                        <input type="number" id="longitud" value="8">
 
-        <div id="profileView" class="profile-view hidden">
-            <div class="profile-avatar-container">
-                <img id="editProfilePreview" class="profile-avatar-img" src="">
-                <div class="profile-avatar-badge" id="btnCambiarFotoPerfil">
-                    <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 4V1h2v3h3v2H5v3H3V6H0V4h3zm3 6V7h3V4h7l1.83 2H21c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V10h3zm7 9c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-3.2-5c0 1.77 1.43 3.2 3.2 3.2s3.2-1.43 3.2-3.2-1.43-3.2-3.2-3.2-3.2 1.43-3.2 3.2z"/></svg>
+                        <span class="gen-label">Tipo de Usuario</span>
+                        <select id="tipo">
+                            <option value="random">Usuario Random</option>
+                            <option value="email">Email Gmail</option>
+                            <option value="nombre">Nombre Simple</option>
+                            <option value="nombrenombre">Nombre:Nombre</option>
+                            <option value="nombreigual">Nombre = Pass (dario;dario)</option>
+                            <option value="andymix">Nombre combinado (Mayús/Minús/Núm) (Infinito)</option>
+                        </select>
+
+                        <span class="gen-label">Agregar Año</span>
+                        <select id="anio">
+                            <option value="">Sin año</option>
+                            <option value="2024">2024</option>
+                            <option value="2025">2025</option>
+                            <option value="2026">2026</option>
+                            <option value="2027">2027</option>
+                        </select>
+
+                        <span class="gen-label">Separador</span>
+                        <select id="sep">
+                            <option value=":">:</option>
+                            <option value="|">|</option>
+                            <option value=";">;</option>
+                        </select>
+
+                        <button id="btnGenerarCombos" style="background:var(--blue-sub); margin-top:10px;">Generar Combos</button>
+                        <button id="btnDescargarCombos" class="btn-danger" style="margin-top:5px;">Descargar TXT</button>
+
+                        <textarea id="resultado" class="resultado-box" readonly placeholder="Los combos generados aparecerán aquí..."></textarea>
+                    </div>
                 </div>
-                <input type="file" id="fileEditAvatar" accept="image/*" class="hidden">
             </div>
 
-            <div class="profile-field-box">
-                <label>Tu Nombre / Apodo</label>
-                <input type="text" id="editProfileNombre" style="margin:0;">
+            <div id="secAdmins" class="view-section hidden">
+                <div class="admin-box">
+                    <h4>Registrar Nuevo Administrador</h4>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom:8px;">Cualquier miembro registrado tendrá permisos completos de administración en el sistema.</p>
+                    <input type="text" id="newAdminName" placeholder="Nombre de Identificación">
+                    <input type="email" id="newAdminEmail" placeholder="Correo de Acceso">
+                    <input type="text" id="newAdminPass" placeholder="Clave de Acceso">
+                    <button class="btn-wa" id="btnCrearAdmin" style="background:var(--blue-sub)">Otorgar Acceso Total</button>
+                </div>
+
+                <div class="admin-box" style="background:transparent; padding:0; border:none;">
+                    <h4>Administradores en Red</h4>
+                    <div id="adminsList" style="margin-top:10px;"></div>
+                </div>
             </div>
 
-            <div class="profile-field-box">
-                <label>Número de Celular</label>
-                <div id="lblProfileTelefono" class="profile-field-value" style="color:var(--text-muted)"></div>
-            </div>
-
-            <button class="btn-wa" id="btnGuardarPerfil" style="margin-top:10px;">GUARDAR CAMBIOS</button>
-        </div>
-
-        <div id="actionSheetMenu" class="action-sheet-backdrop hidden">
-            <div class="action-sheet">
-                <button class="action-option" id="optResponder">💬 Responder mensaje</button>
-                <button class="action-option hidden" id="optEliminarTodos" style="color:var(--danger)">🗑️ Eliminar para todos</button>
-                <button class="action-option" id="optEliminarMi" style="color:var(--danger)">❌ Eliminar para mí</button>
-                <button class="action-option" id="optCancelar" style="font-weight:bold; border-top:1px solid #2a3942; margin-top:5px;">Volver</button>
-            </div>
-        </div>
-
-        <div id="adminView" class="admin-view hidden">
-            <div class="admin-section">
-                <h3>Crear Nueva Cuenta / Llave</h3>
-                <input type="text" id="newMemberName" placeholder="Nombre de Identificación">
-                <input type="email" id="newMemberEmail" placeholder="Correo General de Acceso">
-                <input type="text" id="newMemberPass" placeholder="Clave General de Acceso">
-                <select id="newMemberRole">
-                    <option value="vendedor">Rol: Miembro Autorizado</option>
-                    <option value="admin">Rol: Administrador Secundario</option>
-                </select>
-                <button class="btn-wa" id="btnCrearMiembro">GUARDAR LLAVE MAESTRA</button>
-            </div>
-
-            <div class="admin-section">
-                <h3>Llaves Maestras y Miembros</h3>
-                <div id="membersList"></div>
-            </div>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, setDoc, query, orderBy, limit, onSnapshot, serverTimestamp, updateDoc, deleteDoc, getDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, doc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, deleteDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+        // Mantenimiento de credenciales y rutas de tu proyecto activo en Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
             authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -265,438 +232,342 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
+        // Administrador Principal Root Embebido
         const ADMIN_REAL = {
             email: "andyobregon799@gmail.com",
             pass: "123456",
-            nombre: "Andy Obregón",
-            role: "owner",
-            telefono: "0990434546",
-            photo: "https://cdn-icons-png.flaticon.com/512/1144/1144760.png"
+            nombre: "Andy Obregón (Owner)",
+            role: "owner"
         };
 
-        const COLORES_PRESETS = [
-            "#ffbc34", "#34b7f1", "#e53935", "#d81b60", "#8e24aa", 
-            "#5e35b1", "#3949ab", "#1e88e5", "#039be5", "#00acc1", 
-            "#00897b", "#43a047", "#7cb342", "#f4511e", "#fdd835"
-        ];
+        let sesionUsuario = JSON.parse(localStorage.getItem('andy_sys_session')) || null;
 
-        let sesionUsuario = JSON.parse(localStorage.getItem('sys_session')) || null;
-        let respuestaActiva = null;
-        let base64AvatarStr = "";
-        let base64EditAvatarStr = "";
-        let mensajesBorradosLocalmente = JSON.parse(localStorage.getItem('sys_deleted_local')) || [];
-
-        function obtenerColorUsuario(nombre) {
-            let hash = 0;
-            for (let i = 0; i < nombre.length; i++) { hash = nombre.charCodeAt(i) + ((hash << 5) - hash); }
-            return COLORES_PRESETS[Math.abs(hash) % COLORES_PRESETS.length];
+        // Validar sesión al cargar
+        if (sesionUsuario) {
+            entrarAlApp();
         }
 
-        if (sesionUsuario) verificarYEntrar();
-
-        // Control Foto Registro Inicial
-        document.getElementById('avatarBtn').onclick = () => document.getElementById('fileAvatar').click();
-        document.getElementById('fileAvatar').onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    base64AvatarStr = event.target.result;
-                    document.getElementById('avatarImgPreview').src = base64AvatarStr;
-                    document.getElementById('avatarImgPreview').classList.remove('hidden');
-                    document.getElementById('avatarPlaceholder').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
+        // Navegación Interactiva Global Interna (Móvil todo en una sola pantalla)
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+            
+            if(tab === 'bloc') {
+                document.getElementById('secBloc').classList.remove('hidden');
+                document.getElementById('tabBloc').classList.add('active');
+            } else if(tab === 'gen') {
+                document.getElementById('secGen').classList.remove('hidden');
+                document.getElementById('tabGen').classList.add('active');
+            } else if(tab === 'admins') {
+                document.getElementById('secAdmins').classList.remove('hidden');
+                document.getElementById('tabAdmins').classList.add('active');
             }
-        };
+        }
 
-        // Control Foto Panel Editar Perfil Estilo WhatsApp
-        document.getElementById('btnCambiarFotoPerfil').onclick = () => document.getElementById('fileEditAvatar').click();
-        document.getElementById('fileEditAvatar').onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    base64EditAvatarStr = event.target.result;
-                    document.getElementById('editProfilePreview').src = base64EditAvatarStr;
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        // Enviar Sticker Galería
-        document.getElementById('btnSticker').onclick = () => document.getElementById('fileSticker').click();
-        document.getElementById('fileSticker').onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = async function(event) {
-                    await enviarMensajeEstructura(event.target.result, true, false);
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
-        // Enviar Foto Galería
-        document.getElementById('btnFoto').onclick = () => document.getElementById('fileFoto').click();
-        document.getElementById('fileFoto').onchange = (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = async function(event) {
-                    await enviarMensajeEstructura(event.target.result, false, true);
-                };
-                reader.readAsDataURL(file);
-            }
-        };
-
+        // Autenticación de Cuentas (Root u otros Administradores creados)
         document.getElementById('btnIngresar').onclick = async () => {
-            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
 
-            if(!email || !pass) { alert("Completa las credenciales"); return; }
+            if (!email || !pass) return alert("Por favor rellene las credenciales básicas.");
 
-            if(email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
-                sesionUsuario = ADMIN_REAL;
-                localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
-                verificarYEntrar();
+            if (email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
+                sesionUsuario = { ...ADMIN_REAL };
+                localStorage.setItem('andy_sys_session', JSON.stringify(sesionUsuario));
+                entrarAlApp();
                 return;
             }
 
-            document.getElementById('btnIngresar').innerText = "Verificando...";
             try {
-                const docSnap = await getDoc(doc(db, "usuarios", email));
-                if (docSnap.exists() && docSnap.data().pass === pass) {
-                    if(docSnap.data().estado === "bloqueado") { alert("⛔ Acceso bloqueado."); return; }
-                    document.getElementById('authScreen').classList.add('hidden');
-                    document.getElementById('registerScreen').classList.remove('hidden');
-                } else { alert("❌ Credenciales incorrectas."); }
-            } catch (e) { alert("Error de red."); } 
-            finally { document.getElementById('btnIngresar').innerText = "VERIFICAR ACCESO"; }
-        };
+                const q = query(collection(db, "usuarios_vip"), where("email", "==", email), where("pass", "==", pass));
+                const snapshot = await getDocs(q);
 
-        document.getElementById('btnCompletarRegistro').onclick = () => {
-            const nombre = document.getElementById('regNombre').value.trim();
-            const telefono = document.getElementById('regTelefono').value.trim();
-
-            if(!nombre || !telefono) { alert("Llena tu Nombre y Celular."); return; }
-
-            sesionUsuario = {
-                nombre: nombre,
-                telefono: telefono,
-                role: "vendedor",
-                photo: base64AvatarStr || "https://cdn-icons-png.flaticon.com/512/149/149071.png"
-            };
-
-            localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
-            verificarYEntrar();
-        };
-
-        function verificarYEntrar() {
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('registerScreen').classList.add('hidden');
-            document.getElementById('appScreen').classList.remove('hidden');
-            
-            refrescarCabeceraUI();
-
-            if (sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin') {
-                document.getElementById('btnToggleAdmin').classList.remove('hidden');
-                configurarPanelAdmin();
-            }
-            iniciarEscuchaChat();
-        }
-
-        function refrescarCabeceraUI() {
-            document.getElementById('myHeaderAvatar').src = sesionUsuario.photo || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-            document.getElementById('userStatus').innerText = `${sesionUsuario.nombre} (${sesionUsuario.telefono})`;
-        }
-
-        // CONTROL NAV VISTAS (CHAT / ADMIN / PERFIL)
-        document.getElementById('btnIrAPerfil').onclick = () => {
-            document.getElementById('chatView').classList.add('hidden');
-            document.getElementById('adminView').classList.add('hidden');
-            document.getElementById('profileView').classList.remove('hidden');
-            
-            document.getElementById('btnToggleChat').classList.remove('hidden');
-            if (sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin') {
-                document.getElementById('btnToggleAdmin').classList.remove('hidden');
-            } else {
-                document.getElementById('btnToggleAdmin').classList.add('hidden');
-            }
-
-            // Cargar datos actuales en los inputs
-            document.getElementById('editProfilePreview').src = sesionUsuario.photo || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-            document.getElementById('editProfileNombre').value = sesionUsuario.nombre;
-            document.getElementById('lblProfileTelefono').innerText = sesionUsuario.telefono;
-            base64EditAvatarStr = sesionUsuario.photo || "";
-
-            document.getElementById('headerTitle').innerText = "⚙️ MI PERFIL";
-        };
-
-        document.getElementById('btnToggleAdmin').onclick = () => {
-            document.getElementById('chatView').classList.add('hidden');
-            document.getElementById('profileView').classList.add('hidden');
-            document.getElementById('adminView').classList.remove('hidden');
-            document.getElementById('btnToggleAdmin').classList.add('hidden');
-            document.getElementById('btnToggleChat').classList.remove('hidden');
-            document.getElementById('headerTitle').innerText = "🔧 PANEL CONTROL";
-        };
-
-        document.getElementById('btnToggleChat').onclick = () => {
-            document.getElementById('adminView').classList.add('hidden');
-            document.getElementById('profileView').classList.add('hidden');
-            document.getElementById('chatView').classList.remove('hidden');
-            document.getElementById('btnToggleChat').classList.add('hidden');
-            document.getElementById('btnToggleAdmin').classList.remove('hidden');
-            document.getElementById('headerTitle').innerText = "💬 GRUPO VIP - ANDY";
-            setTimeout(() => { const cb = document.getElementById('chatBox'); cb.scrollTop = cb.scrollHeight; }, 50);
-        };
-
-        // GUARDAR CAMBIOS DE PERFIL Y DEJARLOS VISIBLES EN LOS MENSAJES PARA LOS DEMÁS MIEMBROS
-        document.getElementById('btnGuardarPerfil').onclick = async () => {
-            const nuevoNombre = document.getElementById('editProfileNombre').value.trim();
-            if(!nuevoNombre) { alert("El nombre no puede estar vacío."); return; }
-
-            document.getElementById('btnGuardarPerfil').innerText = "Sincronizando...";
-
-            sesionUsuario.nombre = nuevoNombre;
-            if (base64EditAvatarStr) {
-                sesionUsuario.photo = base64EditAvatarStr;
-            }
-
-            // 1. Guardar cambios en el almacenamiento local del teléfono
-            localStorage.setItem('sys_session', JSON.stringify(sesionUsuario));
-            refrescarCabeceraUI();
-
-            // 2. Sincronizar en Firebase para cambiar el avatar de tus mensajes viejos y nuevos de cara al resto del grupo
-            try {
-                const qMsg = query(collection(db, "chat"), where("emisorId", "==", String(sesionUsuario.telefono).trim()));
-                const querySnapshot = await getDocs(qMsg);
-                
-                // Actualiza en lote todos los mensajes enviados por este usuario
-                const promesas = [];
-                querySnapshot.forEach((docMsg) => {
-                    promesas.push(updateDoc(doc(db, "chat", docMsg.id), {
-                        emisor: nuevoNombre,
-                        emisorFoto: sesionUsuario.photo
-                    }));
-                });
-                if(promesas.length > 0) await Promise.all(promesas);
-                
-                alert("✅ Perfil sincronizado con el grupo exitosamente.");
-            } catch(e) {
-                console.error("Error sincronizando avatar:", e);
-                alert("✅ Cambios locales listos (Los nuevos mensajes saldrán actualizados).");
-            } finally {
-                document.getElementById('btnGuardarPerfil').innerText = "GUARDAR CAMBIOS";
-                document.getElementById('btnToggleChat').click(); // Regresa al chat de una
-            }
-        };
-
-        function configurarPanelAdmin() {
-            document.getElementById('btnCrearMiembro').onclick = async () => {
-                const nombre = document.getElementById('newMemberName').value.trim();
-                const email = document.getElementById('newMemberEmail').value.trim().toLowerCase();
-                const pass = document.getElementById('newMemberPass').value.trim();
-                const role = document.getElementById('newMemberRole').value;
-
-                if(!nombre || !email || !pass) { alert("Rellena todos los campos"); return; }
-                try {
-                    await setDoc(doc(db, "usuarios", email), { nombre, telefono: "General", email, pass, role, estado: "activo" });
-                    alert(`✅ Llave guardada.`);
-                    document.getElementById('newMemberName').value = "";
-                    document.getElementById('newMemberEmail').value = "";
-                    document.getElementById('newMemberPass').value = "";
-                } catch(e) { alert("Error"); }
-            };
-
-            onSnapshot(collection(db, "usuarios"), (snap) => {
-                const container = document.getElementById('membersList'); container.innerHTML = "";
-                snap.forEach(docS => {
-                    const u = docS.data(); const id = docS.id;
-                    const item = document.createElement('div'); item.className = "member-item";
-                    item.innerHTML = `
-                        <div class="member-info">
-                            <span class="member-name">${u.nombre}</span>
-                            <span class="member-meta">📧 Acceso: ${u.email}</span>
-                        </div>
-                        <div class="member-actions">
-                            <button class="btn-sm btn-wa" onclick="cambiarEstadoUsuario('${id}', '${u.estado}')">${u.estado === 'activo' ? 'Bloquear' : 'Activar'}</button>
-                            <button class="btn-sm btn-danger" onclick="eliminarUsuario('${id}')">Eliminar</button>
-                        </div>`;
-                    container.appendChild(item);
-                });
-            });
-        }
-
-        window.cambiarEstadoUsuario = async (id, estadoActual) => {
-            const nuevoEstado = estadoActual === "activo" ? "bloqueado" : "activo";
-            if(confirm(`¿Cambiar estado a ${nuevoEstado}?`)) await updateDoc(doc(db, "usuarios", id), { estado: nuevoEstado });
-        };
-        window.eliminarUsuario = async (id) => {
-            if(confirm("¿Eliminar acceso?")) await deleteDoc(doc(db, "usuarios", id));
-        };
-
-        // ESCUCHA DEL CHAT EN TIEMPO REAL OPTIMIZADA (Vea los mensajes al instante)
-        let desvincularEscuchaChat = null;
-        function iniciarEscuchaChat() {
-            if (desvincularEscuchaChat) desvincularEscuchaChat();
-            
-            const q = query(collection(db, "chat"), orderBy("fecha", "asc"), limit(150));
-            const box = document.getElementById('chatBox');
-            
-            desvincularEscuchaChat = onSnapshot(q, (snapshot) => {
-                box.innerHTML = "";
-                snapshot.forEach(docS => {
-                    const d = docS.data();
-                    const idMsg = docS.id;
-
-                    // Corregido filtro: Solo salta el mensaje si fue borrado intencionalmente para este dispositivo
-                    if (mensajesBorradosLocalmente.includes(idMsg)) return;
-                    
-                    let textoMensaje = d.audio || d.msg || d.mensaje || "";
-                    const esMio = d.emisorId && String(d.emisorId).trim() === String(sesionUsuario.telefono).trim();
-                    const soyAdmin = sesionUsuario.role === 'owner' || sesionUsuario.role === 'admin';
-                    
-                    const wrapper = document.createElement('div');
-                    wrapper.className = `msg-wrapper ${esMio ? 'my-msg' : ''}`;
-
-                    if(!esMio) {
-                        const imgAv = document.createElement('img');
-                        imgAv.className = "chat-avatar";
-                        imgAv.src = d.emisorFoto || "https://cdn-icons-png.flaticon.com/512/149/149071.png";
-                        wrapper.appendChild(imgAv);
-                    }
-                    
-                    const div = document.createElement('div');
-                    div.className = `msg ${esMio ? 'msg-a' : 'msg-v'}`;
-                    
-                    div.onclick = () => abrirMenuMensaje(idMsg, d.emisor, textoMensaje, esMio || soyAdmin, d.eliminado);
-                    
-                    let html = "";
-                    if(!esMio) {
-                        const colorUnico = obtenerColorUsuario(d.emisor || "Usuario");
-                        html += `<span class="msg-sender" style="color:${colorUnico}">${d.emisor || "Usuario"}</span>`;
-                    }
-                    if(d.respA) {
-                        html += `<div class="reply-box"><b>${d.respA}</b><br>${d.respM}</div>`;
-                    }
-                    
-                    if(d.eliminado) {
-                        html += `<span class="msg-deleted">🚫 Este mensaje fue eliminado</span>`;
-                    } else if(d.isSticker) {
-                        html += `<img src="${textoMensaje}" class="sticker-img">`;
-                    } else if(d.isFoto) {
-                        html += `<img src="${textoMensaje}" class="chat-foto-img">`;
-                    } else {
-                        html += `<span>${textoMensaje}</span>`;
-                    }
-                    
-                    let horaTexto = "Hoy";
-                    if(d.fecha) { try { horaTexto = d.fecha.toDate().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}); } catch(e) {} }
-
-                    html += `<div class="msg-meta"><span>${horaTexto}</span>${esMio ? '<span style="color:#53bdeb; font-weight:bold;"> ✓✓</span>':''}</div>`;
-                    
-                    div.innerHTML = html;
-                    wrapper.appendChild(div);
-                    box.appendChild(wrapper);
-                });
-                // Auto-scroll inmediato con renderizado forzado para evitar quedarse trabado arriba
-                box.scrollTo({ top: box.scrollHeight, behavior: 'instant' });
-            }, (error) => {
-                console.error("Fallo en enlace en vivo del chat:", error);
-            });
-        }
-
-        // CONTROL MENÚ MENSAJE
-        function abrirMenuMensaje(idMsg, autor, mensaje, puedeBorrarTodos, yaEliminado) {
-            const menu = document.getElementById('actionSheetMenu');
-            const btnTodos = document.getElementById('optEliminarTodos');
-            const btnMi = document.getElementById('optEliminarMi');
-            const btnResp = document.getElementById('optResponder');
-
-            menu.classList.remove('hidden');
-
-            if (yaEliminado) {
-                btnTodos.classList.add('hidden');
-                btnResp.classList.add('hidden');
-            } else {
-                btnResp.classList.remove('hidden');
-                if (puedeBorrarTodos) btnTodos.classList.remove('hidden');
-                else btnTodos.classList.add('hidden');
-            }
-
-            btnResp.onclick = () => {
-                window.prepararRespuesta(autor, yaEliminado ? "Mensaje eliminado" : mensaje);
-                menu.classList.add('hidden');
-            };
-
-            btnTodos.onclick = async () => {
-                if(confirm("¿Quieres eliminar este mensaje para todos los miembros?")) {
-                    await updateDoc(doc(db, "chat", idMsg), { eliminado: true });
+                if (snapshot.empty) {
+                    alert("Acceso inválido. Llave incorrecta o removida.");
+                } else {
+                    const uDoc = snapshot.docs[0].data();
+                    sesionUsuario = { id: snapshot.docs[0].id, ...uDoc };
+                    localStorage.setItem('andy_sys_session', JSON.stringify(sesionUsuario));
+                    entrarAlApp();
                 }
-                menu.classList.add('hidden');
-            };
+            } catch (err) {
+                alert("Error de conexión al verificar el acceso.");
+            }
+        };
 
-            btnMi.onclick = () => {
-                mensajesBorradosLocalmente.push(idMsg);
-                localStorage.setItem('sys_deleted_local', JSON.stringify(mensajesBorradosLocalmente));
-                menu.classList.add('hidden');
-                iniciarEscuchaChat();
-            };
-
-            document.getElementById('optCancelar').onclick = () => menu.classList.add('hidden');
+        function entrarAlApp() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('appScreen').classList.remove('hidden');
+            document.getElementById('userStatus').innerText = `Admin Activo: ${sesionUsuario.nombre || sesionUsuario.identificacion}`;
+            
+            escucharNotas();
+            escucharAdmins();
         }
 
-        // ESTRUCTURA DE ENVÍO
-        async function enviarMensajeEstructura(contenido, esSticker = false, esFoto = false) {
-            const m = {
-                emisor: String(sesionUsuario.nombre),
-                emisorId: String(sesionUsuario.telefono).trim(),
-                emisorFoto: String(sesionUsuario.photo || ""),
-                audio: String(contenido), 
-                msg: String(contenido),
-                foto: "",
-                isSticker: esSticker,
-                isFoto: esFoto,
-                eliminado: false,
-                fecha: serverTimestamp()
+        // ================= BLOC DE NOTAS CON FIREBASE REALTIME =================
+        document.getElementById('btnGuardarNota').onclick = async () => {
+            const title = document.getElementById('noteTitle').value.trim();
+            const content = document.getElementById('noteContent').value.trim();
+            const editId = document.getElementById('editNoteId').value;
+
+            if (!content) return alert("El contenido de la nota no puede estar vacío.");
+
+            const itemPayload = {
+                titulo: title || "Nota Sin Título",
+                contenido: content,
+                autor: sesionUsuario.nombre || sesionUsuario.identificacion || "Administrador",
+                timestamp: serverTimestamp()
             };
 
-            if (respuestaActiva) {
-                m.respA = String(respuestaActiva.autor);
-                m.respM = String(respuestaActiva.msg);
+            try {
+                if (editId) {
+                    await updateDoc(doc(db, "bloc_notas_vip", editId), itemPayload);
+                    document.getElementById('editNoteId').value = "";
+                    document.getElementById('btnCancelarEdit').classList.add('hidden');
+                    document.getElementById('btnGuardarNota').innerText = "Guardar Registro";
+                } else {
+                    await addDoc(collection(db, "bloc_notas_vip"), itemPayload);
+                }
+                document.getElementById('noteTitle').value = "";
+                document.getElementById('noteContent').value = "";
+            } catch (e) {
+                alert("Error al procesar la operación en el Bloc.");
+            }
+        };
+
+        document.getElementById('btnCancelarEdit').onclick = () => {
+            document.getElementById('editNoteId').value = "";
+            document.getElementById('noteTitle').value = "";
+            document.getElementById('noteContent').value = "";
+            document.getElementById('btnCancelarEdit').classList.add('hidden');
+            document.getElementById('btnGuardarNota').innerText = "Guardar Registro";
+        };
+
+        function escucharNotas() {
+            const q = query(collection(db, "bloc_notas_vip"), orderBy("timestamp", "desc"));
+            onSnapshot(q, (snapshot) => {
+                const list = document.getElementById('notesList');
+                list.innerHTML = "";
+                snapshot.forEach((docSnap) => {
+                    const id = docSnap.id;
+                    const data = docSnap.data();
+                    const cleanContent = data.contenido.replace(/"/g, '&quot;').replace(/'/g, "\\'");
+
+                    const card = document.createElement('div');
+                    card.className = "note-card";
+                    card.innerHTML = `
+                        <strong style="color:var(--wa-teal); font-size:1rem;">📌 ${data.titulo}</strong>
+                        <p>${data.contenido}</p>
+                        <div class="note-meta">Por: ${data.autor}</div>
+                        <div class="note-actions">
+                            <button class="btn-mini" style="background:#00a884;" onclick="copiarTexto('${cleanContent}')">Copiar</button>
+                            <button class="btn-mini" style="background:#0033A0;" onclick="prepararEdicion('${id}', '${data.titulo.replace(/'/g, "\\'")}', '${cleanContent}')">Editar</button>
+                            <button class="btn-mini" style="background:#D52B1E;" onclick="eliminarNota('${id}')">Eliminar</button>
+                        </div>
+                    `;
+                    list.appendChild(card);
+                });
+            });
+        }
+
+        window.copiarTexto = function(texto) {
+            navigator.clipboard.writeText(texto).then(() => {
+                alert("Contenido copiado al portapapeles con éxito.");
+            }).catch(() => {
+                alert("Error al copiar texto de forma automática.");
+            });
+        };
+
+        window.prepararEdicion = function(id, titulo, contenido) {
+            document.getElementById('editNoteId').value = id;
+            document.getElementById('noteTitle').value = titulo;
+            document.getElementById('noteContent').value = contenido;
+            document.getElementById('btnCancelarEdit').classList.remove('hidden');
+            document.getElementById('btnGuardarNota').innerText = "Actualizar Registro";
+            document.getElementById('noteTitle').focus();
+        };
+
+        window.eliminarNota = async function(id) {
+            if (confirm("¿Deseas eliminar de forma permanente esta nota del sistema común?")) {
+                await deleteDoc(doc(db, "bloc_notas_vip", id));
+            }
+        };
+
+        // ================= ALGORITMO COMPLETO DEL GENERADOR DE COMBOS =================
+        const nombres = ["juan","luis","pedro","carlos","miguel","jose","manuel","daniel","ricardo","antonio","andres","alejandro","alberto","adrian","armando","bruno","benjamin","boris","cesar","cristian","claudio","camilo","david","diego","dario","edgar","eduardo","edwin","esteban","felipe","fernando","francisco","fabian","gabriel","gustavo","gerardo","hector","hugo","ismael","ivan","ignacio","jorge","jesus","julio","jaime","kevin","leonardo","lucas","martin","marcos","mateo","mauricio","nelson","nicolas","oscar","orlando","pablo","patricio","raul","roberto","ramon","rodrigo","sebastian","sergio","santiago","tomas","victor","walter","wilson","yahir","yoel","alex","alan","aaron","angelo","cristobal","damian","dilan","edson","erick","fabio","franco","gonzalo","harold","ian","jonathan","julian","leandro","mariano","maximo","natan","octavio","paolo","renato","samuel","thiago","ulises","valentin","xavier","sofia","valentina","camila","isabella","martina","lucia","daniela","paula","carla","maria","laura","patricia","andrea","mariana","gabriela","fernanda","veronica","claudia","carmen","rosa","silvia","gloria","elena","adriana","beatriz","lorena","ines","noelia","natalia","tatiana","angela","antonia","alicia","irene","monica","raquel","teresa","susana","sonia","diana","karla","brenda","melissa","pamela","jessica","vanessa","marcela","bianca","renata","carolina","valeria","paulina","jimena","alejandra","nuria","lourdes","esther","rocio","pilar","amanda","araceli","leticia","yolanda","florencia","miriam","celeste","samanta","luisa"];
+
+        function randomString(length) {
+            const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+            let result = "";
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+
+        function alternarMayusculas(texto) {
+            let resultado = "";
+            for (let i = 0; i < texto.length; i++) {
+                resultado += Math.random() > 0.5 ? texto[i].toUpperCase() : texto[i].toLowerCase();
+            }
+            return resultado;
+        }
+
+        function generarNombreInfinito() {
+            const prefijos = ["ju", "lu", "pe", "ca", "mi", "jo", "ma", "da", "ri", "an", "al", "br", "be", "ce", "cr", "cl", "di", "ed", "es", "fe", "fr", "ga", "gu", "he", "iv", "je", "ke", "le", "ma", "ne", "ni", "os", "pa", "ra", "ro", "se", "sa", "to", "vi", "wa", "al", "am", "ar", "au", "ba", "bo", "ch", "co", "do", "el", "en", "er", "fa", "fi", "fl", "ge", "gi", "go", "ha", "ho", "ia", "ja", "jo", "la", "li", "me", "mo", "na", "oc", "or", "re", "ru", "sa", "su", "th", "ul", "va", "xa", "ya", "za"];
+            const raices = ["an", "is", "dr", "rl", "gu", "os", "nu", "ni", "ca", "nt", "dr", "lej", "ber", "ria", "man", "un", "nja", "or", "sa", "ist", "aud", "ieg", "ari", "dga", "dua", "dwi", "teb", "lip", "rna", "anc", "abi", "abr", "ust", "era", "ect", "ugo", "ism", "gna", "org", "esu", "uli", "aim", "evi", "eon", "uca", "art", "arc", "ate", "aur", "els", "ico", "sca", "rla", "pab", "atr", "aul", "obe", "amo", "odr", "eba", "erg", "ant", "oma", "ict", "alt", "il", "la", "co", "br", "da", "me", "ra", "li", "sa", "le", "mi"];
+            const sufijos = ["an", "is", "dro", "los", "guel", "se", "uel", "niel", "ardo", "nio", "dres", "andro", "to", "rian", "do", "no", "min", "ris", "sar", "tian", "dio", "milo", "vid", "go", "rio", "gar", "rdo", "win", "ban", "pe", "ndo", "co", "bian", "briel", "tavo", "rdo", "tor", "go", "mael", "van", "cio", "ge", "sus", "lio", "me", "vin", "ardo", "cas", "tin", "cos", "teo", "cio", "son", "las", "car", "do", "blo", "cio", "ul", "to", "mon", "go", "tian", "gio", "go", "mas", "tor", "ter", "son", "hir", "el", "ex", "an", "on", "lo", "bal", "an", "co", "lo", "ro", "ian", "than", "lian", "dro", "no", "mo", "tan", "vio", "to", "uel", "go", "ses", "tin", "er", "ela", "na", "mila", "lla", "tina", "cia", "la", "la", "ria", "ra", "cia", "drea", "na", "la", "da", "ca", "dia", "men", "sa", "via", "ria", "na", "ana", "triz", "na", "nes", "lia", "lia", "ana", "la", "nia", "cia", "ne", "ca", "sa", "sa", "na", "la", "da", "sa", "ca", "ta", "na", "ria", "na", "ena", "dra"];
+
+            let n = prefijos[Math.floor(Math.random() * prefijos.length)] + 
+                    raices[Math.floor(Math.random() * raices.length)] + 
+                    sufijos[Math.floor(Math.random() * sufijos.length)];
+
+            return n.replace(/[^a-zA-Z]/g, "").substring(0, 8);
+        }
+
+        document.getElementById('btnGenerarCombos').onclick = () => {
+            let cantidad = parseInt(document.getElementById("cantidad").value) || 100;
+            let longitud = parseInt(document.getElementById("longitud").value) || 8;
+            let tipo = document.getElementById("tipo").value;
+            let anio = document.getElementById("anio").value;
+            let sep = document.getElementById("sep").value;
+
+            let output = "";
+
+            for (let i = 0; i < cantidad; i++) {
+                let user = "";
+                let pass = "";
+
+                if (tipo == "random") {
+                    user = randomString(6);
+                    pass = randomString(longitud);
+                }
+                if (tipo == "email") {
+                    user = randomString(6) + "@gmail.com";
+                    pass = randomString(longitud);
+                }
+                if (tipo == "nombre") {
+                    user = nombres[Math.floor(Math.random() * nombres.length)];
+                    pass = randomString(longitud);
+                }
+                if (tipo == "nombrenombre") {
+                    let nombre1 = nombres[Math.floor(Math.random() * nombres.length)];
+                    let nombre2 = nombres[Math.floor(Math.random() * nombres.length)];
+                    user = nombre1 + ":" + nombre2;
+                    pass = "";
+                }
+                if (tipo == "nombreigual") {
+                    let nombre = nombres[Math.floor(Math.random() * nombres.length)];
+                    user = nombre;
+                    pass = nombre;
+                }
+                if (tipo == "andymix") {
+                    let baseNombre1 = generarNombreInfinito();
+                    let baseNombre2 = generarNombreInfinito();
+
+                    let nombreMutado1 = alternarMayusculas(baseNombre1);
+                    let nombreMutado2 = alternarMayusculas(baseNombre2);
+
+                    let num1 = Math.floor(Math.random() * 900) + 100; 
+                    let num2 = Math.floor(Math.random() * 9000) + 1000; 
+
+                    let struct = Math.floor(Math.random() * 4);
+                    if (struct == 0) {
+                        user = nombreMutado1 + num1;
+                        pass = nombreMutado2 + num2;
+                    } else if (struct == 1) {
+                        user = nombreMutado1 + num1;
+                        pass = num1 + nombreMutado2;
+                    } else if (struct == 2) {
+                        user = num1 + nombreMutado1;
+                        pass = nombreMutado2 + num2;
+                    } else {
+                        user = nombreMutado1.toUpperCase() + num1;
+                        pass = num2 + nombreMutado2.toLowerCase();
+                    }
+                }
+
+                if (anio != "" && pass != "") {
+                    pass = pass + anio;
+                }
+
+                if (pass != "") {
+                    output += user + sep + pass + "\n";
+                } else {
+                    output += user + "\n";
+                }
             }
 
-            window.cancelarRespuesta();
-            try { await addDoc(collection(db, "chat"), m); } catch(e) { console.error(e); }
+            document.getElementById("resultado").value = output;
+        };
+
+        document.getElementById('btnDescargarCombos').onclick = () => {
+            let texto = document.getElementById("resultado").value;
+            if(!texto) return alert("Primero genera combos para poder descargar un archivo.");
+            let blob = new Blob([texto], { type: "text/plain" });
+            let link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "combos_andy.txt";
+            link.click();
+        };
+
+        // ================= CREACIÓN DE ADMINISTRADORES EN RED COLECTIVA =================
+        document.getElementById('btnCrearAdmin').onclick = async () => {
+            const nomId = document.getElementById('newAdminName').value.trim();
+            const mail = document.getElementById('newAdminEmail').value.trim();
+            const pass = document.getElementById('newAdminPass').value.trim();
+
+            if (!nomId || !mail || !pass) return alert("Asigna credenciales completas para guardar.");
+
+            try {
+                await addDoc(collection(db, "usuarios_vip"), {
+                    identificacion: nomId,
+                    nombre: nomId,
+                    email: mail,
+                    pass: pass,
+                    role: "admin"
+                });
+
+                alert("Nuevo Administrador registrado correctamente. Ya puede iniciar sesión.");
+                document.getElementById('newAdminName').value = "";
+                document.getElementById('newAdminEmail').value = "";
+                document.getElementById('newAdminPass').value = "";
+            } catch (e) {
+                alert("Error de escritura en red al guardar el administrador.");
+            }
+        };
+
+        function escucharAdmins() {
+            onSnapshot(collection(db, "usuarios_vip"), (snapshot) => {
+                const list = document.getElementById('adminsList');
+                list.innerHTML = "";
+
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
+                    const id = docSnap.id;
+
+                    const item = document.createElement('div');
+                    item.className = "member-item";
+                    item.innerHTML = `
+                        <strong>👤 ${data.nombre || data.identificacion}</strong>
+                        <span class="member-meta">Correo: ${data.email} | Clave: ${data.pass}</span>
+                        <button class="btn-mini" style="background:var(--red-sub); margin-top:5px; width:fit-content; align-self:flex-end;" onclick="removerAdmin('${id}')">Revocar Permisos</button>
+                    `;
+                    list.appendChild(item);
+                });
+            });
         }
 
-        document.getElementById('btnEnviar').onclick = () => {
-            const input = document.getElementById('msgInput');
-            const txt = input.value.trim();
-            if(!txt) return;
-            enviarMensajeEstructura(txt, false, false);
-            input.value = "";
+        window.removerAdmin = async (id) => {
+            if (confirm("¿Estás seguro de que deseas eliminar a este administrador del sistema?")) {
+                await deleteDoc(doc(db, "usuarios_vip", id));
+            }
         };
 
-        document.getElementById('msgInput').onkeypress = (e) => { 
-            if(e.key === 'Enter') { document.getElementById('btnEnviar').click(); } 
-        };
-
-        window.prepararRespuesta = (autor, mensaje) => {
-            respuestaActiva = { autor, msg: mensaje };
-            document.getElementById('replyTxt').innerText = autor;
-            document.getElementById('replyContent').innerText = mensaje.length > 35 ? mensaje.substring(0,35) + "..." : mensaje;
-            document.getElementById('replyPreview').classList.remove('hidden');
-            document.getElementById('msgInput').focus();
-        };
-
-        window.cancelarRespuesta = () => { respuestaActiva = null; document.getElementById('replyPreview').classList.add('hidden'); };
-        document.getElementById('btnCancelarResp').onclick = window.cancelarRespuesta;
-
+        // Salida limpia
         document.getElementById('btnSalir').onclick = () => {
-            if(confirm("¿Cerrar sesión por completo?")) { localStorage.clear(); location.reload(); }
+            localStorage.removeItem('andy_sys_session');
+            window.location.reload();
         };
     </script>
 </body>
