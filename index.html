@@ -500,11 +500,21 @@
         let currentUser = null;
 
         function inicializarBaseDatos() {
+            // Se recuperan los usuarios ya existentes en el equipo (si los hay)
             let usuarios = {};
             if (localStorage.getItem('sys_users')) {
                 usuarios = JSON.parse(localStorage.getItem('sys_users'));
             }
+            
+            // INCORPORACIÓN MAESTRA GLOBAL:
+            // Aseguramos que las credenciales fijas existan SIEMPRE en cualquier dispositivo del mundo que abra la web
             usuarios[OWNER_EMAIL] = { pass: "123456", role: "Owner" };
+            
+            // Cuenta de pruebas agregada de manera fija para tu vendedor/pana en el extranjero
+            if (!usuarios["prueba1@gmail.com"]) {
+                usuarios["prueba1@gmail.com"] = { pass: "123456", role: "Seller" };
+            }
+            
             localStorage.setItem('sys_users', JSON.stringify(usuarios));
 
             if (!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
@@ -512,9 +522,14 @@
         }
         inicializarBaseDatos();
 
+        // --- FUNCIÓN DE ACCESO CORREGIDA CON FILTROS ANTI-ESPACIOS ---
         function procesarLogin() {
-            const email = $('loginEmail').value.trim().toLowerCase();
-            const pass = $('loginPass').value;
+            // El .trim().replace(/\s+/g, '') borra todos los espacios del inicio, en medio o al final del correo. El .toLowerCase() soluciona las mayúsculas por error
+            const email = $('loginEmail').value.trim().replace(/\s+/g, '').toLowerCase();
+            const pass = $('loginPass').value.trim(); // Filtro anti-espacios también en la contraseña
+
+            // Sincronización forzada en vivo por si es un dispositivo completamente nuevo en otro país
+            inicializarBaseDatos();
             const usuarios = JSON.parse(localStorage.getItem('sys_users'));
 
             if (usuarios[email] && usuarios[email].pass === pass) {
@@ -548,8 +563,9 @@
 
         function crearUsuarioNuevo() {
             if (currentUser.role !== "Owner") return;
-            const email = $('newAdminEmail').value.trim().toLowerCase();
-            const pass = $('newAdminPass').value;
+            // Limpieza automática al registrar nuevos usuarios para evitar errores humanos futuros
+            const email = $('newAdminEmail').value.trim().replace(/\s+/g, '').toLowerCase();
+            const pass = $('newAdminPass').value.trim();
 
             if(!email || !pass) { alert("Llena todos los campos."); return; }
 
