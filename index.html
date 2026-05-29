@@ -276,8 +276,8 @@
             <h2 style="text-align:center;color:#ffeb3b;margin-top:0;">⚙️ SYS ANDY PRO</h2>
             <p style="text-align:center;color:var(--texto-secundario);font-size:0.9rem;">Ingresa tus credenciales de acceso</p>
             <div class="form-group">
-                <label>Correo Electrónico / Usuario:</label>
-                <input type="text" id="loginEmail" placeholder="correo@sistema.com">
+                <label>Usuario / Correo Electrónico:</label>
+                <input type="text" id="loginEmail" placeholder="ej: andy">
             </div>
             <div class="form-group">
                 <label>Contraseña:</label>
@@ -301,7 +301,7 @@
             <button class="tab-btn active" id="tabCombosBtn" onclick="switchTab('combos')">📦 COMBOS</button>
             <button class="tab-btn" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
             <button class="tab-btn" onclick="switchTab('banco-hits')">🗄️ BANCO HITS</button>
-            <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMINS</button>
+            <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')">👥 ADMINS</button>
         </div>
 
         <div id="panel-bloc" class="panel">
@@ -424,13 +424,13 @@
                 <p style="color:#ffeb3b; font-weight:bold; margin-top:0;">Crear cuenta de acceso inmediato:</p>
                 <div class="form-group">
                     <label>Usuario o Correo del Vendedor:</label>
-                    <input type="text" id="newAdminEmail" placeholder="ej: andy_vendedor">
+                    <input type="text" id="newAdminEmail" placeholder="ej: vendedor_juan">
                 </div>
                 <div class="form-group">
                     <label>Contraseña que usará:</label>
                     <input type="text" id="newAdminPass" placeholder="ej: 123456">
                 </div>
-                <button class="btn-block btn-start" onclick="crearVendedorFirebase()">⚡ CREAR E INSTALAR CREDENCIAL</button>
+                <button class="btn-block btn-start" id="btnCrearVendedor" onclick="crearVendedorFirebase()">⚡ CREAR E INSTALAR CREDENCIAL</button>
             </div>
             
             <h4 style="color:#00fffa;">Vendedores Activos en el Sistema:</h4>
@@ -449,21 +449,20 @@
           storageBucket: "gestion-ventas-pro-f8de4.firebasestorage.app",
           messagingSenderId: "96449660649",
           appId: "1:96449660649:web:d949eccf893c9705451278",
-          databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com/" // Vinculación Realtime Database
+          databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com/" 
         };
 
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        const OWNER_EMAIL = "andyobregon799@gmail.com"; 
         let currentUser = null;
-        let usernameClave = ""; // Clave limpia para Firebase sin caracteres especiales
+        let usernameClave = ""; 
 
         function limpiarClaveLocal(str) {
             return str.toLowerCase().replace(/[^a-z0-9]/g, "_");
         }
 
-        // --- SISTEMA DE INICIO DE SESIÓN INTEGRADO CON LA BASE DE DATOS ---
+        // --- INICIO DE SESIÓN CORREGIDO ---
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
             const passInput = document.getElementById('loginPass').value.trim();
@@ -473,13 +472,13 @@
                 return;
             }
 
-            // Caso 1: Eres tú (El dueño de todo el sistema)
-            if(emailInput === OWNER_EMAIL && passInput === "andy799") { // Pon aquí la clave maestra que quieras
-                ingresarAlSistema(OWNER_EMAIL, "Owner");
+            // AHORA RECONOCE DIRECTAMENTE EL USUARIO "andy"
+            if(emailInput === "andy" && passInput === "andy799") { 
+                ingresarAlSistema("andy", "Owner");
                 return;
             }
 
-            // Caso 2: Es un vendedor creado desde el panel
+            // Validación para vendedores creados
             const nodoBuscado = limpiarClaveLocal(emailInput);
             db.ref("vendedores/" + nodoBuscado).once("value")
                 .then((snapshot) => {
@@ -531,10 +530,11 @@
             document.getElementById('main-app').style.display = 'none';
         }
 
-        // --- AGREGAR Y CONTROLAR USUARIOS DIRECTAMENTE DESDE LA APLICACIÓN ---
+        // --- FUNCIÓN DE CREACIÓN CON CONFIRMACIÓN REMOTA REAL ---
         function crearVendedorFirebase() {
             const emailVendedor = document.getElementById("newAdminEmail").value.trim();
             const passVendedor = document.getElementById("newAdminPass").value.trim();
+            const btn = document.getElementById("btnCrearVendedor");
 
             if(!emailVendedor || !passVendedor) {
                 alert("Completa el usuario y contraseña del nuevo vendedor.");
@@ -543,17 +543,31 @@
 
             const nodoVendedor = limpiarClaveLocal(emailVendedor);
 
-            // Guardar credenciales de manera inmediata en la nube de Firebase
+            // Efecto visual de carga
+            btn.disabled = true;
+            btn.style.backgroundColor = "#ffa000";
+            btn.textContent = "⌛ Guardando en Firebase...";
+
+            // Guardar con confirmación de Firebase
             db.ref("vendedores/" + nodoVendedor).set({
                 email: emailVendedor,
                 pass: passVendedor,
                 fechaCreado: Date.now()
             }).then(() => {
-                alert(`¡Vendedor "${emailVendedor}" agregado con éxito! Ya puede iniciar sesión con la contraseña asignada.`);
+                // Restablecer botón y avisar con éxito total
+                btn.disabled = false;
+                btn.style.backgroundColor = "#00bfa5";
+                btn.textContent = "⚡ CREAR E INSTALAR CREDENCIAL";
+                
+                alert(`✅ ¡Usuario Registrado con Éxito en la Nube!\n\nEl vendedor "${emailVendedor}" ya está activo y sus credenciales son 100% funcionales.`);
+                
                 document.getElementById("newAdminEmail").value = "";
                 document.getElementById("newAdminPass").value = "";
             }).catch((err) => {
-                alert("No se pudo guardar en Firebase: " + err.message);
+                btn.disabled = false;
+                btn.style.backgroundColor = "#00bfa5";
+                btn.textContent = "⚡ CREAR E INSTALAR CREDENCIAL";
+                alert("❌ Error: No se pudo verificar el guardado remoto: " + err.message);
             });
         }
 
@@ -590,7 +604,7 @@
             }
         }
 
-        // --- LÓGICA DE GENERACIÓN DE COMBOS ---
+        // --- GENERACIÓN DE COMBOS ---
         function randomString(length){
             const chars="abcdefghijklmnopqrstuvwxyz0123456789";
             let result="";
