@@ -462,7 +462,7 @@
             return str.toLowerCase().replace(/[^a-z0-9]/g, "_");
         }
 
-        // --- INICIO DE SESIÓN CORREGIDO ---
+        // --- INICIO DE SESIÓN ---
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
             const passInput = document.getElementById('loginPass').value.trim();
@@ -472,13 +472,11 @@
                 return;
             }
 
-            // AHORA RECONOCE DIRECTAMENTE EL USUARIO "andy"
             if(emailInput === "andy" && passInput === "andy799") { 
                 ingresarAlSistema("andy", "Owner");
                 return;
             }
 
-            // Validación para vendedores creados
             const nodoBuscado = limpiarClaveLocal(emailInput);
             db.ref("vendedores/" + nodoBuscado).once("value")
                 .then((snapshot) => {
@@ -530,7 +528,7 @@
             document.getElementById('main-app').style.display = 'none';
         }
 
-        // --- FUNCIÓN DE CREACIÓN CON CONFIRMACIÓN REMOTA REAL ---
+        // --- PROCESAMIENTO ULTRA RÁPIDO CORREGIDO ---
         function crearVendedorFirebase() {
             const emailVendedor = document.getElementById("newAdminEmail").value.trim();
             const passVendedor = document.getElementById("newAdminPass").value.trim();
@@ -541,33 +539,30 @@
                 return;
             }
 
-            const nodoVendedor = limpiarClaveLocal(emailVendedor);
+            // Cambiar caracteres especiales a guiones bajos para que Firebase lo acepte en milisegundos
+            const nodoVendedor = emailVendedor.replace(/[\.\$\#\[\]]/g, "_");
 
-            // Efecto visual de carga
             btn.disabled = true;
             btn.style.backgroundColor = "#ffa000";
-            btn.textContent = "⌛ Guardando en Firebase...";
+            btn.textContent = "⌛ Guardando...";
 
-            // Guardar con confirmación de Firebase
+            // Guardado directo sin esperas pesadas de limpieza
             db.ref("vendedores/" + nodoVendedor).set({
                 email: emailVendedor,
                 pass: passVendedor,
                 fechaCreado: Date.now()
-            }).then(() => {
-                // Restablecer botón y avisar con éxito total
+            }, (error) => {
                 btn.disabled = false;
                 btn.style.backgroundColor = "#00bfa5";
                 btn.textContent = "⚡ CREAR E INSTALAR CREDENCIAL";
-                
-                alert(`✅ ¡Usuario Registrado con Éxito en la Nube!\n\nEl vendedor "${emailVendedor}" ya está activo y sus credenciales son 100% funcionales.`);
-                
-                document.getElementById("newAdminEmail").value = "";
-                document.getElementById("newAdminPass").value = "";
-            }).catch((err) => {
-                btn.disabled = false;
-                btn.style.backgroundColor = "#00bfa5";
-                btn.textContent = "⚡ CREAR E INSTALAR CREDENCIAL";
-                alert("❌ Error: No se pudo verificar el guardado remoto: " + err.message);
+
+                if (error) {
+                    alert("❌ Error al guardar de forma remota: " + error.message);
+                } else {
+                    alert(`✅ ¡Usuario Registrado con Éxito!\n\nEl vendedor "${emailVendedor}" ya está guardado y activo en el sistema.`);
+                    document.getElementById("newAdminEmail").value = "";
+                    document.getElementById("newAdminPass").value = "";
+                }
             });
         }
 
