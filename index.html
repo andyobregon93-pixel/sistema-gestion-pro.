@@ -380,7 +380,7 @@
             </div>
 
             <div class="form-group">
-                <label>...o pega tus combos aquí en texto libre (user:pass):</label>
+                <label>...o pega tus combos aquí in texto libre (user:pass):</label>
                 <textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1&#10;Usuario2:Contraseña2"></textarea>
             </div>
 
@@ -453,15 +453,19 @@
 
     <script>
         // --- BASE DE DATOS LOCAL MULTI-USUARIO ---
-        const OWNER_EMAIL = "andy@admin.com"; // Cuenta Maestro por defecto
+        const OWNER_EMAIL = "andyobregon799@gmail.com"; // Tus datos correctos aquí
         let currentUser = null;
 
         function inicializarBaseDatos() {
-            if (!localStorage.getItem('sys_users')) {
-                const cuentasIniciales = {};
-                cuentasIniciales[OWNER_EMAIL] = { pass: "andy1234", role: "Owner" };
-                localStorage.setItem('sys_users', JSON.stringify(cuentasIniciales));
+            // Asegurarse de reescribir o crear siempre las credenciales correctas del Owner
+            let usuarios = {};
+            if (localStorage.getItem('sys_users')) {
+                usuarios = JSON.parse(localStorage.getItem('sys_users'));
             }
+            // Forzar las credenciales solicitadas por Andy
+            usuarios[OWNER_EMAIL] = { pass: "123456", role: "Owner" };
+            localStorage.setItem('sys_users', JSON.stringify(usuarios));
+
             if (!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
             if (!localStorage.getItem('sys_saved_hits')) localStorage.setItem('sys_saved_hits', JSON.stringify({}));
         }
@@ -583,7 +587,6 @@
         function usarUrlEscanner(index) {
             const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
             const data = baseUrls[currentUser.email][index];
-            // Extrae la URL limpia antes del guión si tiene descripción
             const hostLimpio = data.split(" - ")[0].trim();
             $('hostInput').value = hostLimpio;
             switchTab('scanner');
@@ -619,7 +622,6 @@
             const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
             if(!baseHits[currentUser.email]) baseHits[currentUser.email] = [];
 
-            // Evitar duplicados exactos en el historial del mismo usuario
             const existe = baseHits[currentUser.email].some(h => h.user === user && h.pass === pass);
             if (existe) return;
 
@@ -643,7 +645,6 @@
                 item.copies = (item.copies || 0) + 1;
                 localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
                 
-                // Copiar al portapapeles del teléfono
                 navigator.clipboard.writeText(item.texto).then(() => {
                     renderizarBancoHits();
                     alert(`¡Hit Copiado! Total de entregas/copias: ${item.copies}`);
@@ -692,7 +693,9 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
             document.getElementById('panel-' + tabName).classList.add('active');
-            event.currentTarget.classList.add('active');
+            if(event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
         }
 
         // --- MOTOR MULTI-PROXIES DE ESCANEO LSF ---
@@ -705,6 +708,7 @@
             'https://yacdn.org/proxy/{url}'
         ];
 
+        const $ = id => document.getElementById(id);
         const hostInput = $('hostInput');
         const concurrencyInput = $('concurrencyInput');
         const startBtn = $('startBtn'), stopBtn = $('stopBtn'), saveBtn = $('saveBtn');
@@ -842,7 +846,6 @@
             if(ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
             
             playHitSound();
-            // GUARDAR AUTOMÁTICAMENTE EN EL HISTORIAL PERMANENTE DE LA WEB
             guardarHitEnBanco(hit.texto, hit.user, hit.pass);
         }
 
