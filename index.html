@@ -177,7 +177,7 @@
         .btn-action { background-color: var(--azul-boton); margin-top: 5px; }
         .btn-block:disabled { background-color: #424242; color: #757575; cursor: not-allowed; }
 
-        /* Listas de elementos (Bloc de URLs y Banco de Hits) */
+        /* Listas de elementos */
         .item-list {
             margin-top: 15px;
         }
@@ -339,8 +339,8 @@
 
         <div class="tabs-container">
             <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC URLS</button>
-            <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
-            <button class="tab-btn active" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
+            <button class="tab-btn active" id="tabCombosBtn" onclick="switchTab('combos')">📦 COMBOS</button>
+            <button class="tab-btn" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
             <button class="tab-btn" onclick="switchTab('banco-hits')">🗄️ BANCO HITS</button>
             <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMINS</button>
         </div>
@@ -359,14 +359,41 @@
             <div class="item-list" id="listaUrlsContainer"></div>
         </div>
 
-        <!-- SECCIÓN COMBOS -->
-        <div id="panel-combos" class="panel">
-            <h3>Gestión de Combos</h3>
-            <p style="color:var(--texto-secundario)">Carga tus listas estructuradas acá.</p>
+        <!-- SECCIÓN COMBOS (RESTAURADA POR COMPLETO) -->
+        <div id="panel-combos" class="panel active">
+            <h3>📦 Creador y Mezclador de Combos Masivos</h3>
+            <p style="color:var(--texto-secundario); font-size:0.9rem;">Ingresa las listas independientes de usuarios y contraseñas para combinarlas automáticamente en formato <code>usuario:contraseña</code>.</p>
+            
+            <div class="form-group">
+                <label>1. Lista de Usuarios / Teléfonos / Correos:</label>
+                <textarea id="creatorUsers" rows="5" placeholder="usuario1&#10;usuario2&#10;usuario3" oninput="actualizarConteoCreador()"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>2. Lista de Contraseñas / Claves:</label>
+                <textarea id="creatorPasses" rows="5" placeholder="clave1&#10;clave2&#10;clave3" oninput="actualizarConteoCreador()"></textarea>
+            </div>
+
+            <div style="background-color: #1a1f2c; padding: 10px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #ffeb3b;">
+                <span style="color: var(--texto-secundario);">Total filas detectadas:</span> 
+                <strong style="color: #00e676;">Users: <span id="cntUsers">0</span></strong> | 
+                <strong style="color: #00e676;">Passes: <span id="cntPasses">0</span></strong>
+                <br>
+                <span style="color: var(--texto-secundario);">Líneas resultantes estimadas:</span> <strong style="color: #ffff00;"><span id="cntEstimado">0</span></strong>
+            </div>
+
+            <button class="btn-block btn-start" onclick="generarComboMasivo()">⚡ GENERAR Y COMBINAR LISTA</button>
+
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Resultado Final del Combo Generado:</label>
+                <textarea id="creatorResultado" rows="6" readonly placeholder="Aquí aparecerá tu combo listo..."></textarea>
+            </div>
+
+            <button id="btnDescargarCombo" class="btn-block btn-save" disabled onclick="descargarComboCreado()">⬇️ DESCARGAR COMBO (.TXT)</button>
         </div>
 
         <!-- SECCIÓN ESCÁNER -->
-        <div id="panel-scanner" class="panel active">
+        <div id="panel-scanner" class="panel">
             <div class="form-group">
                 <label>Panel (Host con o sin http/https):</label>
                 <input type="text" id="hostInput" placeholder="ej: lista.com:8080" />
@@ -380,7 +407,7 @@
             </div>
 
             <div class="form-group">
-                <label>...o pega tus combos aquí in texto libre (user:pass):</label>
+                <label>...o pega tus combos aquí en texto libre (user:pass):</label>
                 <textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1&#10;Usuario2:Contraseña2"></textarea>
             </div>
 
@@ -453,16 +480,14 @@
 
     <script>
         // --- BASE DE DATOS LOCAL MULTI-USUARIO ---
-        const OWNER_EMAIL = "andyobregon799@gmail.com"; // Tus datos correctos aquí
+        const OWNER_EMAIL = "andyobregon799@gmail.com"; 
         let currentUser = null;
 
         function inicializarBaseDatos() {
-            // Asegurarse de reescribir o crear siempre las credenciales correctas del Owner
             let usuarios = {};
             if (localStorage.getItem('sys_users')) {
                 usuarios = JSON.parse(localStorage.getItem('sys_users'));
             }
-            // Forzar las credenciales solicitadas por Andy
             usuarios[OWNER_EMAIL] = { pass: "123456", role: "Owner" };
             localStorage.setItem('sys_users', JSON.stringify(usuarios));
 
@@ -491,7 +516,7 @@
                 
                 renderizarUrlsBloc();
                 renderizarBancoHits();
-                switchTab('scanner');
+                switchTab('combos'); // Abre en la pestaña restaurada por defecto
             } else {
                 alert("Credenciales incorrectas o usuario no registrado.");
             }
@@ -546,7 +571,50 @@
             }
         }
 
-        // --- SECCIÓN GESTIÓN DEL BLOC DE URLS (EDITAR / ELIMINAR / AGREGAR) ---
+        // --- LÓGICA DE CREACIÓN DE COMBOS DEL PANEL ---
+        function actualizarConteoCreador() {
+            const uLines = $('creatorUsers').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const pLines = $('creatorPasses').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            $('cntUsers').textContent = uLines.length;
+            $('cntPasses').textContent = pLines.length;
+            $('cntEstimado').textContent = uLines.length * pLines.length;
+        }
+
+        function generarComboMasivo() {
+            const uLines = $('creatorUsers').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const pLines = $('creatorPasses').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+            if(uLines.length === 0 || pLines.length === 0) {
+                alert("Por favor introduce datos tanto en la lista de usuarios como en la de claves.");
+                return;
+            }
+
+            let resultado = [];
+            for(let u of uLines) {
+                for(let p of pLines) {
+                    resultado.push(`${u}:${p}`);
+                }
+            }
+
+            $('creatorResultado').value = resultado.join('\n');
+            $('btnDescargarCombo').disabled = false;
+            alert(`¡Hecho! Se han mezclado con éxito ${resultado.length} combinaciones.`);
+        }
+
+        function descargarComboCreado() {
+            const datos = $('creatorResultado').value;
+            if(!datos) return;
+            const blob = new Blob([datos], {type: 'text/plain;charset=utf-8'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'Combo_Generado_Pro.txt';
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+        }
+
+        // --- SECCIÓN GESTIÓN DEL BLOC DE URLS ---
         function guardarUrlBloc() {
             const val = $('inputUrlData').value.trim();
             const editId = $('editUrlId').value;
@@ -693,8 +761,12 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
             document.getElementById('panel-' + tabName).classList.add('active');
-            if(event && event.currentTarget) {
+            
+            // Buscar el botón correspondiente por texto o ID y activarlo
+            if(event && event.currentTarget && event.currentTarget.classList) {
                 event.currentTarget.classList.add('active');
+            } else {
+                if(tabName === 'combos') $('tabCombosBtn').classList.add('active');
             }
         }
 
