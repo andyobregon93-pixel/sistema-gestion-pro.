@@ -850,8 +850,22 @@
                     
                     // --- FORMATO M3U ---
                     const m3uLink = `http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
-                    const texto = `🔥 HIT ENCONTRADO 🔥\n🌐 Host: ${host}\n👤 Usuario: ${user}\n🔑 Pass: ${pass}\n⏳ Expira: ${exp}\n\n🔗 LISTA M3U:\n${m3uLink}`;
-                    
+                    const texto = `🔥 HIT ENCONTRADO ├── url ➤ http://${host}\n` +
+    `├── Dominio ➤ http://${host.split(':')[0]}\n` +
+    `├── Usurario ➤ ${user}\n` +
+    `├── contraseña ➤ ${pass}\n` +
+    `├── Exp. ➤ ${exp}\n` +
+    `├── Activo ➤ ${activeCons}\n` +
+    `├── Max activación ➤ ${maxCons}\n` +
+    `├── Status ➤ ${status}\n` +
+    `╰─➤Zona➤ ${zona}\n\n` +
+    `╭─➤Chanel info\n` +
+    `├  🎩CANALES EN VIVO ➤ ${live}\n` +
+    `├  🎩VIDEOS  Y  PELIS    ➤ 20319\n` +
+    `├  🎩SERIES VARIADAS  ➤ 2068\n` +
+    `╰─➤    \n` +
+    `╭─➤🄼➂🅄 \n` +
+    `├  ${m3uLink}`;
                     HITS[jobId].push({ user, pass, texto });
                     countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
                     
