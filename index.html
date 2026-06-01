@@ -1,6 +1,27 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  import { getFirestore } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDGE6TLwZypuryIVnDYlTR9...", // Asegúrate de pegar tu clave completa
+    authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
+    projectId: "gestion-ventas-pro-f8de4",
+    storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
+    messagingSenderId: "96449660649",
+    appId: "1:96449660649:web:d949eccf893c9705451278"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  window.auth = getAuth(app);
+  window.db = getFirestore(app);
+  
+  console.log("Sistema SYS ANDY PRO conectado a la nube.");
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYS ANDY PRO</title>
@@ -796,26 +817,25 @@
         }
 
         // --- SECCIÓN GESTIÓN DEL BLOC DE URLS ---
-        function guardarUrlBloc() {
-            const val = $('inputUrlData').value.trim();
-            const editId = $('editUrlId').value;
-            if(!val) return;
+        async function guardarUrlBloc() {
+    const val = $('inputUrlData').value.trim();
+    if(!val) return;
 
-            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
-            if (!baseUrls[currentUser.email]) baseUrls[currentUser.email] = [];
-
-            if(editId !== "") {
-                baseUrls[currentUser.email][parseInt(editId)] = val;
-                $('editUrlId').value = "";
-                $('lblUrlForm').textContent = "Agregar nueva URL / Host:";
-            } else {
-                baseUrls[currentUser.email].push(val);
-            }
-
-            localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
-            $('inputUrlData').value = "";
-            renderizarUrlsBloc();
-        }
+    const userRef = doc(window.db, "usuarios_datos", currentUser.email);
+    
+    try {
+        await updateDoc(userRef, {
+            urls: arrayUnion(val) 
+        });
+        alert("URL guardada en la Nube!");
+    } catch (e) {
+        await setDoc(userRef, { urls: [val] });
+        alert("URL guardada en la Nube (nuevo registro)!");
+    }
+    
+    $('inputUrlData').value = "";
+    renderizarUrlsBloc(); 
+   }
 
         function editarUrl(index) {
             const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
@@ -842,29 +862,26 @@
             updateStartState();
         }
 
-        function renderizarUrlsBloc() {
-            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
-            const container = $('listaUrlsContainer');
-            container.innerHTML = '';
-            
-            const misUrls = baseUrls[currentUser.email] || [];
-            if(misUrls.length === 0) {
-                container.innerHTML = `<p style="color:var(--texto-secundario); text-align:center;">No hay URLs guardadas.</p>`;
-                return;
-            }
+        async function renderizarUrlsBloc() {
+    const container = $('listaUrlsContainer');
+    const docSnap = await getDoc(doc(window.db, "usuarios_datos", currentUser.email));
+    const urls = docSnap.exists() ? (docSnap.data().urls || []) : [];
+    
+    container.innerHTML = urls.length ? "" : '<p style="color:var(--texto-secundario); text-align:center;">No hay URLs.</p>';
+    
+    urls.forEach(url => {
+        const div = document.createElement('div');
+        div.className = 'item-card';
+        div.innerHTML = `<div>🌐 <code>${url}</code></div>
+        <div class="item-actions">
+            <button class="btn-small btn-copy" onclick="usarUrlEscanner('${url}')">🔌 Escanear</button>
+            <button class="btn-small btn-del" onclick="eliminarUrlNube('${url}')">Eliminar</button>
+        </div>`;
+        container.appendChild(div);
+    });
+}
 
-            misUrls.forEach((url, index) => {
-                const div = document.createElement('div');
-                div.className = 'item-card';
-                div.innerHTML = `<div>🌐 <code>${url}</code></div>
-                <div class="item-actions">
-                    <button class="btn-small btn-copy" onclick="usarUrlEscanner(${index})">🔌 Escanear</button>
-                    <button class="btn-small btn-edit" onclick="editarUrl(${index})">Editar</button>
-                    <button class="btn-small btn-del" onclick="eliminarUrl(${index})">Eliminar</button>
-                </div>`;
-                container.appendChild(div);
-            });
-        }
+     
 
         // --- GESTIÓN BANCO PERMANENTE DE HITS CON CONTADOR ---
         function guardarHitEnBanco(hitTexto, user, pass) {
