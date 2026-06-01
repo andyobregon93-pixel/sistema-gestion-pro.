@@ -5,7 +5,6 @@
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
   import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
- "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDGE6TLwZypuryIVnDYlTR9...", // Asegúrate de pegar tu clave completa
@@ -550,38 +549,40 @@ window.arrayUnion = arrayUnion;
         inicializarBaseDatos();
 
         // --- FUNCIÓN DE ACCESO CORREGIDA CON FILTROS ANTI-ESPACIOS ---
+        
         async function procesarLogin() {
-    const email = $('loginEmail').value.trim().toLowerCase();
-    const pass = $('loginPass').value.trim();
+            const email = $('loginEmail').value.trim().toLowerCase();
+            const pass = $('loginPass').value.trim();
 
-    try {
-        // Consultamos directamente en Firestore
-        const userRef = doc(window.db, "usuarios_vip", email.replace(/\./g, "_"));
+            try {
+                // Consultamos directamente en Firestore
+                const userRef = doc(window.db, "usuarios_vip", email.replace(/\./g, "_"));
+                const docSnap = await getDoc(userRef);
 
-        const docSnap = await getDoc(userRef);
+                if (docSnap.exists() && docSnap.data().pass === pass) {
+                    currentUser = { email: email, role: docSnap.data().role };
+                    
+                    $('auth-screen').style.display = 'none';
+                    $('main-app').style.display = 'block';
+                    $('userDisplay').textContent = `Usuario: ${email}`;
 
-        if (docSnap.exists() && docSnap.data().pass === pass) {
-            currentUser = { email: email, role: docSnap.data().role };
-            
-            $('auth-screen').style.display = 'none';
-            $('main-app').style.display = 'block';
-            $('userDisplay').textContent = `Usuario: ${email}`;
-
-            if (currentUser.role === "Owner") {
-                $('tabAdminBtn').style.display = 'block';
-                listarUsuariosAdmin();
+                    if (currentUser.role === "Owner") {
+                        $('tabAdminBtn').style.display = 'block';
+                        listarUsuariosAdmin();
+                    }
+                    
+                    renderizarUrlsBloc();
+                    renderizarBancoHits();
+                    switchTab('combos');
+                } else {
+                    alert("Credenciales incorrectas o usuario no registrado.");
+                }
+            } catch (e) {
+                // Mostramos el error real para saber si es un problema de conexión o de Firebase
+                alert("Error: " + e.message);
             }
-            
-            renderizarUrlsBloc();
-            renderizarBancoHits();
-            switchTab('combos');
-        } else {
-            alert("Credenciales incorrectas o usuario no registrado.");
-        }
-    } catch (e) {
-        alert("Error de conexión con la Nube.");
-    
-}
+        } // <--- ESTA LLAVE ES LA QUE FALTABA
+
 
         function cerrarSesion() {
             currentUser = null;
