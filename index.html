@@ -3,29 +3,30 @@
 <head>
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-  import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyDGE6TLwZypuryIVnDYlTR9...", // Asegúrate de pegar tu clave completa
-    authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
-    projectId: "gestion-ventas-pro-f8de4",
-    storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
-    messagingSenderId: "96449660649",
-    appId: "1:96449660649:web:d949eccf893c9705451278"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
+  authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
+  projectId: "gestion-ventas-pro-f8de4",
+  storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
+  messagingSenderId: "96449660649",
+  appId: "1:96449660649:web:d949eccf893c9705451278"
+};
 
-  const app = initializeApp(firebaseConfig);
-  window.auth = getAuth(app);
-  window.db = getFirestore(app);
-  window.doc = doc;
+const app = initializeApp(firebaseConfig);
+
+window.auth = getAuth(app);
+window.db = getFirestore(app);
+window.doc = doc;
 window.getDoc = getDoc;
 window.setDoc = setDoc;
 window.updateDoc = updateDoc;
 window.arrayUnion = arrayUnion;
 
-  console.log("Sistema SYS ANDY PRO conectado a la nube.");
-</script>
+console.log("Sistema SYS ANDY PRO conectado a la nube.");
+
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
