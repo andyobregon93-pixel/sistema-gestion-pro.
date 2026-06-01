@@ -5,53 +5,48 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYS ANDY PRO</title>
 
-   <script type="module">
+            <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, query, collection, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-        apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
-        authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
-        projectId: "gestion-ventas-pro-f8de4",
-        storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
-        messagingSenderId: "96449660649",
-        appId: "1:96449660649:web:d949eccf893c9705451278"
-    };
-
+    const firebaseConfig = { /* ... tus datos ... */ };
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Definimos el selector globalmente
-    window.$ = (id) => document.getElementById(id);
-
-    // Definimos procesarLogin GLOBALMENTE para que el botón onclick pueda encontrarla
+    // Hacemos que las funciones sean accesibles desde el HTML
     window.procesarLogin = async () => {
-        const email = window.$('loginEmail').value.trim().toLowerCase();
-        const pass = window.$('loginPass').value.trim();
+        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        const pass = document.getElementById('loginPass').value.trim();
 
         try {
             const q = query(collection(db, "usuarios_vip"), where("email", "==", email));
             const querySnapshot = await getDocs(q);
 
             if (!querySnapshot.empty) {
-                const data = querySnapshot.docs[0].data();
-                if (data.pass === pass) {
-                    alert("Acceso concedido");
-                    window.$('auth-screen').style.display = 'none';
-                    window.$('main-app').style.display = 'block';
+                const userData = querySnapshot.docs[0].data();
+                
+                if (userData.pass === pass) {
+                    // AQUÍ ESTÁ LA CLAVE: Capturamos el rol y mostramos el botón si es Owner
+                    window.currentUser = { email: email, role: userData.role };
+                    
+                    document.getElementById('auth-screen').style.display = 'none';
+                    document.getElementById('main-app').style.display = 'block';
+                    document.getElementById('userDisplay').textContent = "Usuario: " + email;
+
+                    // Si es Owner, mostrar botón de admin
+                    if (window.currentUser.role === "Owner") {
+                        document.getElementById('tabAdminBtn').style.display = 'block';
+                    }
                 } else {
-                    alert("Contraseña incorrecta.");
+                    alert("Contraseña incorrecta");
                 }
             } else {
-                alert("Usuario no registrado.");
+                alert("Usuario no registrado");
             }
         } catch (e) {
             alert("Error: " + e.message);
         }
     };
-    
-    // NOTA: Debes mover aquí dentro todas tus otras funciones (cerrarSesion, etc.)
-    // y ponerles window.nombreFuncion = async () => { ... }
 </script>
 
 
