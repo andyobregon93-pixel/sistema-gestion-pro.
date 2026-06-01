@@ -4,90 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYS ANDY PRO</title>
-
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, arrayUnion, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGE6TLwIypuryIVnDYlTR9c2U",
-            authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
-            databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com",
-            projectId: "gestion-ventas-pro-f8de4",
-            storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
-            messagingSenderId: "96449660649",
-            appId: "1:96449660649:web:d949eccf893c9705451278"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        window.db = getFirestore(app);
-    </script>
-
-    <style>
-        /* MANTÉN AQUÍ TODOS TUS ESTILOS CSS ORIGINALES */
-        :root { --bg-principal: #0b0e14; --bg-tarjeta: #131722; --borde-neon: #a855f7; --rojo-stop: #d32f2f; --texto-secundario: #9aa4bf; }
-        body { background-color: var(--bg-principal); color: #fff; font-family: sans-serif; }
-        #main-app { display: none; }
-        .auth-box { background-color: var(--bg-tarjeta); border: 2px solid var(--borde-neon); padding: 25px; border-radius: 12px; }
-        /* ... resto de tu CSS ... */
-    </style>
-</head>
-<body>
-
-    <div id="auth-screen">
-        <div class="auth-box">
-            <h2 style="text-align:center; color:#ffeb3b;">⚙️ SYS ANDY PRO</h2>
-            <div class="form-group">
-                <label>Correo:</label>
-                <input type="text" id="loginEmail">
-            </div>
-            <div class="form-group">
-                <label>Contraseña:</label>
-                <input type="password" id="loginPass">
-            </div>
-            <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR</button>
-        </div>
-    </div>
-
-    <div id="main-app">
-        </div>
-
-    <script>
-        // --- LÓGICA DE LOGIN ---
-        async function procesarLogin() {
-            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-            const pass = document.getElementById('loginPass').value.trim();
-
-            try {
-                const q = query(collection(window.db, "usuarios_vip"), where("email", "==", email));
-                const querySnapshot = await getDocs(q);
-
-                if (!querySnapshot.empty) {
-                    const data = querySnapshot.docs[0].data();
-                    if (data.pass === pass) {
-                        window.currentUser = { email: email, role: data.role };
-                        document.getElementById('auth-screen').style.display = 'none';
-                        document.getElementById('main-app').style.display = 'block';
-                        document.getElementById('userDisplay').textContent = "Usuario: " + email;
-                        // Llamar funciones iniciales
-                        if(typeof renderizarUrlsBloc === 'function') renderizarUrlsBloc();
-                    } else {
-                        alert("Contraseña incorrecta");
-                    }
-                } else {
-                    alert("Usuario no registrado");
-                }
-            } catch (e) {
-                alert("Error: " + e.message);
-            }
-        }
-
-  
-    </script>
-
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO</title>
     <style>
         :root {
             --bg-principal: #0b0e14;
@@ -394,6 +310,7 @@
 </head>
 <body>
 
+    <!-- CONTROL DE ACCESO (PANTALLA LOGIN) -->
     <div id="auth-screen">
         <div class="auth-box">
             <h2 style="text-align:center;color:#ffeb3b;margin-top:0;">⚙️ SYS ANDY PRO</h2>
@@ -410,6 +327,7 @@
         </div>
     </div>
 
+    <!-- APLICACIÓN PRINCIPAL -->
     <div id="main-app">
         <div class="navbar">
             <div class="logo-area">
@@ -427,6 +345,7 @@
             <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMINS</button>
         </div>
 
+        <!-- SECCIÓN BLOC DE URLS -->
         <div id="panel-bloc" class="panel">
             <h3>Bloc de Servidores &amp; URLs</h3>
             <div class="item-card" style="border:1px dashed var(--borde-neon)">
@@ -440,62 +359,40 @@
             <div class="item-list" id="listaUrlsContainer"></div>
         </div>
 
+        <!-- SECCIÓN COMBOS (RESTAURADA POR COMPLETO) -->
         <div id="panel-combos" class="panel active">
-            <h3>📦 Creador Avanzado de Combos Masivos</h3>
-            <p style="color:var(--texto-secundario); font-size:0.9rem;">Configura los parámetros para la generación automática de combos aleatorios y realistas.</p>
+            <h3>📦 Creador y Mezclador de Combos Masivos</h3>
+            <p style="color:var(--texto-secundario); font-size:0.9rem;">Ingresa las listas independientes de usuarios y contraseñas para combinarlas automáticamente en formato <code>usuario:contraseña</code>.</p>
             
             <div class="form-group">
-                <label>Cantidad de combos a generar:</label>
-                <input type="number" id="cantidad" value="100">
+                <label>1. Lista de Usuarios / Teléfonos / Correos:</label>
+                <textarea id="creatorUsers" rows="5" placeholder="usuario1&#10;usuario2&#10;usuario3" oninput="actualizarConteoCreador()"></textarea>
             </div>
 
             <div class="form-group">
-                <label>Longitud base de la contraseña:</label>
-                <input type="number" id="longitud" value="8">
+                <label>2. Lista de Contraseñas / Claves:</label>
+                <textarea id="creatorPasses" rows="5" placeholder="clave1&#10;clave2&#10;clave3" oninput="actualizarConteoCreador()"></textarea>
             </div>
 
-            <div class="form-group">
-                <label>Tipo de estructura de usuario:</label>
-                <select id="tipo">
-                    <option value="random">Usuario Random</option>
-                    <option value="email">Email Mix (Gmail/Yahoo/Aol/Hotmail)</option>
-                    <option value="nombre">Nombre + Número / Año</option>
-                    <option value="nombrenombre">Nombre:Nombre / Estructuras Avanzadas</option>
-                    <option value="nombreigual">Nombre = Pass (dario;dario)</option>
-                    <option value="andymix">AndyMix Avanzado (Multi-Combinación realista)</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Agregar año fijo al final de Pass:</label>
-                <select id="anio">
-                    <option value="">Sin año fijo</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label>Separador de cadena:</label>
-                <select id="sep">
-                    <option value=":">:</option>
-                    <option value="|">|</option>
-                    <option value=";">;</option>
-                </select>
+            <div style="background-color: #1a1f2c; padding: 10px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #ffeb3b;">
+                <span style="color: var(--texto-secundario);">Total filas detectadas:</span> 
+                <strong style="color: #00e676;">Users: <span id="cntUsers">0</span></strong> | 
+                <strong style="color: #00e676;">Passes: <span id="cntPasses">0</span></strong>
+                <br>
+                <span style="color: var(--texto-secundario);">Líneas resultantes estimadas:</span> <strong style="color: #ffff00;"><span id="cntEstimado">0</span></strong>
             </div>
 
             <button class="btn-block btn-start" onclick="generarComboMasivo()">⚡ GENERAR Y COMBINAR LISTA</button>
 
             <div class="form-group" style="margin-top: 20px;">
                 <label>Resultado Final del Combo Generado:</label>
-                <textarea id="creatorResultado" rows="10" readonly placeholder="Aquí aparecerá tu combo listo..."></textarea>
+                <textarea id="creatorResultado" rows="6" readonly placeholder="Aquí aparecerá tu combo listo..."></textarea>
             </div>
 
             <button id="btnDescargarCombo" class="btn-block btn-save" disabled onclick="descargarComboCreado()">⬇️ DESCARGAR COMBO (.TXT)</button>
         </div>
 
+        <!-- SECCIÓN ESCÁNER -->
         <div id="panel-scanner" class="panel">
             <div class="form-group">
                 <label>Panel (Host con o sin http/https):</label>
@@ -529,6 +426,7 @@
             <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
             <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
 
+            <!-- TRABAJOS -->
             <div class="job-card">
                 <div class="job-header"><span>Trabajo de Análisis 1</span><span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span></div>
                 <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
@@ -554,12 +452,14 @@
             <div id="hitsContainer"></div>
         </div>
 
+        <!-- SECCIÓN BANCO PERMANENTE DE HITS -->
         <div id="panel-banco-hits" class="panel">
             <h3>🗄️ Historial e Hist Guardadas en la Web</h3>
             <p style="color:var(--texto-secundario); font-size:0.9rem;">Tus Hits se quedan aquí almacenados permanentemente aunque salgas o entres.</p>
             <div class="item-list" id="bancoHitsContainer"></div>
         </div>
 
+        <!-- SECCIÓN ADMINISTACIÓN DE USUARIOS (SOLO OWNER) -->
         <div id="panel-admins" class="panel">
             <h3>👥 Control de Usuarios Nuevos</h3>
             <div class="item-card" style="border:1px dashed #ff4444">
@@ -584,21 +484,11 @@
         let currentUser = null;
 
         function inicializarBaseDatos() {
-            // Se recuperan los usuarios ya existentes en el equipo (si los hay)
             let usuarios = {};
             if (localStorage.getItem('sys_users')) {
                 usuarios = JSON.parse(localStorage.getItem('sys_users'));
             }
-            
-            // INCORPORACIÓN MAESTRA GLOBAL:
-            // Aseguramos que las credenciales fijas existan SIEMPRE en cualquier dispositivo del mundo que abra la web
             usuarios[OWNER_EMAIL] = { pass: "123456", role: "Owner" };
-            
-            // Cuenta de pruebas agregada de manera fija para tu vendedor/pana en el extranjero
-            if (!usuarios["prueba1@gmail.com"]) {
-                usuarios["prueba1@gmail.com"] = { pass: "123456", role: "Seller" };
-            }
-            
             localStorage.setItem('sys_users', JSON.stringify(usuarios));
 
             if (!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
@@ -606,52 +496,31 @@
         }
         inicializarBaseDatos();
 
-        // --- FUNCIÓN DE ACCESO CORREGIDA CON FILTROS ANTI-ESPACIOS ---
-        
-        async function procesarLogin() {
+        function procesarLogin() {
             const email = $('loginEmail').value.trim().toLowerCase();
-            const pass = $('loginPass').value.trim();
+            const pass = $('loginPass').value;
+            const usuarios = JSON.parse(localStorage.getItem('sys_users'));
 
-            try {
-                // Consultamos directamente en Firestore
-                // Buscamos el documento donde el campo "email" sea igual al ingresado
-    const q = query(collection(window.db, "usuarios_vip"), where("email", "==", email));
-    const querySnapshot = await getDocs(q);
-
-    if (!querySnapshot.empty) {
-        // Obtenemos el primer documento encontrado
-        const docSnap = querySnapshot.docs[0];
-        const data = docSnap.data();
-
-        // Validamos la contraseña
-        if (data.pass === pass) {
-            currentUser = { email: email, role: data.role };
-            
-            $('auth-screen').style.display = 'none';
-            $('main-app').style.display = 'block';
-            $('userDisplay').textContent = `Usuario: ${email}`;
-
-            // Si es Owner o admin, mostramos el botón de admins
-            if (currentUser.role === "Owner" || currentUser.role === "admin") {
-                $('tabAdminBtn').style.display = 'block';
-                listarUsuariosAdmin();
+            if (usuarios[email] && usuarios[email].pass === pass) {
+                currentUser = { email: email, role: usuarios[email].role };
+                $('auth-screen').style.display = 'none';
+                $('main-app').style.display = 'block';
+                $('userDisplay').textContent = `Admin Activo: ${email} (${usuarios[email].role})`;
+                
+                if (usuarios[email].role === "Owner") {
+                    $('tabAdminBtn').style.display = 'block';
+                    listarUsuariosAdmin();
+                } else {
+                    $('tabAdminBtn').style.display = 'none';
+                }
+                
+                renderizarUrlsBloc();
+                renderizarBancoHits();
+                switchTab('combos'); // Abre en la pestaña restaurada por defecto
+            } else {
+                alert("Credenciales incorrectas o usuario no registrado.");
             }
-            
-            renderizarUrlsBloc();
-            renderizarBancoHits();
-            switchTab('combos');
-        } else {
-            alert("Contraseña incorrecta.");
         }
-    } else {
-        alert("Usuario no registrado en la base de datos.");
-    }
-} catch (e) {
-    // Mostramos el error real
-    alert("Error: " + e.message);
-}
-        } // <--- ESTA LLAVE ES LA QUE FALTABA
-
 
         function cerrarSesion() {
             currentUser = null;
@@ -663,9 +532,8 @@
 
         function crearUsuarioNuevo() {
             if (currentUser.role !== "Owner") return;
-            // Limpieza automática al registrar nuevos usuarios para evitar errores humanos futuros
-            const email = $('newAdminEmail').value.trim().replace(/\s+/g, '').toLowerCase();
-            const pass = $('newAdminPass').value.trim();
+            const email = $('newAdminEmail').value.trim().toLowerCase();
+            const pass = $('newAdminPass').value;
 
             if(!email || !pass) { alert("Llena todos los campos."); return; }
 
@@ -703,184 +571,35 @@
             }
         }
 
-        // --- FUNCIONES ESPECÍFICAS DE GENERACIÓN AVANZADA ---
-        function randomString(length){
-            const chars="abcdefghijklmnopqrstuvwxyz0123456789";
-            let result="";
-            for(let i=0;i<length;i++){
-                result+=chars.charAt(Math.floor(Math.random()*chars.length));
-            }
-            return result;
+        // --- LÓGICA DE CREACIÓN DE COMBOS DEL PANEL ---
+        function actualizarConteoCreador() {
+            const uLines = $('creatorUsers').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const pLines = $('creatorPasses').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            $('cntUsers').textContent = uLines.length;
+            $('cntPasses').textContent = pLines.length;
+            $('cntEstimado').textContent = uLines.length * pLines.length;
         }
 
-        function randomPassComplex(length){
-            const chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            let result="";
-            for(let i=0;i<length;i++){
-                result+=chars.charAt(Math.floor(Math.random()*chars.length));
-            }
-            return result;
-        }
-
-        function alternarMayusculas(texto) {
-            let resultado = "";
-            for (let i = 0; i < texto.length; i++) {
-                resultado += Math.random() > 0.5 ? texto[i].toUpperCase() : texto[i].toLowerCase();
-            }
-            return resultado;
-        }
-
-        function generarNombreInfinito() {
-            const prefijos = ["ju", "lu", "pe", "ca", "mi", "jo", "ma", "da", "ri", "an", "al", "br", "be", "ce", "cr", "cl", "di", "ed", "es", "fe", "fr", "ga", "gu", "he", "iv", "je", "ke", "le", "ma", "ne", "ni", "os", "pa", "ra", "ro", "se", "sa", "to", "vi", "wa", "al", "am", "ar", "au", "ba", "bo", "ch", "co", "do", "el", "en", "er", "fa", "fi", "fl", "ge", "gi", "go", "ha", "ho", "ia", "ja", "jo", "la", "li", "me", "mo", "na", "oc", "or", "re", "ru", "sa", "su", "th", "ul", "va", "xa", "ya", "za"];
-            const raices = ["an", "is", "dr", "rl", "gu", "os", "nu", "ni", "ca", "nt", "dr", "lej", "ber", "ria", "man", "un", "nja", "or", "sa", "ist", "aud", "ieg", "ari", "dga", "dua", "dwi", "teb", "lip", "rna", "anc", "abi", "abr", "ust", "era", "ect", "ugo", "ism", "gna", "org", "esu", "uli", "aim", "evi", "eon", "uca", "art", "arc", "ate", "aur", "els", "ico", "sca", "rla", "pab", "atr", "aul", "obe", "amo", "odr", "eba", "erg", "ant", "oma", "ict", "alt", "il", "la", "co", "br", "da", "me", "ra", "li", "sa", "le", "mi"];
-            const sufijos = ["an", "is", "dro", "los", "guel", "se", "uel", "niel", "ardo", "nio", "dres", "andro", "to", "rian", "do", "no", "min", "ris", "sar", "tian", "dio", "milo", "vid", "go", "rio", "gar", "rdo", "win", "ban", "pe", "ndo", "co", "bian", "briel", "tavo", "rdo", "tor", "go", "mael", "van", "cio", "ge", "sus", "lio", "me", "vin", "ardo", "cas", "tin", "cos", "teo", "cio", "son", "las", "car", "do", "blo", "cio", "ul", "to", "mon", "go", "tian", "gio", "go", "mas", "tor", "ter", "son", "hir", "el", "ex", "an", "on", "lo", "bal", "an", "co", "lo", "ro", "ian", "than", "lian", "dro", "no", "mo", "tan", "vio", "to", "uel", "go", "ses", "tin", "er", "ela", "na", "mila", "lla", "tina", "cia", "la", "la", "ria", "ra", "cia", "drea", "na", "la", "da", "ca", "dia", "men", "sa", "via", "ria", "na", "ana", "triz", "na", "nes", "lia", "lia", "ana", "la", "nia", "cia", "ne", "ca", "sa", "sa", "na", "la", "da", "sa", "ca", "ta", "na", "ria", "na", "ena", "dra"];
-
-            let n = prefijos[Math.floor(Math.random() * prefijos.length)] + 
-                    raices[Math.floor(Math.random() * raices.length)] + 
-                    sufijos[Math.floor(Math.random() * sufijos.length)];
-
-            return n.replace(/[^a-zA-Z]/g, "").substring(0, 8);
-        }
-
-        const nombres=["juan","luis","pedro","carlos","miguel","jose","manuel","daniel","ricardo","antonio","andres","alejandro","alberto","adrian","armando","bruno","benjamin","boris","cesar","cristian","claudio","camilo","david","diego","dario","edgar","eduardo","edwin","esteban","felipe","fernando","francisco","fabian","gabriel","gustavo","gerardo","hector","hugo","ismael","ivan","ignacio","jorge","jesus","julio","jaime","kevin","leonardo","lucas","martin","marcos","mateo","mauricio","nelson","nicolas","oscar","orlando","pablo","patricio","raul","roberto","ramon","rodrigo","sebastian","sergio","santiago","tomas","victor","walter","wilson","yahir","yoel","alex","alan","aaron","angelo","cristobal","damian","dilan","edson","erick","fabio","franco","gonzalo","harold","ian","jonathan","julian","leandro","mariano","maximo","natan","octavio","paolo","renato","samuel","thiago","ulises","valentin","xavier","sofia","valentina","camila","isabella","martina","lucia","daniela","paula","carla","maria","laura","patricia","andrea","mariana","gabriela","fernanda","veronica","claudia","carmen","rosa","silvia","gloria","elena","adriana","beatriz","lorena","ines","noelia","natalia","tatiana","angela","antonia","alicia","irene","monica","raquel","teresa","susana","sonia","diana","karla","brenda","melissa","pamela","jessica","vanessa","marcela","bianca","renata","carolina","valeria","paulina","jimena","alejandra","nuria","lourdes","esther","rocio","pilar","amanda","araceli","leticia","yolanda","florencia","miriam","celeste","samanta","luisa"];
-        const dominios=["@gmail.com", "@yahoo.com", "@aol.com", "@hotmail.com", "@outlook.com", "@icloud.com", "@att.net", "@yahoo.ca"];
-
-        // --- LÓGICA DE NUEVO GENERADOR DE COMBOS DEL PANEL ---
         function generarComboMasivo() {
-            let cantidad = parseInt(document.getElementById("cantidad").value) || 100;
-            let longitud = parseInt(document.getElementById("longitud").value) || 8;
-            let tipo = document.getElementById("tipo").value;
-            let anio = document.getElementById("anio").value;
-            let sep = document.getElementById("sep").value;
+            const uLines = $('creatorUsers').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            const pLines = $('creatorPasses').value.split('\n').map(l => l.trim()).filter(l => l.length > 0);
 
-            let combosUnicos = new Set();
-            let maxIntentos = cantidad * 10; 
-            let intentos = 0;
-
-            while(combosUnicos.size < cantidad && intentos < maxIntentos){
-                intentos++;
-                let user="";
-                let pass="";
-
-                if(tipo=="random"){
-                    let estruct = Math.floor(Math.random() * 3);
-                    if(estruct == 0){
-                        user = randomString(6) + (Math.floor(Math.random() * 90) + 10);
-                        pass = randomPassComplex(longitud);
-                    } else if(estruct == 1){
-                        user = Math.floor(Math.random() * 9000000000) + 1000000000;
-                        pass = Math.floor(Math.random() * 9000000000) + 1000000000;
-                    } else {
-                        user = randomPassComplex(8);
-                        pass = randomPassComplex(longitud);
-                    }
-                }
-
-                if(tipo=="email"){
-                    let nmb = nombres[Math.floor(Math.random()*nombres.length)] + (Math.floor(Math.random()*99));
-                    let dom = dominios[Math.floor(Math.random()*dominios.length)];
-                    user = nmb + dom;
-                    pass = randomPassComplex(longitud);
-                }
-
-                if(tipo=="nombre"){
-                    let nombre = nombres[Math.floor(Math.random()*nombres.length)];
-                    nombre = nombre.charAt(0).toUpperCase() + nombre.slice(1);
-                    let numRandom = Math.floor(Math.random() * 4);
-                    if(numRandom == 0) user = nombre + (Math.floor(Math.random()*900)+100);
-                    else if(numRandom == 1) user = nombre + "2024";
-                    else if(numRandom == 2) user = nombre + (Math.floor(Math.random()*9000)+1000);
-                    else user = nombre;
-
-                    pass = randomPassComplex(longitud);
-                }
-
-                if(tipo=="nombrenombre"){
-                    let estruct = Math.floor(Math.random() * 4);
-                    if(estruct == 0){
-                        let n1 = nombres[Math.floor(Math.random()*nombres.length)];
-                        let n2 = nombres[Math.floor(Math.random()*nombres.length)];
-                        user = n1.charAt(0).toUpperCase() + n1.slice(1) + n2.charAt(0).toUpperCase() + n2.slice(1);
-                        pass = randomPassComplex(longitud);
-                    } else if(estruct == 1) {
-                        user = "MStreaming" + String(Math.floor(Math.random() * 9000) + 1000);
-                        pass = randomPassComplex(longitud);
-                    } else if(estruct == 2) {
-                        user = "Tourobox1-" + randomString(10);
-                        pass = randomPassComplex(longitud);
-                    } else {
-                        user = "oficialz" + String(Math.floor(Math.random()*29)+10) + "0" + String(Math.floor(Math.random()*8)+1) + "0" + String(Math.floor(Math.random()*8)+1);
-                        pass = randomPassComplex(longitud);
-                    }
-                }
-
-                if(tipo=="nombreigual"){
-                    let base = nombres[Math.floor(Math.random()*nombres.length)] + (Math.floor(Math.random()*89)+10);
-                    if(Math.random() > 0.5) {
-                        user = base;
-                        pass = base;
-                    } else {
-                        let baseLimpia = nombres[Math.floor(Math.random()*nombres.length)];
-                        user = baseLimpia;
-                        pass = baseLimpia;
-                    }
-                }
-
-                if(tipo=="andymix"){
-                    let baseNombre1 = generarNombreInfinito();
-                    let baseNombre2 = generarNombreInfinito();
-
-                    let nombreMutado1 = alternarMayusculas(baseNombre1);
-                    let nombreMutado2 = alternarMayusculas(baseNombre2);
-
-                    let num1 = Math.floor(Math.random() * 900) + 100; 
-                    let num2 = Math.floor(Math.random() * 9000) + 1000; 
-
-                    let struct = Math.floor(Math.random() * 6);
-                    if(struct == 0){
-                        user = nombreMutado1 + num1;
-                        pass = nombreMutado2 + num2;
-                    } else if(struct == 1) {
-                        user = nombreMutado1 + num1;
-                        pass = num1 + nombreMutado2;
-                    } else if(struct == 2) {
-                        user = num1 + nombreMutado1;
-                        pass = nombreMutado2 + num2;
-                    } else if(struct == 3) {
-                        user = nombreMutado1.toUpperCase() + num1;
-                        pass = num2 + nombreMutado2.toLowerCase();
-                    } else if(struct == 4) {
-                        user = randomString(4).toUpperCase() + num1 + nombreMutado1;
-                        pass = randomPassComplex(longitud);
-                    } else {
-                        let hex = "0123456789ABCDEF";
-                        let mac = "";
-                        for(let m=0; m<6; m++) {
-                            mac += hex.charAt(Math.floor(Math.random()*16)) + hex.charAt(Math.floor(Math.random()*16));
-                        }
-                        user = mac;
-                        pass = mac.substring(4);
-                    }
-                }
-
-                if(anio!="" && pass!=""){
-                    pass=pass+anio;
-                }
-
-                let comboLinea = "";
-                if(pass!=""){
-                    comboLinea = user + sep + pass;
-                }else{
-                    comboLinea = user;
-                }
-
-                combosUnicos.add(comboLinea);
+            if(uLines.length === 0 || pLines.length === 0) {
+                alert("Por favor introduce datos tanto en la lista de usuarios como en la de claves.");
+                return;
             }
 
-            let output = Array.from(combosUnicos).join("\n");
-            document.getElementById("creatorResultado").value = output;
-            document.getElementById("btnDescargarCombo").disabled = false;
-            alert(`¡Hecho! Se han generado con éxito ${combosUnicos.size} combinaciones únicas.`);
+            let resultado = [];
+            for(let u of uLines) {
+                for(let p of pLines) {
+                    resultado.push(`${u}:${p}`);
+                }
+            }
+
+            $('creatorResultado').value = resultado.join('\n');
+            $('btnDescargarCombo').disabled = false;
+            alert(`¡Hecho! Se han mezclado con éxito ${resultado.length} combinaciones.`);
         }
 
         function descargarComboCreado() {
@@ -896,25 +615,26 @@
         }
 
         // --- SECCIÓN GESTIÓN DEL BLOC DE URLS ---
-        async function guardarUrlBloc() {
-    const val = $('inputUrlData').value.trim();
-    if(!val) return;
+        function guardarUrlBloc() {
+            const val = $('inputUrlData').value.trim();
+            const editId = $('editUrlId').value;
+            if(!val) return;
 
-    const userRef = doc(window.db, "usuarios_datos", currentUser.email);
-    
-    try {
-        await updateDoc(userRef, {
-            urls: arrayUnion(val) 
-        });
-        alert("URL guardada en la Nube!");
-    } catch (e) {
-        await setDoc(userRef, { urls: [val] });
-        alert("URL guardada en la Nube (nuevo registro)!");
-    }
-    
-    $('inputUrlData').value = "";
-    renderizarUrlsBloc(); 
-   }
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            if (!baseUrls[currentUser.email]) baseUrls[currentUser.email] = [];
+
+            if(editId !== "") {
+                baseUrls[currentUser.email][parseInt(editId)] = val;
+                $('editUrlId').value = "";
+                $('lblUrlForm').textContent = "Agregar nueva URL / Host:";
+            } else {
+                baseUrls[currentUser.email].push(val);
+            }
+
+            localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
+            $('inputUrlData').value = "";
+            renderizarUrlsBloc();
+        }
 
         function editarUrl(index) {
             const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
@@ -941,26 +661,29 @@
             updateStartState();
         }
 
-        async function renderizarUrlsBloc() {
-    const container = $('listaUrlsContainer');
-    const docSnap = await getDoc(doc(window.db, "usuarios_datos", currentUser.email));
-    const urls = docSnap.exists() ? (docSnap.data().urls || []) : [];
-    
-    container.innerHTML = urls.length ? "" : '<p style="color:var(--texto-secundario); text-align:center;">No hay URLs.</p>';
-    
-    urls.forEach(url => {
-        const div = document.createElement('div');
-        div.className = 'item-card';
-        div.innerHTML = `<div>🌐 <code>${url}</code></div>
-        <div class="item-actions">
-            <button class="btn-small btn-copy" onclick="usarUrlEscanner('${url}')">🔌 Escanear</button>
-            <button class="btn-small btn-del" onclick="eliminarUrlNube('${url}')">Eliminar</button>
-        </div>`;
-        container.appendChild(div);
-    });
-}
+        function renderizarUrlsBloc() {
+            const baseUrls = JSON.parse(localStorage.getItem('sys_urls'));
+            const container = $('listaUrlsContainer');
+            container.innerHTML = '';
+            
+            const misUrls = baseUrls[currentUser.email] || [];
+            if(misUrls.length === 0) {
+                container.innerHTML = `<p style="color:var(--texto-secundario); text-align:center;">No hay URLs guardadas.</p>`;
+                return;
+            }
 
-     
+            misUrls.forEach((url, index) => {
+                const div = document.createElement('div');
+                div.className = 'item-card';
+                div.innerHTML = `<div>🌐 <code>${url}</code></div>
+                <div class="item-actions">
+                    <button class="btn-small btn-copy" onclick="usarUrlEscanner(${index})">🔌 Escanear</button>
+                    <button class="btn-small btn-edit" onclick="editarUrl(${index})">Editar</button>
+                    <button class="btn-small btn-del" onclick="eliminarUrl(${index})">Eliminar</button>
+                </div>`;
+                container.appendChild(div);
+            });
+        }
 
         // --- GESTIÓN BANCO PERMANENTE DE HITS CON CONTADOR ---
         function guardarHitEnBanco(hitTexto, user, pass) {
@@ -1039,6 +762,7 @@
             
             document.getElementById('panel-' + tabName).classList.add('active');
             
+            // Buscar el botón correspondiente por texto o ID y activarlo
             if(event && event.currentTarget && event.currentTarget.classList) {
                 event.currentTarget.classList.add('active');
             } else {
