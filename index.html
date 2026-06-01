@@ -560,32 +560,42 @@
 
             try {
                 // Consultamos directamente en Firestore
-            const userRef = doc(window.db, "usuarios_vip", email.replace(/\./g, "_").replace("@", "_"));
+                // Buscamos el documento donde el campo "email" sea igual al ingresado
+    const q = query(collection(window.db, "usuarios_vip"), where("email", "==", email));
+    const querySnapshot = await getDocs(q);
 
-                const docSnap = await getDoc(userRef);
+    if (!querySnapshot.empty) {
+        // Obtenemos el primer documento encontrado
+        const docSnap = querySnapshot.docs[0];
+        const data = docSnap.data();
 
-                if (docSnap.exists() && docSnap.data().pass === pass) {
-                    currentUser = { email: email, role: docSnap.data().role };
-                    
-                    $('auth-screen').style.display = 'none';
-                    $('main-app').style.display = 'block';
-                    $('userDisplay').textContent = `Usuario: ${email}`;
+        // Validamos la contraseña
+        if (data.pass === pass) {
+            currentUser = { email: email, role: data.role };
+            
+            $('auth-screen').style.display = 'none';
+            $('main-app').style.display = 'block';
+            $('userDisplay').textContent = `Usuario: ${email}`;
 
-                    if (currentUser.role === "Owner") {
-                        $('tabAdminBtn').style.display = 'block';
-                        listarUsuariosAdmin();
-                    }
-                    
-                    renderizarUrlsBloc();
-                    renderizarBancoHits();
-                    switchTab('combos');
-                } else {
-                    alert("Credenciales incorrectas o usuario no registrado.");
-                }
-            } catch (e) {
-                // Mostramos el error real para saber si es un problema de conexión o de Firebase
-                alert("Error: " + e.message);
+            // Si es Owner o admin, mostramos el botón de admins
+            if (currentUser.role === "Owner" || currentUser.role === "admin") {
+                $('tabAdminBtn').style.display = 'block';
+                listarUsuariosAdmin();
             }
+            
+            renderizarUrlsBloc();
+            renderizarBancoHits();
+            switchTab('combos');
+        } else {
+            alert("Contraseña incorrecta.");
+        }
+    } else {
+        alert("Usuario no registrado en la base de datos.");
+    }
+} catch (e) {
+    // Mostramos el error real
+    alert("Error: " + e.message);
+}
         } // <--- ESTA LLAVE ES LA QUE FALTABA
 
 
