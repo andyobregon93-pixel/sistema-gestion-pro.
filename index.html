@@ -5,15 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYS ANDY PRO</title>
 
-            <script type="module">
+          
+      <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, arrayUnion, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    const firebaseConfig = { /* ... tus datos ... */ };
+    // Datos obtenidos de 1001000459.png
+    const firebaseConfig = { 
+        apiKey: "AIzaSyDGE6TLwIypuryIVnDYlTR9c2U",
+        authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
+        databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com",
+        projectId: "gestion-ventas-pro-f8de4",
+        storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
+        messagingSenderId: "96449660649",
+        appId: "1:96449660649:web:d949eccf893c9705451278"
+    };
+
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    // Hacemos que las funciones sean accesibles desde el HTML
+    // Hacemos que db sea accesible globalmente
+    window.db = db;
+
+    // Función de Login unificada
     window.procesarLogin = async () => {
         const email = document.getElementById('loginEmail').value.trim().toLowerCase();
         const pass = document.getElementById('loginPass').value.trim();
@@ -23,20 +37,24 @@
             const querySnapshot = await getDocs(q);
 
             if (!querySnapshot.empty) {
-                const userData = querySnapshot.docs[0].data();
+                const docSnap = querySnapshot.docs[0];
+                const data = docSnap.data();
                 
-                if (userData.pass === pass) {
-                    // AQUÍ ESTÁ LA CLAVE: Capturamos el rol y mostramos el botón si es Owner
-                    window.currentUser = { email: email, role: userData.role };
+                if (data.pass === pass) {
+                    window.currentUser = { email: email, role: data.role };
                     
                     document.getElementById('auth-screen').style.display = 'none';
                     document.getElementById('main-app').style.display = 'block';
                     document.getElementById('userDisplay').textContent = "Usuario: " + email;
 
-                    // Si es Owner, mostrar botón de admin
-                    if (window.currentUser.role === "Owner") {
+                    if (data.role === "Owner" || data.role === "admin") {
                         document.getElementById('tabAdminBtn').style.display = 'block';
+                        if(typeof listarUsuariosAdmin === 'function') listarUsuariosAdmin();
                     }
+                    
+                    if(typeof renderizarUrlsBloc === 'function') renderizarUrlsBloc();
+                    if(typeof renderizarBancoHits === 'function') renderizarBancoHits();
+                    if(typeof switchTab === 'function') switchTab('combos');
                 } else {
                     alert("Contraseña incorrecta");
                 }
