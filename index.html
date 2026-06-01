@@ -19,7 +19,12 @@
   const app = initializeApp(firebaseConfig);
   window.auth = getAuth(app);
   window.db = getFirestore(app);
-  
+  window.doc = doc;
+window.getDoc = getDoc;
+window.setDoc = setDoc;
+window.updateDoc = updateDoc;
+window.arrayUnion = arrayUnion;
+
   console.log("Sistema SYS ANDY PRO conectado a la nube.");
 </script>
 
