@@ -544,35 +544,37 @@
         inicializarBaseDatos();
 
         // --- FUNCIÓN DE ACCESO CORREGIDA CON FILTROS ANTI-ESPACIOS ---
-        function procesarLogin() {
-            // El .trim().replace(/\s+/g, '') borra todos los espacios del inicio, en medio o al final del correo. El .toLowerCase() soluciona las mayúsculas por error
-            const email = $('loginEmail').value.trim().replace(/\s+/g, '').toLowerCase();
-            const pass = $('loginPass').value.trim(); // Filtro anti-espacios también en la contraseña
+        async function procesarLogin() {
+    const email = $('loginEmail').value.trim().toLowerCase();
+    const pass = $('loginPass').value.trim();
 
-            // Sincronización forzada en vivo por si es un dispositivo completamente nuevo en otro país
-            inicializarBaseDatos();
-            const usuarios = JSON.parse(localStorage.getItem('sys_users'));
+    try {
+        // Consultamos directamente en Firestore
+        const userRef = doc(window.db, "usuarios_sistema", email.replace(/\./g, "_"));
+        const docSnap = await getDoc(userRef);
 
-            if (usuarios[email] && usuarios[email].pass === pass) {
-                currentUser = { email: email, role: usuarios[email].role };
-                $('auth-screen').style.display = 'none';
-                $('main-app').style.display = 'block';
-                $('userDisplay').textContent = `Admin Activo: ${email} (${usuarios[email].role})`;
-                
-                if (usuarios[email].role === "Owner") {
-                    $('tabAdminBtn').style.display = 'block';
-                    listarUsuariosAdmin();
-                } else {
-                    $('tabAdminBtn').style.display = 'none';
-                }
-                
-                renderizarUrlsBloc();
-                renderizarBancoHits();
-                switchTab('combos'); 
-            } else {
-                alert("Credenciales incorrectas o usuario no registrado.");
+        if (docSnap.exists() && docSnap.data().pass === pass) {
+            currentUser = { email: email, role: docSnap.data().role };
+            
+            $('auth-screen').style.display = 'none';
+            $('main-app').style.display = 'block';
+            $('userDisplay').textContent = `Usuario: ${email}`;
+
+            if (currentUser.role === "Owner") {
+                $('tabAdminBtn').style.display = 'block';
+                listarUsuariosAdmin();
             }
+            
+            renderizarUrlsBloc();
+            renderizarBancoHits();
+            switchTab('combos');
+        } else {
+            alert("Credenciales incorrectas o usuario no registrado.");
         }
+    } catch (e) {
+        alert("Error de conexión con la Nube.");
+    
+}
 
         function cerrarSesion() {
             currentUser = null;
