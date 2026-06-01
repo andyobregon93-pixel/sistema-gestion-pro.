@@ -560,7 +560,7 @@
 
             try {
                 // Consultamos directamente en Firestore
-                const userRef = doc(window.db, "usuarios_vip", email.replace(/\./g, "_").replace("@", "_"));
+            const userRef = doc(window.db, "usuarios_vip", email.replace(/\./g, "_").replace("@", "_"));
 
                 const docSnap = await getDoc(userRef);
 
