@@ -5,69 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYS ANDY PRO</title>
 
-          
-      <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, arrayUnion, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, doc, getDoc, updateDoc, arrayUnion, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-    // Datos obtenidos de 1001000459.png
-    const firebaseConfig = { 
-        apiKey: "AIzaSyDGE6TLwIypuryIVnDYlTR9c2U",
-        authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
-        databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com",
-        projectId: "gestion-ventas-pro-f8de4",
-        storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
-        messagingSenderId: "96449660649",
-        appId: "1:96449660649:web:d949eccf893c9705451278"
-    };
+        const firebaseConfig = {
+            apiKey: "AIzaSyDGE6TLwIypuryIVnDYlTR9c2U",
+            authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
+            databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com",
+            projectId: "gestion-ventas-pro-f8de4",
+            storageBucket: "gestion-ventas-pro-f8de4.appspot.com",
+            messagingSenderId: "96449660649",
+            appId: "1:96449660649:web:d949eccf893c9705451278"
+        };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+        const app = initializeApp(firebaseConfig);
+        window.db = getFirestore(app);
+    </script>
 
-    // Hacemos que db sea accesible globalmente
-    window.db = db;
+    <style>
+        /* MANTÉN AQUÍ TODOS TUS ESTILOS CSS ORIGINALES */
+        :root { --bg-principal: #0b0e14; --bg-tarjeta: #131722; --borde-neon: #a855f7; --rojo-stop: #d32f2f; --texto-secundario: #9aa4bf; }
+        body { background-color: var(--bg-principal); color: #fff; font-family: sans-serif; }
+        #main-app { display: none; }
+        .auth-box { background-color: var(--bg-tarjeta); border: 2px solid var(--borde-neon); padding: 25px; border-radius: 12px; }
+        /* ... resto de tu CSS ... */
+    </style>
+</head>
+<body>
 
-    // Función de Login unificada
-    window.procesarLogin = async () => {
-        const email = document.getElementById('loginEmail').value.trim().toLowerCase();
-        const pass = document.getElementById('loginPass').value.trim();
+    <div id="auth-screen">
+        <div class="auth-box">
+            <h2 style="text-align:center; color:#ffeb3b;">⚙️ SYS ANDY PRO</h2>
+            <div class="form-group">
+                <label>Correo:</label>
+                <input type="text" id="loginEmail">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="loginPass">
+            </div>
+            <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR</button>
+        </div>
+    </div>
 
-        try {
-            const q = query(collection(db, "usuarios_vip"), where("email", "==", email));
-            const querySnapshot = await getDocs(q);
+    <div id="main-app">
+        </div>
 
-            if (!querySnapshot.empty) {
-                const docSnap = querySnapshot.docs[0];
-                const data = docSnap.data();
-                
-                if (data.pass === pass) {
-                    window.currentUser = { email: email, role: data.role };
-                    
-                    document.getElementById('auth-screen').style.display = 'none';
-                    document.getElementById('main-app').style.display = 'block';
-                    document.getElementById('userDisplay').textContent = "Usuario: " + email;
+    <script>
+        // --- LÓGICA DE LOGIN ---
+        async function procesarLogin() {
+            const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const pass = document.getElementById('loginPass').value.trim();
 
-                    if (data.role === "Owner" || data.role === "admin") {
-                        document.getElementById('tabAdminBtn').style.display = 'block';
-                        if(typeof listarUsuariosAdmin === 'function') listarUsuariosAdmin();
+            try {
+                const q = query(collection(window.db, "usuarios_vip"), where("email", "==", email));
+                const querySnapshot = await getDocs(q);
+
+                if (!querySnapshot.empty) {
+                    const data = querySnapshot.docs[0].data();
+                    if (data.pass === pass) {
+                        window.currentUser = { email: email, role: data.role };
+                        document.getElementById('auth-screen').style.display = 'none';
+                        document.getElementById('main-app').style.display = 'block';
+                        document.getElementById('userDisplay').textContent = "Usuario: " + email;
+                        // Llamar funciones iniciales
+                        if(typeof renderizarUrlsBloc === 'function') renderizarUrlsBloc();
+                    } else {
+                        alert("Contraseña incorrecta");
                     }
-                    
-                    if(typeof renderizarUrlsBloc === 'function') renderizarUrlsBloc();
-                    if(typeof renderizarBancoHits === 'function') renderizarBancoHits();
-                    if(typeof switchTab === 'function') switchTab('combos');
                 } else {
-                    alert("Contraseña incorrecta");
+                    alert("Usuario no registrado");
                 }
-            } else {
-                alert("Usuario no registrado");
+            } catch (e) {
+                alert("Error: " + e.message);
             }
-        } catch (e) {
-            alert("Error: " + e.message);
         }
-    };
-</script>
 
-
+  
+    </script>
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
