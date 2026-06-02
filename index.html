@@ -464,11 +464,16 @@
                     <option value="nombre_alfanumerico">Nombre: Alfanuméricos</option>
                     <option value="personalizado">Personalizado (Pederrizador)</option>
                     <option value="desordenado">🎲 Combo Desordenado (mayúsculas/minúsculas/números/símbolos)</option>
+                    <option value="mezclado">🔄 Combo Mezclado (Ej: Andy123:AnDy123)</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>Cantidad de combos (sin repetir):</label>
                 <input type="number" id="genCantidad" value="100">
+            </div>
+            <div class="form-group">
+                <label>Longitud de contraseña (caracteres):</label>
+                <input type="number" id="genPassLength" value="8" min="4" max="20">
             </div>
             <div class="form-group">
                 <label>Separador:</label>
@@ -720,7 +725,7 @@
     }
     function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // ==================== NUEVAS FUNCIONES PARA COMBOS (SIN REPETIR Y DESORDENADO) ====================
+    // ==================== FUNCIONES PARA COMBOS (SIN REPETIR, CON LONGITUD Y MEZCLADO) ====================
     // Lista masiva de nombres reales (más de 300)
     const nombresReales = [
         "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben",
@@ -732,7 +737,6 @@
         "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria",
         "elena", "rocio", "monica", "andrea", "fernanda", "gabriela", "mariana", "victoria", "beatriz", "roxana", "claudia", "viviana", "liliana", "norma", "cristina", "susana", "marcela", "graciela", "teresa", "raquel"
     ];
-    // Palabras y apellidos para mayor variedad
     const palabrasExtra = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system", "server", "network", "digital", "global", "prime", "super", "mega", "ultra", "power", "plus"];
     const simbolos = ["!", "@", "#", "$", "%", "&", "*", "?", "-", "_", "+", "=", "¡", "¿", "~"];
 
@@ -743,43 +747,48 @@
         return str.toLowerCase();
     }
 
-    // Función para generar texto desordenado (mezcla aleatoria de mayúsculas/minúsculas/números/símbolos)
-    function generarDesordenado(base, longitudMin = 6, longitudMax = 12) {
+    // Generar contraseña aleatoria de longitud exacta
+    function generarPasswordAleatoria(longitud) {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let result = "";
+        for (let i = 0; i < longitud; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return result;
+    }
+
+    // Generar texto desordenado (mezcla aleatoria de mayúsculas/minúsculas/números/símbolos) con longitud exacta
+    function generarDesordenadoConLongitud(longitud) {
         const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?-_";
-        let resultado = base || "";
-        // Si no hay base, generar aleatoria
-        if (!resultado) {
-            const long = Math.floor(Math.random() * (longitudMax - longitudMin + 1)) + longitudMin;
-            for (let i = 0; i < long; i++) {
-                resultado += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-        } else {
-            // Mezclar mayúsculas/minúsculas de forma aleatoria en la base
-            let mezclado = "";
-            for (let i = 0; i < resultado.length; i++) {
-                if (Math.random() > 0.5) mezclado += resultado[i].toUpperCase();
-                else mezclado += resultado[i].toLowerCase();
-            }
-            resultado = mezclado;
-            // Añadir números y símbolos aleatorios al final o intercalados
-            if (Math.random() > 0.5) resultado += Math.floor(Math.random() * 999);
-            if (Math.random() > 0.5) resultado += simbolos[Math.floor(Math.random() * simbolos.length)];
-            if (Math.random() > 0.3) resultado += Math.floor(Math.random() * 100);
+        let resultado = "";
+        for (let i = 0; i < longitud; i++) {
+            resultado += chars.charAt(Math.floor(Math.random() * chars.length));
         }
         return resultado;
     }
 
-    // Generador avanzado SIN REPETICIONES
+    // Mezclar mayúsculas/minúsculas de un texto (caso aleatorio)
+    function mezclarCase(texto) {
+        let mezclado = "";
+        for (let i = 0; i < texto.length; i++) {
+            if (Math.random() > 0.5) mezclado += texto[i].toUpperCase();
+            else mezclado += texto[i].toLowerCase();
+        }
+        return mezclado;
+    }
+
+    // Generador avanzado SIN REPETICIONES y con control de longitud
     function generarComboAvanzado() {
         const tipo = document.getElementById('genType').value;
         let cantidad = parseInt(document.getElementById('genCantidad').value) || 100;
+        const passLength = parseInt(document.getElementById('genPassLength').value) || 8;
         const separador = document.getElementById('genSep').value;
         const userCase = document.getElementById('genUserCase').value;
         const passCase = document.getElementById('genPassCase').value;
 
         let combos = new Set();  // ¡Esto evita repeticiones!
         let intentos = 0;
-        const maxIntentos = cantidad * 10; // límite para evitar bucles infinitos
+        const maxIntentos = cantidad * 10;
 
         function generarNumeroRango(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
@@ -793,6 +802,7 @@
                     let ano = generarNumeroRango(1996, 2050);
                     user = nombreBase + ano;
                     pass = "pass" + ano;
+                    // Ajustar longitud de pass? No aplica porque es fijo.
                     break;
                 case 'useruser':
                     let n1 = nombresReales[Math.floor(Math.random() * nombresReales.length)];
@@ -808,13 +818,14 @@
                     break;
                 case 'alfanumericos':
                     user = Math.random().toString(36).substring(2, 8) + generarNumeroRango(100, 999);
-                    pass = Math.random().toString(36).substring(2, 10) + generarNumeroRango(1, 999);
+                    pass = generarPasswordAleatoria(passLength);
                     break;
                 case 'user_num_fijo':
                     let nombreFijo = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
                     let numFijo = generarNumeroRango(123, 999999);
                     user = nombreFijo;
                     pass = numFijo.toString();
+                    // ajustar longitud? no
                     break;
                 case 'user_num_random':
                     let nombreRand = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
@@ -839,25 +850,47 @@
                     let pref = base[Math.floor(Math.random() * base.length)];
                     let suf = Math.floor(Math.random() * 999);
                     user = pref + suf;
-                    pass = Math.random().toString(36).substring(2, 12);
+                    pass = generarPasswordAleatoria(passLength);
                     break;
                 case 'desordenado':
-                    // Combo totalmente desordenado: usuario con mayúsculas/minúsculas mezcladas + números/símbolos
+                    // Generar usuario también desordenado (nombre base + números + mezcla)
                     let nombreDes = nombresReales[Math.floor(Math.random() * nombresReales.length)];
                     let extraDes = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
-                    let baseUser = nombreDes + extraDes;
-                    // Generar usuario desordenado
-                    user = generarDesordenado(baseUser, 5, 10);
-                    // Generar contraseña desordenada (más larga y con símbolos)
-                    pass = generarDesordenado("", 8, 15);
+                    let baseUser = nombreDes + extraDes + Math.floor(Math.random() * 999);
+                    user = generarDesordenadoConLongitud(Math.min(baseUser.length, 12)) || baseUser;
+                    user = mezclarCase(user);
+                    pass = generarDesordenadoConLongitud(passLength);
+                    break;
+                case 'mezclado':
+                    // Combo Mezclado: base nombre + números, luego mezclar case de usuario y contraseña por separado
+                    let nombreMez = nombresReales[Math.floor(Math.random() * nombresReales.length)];
+                    let extraMez = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
+                    let numeros = Math.floor(Math.random() * 999);
+                    let baseCombo = nombreMez + extraMez + numeros;
+                    // Usuario con case mezclado
+                    user = mezclarCase(baseCombo);
+                    // Contraseña: misma base pero con mezcla diferente (o generar aleatoria con longitud)
+                    if (Math.random() > 0.5) {
+                        pass = mezclarCase(baseCombo);
+                    } else {
+                        pass = generarDesordenadoConLongitud(passLength);
+                    }
                     break;
                 default:
                     user = "user" + Math.random();
-                    pass = "pass" + Math.random();
+                    pass = generarPasswordAleatoria(passLength);
             }
 
-            user = applyCase(user, userCase);
-            pass = applyCase(pass, passCase);
+            // Aplicar formatos finales (solo mayúsculas o minúsculas si no es desordenado/mezclado)
+            if (tipo !== 'desordenado' && tipo !== 'mezclado') {
+                user = applyCase(user, userCase);
+                pass = applyCase(pass, passCase);
+            } else {
+                // Para desordenado y mezclado, respetar el case aleatorio ya generado
+                user = user;
+                pass = pass;
+            }
+
             combos.add(user + separador + pass);
         }
 
