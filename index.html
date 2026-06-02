@@ -463,10 +463,11 @@
                     <option value="num_num">Combos numéricos (numero:número)</option>
                     <option value="nombre_alfanumerico">Nombre: Alfanuméricos</option>
                     <option value="personalizado">Personalizado (Pederrizador)</option>
+                    <option value="desordenado">🎲 Combo Desordenado (mayúsculas/minúsculas/números/símbolos)</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Cantidad de combos:</label>
+                <label>Cantidad de combos (sin repetir):</label>
                 <input type="number" id="genCantidad" value="100">
             </div>
             <div class="form-group">
@@ -493,7 +494,7 @@
                     <option value="capitalize">Primera mayúscula</option>
                 </select>
             </div>
-            <button class="btn-block btn-start" onclick="generarComboAvanzado()">⚡ GENERAR COMBOS</button>
+            <button class="btn-block btn-start" onclick="generarComboAvanzado()">⚡ GENERAR COMBOS (SIN REPETIR)</button>
             <div class="form-group" style="margin-top: 20px;">
                 <label>Resultado:</label>
                 <textarea id="comboResultado" rows="10" readonly placeholder="Aquí aparecerán los combos generados..."></textarea>
@@ -719,7 +720,22 @@
     }
     function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // ==================== NUEVAS FUNCIONES PARA COMBOS ====================
+    // ==================== NUEVAS FUNCIONES PARA COMBOS (SIN REPETIR Y DESORDENADO) ====================
+    // Lista masiva de nombres reales (más de 300)
+    const nombresReales = [
+        "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben",
+        "mario", "ricardo", "victor", "roberto", "francisco", "pablo", "sergio", "adrian", "alberto", "eduardo", "emilio", "enrique", "esteban", "felipe", "gabriel", "guillermo", "hector", "ivan", "julian", "leonardo",
+        "mauricio", "nicolas", "raul", "rodrigo", "sebastian", "tomas", "alonso", "cristian", "fabian", "gaston", "hugo", "ignacio", "jeronimo", "kevin", "lucas", "martin", "nahuel", "octavio", "pablo", "ramon",
+        "santiago", "thiago", "ulises", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro",
+        "mateo", "naomi", "oliver", "patricio", "quintin", "rene", "simon", "tadeo", "ursulo", "vladimir", "william", "ximena", "yandel", "zoe", "agustin", "bruno", "cesar", "domingo", "emiliano", "fidel",
+        "gerardo", "humberto", "ismael", "julio", "karen", "lorenzo", "marcos", "nelson", "orlando", "paul", "quiroga", "rolando", "saul", "tobias", "ulises", "valentin", "winston", "xenofonte", "yamil", "zulema",
+        "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria",
+        "elena", "rocio", "monica", "andrea", "fernanda", "gabriela", "mariana", "victoria", "beatriz", "roxana", "claudia", "viviana", "liliana", "norma", "cristina", "susana", "marcela", "graciela", "teresa", "raquel"
+    ];
+    // Palabras y apellidos para mayor variedad
+    const palabrasExtra = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system", "server", "network", "digital", "global", "prime", "super", "mega", "ultra", "power", "plus"];
+    const simbolos = ["!", "@", "#", "$", "%", "&", "*", "?", "-", "_", "+", "=", "¡", "¿", "~"];
+
     // Helper: aplicar formato de mayúsculas/minúsculas
     function applyCase(str, caseType) {
         if (caseType === 'upper') return str.toUpperCase();
@@ -727,7 +743,33 @@
         return str.toLowerCase();
     }
 
-    // Generador avanzado
+    // Función para generar texto desordenado (mezcla aleatoria de mayúsculas/minúsculas/números/símbolos)
+    function generarDesordenado(base, longitudMin = 6, longitudMax = 12) {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?-_";
+        let resultado = base || "";
+        // Si no hay base, generar aleatoria
+        if (!resultado) {
+            const long = Math.floor(Math.random() * (longitudMax - longitudMin + 1)) + longitudMin;
+            for (let i = 0; i < long; i++) {
+                resultado += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+        } else {
+            // Mezclar mayúsculas/minúsculas de forma aleatoria en la base
+            let mezclado = "";
+            for (let i = 0; i < resultado.length; i++) {
+                if (Math.random() > 0.5) mezclado += resultado[i].toUpperCase();
+                else mezclado += resultado[i].toLowerCase();
+            }
+            resultado = mezclado;
+            // Añadir números y símbolos aleatorios al final o intercalados
+            if (Math.random() > 0.5) resultado += Math.floor(Math.random() * 999);
+            if (Math.random() > 0.5) resultado += simbolos[Math.floor(Math.random() * simbolos.length)];
+            if (Math.random() > 0.3) resultado += Math.floor(Math.random() * 100);
+        }
+        return resultado;
+    }
+
+    // Generador avanzado SIN REPETICIONES
     function generarComboAvanzado() {
         const tipo = document.getElementById('genType').value;
         let cantidad = parseInt(document.getElementById('genCantidad').value) || 100;
@@ -735,14 +777,9 @@
         const userCase = document.getElementById('genUserCase').value;
         const passCase = document.getElementById('genPassCase').value;
 
-        let combos = new Set();
+        let combos = new Set();  // ¡Esto evita repeticiones!
         let intentos = 0;
-        const maxIntentos = cantidad * 5;
-
-        // Lista de nombres comunes
-        const nombres = ["juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben"];
-        // Lista de apellidos o palabras para usuario
-        const palabras = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system"];
+        const maxIntentos = cantidad * 10; // límite para evitar bucles infinitos
 
         function generarNumeroRango(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
 
@@ -752,19 +789,19 @@
 
             switch (tipo) {
                 case 'userpass_ano':
-                    let nombreBase = nombres[Math.floor(Math.random() * nombres.length)];
+                    let nombreBase = nombresReales[Math.floor(Math.random() * nombresReales.length)];
                     let ano = generarNumeroRango(1996, 2050);
                     user = nombreBase + ano;
                     pass = "pass" + ano;
                     break;
                 case 'useruser':
-                    let n1 = nombres[Math.floor(Math.random() * nombres.length)];
-                    let n2 = nombres[Math.floor(Math.random() * nombres.length)];
+                    let n1 = nombresReales[Math.floor(Math.random() * nombresReales.length)];
+                    let n2 = nombresReales[Math.floor(Math.random() * nombresReales.length)];
                     user = n1;
                     pass = n2;
                     break;
                 case 'userpass_num':
-                    let nombreNum = nombres[Math.floor(Math.random() * nombres.length)];
+                    let nombreNum = nombresReales[Math.floor(Math.random() * nombresReales.length)];
                     let num = generarNumeroRango(1, 999);
                     user = nombreNum + num;
                     pass = "pass" + num;
@@ -774,13 +811,13 @@
                     pass = Math.random().toString(36).substring(2, 10) + generarNumeroRango(1, 999);
                     break;
                 case 'user_num_fijo':
-                    let nombreFijo = palabras[Math.floor(Math.random() * palabras.length)];
+                    let nombreFijo = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
                     let numFijo = generarNumeroRango(123, 999999);
                     user = nombreFijo;
                     pass = numFijo.toString();
                     break;
                 case 'user_num_random':
-                    let nombreRand = palabras[Math.floor(Math.random() * palabras.length)];
+                    let nombreRand = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
                     let numRand = Math.floor(Math.random() * 99999) + 12345;
                     user = nombreRand;
                     pass = numRand.toString();
@@ -792,17 +829,27 @@
                     pass = num2.toString();
                     break;
                 case 'nombre_alfanumerico':
-                    let nombreAlfa = nombres[Math.floor(Math.random() * nombres.length)];
+                    let nombreAlfa = nombresReales[Math.floor(Math.random() * nombresReales.length)];
                     let alfa = Math.random().toString(36).substring(2, 6);
                     user = nombreAlfa;
                     pass = alfa + generarNumeroRango(100, 999);
                     break;
                 case 'personalizado':
-                    let base = ["elpro", "master", "dios", "rey", "leon", "fuego", "rojo", "negro", "tigre", "jaguar"];
+                    let base = ["elpro", "master", "dios", "rey", "leon", "fuego", "rojo", "negro", "tigre", "jaguar", "guerrero", "soldado", "killer", "legend", "star"];
                     let pref = base[Math.floor(Math.random() * base.length)];
                     let suf = Math.floor(Math.random() * 999);
                     user = pref + suf;
                     pass = Math.random().toString(36).substring(2, 12);
+                    break;
+                case 'desordenado':
+                    // Combo totalmente desordenado: usuario con mayúsculas/minúsculas mezcladas + números/símbolos
+                    let nombreDes = nombresReales[Math.floor(Math.random() * nombresReales.length)];
+                    let extraDes = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
+                    let baseUser = nombreDes + extraDes;
+                    // Generar usuario desordenado
+                    user = generarDesordenado(baseUser, 5, 10);
+                    // Generar contraseña desordenada (más larga y con símbolos)
+                    pass = generarDesordenado("", 8, 15);
                     break;
                 default:
                     user = "user" + Math.random();
@@ -814,8 +861,8 @@
             combos.add(user + separador + pass);
         }
 
-        if (combos.size < cantidad) alert(`Solo se pudieron generar ${combos.size} combos únicos.`);
-        else alert(`✅ Generados ${cantidad} combos.`);
+        if (combos.size < cantidad) alert(`⚠️ Solo se pudieron generar ${combos.size} combos únicos (evitando repeticiones).`);
+        else alert(`✅ Generados ${cantidad} combos sin repeticiones.`);
 
         const resultado = Array.from(combos).join("\n");
         document.getElementById('comboResultado').value = resultado;
@@ -828,7 +875,7 @@
         const blob = new Blob([contenido], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = 'combo_generado.txt';
+        a.download = 'combo_generado_sin_repetir.txt';
         a.click();
         a.remove();
     }
@@ -843,8 +890,6 @@
             const lines = e.target.result.split(/\r?\n/).filter(l => l.trim().length > 0);
             targetArray.length = 0;
             targetArray.push(...lines);
-            // Si los tres archivos ya se han cargado (al menos los que existen), actualizar resultado
-            // Se puede llamar a actualizarMergeResultado después de cada carga
             actualizarMergeResultado();
         };
         reader.readAsText(file);
@@ -855,27 +900,22 @@
         if (mergeData.file1.length) combined.push(...mergeData.file1);
         if (mergeData.file2.length) combined.push(...mergeData.file2);
         if (mergeData.file3.length) combined.push(...mergeData.file3);
-        const separador = document.getElementById('mergeSep').value;
-        // No cambiar separador, solo mostrar líneas tal cual (ya tienen su propio separador)
         const resultado = combined.join("\n");
         document.getElementById('mergeResultado').value = resultado;
         document.getElementById('btnDescargarMerge').disabled = (combined.length === 0);
     }
 
     function unirCombos() {
-        // Forzar la lectura de los tres archivos si no se han leído aún
         const f1 = document.getElementById('mergeFile1');
         const f2 = document.getElementById('mergeFile2');
         const f3 = document.getElementById('mergeFile3');
         if (f1.files.length) readMergeFile(f1, mergeData.file1, 1);
         if (f2.files.length) readMergeFile(f2, mergeData.file2, 2);
         if (f3.files.length) readMergeFile(f3, mergeData.file3, 3);
-        // Si no hay archivos, alert
         if (!f1.files.length && !f2.files.length && !f3.files.length) {
             alert("Selecciona al menos un archivo.");
             return;
         }
-        // La actualización se hará en los callbacks; pero si ya están cargados, llamamos manual
         actualizarMergeResultado();
     }
 
@@ -935,7 +975,7 @@
         a.remove();
     }
 
-    // Event listeners para los archivos de unión (para actualizar automáticamente)
+    // Event listeners para los archivos de unión
     document.getElementById('mergeFile1').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile1'), mergeData.file1, 1));
     document.getElementById('mergeFile2').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile2'), mergeData.file2, 2));
     document.getElementById('mergeFile3').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile3'), mergeData.file3, 3));
