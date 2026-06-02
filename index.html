@@ -802,7 +802,6 @@
                     let ano = generarNumeroRango(1996, 2050);
                     user = nombreBase + ano;
                     pass = "pass" + ano;
-                    // Ajustar longitud de pass? No aplica porque es fijo.
                     break;
                 case 'useruser':
                     let n1 = nombresReales[Math.floor(Math.random() * nombresReales.length)];
@@ -825,7 +824,6 @@
                     let numFijo = generarNumeroRango(123, 999999);
                     user = nombreFijo;
                     pass = numFijo.toString();
-                    // ajustar longitud? no
                     break;
                 case 'user_num_random':
                     let nombreRand = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
@@ -853,7 +851,6 @@
                     pass = generarPasswordAleatoria(passLength);
                     break;
                 case 'desordenado':
-                    // Generar usuario también desordenado (nombre base + números + mezcla)
                     let nombreDes = nombresReales[Math.floor(Math.random() * nombresReales.length)];
                     let extraDes = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
                     let baseUser = nombreDes + extraDes + Math.floor(Math.random() * 999);
@@ -862,14 +859,11 @@
                     pass = generarDesordenadoConLongitud(passLength);
                     break;
                 case 'mezclado':
-                    // Combo Mezclado: base nombre + números, luego mezclar case de usuario y contraseña por separado
                     let nombreMez = nombresReales[Math.floor(Math.random() * nombresReales.length)];
                     let extraMez = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
                     let numeros = Math.floor(Math.random() * 999);
                     let baseCombo = nombreMez + extraMez + numeros;
-                    // Usuario con case mezclado
                     user = mezclarCase(baseCombo);
-                    // Contraseña: misma base pero con mezcla diferente (o generar aleatoria con longitud)
                     if (Math.random() > 0.5) {
                         pass = mezclarCase(baseCombo);
                     } else {
@@ -881,12 +875,10 @@
                     pass = generarPasswordAleatoria(passLength);
             }
 
-            // Aplicar formatos finales (solo mayúsculas o minúsculas si no es desordenado/mezclado)
             if (tipo !== 'desordenado' && tipo !== 'mezclado') {
                 user = applyCase(user, userCase);
                 pass = applyCase(pass, passCase);
             } else {
-                // Para desordenado y mezclado, respetar el case aleatorio ya generado
                 user = user;
                 pass = pass;
             }
@@ -1117,7 +1109,7 @@
         if (btn) btn.classList.add('active');
     }
 
-    // ==================== ESCÁNER (original con sonido, proxies, etc.) ====================
+    // ==================== ESCÁNER (sonido, proxies, etc.) - FORMATO DE HIT LIMPIO ====================
     let moanAudioContext = null;
     function playMoanSound() {
         if (!document.getElementById('soundToggle').checked) return;
@@ -1247,7 +1239,10 @@
                         const info = data.user_info;
                         const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
 
-                        let liveChannels = 0, movies = 0, series = 0;
+                        // Obtener canales, películas, series (solo si existen y >0)
+                        let liveChannels = 0;
+                        let movies = 0;
+                        let series = 0;
                         if (data.available_channels && Array.isArray(data.available_channels)) liveChannels = data.available_channels.length;
                         else if (data.total_channels) liveChannels = data.total_channels;
                         else if (data.channels_count) liveChannels = data.channels_count;
@@ -1255,6 +1250,13 @@
                         else if (data.total_movies) movies = data.total_movies;
                         if (data.series_count) series = data.series_count;
                         else if (data.total_series) series = data.total_series;
+
+                        // Construir líneas de información solo si el valor es > 0
+                        let infoExtra = "";
+                        if (liveChannels > 0) infoExtra += `├── 📺 Canales ➤ ${liveChannels}\n`;
+                        if (movies > 0) infoExtra += `├── 🎬 Películas ➤ ${movies}\n`;
+                        if (series > 0) infoExtra += `├── 📺 Series ➤ ${series}\n`;
+                        // Si no hay ninguna línea extra, no agregamos nada (pero mantenemos el resto)
 
                         const texto = `Host ➤ http://${host}
 ├── Dominio ➤ http://${host.split(':')[0]}
@@ -1264,13 +1266,11 @@
 ├── Act Con ➤ ${info.active_cons || 0}
 ├── Max Con ➤ ${info.max_connections || "N/A"}
 ├── Status ➤ ${info.status}
-├── 📺 Canales ➤ ${liveChannels}
-├── 🎬 Películas ➤ ${movies}
-├── 📺 Series ➤ ${series}
-╰─➤ Zona ➤ ${info.timezone || "N/A"}
+${infoExtra}╰─➤ Zona ➤ ${info.timezone || "N/A"}
 
 ╭─➤ 🄼➂🅄 
 ├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
+
                         HITS[jobId].push({ user, pass, texto });
                         countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
                         const div = document.createElement('div');
