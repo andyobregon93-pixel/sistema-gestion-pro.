@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - LEÓN ROJO + REGISTRO CON APROBACIÓN</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + CHAT WHATSAPP</title>
     <style>
         /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones ========== */
         :root {
@@ -385,7 +385,7 @@
             font-weight: bold;
         }
 
-        /* ========== CHAT STYLES ========== */
+        /* ========== CHAT WHATSAPP STYLE ========== */
         .chat-container {
             background: rgba(0,0,0,0.7);
             border-radius: 20px;
@@ -394,83 +394,101 @@
             border: 2px solid #ff4422;
         }
         .chat-messages {
-            height: 400px;
+            height: 500px;
             overflow-y: auto;
             padding: 10px;
-            background: #1a0303;
+            background: #0a0a0a;
             border-radius: 15px;
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 8px;
+        }
+        .message-wrapper {
+            display: flex;
+            width: 100%;
+            margin-bottom: 6px;
+        }
+        .message-wrapper.own {
+            justify-content: flex-end;
+        }
+        .message-wrapper.other {
+            justify-content: flex-start;
         }
         .chat-message {
-            background: #2a0a0a;
-            border-radius: 15px;
+            max-width: 75%;
             padding: 8px 12px;
-            border-left: 5px solid var(--user-color, #ff8844);
+            border-radius: 18px;
             position: relative;
+            word-wrap: break-word;
         }
-        .chat-message.replying {
-            border-left: 5px solid #ffaa33;
-            background: #331a0a;
+        .message-wrapper.own .chat-message {
+            background: #2a5c2a;
+            border-bottom-right-radius: 4px;
+            color: white;
+        }
+        .message-wrapper.other .chat-message {
+            background: #1a2a1a;
+            border-bottom-left-radius: 4px;
+            color: #ffddcc;
         }
         .message-header {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-bottom: 5px;
-            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 4px;
+            font-size: 0.8rem;
         }
         .message-avatar {
-            font-size: 1.2rem;
+            font-size: 1rem;
             background: #000;
             border-radius: 50%;
-            width: 28px;
-            height: 28px;
+            width: 22px;
+            height: 22px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
         .message-name {
             font-weight: bold;
-            color: var(--user-color, #ffaa66);
+            color: #ffaa66;
         }
         .message-time {
-            font-size: 0.7rem;
-            color: #ffaa88;
+            font-size: 0.65rem;
+            color: #aaa;
+            margin-left: 5px;
         }
         .message-text {
-            color: #ffddcc;
-            word-break: break-word;
+            font-size: 0.9rem;
             white-space: pre-wrap;
         }
         .reply-preview {
-            background: #3a1a0a;
-            border-radius: 10px;
-            padding: 5px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 4px 8px;
             margin-bottom: 5px;
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             border-left: 3px solid #ffaa33;
         }
         .message-actions {
             position: absolute;
-            top: 5px;
+            top: 4px;
             right: 8px;
             display: flex;
-            gap: 8px;
+            gap: 6px;
             opacity: 0;
             transition: opacity 0.2s;
         }
-        .chat-message:hover .message-actions {
+        .message-wrapper:hover .message-actions {
             opacity: 1;
         }
         .msg-btn {
             background: none;
             border: none;
-            color: #ffaa88;
+            color: #ddd;
             cursor: pointer;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
+            padding: 2px;
         }
         .msg-btn:hover { color: #ff4422; }
         .chat-input-area {
@@ -531,7 +549,6 @@
 </head>
 <body>
 
-<!-- Pantalla de Login con pestaña de Registro -->
 <div id="auth-screen">
     <div class="auth-box">
         <div style="display: flex; gap: 10px; margin-bottom: 20px;">
@@ -571,7 +588,7 @@
         <button class="tab-btn" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
         <button class="tab-btn" onclick="switchTab('banco-hits')">🗄️ BANCO HITS</button>
         <button class="tab-btn" id="tabAdminBtn" style="display:none;" onclick="switchTab('admins')">👥 ADMINS</button>
-        <button class="tab-btn" onclick="switchTab('chat')">💬 CHAT GENERAL</button>
+        <button class="tab-btn" onclick="switchTab('chat')">💬 CHAT WHATSAPP</button>
         <button class="tab-btn" id="tabRequestsBtn" style="display:none;" onclick="switchTab('solicitudes')">👥 SOLICITUDES</button>
     </div>
 
@@ -580,7 +597,7 @@
         <h3>Bloc de Servidores &amp; URLs</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
             <input type="hidden" id="editUrlId" value="">
-            <div class="form-group"><label>Agregar nueva URL / Host:</label><input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor de Pruebas"></div>
+            <div class="form-group"><label id="lblUrlForm">Agregar nueva URL / Host:</label><input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor de Pruebas"></div>
             <button class="btn-block btn-action" onclick="guardarUrlBloc()">GUARDAR URL</button>
         </div>
         <div class="item-list" id="listaUrlsContainer"></div>
@@ -594,7 +611,6 @@
             <button class="sub-tab" data-sub="merge">Unir Combos</button>
             <button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button>
         </div>
-
         <div id="sub-generator" class="sub-panel active">
             <div class="form-group"><label>Tipo de generación:</label>
                 <select id="genType">
@@ -620,7 +636,6 @@
             <div class="form-group"><label>Resultado:</label><textarea id="comboResultado" rows="10" readonly></textarea></div>
             <button id="btnDescargarComboGen" class="btn-block btn-save" disabled onclick="descargarComboGenerado()">⬇️ DESCARGAR COMBO</button>
         </div>
-
         <div id="sub-merge" class="sub-panel">
             <div class="form-group"><label>Archivo 1:</label><input type="file" id="mergeFile1" accept=".txt"></div>
             <div class="form-group"><label>Archivo 2:</label><input type="file" id="mergeFile2" accept=".txt"></div>
@@ -630,7 +645,6 @@
             <div class="form-group"><label>Resultado:</label><textarea id="mergeResultado" rows="10" readonly></textarea></div>
             <button id="btnDescargarMerge" class="btn-block btn-save" disabled onclick="descargarMergeResultado()">⬇️ DESCARGAR UNIÓN</button>
         </div>
-
         <div id="sub-dedupe" class="sub-panel">
             <div class="form-group"><label>Archivo .txt:</label><input type="file" id="dedupeFile" accept=".txt"></div>
             <div class="form-group"><label>...o pega texto:</label><textarea id="dedupeText" rows="6" placeholder="user:pass por línea"></textarea></div>
@@ -674,9 +688,9 @@
         <div class="item-list" id="listaVendedoresContainer"></div>
     </div>
 
-    <!-- PANEL CHAT GENERAL -->
+    <!-- PANEL CHAT WHATSAPP -->
     <div id="panel-chat" class="panel">
-        <h3>💬 CHAT GENERAL - COMUNIDAD SYS ANDY PRO</h3>
+        <h3>💬 CHAT ESTILO WHATSAPP - COMUNIDAD SYS ANDY PRO</h3>
         <div class="profile-config">
             <div class="avatar-select" id="avatarSelect">🦁</div>
             <input type="text" id="displayName" placeholder="Tu nombre en el chat" maxlength="20" style="width: 150px;">
@@ -781,7 +795,7 @@
     }
 
     window.aprobarUsuario = function(key, nombre, email, pass) {
-        if (confirm(`¿Aprobar a ${nombre} (${email})? Se le permitirá iniciar sesión.`)) {
+        if (confirm(`¿Aprobar a ${nombre} (${email})?`)) {
             const nodo = limpiarClaveLocal(email);
             db.ref("vendedores/" + nodo).set({
                 email: email,
@@ -1244,7 +1258,7 @@
     });
     updateStartState();
 
-    // ==================== CHAT ====================
+    // ==================== CHAT WHATSAPP STYLE ====================
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     function getUserColor(email) { let hash=0; for(let i=0;i<email.length;i++) hash=((hash<<5)-hash)+email.charCodeAt(i); const hue=Math.abs(hash%360); return `hsl(${hue}, 70%, 60%)`; }
@@ -1279,42 +1293,44 @@
             const messages=[];
             snapshot.forEach(child=>{ messages.push({id:child.key, ...child.val()}); });
             messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
-            renderizarMensajes(messages);
+            renderizarMensajesWhatsApp(messages);
         });
     }
-    async function renderizarMensajes(messages){
+    async function renderizarMensajesWhatsApp(messages){
         const container=document.getElementById('chatMessages');
         if(!container) return;
         container.innerHTML='';
         for(const msg of messages){
-            const userColor=getUserColor(msg.userId);
-            const replyHtml=msg.replyTo?`<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>`:'';
-            const msgDiv=document.createElement('div');
-            msgDiv.className=`chat-message ${msg.replyTo?'replying':''}`;
-            msgDiv.style.setProperty('--user-color', userColor);
-            msgDiv.dataset.id=msg.id;
-            msgDiv.innerHTML=`
+            const isOwn = (msg.userId === currentUser.uid);
+            const wrapper = document.createElement('div');
+            wrapper.className = `message-wrapper ${isOwn ? 'own' : 'other'}`;
+            const bubble = document.createElement('div');
+            bubble.className = 'chat-message';
+            const userColor = getUserColor(msg.userId);
+            const replyHtml = msg.replyTo ? `<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>` : '';
+            bubble.innerHTML = `
                 <div class="message-header">
                     <span class="message-avatar">${escapeHtml(msg.avatar||'🦁')}</span>
                     <span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span>
-                    <span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span>
+                    <span class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
                 </div>
                 ${replyHtml}
-                <div class="message-text">${formatMessageText(msg.text, msg.mentions||[])}</div>
+                <div class="message-text">${formatMessageTextWhatsApp(msg.text, msg.mentions||[])}</div>
                 <div class="message-actions">
                     <button class="msg-btn reply-btn" title="Responder">💬</button>
-                    ${(currentUser.role==='Owner' || msg.userId===currentUser.uid)?`<button class="msg-btn edit-btn" title="Editar">✏️</button><button class="msg-btn delete-btn" title="Eliminar">🗑️</button>`:''}
+                    ${ (currentUser.role === 'Owner' || msg.userId === currentUser.uid) ? `<button class="msg-btn edit-btn" title="Editar">✏️</button><button class="msg-btn delete-btn" title="Eliminar">🗑️</button>` : '' }
                 </div>
             `;
-            msgDiv.querySelector('.reply-btn').onclick=()=>{ currentReplyTo={ id:msg.id, userName:msg.userName, text:msg.text }; const badge=document.getElementById('replyBadge'); if(badge){ badge.style.display='flex'; badge.querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`; } };
-            if(msgDiv.querySelector('.edit-btn')) msgDiv.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id, msg.text);
-            if(msgDiv.querySelector('.delete-btn')) msgDiv.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);
-            container.appendChild(msgDiv);
+            bubble.querySelector('.reply-btn').onclick=()=>{ currentReplyTo={ id:msg.id, userName:msg.userName, text:msg.text }; const badge=document.getElementById('replyBadge'); if(badge){ badge.style.display='flex'; badge.querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`; } };
+            if(bubble.querySelector('.edit-btn')) bubble.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id, msg.text);
+            if(bubble.querySelector('.delete-btn')) bubble.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);
+            wrapper.appendChild(bubble);
+            container.appendChild(wrapper);
         }
-        container.scrollTop=container.scrollHeight;
+        container.scrollTop = container.scrollHeight;
     }
     function escapeHtml(str){ return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-    function formatMessageText(text, mentions){
+    function formatMessageTextWhatsApp(text, mentions){
         let html=escapeHtml(text);
         mentions.forEach(m=>{
             const regex=new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
@@ -1322,7 +1338,7 @@
         });
         return html;
     }
-    async function enviarMensaje(){
+    async function enviarMensajeWhatsApp(){
         const input=document.getElementById('chatInput');
         let text=input.value.trim();
         if(!text) return;
@@ -1351,14 +1367,14 @@
         if(confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
     }
     const sendMsgBtn = document.getElementById('sendMsgBtn');
-    if(sendMsgBtn) sendMsgBtn.addEventListener('click', enviarMensaje);
+    if(sendMsgBtn) sendMsgBtn.addEventListener('click', enviarMensajeWhatsApp);
     const chatInputElem = document.getElementById('chatInput');
-    if(chatInputElem) chatInputElem.addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensaje(); } });
+    if(chatInputElem) chatInputElem.addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensajeWhatsApp(); } });
     const cancelReplyBtn = document.getElementById('cancelReplyBtn');
     if(cancelReplyBtn) cancelReplyBtn.addEventListener('click', ()=>{ currentReplyTo=null; const badge=document.getElementById('replyBadge'); if(badge) badge.style.display='none'; });
     function cargarMensajesChat(){}
 
-    // Mostrar/ocultar paneles de login/registro
+    // Mostrar/ocultar login/registro
     document.getElementById('showLoginBtn').addEventListener('click',()=>{
         document.getElementById('loginPanel').style.display='block';
         document.getElementById('registerPanel').style.display='none';
