@@ -732,7 +732,7 @@
         </div>
     </div>
 
-    <!-- PANEL SCANNER (MEJORADO) -->
+    <!-- PANEL SCANNER (MEJORADO - SIN BLOQUEO DE HOST VIVO) -->
     <div id="panel-scanner" class="panel">
         <div class="form-group"><label>Panel (Host con o sin http/https):</label><input type="text" id="hostInput" placeholder="ej: lista.com:8080" /></div>
         <div class="form-group"><label>Selecciona tus archivos de Combos (.txt):</label><input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile3" accept=".txt" /></div>
@@ -742,7 +742,7 @@
             <label><input type="checkbox" id="useCors" checked> Proxy CORS</label>
             <label><input type="checkbox" id="soundToggle" checked> 🔔 Sonido de Gemido</label>
             <label><input type="checkbox" id="autoDownload" checked> ⬇️ Auto-Descarga</label>
-            <label><input type="checkbox" id="checkAlive" checked> ✅ Verificar host vivo antes</label>
+            <label><input type="checkbox" id="checkAlive" checked> ✅ Verificar host vivo antes (sin efecto - bloqueo eliminado)</label>
             <label><input type="checkbox" id="tryHttpsFirst" checked> 🔒 Intentar HTTPS primero</label>
         </div>
         <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN MULTI-JOB</button>
@@ -882,7 +882,6 @@
             const update = snapshot.val();
             if (update.timestamp > (localStorage.getItem('last_update_seen') || 0)) {
                 showNotification("🔔 ACTUALIZACIÓN DEL SISTEMA", update.message);
-                // Insertar un mensaje de sistema en el chat
                 const systemMsg = {
                     userId: "system",
                     userName: "SISTEMA",
@@ -1543,10 +1542,13 @@
         if(isRunning) return;
         if(moanAudioContext && moanAudioContext.state==='suspended') await moanAudioContext.resume();
         const host = hostInput.value.replace(/^https?:\/\//,'').trim();
-        if(document.getElementById('checkAlive')?.checked && !(await isHostAlive(host, document.getElementById('tryHttpsFirst')?.checked))){
-            alert("⚠️ El host no responde. Verifica la dirección.");
-            return;
-        }
+        // ========== ELIMINADO EL BLOQUEO DE VERIFICACIÓN DE HOST VIVO ==========
+        // El checkbox "checkAlive" ya no impide el escaneo, se ha quitado la condición.
+        // if(document.getElementById('checkAlive')?.checked && !(await isHostAlive(host, document.getElementById('tryHttpsFirst')?.checked))){
+        //     alert("⚠️ El host no responde. Verifica la dirección.");
+        //     return;
+        // }
+        // =========================================================================
         isRunning=true; stopRequested=false;
         startBtn.disabled=true; stopBtn.disabled=false;
         if(combosTxt.length){ combos1=combos1.concat(combosTxt); combosTxt=[]; }
@@ -1604,10 +1606,10 @@
         await db.ref(`chat_profiles/${currentUser.uid}`).set({name:chatDisplayName, avatar:chatAvatar});
         alert("Perfil actualizado");
     });
-    const avatarSelect = document.getElementById('avatarSelect');
-    if(avatarSelect) avatarSelect.addEventListener('click',()=>{
+    const avatarSelectElem = document.getElementById('avatarSelect');
+    if(avatarSelectElem) avatarSelectElem.addEventListener('click',()=>{
         let newEmoji=prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
-        if(newEmoji && newEmoji.trim()) avatarSelect.textContent=newEmoji.trim();
+        if(newEmoji && newEmoji.trim()) avatarSelectElem.textContent=newEmoji.trim();
     });
     let chatUnsubscribe=null;
     function iniciarChat(){
@@ -1619,7 +1621,6 @@
             messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
             renderizarMensajesWhatsApp(messages);
         });
-        // Cargar lista de usuarios para menciones
         db.ref('chat_profiles').once('value').then(snap => {
             mentionUsersList = [];
             snap.forEach(child => {
@@ -1683,7 +1684,6 @@
         return html;
     }
 
-    // Autocompletado de menciones
     function setupMentionAutocomplete() {
         const input = document.getElementById('chatInput');
         const suggestionsDiv = document.createElement('div');
@@ -1765,11 +1765,10 @@
     }
     const sendMsgBtn = document.getElementById('sendMsgBtn');
     if(sendMsgBtn) sendMsgBtn.addEventListener('click', enviarMensajeWhatsApp);
-    const chatInputElem = document.getElementById('chatInput');
-    if(chatInputElem) chatInputElem.addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensajeWhatsApp(); } });
+    const chatInputElem2 = document.getElementById('chatInput');
+    if(chatInputElem2) chatInputElem2.addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensajeWhatsApp(); } });
     const cancelReplyBtn = document.getElementById('cancelReplyBtn');
     if(cancelReplyBtn) cancelReplyBtn.addEventListener('click', ()=>{ currentReplyTo=null; const badge=document.getElementById('replyBadge'); if(badge) badge.style.display='none'; });
-    function cargarMensajesChat(){}
 
     // ==================== MODO OSCURO/CLARO ====================
     document.getElementById('themeToggleBtn').addEventListener('click', () => {
@@ -1792,7 +1791,6 @@
         document.getElementById('showLoginBtn').style.background='#442222';
     });
 
-    // Inicializar autocompletado después de cargar el DOM
     document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('chatInput')) setupMentionAutocomplete();
     });
