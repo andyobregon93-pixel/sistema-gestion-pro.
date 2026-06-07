@@ -415,6 +415,7 @@
             padding: 15px;
             margin-top: 10px;
             border: 2px solid #ff4422;
+            position: relative;
         }
         .chat-messages {
             height: 500px;
@@ -518,6 +519,7 @@
             display: flex;
             gap: 10px;
             align-items: flex-end;
+            position: relative;
         }
         .chat-input {
             flex: 1;
@@ -527,6 +529,30 @@
             padding: 10px 15px;
             color: white;
             resize: none;
+        }
+        .mention-suggestions {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            background: #1a0505;
+            border: 1px solid #ff4422;
+            border-radius: 12px;
+            max-height: 150px;
+            overflow-y: auto;
+            width: 200px;
+            z-index: 1000;
+            display: none;
+        }
+        .mention-suggestions div {
+            padding: 6px 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .mention-suggestions div:hover {
+            background: #ff4422;
+            color: black;
         }
         .reply-badge {
             background: #ff4422;
@@ -583,6 +609,13 @@
         .stats-card canvas {
             max-height: 250px;
         }
+        /* Panel Owner para actualización */
+        .owner-update-panel {
+            background: var(--bg-tarjeta);
+            border-radius: 20px;
+            padding: 15px;
+            margin-top: 15px;
+        }
     </style>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -634,6 +667,7 @@
         <button class="tab-btn" onclick="switchTab('stats')">📊 ESTADÍSTICAS</button>
         <button class="tab-btn" id="tabRequestsBtn" style="display:none;" onclick="switchTab('solicitudes')">👥 SOLICITUDES</button>
         <button class="tab-btn" id="tabBannedBtn" style="display:none;" onclick="switchTab('banned')">🚫 BANEADOS</button>
+        <button class="tab-btn" id="tabUpdateBtn" style="display:none;" onclick="switchTab('update')">📢 ACTUALIZAR</button>
     </div>
 
     <!-- PANEL BLOC URLS -->
@@ -796,6 +830,20 @@
         <div class="form-group"><label>ID de usuario (email normalizado) o nombre:</label><input type="text" id="banUserId" placeholder="ej: pericoverde@gmail.com"></div>
         <button class="btn-block btn-start" onclick="banUser()">➕ BANEAR USUARIO</button>
     </div>
+
+    <!-- PANEL ACTUALIZACIÓN (solo Owner) -->
+    <div id="panel-update" class="panel">
+        <h3>📢 ANUNCIAR ACTUALIZACIÓN DEL SISTEMA</h3>
+        <div class="owner-update-panel">
+            <div class="form-group">
+                <label>Mensaje de actualización (se enviará a todos los usuarios activos):</label>
+                <textarea id="updateMessage" rows="3" placeholder="Ej: Nueva versión disponible con mejoras en el escáner y chat. Recarga la página."></textarea>
+            </div>
+            <button class="btn-block btn-start" onclick="publicarActualizacion()">📢 NOTIFICAR ACTUALIZACIÓN</button>
+        </div>
+        <h4>Últimas notificaciones enviadas</h4>
+        <div id="updateHistoryContainer" class="item-list"></div>
+    </div>
 </div>
 
 <script>
@@ -828,6 +876,63 @@
         }
     }
 
+    // ==================== ACTUALIZACIONES DEL SISTEMA ====================
+    function escucharActualizaciones() {
+        db.ref("system_updates").limitToLast(1).on("child_added", (snapshot) => {
+            const update = snapshot.val();
+            if (update.timestamp > (localStorage.getItem('last_update_seen') || 0)) {
+                showNotification("🔔 ACTUALIZACIÓN DEL SISTEMA", update.message);
+                // Insertar un mensaje de sistema en el chat
+                const systemMsg = {
+                    userId: "system",
+                    userName: "SISTEMA",
+                    avatar: "🤖",
+                    text: `📢 ${update.message}\n🔄 Recarga la página si es necesario.`,
+                    timestamp: Date.now(),
+                    isSystem: true
+                };
+                db.ref('chat_messages').push(systemMsg);
+                localStorage.setItem('last_update_seen', update.timestamp);
+            }
+        });
+    }
+
+    window.publicarActualizacion = function() {
+        if (currentUser?.role !== 'Owner') return;
+        const msg = document.getElementById('updateMessage').value.trim();
+        if (!msg) { alert("Escribe un mensaje."); return; }
+        const updateData = {
+            message: msg,
+            timestamp: Date.now(),
+            author: currentUser.email
+        };
+        db.ref("system_updates").push(updateData).then(() => {
+            alert("✅ Notificación de actualización enviada a todos los usuarios conectados.");
+            document.getElementById('updateMessage').value = "";
+            cargarHistorialActualizaciones();
+        }).catch(err => alert("Error: "+err.message));
+    }
+
+    function cargarHistorialActualizaciones() {
+        if (currentUser?.role !== 'Owner') return;
+        db.ref("system_updates").orderByChild("timestamp").limitToLast(10).on("value", (snapshot) => {
+            const container = document.getElementById("updateHistoryContainer");
+            if (!container) return;
+            container.innerHTML = "";
+            const updates = [];
+            snapshot.forEach(child => updates.push({ id: child.key, ...child.val() }));
+            updates.reverse().forEach(up => {
+                const div = document.createElement("div");
+                div.className = "item-card";
+                div.innerHTML = `
+                    <div><strong>${escapeHtml(up.author)}</strong> - ${new Date(up.timestamp).toLocaleString()}</div>
+                    <div>${escapeHtml(up.message)}</div>
+                `;
+                container.appendChild(div);
+            });
+        });
+    }
+
     // ==================== ESTADÍSTICAS ====================
     let statsChart = null, successChart = null;
     let totalScans = 0, totalHits = 0;
@@ -853,7 +958,7 @@
             const usersCount = {};
             snap.forEach(msg => {
                 const userName = msg.val().userName;
-                usersCount[userName] = (usersCount[userName] || 0) + 1;
+                if (userName) usersCount[userName] = (usersCount[userName] || 0) + 1;
             });
             const sorted = Object.entries(usersCount).sort((a,b) => b[1]-a[1]).slice(0,5);
             const list = document.getElementById('topChattersList');
@@ -1030,14 +1135,17 @@
             document.getElementById('tabAdminBtn').style.display = 'block';
             document.getElementById('tabRequestsBtn').style.display = 'block';
             document.getElementById('tabBannedBtn').style.display = 'block';
+            document.getElementById('tabUpdateBtn').style.display = 'block';
             escucharVendedores();
             cargarSolicitudes();
             cargarUsuariosAprobados();
             cargarBaneados();
+            cargarHistorialActualizaciones();
         } else {
             document.getElementById('tabAdminBtn').style.display = 'none';
             document.getElementById('tabRequestsBtn').style.display = 'none';
             document.getElementById('tabBannedBtn').style.display = 'none';
+            document.getElementById('tabUpdateBtn').style.display = 'none';
         }
         if (!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
         if (!localStorage.getItem('sys_saved_hits')) localStorage.setItem('sys_saved_hits', JSON.stringify({}));
@@ -1048,11 +1156,14 @@
         iniciarChat();
         cargarEstadisticas();
         requestNotificationPermission();
+        escucharActualizaciones();
+        iniciarHeartbeatEscanner();
     }
     window.cerrarSesion = function() {
         if (window.chatUnsubscribe) window.chatUnsubscribe();
         if (window.pendingUnsub) db.ref("pending_users").off();
         if (window.vendedoresUnsub) db.ref("vendedores").off();
+        if (heartbeatInterval) clearInterval(heartbeatInterval);
         currentUser = null;
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPass').value = '';
@@ -1272,8 +1383,21 @@
     document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
-    // ==================== ESCÁNER MEJORADO ====================
+    // ==================== ESCÁNER MEJORADO + HEARTBEAT ====================
     let moanAudioContext = null;
+    let lastScanProgress = Date.now();
+    let heartbeatInterval = null;
+    function iniciarHeartbeatEscanner() {
+        if (heartbeatInterval) clearInterval(heartbeatInterval);
+        heartbeatInterval = setInterval(() => {
+            if (isRunning && (Date.now() - lastScanProgress > 15000)) {
+                showNotification("⚠️ ESCÁNER DETENIDO", "El escáner no responde. Revisa la conexión o reinicia.");
+                console.warn("Heartbeat: escáner detenido inesperadamente");
+            }
+        }, 10000);
+    }
+    function actualizarHeartbeat() { lastScanProgress = Date.now(); }
+
     function playMoanSound() {
         if (!document.getElementById('soundToggle')?.checked) return;
         try {
@@ -1401,7 +1525,9 @@
                     }
                     updateStatsOnScan();
                 } catch(e) { } finally {
-                    processed++; fill.style.width = ((processed/total)*100)+'%'; txt.textContent = `Procesados: ${processed} / ${total}`;
+                    processed++;
+                    fill.style.width = ((processed/total)*100)+'%'; txt.textContent = `Procesados: ${processed} / ${total}`;
+                    actualizarHeartbeat();
                 }
             }
         }
@@ -1451,9 +1577,14 @@
     });
     updateStartState();
 
-    // ==================== CHAT WHATSAPP (con ban, etiquetas y notificaciones) ====================
+    // ==================== CHAT WHATSAPP CON AUTOCOMPLETADO ====================
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
+    let mentionUsersList = [];
+    let mentionActive = false;
+    let mentionStartPos = 0;
+    let currentMentionIndex = 0;
+
     function getUserColor(email) { let hash=0; for(let i=0;i<email.length;i++) hash=((hash<<5)-hash)+email.charCodeAt(i); const hue=Math.abs(hash%360); return `hsl(${hue}, 70%, 60%)`; }
     async function cargarPerfilUsuario(email) {
         const perfilRef = db.ref(`chat_profiles/${currentUser.uid}`);
@@ -1487,6 +1618,15 @@
             snapshot.forEach(child=>{ messages.push({id:child.key, ...child.val()}); });
             messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
             renderizarMensajesWhatsApp(messages);
+        });
+        // Cargar lista de usuarios para menciones
+        db.ref('chat_profiles').once('value').then(snap => {
+            mentionUsersList = [];
+            snap.forEach(child => {
+                if (child.key !== currentUser.uid) {
+                    mentionUsersList.push({ id: child.key, name: child.val().name, avatar: child.val().avatar || "🦁" });
+                }
+            });
         });
     }
     async function renderizarMensajesWhatsApp(messages){
@@ -1542,6 +1682,61 @@
         });
         return html;
     }
+
+    // Autocompletado de menciones
+    function setupMentionAutocomplete() {
+        const input = document.getElementById('chatInput');
+        const suggestionsDiv = document.createElement('div');
+        suggestionsDiv.className = 'mention-suggestions';
+        input.parentNode.appendChild(suggestionsDiv);
+
+        function hideSuggestions() { suggestionsDiv.style.display = 'none'; mentionActive = false; }
+        function showSuggestions(filter) {
+            const filtered = mentionUsersList.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()));
+            if (filtered.length === 0) { hideSuggestions(); return; }
+            suggestionsDiv.innerHTML = '';
+            filtered.forEach((user, idx) => {
+                const item = document.createElement('div');
+                item.innerHTML = `<span>${user.avatar}</span> <span>${escapeHtml(user.name)}</span>`;
+                item.onclick = () => {
+                    const before = input.value.substring(0, mentionStartPos);
+                    const after = input.value.substring(input.selectionStart);
+                    const newText = before + user.name + ' ' + after;
+                    input.value = newText;
+                    input.focus();
+                    hideSuggestions();
+                };
+                suggestionsDiv.appendChild(item);
+            });
+            suggestionsDiv.style.display = 'block';
+            mentionActive = true;
+        }
+
+        input.addEventListener('input', (e) => {
+            const cursorPos = input.selectionStart;
+            const text = input.value;
+            const atIndex = text.lastIndexOf('@', cursorPos - 1);
+            if (atIndex !== -1 && (atIndex === 0 || text[atIndex-1] === ' ' || text[atIndex-1] === '\n')) {
+                const afterAt = text.substring(atIndex + 1, cursorPos);
+                if (!afterAt.includes(' ') && !afterAt.includes('\n')) {
+                    mentionStartPos = atIndex;
+                    showSuggestions(afterAt);
+                    return;
+                }
+            }
+            hideSuggestions();
+        });
+        input.addEventListener('keydown', (e) => {
+            if (!mentionActive) return;
+            if (e.key === 'ArrowDown') { currentMentionIndex = (currentMentionIndex + 1) % suggestionsDiv.children.length; highlightSuggestion(suggestionsDiv, currentMentionIndex); e.preventDefault(); }
+            else if (e.key === 'ArrowUp') { currentMentionIndex = (currentMentionIndex - 1 + suggestionsDiv.children.length) % suggestionsDiv.children.length; highlightSuggestion(suggestionsDiv, currentMentionIndex); e.preventDefault(); }
+            else if (e.key === 'Enter' && mentionActive) { suggestionsDiv.children[currentMentionIndex]?.click(); e.preventDefault(); }
+            else if (e.key === 'Escape') hideSuggestions();
+        });
+        function highlightSuggestion(div, idx) { Array.from(div.children).forEach((child, i) => child.style.background = i === idx ? '#ff4422' : ''); }
+        document.addEventListener('click', (e) => { if (!suggestionsDiv.contains(e.target) && e.target !== input) hideSuggestions(); });
+    }
+
     async function enviarMensajeWhatsApp(){
         const input=document.getElementById('chatInput');
         let text=input.value.trim();
@@ -1552,22 +1747,13 @@
         const mentions=[];
         while((match=mentionRegex.exec(text))!==null){
             const mentionedName=match[1];
-            const snapshot=await db.ref('chat_profiles').once('value');
-            let found=null;
-            snapshot.forEach(prof=>{
-                if(prof.val().name.toLowerCase()===mentionedName.toLowerCase()) found={ userId:prof.key, userName:prof.val().name };
-            });
-            if(found && !mentions.some(m=>m.userId===found.userId)) mentions.push(found);
+            const found = mentionUsersList.find(u => u.name.toLowerCase() === mentionedName.toLowerCase());
+            if(found && !mentions.some(m=>m.userId===found.id)) mentions.push({ userId: found.id, userName: found.name });
         }
         const msgData={ userId:currentUser.uid, userName:chatDisplayName, avatar:chatAvatar, text:text, timestamp:Date.now(), mentions:mentions };
         if(currentReplyTo){ msgData.replyTo={ id:currentReplyTo.id, userId:currentReplyTo.userId, userName:currentReplyTo.userName, text:currentReplyTo.text.substring(0,100) }; currentReplyTo=null; const badge=document.getElementById('replyBadge'); if(badge) badge.style.display='none'; }
         await db.ref('chat_messages').push(msgData);
-        // Notificar a los mencionados
-        for (let m of mentions) {
-            if (m.userId !== currentUser.uid) {
-                showNotification(`📢 Te han mencionado`, `${chatDisplayName} te mencionó: ${text.substring(0,50)}`);
-            }
-        }
+        for (let m of mentions) if (m.userId !== currentUser.uid) showNotification(`📢 Te han mencionado`, `${chatDisplayName} te mencionó: ${text.substring(0,50)}`);
         input.value='';
     }
     async function editarMensaje(msgId, oldText){
@@ -1604,6 +1790,11 @@
         document.getElementById('registerPanel').style.display='block';
         document.getElementById('showRegisterBtn').style.background='#ff8833';
         document.getElementById('showLoginBtn').style.background='#442222';
+    });
+
+    // Inicializar autocompletado después de cargar el DOM
+    document.addEventListener('DOMContentLoaded', () => {
+        if (document.getElementById('chatInput')) setupMentionAutocomplete();
     });
 </script>
 </body>
