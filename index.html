@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - LEÓN ROJO + CHAT WHATSAPP + ESTADÍSTICAS</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones (sin cambios) ========== */
+        /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones ========== */
         :root {
             --bg-principal: #000000;
             --bg-tarjeta: #1a0505;
@@ -616,7 +616,7 @@
             padding: 15px;
             margin-top: 15px;
         }
-        /* Estilos específicos del nuevo escáner */
+        /* Estilos para el escáner MUNRRA */
         .jobTop {
             display: flex;
             align-items: center;
@@ -691,7 +691,7 @@
         <button class="tab-btn" id="tabUpdateBtn" style="display:none;" onclick="switchTab('update')">📢 ACTUALIZAR</button>
     </div>
 
-    <!-- PANEL BLOC URLS (sin cambios) -->
+    <!-- PANEL BLOC URLS -->
     <div id="panel-bloc" class="panel">
         <h3>Bloc de Servidores &amp; URLs</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
@@ -702,7 +702,7 @@
         <div class="item-list" id="listaUrlsContainer"></div>
     </div>
 
-    <!-- PANEL COMBOS (sin cambios) -->
+    <!-- PANEL COMBOS -->
     <div id="panel-combos" class="panel">
         <h3>📦 MÚLTIPLE HERRAMIENTA DE COMBOS</h3>
         <div class="sub-tabs">
@@ -711,7 +711,6 @@
             <button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button>
         </div>
         <div id="sub-generator" class="sub-panel active">
-            <!-- mismo contenido de siempre -->
             <div class="form-group"><label>Tipo de generación:</label>
                 <select id="genType">
                     <option value="userpass_ano">User:Pass (1996-2050)</option>
@@ -754,7 +753,7 @@
         </div>
     </div>
 
-    <!-- PANEL SCANNER (NUEVO - CÓDIGO MUNRRA ADAPTADO) -->
+    <!-- PANEL SCANNER - VERSIÓN MUNRRA COMPLETA Y FUNCIONAL -->
     <div id="panel-scanner" class="panel">
         <div class="form-group"><label>Panel (Host con o sin http/https):</label><input type="text" id="hostInput" placeholder="ej: lista.com:8080" /></div>
         <div class="form-group"><label>Selecciona tus archivos de Combos (.txt):</label><input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" /><input type="file" id="comboFile3" accept=".txt" /></div>
@@ -769,39 +768,35 @@
         <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
         <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
 
-        <!-- Barra Job 1 -->
         <div id="progressContainer">
             <div class="jobTop"><div id="hitsCount1" class="hitsCount">Hits: <span class="yellow-hit">0</span></div></div>
             <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
             <div id="progressText" class="job-status">Esperando inicio...</div>
             <div id="currentCombo" class="job-user">Usuario actual: -</div>
         </div>
-        <!-- Barra Job 2 -->
         <div id="progressContainer2">
             <div class="jobTop"><div id="hitsCount2" class="hitsCount">Hits: <span class="yellow-hit">0</span></div></div>
             <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
             <div id="progressText2" class="job-status">Esperando inicio...</div>
             <div id="currentCombo2" class="job-user">Usuario actual: -</div>
         </div>
-        <!-- Barra Job 3 -->
         <div id="progressContainer3">
             <div class="jobTop"><div id="hitsCount3" class="hitsCount">Hits: <span class="yellow-hit">0</span></div></div>
             <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
             <div id="progressText3" class="job-status">Esperando inicio...</div>
             <div id="currentCombo3" class="job-user">Usuario actual: -</div>
         </div>
-
         <div class="results-title">Resultados del Escaneo Actual:</div>
         <div id="hitsContainer"></div>
     </div>
 
-    <!-- PANEL BANCO HITS (sin cambios) -->
+    <!-- PANEL BANCO HITS -->
     <div id="panel-banco-hits" class="panel">
         <h3>🗄️ Historial e Hits Guardados (con Fecha/Hora)</h3>
         <div class="item-list" id="bancoHitsContainer"></div>
     </div>
 
-    <!-- PANEL ADMINS (sin cambios) -->
+    <!-- PANEL ADMINS -->
     <div id="panel-admins" class="panel">
         <h3>👥 Panel Maestro: Agregar Nuevos Vendedores</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
@@ -813,7 +808,7 @@
         <div class="item-list" id="listaVendedoresContainer"></div>
     </div>
 
-    <!-- PANEL CHAT WHATSAPP (sin cambios) -->
+    <!-- PANEL CHAT WHATSAPP -->
     <div id="panel-chat" class="panel">
         <h3>💬 CHAT ESTILO WHATSAPP - COMUNIDAD SYS ANDY PRO</h3>
         <div class="profile-config">
@@ -836,7 +831,7 @@
         </div>
     </div>
 
-    <!-- PANEL ESTADÍSTICAS (sin cambios) -->
+    <!-- PANEL ESTADÍSTICAS -->
     <div id="panel-stats" class="panel">
         <h3>📊 ESTADÍSTICAS EN VIVO</h3>
         <div class="stats-grid">
@@ -856,7 +851,7 @@
         </div>
     </div>
 
-    <!-- PANEL SOLICITUDES (sin cambios) -->
+    <!-- PANEL SOLICITUDES -->
     <div id="panel-solicitudes" class="panel">
         <h3>👥 SOLICITUDES DE REGISTRO (PENDIENTES)</h3>
         <div id="pendingUsersContainer" class="item-list"></div>
@@ -864,7 +859,7 @@
         <div id="approvedUsersContainer" class="item-list"></div>
     </div>
 
-    <!-- PANEL BANEADOS (sin cambios) -->
+    <!-- PANEL BANEADOS -->
     <div id="panel-banned" class="panel">
         <h3>🚫 USUARIOS BANEADOS</h3>
         <div id="bannedUsersContainer" class="item-list"></div>
@@ -872,7 +867,7 @@
         <button class="btn-block btn-start" onclick="banUser()">➕ BANEAR USUARIO</button>
     </div>
 
-    <!-- PANEL ACTUALIZACIÓN (sin cambios) -->
+    <!-- PANEL ACTUALIZACIÓN -->
     <div id="panel-update" class="panel">
         <h3>📢 ANUNCIAR ACTUALIZACIÓN DEL SISTEMA</h3>
         <div class="owner-update-panel">
@@ -888,7 +883,7 @@
 </div>
 
 <script>
-    // ==================== FIREBASE CONFIG (sin cambios) ====================
+    // ==================== CONFIGURACIÓN FIREBASE ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -896,7 +891,7 @@
         storageBucket: "gestion-ventas-pro-f8de4.firebasestorage.app",
         messagingSenderId: "96449660649",
         appId: "1:96449660649:web:d949eccf893c9705451278",
-        databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com/" 
+        databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com/"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
@@ -904,20 +899,39 @@
     let currentUser = null;
     let usernameClave = "";
 
-    // ==================== NOTIFICACIONES (reparadas) ====================
+    // ==================== NOTIFICACIONES MEJORADAS ====================
     let notificationPermission = false;
     function requestNotificationPermission() {
-        if ('Notification' in window) {
-            Notification.requestPermission().then(perm => { notificationPermission = (perm === 'granted'); });
+        if (!('Notification' in window)) return;
+        if (Notification.permission === 'granted') notificationPermission = true;
+        else if (Notification.permission !== 'denied') {
+            Notification.requestPermission().then(perm => {
+                notificationPermission = (perm === 'granted');
+                if (notificationPermission) {
+                    new Notification("🔔 Notificaciones activadas", {
+                        body: "Recibirás alertas de nuevos hits, menciones y actualizaciones.",
+                        icon: "https://cdn-icons-png.flaticon.com/512/1998/1998610.png"
+                    });
+                }
+            });
         }
     }
     function showNotification(title, body) {
+        if (!notificationPermission && Notification.permission === 'granted') notificationPermission = true;
         if (notificationPermission && document.getElementById('notifToggle')?.checked) {
-            new Notification(title, { body: body, icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998610.png' });
+            try {
+                const notification = new Notification(title, {
+                    body: body,
+                    icon: 'https://cdn-icons-png.flaticon.com/512/1998/1998610.png',
+                    silent: false,
+                    vibrate: [200, 100, 200]
+                });
+                setTimeout(() => notification.close(), 5000);
+            } catch (e) {}
         }
     }
 
-    // ==================== ACTUALIZACIONES ====================
+    // ==================== ACTUALIZACIONES DEL SISTEMA ====================
     function escucharActualizaciones() {
         db.ref("system_updates").orderByChild("timestamp").limitToLast(1).on("child_added", (snapshot) => {
             const update = snapshot.val();
@@ -965,7 +979,7 @@
         });
     }
 
-    // ==================== ESTADÍSTICAS (sin cambios) ====================
+    // ==================== ESTADÍSTICAS ====================
     let statsChart = null, successChart = null;
     let totalScans = 0, totalHits = 0;
     function cargarEstadisticas() {
@@ -997,7 +1011,7 @@
     function updateStatsOnHit() { totalHits++; cargarEstadisticas(); }
     function updateStatsOnScan() { totalScans++; cargarEstadisticas(); }
 
-    // ==================== REGISTRO Y APROBACIÓN (sin cambios) ====================
+    // ==================== REGISTRO Y APROBACIÓN ====================
     function limpiarClaveLocal(str) { if (!str) return ""; return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_"); }
     window.registrarUsuario = function() {
         const nombre = document.getElementById('regName').value.trim();
@@ -1092,7 +1106,7 @@
     window.unbanUser = function(key) { if (confirm("¿Desbanear a este usuario?")) db.ref("banned_users/" + key).remove(); }
     async function isUserBanned(userId) { const snap = await db.ref("banned_users/" + userId).once("value"); return snap.exists(); }
 
-    // ==================== LOGIN (sin cambios) ====================
+    // ==================== LOGIN ====================
     window.procesarLogin = async function() {
         const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
         const passInput = document.getElementById('loginPass').value.trim();
@@ -1179,7 +1193,7 @@
     }
     window.eliminarVendedorFirebase = function(key) { if (confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // ==================== BLOC URLS Y BANCO HITS (sin cambios) ====================
+    // ==================== BLOC URLS Y BANCO HITS ====================
     window.guardarUrlBloc = function() {
         const val = document.getElementById('inputUrlData').value.trim(), editId = document.getElementById('editUrlId').value;
         if (!val) return;
@@ -1256,9 +1270,9 @@
         if (tabName === 'banned' && currentUser?.role === 'Owner') cargarBaneados();
     }
 
-    // ==================== COMBOS (sin cambios) ====================
-    const nombresReales = [/* lista larga - omito por brevedad, pero está completa en tu código original */];
-    const palabrasExtra = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system", "server", "network", "digital", "global", "prime", "super", "mega", "ultra", "power", "plus"];
+    // ==================== COMBOS ====================
+    const nombresReales = ["juan","pedro","carlos","luis","andres","david","diego","javier","manuel","alejandro","fernando","miguel","rafael","jorge","antonio","angel","jose","daniel","oscar","ruben"];
+    const palabrasExtra = ["admin","user","test","root","master","demo","guest","support","office","system","server","network","digital","global","prime","super","mega","ultra","power","plus"];
     function applyCase(str, caseType) { if (caseType === 'upper') return str.toUpperCase(); if (caseType === 'capitalize') return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(); return str.toLowerCase(); }
     function generarPasswordAleatoria(longitud) { const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"; let result = ""; for (let i = 0; i < longitud; i++) result += chars.charAt(Math.floor(Math.random() * chars.length)); return result; }
     function generarDesordenadoConLongitud(longitud) { const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%&*?-_"; let resultado = ""; for (let i = 0; i < longitud; i++) resultado += chars.charAt(Math.floor(Math.random() * chars.length)); return resultado; }
@@ -1313,7 +1327,7 @@
     document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
-    // ==================== NUEVO ESCÁNER (código MUNRRA adaptado) ====================
+    // ==================== NUEVO ESCÁNER MUNRRA - COMPLETO Y FUNCIONAL ====================
     // Variables globales del escáner
     let isRunningScan = false;
     let stopRequestedScan = false;
@@ -1321,19 +1335,6 @@
     let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
     const HITS_SCAN = { 1: [], 2: [], 3: [] };
     let audioCtxScan = null;
-    let lastScanProgress = Date.now();
-    let heartbeatInterval = null;
-
-    function iniciarHeartbeatEscanner() {
-        if (heartbeatInterval) clearInterval(heartbeatInterval);
-        heartbeatInterval = setInterval(() => {
-            if (isRunningScan && (Date.now() - lastScanProgress > 15000)) {
-                showNotification("⚠️ ESCÁNER DETENIDO", "El escáner no responde. Revisa la conexión o reinicia.");
-                console.warn("Heartbeat: escáner detenido inesperadamente");
-            }
-        }, 10000);
-    }
-    function actualizarHeartbeat() { lastScanProgress = Date.now(); }
 
     function randomUA() {
         const uas = [
@@ -1574,7 +1575,6 @@ ${link}
         if (ui.fill) ui.fill.style.width = pct + '%';
         if (ui.text) ui.text.textContent = `Procesados: ${processed} / ${total} | Hits: ${ui.hitsArr.length}`;
         if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-        actualizarHeartbeat();
         updateStatsOnScan();
     }
 
@@ -1763,7 +1763,7 @@ ${link}
 
     updateStartStateScan();
 
-    // ==================== CHAT WHATSAPP (sin cambios) ====================
+    // ==================== CHAT WHATSAPP ====================
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     let mentionUsersList = [];
