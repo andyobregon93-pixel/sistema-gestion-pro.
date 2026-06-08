@@ -897,7 +897,18 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
-    // ==================== LOGIN Y REGISTRO ====================
+    // ==================== CAMBIO ENTRE PESTAÑAS LOGIN/REGISTRO ====================
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            const target = this.getAttribute('data-auth');
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById(`auth-${target}`).classList.add('active');
+        });
+    });
+
+    // ==================== LOGIN ====================
     function procesarLogin() {
         const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
         const passInput = document.getElementById('loginPass').value.trim();
@@ -979,7 +990,7 @@
     }
     function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // ==================== NUEVA FUNCIÓN: REGISTRO CON APROBACIÓN ====================
+    // ==================== REGISTRO CON APROBACIÓN ====================
     function solicitarRegistro() {
         const email = document.getElementById('regEmail').value.trim().toLowerCase();
         const pass = document.getElementById('regPass').value.trim();
@@ -1008,6 +1019,7 @@
                     document.getElementById('regPass').value = '';
                     document.getElementById('regPassConfirm').value = '';
                     document.getElementById('regDisplayName').value = '';
+                    // Cambiar a pestaña de login
                     document.querySelector('.auth-tab[data-auth="login"]').click();
                 }).catch(err => alert("Error: " + err.message));
             });
