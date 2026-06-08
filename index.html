@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - LEÓN ROJO + CHAT WHATSAPP</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + CHAT GENERAL</title>
     <style>
-        /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones ========== */
+        /* ========== PALETA LEÓN ROJO + NEGRO (TEMA DÍA - por defecto) ========== */
         :root {
             --bg-principal: #000000;
             --bg-tarjeta: #1a0505;
@@ -15,16 +15,31 @@
             --borde-neon: #ff2200;
             --fuego-grad: linear-gradient(135deg, #ff3300, #990000, #330000);
             --sombra-difusa: 0 0 20px rgba(255, 34, 0, 0.4), 0 0 40px rgba(128, 0, 0, 0.3);
+            --grad-fondo: radial-gradient(circle at 50% 30%, #2a0000, #000000);
+        }
+
+        /* TEMA NOCHE (alternativo) */
+        body.theme-night {
+            --bg-principal: #0a0f1a;
+            --bg-tarjeta: #111827;
+            --bg-inputs: #1f2a3a;
+            --texto-principal: #ccddff;
+            --texto-secundario: #88aaff;
+            --borde-neon: #3b82f6;
+            --fuego-grad: linear-gradient(135deg, #1e3a8a, #0f172a, #020617);
+            --sombra-difusa: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(0, 0, 128, 0.3);
+            --grad-fondo: radial-gradient(circle at 50% 30%, #0a0f1a, #020617);
         }
 
         body {
-            background: radial-gradient(circle at 50% 30%, #2a0000, #000000);
+            background: var(--grad-fondo);
             color: var(--texto-principal);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
             padding: 0;
             min-height: 100vh;
             position: relative;
+            transition: background 0.3s, color 0.2s;
         }
 
         body::before {
@@ -55,7 +70,7 @@
             min-height: 100vh;
             padding: 20px;
             box-sizing: border-box;
-            background: radial-gradient(circle at center, #3a0a0a, #000000);
+            background: var(--grad-fondo);
         }
         .auth-box {
             background: rgba(26, 5, 5, 0.9);
@@ -80,6 +95,10 @@
             padding: 10px 15px;
             border-bottom: 2px solid #ff3311;
             box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+        }
+        body.theme-night .navbar {
+            background: linear-gradient(90deg, #0f172a, #1e293b, #0f172a);
+            border-bottom-color: #3b82f6;
         }
 
         .logo-area {
@@ -112,7 +131,7 @@
             color: #ffaa77;
         }
 
-        .btn-salir {
+        .btn-salir, .btn-theme {
             background-color: #aa2222;
             color: white;
             border: none;
@@ -121,6 +140,13 @@
             cursor: pointer;
             font-weight: bold;
             transition: 0.1s linear;
+            margin-left: 8px;
+        }
+        .btn-theme {
+            background-color: #444;
+        }
+        body.theme-night .btn-theme {
+            background-color: #2563eb;
         }
 
         .tabs-container {
@@ -129,6 +155,10 @@
             border-bottom: 2px solid #ff4422;
             overflow-x: auto;
             backdrop-filter: blur(3px);
+        }
+        body.theme-night .tabs-container {
+            background-color: #111827;
+            border-bottom-color: #3b82f6;
         }
 
         .tab-btn {
@@ -143,12 +173,16 @@
             white-space: nowrap;
             transition: 0.2s;
         }
-
         .tab-btn.active {
             color: #ffaa44;
             border-bottom: 3px solid #ff4422;
             background: rgba(80, 10, 10, 0.6);
             text-shadow: 0 0 5px #ff3300;
+        }
+        body.theme-night .tab-btn.active {
+            color: #60a5fa;
+            border-bottom-color: #3b82f6;
+            background: rgba(37, 99, 235, 0.2);
         }
 
         .panel {
@@ -181,6 +215,11 @@
             color: #000;
             box-shadow: 0 0 10px #ff4422;
         }
+        body.theme-night .sub-tab.active {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 0 10px #3b82f6;
+        }
         .sub-panel {
             display: none;
         }
@@ -212,22 +251,31 @@
             transition: 0.2s;
             backdrop-filter: blur(2px);
         }
+        body.theme-night input, body.theme-night textarea, body.theme-night select {
+            background-color: #0f172a;
+            border-color: #3b82f6;
+            color: #e2e8f0;
+        }
         input:focus, textarea:focus, select:focus {
             border-color: #ff6644;
             box-shadow: 0 0 12px #ff4422;
             outline: none;
         }
+        body.theme-night input:focus, body.theme-night textarea:focus {
+            border-color: #60a5fa;
+            box-shadow: 0 0 12px #3b82f6;
+        }
 
-        .btn-block, .btn-small, .btn-salir {
+        .btn-block, .btn-small, .btn-salir, .btn-theme {
             position: relative;
             overflow: hidden;
             transition: transform 0.05s linear, box-shadow 0.1s;
         }
-        .btn-block:active, .btn-small:active, .btn-salir:active {
+        .btn-block:active, .btn-small:active, .btn-salir:active, .btn-theme:active {
             transform: scale(0.96);
             box-shadow: 0 0 0 2px #ffaa33, 0 0 0 6px rgba(255, 68, 0, 0.7);
         }
-        .btn-block:active::after, .btn-small:active::after, .btn-salir:active::after {
+        .btn-block:active::after, .btn-small:active::after, .btn-salir:active::after, .btn-theme:active::after {
             content: "";
             position: absolute;
             top: 50%;
@@ -277,6 +325,10 @@
             margin-bottom: 10px;
             box-shadow: 0 0 12px rgba(255, 50, 0, 0.3);
         }
+        body.theme-night .item-card {
+            background: rgba(17, 24, 39, 0.9);
+            border-color: #3b82f6;
+        }
 
         .item-actions { display: flex; gap: 8px; margin-top: 8px; }
         .btn-small {
@@ -300,6 +352,10 @@
             padding: 12px;
             margin-bottom: 15px;
             box-shadow: 0 0 20px rgba(255, 34, 0, 0.5);
+        }
+        body.theme-night .job-card {
+            background: rgba(15, 23, 42, 0.9);
+            border-color: #3b82f6;
         }
 
         .job-header {
@@ -339,6 +395,10 @@
             overflow-y: auto;
             border: 2px solid #ff4422;
         }
+        body.theme-night #hitsContainer {
+            background: rgba(15, 23, 42, 0.7);
+            border-color: #3b82f6;
+        }
 
         .hit-block {
             background: rgba(0, 0, 0, 0.85);
@@ -348,6 +408,10 @@
             margin-bottom: 12px;
             backdrop-filter: blur(2px);
             box-shadow: 0 0 10px rgba(255, 50, 0, 0.5);
+        }
+        body.theme-night .hit-block {
+            border-color: #3b82f6;
+            background: rgba(0, 0, 0, 0.7);
         }
 
         .hit-header {
@@ -375,6 +439,11 @@
             border-radius: 15px;
             font-size: 0.9rem;
         }
+        body.theme-night .hit-content {
+            background: #0f172a;
+            border-color: #3b82f6;
+            color: #cbd5e1;
+        }
 
         .counter-badge {
             background-color: #ff4422;
@@ -385,7 +454,7 @@
             font-weight: bold;
         }
 
-        /* ========== CHAT WHATSAPP STYLE ========== */
+        /* ========== CHAT STYLES ========== */
         .chat-container {
             background: rgba(0,0,0,0.7);
             border-radius: 20px;
@@ -393,102 +462,97 @@
             margin-top: 10px;
             border: 2px solid #ff4422;
         }
+        body.theme-night .chat-container {
+            border-color: #3b82f6;
+        }
         .chat-messages {
-            height: 500px;
+            height: 400px;
             overflow-y: auto;
             padding: 10px;
-            background: #0a0a0a;
+            background: #1a0303;
             border-radius: 15px;
             margin-bottom: 15px;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 10px;
         }
-        .message-wrapper {
-            display: flex;
-            width: 100%;
-            margin-bottom: 6px;
-        }
-        .message-wrapper.own {
-            justify-content: flex-end;
-        }
-        .message-wrapper.other {
-            justify-content: flex-start;
+        body.theme-night .chat-messages {
+            background: #0f172a;
         }
         .chat-message {
-            max-width: 75%;
+            background: #2a0a0a;
+            border-radius: 15px;
             padding: 8px 12px;
-            border-radius: 18px;
+            border-left: 5px solid var(--user-color, #ff8844);
             position: relative;
-            word-wrap: break-word;
         }
-        .message-wrapper.own .chat-message {
-            background: #2a5c2a;
-            border-bottom-right-radius: 4px;
-            color: white;
+        body.theme-night .chat-message {
+            background: #1e293b;
         }
-        .message-wrapper.other .chat-message {
-            background: #1a2a1a;
-            border-bottom-left-radius: 4px;
-            color: #ffddcc;
+        .chat-message.replying {
+            border-left: 5px solid #ffaa33;
+            background: #331a0a;
+        }
+        body.theme-night .chat-message.replying {
+            border-left-color: #facc15;
+            background: #1e293b;
         }
         .message-header {
             display: flex;
             align-items: center;
-            gap: 6px;
-            margin-bottom: 4px;
-            font-size: 0.8rem;
+            gap: 8px;
+            margin-bottom: 5px;
+            flex-wrap: wrap;
         }
         .message-avatar {
-            font-size: 1rem;
+            font-size: 1.2rem;
             background: #000;
             border-radius: 50%;
-            width: 22px;
-            height: 22px;
+            width: 28px;
+            height: 28px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
         }
         .message-name {
             font-weight: bold;
-            color: #ffaa66;
+            color: var(--user-color, #ffaa66);
         }
         .message-time {
-            font-size: 0.65rem;
-            color: #aaa;
-            margin-left: 5px;
+            font-size: 0.7rem;
+            color: #ffaa88;
         }
         .message-text {
-            font-size: 0.9rem;
+            color: #ffddcc;
+            word-break: break-word;
             white-space: pre-wrap;
         }
         .reply-preview {
-            background: rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 4px 8px;
+            background: #3a1a0a;
+            border-radius: 10px;
+            padding: 5px;
             margin-bottom: 5px;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             border-left: 3px solid #ffaa33;
         }
         .message-actions {
             position: absolute;
-            top: 4px;
+            top: 5px;
             right: 8px;
             display: flex;
-            gap: 6px;
+            gap: 8px;
             opacity: 0;
             transition: opacity 0.2s;
         }
-        .message-wrapper:hover .message-actions {
+        .chat-message:hover .message-actions {
             opacity: 1;
         }
         .msg-btn {
             background: none;
             border: none;
-            color: #ddd;
+            color: #ffaa88;
             cursor: pointer;
-            font-size: 0.7rem;
-            padding: 2px;
+            font-size: 0.8rem;
         }
         .msg-btn:hover { color: #ff4422; }
         .chat-input-area {
@@ -542,6 +606,13 @@
             padding: 0 5px;
             cursor: pointer;
         }
+        @keyframes highlight {
+            0% { background-color: #ffaa33; }
+            100% { background-color: #2a0a0a; }
+        }
+        .highlight-message {
+            animation: highlight 1s ease;
+        }
     </style>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -551,25 +622,17 @@
 
 <div id="auth-screen">
     <div class="auth-box">
-        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
-            <button id="showLoginBtn" class="btn-small btn-action" style="flex:1;">INICIAR SESIÓN</button>
-            <button id="showRegisterBtn" class="btn-small" style="flex:1; background:#442222;">REGISTRARSE</button>
+        <h2 style="text-align:center;background:linear-gradient(135deg,#ff5533,#aa1100);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:0;">🦁 SYS ANDY PRO - LEÓN ROJO</h2>
+        <p style="text-align:center;color:#ffaa88;">Ingresa tus credenciales</p>
+        <div class="form-group">
+            <label>Usuario o Correo Electrónico:</label>
+            <input type="text" id="loginEmail" placeholder="ej: andyobregon799@gmail.com">
         </div>
-        <div id="loginPanel">
-            <h2 style="text-align:center;background:linear-gradient(135deg,#ff5533,#aa1100);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:0;">🦁 SYS ANDY PRO</h2>
-            <p style="text-align:center;color:#ffaa88;">Ingresa tus credenciales</p>
-            <div class="form-group"><label>Usuario o Correo:</label><input type="text" id="loginEmail" placeholder="ej: andyobregon799@gmail.com"></div>
-            <div class="form-group"><label>Contraseña:</label><input type="password" id="loginPass" placeholder="••••••••"></div>
-            <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR</button>
+        <div class="form-group">
+            <label>Contraseña:</label>
+            <input type="password" id="loginPass" placeholder="••••••••">
         </div>
-        <div id="registerPanel" style="display:none;">
-            <h2 style="text-align:center;background:linear-gradient(135deg,#ff5533,#aa1100);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:0;">📝 REGISTRO</h2>
-            <p style="text-align:center;color:#ffaa88;">Crea tu cuenta - espera aprobación</p>
-            <div class="form-group"><label>Nombre completo:</label><input type="text" id="regName" placeholder="Ej: Juan Pérez"></div>
-            <div class="form-group"><label>Correo electrónico:</label><input type="text" id="regEmail" placeholder="ej: juan@gmail.com"></div>
-            <div class="form-group"><label>Contraseña:</label><input type="password" id="regPass" placeholder="mínimo 6 caracteres"></div>
-            <button class="btn-block btn-start" onclick="registrarUsuario()">REGISTRARSE</button>
-        </div>
+        <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR AL SISTEMA</button>
     </div>
 </div>
 
@@ -579,17 +642,19 @@
             <span class="logo-title">SYS ANDY PRO</span>
             <span class="logo-sub" id="userDisplay">Cargando...</span>
         </div>
-        <button class="btn-salir" onclick="cerrarSesion()">SALIR</button>
+        <div style="display: flex;">
+            <button class="btn-theme" onclick="toggleTheme()">🌓 DÍA/NOCHE</button>
+            <button class="btn-salir" onclick="cerrarSesion()">SALIR</button>
+        </div>
     </div>
 
     <div class="tabs-container">
         <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC URLS</button>
-        <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
+        <button class="tab-btn" id="tabCombosBtn" onclick="switchTab('combos')">📦 COMBOS</button>
         <button class="tab-btn" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
         <button class="tab-btn" onclick="switchTab('banco-hits')">🗄️ BANCO HITS</button>
-        <button class="tab-btn" id="tabAdminBtn" style="display:none;" onclick="switchTab('admins')">👥 ADMINS</button>
-        <button class="tab-btn" onclick="switchTab('chat')">💬 CHAT WHATSAPP</button>
-        <button class="tab-btn" id="tabRequestsBtn" style="display:none;" onclick="switchTab('solicitudes')">👥 SOLICITUDES</button>
+        <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')">👥 ADMINS</button>
+        <button class="tab-btn" id="tabChatBtn" onclick="switchTab('chat')">💬 CHAT GENERAL</button>
     </div>
 
     <!-- PANEL BLOC URLS -->
@@ -597,8 +662,11 @@
         <h3>Bloc de Servidores &amp; URLs</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
             <input type="hidden" id="editUrlId" value="">
-            <div class="form-group"><label id="lblUrlForm">Agregar nueva URL / Host:</label><input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor de Pruebas"></div>
-            <button class="btn-block btn-action" onclick="guardarUrlBloc()">GUARDAR URL</button>
+            <div class="form-group">
+                <label id="lblUrlForm">Agregar nueva URL / Host:</label>
+                <input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor de Pruebas">
+            </div>
+            <button class="btn-block btn-action" id="btnGuardarUrl" onclick="guardarUrlBloc()">GUARDAR URL</button>
         </div>
         <div class="item-list" id="listaUrlsContainer"></div>
     </div>
@@ -611,8 +679,10 @@
             <button class="sub-tab" data-sub="merge">Unir Combos</button>
             <button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button>
         </div>
+
         <div id="sub-generator" class="sub-panel active">
-            <div class="form-group"><label>Tipo de generación:</label>
+            <div class="form-group">
+                <label>Tipo de generación:</label>
                 <select id="genType">
                     <option value="userpass_ano">User:Pass (1996-2050)</option>
                     <option value="useruser">User:User (Nombre-Nombre)</option>
@@ -627,15 +697,31 @@
                     <option value="mezclado">🔄 Combo Mezclado</option>
                 </select>
             </div>
-            <div class="form-group"><label>Cantidad de combos (sin repetir):</label><input type="number" id="genCantidad" value="100"></div>
-            <div class="form-group"><label>Longitud de contraseña (caracteres):</label><input type="number" id="genPassLength" value="8" min="4" max="20"></div>
-            <div class="form-group"><label>Separador:</label><select id="genSep"><option value=":">:</option><option value="|">|</option><option value=";">;</option></select></div>
-            <div class="form-group"><label>Formato usuario:</label><select id="genUserCase"><option value="lower">Minúscula</option><option value="upper">Mayúscula</option><option value="capitalize">Primera mayúscula</option></select></div>
-            <div class="form-group"><label>Formato contraseña:</label><select id="genPassCase"><option value="lower">Minúscula</option><option value="upper">Mayúscula</option><option value="capitalize">Primera mayúscula</option></select></div>
+            <div class="form-group">
+                <label>Cantidad de combos (sin repetir):</label>
+                <input type="number" id="genCantidad" value="100">
+            </div>
+            <div class="form-group">
+                <label>Longitud de contraseña (caracteres):</label>
+                <input type="number" id="genPassLength" value="8" min="4" max="20">
+            </div>
+            <div class="form-group">
+                <label>Separador:</label>
+                <select id="genSep"><option value=":">:</option><option value="|">|</option><option value=";">;</option></select>
+            </div>
+            <div class="form-group">
+                <label>Formato usuario:</label>
+                <select id="genUserCase"><option value="lower">Minúscula</option><option value="upper">Mayúscula</option><option value="capitalize">Primera mayúscula</option></select>
+            </div>
+            <div class="form-group">
+                <label>Formato contraseña:</label>
+                <select id="genPassCase"><option value="lower">Minúscula</option><option value="upper">Mayúscula</option><option value="capitalize">Primera mayúscula</option></select>
+            </div>
             <button class="btn-block btn-start" onclick="generarComboAvanzado()">⚡ GENERAR COMBOS (SIN REPETIR)</button>
             <div class="form-group"><label>Resultado:</label><textarea id="comboResultado" rows="10" readonly></textarea></div>
             <button id="btnDescargarComboGen" class="btn-block btn-save" disabled onclick="descargarComboGenerado()">⬇️ DESCARGAR COMBO</button>
         </div>
+
         <div id="sub-merge" class="sub-panel">
             <div class="form-group"><label>Archivo 1:</label><input type="file" id="mergeFile1" accept=".txt"></div>
             <div class="form-group"><label>Archivo 2:</label><input type="file" id="mergeFile2" accept=".txt"></div>
@@ -645,6 +731,7 @@
             <div class="form-group"><label>Resultado:</label><textarea id="mergeResultado" rows="10" readonly></textarea></div>
             <button id="btnDescargarMerge" class="btn-block btn-save" disabled onclick="descargarMergeResultado()">⬇️ DESCARGAR UNIÓN</button>
         </div>
+
         <div id="sub-dedupe" class="sub-panel">
             <div class="form-group"><label>Archivo .txt:</label><input type="file" id="dedupeFile" accept=".txt"></div>
             <div class="form-group"><label>...o pega texto:</label><textarea id="dedupeText" rows="6" placeholder="user:pass por línea"></textarea></div>
@@ -682,23 +769,25 @@
         <div class="item-card" style="border:2px solid var(--borde-neon)">
             <div class="form-group"><label>Usuario o Correo del Vendedor:</label><input type="text" id="newAdminEmail" placeholder="ej: pericoverde@gmail.com"></div>
             <div class="form-group"><label>Contraseña que usará:</label><input type="text" id="newAdminPass" placeholder="ej: 123456"></div>
-            <button class="btn-block btn-start" onclick="crearVendedorFirebase()">⚡ CREAR E INSTALAR CREDENCIAL</button>
+            <button class="btn-block btn-start" id="btnCrearVendedor" onclick="crearVendedorFirebase()">⚡ CREAR E INSTALAR CREDENCIAL</button>
         </div>
         <h4 style="color:#ffaa66;">Vendedores Activos en el Sistema:</h4>
         <div class="item-list" id="listaVendedoresContainer"></div>
     </div>
 
-    <!-- PANEL CHAT WHATSAPP -->
+    <!-- PANEL CHAT GENERAL -->
     <div id="panel-chat" class="panel">
-        <h3>💬 CHAT ESTILO WHATSAPP - COMUNIDAD SYS ANDY PRO</h3>
-        <div class="profile-config">
+        <h3>💬 CHAT GENERAL - COMUNIDAD SYS ANDY PRO</h3>
+        <div class="profile-config" id="profileConfig">
             <div class="avatar-select" id="avatarSelect">🦁</div>
             <input type="text" id="displayName" placeholder="Tu nombre en el chat" maxlength="20" style="width: 150px;">
             <button class="btn-small btn-action" id="saveProfileBtn">Guardar perfil</button>
             <span style="font-size:0.7rem;">(pulsa el emoji para cambiarlo)</span>
         </div>
         <div class="chat-container">
-            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-messages" id="chatMessages">
+                <!-- mensajes dinámicos -->
+            </div>
             <div class="reply-badge" id="replyBadge" style="display: none;">
                 <span>Respondiendo a...</span>
                 <button class="msg-btn" id="cancelReplyBtn">❌</button>
@@ -709,17 +798,19 @@
             </div>
         </div>
     </div>
-
-    <!-- PANEL SOLICITUDES (solo Owner) -->
-    <div id="panel-solicitudes" class="panel">
-        <h3>👥 SOLICITUDES DE REGISTRO (PENDIENTES)</h3>
-        <div id="pendingUsersContainer" class="item-list"></div>
-        <h3>✅ USUARIOS APROBADOS</h3>
-        <div id="approvedUsersContainer" class="item-list"></div>
-    </div>
 </div>
 
 <script>
+    // ==================== TEMA DÍA/NOCHE ====================
+    function toggleTheme() {
+        document.body.classList.toggle('theme-night');
+        localStorage.setItem('sys_theme', document.body.classList.contains('theme-night') ? 'night' : 'day');
+    }
+    (function() {
+        const saved = localStorage.getItem('sys_theme');
+        if (saved === 'night') document.body.classList.add('theme-night');
+    })();
+
     // ==================== FIREBASE CONFIG ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -741,133 +832,20 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
-    // ==================== REGISTRO Y APROBACIÓN ====================
-    window.registrarUsuario = function() {
-        const nombre = document.getElementById('regName').value.trim();
-        const email = document.getElementById('regEmail').value.trim().toLowerCase();
-        const pass = document.getElementById('regPass').value.trim();
-        if (!nombre || !email || !pass) { alert("Completa todos los campos."); return; }
-        if (pass.length < 6) { alert("La contraseña debe tener al menos 6 caracteres."); return; }
-        const nodo = limpiarClaveLocal(email);
-        db.ref("vendedores/" + nodo).once("value").then(snap => {
-            if (snap.exists()) { alert("Este correo ya está registrado como usuario aprobado."); return; }
-            db.ref("pending_users/" + nodo).once("value").then(snap2 => {
-                if (snap2.exists()) { alert("Ya tienes una solicitud pendiente. Espera aprobación."); return; }
-                db.ref("pending_users/" + nodo).set({
-                    nombre: nombre,
-                    email: email,
-                    pass: pass,
-                    fecha: Date.now(),
-                    estado: "pendiente"
-                }).then(() => {
-                    alert("✅ Registro exitoso. Tu solicitud ha sido enviada. Espera a que el administrador la apruebe.");
-                    document.getElementById('regName').value = "";
-                    document.getElementById('regEmail').value = "";
-                    document.getElementById('regPass').value = "";
-                    document.getElementById('showLoginBtn').click();
-                }).catch(err => alert("Error: "+err.message));
-            });
-        });
-    }
-
-    function cargarSolicitudes() {
-        if (!currentUser || currentUser.role !== 'Owner') return;
-        db.ref("pending_users").on("value", (snapshot) => {
-            const container = document.getElementById("pendingUsersContainer");
-            if (!container) return;
-            container.innerHTML = "";
-            if (!snapshot.exists()) { container.innerHTML = "<p>No hay solicitudes pendientes.</p>"; return; }
-            snapshot.forEach(child => {
-                const data = child.val();
-                const div = document.createElement("div");
-                div.className = "item-card";
-                div.innerHTML = `
-                    <div><strong>${escapeHtml(data.nombre)}</strong> (${escapeHtml(data.email)})</div>
-                    <div>Fecha: ${new Date(data.fecha).toLocaleString()}</div>
-                    <div class="item-actions">
-                        <button class="btn-small btn-start" onclick="aprobarUsuario('${child.key}', '${escapeHtml(data.nombre)}', '${escapeHtml(data.email)}', '${escapeHtml(data.pass)}')">✅ Aprobar</button>
-                        <button class="btn-small btn-del" onclick="rechazarUsuario('${child.key}')">❌ Rechazar</button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        });
-    }
-
-    window.aprobarUsuario = function(key, nombre, email, pass) {
-        if (confirm(`¿Aprobar a ${nombre} (${email})?`)) {
-            const nodo = limpiarClaveLocal(email);
-            db.ref("vendedores/" + nodo).set({
-                email: email,
-                pass: pass,
-                nombre: nombre,
-                fechaCreado: firebase.database.ServerValue.TIMESTAMP,
-                rol: "User"
-            }).then(() => {
-                db.ref("pending_users/" + key).remove();
-                alert("Usuario aprobado correctamente.");
-            }).catch(err => alert("Error: "+err.message));
-        }
-    }
-    window.rechazarUsuario = function(key) {
-        if (confirm("¿Rechazar esta solicitud?")) {
-            db.ref("pending_users/" + key).remove();
-            alert("Solicitud rechazada.");
-        }
-    }
-
-    function cargarUsuariosAprobados() {
-        if (!currentUser || currentUser.role !== 'Owner') return;
-        db.ref("vendedores").on("value", (snapshot) => {
-            const container = document.getElementById("approvedUsersContainer");
-            if (!container) return;
-            container.innerHTML = "";
-            if (!snapshot.exists()) { container.innerHTML = "<p>No hay usuarios aprobados.</p>"; return; }
-            snapshot.forEach(child => {
-                const data = child.val();
-                if (data.email === currentUser.email) return;
-                const div = document.createElement("div");
-                div.className = "item-card";
-                div.innerHTML = `
-                    <div><strong>${escapeHtml(data.nombre || data.email)}</strong> (${escapeHtml(data.email)}) - Rol: ${data.rol || "User"}</div>
-                    <div class="item-actions">
-                        <button class="btn-small btn-del" onclick="eliminarUsuarioAprobado('${child.key}', '${escapeHtml(data.email)}')">🗑️ Eliminar acceso</button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        });
-    }
-
-    window.eliminarUsuarioAprobado = function(key, email) {
-        if (confirm(`¿Eliminar el acceso de ${email}?`)) {
-            db.ref("vendedores/" + key).remove();
-            alert("Usuario eliminado. Ya no podrá iniciar sesión.");
-        }
-    }
-
-    // ==================== LOGIN ====================
-    window.procesarLogin = function() {
+    // ==================== LOGIN Y SESIÓN ====================
+    function procesarLogin() {
         const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
         const passInput = document.getElementById('loginPass').value.trim();
-        if (!emailInput || !passInput) { alert("Completa todos los campos."); return; }
-        if ((emailInput === "andy" || emailInput === "andyobregon799@gmail.com") && passInput === "andy799") {
+        if(!emailInput || !passInput) { alert("Completa todos los campos."); return; }
+        if((emailInput === "andy" || emailInput === "andyobregon799@gmail.com") && passInput === "andy799") { 
             ingresarAlSistema(emailInput, "Owner");
             return;
         }
         const nodoBuscado = limpiarClaveLocal(emailInput);
         db.ref("vendedores/" + nodoBuscado).once("value").then((snapshot) => {
-            if (snapshot.exists() && snapshot.val().pass === passInput) {
-                ingresarAlSistema(snapshot.val().email, snapshot.val().rol || "User");
-            } else {
-                db.ref("pending_users/" + nodoBuscado).once("value").then(pendingSnap => {
-                    if (pendingSnap.exists()) {
-                        alert("⏳ Tu solicitud aún está pendiente de aprobación por el administrador.");
-                    } else {
-                        alert("Credencial incorrecta o usuario no registrado.");
-                    }
-                });
-            }
+            if(snapshot.exists() && snapshot.val().pass === passInput) {
+                ingresarAlSistema(snapshot.val().email, "Seller");
+            } else alert("Credencial incorrecta.");
         }).catch(err => alert("Error de conexión."));
     }
 
@@ -879,14 +857,8 @@
         document.getElementById('userDisplay').textContent = `Admin Activo: ${email} (${elRol})`;
         if (elRol === "Owner") {
             document.getElementById('tabAdminBtn').style.display = 'block';
-            document.getElementById('tabRequestsBtn').style.display = 'block';
             escucharVendedores();
-            cargarSolicitudes();
-            cargarUsuariosAprobados();
-        } else {
-            document.getElementById('tabAdminBtn').style.display = 'none';
-            document.getElementById('tabRequestsBtn').style.display = 'none';
-        }
+        } else document.getElementById('tabAdminBtn').style.display = 'none';
         if (!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
         if (!localStorage.getItem('sys_saved_hits')) localStorage.setItem('sys_saved_hits', JSON.stringify({}));
         renderizarUrlsBloc();
@@ -896,10 +868,8 @@
         iniciarChat();
     }
 
-    window.cerrarSesion = function() {
+    function cerrarSesion() {
         if (window.chatUnsubscribe) window.chatUnsubscribe();
-        if (window.pendingUnsub) db.ref("pending_users").off();
-        if (window.vendedoresUnsub) db.ref("vendedores").off();
         currentUser = null;
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPass').value = '';
@@ -907,17 +877,17 @@
         document.getElementById('main-app').style.display = 'none';
     }
 
-    // ==================== VENDEDORES ====================
-    window.crearVendedorFirebase = function() {
+    // ==================== VENDEDORES (ADMINS) ====================
+    function crearVendedorFirebase() {
         const emailVendedor = document.getElementById("newAdminEmail").value.trim();
         const passVendedor = document.getElementById("newAdminPass").value.trim();
-        if (!emailVendedor || !passVendedor) { alert("Completa ambos campos."); return; }
+        if(!emailVendedor || !passVendedor) { alert("Completa ambos campos."); return; }
         const nodoVendedor = limpiarClaveLocal(emailVendedor);
         const btn = document.getElementById("btnCrearVendedor");
         btn.disabled = true; btn.textContent = "⌛ Guardando...";
-        db.ref("vendedores/" + nodoVendedor).set({ email: emailVendedor, pass: passVendedor, fechaCreado: firebase.database.ServerValue.TIMESTAMP, rol: "Seller" }, (error) => {
+        db.ref("vendedores/" + nodoVendedor).set({ email: emailVendedor, pass: passVendedor, fechaCreado: firebase.database.ServerValue.TIMESTAMP }, (error) => {
             btn.disabled = false; btn.textContent = "⚡ CREAR E INSTALAR CREDENCIAL";
-            if (error) alert("Error: " + error.message);
+            if(error) alert("Error: "+error.message);
             else { alert("✅ Registrado con éxito"); document.getElementById("newAdminEmail").value = ""; document.getElementById("newAdminPass").value = ""; }
         });
     }
@@ -925,21 +895,21 @@
     function escucharVendedores() {
         db.ref("vendedores").on("value", (snapshot) => {
             const container = document.getElementById("listaVendedoresContainer");
-            if (!container) return;
+            if(!container) return;
             container.innerHTML = "";
-            if (!snapshot.exists()) { container.innerHTML = `<p>No hay vendedores.</p>`; return; }
+            if(!snapshot.exists()) { container.innerHTML = `<p>No hay vendedores.</p>`; return; }
             snapshot.forEach((hijo) => {
                 const vendData = hijo.val();
                 const div = document.createElement("div"); div.className = "item-card";
-                div.innerHTML = `<div>👤 <strong>${escapeHtml(vendData.email)}</strong> 🔑 ${escapeHtml(vendData.pass)}</div><div class="item-actions"><button class="btn-small btn-del" onclick="eliminarVendedorFirebase('${hijo.key}')">Eliminar</button></div>`;
+                div.innerHTML = `<div>👤 <strong>${vendData.email}</strong> 🔑 ${vendData.pass}</div><div class="item-actions"><button class="btn-small btn-del" onclick="eliminarVendedorFirebase('${hijo.key}')">Eliminar</button></div>`;
                 container.appendChild(div);
             });
         });
     }
-    window.eliminarVendedorFirebase = function(key) { if (confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
+    function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
     // ==================== BLOC URLS Y BANCO HITS ====================
-    window.guardarUrlBloc = function() {
+    function guardarUrlBloc() {
         const val = document.getElementById('inputUrlData').value.trim(), editId = document.getElementById('editUrlId').value;
         if (!val) return;
         let baseUrls = JSON.parse(localStorage.getItem('sys_urls')) || {};
@@ -960,12 +930,12 @@
         if (misUrls.length === 0) { container.innerHTML = '<p>No hay servidores guardados.</p>'; return; }
         misUrls.forEach((url, idx) => {
             let div = document.createElement('div'); div.className = 'item-card';
-            div.innerHTML = `<div>🌐 <code>${escapeHtml(url)}</code></div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`;
+            div.innerHTML = `<div>🌐 <code>${url}</code></div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`;
             container.appendChild(div);
         });
     }
-    window.usarUrlEscanner = function(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); document.getElementById('hostInput').value = baseUrls[usernameClave][idx].split(" - ")[0].trim(); switchTab('scanner'); }
-    window.eliminarUrl = function(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); baseUrls[usernameClave].splice(idx, 1); localStorage.setItem('sys_urls', JSON.stringify(baseUrls)); renderizarUrlsBloc(); }
+    function usarUrlEscanner(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); document.getElementById('hostInput').value = baseUrls[usernameClave][idx].split(" - ")[0].trim(); switchTab('scanner'); }
+    function eliminarUrl(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); baseUrls[usernameClave].splice(idx, 1); localStorage.setItem('sys_urls', JSON.stringify(baseUrls)); renderizarUrlsBloc(); }
 
     function guardarHitEnBanco(hitTexto, user, pass) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
@@ -996,9 +966,9 @@
         misHits.forEach(h => {
             const div = document.createElement('div');
             div.className = 'hit-block';
-            div.innerHTML = `<div class="hit-header"><span>👤 ${escapeHtml(h.user)}</span><span class="counter-badge">Entregas: ${h.copies || 0}</span></div>
-                            <div class="hit-date">📅 ${escapeHtml(h.fecha)}</div>
-                            <pre class="hit-content">${escapeHtml(h.texto)}</pre>
+            div.innerHTML = `<div class="hit-header"><span>👤 ${h.user}</span><span class="counter-badge">Entregas: ${h.copies || 0}</span></div>
+                            <div class="hit-date">📅 ${h.fecha || 'Fecha desconocida'}</div>
+                            <pre class="hit-content">${h.texto}</pre>
                             <div class="item-actions">
                                 <button class="btn-small btn-copy" onclick="copiarHitConContador(${h.id})">📋 Copiar</button>
                                 <button class="btn-small btn-del" onclick="borrarHitBanco(${h.id})">Eliminar</button>
@@ -1007,7 +977,7 @@
         });
     }
 
-    window.copiarHitConContador = function(hitId) {
+    function copiarHitConContador(hitId) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
         const item = baseHits[usernameClave].find(h => h.id == hitId);
         if (item) {
@@ -1016,25 +986,20 @@
             navigator.clipboard.writeText(item.texto).then(() => renderizarBancoHits());
         }
     }
-    window.borrarHitBanco = function(hitId) {
+    function borrarHitBanco(hitId) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
         baseHits[usernameClave] = baseHits[usernameClave].filter(h => h.id != hitId);
         localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
         renderizarBancoHits();
     }
 
-    window.switchTab = function(tabName) {
+    function switchTab(tabName) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-        const panel = document.getElementById('panel-' + tabName);
-        if (panel) panel.classList.add('active');
+        document.getElementById('panel-' + tabName).classList.add('active');
         let btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick')?.includes(tabName));
         if (btn) btn.classList.add('active');
         if (tabName === 'chat') cargarMensajesChat();
-        if (tabName === 'solicitudes' && currentUser?.role === 'Owner') {
-            cargarSolicitudes();
-            cargarUsuariosAprobados();
-        }
     }
 
     // ==================== COMBOS (generador, unir, dedupe) ====================
@@ -1042,7 +1007,7 @@
         "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben",
         "mario", "ricardo", "victor", "roberto", "francisco", "pablo", "sergio", "adrian", "alberto", "eduardo", "emilio", "enrique", "esteban", "felipe", "gabriel", "guillermo", "hector", "ivan", "julian", "leonardo",
         "mauricio", "nicolas", "raul", "rodrigo", "sebastian", "tomas", "alonso", "cristian", "fabian", "gaston", "hugo", "ignacio", "jeronimo", "kevin", "lucas", "martin", "nahuel", "octavio", "pablo", "ramon",
-        "santiago", "thiago", "ulies", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro",
+        "santiago", "thiago", "ulises", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro",
         "mateo", "naomi", "oliver", "patricio", "quintin", "rene", "simon", "tadeo", "ursulo", "vladimir", "william", "ximena", "yandel", "zoe", "agustin", "bruno", "cesar", "domingo", "emiliano", "fidel",
         "gerardo", "humberto", "ismael", "julio", "karen", "lorenzo", "marcos", "nelson", "orlando", "paul", "quiroga", "rolando", "saul", "tobias", "ulises", "valentin", "winston", "xenofonte", "yamil", "zulema",
         "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria",
@@ -1071,7 +1036,7 @@
         for (let i = 0; i < texto.length; i++) mezclado += Math.random() > 0.5 ? texto[i].toUpperCase() : texto[i].toLowerCase();
         return mezclado;
     }
-    window.generarComboAvanzado = function() {
+    function generarComboAvanzado() {
         const tipo = document.getElementById('genType').value;
         let cantidad = parseInt(document.getElementById('genCantidad').value) || 100;
         const passLength = parseInt(document.getElementById('genPassLength').value) || 8;
@@ -1106,17 +1071,16 @@
         document.getElementById('comboResultado').value = Array.from(combos).join("\n");
         document.getElementById('btnDescargarComboGen').disabled = false;
     }
-    window.descargarComboGenerado = function() { const c = document.getElementById('comboResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combo_generado.txt'; a.click(); a.remove(); }
-
+    function descargarComboGenerado() { const c = document.getElementById('comboResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combo_generado.txt'; a.click(); a.remove(); }
     let mergeData = { file1: [], file2: [], file3: [] };
     function readMergeFile(inputEl, targetArray) { const f = inputEl.files[0]; if(!f){ targetArray.length=0; return; } const r = new FileReader(); r.onload = e => { const lines = e.target.result.split(/\r?\n/).filter(l=>l.trim().length>0); targetArray.length = 0; targetArray.push(...lines); actualizarMergeResultado(); }; r.readAsText(f); }
     function actualizarMergeResultado() { let combined = []; if(mergeData.file1.length) combined.push(...mergeData.file1); if(mergeData.file2.length) combined.push(...mergeData.file2); if(mergeData.file3.length) combined.push(...mergeData.file3); document.getElementById('mergeResultado').value = combined.join("\n"); document.getElementById('btnDescargarMerge').disabled = (combined.length===0); }
-    window.unirCombos = function() { const f1=document.getElementById('mergeFile1'), f2=document.getElementById('mergeFile2'), f3=document.getElementById('mergeFile3'); if(f1.files.length) readMergeFile(f1, mergeData.file1); if(f2.files.length) readMergeFile(f2, mergeData.file2); if(f3.files.length) readMergeFile(f3, mergeData.file3); if(!f1.files.length && !f2.files.length && !f3.files.length) alert("Selecciona al menos un archivo."); else actualizarMergeResultado(); }
-    window.descargarMergeResultado = function() { const c = document.getElementById('mergeResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combos_unidos.txt'; a.click(); a.remove(); }
+    function unirCombos() { const f1=document.getElementById('mergeFile1'), f2=document.getElementById('mergeFile2'), f3=document.getElementById('mergeFile3'); if(f1.files.length) readMergeFile(f1, mergeData.file1); if(f2.files.length) readMergeFile(f2, mergeData.file2); if(f3.files.length) readMergeFile(f3, mergeData.file3); if(!f1.files.length && !f2.files.length && !f3.files.length) alert("Selecciona al menos un archivo."); else actualizarMergeResultado(); }
+    function descargarMergeResultado() { const c = document.getElementById('mergeResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combos_unidos.txt'; a.click(); a.remove(); }
     let dedupeLines = [];
-    window.eliminarDuplicados = function() { const fileInput=document.getElementById('dedupeFile'), textArea=document.getElementById('dedupeText'); if(fileInput.files.length){ const f=fileInput.files[0]; const r=new FileReader(); r.onload=e=>{ dedupeLines = e.target.result.split(/\r?\n/).filter(l=>l.trim().length>0); procesarDedupe(); }; r.readAsText(f); } else if(textArea.value.trim()){ dedupeLines = textArea.value.split(/\r?\n/).filter(l=>l.trim().length>0); procesarDedupe(); } else alert("Selecciona archivo o pega texto."); }
+    function eliminarDuplicados() { const fileInput=document.getElementById('dedupeFile'), textArea=document.getElementById('dedupeText'); if(fileInput.files.length){ const f=fileInput.files[0]; const r=new FileReader(); r.onload=e=>{ dedupeLines = e.target.result.split(/\r?\n/).filter(l=>l.trim().length>0); procesarDedupe(); }; r.readAsText(f); } else if(textArea.value.trim()){ dedupeLines = textArea.value.split(/\r?\n/).filter(l=>l.trim().length>0); procesarDedupe(); } else alert("Selecciona archivo o pega texto."); }
     function procesarDedupe() { const unicos = [...new Set(dedupeLines)]; document.getElementById('dedupeResultado').value = unicos.join("\n"); document.getElementById('btnDescargarDedupe').disabled = (unicos.length===0); alert(`Duplicados eliminados: ${dedupeLines.length - unicos.length} eliminados, ${unicos.length} únicos.`); }
-    window.descargarDedupeResultado = function() { const c = document.getElementById('dedupeResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combos_sin_duplicados.txt'; a.click(); a.remove(); }
+    function descargarDedupeResultado() { const c = document.getElementById('dedupeResultado').value; if(!c) return; const blob = new Blob([c],{type:'text/plain'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='combos_sin_duplicados.txt'; a.click(); a.remove(); }
     document.getElementById('mergeFile1').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile1'), mergeData.file1));
     document.getElementById('mergeFile2').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile2'), mergeData.file2));
     document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
@@ -1125,7 +1089,7 @@
     // ==================== ESCÁNER (completo, con sonido y proxies) ====================
     let moanAudioContext = null;
     function playMoanSound() {
-        if (!document.getElementById('soundToggle')?.checked) return;
+        if (!document.getElementById('soundToggle').checked) return;
         try {
             if (!moanAudioContext) moanAudioContext = new (window.AudioContext || window.webkitAudioContext)();
             if (moanAudioContext.state === 'suspended') moanAudioContext.resume();
@@ -1154,7 +1118,7 @@
     function markProxySuccess(tpl) { PROXY_FAILS.delete(tpl); }
     async function fetchWithCors(url, options = {}, intentos = 3) {
         const opts = { cache: 'no-store', ...options };
-        if (!document.getElementById('useCors')?.checked) { let r = await fetch(url, opts); if(r.ok) return r; throw new Error('Direct fetch failed'); }
+        if (!document.getElementById('useCors').checked) { let r = await fetch(url, opts); if(r.ok) return r; throw new Error('Direct fetch failed'); }
         let proxies = CORS_PROXIES.filter(tpl => !isProxyOnCooldown(tpl));
         if(proxies.length===0) proxies = [...CORS_PROXIES];
         for(let i=proxies.length-1;i>0;i--){ let j=Math.floor(Math.random()*(i+1)); [proxies[i],proxies[j]]=[proxies[j],proxies[i]]; }
@@ -1170,7 +1134,7 @@
     let isRunning = false, stopRequested = false;
     let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
     const HITS = { 1: [], 2: [], 3: [] };
-    function updateStartState(){ const hasHost = !!hostInput?.value.trim(); startBtn.disabled = !(hasHost && (combos1.length || combos2.length || combos3.length || combosTxt.length)); }
+    function updateStartState(){ const hasHost = !!hostInput.value.trim(); startBtn.disabled = !(hasHost && (combos1.length || combos2.length || combos3.length || combosTxt.length)); }
     async function processarCombosJob(host, combos, conc, jobId){
         let total = combos.length, processed = 0, index = 0;
         const fill = document.getElementById(jobId === 1 ? 'progressBarFill' : (jobId === 2 ? 'progressBarFill2' : 'progressBarFill3'));
@@ -1207,7 +1171,7 @@
                         HITS[jobId].push({ user, pass, texto });
                         countSpan.innerHTML = `Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;
                         const div = document.createElement('div'); div.className = 'hit-block';
-                        div.innerHTML = `<div class="hit-header">👤 ${escapeHtml(user)} : ${escapeHtml(pass)}</div><pre class="hit-content">${escapeHtml(texto)}</pre>`;
+                        div.innerHTML = `<div class="hit-header">👤 ${user} : ${pass}</div><pre class="hit-content">${texto}</pre>`;
                         hitsContainer.prepend(div);
                         guardarHitEnBanco(texto, user, pass);
                     }
@@ -1219,12 +1183,12 @@
         await Promise.all(Array.from({ length: conc }, () => worker()));
     }
     function readTxtFile(inputEl, targetArray){ targetArray.length=0; const f=inputEl.files?.[0]; if(!f){ updateStartState(); return; } const r=new FileReader(); r.onload=e=>{ String(e.target.result).split(/\r?\n/).forEach(l=>{ if(extractCombo(l)) targetArray.push(l); }); updateStartState(); }; r.readAsText(f); }
-    if(comboFile1) comboFile1.addEventListener('change',()=>readTxtFile(comboFile1, combos1));
-    if(comboFile2) comboFile2.addEventListener('change',()=>readTxtFile(comboFile2, combos2));
-    if(comboFile3) comboFile3.addEventListener('change',()=>readTxtFile(comboFile3, combos3));
-    if(comboText) comboText.addEventListener('input',()=>{ combosTxt.length=0; comboText.value.split(/\r?\n/).forEach(l=>{ if(extractCombo(l)) combosTxt.push(l); }); updateStartState(); });
-    if(hostInput) hostInput.addEventListener('input', updateStartState);
-    if(startBtn) startBtn.addEventListener('click', async ()=>{
+    comboFile1.addEventListener('change',()=>readTxtFile(comboFile1, combos1));
+    comboFile2.addEventListener('change',()=>readTxtFile(comboFile2, combos2));
+    comboFile3.addEventListener('change',()=>readTxtFile(comboFile3, combos3));
+    comboText.addEventListener('input',()=>{ combosTxt.length=0; comboText.value.split(/\r?\n/).forEach(l=>{ if(extractCombo(l)) combosTxt.push(l); }); updateStartState(); });
+    hostInput.addEventListener('input', updateStartState);
+    startBtn.addEventListener('click', async ()=>{
         if(isRunning) return;
         if(moanAudioContext && moanAudioContext.state==='suspended') await moanAudioContext.resume();
         isRunning=true; stopRequested=false;
@@ -1238,7 +1202,7 @@
         if(combos3.length) jobs.push(processarCombosJob(host, combos3, Math.floor(conc/3)||20, 3));
         Promise.allSettled(jobs).then(()=>{
             isRunning=false; stopBtn.disabled=true; startBtn.disabled=false; saveBtn.disabled=false;
-            if(document.getElementById('autoDownload')?.checked){
+            if(document.getElementById('autoDownload').checked){
                 const allHits = [...HITS[1],...HITS[2],...HITS[3]];
                 if(allHits.length){
                     let content = allHits.map(h=>h.texto).join('\n\n================\n\n');
@@ -1248,8 +1212,8 @@
             }
         });
     });
-    if(stopBtn) stopBtn.addEventListener('click',()=>{ stopRequested=true; });
-    if(saveBtn) saveBtn.addEventListener('click',()=>{
+    stopBtn.addEventListener('click',()=>{ stopRequested=true; });
+    saveBtn.addEventListener('click',()=>{
         const allHits = [...HITS[1],...HITS[2],...HITS[3]];
         if(!allHits.length){ alert("No hay hits para guardar."); return; }
         let content = allHits.map(h=>h.texto).join('\n\n================\n\n');
@@ -1258,7 +1222,7 @@
     });
     updateStartState();
 
-    // ==================== CHAT WHATSAPP STYLE ====================
+    // ==================== CHAT ====================
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     function getUserColor(email) { let hash=0; for(let i=0;i<email.length;i++) hash=((hash<<5)-hash)+email.charCodeAt(i); const hue=Math.abs(hash%360); return `hsl(${hue}, 70%, 60%)`; }
@@ -1267,23 +1231,19 @@
         const snapshot = await perfilRef.once('value');
         if(snapshot.exists()){ const data=snapshot.val(); chatDisplayName=data.name||email.split('@')[0]; chatAvatar=data.avatar||"🦁"; }
         else{ chatDisplayName=email.split('@')[0]; chatAvatar="🦁"; await perfilRef.set({name:chatDisplayName, avatar:chatAvatar}); }
-        const displayNameInput = document.getElementById('displayName');
-        if(displayNameInput) displayNameInput.value=chatDisplayName;
-        const avatarSelect = document.getElementById('avatarSelect');
-        if(avatarSelect) avatarSelect.textContent=chatAvatar;
+        document.getElementById('displayName').value=chatDisplayName;
+        document.getElementById('avatarSelect').textContent=chatAvatar;
     }
-    const saveProfileBtn = document.getElementById('saveProfileBtn');
-    if(saveProfileBtn) saveProfileBtn.addEventListener('click', async()=>{
-        const newName=document.getElementById('displayName')?.value.trim();
+    document.getElementById('saveProfileBtn').addEventListener('click', async()=>{
+        const newName=document.getElementById('displayName').value.trim();
         if(newName) chatDisplayName=newName;
-        chatAvatar=document.getElementById('avatarSelect')?.textContent || "🦁";
+        chatAvatar=document.getElementById('avatarSelect').textContent;
         await db.ref(`chat_profiles/${currentUser.uid}`).set({name:chatDisplayName, avatar:chatAvatar});
         alert("Perfil actualizado");
     });
-    const avatarSelect = document.getElementById('avatarSelect');
-    if(avatarSelect) avatarSelect.addEventListener('click',()=>{
+    document.getElementById('avatarSelect').addEventListener('click',()=>{
         let newEmoji=prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
-        if(newEmoji && newEmoji.trim()) avatarSelect.textContent=newEmoji.trim();
+        if(newEmoji && newEmoji.trim()) document.getElementById('avatarSelect').textContent=newEmoji.trim();
     });
     let chatUnsubscribe=null;
     function iniciarChat(){
@@ -1293,44 +1253,42 @@
             const messages=[];
             snapshot.forEach(child=>{ messages.push({id:child.key, ...child.val()}); });
             messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
-            renderizarMensajesWhatsApp(messages);
+            renderizarMensajes(messages);
         });
     }
-    async function renderizarMensajesWhatsApp(messages){
+    async function renderizarMensajes(messages){
         const container=document.getElementById('chatMessages');
         if(!container) return;
         container.innerHTML='';
         for(const msg of messages){
-            const isOwn = (msg.userId === currentUser.uid);
-            const wrapper = document.createElement('div');
-            wrapper.className = `message-wrapper ${isOwn ? 'own' : 'other'}`;
-            const bubble = document.createElement('div');
-            bubble.className = 'chat-message';
-            const userColor = getUserColor(msg.userId);
-            const replyHtml = msg.replyTo ? `<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>` : '';
-            bubble.innerHTML = `
+            const userColor=getUserColor(msg.userId);
+            const replyHtml=msg.replyTo?`<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>`:'';
+            const msgDiv=document.createElement('div');
+            msgDiv.className=`chat-message ${msg.replyTo?'replying':''}`;
+            msgDiv.style.setProperty('--user-color', userColor);
+            msgDiv.dataset.id=msg.id;
+            msgDiv.innerHTML=`
                 <div class="message-header">
                     <span class="message-avatar">${escapeHtml(msg.avatar||'🦁')}</span>
                     <span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span>
-                    <span class="message-time">${new Date(msg.timestamp).toLocaleTimeString()}</span>
+                    <span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span>
                 </div>
                 ${replyHtml}
-                <div class="message-text">${formatMessageTextWhatsApp(msg.text, msg.mentions||[])}</div>
+                <div class="message-text">${formatMessageText(msg.text, msg.mentions||[])}</div>
                 <div class="message-actions">
                     <button class="msg-btn reply-btn" title="Responder">💬</button>
-                    ${ (currentUser.role === 'Owner' || msg.userId === currentUser.uid) ? `<button class="msg-btn edit-btn" title="Editar">✏️</button><button class="msg-btn delete-btn" title="Eliminar">🗑️</button>` : '' }
+                    ${(currentUser.role==='Owner' || msg.userId===currentUser.uid)?`<button class="msg-btn edit-btn" title="Editar">✏️</button><button class="msg-btn delete-btn" title="Eliminar">🗑️</button>`:''}
                 </div>
             `;
-            bubble.querySelector('.reply-btn').onclick=()=>{ currentReplyTo={ id:msg.id, userName:msg.userName, text:msg.text }; const badge=document.getElementById('replyBadge'); if(badge){ badge.style.display='flex'; badge.querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`; } };
-            if(bubble.querySelector('.edit-btn')) bubble.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id, msg.text);
-            if(bubble.querySelector('.delete-btn')) bubble.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);
-            wrapper.appendChild(bubble);
-            container.appendChild(wrapper);
+            msgDiv.querySelector('.reply-btn').onclick=()=>{ currentReplyTo={ id:msg.id, userName:msg.userName, text:msg.text }; document.getElementById('replyBadge').style.display='flex'; document.getElementById('replyBadge').querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`; };
+            if(msgDiv.querySelector('.edit-btn')) msgDiv.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id, msg.text);
+            if(msgDiv.querySelector('.delete-btn')) msgDiv.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);
+            container.appendChild(msgDiv);
         }
-        container.scrollTop = container.scrollHeight;
+        container.scrollTop=container.scrollHeight;
     }
-    function escapeHtml(str){ return String(str).replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
-    function formatMessageTextWhatsApp(text, mentions){
+    function escapeHtml(str){ return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+    function formatMessageText(text, mentions){
         let html=escapeHtml(text);
         mentions.forEach(m=>{
             const regex=new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
@@ -1338,7 +1296,7 @@
         });
         return html;
     }
-    async function enviarMensajeWhatsApp(){
+    async function enviarMensaje(){
         const input=document.getElementById('chatInput');
         let text=input.value.trim();
         if(!text) return;
@@ -1355,7 +1313,7 @@
             if(found && !mentions.some(m=>m.userId===found.userId)) mentions.push(found);
         }
         const msgData={ userId:currentUser.uid, userName:chatDisplayName, avatar:chatAvatar, text:text, timestamp:Date.now(), mentions:mentions };
-        if(currentReplyTo){ msgData.replyTo={ id:currentReplyTo.id, userId:currentReplyTo.userId, userName:currentReplyTo.userName, text:currentReplyTo.text.substring(0,100) }; currentReplyTo=null; const badge=document.getElementById('replyBadge'); if(badge) badge.style.display='none'; }
+        if(currentReplyTo){ msgData.replyTo={ id:currentReplyTo.id, userId:currentReplyTo.userId, userName:currentReplyTo.userName, text:currentReplyTo.text.substring(0,100) }; currentReplyTo=null; document.getElementById('replyBadge').style.display='none'; }
         await db.ref('chat_messages').push(msgData);
         input.value='';
     }
@@ -1366,27 +1324,10 @@
     async function eliminarMensaje(msgId){
         if(confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
     }
-    const sendMsgBtn = document.getElementById('sendMsgBtn');
-    if(sendMsgBtn) sendMsgBtn.addEventListener('click', enviarMensajeWhatsApp);
-    const chatInputElem = document.getElementById('chatInput');
-    if(chatInputElem) chatInputElem.addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensajeWhatsApp(); } });
-    const cancelReplyBtn = document.getElementById('cancelReplyBtn');
-    if(cancelReplyBtn) cancelReplyBtn.addEventListener('click', ()=>{ currentReplyTo=null; const badge=document.getElementById('replyBadge'); if(badge) badge.style.display='none'; });
-    function cargarMensajesChat(){}
-
-    // Mostrar/ocultar login/registro
-    document.getElementById('showLoginBtn').addEventListener('click',()=>{
-        document.getElementById('loginPanel').style.display='block';
-        document.getElementById('registerPanel').style.display='none';
-        document.getElementById('showLoginBtn').style.background='#ff8833';
-        document.getElementById('showRegisterBtn').style.background='#442222';
-    });
-    document.getElementById('showRegisterBtn').addEventListener('click',()=>{
-        document.getElementById('loginPanel').style.display='none';
-        document.getElementById('registerPanel').style.display='block';
-        document.getElementById('showRegisterBtn').style.background='#ff8833';
-        document.getElementById('showLoginBtn').style.background='#442222';
-    });
+    document.getElementById('sendMsgBtn').addEventListener('click', enviarMensaje);
+    document.getElementById('chatInput').addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensaje(); } });
+    document.getElementById('cancelReplyBtn').addEventListener('click', ()=>{ currentReplyTo=null; document.getElementById('replyBadge').style.display='none'; });
+    function cargarMensajesChat(){} // ya se actualiza en tiempo real
 </script>
 </body>
 </html>
