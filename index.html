@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - LEÓN ROJO + CHAT GENERAL</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + CHAT GENERAL + REGISTRO CON APROBACIÓN</title>
     <style>
         /* ========== PALETA LEÓN ROJO + NEGRO (TEMA DÍA - por defecto) ========== */
         :root {
@@ -81,6 +81,36 @@
             width: 100%;
             max-width: 400px;
             box-shadow: var(--sombra-difusa), inset 0 0 15px rgba(255, 68, 0, 0.2);
+        }
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid var(--borde-neon);
+        }
+        .auth-tab {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: var(--texto-secundario);
+            font-weight: bold;
+            padding: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .auth-tab.active {
+            color: #ffaa44;
+            border-bottom: 3px solid #ff4422;
+        }
+        body.theme-night .auth-tab.active {
+            color: #60a5fa;
+            border-bottom-color: #3b82f6;
+        }
+        .auth-panel {
+            display: none;
+        }
+        .auth-panel.active {
+            display: block;
         }
 
         #main-app {
@@ -172,6 +202,7 @@
             text-align: center;
             white-space: nowrap;
             transition: 0.2s;
+            position: relative;
         }
         .tab-btn.active {
             color: #ffaa44;
@@ -183,6 +214,14 @@
             color: #60a5fa;
             border-bottom-color: #3b82f6;
             background: rgba(37, 99, 235, 0.2);
+        }
+        .badge-pending {
+            background: #ff3300;
+            color: white;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            margin-left: 6px;
         }
 
         .panel {
@@ -239,7 +278,7 @@
             font-weight: bold;
         }
 
-        input[type="text"], input[type="password"], input[type="number"], textarea, select {
+        input[type="text"], input[type="password"], input[type="number"], input[type="email"], textarea, select {
             width: 100%;
             padding: 10px;
             background-color: #1f0808;
@@ -330,7 +369,7 @@
             border-color: #3b82f6;
         }
 
-        .item-actions { display: flex; gap: 8px; margin-top: 8px; }
+        .item-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
         .btn-small {
             padding: 6px 12px;
             font-size: 0.85rem;
@@ -343,6 +382,8 @@
         .btn-edit { background-color: #dd8822; }
         .btn-del { background-color: #aa2222; }
         .btn-copy { background-color: #00bfa5; }
+        .btn-approve { background-color: #2e7d32; }
+        .btn-reject { background-color: #c62828; }
 
         .job-card {
             background: rgba(20, 5, 5, 0.9);
@@ -622,17 +663,44 @@
 
 <div id="auth-screen">
     <div class="auth-box">
-        <h2 style="text-align:center;background:linear-gradient(135deg,#ff5533,#aa1100);-webkit-background-clip:text;background-clip:text;color:transparent;margin-top:0;">🦁 SYS ANDY PRO - LEÓN ROJO</h2>
-        <p style="text-align:center;color:#ffaa88;">Ingresa tus credenciales</p>
-        <div class="form-group">
-            <label>Usuario o Correo Electrónico:</label>
-            <input type="text" id="loginEmail" placeholder="ej: andyobregon799@gmail.com">
+        <h2 style="text-align:center;background:linear-gradient(135deg,#ff5533,#aa1100);-webkit-background-clip:text;background-clip:text;color:transparent;">🦁 SYS ANDY PRO</h2>
+        <div class="auth-tabs">
+            <button class="auth-tab active" data-auth="login">🔐 Iniciar Sesión</button>
+            <button class="auth-tab" data-auth="register">📝 Registrarse</button>
         </div>
-        <div class="form-group">
-            <label>Contraseña:</label>
-            <input type="password" id="loginPass" placeholder="••••••••">
+        <!-- Panel Login -->
+        <div id="auth-login" class="auth-panel active">
+            <div class="form-group">
+                <label>Usuario o Correo Electrónico:</label>
+                <input type="text" id="loginEmail" placeholder="ej: andyobregon799@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="loginPass" placeholder="••••••••">
+            </div>
+            <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR AL SISTEMA</button>
         </div>
-        <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR AL SISTEMA</button>
+        <!-- Panel Registro -->
+        <div id="auth-register" class="auth-panel">
+            <div class="form-group">
+                <label>Correo Electrónico:</label>
+                <input type="email" id="regEmail" placeholder="usuario@ejemplo.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="regPass" placeholder="mínimo 4 caracteres">
+            </div>
+            <div class="form-group">
+                <label>Confirmar Contraseña:</label>
+                <input type="password" id="regPassConfirm" placeholder="repita contraseña">
+            </div>
+            <div class="form-group">
+                <label>Nombre en el chat (opcional):</label>
+                <input type="text" id="regDisplayName" placeholder="Como te verán">
+            </div>
+            <button class="btn-block btn-save" onclick="solicitarRegistro()">📨 ENVIAR SOLICITUD</button>
+            <p style="font-size:0.75rem; text-align:center; margin-top:10px;">Tu solicitud será revisada por el administrador. Recibirás acceso al ser aprobada.</p>
+        </div>
     </div>
 </div>
 
@@ -650,11 +718,12 @@
 
     <div class="tabs-container">
         <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC URLS</button>
-        <button class="tab-btn" id="tabCombosBtn" onclick="switchTab('combos')">📦 COMBOS</button>
+        <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
         <button class="tab-btn" onclick="switchTab('scanner')">📡 ESCÁNER LSF</button>
         <button class="tab-btn" onclick="switchTab('banco-hits')">🗄️ BANCO HITS</button>
         <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')">👥 ADMINS</button>
-        <button class="tab-btn" id="tabChatBtn" onclick="switchTab('chat')">💬 CHAT GENERAL</button>
+        <button class="tab-btn" id="tabSolicitudesBtn" onclick="switchTab('solicitudes')">📝 SOLICITUDES</button>
+        <button class="tab-btn" onclick="switchTab('chat')">💬 CHAT GENERAL</button>
     </div>
 
     <!-- PANEL BLOC URLS -->
@@ -775,6 +844,12 @@
         <div class="item-list" id="listaVendedoresContainer"></div>
     </div>
 
+    <!-- PANEL SOLICITUDES (solo Owner) -->
+    <div id="panel-solicitudes" class="panel">
+        <h3>📋 Solicitudes de Registro Pendientes</h3>
+        <div id="solicitudesContainer" class="item-list"></div>
+    </div>
+
     <!-- PANEL CHAT GENERAL -->
     <div id="panel-chat" class="panel">
         <h3>💬 CHAT GENERAL - COMUNIDAD SYS ANDY PRO</h3>
@@ -801,17 +876,7 @@
 </div>
 
 <script>
-    // ==================== TEMA DÍA/NOCHE ====================
-    function toggleTheme() {
-        document.body.classList.toggle('theme-night');
-        localStorage.setItem('sys_theme', document.body.classList.contains('theme-night') ? 'night' : 'day');
-    }
-    (function() {
-        const saved = localStorage.getItem('sys_theme');
-        if (saved === 'night') document.body.classList.add('theme-night');
-    })();
-
-    // ==================== FIREBASE CONFIG ====================
+    // ==================== CONFIGURACIÓN GLOBAL ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -819,7 +884,7 @@
         storageBucket: "gestion-ventas-pro-f8de4.firebasestorage.app",
         messagingSenderId: "96449660649",
         appId: "1:96449660649:web:d949eccf893c9705451278",
-        databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com/" 
+        databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com/"
     };
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
@@ -832,7 +897,7 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
-    // ==================== LOGIN Y SESIÓN ====================
+    // ==================== LOGIN Y REGISTRO ====================
     function procesarLogin() {
         const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
         const passInput = document.getElementById('loginPass').value.trim();
@@ -845,7 +910,7 @@
         db.ref("vendedores/" + nodoBuscado).once("value").then((snapshot) => {
             if(snapshot.exists() && snapshot.val().pass === passInput) {
                 ingresarAlSistema(snapshot.val().email, "Seller");
-            } else alert("Credencial incorrecta.");
+            } else alert("Credencial incorrecta o aún no aprobada.");
         }).catch(err => alert("Error de conexión."));
     }
 
@@ -857,8 +922,13 @@
         document.getElementById('userDisplay').textContent = `Admin Activo: ${email} (${elRol})`;
         if (elRol === "Owner") {
             document.getElementById('tabAdminBtn').style.display = 'block';
+            document.getElementById('tabSolicitudesBtn').style.display = 'block';
             escucharVendedores();
-        } else document.getElementById('tabAdminBtn').style.display = 'none';
+            escucharSolicitudesRegistro();
+        } else {
+            document.getElementById('tabAdminBtn').style.display = 'none';
+            document.getElementById('tabSolicitudesBtn').style.display = 'none';
+        }
         if (!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
         if (!localStorage.getItem('sys_saved_hits')) localStorage.setItem('sys_saved_hits', JSON.stringify({}));
         renderizarUrlsBloc();
@@ -870,6 +940,7 @@
 
     function cerrarSesion() {
         if (window.chatUnsubscribe) window.chatUnsubscribe();
+        if (window.solicitudesUnsubscribe) window.solicitudesUnsubscribe();
         currentUser = null;
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPass').value = '';
@@ -908,7 +979,121 @@
     }
     function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // ==================== BLOC URLS Y BANCO HITS ====================
+    // ==================== NUEVA FUNCIÓN: REGISTRO CON APROBACIÓN ====================
+    function solicitarRegistro() {
+        const email = document.getElementById('regEmail').value.trim().toLowerCase();
+        const pass = document.getElementById('regPass').value.trim();
+        const passConfirm = document.getElementById('regPassConfirm').value.trim();
+        const displayName = document.getElementById('regDisplayName').value.trim() || email.split('@')[0];
+        if (!email || !pass || !passConfirm) { alert("Completa todos los campos."); return; }
+        if (pass !== passConfirm) { alert("Las contraseñas no coinciden."); return; }
+        if (pass.length < 4) { alert("La contraseña debe tener al menos 4 caracteres."); return; }
+        const nodoVendedor = limpiarClaveLocal(email);
+        db.ref(`vendedores/${nodoVendedor}`).once('value').then(snap => {
+            if (snap.exists()) { alert("Este correo ya está registrado y aprobado. Inicia sesión."); return; }
+            db.ref('registro_solicitudes').orderByChild('email').equalTo(email).once('value').then(snapSolic => {
+                let existePendiente = false;
+                snapSolic.forEach(child => { if (child.val().estado === 'pendiente') existePendiente = true; });
+                if (existePendiente) { alert("Ya tienes una solicitud pendiente. Espera la aprobación."); return; }
+                const nuevaSolicitud = {
+                    email: email,
+                    password: pass,
+                    displayName: displayName,
+                    estado: 'pendiente',
+                    fecha: firebase.database.ServerValue.TIMESTAMP
+                };
+                db.ref('registro_solicitudes').push(nuevaSolicitud).then(() => {
+                    alert("✅ Solicitud enviada. El administrador la revisará.");
+                    document.getElementById('regEmail').value = '';
+                    document.getElementById('regPass').value = '';
+                    document.getElementById('regPassConfirm').value = '';
+                    document.getElementById('regDisplayName').value = '';
+                    document.querySelector('.auth-tab[data-auth="login"]').click();
+                }).catch(err => alert("Error: " + err.message));
+            });
+        });
+    }
+
+    let solicitudesUnsubscribe = null;
+    function escucharSolicitudesRegistro() {
+        if(solicitudesUnsubscribe) solicitudesUnsubscribe();
+        const solicitudesRef = db.ref('registro_solicitudes').orderByChild('estado').equalTo('pendiente');
+        solicitudesUnsubscribe = solicitudesRef.on('value', (snapshot) => {
+            const container = document.getElementById('solicitudesContainer');
+            const tabBtn = document.getElementById('tabSolicitudesBtn');
+            if(!container) return;
+            container.innerHTML = '';
+            let count = 0;
+            if(snapshot.exists()){
+                snapshot.forEach(child => {
+                    count++;
+                    const sol = child.val();
+                    const fecha = sol.fecha ? new Date(sol.fecha).toLocaleString() : 'desconocida';
+                    const div = document.createElement('div');
+                    div.className = 'item-card';
+                    div.innerHTML = `
+                        <div><strong>📧 ${sol.email}</strong> | 🧑 ${sol.displayName}</div>
+                        <div>📅 ${fecha}</div>
+                        <div class="item-actions">
+                            <button class="btn-small btn-approve" onclick="aprobarSolicitud('${child.key}', '${sol.email.replace(/'/g, "\\'")}', '${sol.password.replace(/'/g, "\\'")}', '${sol.displayName.replace(/'/g, "\\'")}')">✅ Aprobar</button>
+                            <button class="btn-small btn-reject" onclick="rechazarSolicitud('${child.key}')">❌ Rechazar</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            } else {
+                container.innerHTML = '<p>✨ No hay solicitudes pendientes.</p>';
+            }
+            if(tabBtn){
+                let badge = tabBtn.querySelector('.badge-pending');
+                if(count > 0){
+                    if(!badge) tabBtn.innerHTML = `📝 SOLICITUDES <span class="badge-pending">${count}</span>`;
+                    else badge.textContent = count;
+                } else {
+                    if(badge) badge.remove();
+                    if(tabBtn.innerText.includes('(')) tabBtn.innerHTML = '📝 SOLICITUDES';
+                }
+            }
+        });
+    }
+
+    async function aprobarSolicitud(key, email, password, displayName) {
+        if(!confirm(`Aprobar a ${email}? Se creará como vendedor.`)) return;
+        const nodo = limpiarClaveLocal(email);
+        try {
+            await db.ref(`vendedores/${nodo}`).set({
+                email: email,
+                pass: password,
+                fechaCreado: firebase.database.ServerValue.TIMESTAMP
+            });
+            await db.ref(`chat_profiles/${nodo}`).set({
+                name: displayName || email.split('@')[0],
+                avatar: '🦁'
+            });
+            await db.ref(`registro_solicitudes/${key}`).remove();
+            alert(`✅ ${email} aprobado. Ya puede iniciar sesión.`);
+        } catch(e) { alert("Error: "+e.message); }
+    }
+
+    async function rechazarSolicitud(key) {
+        if(confirm("¿Rechazar solicitud?")){
+            await db.ref(`registro_solicitudes/${key}`).remove();
+            alert("Solicitud rechazada.");
+        }
+    }
+
+    // ==================== RESTO DE FUNCIONES ORIGINALES (sin cambios) ====================
+    // TEMA
+    function toggleTheme() {
+        document.body.classList.toggle('theme-night');
+        localStorage.setItem('sys_theme', document.body.classList.contains('theme-night') ? 'night' : 'day');
+    }
+    (function() {
+        const saved = localStorage.getItem('sys_theme');
+        if (saved === 'night') document.body.classList.add('theme-night');
+    })();
+
+    // BLOC URLS
     function guardarUrlBloc() {
         const val = document.getElementById('inputUrlData').value.trim(), editId = document.getElementById('editUrlId').value;
         if (!val) return;
@@ -937,6 +1122,7 @@
     function usarUrlEscanner(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); document.getElementById('hostInput').value = baseUrls[usernameClave][idx].split(" - ")[0].trim(); switchTab('scanner'); }
     function eliminarUrl(idx) { let baseUrls = JSON.parse(localStorage.getItem('sys_urls')); baseUrls[usernameClave].splice(idx, 1); localStorage.setItem('sys_urls', JSON.stringify(baseUrls)); renderizarUrlsBloc(); }
 
+    // BANCO HITS
     function guardarHitEnBanco(hitTexto, user, pass) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
         if (!baseHits[usernameClave]) baseHits[usernameClave] = [];
@@ -955,7 +1141,6 @@
         localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
         renderizarBancoHits();
     }
-
     function renderizarBancoHits() {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
         const container = document.getElementById('bancoHitsContainer');
@@ -976,7 +1161,6 @@
             container.appendChild(div);
         });
     }
-
     function copiarHitConContador(hitId) {
         const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits'));
         const item = baseHits[usernameClave].find(h => h.id == hitId);
@@ -993,6 +1177,7 @@
         renderizarBancoHits();
     }
 
+    // SWITCH TABS
     function switchTab(tabName) {
         document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1002,17 +1187,8 @@
         if (tabName === 'chat') cargarMensajesChat();
     }
 
-    // ==================== COMBOS (generador, unir, dedupe) ====================
-    const nombresReales = [
-        "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben",
-        "mario", "ricardo", "victor", "roberto", "francisco", "pablo", "sergio", "adrian", "alberto", "eduardo", "emilio", "enrique", "esteban", "felipe", "gabriel", "guillermo", "hector", "ivan", "julian", "leonardo",
-        "mauricio", "nicolas", "raul", "rodrigo", "sebastian", "tomas", "alonso", "cristian", "fabian", "gaston", "hugo", "ignacio", "jeronimo", "kevin", "lucas", "martin", "nahuel", "octavio", "pablo", "ramon",
-        "santiago", "thiago", "ulises", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro",
-        "mateo", "naomi", "oliver", "patricio", "quintin", "rene", "simon", "tadeo", "ursulo", "vladimir", "william", "ximena", "yandel", "zoe", "agustin", "bruno", "cesar", "domingo", "emiliano", "fidel",
-        "gerardo", "humberto", "ismael", "julio", "karen", "lorenzo", "marcos", "nelson", "orlando", "paul", "quiroga", "rolando", "saul", "tobias", "ulises", "valentin", "winston", "xenofonte", "yamil", "zulema",
-        "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria",
-        "elena", "rocio", "monica", "andrea", "fernanda", "gabriela", "mariana", "victoria", "beatriz", "roxana", "claudia", "viviana", "liliana", "norma", "cristina", "susana", "marcela", "graciela", "teresa", "raquel"
-    ];
+    // ========== COMBOS (Todas las funciones originales) ==========
+    const nombresReales = [ "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben", "mario", "ricardo", "victor", "roberto", "francisco", "pablo", "sergio", "adrian", "alberto", "eduardo", "emilio", "enrique", "esteban", "felipe", "gabriel", "guillermo", "hector", "ivan", "julian", "leonardo", "mauricio", "nicolas", "raul", "rodrigo", "sebastian", "tomas", "alonso", "cristian", "fabian", "gaston", "hugo", "ignacio", "jeronimo", "kevin", "lucas", "martin", "nahuel", "octavio", "pablo", "ramon", "santiago", "thiago", "ulises", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro", "mateo", "naomi", "oliver", "patricio", "quintin", "rene", "simon", "tadeo", "ursulo", "vladimir", "william", "ximena", "yandel", "zoe", "agustin", "bruno", "cesar", "domingo", "emiliano", "fidel", "gerardo", "humberto", "ismael", "julio", "karen", "lorenzo", "marcos", "nelson", "orlando", "paul", "quiroga", "rolando", "saul", "tobias", "ulises", "valentin", "winston", "xenofonte", "yamil", "zulema", "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria", "elena", "rocio", "monica", "andrea", "fernanda", "gabriela", "mariana", "victoria", "beatriz", "roxana", "claudia", "viviana", "liliana", "norma", "cristina", "susana", "marcela", "graciela", "teresa", "raquel" ];
     const palabrasExtra = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system", "server", "network", "digital", "global", "prime", "super", "mega", "ultra", "power", "plus"];
     function applyCase(str, caseType) {
         if (caseType === 'upper') return str.toUpperCase();
@@ -1086,7 +1262,7 @@
     document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
-    // ==================== ESCÁNER (completo, con sonido y proxies) ====================
+    // ========== ESCÁNER COMPLETO (con proxies, sonido, 3 jobs) ==========
     let moanAudioContext = null;
     function playMoanSound() {
         if (!document.getElementById('soundToggle').checked) return;
@@ -1222,7 +1398,7 @@
     });
     updateStartState();
 
-    // ==================== CHAT ====================
+    // ========== CHAT COMPLETO (igual) ==========
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     function getUserColor(email) { let hash=0; for(let i=0;i<email.length;i++) hash=((hash<<5)-hash)+email.charCodeAt(i); const hue=Math.abs(hash%360); return `hsl(${hue}, 70%, 60%)`; }
@@ -1327,7 +1503,7 @@
     document.getElementById('sendMsgBtn').addEventListener('click', enviarMensaje);
     document.getElementById('chatInput').addEventListener('keypress', (e)=>{ if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); enviarMensaje(); } });
     document.getElementById('cancelReplyBtn').addEventListener('click', ()=>{ currentReplyTo=null; document.getElementById('replyBadge').style.display='none'; });
-    function cargarMensajesChat(){} // ya se actualiza en tiempo real
+    function cargarMensajesChat(){}
 </script>
 </body>
 </html>
