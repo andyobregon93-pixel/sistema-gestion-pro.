@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>SYS ANDY PRO - LEÓN ROJO + CHAT + REGISTRO + NUEVO ESCÁNER + RECUPERACIÓN</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + CHAT + RECUPERACIÓN + NUEVO ESCÁNER</title>
     <style>
         /* ========== PALETA LEÓN ROJO + NEGRO (TEMA DÍA - por defecto) ========== */
         :root {
@@ -334,7 +334,7 @@
         .item-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-small { padding: 6px 12px; border-radius: 12px; color: white; background-color: #000; }
 
-        /* ========== ESTILOS DEL NUEVO ESCÁNER (adaptados) ========== */
+        /* ========== ESTILOS DEL NUEVO ESCÁNER (MUNRRA adaptado) ========== */
         .progress-container, .progress-container2, .progress-container3 {
             margin-top: 20px;
             border: 2px solid var(--borde-neon);
@@ -610,7 +610,7 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
-    // ========== LOGIN / REGISTRO / ADMIN (exactamente igual que en el original) ==========
+    // ========== LOGIN / REGISTRO / ADMIN (exactamente igual al original que funciona) ==========
     document.querySelectorAll('.auth-tab').forEach(tab => {
         tab.addEventListener('click', function() {
             const target = this.getAttribute('data-auth');
