@@ -41,7 +41,7 @@
             transition: background 0.3s, color 0.2s;
         }
 
-        /* RESPONSIVE */
+        /* RESPONSIVE (mejorado) */
         @media (max-width: 768px) {
             .tabs-container { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
             .tab-btn { display: inline-block; flex: none; padding: 10px 12px; font-size: 0.9rem; }
@@ -334,7 +334,7 @@
         .item-actions { display: flex; gap: 8px; flex-wrap: wrap; }
         .btn-small { padding: 6px 12px; border-radius: 12px; color: white; background-color: #000; }
 
-        /* ========== NUEVO ESCÁNER (estilos) ========== */
+        /* ========== ESTILOS DEL NUEVO ESCÁNER ========== */
         .progressContainer, .progressContainer2, .progressContainer3 {
             margin-top: 20px;
             border: 2px solid var(--borde-neon);
@@ -430,17 +430,35 @@
         </div>
         <!-- Panel Login -->
         <div id="auth-login" class="auth-panel active">
-            <div class="form-group"><label>Usuario o Correo Electrónico:</label><input type="text" id="loginEmail" placeholder="ej: andyobregon799@gmail.com"></div>
-            <div class="form-group"><label>Contraseña:</label><input type="password" id="loginPass" placeholder="••••••••"></div>
+            <div class="form-group">
+                <label>Usuario o Correo Electrónico:</label>
+                <input type="text" id="loginEmail" placeholder="ej: andyobregon799@gmail.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="loginPass" placeholder="••••••••">
+            </div>
             <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR AL SISTEMA</button>
             <div style="text-align:center; margin-top:12px;"><a href="#" id="forgotPasswordLink" style="color:#ffaa66;">¿Olvidaste tu contraseña?</a></div>
         </div>
         <!-- Panel Registro -->
         <div id="auth-register" class="auth-panel">
-            <div class="form-group"><label>Correo Electrónico:</label><input type="email" id="regEmail" placeholder="usuario@ejemplo.com"></div>
-            <div class="form-group"><label>Contraseña:</label><input type="password" id="regPass" placeholder="mínimo 4 caracteres"></div>
-            <div class="form-group"><label>Confirmar Contraseña:</label><input type="password" id="regPassConfirm" placeholder="repita contraseña"></div>
-            <div class="form-group"><label>Nombre en el chat (opcional):</label><input type="text" id="regDisplayName" placeholder="Como te verán"></div>
+            <div class="form-group">
+                <label>Correo Electrónico:</label>
+                <input type="email" id="regEmail" placeholder="usuario@ejemplo.com">
+            </div>
+            <div class="form-group">
+                <label>Contraseña:</label>
+                <input type="password" id="regPass" placeholder="mínimo 4 caracteres">
+            </div>
+            <div class="form-group">
+                <label>Confirmar Contraseña:</label>
+                <input type="password" id="regPassConfirm" placeholder="repita contraseña">
+            </div>
+            <div class="form-group">
+                <label>Nombre en el chat (opcional):</label>
+                <input type="text" id="regDisplayName" placeholder="Como te verán">
+            </div>
             <button class="btn-block btn-save" onclick="solicitarRegistro()">📨 ENVIAR SOLICITUD</button>
             <p style="font-size:0.75rem; text-align:center; margin-top:10px;">Tu solicitud será revisada por el administrador. Recibirás acceso al ser aprobada.</p>
         </div>
@@ -468,9 +486,16 @@
 
 <div id="main-app">
     <div class="navbar">
-        <div class="logo-area"><span class="logo-title">SYS ANDY PRO</span><span class="logo-sub" id="userDisplay">Cargando...</span></div>
-        <div style="display: flex;"><button class="btn-theme" onclick="toggleTheme()">🌓 DÍA/NOCHE</button><button class="btn-salir" onclick="cerrarSesion()">SALIR</button></div>
+        <div class="logo-area">
+            <span class="logo-title">SYS ANDY PRO</span>
+            <span class="logo-sub" id="userDisplay">Cargando...</span>
+        </div>
+        <div style="display: flex;">
+            <button class="btn-theme" onclick="toggleTheme()">🌓 DÍA/NOCHE</button>
+            <button class="btn-salir" onclick="cerrarSesion()">SALIR</button>
+        </div>
     </div>
+
     <div class="tabs-container">
         <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC URLS</button>
         <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
@@ -487,7 +512,7 @@
         <div class="item-card" style="border:2px solid var(--borde-neon)">
             <input type="hidden" id="editUrlId" value="">
             <div class="form-group"><label id="lblUrlForm">Agregar nueva URL / Host:</label><input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor de Pruebas"></div>
-            <button class="btn-block btn-action" onclick="guardarUrlBloc()">GUARDAR URL</button>
+            <button class="btn-block btn-action" id="btnGuardarUrl" onclick="guardarUrlBloc()">GUARDAR URL</button>
         </div>
         <div class="item-list" id="listaUrlsContainer"></div>
     </div>
@@ -495,7 +520,11 @@
     <!-- PANEL COMBOS (igual) -->
     <div id="panel-combos" class="panel">
         <h3>📦 MÚLTIPLE HERRAMIENTA DE COMBOS</h3>
-        <div class="sub-tabs"><button class="sub-tab active" data-sub="generator">Generador de Combos</button><button class="sub-tab" data-sub="merge">Unir Combos</button><button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button></div>
+        <div class="sub-tabs">
+            <button class="sub-tab active" data-sub="generator">Generador de Combos</button>
+            <button class="sub-tab" data-sub="merge">Unir Combos</button>
+            <button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button>
+        </div>
         <div id="sub-generator" class="sub-panel active">
             <div class="form-group"><label>Tipo de generación:</label><select id="genType">...</select></div>
             <div class="form-group"><label>Cantidad de combos (sin repetir):</label><input type="number" id="genCantidad" value="100"></div>
@@ -556,10 +585,13 @@
         <div id="hitsContainer"></div>
     </div>
 
-    <!-- BANCO HITS (igual) -->
-    <div id="panel-banco-hits" class="panel"><h3>🗄️ Historial e Hits Guardados (con Fecha/Hora)</h3><div id="bancoHitsContainer"></div></div>
+    <!-- PANEL BANCO HITS (igual) -->
+    <div id="panel-banco-hits" class="panel">
+        <h3>🗄️ Historial e Hits Guardados (con Fecha/Hora)</h3>
+        <div class="item-list" id="bancoHitsContainer"></div>
+    </div>
 
-    <!-- ADMINS (igual) -->
+    <!-- PANEL ADMINS (igual) -->
     <div id="panel-admins" class="panel">
         <h3>👥 Panel Maestro: Agregar Nuevos Vendedores</h3>
         <div class="item-card" style="border:2px solid var(--borde-neon)">
@@ -571,14 +603,32 @@
         <div id="listaVendedoresContainer"></div>
     </div>
 
-    <!-- SOLICITUDES (igual) -->
-    <div id="panel-solicitudes" class="panel"><h3>📋 Solicitudes de Registro Pendientes</h3><div id="solicitudesContainer"></div></div>
+    <!-- PANEL SOLICITUDES (igual) -->
+    <div id="panel-solicitudes" class="panel">
+        <h3>📋 Solicitudes de Registro Pendientes</h3>
+        <div id="solicitudesContainer"></div>
+    </div>
 
-    <!-- CHAT (igual) -->
+    <!-- PANEL CHAT GENERAL (igual) -->
     <div id="panel-chat" class="panel">
         <h3>💬 CHAT GENERAL - COMUNIDAD SYS ANDY PRO</h3>
-        <div class="profile-config"><div class="avatar-select" id="avatarSelect">🦁</div><input type="text" id="displayName" placeholder="Tu nombre en el chat" maxlength="20" style="width: 150px;"><button class="btn-small btn-action" id="saveProfileBtn">Guardar perfil</button><span style="font-size:0.7rem;">(pulsa el emoji para cambiarlo)</span></div>
-        <div class="chat-container"><div class="chat-messages" id="chatMessages"></div><div class="reply-badge" id="replyBadge" style="display:none;"><span>Respondiendo a...</span><button id="cancelReplyBtn">❌</button></div><div class="chat-input-area"><textarea id="chatInput" class="chat-input" rows="2" placeholder="Escribe tu mensaje... Usa @nombre para etiquetar"></textarea><button id="sendMsgBtn" class="btn-small btn-start">📤</button></div></div>
+        <div class="profile-config">
+            <div class="avatar-select" id="avatarSelect">🦁</div>
+            <input type="text" id="displayName" placeholder="Tu nombre en el chat" maxlength="20" style="width: 150px;">
+            <button class="btn-small btn-action" id="saveProfileBtn">Guardar perfil</button>
+            <span style="font-size:0.7rem;">(pulsa el emoji para cambiarlo)</span>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="reply-badge" id="replyBadge" style="display: none;">
+                <span>Respondiendo a...</span>
+                <button class="msg-btn" id="cancelReplyBtn">❌</button>
+            </div>
+            <div class="chat-input-area">
+                <textarea id="chatInput" class="chat-input" rows="2" placeholder="Escribe tu mensaje... Usa @nombre para etiquetar"></textarea>
+                <button id="sendMsgBtn" class="btn-small btn-start">📤</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -610,7 +660,7 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
-    // ========== LOGIN / REGISTRO / ADMIN (exactamente igual que el original) ==========
+    // ========== LOGIN / REGISTRO / ADMIN (exactamente igual que en el original) ==========
     document.querySelectorAll('.auth-tab').forEach(tab => {
         tab.addEventListener('click', function() {
             const target = this.getAttribute('data-auth');
