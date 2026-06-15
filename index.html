@@ -610,7 +610,7 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
-    // ========== LOGIN / REGISTRO / ADMIN (exactamente igual al original) ==========
+    // ========== LOGIN / REGISTRO / ADMIN (exactamente igual al original que funciona) ==========
     document.querySelectorAll('.auth-tab').forEach(tab => {
         tab.addEventListener('click', function() {
             const target = this.getAttribute('data-auth');
@@ -1064,6 +1064,7 @@
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
     // ========== NUEVO ESCÁNER (MUNRRA adaptado a SYS ANDY PRO) ==========
+    // Nota: Este código reemplaza completamente el escáner antiguo.
     let audioCtx = null;
     let isScanning = false;
     let stopScanRequested = false;
