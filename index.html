@@ -610,7 +610,7 @@
         return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
     }
 
-    // ========== LOGIN / REGISTRO / ADMIN (exactamente igual al original que funciona) ==========
+    // ========== CAMBIO ENTRE PESTAÑAS LOGIN/REGISTRO ==========
     document.querySelectorAll('.auth-tab').forEach(tab => {
         tab.addEventListener('click', function() {
             const target = this.getAttribute('data-auth');
@@ -621,6 +621,7 @@
         });
     });
 
+    // ==================== LOGIN ====================
     function procesarLogin() {
         const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
         const passInput = document.getElementById('loginPass').value.trim();
@@ -671,7 +672,7 @@
         document.getElementById('main-app').style.display = 'none';
     }
 
-    // VENDEDORES
+    // ==================== VENDEDORES (ADMINS) ====================
     function crearVendedorFirebase() {
         const emailVendedor = document.getElementById("newAdminEmail").value.trim();
         const passVendedor = document.getElementById("newAdminPass").value.trim();
@@ -702,7 +703,7 @@
     }
     function eliminarVendedorFirebase(key) { if(confirm("¿Eliminar acceso?")) db.ref("vendedores/" + key).remove(); }
 
-    // REGISTRO CON APROBACIÓN
+    // ==================== REGISTRO CON APROBACIÓN ====================
     function solicitarRegistro() {
         const email = document.getElementById('regEmail').value.trim().toLowerCase();
         const pass = document.getElementById('regPass').value.trim();
@@ -805,7 +806,7 @@
         }
     }
 
-    // ========== RECUPERACIÓN DE CONTRASEÑA ==========
+    // ==================== RECUPERACIÓN DE CONTRASEÑA ====================
     const resetModal = document.getElementById('resetModal');
     const closeModal = document.querySelector('.close-modal');
     const forgotLink = document.getElementById('forgotPasswordLink');
@@ -884,7 +885,8 @@
         document.getElementById('loginEmail').value = email;
     }
 
-    // ========== RESTO DE FUNCIONES ORIGINALES (BLOC, BANCO HITS, COMBOS, TEMA, SWITCH TABS) ==========
+    // ==================== RESTO DE FUNCIONES ORIGINALES (sin cambios) ====================
+    // TEMA
     function toggleTheme() {
         document.body.classList.toggle('theme-night');
         localStorage.setItem('sys_theme', document.body.classList.contains('theme-night') ? 'night' : 'day');
@@ -988,7 +990,7 @@
         if (tabName === 'chat') cargarMensajesChat();
     }
 
-    // ========== COMBOS (exactamente igual al original) ==========
+    // ========== COMBOS (Todas las funciones originales) ==========
     const nombresReales = [ "juan", "pedro", "carlos", "luis", "andres", "david", "diego", "javier", "manuel", "alejandro", "fernando", "miguel", "rafael", "jorge", "antonio", "angel", "jose", "daniel", "oscar", "ruben", "mario", "ricardo", "victor", "roberto", "francisco", "pablo", "sergio", "adrian", "alberto", "eduardo", "emilio", "enrique", "esteban", "felipe", "gabriel", "guillermo", "hector", "ivan", "julian", "leonardo", "mauricio", "nicolas", "raul", "rodrigo", "sebastian", "tomas", "alonso", "cristian", "fabian", "gaston", "hugo", "ignacio", "jeronimo", "kevin", "lucas", "martin", "nahuel", "octavio", "pablo", "ramon", "santiago", "thiago", "ulises", "valentin", "wenceslao", "xavier", "yago", "zacarías", "abraham", "benjamin", "camilo", "damian", "elias", "facundo", "gonzalo", "hernan", "ismael", "jesus", "kamilo", "lautaro", "mateo", "naomi", "oliver", "patricio", "quintin", "rene", "simon", "tadeo", "ursulo", "vladimir", "william", "ximena", "yandel", "zoe", "agustin", "bruno", "cesar", "domingo", "emiliano", "fidel", "gerardo", "humberto", "ismael", "julio", "karen", "lorenzo", "marcos", "nelson", "orlando", "paul", "quiroga", "rolando", "saul", "tobias", "ulises", "valentin", "winston", "xenofonte", "yamil", "zulema", "ana", "maria", "laura", "sofia", "valentina", "carmen", "isabella", "camila", "lucia", "martina", "julia", "paula", "daniela", "carolina", "alejandra", "veronica", "silvia", "lorena", "patricia", "gloria", "elena", "rocio", "monica", "andrea", "fernanda", "gabriela", "mariana", "victoria", "beatriz", "roxana", "claudia", "viviana", "liliana", "norma", "cristina", "susana", "marcela", "graciela", "teresa", "raquel" ];
     const palabrasExtra = ["admin", "user", "test", "root", "master", "demo", "guest", "support", "office", "system", "server", "network", "digital", "global", "prime", "super", "mega", "ultra", "power", "plus"];
     function applyCase(str, caseType) {
@@ -1064,7 +1066,6 @@
     document.querySelectorAll('.sub-tab').forEach(btn=>{ btn.addEventListener('click',()=>{ const subId=btn.getAttribute('data-sub'); document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); document.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active')); document.getElementById(`sub-${subId}`).classList.add('active'); }); });
 
     // ========== NUEVO ESCÁNER (MUNRRA adaptado a SYS ANDY PRO) ==========
-    // Nota: Este código reemplaza completamente el escáner antiguo.
     let audioCtx = null;
     let isScanning = false;
     let stopScanRequested = false;
@@ -1477,7 +1478,7 @@ ${liveCatsText}
     saveBtnScan.textContent = "GUARDAR TODO EN TELÉFONO (.TXT)";
     updateStartStateScanner();
 
-    // ========== CHAT (exactamente igual al original) ==========
+    // ========== CHAT COMPLETO (igual) ==========
     let chatDisplayName = "", chatAvatar = "🦁";
     let currentReplyTo = null;
     let chatUnsubscribe = null;
