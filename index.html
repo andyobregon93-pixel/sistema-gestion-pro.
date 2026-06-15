@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - LEÓN ROJO + CHAT GENERAL + REGISTRO CON APROBACIÓN</title>
+    <title>SYS ANDY PRO - LEÓN ROJO + CHAT GENERAL + REGISTRO CON APROBACIÓN + RECUPERACIÓN</title>
     <style>
         /* ========== PALETA LEÓN ROJO + NEGRO (TEMA DÍA - por defecto) ========== */
         :root {
@@ -49,7 +49,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ff3311' fill-opacity='0.05' d='M50,15 C30,15 15,30 15,50 C15,70 30,85 50,85 C70,85 85,70 85,50 C85,30 70,15 50,15 Z M50,25 C64,25 75,36 75,50 C75,64 64,75 50,75 C36,75 25,64 25,50 C25,36 36,25 50,25 Z M45,40 L55,40 L55,60 L45,60 Z M40,45 L45,45 L45,55 L40,55 Z M60,45 L55,45 L55,55 L60,55 Z'/%3E%3C/svg%3E");
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath fill='%23ff3311' fill-opacity='0.05' d='M50,15 C30,15 15,30 15,50 C15,70 30,85 50,85 C70,85 85,70 85,50 C85,30 70,15 50,15 Z M50,25 C64,25 75,36 75,50 C75,64 64,75 50,75 C36,75 25,64 25,50 C25,36 36,25 50,25 Z M45,40 L55,40 L55,60 L45,60 Z M40,45 L45,45 L45,55 L40,55 Z M60,45 L55,45 L55,60 L60,55 Z'/%3E%3C/svg%3E");
             background-repeat: repeat;
             background-size: 80px;
             opacity: 0.15;
@@ -112,6 +112,42 @@
         .auth-panel.active {
             display: block;
         }
+
+        /* Modal de recuperación */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background: var(--bg-tarjeta);
+            border: 2px solid var(--borde-neon);
+            border-radius: 30px;
+            padding: 25px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: var(--sombra-difusa);
+            color: var(--texto-principal);
+        }
+        .modal-content h3 { margin-top: 0; color: #ffaa44; text-align: center; }
+        .modal-content .form-group { margin-bottom: 15px; }
+        .modal-content .btn-block { margin-top: 5px; }
+        .close-modal {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #ff8866;
+        }
+        .close-modal:hover { color: #ff3300; }
 
         #main-app {
             display: none;
@@ -658,6 +694,8 @@
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <!-- EmailJS library para enviar correos -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
 </head>
 <body>
 
@@ -679,6 +717,9 @@
                 <input type="password" id="loginPass" placeholder="••••••••">
             </div>
             <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR AL SISTEMA</button>
+            <div style="text-align:center; margin-top:12px;">
+                <a href="#" id="forgotPasswordLink" style="color:#ffaa66; font-size:0.9rem;">¿Olvidaste tu contraseña?</a>
+            </div>
         </div>
         <!-- Panel Registro -->
         <div id="auth-register" class="auth-panel">
@@ -701,6 +742,37 @@
             <button class="btn-block btn-save" onclick="solicitarRegistro()">📨 ENVIAR SOLICITUD</button>
             <p style="font-size:0.75rem; text-align:center; margin-top:10px;">Tu solicitud será revisada por el administrador. Recibirás acceso al ser aprobada.</p>
         </div>
+    </div>
+</div>
+
+<!-- Modal de recuperación de contraseña -->
+<div id="resetModal" class="modal">
+    <div class="modal-content">
+        <span class="close-modal">&times;</span>
+        <h3>🔐 Recuperar contraseña</h3>
+        <div id="resetStep1">
+            <div class="form-group">
+                <label>Correo electrónico registrado:</label>
+                <input type="email" id="resetEmail" placeholder="tu@email.com">
+            </div>
+            <button class="btn-block btn-start" onclick="solicitarCodigoReset()">📧 Enviar código de verificación</button>
+        </div>
+        <div id="resetStep2" style="display:none;">
+            <div class="form-group">
+                <label>Código de verificación (6 dígitos):</label>
+                <input type="text" id="resetCode" maxlength="6" placeholder="Ej: 123456">
+            </div>
+            <div class="form-group">
+                <label>Nueva contraseña:</label>
+                <input type="password" id="newPassword" placeholder="mínimo 4 caracteres">
+            </div>
+            <div class="form-group">
+                <label>Confirmar nueva contraseña:</label>
+                <input type="password" id="confirmNewPassword" placeholder="repita la contraseña">
+            </div>
+            <button class="btn-block btn-save" onclick="verificarCodigoYResetear()">✅ Restablecer contraseña</button>
+        </div>
+        <div id="resetMsg" style="margin-top:10px; font-size:0.85rem; text-align:center;"></div>
     </div>
 </div>
 
@@ -891,6 +963,22 @@
 
     let currentUser = null;
     let usernameClave = "";
+
+    // ==================== CONFIGURACIÓN EMAILJS (para recuperación) ====================
+    // INSTRUCCIONES: 
+    // 1. Regístrate en https://www.emailjs.com/
+    // 2. Crea un servicio (ej: Gmail, Outlook, etc.) y obtén tu SERVICE_ID.
+    // 3. Crea una plantilla de correo con las variables: {{code}} y {{email}}.
+    // 4. Obtén tu PUBLIC_KEY (se encuentra en la sección "Account").
+    // 5. Reemplaza los valores abajo (debes hacerlo para que funcione el envío).
+    const EMAILJS_PUBLIC_KEY = "TU_PUBLIC_KEY_AQUI";    // Cambia por tu clave pública
+    const EMAILJS_SERVICE_ID = "TU_SERVICE_ID_AQUI";    // Ej: "service_xxx"
+    const EMAILJS_TEMPLATE_ID = "TU_TEMPLATE_ID_AQUI";  // Ej: "template_xxx"
+
+    // Inicializar EmailJS si las claves fueron configuradas
+    if(EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY_AQUI") {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
 
     function limpiarClaveLocal(str) {
         if (!str) return "";
@@ -1092,6 +1180,122 @@
             await db.ref(`registro_solicitudes/${key}`).remove();
             alert("Solicitud rechazada.");
         }
+    }
+
+    // ==================== RECUPERACIÓN DE CONTRASEÑA ====================
+    const resetModal = document.getElementById('resetModal');
+    const closeModal = document.querySelector('.close-modal');
+    const forgotLink = document.getElementById('forgotPasswordLink');
+    let resetEmailTemp = "";
+
+    forgotLink.onclick = (e) => {
+        e.preventDefault();
+        resetModal.style.display = 'flex';
+        document.getElementById('resetStep1').style.display = 'block';
+        document.getElementById('resetStep2').style.display = 'none';
+        document.getElementById('resetMsg').innerHTML = '';
+        document.getElementById('resetEmail').value = '';
+        document.getElementById('resetCode').value = '';
+        document.getElementById('newPassword').value = '';
+        document.getElementById('confirmNewPassword').value = '';
+    };
+    closeModal.onclick = () => { resetModal.style.display = 'none'; };
+    window.onclick = (e) => { if (e.target === resetModal) resetModal.style.display = 'none'; };
+
+    function generarCodigo() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
+    async function solicitarCodigoReset() {
+        const email = document.getElementById('resetEmail').value.trim().toLowerCase();
+        if (!email) { alert("Ingresa tu correo electrónico."); return; }
+        const nodo = limpiarClaveLocal(email);
+        const snapshot = await db.ref(`vendedores/${nodo}`).once('value');
+        if (!snapshot.exists()) {
+            alert("No hay una cuenta registrada con ese correo.");
+            return;
+        }
+        // Generar código y guardar en Firebase con expiración (5 minutos)
+        const code = generarCodigo();
+        const expiresAt = Date.now() + 5 * 60 * 1000;
+        await db.ref(`reset_codes/${nodo}`).set({
+            code: code,
+            expiresAt: expiresAt,
+            email: email
+        });
+        resetEmailTemp = email;
+        // Enviar correo usando EmailJS (si está configurado)
+        if (EMAILJS_PUBLIC_KEY !== "TU_PUBLIC_KEY_AQUI" && EMAILJS_SERVICE_ID !== "TU_SERVICE_ID_AQUI" && EMAILJS_TEMPLATE_ID !== "TU_TEMPLATE_ID_AQUI") {
+            try {
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: email,
+                    code: code,
+                    subject: "Código de recuperación - SYS ANDY PRO"
+                });
+                document.getElementById('resetMsg').innerHTML = '<span style="color:#00cc66;">✅ Código enviado a tu correo. Revisa la bandeja de entrada/spam.</span>';
+                document.getElementById('resetStep1').style.display = 'none';
+                document.getElementById('resetStep2').style.display = 'block';
+            } catch(err) {
+                console.error(err);
+                document.getElementById('resetMsg').innerHTML = '<span style="color:#ff6666;">❌ Error al enviar el correo. Verifica la configuración de EmailJS.</span>';
+            }
+        } else {
+            // Si no configuró EmailJS, mostrar código en consola (modo desarrollo)
+            console.warn("EmailJS no configurado. Código generado:", code);
+            alert(`[DEMO] Código de verificación: ${code}\n(Revisa la consola. Configura EmailJS para envío real.)`);
+            document.getElementById('resetMsg').innerHTML = '<span style="color:#ffaa44;">⚠️ Modo demostración: revisa la consola del navegador para obtener el código.</span>';
+            document.getElementById('resetStep1').style.display = 'none';
+            document.getElementById('resetStep2').style.display = 'block';
+        }
+    }
+
+    async function verificarCodigoYResetear() {
+        const codeIngresado = document.getElementById('resetCode').value.trim();
+        const newPass = document.getElementById('newPassword').value.trim();
+        const confirmPass = document.getElementById('confirmNewPassword').value.trim();
+        if (!codeIngresado || !newPass || !confirmPass) {
+            alert("Completa todos los campos.");
+            return;
+        }
+        if (newPass.length < 4) {
+            alert("La nueva contraseña debe tener al menos 4 caracteres.");
+            return;
+        }
+        if (newPass !== confirmPass) {
+            alert("Las contraseñas nuevas no coinciden.");
+            return;
+        }
+        const email = resetEmailTemp;
+        if (!email) {
+            alert("Correo no identificado. Reinicia el proceso.");
+            resetModal.style.display = 'none';
+            return;
+        }
+        const nodo = limpiarClaveLocal(email);
+        const snapshot = await db.ref(`reset_codes/${nodo}`).once('value');
+        if (!snapshot.exists()) {
+            alert("Código no válido o expirado. Solicita uno nuevo.");
+            return;
+        }
+        const data = snapshot.val();
+        if (Date.now() > data.expiresAt) {
+            alert("El código ha expirado. Solicita uno nuevo.");
+            await db.ref(`reset_codes/${nodo}`).remove();
+            return;
+        }
+        if (data.code !== codeIngresado) {
+            alert("Código incorrecto.");
+            return;
+        }
+        // Actualizar contraseña en vendedores
+        await db.ref(`vendedores/${nodo}`).update({ pass: newPass });
+        // Eliminar el código usado
+        await db.ref(`reset_codes/${nodo}`).remove();
+        alert("✅ Contraseña restablecida correctamente. Ya puedes iniciar sesión.");
+        resetModal.style.display = 'none';
+        // Limpiar campos de login
+        document.getElementById('loginEmail').value = email;
+        document.getElementById('loginPass').value = '';
     }
 
     // ==================== RESTO DE FUNCIONES ORIGINALES (sin cambios) ====================
