@@ -2053,8 +2053,9 @@
                 `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
         }
 
-        // ---- Mostrar hit (usa la función de sonido y guardado de la página) ----
+        // ---- Mostrar hit (usando las funciones de la página) ----
         function mostrarHit(hit, ui) {
+            // 1. Crear el bloque visual
             const div = document.createElement('div');
             div.className = 'hit-block';
             const header = document.createElement('div');
@@ -2066,23 +2067,22 @@
             div.appendChild(header);
             div.appendChild(content);
 
-            // Añadir al container global
-            document.getElementById('hitsContainer').prepend(div);
+            // 2. Agregar al container de resultados (si existe)
+            const hitsContainer = document.getElementById('hitsContainer');
+            if (hitsContainer) hitsContainer.prepend(div);
 
-            // Actualizar contador del job
-            if (ui.hitsCountEl) {
+            // 3. Actualizar el contador del job
+            if (ui && ui.hitsCountEl) {
                 ui.hitsCountEl.innerHTML =
                     `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
             }
 
-            // Sonido (usamos la función playMoanSound que ya existe en la página)
-            if (typeof playMoanSound === 'function') playMoanSound();
-            else {
-                // fallback: intentar con la función de sonido original de MUNRRA si existe
-                if (typeof playHitSound === 'function') playHitSound();
+            // 4. Reproducir sonido si está activado
+            if (document.getElementById('soundToggle') && document.getElementById('soundToggle').checked) {
+                playMoanSound();
             }
 
-            // Guardar en el banco de hits (función de la página)
+            // 5. Guardar en el banco de hits (si existe la función)
             if (typeof guardarHitEnBanco === 'function') {
                 guardarHitEnBanco(hit.texto, hit.user, hit.pass);
             }
@@ -2199,6 +2199,7 @@ ${t('groupsB')}`;
                         if (stopRequested) break;
                         if (hit) {
                             ui.hitsArr.push(hit);
+                            // ⭐ AQUÍ SE LLAMA A mostrarHit (que ahora usa las funciones correctas)
                             mostrarHit(hit, ui);
                         }
                     } catch (_) {}
