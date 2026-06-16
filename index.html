@@ -1476,23 +1476,25 @@
 
         // BANCO HITS
         function guardarHitEnBanco(hitTexto, user, pass) {
-            const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
-            if (!baseHits[usernameClave]) baseHits[usernameClave] = [];
-            const yaExiste = baseHits[usernameClave].some(h => h.user === user && h.pass === pass);
-            if (yaExiste) return;
-            const ahora = new Date();
-            const fechaHora = ahora.toLocaleString('es-ES', { dateStyle: 'full', timeStyle: 'medium' });
-            baseHits[usernameClave].push({
-                id: Date.now() + Math.random(),
-                user,
-                pass,
-                texto: hitTexto,
-                copies: 0,
-                fecha: fechaHora,
-                timestamp: ahora.getTime()
-            });
-            localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
-            renderizarBancoHits();
+            try {
+                const baseHits = JSON.parse(localStorage.getItem('sys_saved_hits')) || {};
+                if (!baseHits[usernameClave]) baseHits[usernameClave] = [];
+                const yaExiste = baseHits[usernameClave].some(h => h.user === user && h.pass === pass);
+                if (yaExiste) return;
+                const ahora = new Date();
+                const fechaHora = ahora.toLocaleString('es-ES', { dateStyle: 'full', timeStyle: 'medium' });
+                baseHits[usernameClave].push({
+                    id: Date.now() + Math.random(),
+                    user,
+                    pass,
+                    texto: hitTexto,
+                    copies: 0,
+                    fecha: fechaHora,
+                    timestamp: ahora.getTime()
+                });
+                localStorage.setItem('sys_saved_hits', JSON.stringify(baseHits));
+                renderizarBancoHits();
+            } catch (e) { console.error("Error guardando en banco:", e); }
         }
 
         function renderizarBancoHits() {
@@ -1783,7 +1785,6 @@
             let h = hostRaw.replace(/^https?:\/\//, '').trim();
             // Si tiene una barra en lugar de dos puntos, convertirla a dos puntos
             if (h.includes('/') && !h.includes(':')) {
-                // Reemplazar la primera barra por dos puntos
                 h = h.replace('/', ':');
             }
             // Si no tiene puerto, agregar :80
@@ -2069,38 +2070,53 @@
                 `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
         }
 
-        // ---- Mostrar hit (usando las funciones de la página) ----
+        // ---- Mostrar hit (con try-catch para evitar que falle el sonido o el guardado) ----
         function mostrarHit(hit, ui) {
-            // 1. Crear el bloque visual
-            const div = document.createElement('div');
-            div.className = 'hit-block';
-            const header = document.createElement('div');
-            header.className = 'hit-header';
-            header.textContent = `${t('user')}: ${hit.user} | ${t('pass')}: ${hit.pass}`;
-            const content = document.createElement('pre');
-            content.className = 'hit-content';
-            content.textContent = hit.texto;
-            div.appendChild(header);
-            div.appendChild(content);
+            // 1. Crear y mostrar el bloque HTML (si falla esto, no hay nada que hacer)
+            try {
+                const div = document.createElement('div');
+                div.className = 'hit-block';
+                const header = document.createElement('div');
+                header.className = 'hit-header';
+                header.textContent = `${t('user')}: ${hit.user} | ${t('pass')}: ${hit.pass}`;
+                const content = document.createElement('pre');
+                content.className = 'hit-content';
+                content.textContent = hit.texto;
+                div.appendChild(header);
+                div.appendChild(content);
 
-            // 2. Agregar al container de resultados (si existe)
-            const hitsContainer = document.getElementById('hitsContainer');
-            if (hitsContainer) hitsContainer.prepend(div);
-
-            // 3. Actualizar el contador del job
-            if (ui && ui.hitsCountEl) {
-                ui.hitsCountEl.innerHTML =
-                    `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+                const hitsContainer = document.getElementById('hitsContainer');
+                if (hitsContainer) hitsContainer.prepend(div);
+            } catch (e) {
+                console.error("Error mostrando el bloque del hit:", e);
             }
 
-            // 4. Reproducir sonido si está activado
-            if (document.getElementById('soundToggle') && document.getElementById('soundToggle').checked) {
-                playMoanSound();
+            // 2. Actualizar el contador del job (crítico)
+            try {
+                if (ui && ui.hitsCountEl) {
+                    ui.hitsCountEl.innerHTML =
+                        `${t('hitsFound')}: <span class="yellow-hit">${ui.hitsArr.length}</span>`;
+                }
+            } catch (e) {
+                console.error("Error actualizando contador:", e);
             }
 
-            // 5. Guardar en el banco de hits (si existe la función)
-            if (typeof guardarHitEnBanco === 'function') {
-                guardarHitEnBanco(hit.texto, hit.user, hit.pass);
+            // 3. Reproducir sonido (no crítico, si falla no importa)
+            try {
+                if (document.getElementById('soundToggle') && document.getElementById('soundToggle').checked) {
+                    if (typeof playMoanSound === 'function') playMoanSound();
+                }
+            } catch (e) {
+                console.error("Error reproduciendo sonido:", e);
+            }
+
+            // 4. Guardar en el banco de hits (no crítico, si falla no importa)
+            try {
+                if (typeof guardarHitEnBanco === 'function') {
+                    guardarHitEnBanco(hit.texto, hit.user, hit.pass);
+                }
+            } catch (e) {
+                console.error("Error guardando en banco:", e);
             }
         }
 
