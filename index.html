@@ -1777,6 +1777,22 @@
         // ========== ESCÁNER (código original de MUNRRA, corregido) ==========
         // ======================================================================
 
+        // ---- Normalización del host ----
+        function normalizarHost(hostRaw) {
+            // Eliminar http:// o https://
+            let h = hostRaw.replace(/^https?:\/\//, '').trim();
+            // Si tiene una barra en lugar de dos puntos, convertirla a dos puntos
+            if (h.includes('/') && !h.includes(':')) {
+                // Reemplazar la primera barra por dos puntos
+                h = h.replace('/', ':');
+            }
+            // Si no tiene puerto, agregar :80
+            if (!h.includes(':')) {
+                h = h + ':80';
+            }
+            return h;
+        }
+
         // ---- Textos fijos en español (igual que en MUNRRA) ----
         const i18n = {
             es: {
@@ -1860,8 +1876,8 @@
             return opts;
         }
 
-        // ---- Fetch con timeout ----
-        async function fetchTimeout(url, opts = {}, ms = 6000) {
+        // ---- Fetch con timeout (7 segundos como en MUNRRA) ----
+        async function fetchTimeout(url, opts = {}, ms = 7000) {
             const controller = new AbortController();
             const id = setTimeout(() => { controller.abort(); }, ms);
             try {
@@ -2199,7 +2215,6 @@ ${t('groupsB')}`;
                         if (stopRequested) break;
                         if (hit) {
                             ui.hitsArr.push(hit);
-                            // ⭐ AQUÍ SE LLAMA A mostrarHit (que ahora usa las funciones correctas)
                             mostrarHit(hit, ui);
                         }
                     } catch (_) {}
@@ -2336,7 +2351,7 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
 
         document.getElementById('hostInput').addEventListener('input', updateStartState);
 
-        // ---- Botón START (exactamente igual a MUNRRA) ----
+        // ---- Botón START (con normalización del host) ----
         document.getElementById('startBtn').addEventListener('click', async () => {
             if (isRunning) return;
 
@@ -2370,7 +2385,12 @@ Total (bruto): ${total} | Después de deduplicar: ${totalAfter}
                 if (el) el.textContent = `${t('currentUser')}: -`;
             });
 
-            const host = document.getElementById('hostInput').value.replace(/^https?:\/\//, '').trim();
+            // === NORMALIZAR EL HOST ===
+            const rawHost = document.getElementById('hostInput').value.trim();
+            const host = normalizarHost(rawHost);
+            // Actualizar el input con el formato corregido (opcional)
+            document.getElementById('hostInput').value = host;
+
             const baseConc = parseInt(document.getElementById('concurrencyInput').value) || 80;
 
             // Obtener IP y Geo
