@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - PANTALLA COMPLETA */
+        /* ESTILOS - VERSIÓN ESCRITORIO CENTRADO */
         /* ============================================================== */
 
         * {
@@ -22,7 +22,7 @@
             --texto-principal: #d4e4ff;
             --texto-secundario: #88bbff;
             --borde-neon: #00ccff;
-            --sombra-difusa: 0 0 30px rgba(0, 180, 255, 0.2);
+            --sombra-difusa: 0 0 30px rgba(0, 180, 255, 0.15);
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a3a, #050d1a);
             --border-radius: 10px;
         }
@@ -30,35 +30,32 @@
         html,
         body {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
+            min-height: 100vh;
             background: var(--grad-fondo);
             color: var(--texto-principal);
             font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
             display: flex;
             justify-content: center;
-            align-items: center;
-            overflow: hidden;
+            align-items: flex-start;
+            padding: 20px;
+            overflow-y: auto;
         }
 
-        /* ===== CONTENEDOR PRINCIPAL (100% PANTALLA) ===== */
+        /* ===== CONTENEDOR PRINCIPAL (ANCHO FIJO) ===== */
         .app-container {
             width: 100%;
-            height: 100vh;
-            max-width: 100vw;
+            max-width: 900px;
             background: rgba(10, 22, 40, 0.92);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 200, 255, 0.1);
+            border-radius: 20px;
+            border: 1px solid rgba(0, 200, 255, 0.12);
             box-shadow: var(--sombra-difusa);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             position: relative;
+            min-height: 90vh;
+            max-height: 98vh;
         }
 
         /* ===== LOGIN ===== */
@@ -68,7 +65,7 @@
             align-items: center;
             justify-content: center;
             width: 100%;
-            height: 100%;
+            min-height: 80vh;
             padding: 20px;
         }
 
@@ -176,7 +173,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 20px;
+            padding: 10px 20px;
             border-bottom: 2px solid var(--borde-neon);
             flex-shrink: 0;
             min-height: 56px;
@@ -190,7 +187,7 @@
         }
 
         .navbar .logo-title {
-            font-size: 1.2rem;
+            font-size: 1.3rem;
             font-weight: bold;
             background: linear-gradient(135deg, #66ddff, #0088cc);
             -webkit-background-clip: text;
@@ -247,10 +244,10 @@
         .tabs-container {
             display: flex;
             background: #0a1a3a;
-            border-bottom: 2px solid rgba(0, 200, 255, 0.15);
-            padding: 0 15px;
+            border-bottom: 2px solid rgba(0, 200, 255, 0.12);
+            padding: 4px 12px;
             flex-shrink: 0;
-            gap: 3px;
+            gap: 4px;
             overflow-x: auto;
         }
 
@@ -284,7 +281,7 @@
         .tab-btn.active {
             color: #66ddff;
             border-bottom-color: var(--borde-neon);
-            background: rgba(0, 100, 200, 0.1);
+            background: rgba(0, 100, 200, 0.08);
         }
 
         .tab-btn.massive-tab {
@@ -295,14 +292,15 @@
         .tab-btn.massive-tab.active {
             color: #ff8800;
             border-bottom-color: #ff8800;
+            background: rgba(255, 136, 0, 0.08);
         }
 
         /* ===== PANELES ===== */
         .panels-container {
             flex: 1;
             overflow-y: auto;
-            padding: 12px 16px 16px 16px;
-            background: rgba(10, 26, 58, 0.3);
+            padding: 15px 20px 20px 20px;
+            background: rgba(10, 26, 58, 0.2);
         }
 
         .panels-container::-webkit-scrollbar {
@@ -355,24 +353,24 @@
         }
 
         .item-card .info-box {
-            background: rgba(0, 68, 170, 0.12);
+            background: rgba(0, 68, 170, 0.1);
             padding: 8px 12px;
             border-radius: 8px;
-            border: 1px solid rgba(0, 170, 255, 0.15);
+            border: 1px solid rgba(0, 170, 255, 0.1);
             margin-bottom: 12px;
             font-size: 0.8rem;
             color: #88ddff;
-            line-height: 1.4;
+            line-height: 1.5;
         }
 
         .item-card .info-box.live {
             border-color: #ff44aa;
-            background: #ff44aa10;
+            background: #ff44aa08;
         }
 
         .item-card .info-box.massive {
             border-color: #ff8800;
-            background: #ff880010;
+            background: #ff880008;
         }
 
         /* ===== FORMULARIOS ===== */
@@ -420,7 +418,7 @@
         /* ===== BOTONES ===== */
         .btn-block {
             padding: 10px 16px;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             border: none;
             border-radius: 25px;
@@ -454,38 +452,38 @@
 
         .btn-block.btn-live {
             background: linear-gradient(135deg, #ff44aa, #cc0088);
-            box-shadow: 0 0 20px rgba(255, 68, 170, 0.25);
+            box-shadow: 0 0 20px rgba(255, 68, 170, 0.2);
             animation: pulse-live 2s ease-in-out infinite;
         }
 
         .btn-block.btn-massive {
             background: linear-gradient(135deg, #ff8800, #cc5500);
-            box-shadow: 0 0 20px rgba(255, 136, 0, 0.25);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.2);
             animation: pulse-massive 2s ease-in-out infinite;
         }
 
         @keyframes pulse-live {
             0%,
             100% {
-                box-shadow: 0 0 15px rgba(255, 68, 170, 0.25);
+                box-shadow: 0 0 15px rgba(255, 68, 170, 0.2);
             }
             50% {
-                box-shadow: 0 0 30px rgba(255, 68, 170, 0.5);
+                box-shadow: 0 0 30px rgba(255, 68, 170, 0.4);
             }
         }
 
         @keyframes pulse-massive {
             0%,
             100% {
-                box-shadow: 0 0 15px rgba(255, 136, 0, 0.25);
+                box-shadow: 0 0 15px rgba(255, 136, 0, 0.2);
             }
             50% {
-                box-shadow: 0 0 30px rgba(255, 136, 0, 0.5);
+                box-shadow: 0 0 30px rgba(255, 136, 0, 0.4);
             }
         }
 
         .btn-block:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
             animation: none !important;
@@ -512,6 +510,10 @@
             transform: scale(1.05);
         }
 
+        .btn-small:active {
+            transform: scale(0.95);
+        }
+
         .btn-small.btn-copy {
             background: #0088cc;
         }
@@ -528,13 +530,9 @@
             background: #00cc88;
         }
 
-        .btn-small.btn-massive-sm {
-            background: #ff8800;
-        }
-
         /* ===== RESULTADOS ===== */
         .result-box {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.3);
             border: 2px solid var(--borde-neon);
             border-radius: 12px;
             padding: 12px 14px;
@@ -570,7 +568,7 @@
 
         /* ===== TARJETAS GENERADAS ===== */
         .generated-cards {
-            background: rgba(0, 20, 50, 0.6);
+            background: rgba(0, 20, 50, 0.5);
             border: 2px solid #00aaff;
             border-radius: 12px;
             padding: 10px 12px;
@@ -625,7 +623,7 @@
         .info-badge {
             background: #1a4a7a;
             padding: 1px 8px;
-            border-radius: 6px;
+            border-radius: 4px;
             font-size: 0.6rem;
             color: #88ddff;
             white-space: nowrap;
@@ -656,7 +654,7 @@
         .credit-history {
             max-height: 120px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 8px;
             padding: 6px 10px;
         }
@@ -713,7 +711,7 @@
             display: grid;
             grid-template-columns: 1fr;
             gap: 3px;
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             max-height: 250px;
             overflow-y: auto;
         }
@@ -722,25 +720,24 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 5px 8px;
+            padding: 4px 8px;
             border-radius: 6px;
             flex-wrap: wrap;
             gap: 3px;
-            transition: 0.1s;
         }
 
         .massive-result-grid .massive-item.valid {
-            background: rgba(0, 255, 136, 0.08);
+            background: rgba(0, 255, 136, 0.06);
             border-left: 3px solid #00ff88;
         }
 
         .massive-result-grid .massive-item.invalid {
-            background: rgba(255, 68, 68, 0.06);
+            background: rgba(255, 68, 68, 0.05);
             border-left: 3px solid #ff4444;
         }
 
         .massive-result-grid .massive-item.pending {
-            background: rgba(255, 170, 68, 0.06);
+            background: rgba(255, 170, 68, 0.05);
             border-left: 3px solid #ffaa44;
         }
 
@@ -753,24 +750,24 @@
 
         .massive-result-grid .massive-item .result {
             font-weight: bold;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             padding: 1px 8px;
-            border-radius: 10px;
+            border-radius: 8px;
         }
 
         .massive-result-grid .massive-item .result.valid {
             color: #00ff88;
-            background: rgba(0, 255, 136, 0.12);
+            background: rgba(0, 255, 136, 0.1);
         }
 
         .massive-result-grid .massive-item .result.invalid {
             color: #ff4444;
-            background: rgba(255, 68, 68, 0.12);
+            background: rgba(255, 68, 68, 0.1);
         }
 
         .massive-result-grid .massive-item .result.pending {
             color: #ffaa44;
-            background: rgba(255, 170, 68, 0.12);
+            background: rgba(255, 170, 68, 0.1);
         }
 
         .massive-result-grid .massive-item .info-badge-sm {
@@ -786,19 +783,19 @@
             display: flex;
             gap: 12px;
             padding: 6px 10px;
-            border-radius: 8px;
-            background: rgba(0, 0, 0, 0.25);
-            margin-bottom: 8px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.2);
+            margin-bottom: 6px;
             flex-wrap: wrap;
         }
 
         .massive-summary .stat {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
         }
 
         .massive-summary .stat .num {
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
 
         .massive-summary .stat.valid .num {
@@ -863,188 +860,6 @@
             background: transparent;
         }
 
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 850px) {
-            .panels-container {
-                padding: 10px 12px 12px 12px;
-            }
-
-            .navbar {
-                padding: 6px 14px;
-                min-height: 48px;
-            }
-
-            .navbar .logo-title {
-                font-size: 1rem;
-            }
-
-            .tabs-container {
-                padding: 0 10px;
-            }
-
-            .tab-btn {
-                padding: 6px 12px;
-                font-size: 0.7rem;
-            }
-
-            .flex-row .form-group {
-                min-width: 60px;
-            }
-
-            .live-result-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .generated-cards .card-item {
-                font-size: 0.7rem;
-                padding: 4px 6px;
-            }
-
-            .massive-result-grid .massive-item {
-                font-size: 0.7rem;
-                padding: 4px 6px;
-            }
-
-            .massive-summary {
-                gap: 8px;
-                padding: 5px 8px;
-            }
-
-            .massive-summary .stat {
-                font-size: 0.7rem;
-            }
-
-            .btn-block {
-                font-size: 0.8rem;
-                padding: 8px 12px;
-                min-width: 80px;
-            }
-
-            .login-box {
-                padding: 25px 25px;
-            }
-        }
-
-        @media (max-width: 500px) {
-            .navbar {
-                padding: 4px 10px;
-                min-height: 42px;
-            }
-
-            .navbar .logo-title {
-                font-size: 0.85rem;
-            }
-
-            .navbar .credits-display {
-                font-size: 0.65rem;
-                padding: 3px 10px;
-            }
-
-            .navbar .btn-salir {
-                font-size: 0.65rem;
-                padding: 3px 10px;
-            }
-
-            .panels-container {
-                padding: 6px 8px 10px 8px;
-            }
-
-            .tab-btn {
-                padding: 5px 8px;
-                font-size: 0.6rem;
-            }
-
-            .item-card {
-                padding: 10px 12px;
-                margin-bottom: 8px;
-            }
-
-            .item-card .info-box {
-                font-size: 0.7rem;
-                padding: 6px 8px;
-            }
-
-            .panel h3 {
-                font-size: 0.95rem;
-                margin-bottom: 8px;
-            }
-
-            .form-group input {
-                font-size: 0.8rem;
-                padding: 6px 10px;
-            }
-
-            .btn-block {
-                font-size: 0.7rem;
-                padding: 7px 10px;
-                min-width: 60px;
-            }
-
-            .flex-row .btn-block {
-                min-width: 50px;
-            }
-
-            .generated-cards .card-item {
-                font-size: 0.6rem;
-                padding: 3px 4px;
-            }
-
-            .generated-cards .card-number {
-                font-size: 0.65rem;
-            }
-
-            .info-badge {
-                font-size: 0.5rem;
-                padding: 1px 5px;
-            }
-
-            .massive-result-grid .massive-item {
-                font-size: 0.6rem;
-                padding: 3px 4px;
-            }
-
-            .massive-result-grid .massive-item .number {
-                font-size: 0.65rem;
-            }
-
-            .massive-result-grid .massive-item .result {
-                font-size: 0.6rem;
-                padding: 1px 6px;
-            }
-
-            .live-result-grid {
-                font-size: 0.75rem;
-                gap: 2px 8px;
-            }
-
-            .login-box {
-                padding: 20px 18px;
-            }
-
-            .login-box h2 {
-                font-size: 1.4rem;
-            }
-
-            .result-box {
-                padding: 8px 10px;
-                max-height: 250px;
-                font-size: 0.75rem;
-            }
-
-            .credit-item {
-                font-size: 0.65rem;
-                padding: 3px 0;
-            }
-
-            .massive-summary .stat {
-                font-size: 0.65rem;
-            }
-
-            .massive-summary .stat .num {
-                font-size: 0.85rem;
-            }
-        }
-
         /* ===== UTILIDADES ===== */
         .hidden {
             display: none !important;
@@ -1074,12 +889,12 @@
             color: #ffaa44;
         }
 
-        .gap-5 {
-            gap: 5px;
+        .text-muted {
+            color: #6688aa;
         }
 
-        .flex-wrap {
-            flex-wrap: wrap;
+        .text-small {
+            font-size: 0.75rem;
         }
 
         .btn-group {
@@ -1090,9 +905,9 @@
 
         .btn-massive-lg {
             padding: 10px 20px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             background: linear-gradient(135deg, #ff8800, #cc5500);
-            box-shadow: 0 0 25px rgba(255, 136, 0, 0.25);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.2);
             animation: pulse-massive 2s ease-in-out infinite;
             border: none;
             border-radius: 25px;
@@ -1100,31 +915,295 @@
             font-weight: 700;
             cursor: pointer;
             transition: 0.15s;
-            min-width: 180px;
+            min-width: 170px;
         }
 
         .btn-massive-lg:hover {
-            transform: scale(1.03);
-            box-shadow: 0 0 35px rgba(255, 136, 0, 0.4);
-        }
-
-        .btn-massive-lg:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-            animation: none !important;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(255, 136, 0, 0.35);
         }
 
         .btn-massive-lg:active {
             transform: scale(0.97);
         }
 
-        .text-small {
-            font-size: 0.75rem;
+        .btn-massive-lg:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            animation: none !important;
         }
 
-        .text-muted {
-            color: #6688aa;
+        /* ============================================================== */
+        /* RESPONSIVE */
+        /* ============================================================== */
+
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .app-container {
+                max-height: 100vh;
+                min-height: 95vh;
+                border-radius: 14px;
+            }
+
+            .panels-container {
+                padding: 10px 12px 14px 12px;
+            }
+
+            .navbar {
+                padding: 8px 14px;
+                min-height: 48px;
+            }
+
+            .navbar .logo-title {
+                font-size: 1.1rem;
+            }
+
+            .tabs-container {
+                padding: 3px 8px;
+            }
+
+            .tab-btn {
+                padding: 6px 12px;
+                font-size: 0.7rem;
+            }
+
+            .flex-row .form-group {
+                min-width: 60px;
+            }
+
+            .live-result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .generated-cards .card-item {
+                font-size: 0.7rem;
+                padding: 4px 6px;
+            }
+
+            .massive-result-grid .massive-item {
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
+
+            .massive-summary {
+                gap: 8px;
+                padding: 5px 8px;
+            }
+
+            .massive-summary .stat {
+                font-size: 0.7rem;
+            }
+
+            .btn-block {
+                font-size: 0.75rem;
+                padding: 8px 12px;
+                min-width: 80px;
+            }
+
+            .btn-massive-lg {
+                font-size: 0.8rem;
+                padding: 8px 14px;
+                min-width: 130px;
+            }
+
+            .login-box {
+                padding: 25px 25px;
+            }
+        }
+
+        @media (max-width: 500px) {
+            body {
+                padding: 5px;
+            }
+
+            .app-container {
+                border-radius: 10px;
+                max-height: 100vh;
+                min-height: 98vh;
+            }
+
+            .navbar {
+                padding: 4px 10px;
+                min-height: 42px;
+            }
+
+            .navbar .logo-title {
+                font-size: 0.9rem;
+            }
+
+            .navbar .credits-display {
+                font-size: 0.6rem;
+                padding: 3px 10px;
+            }
+
+            .navbar .btn-salir {
+                font-size: 0.6rem;
+                padding: 3px 10px;
+            }
+
+            .navbar .user-info {
+                font-size: 0.55rem;
+            }
+
+            .panels-container {
+                padding: 6px 8px 10px 8px;
+            }
+
+            .panel h3 {
+                font-size: 0.9rem;
+                margin-bottom: 8px;
+            }
+
+            .tab-btn {
+                padding: 4px 8px;
+                font-size: 0.6rem;
+            }
+
+            .item-card {
+                padding: 8px 10px;
+                margin-bottom: 8px;
+            }
+
+            .item-card .info-box {
+                font-size: 0.65rem;
+                padding: 5px 8px;
+            }
+
+            .form-group {
+                margin-bottom: 6px;
+            }
+
+            .form-group label {
+                font-size: 0.6rem;
+            }
+
+            .form-group input {
+                font-size: 0.75rem;
+                padding: 6px 8px;
+            }
+
+            .flex-row {
+                gap: 4px;
+            }
+
+            .flex-row .form-group {
+                min-width: 50px;
+            }
+
+            .btn-block {
+                font-size: 0.65rem;
+                padding: 6px 10px;
+                min-width: 60px;
+                border-radius: 20px;
+            }
+
+            .flex-row .btn-block {
+                min-width: 50px;
+            }
+
+            .btn-massive-lg {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+                min-width: 100px;
+            }
+
+            .generated-cards {
+                max-height: 200px;
+                padding: 6px 8px;
+            }
+
+            .generated-cards .card-item {
+                font-size: 0.6rem;
+                padding: 3px 4px;
+            }
+
+            .generated-cards .card-number {
+                font-size: 0.6rem;
+            }
+
+            .info-badge {
+                font-size: 0.5rem;
+                padding: 1px 4px;
+            }
+
+            .result-box {
+                max-height: 250px;
+                padding: 8px 10px;
+                font-size: 0.7rem;
+            }
+
+            .live-result-grid {
+                font-size: 0.7rem;
+                gap: 2px 6px;
+            }
+
+            .detail-list {
+                font-size: 0.65rem;
+                margin-left: 12px;
+            }
+
+            .massive-result-grid {
+                max-height: 180px;
+                font-size: 0.6rem;
+            }
+
+            .massive-result-grid .massive-item {
+                padding: 2px 4px;
+            }
+
+            .massive-result-grid .massive-item .number {
+                font-size: 0.6rem;
+            }
+
+            .massive-result-grid .massive-item .result {
+                font-size: 0.55rem;
+                padding: 1px 4px;
+            }
+
+            .massive-summary {
+                gap: 5px;
+                padding: 3px 6px;
+            }
+
+            .massive-summary .stat {
+                font-size: 0.6rem;
+            }
+
+            .massive-summary .stat .num {
+                font-size: 0.75rem;
+            }
+
+            .massive-item .copy-btn {
+                font-size: 0.45rem;
+                padding: 1px 4px;
+            }
+
+            .credit-history {
+                max-height: 80px;
+                padding: 4px 6px;
+            }
+
+            .credit-item {
+                font-size: 0.6rem;
+                padding: 2px 0;
+            }
+
+            .login-box {
+                padding: 20px 16px;
+            }
+
+            .login-box h2 {
+                font-size: 1.4rem;
+            }
+
+            .btn-small {
+                font-size: 0.5rem;
+                padding: 2px 6px;
+            }
         }
     </style>
 </head>
@@ -1235,7 +1314,7 @@
                                 📋 COPIAR TODO
                             </button>
                             <button class="btn-block btn-massive" onclick="liveMasivoDesdeGenerador()" style="flex:1;min-width:80px;">
-                                📊 LIVE MASIVO x10 (7 créditos)
+                                📊 LIVE MASIVO (7 créditos)
                             </button>
                         </div>
 
@@ -1326,7 +1405,7 @@
 
                         <div style="display:flex; gap:8px; flex-wrap:wrap;">
                             <button class="btn-massive-lg" onclick="liveMasivoDesdePanel()" id="massiveBtn">
-                                📊 LIVE MASIVO x10 (7 créditos)
+                                📊 LIVE MASIVO (7 créditos)
                             </button>
                             <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled style="flex:1;min-width:120px;">
                                 ⬇️ DESCARGAR
@@ -1363,7 +1442,7 @@
                             <span style="color:#88bbff; font-size:0.75rem;">
                                 🔹 Generar: 2 créditos<br>
                                 🔹 LIVE: 2 créditos<br>
-                                🔹 LIVE Masivo x10: 7 créditos
+                                🔹 LIVE Masivo: 7 créditos
                             </span>
                         </div>
                     </div>
@@ -1463,7 +1542,7 @@
             const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444', warning: '#ffaa44' };
             const div = document.createElement('div');
             div.style.cssText = `
-                position: fixed; bottom: 15px; right: 15px; 
+                position: fixed; bottom: 20px; right: 20px; 
                 background: #0a1a3a; border: 2px solid ${colors[tipo] || '#66ddff'};
                 color: white; padding: 10px 18px; border-radius: 12px;
                 z-index: 9999; max-width: 350px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
@@ -1904,8 +1983,8 @@
             const cvvInfo = getCVVLength(brand) === 4 ? '4 dígitos (Amex)' : '3 dígitos';
 
             return `
-                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:12px;margin-bottom:10px;">
-                    <div style="font-size:1.1rem;font-weight:bold;margin-bottom:10px;">
+                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
+                    <div style="font-size:1rem;font-weight:bold;margin-bottom:8px;">
                         <span class="${estadoClass}">${icono} ${result.mensaje}</span>
                     </div>
                     <div class="live-result-grid">
@@ -1923,13 +2002,13 @@
                         <div><span class="label">📊 Código:</span> <span class="value">${result.codigo || 'N/A'}</span></div>
                         <div><span class="label">💳 Fondos:</span> <span class="value">${result.fondos ? '✅ Disponibles' : '❌ No'}</span></div>
                     </div>
-                    <div style="margin-top:10px;border-top:1px solid #1a4a7a;padding-top:8px;">
+                    <div style="margin-top:8px;border-top:1px solid #1a4a7a;padding-top:6px;">
                         <strong style="color:#66ddff;">📋 Detalles:</strong>
                         <ul class="detail-list">
                             ${result.detalles.map(d => `<li>${d}</li>`).join('')}
                         </ul>
                     </div>
-                    <div style="margin-top:8px;color:#6688aa;font-size:0.7rem;border-top:1px solid #1a3a5a;padding-top:6px;">
+                    <div style="margin-top:6px;color:#6688aa;font-size:0.7rem;border-top:1px solid #1a3a5a;padding-top:5px;">
                         💎 Costo: 2 créditos | Saldo: ${currentCredits} créditos
                     </div>
                 </div>
@@ -1957,7 +2036,6 @@
                 return;
             }
 
-            // Cambiar al panel de LIVE MASIVO
             switchTab('massive');
 
             const count = Math.min(cards.length, 10);
@@ -1995,7 +2073,7 @@
             cargarHistorialMasivo();
 
             if (btn) { btn.disabled = false;
-                btn.textContent = '📊 LIVE MASIVO x10 (7 créditos)'; }
+                btn.textContent = '📊 LIVE MASIVO (7 créditos)'; }
 
             const fondosCount = massiveResults.filter(r => r.result.estado === 'valid').length;
             mostrarNotificacion(`✅ ${fondosCount}/${count} con fondos`, 'success');
@@ -2006,9 +2084,7 @@
                 mostrarNotificacion('❌ Primero genera tarjetas', 'error');
                 return;
             }
-            // Cambiar al panel de LIVE MASIVO automáticamente
             switchTab('massive');
-            // Ejecutar LIVE Masivo
             setTimeout(() => liveMasivo(), 300);
         }
 
@@ -2028,8 +2104,8 @@
             const fondosCount = results.filter(r => r.result.estado === 'valid').length;
 
             let html = `
-                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
-                    <div style="font-size:1rem;font-weight:bold;color:#66ddff;margin-bottom:8px;">
+                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
+                    <div style="font-size:0.95rem;font-weight:bold;color:#66ddff;margin-bottom:6px;">
                         📊 RESULTADOS (${results.length} tarjetas)
                     </div>
                     <div class="massive-summary">
@@ -2081,7 +2157,7 @@
 
             html += `
                     </div>
-                    <div style="margin-top:8px;color:#6688aa;font-size:0.7rem;border-top:1px solid #1a3a5a;padding-top:6px;">
+                    <div style="margin-top:6px;color:#6688aa;font-size:0.7rem;border-top:1px solid #1a3a5a;padding-top:5px;">
                         💎 Costo: 7 créditos | Saldo: ${currentCredits} créditos
                     </div>
                 </div>
@@ -2306,7 +2382,7 @@
                     const data = hijo.val();
                     const div = document.createElement("div");
                     div.style.cssText =
-                        'padding:6px 10px;border-bottom:1px solid #1a3a5a;display:flex;justify-content:space-between;align-items:center;';
+                        'padding:5px 10px;border-bottom:1px solid #1a3a5a;display:flex;justify-content:space-between;align-items:center;';
                     div.innerHTML = `
                         <span style="font-size:0.8rem;">👤 <strong>${data.email}</strong></span>
                         <button class="btn-small btn-danger" onclick="eliminarUsuario('${hijo.key}')">Eliminar</button>
@@ -2421,12 +2497,10 @@
         // 14. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN ESCRITORIO CENTRADO');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
-        console.log('💎 Generar: 2 créditos | LIVE: 2 créditos | LIVE Masivo x10: 7 créditos');
-        console.log('📌 Diseño optimizado - 100% pantalla');
-        console.log('🟢 Resultados con colores y botón copiar individual');
-        console.log('📊 LIVE Masivo lleva automáticamente al panel correcto');
+        console.log('💎 Generar: 2 créditos | LIVE: 2 créditos | LIVE Masivo: 7 créditos');
+        console.log('📌 Diseño centrado - legible en cualquier pantalla');
     </script>
 
 </body>
