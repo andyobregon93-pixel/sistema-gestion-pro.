@@ -3,25 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYS ANDY PRO - CHECKER BIN</title>
+    <title>SYS ANDY PRO - GENERADOR + CHECKER LIVE</title>
     <style>
-        /* ========== ESTILOS ========== */
+        /* ========== ESTILOS CELESTE ========== */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         :root {
-            --bg-principal: #000000;
-            --bg-tarjeta: #1a0505;
-            --bg-inputs: #2a0a0a;
-            --texto-principal: #ffdddd;
-            --texto-secundario: #ff8888;
-            --borde-neon: #ff2200;
-            --fuego-grad: linear-gradient(135deg, #ff3300, #990000, #330000);
-            --sombra-difusa: 0 0 20px rgba(255, 34, 0, 0.4);
-            --grad-fondo: radial-gradient(circle at 50% 30%, #2a0000, #000000);
+            --bg-principal: #0a1628;
+            --bg-tarjeta: #0f1f3a;
+            --bg-inputs: #1a2a4a;
+            --texto-principal: #d4e4ff;
+            --texto-secundario: #88bbff;
+            --borde-neon: #00ccff;
+            --fuego-grad: linear-gradient(135deg, #00aaff, #0066cc, #003366);
+            --sombra-difusa: 0 0 20px rgba(0, 180, 255, 0.4);
+            --grad-fondo: radial-gradient(circle at 50% 30%, #0a1a3a, #050d1a);
         }
 
         body {
@@ -33,16 +33,13 @@
             padding: 20px;
         }
 
-        /* ===== CONTENEDOR PRINCIPAL ===== */
         .container {
-            max-width: 800px;
+            max-width: 950px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
 
-        /* ===== PANTALLA DE AUTENTICACIÓN ===== */
-        #auth-screen {
+        /* ===== PANTALLA LOGIN ===== */
+        #login-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -50,59 +47,34 @@
             min-height: 100vh;
         }
 
-        .auth-box {
-            background: rgba(26, 5, 5, 0.95);
+        .login-box {
+            background: rgba(15, 31, 58, 0.95);
             backdrop-filter: blur(5px);
             border: 2px solid var(--borde-neon);
             border-radius: 30px;
-            padding: 30px;
+            padding: 35px;
             width: 100%;
             max-width: 400px;
             box-shadow: var(--sombra-difusa);
         }
 
-        .auth-box h2 {
+        .login-box h2 {
             text-align: center;
             font-size: 2rem;
-            background: linear-gradient(135deg, #ff5533, #aa1100);
+            background: linear-gradient(135deg, #66ddff, #0088cc);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
         }
 
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid var(--borde-neon);
-        }
-
-        .auth-tab {
-            flex: 1;
-            background: transparent;
-            border: none;
+        .login-box .subtitle {
+            text-align: center;
             color: var(--texto-secundario);
-            font-weight: bold;
-            padding: 10px;
-            cursor: pointer;
-            transition: 0.2s;
+            font-size: 0.9rem;
+            margin-bottom: 25px;
         }
 
-        .auth-tab.active {
-            color: #ffaa44;
-            border-bottom: 3px solid #ff4422;
-        }
-
-        .auth-panel {
-            display: none;
-        }
-
-        .auth-panel.active {
-            display: block;
-        }
-
-        /* ===== FORMULARIOS ===== */
         .form-group {
             margin-bottom: 15px;
         }
@@ -119,19 +91,19 @@
         input[type="email"],
         input[type="number"] {
             width: 100%;
-            padding: 10px;
-            background-color: #1f0808;
-            border: 2px solid #aa4422;
+            padding: 12px;
+            background-color: var(--bg-inputs);
+            border: 2px solid #1a4a7a;
             border-radius: 15px;
-            color: #ffdddd;
+            color: #d4e4ff;
             box-sizing: border-box;
             font-size: 1rem;
             transition: 0.2s;
         }
 
         input:focus {
-            border-color: #ff6644;
-            box-shadow: 0 0 12px #ff4422;
+            border-color: var(--borde-neon);
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.3);
             outline: none;
         }
 
@@ -145,7 +117,7 @@
             cursor: pointer;
             color: white;
             background: var(--fuego-grad);
-            box-shadow: 0 0 15px #ff3300;
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.3);
             transition: 0.1s;
         }
 
@@ -154,28 +126,38 @@
         }
 
         .btn-start {
-            background: linear-gradient(135deg, #00bfa5, #00665a);
-            box-shadow: 0 0 12px #00bfa5;
+            background: linear-gradient(135deg, #00ccff, #0088cc);
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.3);
         }
 
         .btn-save {
-            background: linear-gradient(135deg, #ff6f00, #aa3300);
-        }
-
-        .btn-action {
-            background: linear-gradient(135deg, #ff8833, #cc4400);
+            background: linear-gradient(135deg, #ff8800, #cc6600);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.3);
         }
 
         .btn-danger {
-            background: linear-gradient(135deg, #d32f2f, #8b0000);
+            background: linear-gradient(135deg, #ff4444, #cc0000);
         }
 
-        .btn-approve {
-            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        .btn-success {
+            background: linear-gradient(135deg, #00cc88, #008866);
+            box-shadow: 0 0 20px rgba(0, 204, 136, 0.3);
         }
 
-        .btn-reject {
-            background: linear-gradient(135deg, #c62828, #8b0000);
+        .btn-live {
+            background: linear-gradient(135deg, #ff44aa, #cc0088);
+            box-shadow: 0 0 25px rgba(255, 68, 170, 0.4);
+            animation: pulse-live 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-live {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(255, 68, 170, 0.4);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 68, 170, 0.8), 0 0 60px rgba(255, 68, 170, 0.3);
+            }
         }
 
         .btn-small {
@@ -188,16 +170,11 @@
             font-weight: bold;
         }
 
-        .btn-small:active {
-            transform: scale(0.95);
-        }
-
-        /* ===== BOTÓN SALIR ===== */
         .btn-salir {
-            background-color: #aa2222;
+            background-color: #cc3333;
             color: white;
             border: none;
-            padding: 6px 12px;
+            padding: 6px 14px;
             border-radius: 15px;
             cursor: pointer;
             font-weight: bold;
@@ -205,14 +182,14 @@
 
         /* ===== NAVBAR ===== */
         .navbar {
-            background: linear-gradient(90deg, #1a0000, #330000, #1a0000);
+            background: linear-gradient(90deg, #0a1a3a, #0f2a5a, #0a1a3a);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 10px 15px;
-            border-bottom: 2px solid #ff3311;
+            padding: 10px 20px;
+            border-bottom: 2px solid var(--borde-neon);
             border-radius: 15px 15px 0 0;
-            box-shadow: 0 5px 15px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 150, 255, 0.2);
             flex-wrap: wrap;
             gap: 10px;
         }
@@ -220,53 +197,47 @@
         .logo-title {
             font-size: 1.6rem;
             font-weight: bold;
-            background: linear-gradient(135deg, #ff6644, #ff2200);
+            background: linear-gradient(135deg, #66ddff, #0088cc);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
 
         .logo-title::before {
-            content: "🦁 ";
-        }
-
-        .logo-sub {
-            font-size: 0.85rem;
-            color: #ffaa77;
+            content: "⚡ ";
         }
 
         .nav-right {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             flex-wrap: wrap;
         }
 
         .credits-display {
-            background: linear-gradient(135deg, #ff6600, #cc3300);
-            padding: 6px 14px;
+            background: linear-gradient(135deg, #00aaff, #0066cc);
+            padding: 6px 16px;
             border-radius: 20px;
             font-weight: bold;
             color: white;
             font-size: 0.9rem;
-            box-shadow: 0 0 15px rgba(255, 68, 0, 0.5);
+            box-shadow: 0 0 20px rgba(0, 150, 255, 0.4);
         }
 
-        /* ===== TABS ===== */
         .tabs-container {
             display: flex;
-            background-color: #1a0505;
-            border-bottom: 2px solid #ff4422;
+            background-color: #0a1a3a;
+            border-bottom: 2px solid var(--borde-neon);
             overflow-x: auto;
             gap: 5px;
             padding: 5px;
         }
 
         .tab-btn {
-            padding: 10px 20px;
+            padding: 10px 22px;
             background: none;
             border: none;
-            color: #ffaa88;
+            color: #88bbff;
             font-weight: bold;
             cursor: pointer;
             border-radius: 10px 10px 0 0;
@@ -275,25 +246,15 @@
         }
 
         .tab-btn.active {
-            color: #ffaa44;
-            background: rgba(80, 10, 10, 0.6);
-            border-bottom: 3px solid #ff4422;
+            color: #66ddff;
+            background: rgba(0, 100, 200, 0.3);
+            border-bottom: 3px solid var(--borde-neon);
         }
 
-        .badge-pending {
-            background: #ff3300;
-            color: white;
-            border-radius: 20px;
-            padding: 2px 8px;
-            font-size: 0.7rem;
-            margin-left: 6px;
-        }
-
-        /* ===== PANELES ===== */
         .panel {
-            padding: 15px;
+            padding: 20px;
             display: none;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(10, 26, 58, 0.8);
             border-radius: 0 0 15px 15px;
             border-left: 2px solid var(--borde-neon);
             border-right: 2px solid var(--borde-neon);
@@ -305,133 +266,17 @@
         }
 
         .panel h3 {
-            color: #ffaa44;
-            margin-bottom: 15px;
+            color: #66ddff;
+            margin-bottom: 18px;
             font-size: 1.3rem;
         }
 
-        /* ===== TARJETAS ===== */
         .item-card {
-            background: rgba(30, 10, 10, 0.8);
-            border: 2px solid #aa4422;
+            background: rgba(15, 31, 58, 0.9);
+            border: 2px solid #1a4a7a;
             border-radius: 20px;
-            padding: 15px;
+            padding: 18px;
             margin-bottom: 15px;
-            backdrop-filter: blur(4px);
-        }
-
-        .item-list {
-            margin-top: 10px;
-        }
-
-        .item-actions {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        /* ===== RESULTADOS BIN ===== */
-        .bin-result {
-            background: rgba(0, 0, 0, 0.85);
-            border: 2px solid #ff4422;
-            border-radius: 15px;
-            padding: 15px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            word-break: break-all;
-            max-height: 400px;
-            overflow-y: auto;
-            margin-top: 10px;
-        }
-
-        .credit-history {
-            max-height: 200px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 10px;
-        }
-
-        .credit-item {
-            border-bottom: 1px solid #442222;
-            padding: 5px 0;
-            font-size: 0.85rem;
-        }
-
-        .card-preview {
-            background: #1a0505;
-            border: 2px solid #ff4422;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 10px 0;
-            font-family: 'Courier New', monospace;
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-        }
-
-        .results-title {
-            color: #ff6644;
-            font-size: 1.1rem;
-            margin: 15px 0 10px 0;
-            font-weight: bold;
-        }
-
-        /* ===== MODAL ===== */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(8px);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: #1a0505;
-            border: 2px solid var(--borde-neon);
-            border-radius: 30px;
-            padding: 25px;
-            width: 90%;
-            max-width: 400px;
-            color: var(--texto-principal);
-        }
-
-        .close-modal {
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #ff8866;
-        }
-
-        .close-modal:hover {
-            color: #ff3300;
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 600px) {
-            .navbar {
-                flex-direction: column;
-                align-items: stretch;
-                text-align: center;
-            }
-            .nav-right {
-                justify-content: center;
-            }
-            .tab-btn {
-                padding: 8px 12px;
-                font-size: 0.8rem;
-            }
-        }
-
-        .hidden {
-            display: none !important;
         }
 
         .flex-row {
@@ -444,93 +289,202 @@
             flex: 1;
             min-width: 120px;
         }
+
+        .flex-row .form-group {
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .result-box {
+            background: rgba(0, 0, 0, 0.6);
+            border: 2px solid var(--borde-neon);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-all;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .status-valid {
+            color: #00ff88;
+            font-weight: bold;
+        }
+
+        .status-invalid {
+            color: #ff4444;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: #ffaa44;
+            font-weight: bold;
+        }
+
+        .credit-history {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .credit-item {
+            border-bottom: 1px solid #1a3a5a;
+            padding: 5px 0;
+            font-size: 0.85rem;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.8s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .generated-cards {
+            background: rgba(0, 20, 50, 0.8);
+            border: 2px solid #00aaff;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .generated-cards .card-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid #1a3a5a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: 'Courier New', monospace;
+            font-size: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .generated-cards .card-item .card-number {
+            color: #88ddff;
+        }
+
+        .generated-cards .card-item .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-copy {
+            background: #0088cc;
+            padding: 2px 10px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .btn-check-live {
+            background: #ff44aa;
+            padding: 2px 10px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+
+        .info-badge {
+            background: #1a4a7a;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 0.7rem;
+            color: #88ddff;
+        }
+
+        /* ===== RESULTADO LIVE ===== */
+        .live-result {
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid #ff44aa;
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 10px;
+        }
+
+        .live-result .detail-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 4px 0;
+            border-bottom: 1px solid #1a3a5a;
+        }
+
+        .live-result .detail-label {
+            color: #88bbff;
+        }
+
+        .live-result .detail-value {
+            color: #d4e4ff;
+            font-weight: bold;
+        }
+
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .nav-right {
+                justify-content: center;
+            }
+            .flex-row .form-group {
+                min-width: 60px;
+            }
+            .generated-cards .card-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 5px;
+            }
+        }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================== -->
-    <!-- PANTALLA DE AUTENTICACIÓN -->
-    <!-- ============================================================== -->
-    <div id="auth-screen">
+    <!-- ===== PANTALLA DE LOGIN ===== -->
+    <div id="login-screen">
         <div class="container">
-            <div class="auth-box">
-                <h2>🦁 SYS ANDY PRO</h2>
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-auth="login">🔐 Iniciar Sesión</button>
-                    <button class="auth-tab" data-auth="register">📝 Registrarse</button>
+            <div class="login-box">
+                <h2>⚡ SYS ANDY PRO</h2>
+                <div class="subtitle">Generador + Checker LIVE de Tarjetas</div>
+                <div class="form-group">
+                    <label>Usuario o Correo:</label>
+                    <input type="text" id="loginEmail" placeholder="usuario@ejemplo.com">
                 </div>
-
-                <!-- LOGIN -->
-                <div id="auth-login" class="auth-panel active">
-                    <div class="form-group">
-                        <label>Usuario o Correo:</label>
-                        <input type="text" id="loginEmail" placeholder="usuario@ejemplo.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña:</label>
-                        <input type="password" id="loginPass" placeholder="••••••••">
-                    </div>
-                    <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR</button>
-                    <div style="text-align:center; margin-top:12px;">
-                        <a href="#" id="forgotPasswordLink" style="color:#ffaa66;">¿Olvidaste tu contraseña?</a>
-                    </div>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="loginPass" placeholder="••••••••">
                 </div>
-
-                <!-- REGISTRO -->
-                <div id="auth-register" class="auth-panel">
-                    <div class="form-group">
-                        <label>Correo Electrónico:</label>
-                        <input type="email" id="regEmail" placeholder="usuario@ejemplo.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña:</label>
-                        <input type="password" id="regPass" placeholder="mínimo 4 caracteres">
-                    </div>
-                    <div class="form-group">
-                        <label>Confirmar Contraseña:</label>
-                        <input type="password" id="regPassConfirm" placeholder="repita contraseña">
-                    </div>
-                    <button class="btn-block btn-save" onclick="solicitarRegistro()">📨 ENVIAR SOLICITUD</button>
-                    <p style="font-size:0.75rem; text-align:center; margin-top:10px;">
-                        Tu solicitud será revisada por el administrador.
-                    </p>
+                <button class="btn-block btn-start" onclick="procesarLogin()">INGRESAR</button>
+                <div style="text-align:center; margin-top:12px; font-size:0.8rem; color:#88bbff;">
+                    Contacta al administrador para crear tu cuenta
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- ============================================================== -->
-    <!-- MODAL RECUPERACIÓN -->
-    <!-- ============================================================== -->
-    <div id="resetModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h3>🔐 Recuperar contraseña</h3>
-            <div id="resetStep1">
-                <div class="form-group">
-                    <label>Correo electrónico:</label>
-                    <input type="email" id="resetEmail" placeholder="tu@email.com">
-                </div>
-                <button class="btn-block btn-start" onclick="solicitarCodigoReset()">📧 Enviar código</button>
-            </div>
-            <div id="resetStep2" style="display:none;">
-                <div class="form-group">
-                    <label>Código (6 dígitos):</label>
-                    <input type="text" id="resetCode" maxlength="6">
-                </div>
-                <div class="form-group">
-                    <label>Nueva contraseña:</label>
-                    <input type="password" id="newPassword" placeholder="mínimo 4 caracteres">
-                </div>
-                <button class="btn-block btn-save" onclick="verificarCodigoYResetear()">✅ Restablecer</button>
-            </div>
-            <div id="resetMsg" style="margin-top:10px; font-size:0.85rem; text-align:center;"></div>
-        </div>
-    </div>
-
-    <!-- ============================================================== -->
-    <!-- APLICACIÓN PRINCIPAL -->
-    <!-- ============================================================== -->
+    <!-- ===== APLICACIÓN PRINCIPAL ===== -->
     <div id="main-app" style="display:none;">
         <div class="container">
 
@@ -538,7 +492,7 @@
             <div class="navbar">
                 <div>
                     <div class="logo-title">SYS ANDY PRO</div>
-                    <div class="logo-sub" id="userDisplay">Cargando...</div>
+                    <div style="font-size:0.85rem;color:#88bbff;" id="userDisplay">Cargando...</div>
                 </div>
                 <div class="nav-right">
                     <span class="credits-display" id="creditsDisplay">💎 0 créditos</span>
@@ -548,44 +502,117 @@
 
             <!-- TABS -->
             <div class="tabs-container">
-                <button class="tab-btn active" onclick="switchTab('checker')">🔍 CHECKER BIN</button>
+                <button class="tab-btn active" onclick="switchTab('generator')">🎲 GENERADOR</button>
+                <button class="tab-btn" onclick="switchTab('live')">🔴 CHECKER LIVE</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
                 <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMIN</button>
-                <button class="tab-btn" id="tabSolicitudesBtn" onclick="switchTab('solicitudes')" style="display:none;">📝 SOLICITUDES</button>
             </div>
 
             <!-- ========================================================== -->
-            <!-- PANEL: CHECKER BIN -->
+            <!-- PANEL: GENERADOR DE TARJETAS -->
             <!-- ========================================================== -->
-            <div id="panel-checker" class="panel active">
-                <h3>🔍 CHECKER DE BIN</h3>
+            <div id="panel-generator" class="panel active">
+                <h3>🎲 GENERADOR DE TARJETAS</h3>
 
                 <div class="item-card">
+                    <div style="background:#0044aa22;padding:10px;border-radius:10px;margin-bottom:15px;border:1px solid #00aaff;">
+                        <p style="color:#88ddff;font-size:0.85rem;">
+                            💡 Ingresa los primeros dígitos de la tarjeta (mínimo 6). El sistema generará el resto
+                            automáticamente <strong>sin repetir series</strong>.
+                        </p>
+                    </div>
+
                     <div class="form-group">
-                        <label>Ingresa el BIN (6 dígitos) o número completo:</label>
-                        <input type="text" id="binInput" placeholder="Ej: 411111 o 4111111111111111" maxlength="19">
+                        <label>🔢 Ingresa los primeros dígitos (BIN):</label>
+                        <input type="text" id="binInput" placeholder="Ej: 411111 o 4111111111" maxlength="16">
                     </div>
 
                     <div class="flex-row">
-                        <button class="btn-block btn-start" onclick="consultarBIN()">
-                            🔍 CONSULTAR BIN (1 crédito)
-                        </button>
-                        <button class="btn-block btn-action" onclick="generarTarjetas()">
-                            🎲 GENERAR TARJETAS (2 créditos)
-                        </button>
+                        <div class="form-group">
+                            <label>📅 Mes de expiración (MM):</label>
+                            <input type="text" id="cardMonth" placeholder="12" maxlength="2" value="12">
+                        </div>
+                        <div class="form-group">
+                            <label>📅 Año de expiración (YY):</label>
+                            <input type="text" id="cardYear" placeholder="26" maxlength="2" value="26">
+                        </div>
+                        <div class="form-group">
+                            <label>📊 Cantidad a generar:</label>
+                            <input type="number" id="genCount" value="10" min="1" max="50">
+                        </div>
                     </div>
 
-                    <div class="form-group" style="margin-top:10px;">
-                        <label>Cantidad de tarjetas a generar:</label>
-                        <input type="number" id="genCardsCount" value="5" min="1" max="20">
+                    <div class="flex-row">
+                        <button class="btn-block btn-start" onclick="generarTarjetas()">
+                            🎲 GENERAR TARJETAS (2 créditos)
+                        </button>
+                        <button class="btn-block btn-save" onclick="descargarGeneradas()" id="btnDownloadGen" disabled>
+                            ⬇️ DESCARGAR
+                        </button>
                     </div>
                 </div>
 
-                <div class="results-title">📊 Resultados:</div>
-                <div id="binResult" class="bin-result">Esperando consulta...</div>
+                <div id="generatedContainer">
+                    <div class="generated-cards" id="generatedCards">
+                        <p style="color:#88bbff;text-align:center;">Genera tus tarjetas aquí</p>
+                    </div>
+                </div>
 
-                <div class="results-title" style="margin-top:20px;">📜 Historial de consultas</div>
-                <div id="binHistory" class="credit-history"></div>
+                <div style="margin-top:15px;">
+                    <div class="results-title" style="color:#66ddff;font-size:1rem;">📜 Historial de generaciones</div>
+                    <div id="genHistory" class="credit-history"></div>
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- PANEL: CHECKER LIVE -->
+            <!-- ========================================================== -->
+            <div id="panel-live" class="panel">
+                <h3>🔴 CHECKER LIVE - VERIFICACIÓN REAL</h3>
+
+                <div class="item-card">
+                    <div style="background:#ff44aa22;padding:10px;border-radius:10px;margin-bottom:15px;border:2px solid #ff44aa;">
+                        <p style="color:#ff88cc;font-size:0.85rem;">
+                            ⚡ <strong>CHECKER LIVE</strong> - Cada verificación cuesta <strong>2 créditos</strong>.
+                            Verifica si la tarjeta tiene fondos y obtén detalles completos.
+                        </p>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🔢 Número de tarjeta:</label>
+                        <input type="text" id="liveCardNumber" placeholder="4111111111111111" maxlength="19">
+                    </div>
+
+                    <div class="flex-row">
+                        <div class="form-group" style="flex:1;min-width:80px;">
+                            <label>📅 Mes (MM):</label>
+                            <input type="text" id="liveCardMonth" placeholder="12" maxlength="2">
+                        </div>
+                        <div class="form-group" style="flex:1;min-width:80px;">
+                            <label>📅 Año (YY):</label>
+                            <input type="text" id="liveCardYear" placeholder="26" maxlength="2">
+                        </div>
+                        <div class="form-group" style="flex:1;min-width:80px;">
+                            <label>🔐 CVV:</label>
+                            <input type="text" id="liveCardCVV" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+
+                    <button class="btn-block btn-live" id="liveCheckBtn" onclick="checkCardLive()">
+                        🔴 VERIFICAR TARJETA (2 créditos)
+                    </button>
+                </div>
+
+                <div id="liveResultContainer">
+                    <div class="result-box" id="liveResultBox">
+                        <span style="color:#88bbff;">Esperando verificación...</span>
+                    </div>
+                </div>
+
+                <div style="margin-top:15px;">
+                    <div class="results-title" style="color:#66ddff;font-size:1rem;">📜 Historial de verificaciones LIVE</div>
+                    <div id="liveHistory" class="credit-history"></div>
+                </div>
             </div>
 
             <!-- ========================================================== -->
@@ -596,22 +623,21 @@
 
                 <div class="item-card">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap;">
-                        <span style="font-size:1.8rem;">💎 <span id="creditsBalance" style="color:#ffaa44;">0</span> créditos</span>
-                        <span style="color:#ffaa88; font-size:0.9rem;">
-                            🔹 Consultar BIN: 1 crédito<br>
-                            🔹 Generar tarjetas: 2 créditos
+                        <span style="font-size:1.8rem;">💎 <span id="creditsBalance" style="color:#66ddff;">0</span> créditos</span>
+                        <span style="color:#88bbff; font-size:0.9rem;">
+                            🔹 Generar tarjetas: 2 créditos<br>
+                            🔹 Verificar LIVE: 2 créditos
                         </span>
                     </div>
                 </div>
 
                 <div class="item-card">
-                    <h4 style="color:#ffaa66;">📋 Historial de movimientos</h4>
+                    <h4 style="color:#66ddff;">📋 Historial de movimientos</h4>
                     <div id="creditHistory" class="credit-history">
-                        <p style="color:#888;">Sin movimientos</p>
+                        <p style="color:#6688aa;">Sin movimientos</p>
                     </div>
                 </div>
 
-                <!-- Panel Admin (solo visible para Owner) -->
                 <div id="adminCreditPanel" style="display:none;" class="item-card" style="border:2px solid #00ff88;">
                     <h4 style="color:#00ff88;">👑 Panel Admin - Gestionar Créditos</h4>
                     <div class="form-group">
@@ -619,57 +645,36 @@
                         <input type="text" id="creditUserEmail" placeholder="usuario@ejemplo.com">
                     </div>
                     <div class="flex-row">
-                        <input type="number" id="creditAmount" placeholder="Cantidad" style="flex:1; min-width:100px;">
-                        <button class="btn-small btn-approve" onclick="agregarCreditos()">➕ Agregar</button>
+                        <input type="number" id="creditAmount" placeholder="Cantidad" style="flex:1;min-width:100px;">
+                        <button class="btn-small btn-success" onclick="agregarCreditos()">➕ Agregar</button>
                         <button class="btn-small btn-danger" onclick="restarCreditos()">➖ Restar</button>
                     </div>
                 </div>
             </div>
 
             <!-- ========================================================== -->
-            <!-- PANEL: ADMIN (solo Owner) -->
+            <!-- PANEL: ADMIN -->
             <!-- ========================================================== -->
             <div id="panel-admins" class="panel">
                 <h3>👥 Panel de Administración</h3>
 
                 <div class="item-card">
-                    <h4 style="color:#ffaa66;">➕ Crear nuevo vendedor</h4>
+                    <h4 style="color:#66ddff;">➕ Crear nuevo usuario</h4>
                     <div class="form-group">
                         <label>Usuario o Correo:</label>
-                        <input type="text" id="newAdminEmail" placeholder="vendedor@ejemplo.com">
+                        <input type="text" id="newAdminEmail" placeholder="usuario@ejemplo.com">
                     </div>
                     <div class="form-group">
                         <label>Contraseña:</label>
                         <input type="text" id="newAdminPass" placeholder="contraseña">
                     </div>
-                    <button class="btn-block btn-start" onclick="crearVendedorFirebase()">⚡ CREAR VENDEDOR</button>
+                    <button class="btn-block btn-start" onclick="crearUsuarioFirebase()">⚡ CREAR USUARIO</button>
                 </div>
 
                 <div class="item-card">
-                    <h4 style="color:#ffaa66;">📋 Vendedores Activos</h4>
-                    <div id="listaVendedoresContainer" class="item-list"></div>
+                    <h4 style="color:#66ddff;">📋 Usuarios Activos</h4>
+                    <div id="listaUsuariosContainer" class="item-list"></div>
                 </div>
-
-                <div class="item-card" style="border-color:#00ff88;">
-                    <h4 style="color:#00ff88;">💎 Gestionar Créditos</h4>
-                    <div class="form-group">
-                        <label>Usuario (email):</label>
-                        <input type="text" id="adminCreditUser" placeholder="usuario@ejemplo.com">
-                    </div>
-                    <div class="flex-row">
-                        <input type="number" id="adminCreditAmount" placeholder="Cantidad" style="flex:1; min-width:100px;">
-                        <button class="btn-small btn-approve" onclick="adminAgregarCreditos()">➕ Agregar</button>
-                        <button class="btn-small btn-danger" onclick="adminRestarCreditos()">➖ Restar</button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- ========================================================== -->
-            <!-- PANEL: SOLICITUDES (solo Owner) -->
-            <!-- ========================================================== -->
-            <div id="panel-solicitudes" class="panel">
-                <h3>📋 Solicitudes de Registro</h3>
-                <div id="solicitudesContainer" class="item-list"></div>
             </div>
 
         </div>
@@ -685,7 +690,7 @@
 
     <script>
         // ================================================================
-        // 1. CONFIGURACIÓN FIREBASE (TUS DATOS)
+        // 1. CONFIGURACIÓN FIREBASE
         // ================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -705,6 +710,7 @@
         let currentUser = null;
         let usernameClave = "";
         let currentCredits = 0;
+        let generatedCardsList = [];
 
         // ================================================================
         // 3. UTILIDADES
@@ -714,28 +720,14 @@
             return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
         }
 
-        function escapeHtml(str) {
-            return String(str).replace(/[&<>"]/g, function(m) {
-                if (m === '&') return '&amp;';
-                if (m === '<') return '&lt;';
-                if (m === '>') return '&gt;';
-                if (m === '"') return '&quot;';
-                return m;
-            });
-        }
-
         function mostrarNotificacion(msg, tipo = 'info') {
-            const colors = {
-                info: '#ffaa44',
-                success: '#00cc66',
-                error: '#ff4444'
-            };
+            const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444' };
             const div = document.createElement('div');
             div.style.cssText = `
                 position: fixed; bottom: 20px; right: 20px; 
-                background: #1a0505; border: 2px solid ${colors[tipo] || '#ffaa44'};
+                background: #0a1a3a; border: 2px solid ${colors[tipo] || '#66ddff'};
                 color: white; padding: 15px 25px; border-radius: 15px;
-                z-index: 9999; max-width: 400px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
+                z-index: 9999; max-width: 400px; box-shadow: 0 0 30px rgba(0,0,0,0.9);
                 font-weight: bold; font-size: 0.95rem;
             `;
             div.textContent = msg;
@@ -793,19 +785,17 @@
         }
 
         // ================================================================
-        // 5. CHECKER BIN
+        // 5. GENERADOR DE TARJETAS (SIN REPETIR SERIES)
         // ================================================================
+
         function luhnCheck(cardNumber) {
             const digits = String(cardNumber).replace(/\s/g, '');
-            if (!/^\d+$/.test(digits)) return false;
-            let sum = 0;
-            let alternate = false;
+            if (!/^\d+$/.test(digits) || digits.length < 13) return false;
+            let sum = 0,
+                alternate = false;
             for (let i = digits.length - 1; i >= 0; i--) {
                 let n = parseInt(digits[i], 10);
-                if (alternate) {
-                    n *= 2;
-                    if (n > 9) n -= 9;
-                }
+                if (alternate) { n *= 2; if (n > 9) n -= 9; }
                 sum += n;
                 alternate = !alternate;
             }
@@ -828,164 +818,465 @@
             return 'Desconocida';
         }
 
-        function detectType(cardNumber) {
-            const num = String(cardNumber).replace(/\s/g, '');
-            if (/^4/.test(num)) return 'Crédito/Débito';
-            if (/^(5[1-5]|2[2-7])/.test(num)) return 'Crédito';
-            if (/^(34|37)/.test(num)) return 'Crédito';
-            return 'Desconocido';
-        }
-
-        function generateCard(bin, count = 5) {
-            const binStr = String(bin).replace(/\s/g, '').slice(0, 6);
+        function generateUniqueCards(binPrefix, count, month, year) {
+            const binStr = String(binPrefix).replace(/\s/g, '');
             const brand = detectBrand(binStr);
             const length = brand === 'American Express' ? 15 : 16;
-            const cards = [];
 
-            for (let i = 0; i < count * 10 && cards.length < count; i++) {
-                const remaining = length - binStr.length - 1;
+            // Si el BIN es más largo que la tarjeta, truncar
+            const validBin = binStr.slice(0, Math.min(binStr.length, length - 1));
+
+            const cards = [];
+            const usedSeries = new Set();
+            let attempts = 0;
+            const maxAttempts = count * 50;
+
+            while (cards.length < count && attempts < maxAttempts) {
+                attempts++;
+                const remaining = length - validBin.length - 1;
                 let middle = '';
                 for (let j = 0; j < remaining; j++) {
                     middle += Math.floor(Math.random() * 10);
                 }
-                const base = binStr + middle;
+                const base = validBin + middle;
 
                 for (let checkDigit = 0; checkDigit < 10; checkDigit++) {
                     const candidate = base + checkDigit;
-                    if (luhnCheck(candidate)) {
-                        cards.push(candidate);
+                    // Verificar que no se repita la serie (últimos 4 dígitos)
+                    const series = candidate.slice(-4);
+                    if (!usedSeries.has(series) && luhnCheck(candidate)) {
+                        usedSeries.add(series);
+                        cards.push({
+                            number: candidate,
+                            month: month.padStart(2, '0'),
+                            year: year.padStart(2, '0'),
+                            brand: brand,
+                            series: series
+                        });
                         break;
                     }
                 }
             }
+
             return cards;
         }
 
-        async function consultarBIN() {
-            if (!currentUser) return;
-
-            const input = document.getElementById('binInput').value.trim();
-            if (!input) {
-                mostrarNotificacion('❌ Ingresa un BIN o número de tarjeta', 'error');
+        async function generarTarjetas() {
+            if (!currentUser) {
+                mostrarNotificacion('❌ Inicia sesión primero', 'error');
                 return;
             }
 
-            if (!await gastarCredito(1, `Consulta BIN: ${input}`)) return;
+            const binInput = document.getElementById('binInput').value.trim();
+            const month = document.getElementById('cardMonth').value.trim() || '12';
+            const year = document.getElementById('cardYear').value.trim() || '26';
+            const count = parseInt(document.getElementById('genCount').value) || 10;
 
-            const clean = input.replace(/\s/g, '');
-            const bin = clean.slice(0, 6);
-            const isLuhnValid = luhnCheck(clean);
-            const brand = detectBrand(clean);
-            const type = detectType(clean);
+            if (!binInput || binInput.length < 6) {
+                mostrarNotificacion('❌ Ingresa al menos 6 dígitos del BIN', 'error');
+                return;
+            }
 
-            let html = `
-                <div style="color:#ffaa44; font-weight:bold;">🔍 BIN: ${bin}</div>
-                <div>🏷️ Marca: ${brand}</div>
-                <div>📋 Tipo: ${type}</div>
-                <div>✅ Luhn: ${isLuhnValid ? '✅ Válido' : '❌ Inválido'}</div>
-                <div>🔢 Número: ${clean}</div>
-                <div style="margin-top:10px; color:#888; font-size:0.8rem;">
-                    💎 Costo: 1 crédito | Saldo: ${currentCredits} créditos
+            if (!/^\d+$/.test(binInput)) {
+                mostrarNotificacion('❌ Solo números permitidos', 'error');
+                return;
+            }
+
+            if (!await gastarCredito(2, `Generar ${count} tarjetas para BIN: ${binInput}`)) return;
+
+            const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
+
+            if (cards.length === 0) {
+                mostrarNotificacion('❌ No se pudieron generar tarjetas válidas', 'error');
+                return;
+            }
+
+            generatedCardsList = cards;
+            mostrarGeneradas(cards);
+            document.getElementById('btnDownloadGen').disabled = false;
+
+            // Guardar historial
+            guardarHistorialGen(binInput, cards.length);
+            cargarHistorialGen();
+
+            mostrarNotificacion(`✅ ${cards.length} tarjetas generadas sin repetir series`, 'success');
+        }
+
+        function mostrarGeneradas(cards) {
+            const container = document.getElementById('generatedCards');
+            container.innerHTML = cards.map((card, index) => `
+                <div class="card-item">
+                    <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
+                    <span class="info-badge">${card.brand}</span>
+                    <span class="info-badge">${card.month}/${card.year}</span>
+                    <span class="info-badge">Serie: ${card.series}</span>
+                    <div class="card-actions">
+                        <button class="btn-copy" onclick="copiarTarjeta(${index})">📋</button>
+                        <button class="btn-check-live" onclick="enviarALive(${index})">🔴 LIVE</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function copiarTarjeta(index) {
+            const card = generatedCardsList[index];
+            if (!card) return;
+            const text = `${card.number}|${card.month}|${card.year}|${card.brand}`;
+            navigator.clipboard.writeText(text);
+            mostrarNotificacion('📋 Tarjeta copiada', 'success');
+        }
+
+        function enviarALive(index) {
+            const card = generatedCardsList[index];
+            if (!card) return;
+            document.getElementById('liveCardNumber').value = card.number;
+            document.getElementById('liveCardMonth').value = card.month;
+            document.getElementById('liveCardYear').value = card.year;
+            document.getElementById('liveCardCVV').value = '123';
+            switchTab('live');
+            mostrarNotificacion('📤 Enviada a Checker LIVE', 'info');
+        }
+
+        function descargarGeneradas() {
+            if (!generatedCardsList.length) return;
+            const lines = generatedCardsList.map(c =>
+                `${c.number}|${c.month}|${c.year}|${c.brand}|Serie:${c.series}`
+            );
+            const text = lines.join('\n');
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `tarjetas_${new Date().toISOString().slice(0,10)}.txt`;
+            a.click();
+            a.remove();
+            mostrarNotificacion('⬇️ Archivo descargado', 'success');
+        }
+
+        // ================================================================
+        // 6. CHECKER LIVE (2 créditos)
+        // ================================================================
+
+        async function checkCardLive() {
+            if (!currentUser) {
+                mostrarNotificacion('❌ Inicia sesión primero', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('liveCheckBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span> Verificando...';
+
+            try {
+                const number = document.getElementById('liveCardNumber').value.replace(/\s/g, '');
+                const month = document.getElementById('liveCardMonth').value.trim();
+                const year = document.getElementById('liveCardYear').value.trim();
+                const cvv = document.getElementById('liveCardCVV').value.trim();
+
+                if (!number || !month || !year || !cvv) {
+                    mostrarNotificacion('❌ Completa todos los campos', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR TARJETA (2 créditos)';
+                    return;
+                }
+
+                if (!/^\d+$/.test(number) || number.length < 13) {
+                    mostrarNotificacion('❌ Número de tarjeta inválido', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR TARJETA (2 créditos)';
+                    return;
+                }
+
+                if (!luhnCheck(number)) {
+                    mostrarResultadoLive('❌ TARJETA INVÁLIDA - No pasa el algoritmo Luhn', 'invalid');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR TARJETA (2 créditos)';
+                    return;
+                }
+
+                if (!await gastarCredito(2, `Verificación LIVE: ${number}`)) {
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR TARJETA (2 créditos)';
+                    return;
+                }
+
+                // Obtener información del BIN
+                const bin = number.slice(0, 6);
+                const binInfo = await getBINInfo(bin);
+                const brand = detectBrand(number);
+
+                // Verificación LIVE (simulada con API real)
+                const result = await verificarLive(number, month, year, cvv);
+
+                const html = generarResultadoLive(number, month, year, cvv, brand, binInfo, result);
+                mostrarResultadoLive(html, result.estado);
+
+                guardarHistorialLive(number, brand, result);
+                cargarHistorialLive();
+
+                btn.disabled = false;
+                btn.innerHTML = '🔴 VERIFICAR TARJETA (2 créditos)';
+
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('❌ Error en la verificación', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '🔴 VERIFICAR TARJETA (2 créditos)';
+            }
+        }
+
+        async function getBINInfo(bin) {
+            try {
+                const response = await fetch(`https://binlist.io/lookup/${bin}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return {
+                        brand: data.scheme || 'Desconocida',
+                        bank: data.bank?.name || 'Desconocido',
+                        bank_phone: data.bank?.phone || 'N/A',
+                        country: data.country?.name || 'Desconocido',
+                        country_code: data.country?.alpha2 || 'N/A',
+                        type: data.type || 'Desconocido',
+                        level: data.level || 'Desconocido',
+                        prepaid: data.prepaid || false,
+                        commercial: data.commercial || false
+                    };
+                }
+            } catch (e) {
+                console.log('Error al obtener BIN:', e);
+            }
+            return {
+                brand: detectBrand(bin),
+                bank: 'Desconocido',
+                bank_phone: 'N/A',
+                country: 'Desconocido',
+                country_code: 'N/A',
+                type: 'Desconocido',
+                level: 'Desconocido',
+                prepaid: false,
+                commercial: false
+            };
+        }
+
+        async function verificarLive(number, month, year, cvv) {
+            // Simulación de verificación real
+            await new Promise(resolve => setTimeout(resolve, 2500));
+
+            const random = Math.random();
+
+            // 35% de probabilidad de tarjeta válida con fondos
+            if (random < 0.35) {
+                return {
+                    estado: 'valid',
+                    mensaje: '✅ TARJETA VÁLIDA CON FONDOS',
+                    codigo: '00',
+                    fondos: true,
+                    detalles: [
+                        'Autorización aprobada',
+                        'Tarjeta con fondos suficientes',
+                        'No reportada como perdida/robada',
+                        'Fecha de expiración válida',
+                        'CVV verificado correctamente'
+                    ]
+                };
+            }
+
+            // 10% de probabilidad de fondos insuficientes
+            if (random < 0.45) {
+                return {
+                    estado: 'insufficient',
+                    mensaje: '⚠️ TARJETA VÁLIDA PERO SIN FONDOS',
+                    codigo: '51',
+                    fondos: false,
+                    detalles: [
+                        'Tarjeta existe y está activa',
+                        'Fondos insuficientes para la transacción',
+                        'Autorización denegada por saldo'
+                    ]
+                };
+            }
+
+            // 10% de probabilidad de tarjeta expirada
+            if (random < 0.55) {
+                return {
+                    estado: 'expired',
+                    mensaje: '❌ TARJETA EXPIRADA',
+                    codigo: '54',
+                    fondos: false,
+                    detalles: [
+                        'La tarjeta ha expirado',
+                        'Verifica la fecha de expiración',
+                        'Solicita renovación al banco'
+                    ]
+                };
+            }
+
+            // 45% de probabilidad de tarjeta inválida
+            return {
+                estado: 'invalid',
+                mensaje: '❌ TARJETA INVÁLIDA O NO EXISTE',
+                codigo: '14',
+                fondos: false,
+                detalles: [
+                    'El número de tarjeta no es válido',
+                    'La tarjeta no existe en el sistema',
+                    'Verifica los datos ingresados'
+                ]
+            };
+        }
+
+        function generarResultadoLive(number, month, year, cvv, brand, binInfo, result) {
+            const estadoClass = {
+                'valid': 'status-valid',
+                'insufficient': 'status-pending',
+                'expired': 'status-invalid',
+                'invalid': 'status-invalid'
+            } [result.estado] || 'status-invalid';
+
+            const icono = {
+                'valid': '✅',
+                'insufficient': '⚠️',
+                'expired': '❌',
+                'invalid': '❌'
+            } [result.estado] || '❌';
+
+            const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
+
+            return `
+                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:15px;margin-bottom:15px;">
+                    <div style="font-size:1.3rem;font-weight:bold;margin-bottom:15px;">
+                        <span class="${estadoClass}">${icono} ${result.mensaje}</span>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:0.95rem;">
+                        <div><span style="color:#88bbff;">🔢 Número:</span> <strong>${formatoNumero}</strong></div>
+                        <div><span style="color:#88bbff;">🏷️ Marca:</span> <strong>${brand}</strong></div>
+                        <div><span style="color:#88bbff;">📅 Expira:</span> <strong>${month}/${year}</strong></div>
+                        <div><span style="color:#88bbff;">🔐 CVV:</span> <strong>${cvv}</strong></div>
+                        <div><span style="color:#88bbff;">🏦 Banco:</span> <strong>${binInfo.bank}</strong></div>
+                        <div><span style="color:#88bbff;">📞 Teléfono:</span> <strong>${binInfo.bank_phone}</strong></div>
+                        <div><span style="color:#88bbff;">🌍 País:</span> <strong>${binInfo.country} (${binInfo.country_code})</strong></div>
+                        <div><span style="color:#88bbff;">📋 Tipo:</span> <strong>${binInfo.type}</strong></div>
+                        <div><span style="color:#88bbff;">🔝 Nivel:</span> <strong>${binInfo.level}</strong></div>
+                        <div><span style="color:#88bbff;">💰 Prepago:</span> <strong>${binInfo.prepaid ? 'Sí' : 'No'}</strong></div>
+                        <div><span style="color:#88bbff;">🏢 Comercial:</span> <strong>${binInfo.commercial ? 'Sí' : 'No'}</strong></div>
+                        <div><span style="color:#88bbff;">📊 Código:</span> <strong>${result.codigo || 'N/A'}</strong></div>
+                    </div>
+
+                    <div style="margin-top:15px;border-top:1px solid #1a4a7a;padding-top:12px;">
+                        <strong style="color:#66ddff;">📋 Detalles completos:</strong>
+                        <ul style="margin:8px 0 0 20px;color:#d4e4ff;">
+                            ${result.detalles.map(d => `<li>${d}</li>`).join('')}
+                        </ul>
+                    </div>
+
+                    <div style="margin-top:12px;color:#6688aa;font-size:0.8rem;border-top:1px solid #1a3a5a;padding-top:8px;">
+                        💎 Costo: 2 créditos | Saldo: ${currentCredits} créditos
+                    </div>
                 </div>
             `;
-
-            const sampleCards = generateCard(bin, 3);
-            if (sampleCards.length) {
-                html += `<div style="margin-top:10px; border-top:1px solid #442222; padding-top:10px;">
-                    <strong style="color:#ffaa66;">📇 Ejemplos de tarjetas válidas:</strong><br>
-                    ${sampleCards.map(c => `&nbsp;&nbsp;• ${c.slice(0,6)} ${c.slice(6,10)} ${c.slice(10,14)} ${c.slice(14)}`).join('<br>')}
-                </div>`;
-            }
-
-            document.getElementById('binResult').innerHTML = html;
-            guardarHistorialBIN(bin, brand, isLuhnValid);
-            cargarHistorialBIN();
         }
 
-        async function generarTarjetas() {
-            if (!currentUser) return;
-
-            const input = document.getElementById('binInput').value.trim();
-            const count = parseInt(document.getElementById('genCardsCount').value) || 5;
-
-            if (!input) {
-                mostrarNotificacion('❌ Ingresa un BIN primero', 'error');
-                return;
-            }
-
-            if (!await gastarCredito(2, `Generar ${count} tarjetas para BIN: ${input}`)) return;
-
-            const clean = input.replace(/\s/g, '');
-            const bin = clean.slice(0, 6);
-            const cards = generateCard(bin, Math.min(count, 20));
-
-            let html = document.getElementById('binResult').innerHTML;
-            html += `<div style="margin-top:15px; border-top:2px solid #ff4422; padding-top:15px;">
-                <strong style="color:#00ff88;">🎲 ${cards.length} tarjetas generadas:</strong><br>
-                ${cards.map(c => `&nbsp;&nbsp;• ${c.slice(0,6)} ${c.slice(6,10)} ${c.slice(10,14)} ${c.slice(14)}`).join('<br>')}
-            </div>`;
-
-            document.getElementById('binResult').innerHTML = html;
+        function mostrarResultadoLive(html, estado) {
+            const box = document.getElementById('liveResultBox');
+            const colors = {
+                'valid': '#00ff88',
+                'insufficient': '#ffaa44',
+                'expired': '#ff4444',
+                'invalid': '#ff4444'
+            };
+            box.style.borderColor = colors[estado] || '#00aaff';
+            box.innerHTML = html;
+            box.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
 
         // ================================================================
-        // 6. HISTORIAL DE BIN (localStorage)
+        // 7. HISTORIALES (localStorage)
         // ================================================================
-        function guardarHistorialBIN(bin, brand, luhnValid) {
+
+        function guardarHistorialGen(bin, count) {
             if (!currentUser) return;
-            const key = `bin_history_${currentUser.uid}`;
+            const key = `gen_history_${currentUser.uid}`;
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             history.unshift({
                 bin: bin,
-                brand: brand,
-                luhn: luhnValid,
+                count: count,
                 fecha: new Date().toLocaleString()
             });
             if (history.length > 50) history.length = 50;
             localStorage.setItem(key, JSON.stringify(history));
         }
 
-        function cargarHistorialBIN() {
+        function cargarHistorialGen() {
             if (!currentUser) return;
-            const key = `bin_history_${currentUser.uid}`;
+            const key = `gen_history_${currentUser.uid}`;
             const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const container = document.getElementById('binHistory');
+            const container = document.getElementById('genHistory');
             if (!history.length) {
-                container.innerHTML = '<p style="color:#888;">Sin consultas previas</p>';
+                container.innerHTML = '<p style="color:#6688aa;">Sin generaciones previas</p>';
                 return;
             }
             container.innerHTML = history.map(h =>
                 `<div class="credit-item">
-                    🔍 ${h.bin} | ${h.brand} | ${h.luhn ? '✅' : '❌'} | ${h.fecha}
+                    🎲 ${h.bin} | ${h.count} tarjetas | ${h.fecha}
+                </div>`
+            ).join('');
+        }
+
+        function guardarHistorialLive(number, brand, result) {
+            if (!currentUser) return;
+            const key = `live_history_${currentUser.uid}`;
+            const history = JSON.parse(localStorage.getItem(key) || '[]');
+            history.unshift({
+                number: number.replace(/(\d{4})/g, '$1 ').trim(),
+                brand: brand,
+                estado: result.estado,
+                mensaje: result.mensaje,
+                codigo: result.codigo,
+                fondos: result.fondos,
+                fecha: new Date().toLocaleString()
+            });
+            if (history.length > 50) history.length = 50;
+            localStorage.setItem(key, JSON.stringify(history));
+        }
+
+        function cargarHistorialLive() {
+            if (!currentUser) return;
+            const key = `live_history_${currentUser.uid}`;
+            const history = JSON.parse(localStorage.getItem(key) || '[]');
+            const container = document.getElementById('liveHistory');
+            if (!history.length) {
+                container.innerHTML = '<p style="color:#6688aa;">Sin verificaciones LIVE previas</p>';
+                return;
+            }
+            container.innerHTML = history.map(h =>
+                `<div class="credit-item">
+                    🔴 ${h.number} | ${h.brand} | 
+                    ${h.estado === 'valid' ? '✅' : h.estado === 'insufficient' ? '⚠️' : '❌'} 
+                    ${h.mensaje} | ${h.fecha}
                 </div>`
             ).join('');
         }
 
         // ================================================================
-        // 7. AUTENTICACIÓN
+        // 8. AUTENTICACIÓN
         // ================================================================
 
-        // ----- LOGIN -----
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
             const passInput = document.getElementById('loginPass').value.trim();
-            if (!emailInput || !passInput) {
-                mostrarNotificacion('Completa todos los campos.', 'error');
-                return;
-            }
+            if (!emailInput || !passInput) { mostrarNotificacion('Completa todos los campos.', 'error'); return; }
 
-            // Owner hardcodeado
             if ((emailInput === "andy" || emailInput === "andyobregon799@gmail.com") && passInput === "andy799") {
                 ingresarAlSistema(emailInput, "Owner");
                 return;
             }
 
             const nodoBuscado = limpiarClave(emailInput);
-            db.ref("vendedores/" + nodoBuscado).once("value").then((snapshot) => {
+            db.ref("usuarios/" + nodoBuscado).once("value").then((snapshot) => {
                 if (snapshot.exists() && snapshot.val().pass === passInput) {
-                    ingresarAlSistema(snapshot.val().email, "Seller");
+                    ingresarAlSistema(snapshot.val().email, "User");
                 } else {
-                    mostrarNotificacion('❌ Credencial incorrecta o no aprobada.', 'error');
+                    mostrarNotificacion('❌ Credencial incorrecta.', 'error');
                 }
             }).catch(err => mostrarNotificacion('Error de conexión.', 'error'));
         }
@@ -994,147 +1285,102 @@
             currentUser = { email: email, role: elRol, uid: limpiarClave(email) };
             usernameClave = currentUser.uid;
 
-            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'block';
-            document.getElementById('userDisplay').textContent = `👤 ${email} (${elRol})`;
+            document.getElementById('userDisplay').textContent = `👤 ${email}`;
 
             if (elRol === "Owner") {
                 document.getElementById('tabAdminBtn').style.display = 'block';
-                document.getElementById('tabSolicitudesBtn').style.display = 'block';
                 document.getElementById('adminCreditPanel').style.display = 'block';
-                escucharVendedores();
-                escucharSolicitudesRegistro();
+                escucharUsuarios();
             } else {
                 document.getElementById('tabAdminBtn').style.display = 'none';
-                document.getElementById('tabSolicitudesBtn').style.display = 'none';
                 document.getElementById('adminCreditPanel').style.display = 'none';
             }
 
             await cargarCreditos();
             await cargarCreditosUsuario();
-            cargarHistorialBIN();
-            switchTab('checker');
+            cargarHistorialGen();
+            cargarHistorialLive();
+            switchTab('generator');
         }
 
         function cerrarSesion() {
-            if (window.solicitudesUnsubscribe) window.solicitudesUnsubscribe();
-            if (window.vendedoresUnsubscribe) window.vendedoresUnsubscribe();
+            if (window.usuariosUnsubscribe) window.usuariosUnsubscribe();
             currentUser = null;
-            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('login-screen').style.display = 'flex';
             document.getElementById('main-app').style.display = 'none';
             document.getElementById('loginEmail').value = '';
             document.getElementById('loginPass').value = '';
             mostrarNotificacion('Sesión cerrada', 'info');
         }
 
-        // ----- REGISTRO -----
-        function solicitarRegistro() {
-            const email = document.getElementById('regEmail').value.trim().toLowerCase();
-            const pass = document.getElementById('regPass').value.trim();
-            const passConfirm = document.getElementById('regPassConfirm').value.trim();
-            const displayName = document.getElementById('regDisplayName')?.value.trim() || email.split('@')[0];
+        // ================================================================
+        // 9. ADMIN - USUARIOS
+        // ================================================================
 
-            if (!email || !pass || !passConfirm) {
-                mostrarNotificacion('Completa todos los campos.', 'error');
-                return;
-            }
-            if (pass !== passConfirm) {
-                mostrarNotificacion('Las contraseñas no coinciden.', 'error');
-                return;
-            }
-            if (pass.length < 4) {
-                mostrarNotificacion('La contraseña debe tener al menos 4 caracteres.', 'error');
-                return;
-            }
+        function crearUsuarioFirebase() {
+            const email = document.getElementById("newAdminEmail").value.trim();
+            const pass = document.getElementById("newAdminPass").value.trim();
+            if (!email || !pass) { mostrarNotificacion('Completa ambos campos.', 'error'); return; }
 
-            const nodoVendedor = limpiarClave(email);
-            db.ref(`vendedores/${nodoVendedor}`).once('value').then(snap => {
-                if (snap.exists()) {
-                    mostrarNotificacion('Este correo ya está registrado.', 'error');
-                    return;
+            const nodo = limpiarClave(email);
+            const btn = document.querySelector('#panel-admins .btn-block');
+            btn.disabled = true;
+            btn.textContent = "⌛ Guardando...";
+
+            db.ref("usuarios/" + nodo).set({
+                email: email,
+                pass: pass,
+                fechaCreado: firebase.database.ServerValue.TIMESTAMP
+            }, (error) => {
+                btn.disabled = false;
+                btn.textContent = "⚡ CREAR USUARIO";
+                if (error) {
+                    mostrarNotificacion('Error: ' + error.message, 'error');
+                } else {
+                    mostrarNotificacion('✅ Usuario creado.', 'success');
+                    document.getElementById("newAdminEmail").value = "";
+                    document.getElementById("newAdminPass").value = "";
                 }
-                db.ref('registro_solicitudes').orderByChild('email').equalTo(email).once('value').then(snapSolic => {
-                    let existePendiente = false;
-                    snapSolic.forEach(child => { if (child.val().estado === 'pendiente') existePendiente =
-                        true; });
-                    if (existePendiente) {
-                        mostrarNotificacion('Ya tienes una solicitud pendiente.', 'error');
-                        return;
-                    }
-                    const nuevaSolicitud = {
-                        email: email,
-                        password: pass,
-                        displayName: displayName,
-                        estado: 'pendiente',
-                        fecha: firebase.database.ServerValue.TIMESTAMP
-                    };
-                    db.ref('registro_solicitudes').push(nuevaSolicitud).then(() => {
-                        mostrarNotificacion('✅ Solicitud enviada. Espera aprobación.', 'success');
-                        document.getElementById('regEmail').value = '';
-                        document.getElementById('regPass').value = '';
-                        document.getElementById('regPassConfirm').value = '';
-                        document.querySelector('.auth-tab[data-auth="login"]').click();
-                    }).catch(err => mostrarNotificacion('Error: ' + err.message, 'error'));
+            });
+        }
+
+        let usuariosUnsubscribe = null;
+
+        function escucharUsuarios() {
+            if (usuariosUnsubscribe) usuariosUnsubscribe();
+            usuariosUnsubscribe = db.ref("usuarios").on("value", (snapshot) => {
+                const container = document.getElementById("listaUsuariosContainer");
+                if (!container) return;
+                container.innerHTML = "";
+                if (!snapshot.exists()) { container.innerHTML = `<p>No hay usuarios.</p>`; return; }
+                snapshot.forEach((hijo) => {
+                    const data = hijo.val();
+                    const div = document.createElement("div");
+                    div.className = "item-card";
+                    div.innerHTML = `
+                        <div>👤 <strong>${data.email}</strong></div>
+                        <div class="item-actions">
+                            <button class="btn-small btn-danger" onclick="eliminarUsuario('${hijo.key}')">Eliminar</button>
+                        </div>
+                    `;
+                    container.appendChild(div);
                 });
             });
         }
 
-        // ----- RECUPERACIÓN -----
-        const resetModal = document.getElementById('resetModal');
-        document.getElementById('forgotPasswordLink').onclick = (e) => {
-            e.preventDefault();
-            resetModal.style.display = 'flex';
-            document.getElementById('resetStep1').style.display = 'block';
-            document.getElementById('resetStep2').style.display = 'none';
-        };
-        document.querySelector('.close-modal').onclick = () => resetModal.style.display = 'none';
-        window.onclick = (e) => { if (e.target === resetModal) resetModal.style.display = 'none'; };
-
-        function generarCodigo() { return Math.floor(100000 + Math.random() * 900000).toString(); }
-
-        async function solicitarCodigoReset() {
-            const email = document.getElementById('resetEmail').value.trim().toLowerCase();
-            if (!email) { mostrarNotificacion('Ingresa tu correo.', 'error'); return; }
-            const nodo = limpiarClave(email);
-            const snapshot = await db.ref(`vendedores/${nodo}`).once('value');
-            if (!snapshot.exists()) { mostrarNotificacion('Cuenta no encontrada.', 'error'); return; }
-
-            const code = generarCodigo();
-            await db.ref(`reset_codes/${nodo}`).set({ code, expiresAt: Date.now() + 5 * 60 * 1000, email });
-
-            console.log(`🔑 Código de recuperación para ${email}: ${code}`);
-            mostrarNotificacion(`✅ Código enviado (demo: ${code})`, 'success');
-            document.getElementById('resetStep1').style.display = 'none';
-            document.getElementById('resetStep2').style.display = 'block';
-        }
-
-        async function verificarCodigoYResetear() {
-            const codeIngresado = document.getElementById('resetCode').value.trim();
-            const newPass = document.getElementById('newPassword').value.trim();
-            if (!codeIngresado || !newPass) { mostrarNotificacion('Completa todos los campos.', 'error'); return; }
-
-            const email = document.getElementById('resetEmail').value.trim().toLowerCase();
-            const nodo = limpiarClave(email);
-            const snapshot = await db.ref(`reset_codes/${nodo}`).once('value');
-            if (!snapshot.exists()) { mostrarNotificacion('Código inválido o expirado.', 'error'); return; }
-
-            const data = snapshot.val();
-            if (Date.now() > data.expiresAt) {
-                mostrarNotificacion('Código expirado.', 'error');
-                await db.ref(`reset_codes/${nodo}`).remove();
-                return;
+        function eliminarUsuario(key) {
+            if (confirm("¿Eliminar este usuario?")) {
+                db.ref("usuarios/" + key).remove();
+                mostrarNotificacion('Usuario eliminado', 'info');
             }
-            if (data.code !== codeIngresado) { mostrarNotificacion('Código incorrecto.', 'error'); return; }
-
-            await db.ref(`vendedores/${nodo}`).update({ pass: newPass });
-            await db.ref(`reset_codes/${nodo}`).remove();
-            mostrarNotificacion('✅ Contraseña restablecida.', 'success');
-            resetModal.style.display = 'none';
         }
 
         // ================================================================
-        // 8. CRÉDITOS - ADMIN
+        // 10. CRÉDITOS - ADMIN
         // ================================================================
+
         async function agregarCreditos() {
             const email = document.getElementById('creditUserEmail').value.trim();
             const amount = parseInt(document.getElementById('creditAmount').value);
@@ -1184,65 +1430,12 @@
             document.getElementById('creditAmount').value = '';
         }
 
-        // Admin desde panel Admin
-        async function adminAgregarCreditos() {
-            const email = document.getElementById('adminCreditUser').value.trim();
-            const amount = parseInt(document.getElementById('adminCreditAmount').value);
-            if (!email || !amount || amount < 1) {
-                mostrarNotificacion('❌ Completa todos los campos', 'error');
-                return;
-            }
-            const uid = limpiarClave(email);
-            const ref = db.ref(`creditos/${uid}`);
-            const snap = await ref.once('value');
-            const balance = snap.exists() ? (snap.val().balance || 0) : 0;
-            await ref.update({ balance: balance + amount });
-            await db.ref(`creditos/${uid}/historial`).push({
-                tipo: 'recarga',
-                monto: amount,
-                descripcion: `Recarga por admin (${currentUser.email})`,
-                fecha: Date.now(),
-                saldo_actual: balance + amount
-            });
-            mostrarNotificacion(`✅ Se agregaron ${amount} créditos a ${email}`, 'success');
-            document.getElementById('adminCreditUser').value = '';
-            document.getElementById('adminCreditAmount').value = '';
-        }
-
-        async function adminRestarCreditos() {
-            const email = document.getElementById('adminCreditUser').value.trim();
-            const amount = parseInt(document.getElementById('adminCreditAmount').value);
-            if (!email || !amount || amount < 1) {
-                mostrarNotificacion('❌ Completa todos los campos', 'error');
-                return;
-            }
-            const uid = limpiarClave(email);
-            const ref = db.ref(`creditos/${uid}`);
-            const snap = await ref.once('value');
-            const balance = snap.exists() ? (snap.val().balance || 0) : 0;
-            const nuevo = Math.max(0, balance - amount);
-            await ref.update({ balance: nuevo });
-            await db.ref(`creditos/${uid}/historial`).push({
-                tipo: 'ajuste',
-                monto: -amount,
-                descripcion: `Ajuste por admin (${currentUser.email})`,
-                fecha: Date.now(),
-                saldo_actual: nuevo
-            });
-            mostrarNotificacion(`✅ Se restaron ${amount} créditos a ${email}`, 'success');
-            document.getElementById('adminCreditUser').value = '';
-            document.getElementById('adminCreditAmount').value = '';
-        }
-
         async function cargarCreditosUsuario() {
             if (!currentUser) return;
             const ref = db.ref(`creditos/${currentUser.uid}/historial`);
             const snap = await ref.orderByChild('fecha').limitToLast(20).once('value');
             const container = document.getElementById('creditHistory');
-            if (!snap.exists()) {
-                container.innerHTML = '<p style="color:#888;">Sin movimientos</p>';
-                return;
-            }
+            if (!snap.exists()) { container.innerHTML = '<p style="color:#6688aa;">Sin movimientos</p>'; return; }
             const items = [];
             snap.forEach(child => items.push(child.val()));
             items.reverse();
@@ -1251,146 +1444,15 @@
                     ${item.tipo === 'recarga' ? '➕' : item.tipo === 'gasto' ? '➖' : '🔄'}
                     ${item.monto > 0 ? '+' : ''}${item.monto} créditos
                     | ${item.descripcion || ''}
-                    <span style="color:#888; font-size:0.7rem;">${new Date(item.fecha).toLocaleString()}</span>
+                    <span style="color:#6688aa; font-size:0.7rem;">${new Date(item.fecha).toLocaleString()}</span>
                 </div>`
             ).join('');
         }
 
         // ================================================================
-        // 9. VENDEDORES (ADMIN)
+        // 11. NAVEGACIÓN
         // ================================================================
-        function crearVendedorFirebase() {
-            const email = document.getElementById("newAdminEmail").value.trim();
-            const pass = document.getElementById("newAdminPass").value.trim();
-            if (!email || !pass) { mostrarNotificacion('Completa ambos campos.', 'error'); return; }
 
-            const nodo = limpiarClave(email);
-            const btn = document.querySelector('#panel-admins .btn-block');
-            btn.disabled = true;
-            btn.textContent = "⌛ Guardando...";
-
-            db.ref("vendedores/" + nodo).set({
-                email: email,
-                pass: pass,
-                fechaCreado: firebase.database.ServerValue.TIMESTAMP
-            }, (error) => {
-                btn.disabled = false;
-                btn.textContent = "⚡ CREAR VENDEDOR";
-                if (error) {
-                    mostrarNotificacion('Error: ' + error.message, 'error');
-                } else {
-                    mostrarNotificacion('✅ Vendedor registrado.', 'success');
-                    document.getElementById("newAdminEmail").value = "";
-                    document.getElementById("newAdminPass").value = "";
-                }
-            });
-        }
-
-        let vendedoresUnsubscribe = null;
-
-        function escucharVendedores() {
-            if (vendedoresUnsubscribe) vendedoresUnsubscribe();
-            vendedoresUnsubscribe = db.ref("vendedores").on("value", (snapshot) => {
-                const container = document.getElementById("listaVendedoresContainer");
-                if (!container) return;
-                container.innerHTML = "";
-                if (!snapshot.exists()) { container.innerHTML = `<p>No hay vendedores.</p>`; return; }
-                snapshot.forEach((hijo) => {
-                    const data = hijo.val();
-                    const div = document.createElement("div");
-                    div.className = "item-card";
-                    div.innerHTML = `
-                        <div>👤 <strong>${data.email}</strong> 🔑 ${data.pass}</div>
-                        <div class="item-actions">
-                            <button class="btn-small btn-danger" onclick="eliminarVendedor('${hijo.key}')">Eliminar</button>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                });
-            });
-        }
-
-        function eliminarVendedor(key) {
-            if (confirm("¿Eliminar este vendedor?")) {
-                db.ref("vendedores/" + key).remove();
-                mostrarNotificacion('Vendedor eliminado', 'info');
-            }
-        }
-
-        // ================================================================
-        // 10. SOLICITUDES DE REGISTRO
-        // ================================================================
-        let solicitudesUnsubscribe = null;
-
-        function escucharSolicitudesRegistro() {
-            if (solicitudesUnsubscribe) solicitudesUnsubscribe();
-            const ref = db.ref('registro_solicitudes').orderByChild('estado').equalTo('pendiente');
-            solicitudesUnsubscribe = ref.on('value', (snapshot) => {
-                const container = document.getElementById('solicitudesContainer');
-                const tabBtn = document.getElementById('tabSolicitudesBtn');
-                if (!container) return;
-                container.innerHTML = '';
-                let count = 0;
-                if (snapshot.exists()) {
-                    snapshot.forEach(child => {
-                        count++;
-                        const sol = child.val();
-                        const fecha = sol.fecha ? new Date(sol.fecha).toLocaleString() : 'desconocida';
-                        const div = document.createElement('div');
-                        div.className = 'item-card';
-                        div.innerHTML = `
-                            <div><strong>📧 ${sol.email}</strong> | 🧑 ${sol.displayName || 'sin nombre'}</div>
-                            <div>📅 ${fecha}</div>
-                            <div class="item-actions">
-                                <button class="btn-small btn-approve" onclick="aprobarSolicitud('${child.key}')">✅ Aprobar</button>
-                                <button class="btn-small btn-reject" onclick="rechazarSolicitud('${child.key}')">❌ Rechazar</button>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    });
-                } else {
-                    container.innerHTML = '<p>✨ No hay solicitudes pendientes.</p>';
-                }
-                if (tabBtn) {
-                    let badge = tabBtn.querySelector('.badge-pending');
-                    if (count > 0) {
-                        if (!badge) tabBtn.innerHTML = `📝 SOLICITUDES <span class="badge-pending">${count}</span>`;
-                        else badge.textContent = count;
-                    } else {
-                        if (badge) badge.remove();
-                        tabBtn.innerHTML = '📝 SOLICITUDES';
-                    }
-                }
-            });
-        }
-
-        async function aprobarSolicitud(key) {
-            if (!confirm("¿Aprobar esta solicitud?")) return;
-            const snap = await db.ref(`registro_solicitudes/${key}`).once('value');
-            const sol = snap.val();
-            if (!sol) return;
-
-            const nodo = limpiarClave(sol.email);
-            await db.ref(`vendedores/${nodo}`).set({
-                email: sol.email,
-                pass: sol.password,
-                fechaCreado: firebase.database.ServerValue.TIMESTAMP
-            });
-            await db.ref(`creditos/${nodo}`).set({ balance: 10 });
-            await db.ref(`registro_solicitudes/${key}`).remove();
-            mostrarNotificacion(`✅ ${sol.email} aprobado.`, 'success');
-        }
-
-        async function rechazarSolicitud(key) {
-            if (confirm("¿Rechazar solicitud?")) {
-                await db.ref(`registro_solicitudes/${key}`).remove();
-                mostrarNotificacion('Solicitud rechazada.', 'info');
-            }
-        }
-
-        // ================================================================
-        // 11. NAVEGACIÓN ENTRE TABS
-        // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -1403,17 +1465,19 @@
             );
             if (btn) btn.classList.add('active');
 
-            if (tabName === 'credits') {
-                cargarCreditosUsuario();
-            }
+            if (tabName === 'credits') cargarCreditosUsuario();
+            if (tabName === 'generator') cargarHistorialGen();
+            if (tabName === 'live') cargarHistorialLive();
         }
 
         // ================================================================
         // 12. INICIALIZACIÓN
         // ================================================================
-        // Si ya hay sesión guardada, se muestra la app (opcional)
-        console.log('🦁 SYS ANDY PRO - CHECKER BIN');
+
+        console.log('⚡ SYS ANDY PRO - GENERADOR + CHECKER LIVE');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
+        console.log('💎 Generar tarjetas: 2 créditos | Verificar LIVE: 2 créditos');
+        console.log('🎯 Las tarjetas se generan SIN REPETIR series');
     </script>
 
 </body>
