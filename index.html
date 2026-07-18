@@ -9,7 +9,6 @@
         /* ESTILOS - VERSIÓN ESCRITORIO FIJO */
         /* ============================================================== */
 
-        /* RESET */
         * {
             margin: 0;
             padding: 0;
@@ -28,13 +27,11 @@
             --border-radius: 12px;
         }
 
-        /* ===== ESTRUCTURA PRINCIPAL ===== */
         html,
         body {
             width: 100%;
             height: 100%;
             overflow: hidden;
-            /* ← IMPORTANTE: sin scroll en la página */
         }
 
         body {
@@ -50,7 +47,6 @@
             overflow: hidden;
         }
 
-        /* ===== CONTENEDOR PRINCIPAL (tamaño fijo como escritorio) ===== */
         .app-container {
             width: 100%;
             max-width: 1100px;
@@ -67,7 +63,7 @@
             position: relative;
         }
 
-        /* ===== PANTALLA DE LOGIN (centrada) ===== */
+        /* ===== LOGIN ===== */
         #login-screen {
             display: flex;
             flex-direction: column;
@@ -116,7 +112,6 @@
             color: var(--texto-secundario);
             font-weight: 600;
             font-size: 0.85rem;
-            letter-spacing: 0.5px;
         }
 
         .login-box input {
@@ -293,7 +288,7 @@
             background: rgba(0, 100, 200, 0.1);
         }
 
-        /* ===== PANELES (scroll interno) ===== */
+        /* ===== PANELES ===== */
         .panels-container {
             flex: 1;
             overflow-y: auto;
@@ -342,20 +337,13 @@
             letter-spacing: 0.3px;
         }
 
-        /* ===== TARJETAS / CARDS ===== */
+        /* ===== TARJETAS ===== */
         .item-card {
             background: rgba(15, 31, 58, 0.85);
             border: 1px solid #1a4a7a;
             border-radius: 16px;
             padding: 20px 22px;
             margin-bottom: 16px;
-        }
-
-        .item-card .card-header {
-            color: #88ddff;
-            font-weight: 600;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
         }
 
         .item-card .info-box {
@@ -366,6 +354,11 @@
             margin-bottom: 14px;
             font-size: 0.85rem;
             color: #88ddff;
+        }
+
+        .item-card .info-box.live {
+            border-color: #ff44aa;
+            background: #ff44aa15;
         }
 
         /* ===== FORMULARIOS ===== */
@@ -610,6 +603,11 @@
             color: #dd88ff;
         }
 
+        .info-badge.cvv4 {
+            background: #6a1a3a;
+            color: #ff88aa;
+        }
+
         .info-badge.fecha {
             background: #1a6a4a;
             color: #88ffbb;
@@ -618,6 +616,11 @@
         .info-badge.brand {
             background: #1a4a6a;
             color: #88bbff;
+        }
+
+        .info-badge.amex {
+            background: #6a1a3a;
+            color: #ff88aa;
         }
 
         /* ===== HISTORIAL ===== */
@@ -710,7 +713,7 @@
             background: transparent;
         }
 
-        /* ===== RESPONSIVE (se mantiene el diseño) ===== */
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 850px) {
             .app-container {
                 max-height: 98vh;
@@ -825,7 +828,6 @@
             }
         }
 
-        /* ===== OCULTOS ===== */
         .hidden {
             display: none !important;
         }
@@ -834,11 +836,11 @@
 <body>
 
     <!-- ============================================================== -->
-    <!-- CONTENEDOR PRINCIPAL (como escritorio) -->
+    <!-- CONTENEDOR PRINCIPAL -->
     <!-- ============================================================== -->
     <div class="app-container">
 
-        <!-- ===== PANTALLA DE LOGIN ===== -->
+        <!-- ===== LOGIN ===== -->
         <div id="login-screen">
             <div class="login-box">
                 <h2>⚡ SYS ANDY PRO</h2>
@@ -889,19 +891,19 @@
             <!-- PANELS -->
             <div class="panels-container">
 
-                <!-- ===== PANEL: GENERADOR ===== -->
+                <!-- ===== GENERADOR ===== -->
                 <div id="panel-generator" class="panel active">
                     <h3>🎲 GENERADOR DE TARJETAS</h3>
 
                     <div class="item-card">
                         <div class="info-box">
-                            💡 Ingresa los primeros dígitos (mínimo 6). El sistema genera el resto <strong>sin repetir series</strong>.
-                            Cada tarjeta incluye <strong>CVV aleatorio</strong>.
+                            💡 Ingresa los primeros dígitos (mínimo 6). El sistema detecta automáticamente la marca y genera el CVV correcto:
+                            <strong>3 dígitos</strong> para Visa/Mastercard, <strong>4 dígitos</strong> para American Express.
                         </div>
 
                         <div class="form-group">
                             <label>🔢 Ingresa los primeros dígitos (BIN)</label>
-                            <input type="text" id="binInput" placeholder="Ej: 411111 o 4111111111" maxlength="16">
+                            <input type="text" id="binInput" placeholder="Ej: 411111 o 371449" maxlength="16">
                         </div>
 
                         <div class="flex-row">
@@ -941,14 +943,16 @@
                     </div>
                 </div>
 
-                <!-- ===== PANEL: CHECKER LIVE ===== -->
+                <!-- ===== CHECKER LIVE ===== -->
                 <div id="panel-live" class="panel">
                     <h3>🔴 CHECKER LIVE - VERIFICACIÓN REAL</h3>
 
                     <div class="item-card">
-                        <div class="info-box" style="border-color:#ff44aa;background:#ff44aa15;">
+                        <div class="info-box live">
                             ⚡ <strong>CHECKER LIVE</strong> - Cada verificación cuesta <strong>2 créditos</strong>.
-                            Verifica si la tarjeta tiene fondos y obtén detalles completos del BIN.
+                            Verifica si la tarjeta tiene fondos y obtén <strong>detalles REALES del BIN</strong> (banco, país, tipo, nivel).
+                            <br><br>
+                            <strong>🔐 CVV:</strong> 3 dígitos (Visa/Mastercard) | 4 dígitos (American Express)
                         </div>
 
                         <div class="form-group">
@@ -967,7 +971,7 @@
                             </div>
                             <div class="form-group">
                                 <label>🔐 CVV</label>
-                                <input type="text" id="liveCardCVV" placeholder="123" maxlength="4">
+                                <input type="text" id="liveCardCVV" placeholder="123 o 1234" maxlength="4">
                             </div>
                         </div>
 
@@ -988,7 +992,7 @@
                     </div>
                 </div>
 
-                <!-- ===== PANEL: CRÉDITOS ===== -->
+                <!-- ===== CRÉDITOS ===== -->
                 <div id="panel-credits" class="panel">
                     <h3>💎 MIS CRÉDITOS</h3>
 
@@ -1023,7 +1027,7 @@
                     </div>
                 </div>
 
-                <!-- ===== PANEL: ADMIN ===== -->
+                <!-- ===== ADMIN ===== -->
                 <div id="panel-admins" class="panel">
                     <h3>👥 Panel de Administración</h3>
 
@@ -1046,9 +1050,9 @@
                     </div>
                 </div>
 
-            </div><!-- /panels-container -->
-        </div><!-- /main-app -->
-    </div><!-- /app-container -->
+            </div>
+        </div>
+    </div>
 
     <!-- ============================================================== -->
     <!-- SCRIPTS -->
@@ -1109,12 +1113,47 @@
                 setTimeout(() => div.remove(), 500); }, 4000);
         }
 
-        function generarCVV() {
-            return String(Math.floor(100 + Math.random() * 900));
+        // ================================================================
+        // 4. DETECCIÓN DE MARCA Y LONGITUD DE CVV
+        // ================================================================
+
+        function detectBrand(cardNumber) {
+            const num = String(cardNumber).replace(/\s/g, '');
+            const patterns = {
+                'Visa': /^4/,
+                'Mastercard': /^(5[1-5]|2[2-7])/,
+                'American Express': /^(34|37)/,
+                'Discover': /^(6011|65|64[4-9]|622)/,
+                'JCB': /^35/,
+                'Diners Club': /^(30|36|38|39)/
+            };
+            for (const [brand, pattern] of Object.entries(patterns)) {
+                if (pattern.test(num)) return brand;
+            }
+            return 'Desconocida';
+        }
+
+        function getCardLength(brand) {
+            if (brand === 'American Express') return 15;
+            return 16;
+        }
+
+        function getCVVLength(brand) {
+            if (brand === 'American Express') return 4;
+            return 3;
+        }
+
+        function generarCVV(brand) {
+            const length = getCVVLength(brand);
+            let cvv = '';
+            for (let i = 0; i < length; i++) {
+                cvv += Math.floor(Math.random() * 10);
+            }
+            return cvv;
         }
 
         // ================================================================
-        // 4. CRÉDITOS
+        // 5. CRÉDITOS
         // ================================================================
         async function cargarCreditos() {
             if (!currentUser) return;
@@ -1153,7 +1192,7 @@
         }
 
         // ================================================================
-        // 5. GENERADOR DE TARJETAS
+        // 6. GENERADOR DE TARJETAS
         // ================================================================
 
         function luhnCheck(cardNumber) {
@@ -1170,27 +1209,15 @@
             return sum % 10 === 0;
         }
 
-        function detectBrand(cardNumber) {
-            const num = String(cardNumber).replace(/\s/g, '');
-            const patterns = {
-                'Visa': /^4/,
-                'Mastercard': /^(5[1-5]|2[2-7])/,
-                'American Express': /^(34|37)/,
-                'Discover': /^(6011|65|64[4-9]|622)/,
-                'JCB': /^35/,
-                'Diners Club': /^(30|36|38|39)/
-            };
-            for (const [brand, pattern] of Object.entries(patterns)) {
-                if (pattern.test(num)) return brand;
-            }
-            return 'Desconocida';
-        }
-
         function generateUniqueCards(binPrefix, count, month, year) {
             const binStr = String(binPrefix).replace(/\s/g, '');
             const brand = detectBrand(binStr);
-            const length = brand === 'American Express' ? 15 : 16;
+            const length = getCardLength(brand);
+            const cvvLength = getCVVLength(brand);
+
+            // Si el BIN es más largo que la tarjeta, truncar
             const validBin = binStr.slice(0, Math.min(binStr.length, length - 1));
+
             const cards = [];
             const usedSeries = new Set();
             let attempts = 0;
@@ -1200,8 +1227,11 @@
                 attempts++;
                 const remaining = length - validBin.length - 1;
                 let middle = '';
-                for (let j = 0; j < remaining; j++) middle += Math.floor(Math.random() * 10);
+                for (let j = 0; j < remaining; j++) {
+                    middle += Math.floor(Math.random() * 10);
+                }
                 const base = validBin + middle;
+
                 for (let checkDigit = 0; checkDigit < 10; checkDigit++) {
                     const candidate = base + checkDigit;
                     const series = candidate.slice(-4);
@@ -1213,12 +1243,14 @@
                             year: year.padStart(2, '0'),
                             brand: brand,
                             series: series,
-                            cvv: generarCVV()
+                            cvv: generarCVV(brand),
+                            cvvLength: cvvLength
                         });
                         break;
                     }
                 }
             }
+
             return cards;
         }
 
@@ -1236,33 +1268,44 @@
             if (!await gastarCredito(2, `Generar ${count} tarjetas para BIN: ${binInput}`)) return;
 
             const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
-            if (cards.length === 0) { mostrarNotificacion('❌ No se pudieron generar tarjetas válidas', 'error'); return; }
+
+            if (cards.length === 0) {
+                mostrarNotificacion('❌ No se pudieron generar tarjetas válidas', 'error');
+                return;
+            }
 
             generatedCardsList = cards;
             mostrarGeneradas(cards);
             document.getElementById('btnDownloadGen').disabled = false;
             guardarHistorialGen(binInput, cards.length);
             cargarHistorialGen();
-            mostrarNotificacion(`✅ ${cards.length} tarjetas generadas con CVV aleatorio`, 'success');
+
+            const cvvInfo = cards[0].cvvLength === 4 ? '4 dígitos (Amex)' : '3 dígitos';
+            mostrarNotificacion(`✅ ${cards.length} tarjetas generadas - CVV de ${cvvInfo}`, 'success');
         }
 
         function mostrarGeneradas(cards) {
             const container = document.getElementById('generatedCards');
-            container.innerHTML = cards.map((card, index) => `
-                <div class="card-item">
-                    <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
-                    <div class="card-info">
-                        <span class="info-badge brand">${card.brand}</span>
-                        <span class="info-badge fecha">${card.month}/${card.year}</span>
-                        <span class="info-badge cvv">🔐 ${card.cvv}</span>
-                        <span class="info-badge">Serie: ${card.series}</span>
+            container.innerHTML = cards.map((card, index) => {
+                const cvvClass = card.cvvLength === 4 ? 'cvv4' : 'cvv';
+                const brandClass = card.brand === 'American Express' ? 'amex' : 'brand';
+                const cvvLabel = card.cvvLength === 4 ? '🔐 CVV(4)' : '🔐 CVV';
+                return `
+                    <div class="card-item">
+                        <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
+                        <div class="card-info">
+                            <span class="info-badge ${brandClass}">${card.brand}</span>
+                            <span class="info-badge fecha">${card.month}/${card.year}</span>
+                            <span class="info-badge ${cvvClass}">${cvvLabel} ${card.cvv}</span>
+                            <span class="info-badge">Serie: ${card.series}</span>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn-small btn-copy" onclick="copiarTarjeta(${index})">📋</button>
+                            <button class="btn-small btn-live-sm" onclick="enviarALive(${index})">🔴</button>
+                        </div>
                     </div>
-                    <div class="card-actions">
-                        <button class="btn-small btn-copy" onclick="copiarTarjeta(${index})">📋</button>
-                        <button class="btn-small btn-live-sm" onclick="enviarALive(${index})">🔴</button>
-                    </div>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
 
         function copiarTarjeta(index) {
@@ -1303,7 +1346,7 @@
         }
 
         // ================================================================
-        // 6. CHECKER LIVE
+        // 7. CHECKER LIVE CON API REAL DE BIN
         // ================================================================
 
         async function getBINInfo(bin) {
@@ -1315,6 +1358,7 @@
                         brand: data.scheme || 'Desconocida',
                         bank: data.bank?.name || 'Desconocido',
                         bank_phone: data.bank?.phone || 'N/A',
+                        bank_url: data.bank?.url || 'N/A',
                         country: data.country?.name || 'Desconocido',
                         country_code: data.country?.alpha2 || 'N/A',
                         country_emoji: data.country?.emoji || '🌍',
@@ -1324,11 +1368,15 @@
                         commercial: data.commercial || false
                     };
                 }
-            } catch (e) { console.log('BIN error:', e); }
+            } catch (e) {
+                console.log('Error al obtener BIN:', e);
+            }
+            // Fallback: detectar marca localmente
             return {
                 brand: detectBrand(bin),
                 bank: 'Desconocido',
                 bank_phone: 'N/A',
+                bank_url: 'N/A',
                 country: 'Desconocido',
                 country_code: 'N/A',
                 country_emoji: '🌍',
@@ -1439,7 +1487,18 @@
 
                 const bin = number.slice(0, 6);
                 const binInfo = await getBINInfo(bin);
-                const brand = detectBrand(number);
+                const brand = binInfo.brand || detectBrand(number);
+
+                // Validar longitud del CVV según la marca
+                const cvvLength = getCVVLength(brand);
+                if (cvv.length !== cvvLength) {
+                    mostrarResultadoLive(
+                        `⚠️ CVV INCORRECTO - ${brand} usa ${cvvLength} dígitos (ingresaste ${cvv.length})`, 'invalid');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)';
+                    return;
+                }
+
                 const result = await verificarLive(number, month, year, cvv);
 
                 const html = generarResultadoLive(number, month, year, cvv, brand, binInfo, result);
@@ -1474,6 +1533,8 @@
             } [result.estado] || '❌';
 
             const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
+            const cvvLength = getCVVLength(brand);
+            const cvvInfo = cvvLength === 4 ? '4 dígitos (Amex)' : '3 dígitos';
 
             return `
                 <div style="border-bottom:2px solid #1a4a7a;padding-bottom:15px;margin-bottom:12px;">
@@ -1484,10 +1545,10 @@
                         <div><span class="label">🔢 Número:</span> <span class="value">${formatoNumero}</span></div>
                         <div><span class="label">🏷️ Marca:</span> <span class="value">${brand}</span></div>
                         <div><span class="label">📅 Expira:</span> <span class="value">${month}/${year}</span></div>
-                        <div><span class="label">🔐 CVV:</span> <span class="value">${cvv}</span></div>
-                        <div><span class="label">🏦 Banco:</span> <span class="value">${binInfo.bank}</span></div>
+                        <div><span class="label">🔐 CVV:</span> <span class="value">${cvv} (${cvvInfo})</span></div>
+                        <div><span class="label">🏦 Banco:</span> <span class="value" style="color:#66ddff;">${binInfo.bank}</span></div>
                         <div><span class="label">📞 Teléfono:</span> <span class="value">${binInfo.bank_phone}</span></div>
-                        <div><span class="label">🌍 País:</span> <span class="value">${binInfo.country_emoji} ${binInfo.country} (${binInfo.country_code})</span></div>
+                        <div><span class="label">🌍 País:</span> <span class="value" style="color:#66ddff;">${binInfo.country_emoji} ${binInfo.country} (${binInfo.country_code})</span></div>
                         <div><span class="label">📋 Tipo:</span> <span class="value">${binInfo.type}</span></div>
                         <div><span class="label">🔝 Nivel:</span> <span class="value">${binInfo.level}</span></div>
                         <div><span class="label">💰 Prepago:</span> <span class="value">${binInfo.prepaid ? 'Sí' : 'No'}</span></div>
@@ -1522,7 +1583,7 @@
         }
 
         // ================================================================
-        // 7. HISTORIALES
+        // 8. HISTORIALES
         // ================================================================
 
         function guardarHistorialGen(bin, count) {
@@ -1574,7 +1635,7 @@
         }
 
         // ================================================================
-        // 8. AUTENTICACIÓN
+        // 9. AUTENTICACIÓN
         // ================================================================
 
         function procesarLogin() {
@@ -1632,7 +1693,7 @@
         }
 
         // ================================================================
-        // 9. ADMIN
+        // 10. ADMIN
         // ================================================================
 
         function crearUsuarioFirebase() {
@@ -1675,7 +1736,7 @@
                     const data = hijo.val();
                     const div = document.createElement("div");
                     div.style.cssText =
-                    'padding:8px 12px;border-bottom:1px solid #1a3a5a;display:flex;justify-content:space-between;align-items:center;';
+                        'padding:8px 12px;border-bottom:1px solid #1a3a5a;display:flex;justify-content:space-between;align-items:center;';
                     div.innerHTML = `
                         <span>👤 <strong>${data.email}</strong></span>
                         <button class="btn-small btn-danger" onclick="eliminarUsuario('${hijo.key}')">Eliminar</button>
@@ -1693,7 +1754,7 @@
         }
 
         // ================================================================
-        // 10. CRÉDITOS ADMIN
+        // 11. CRÉDITOS ADMIN
         // ================================================================
 
         async function agregarCreditos() {
@@ -1759,7 +1820,7 @@
         }
 
         // ================================================================
-        // 11. NAVEGACIÓN
+        // 12. NAVEGACIÓN
         // ================================================================
 
         function switchTab(tabName) {
@@ -1780,14 +1841,16 @@
         }
 
         // ================================================================
-        // 12. INICIALIZACIÓN
+        // 13. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN ESCRITORIO');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
         console.log('💎 Generar: 2 créditos | Verificar LIVE: 2 créditos');
-        console.log('🎯 CVV aleatorio automático');
-        console.log('🖥️ Diseño de escritorio fijo');
+        console.log('🎯 Detección automática de marca y CVV');
+        console.log('📌 Visa/Mastercard: CVV 3 dígitos');
+        console.log('📌 American Express: CVV 4 dígitos');
+        console.log('🌍 API real de BIN - Muestra banco y país');
     </script>
 
 </body>
