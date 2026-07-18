@@ -648,16 +648,6 @@
             color: #ff88aa;
         }
 
-        .info-badge.live-result {
-            background: #1a6a3a;
-            color: #88ff88;
-        }
-
-        .info-badge.live-fail {
-            background: #6a1a2a;
-            color: #ff8888;
-        }
-
         /* ===== HISTORIAL ===== */
         .credit-history {
             max-height: 150px;
@@ -720,7 +710,7 @@
             grid-template-columns: 1fr;
             gap: 4px;
             font-size: 0.85rem;
-            max-height: 250px;
+            max-height: 280px;
             overflow-y: auto;
         }
 
@@ -728,10 +718,26 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 4px 8px;
-            border-bottom: 1px solid #1a3a5a;
+            padding: 6px 10px;
+            border-radius: 8px;
             flex-wrap: wrap;
             gap: 4px;
+            transition: 0.1s;
+        }
+
+        .massive-result-grid .massive-item.valid {
+            background: rgba(0, 255, 136, 0.1);
+            border-left: 4px solid #00ff88;
+        }
+
+        .massive-result-grid .massive-item.invalid {
+            background: rgba(255, 68, 68, 0.08);
+            border-left: 4px solid #ff4444;
+        }
+
+        .massive-result-grid .massive-item.pending {
+            background: rgba(255, 170, 68, 0.08);
+            border-left: 4px solid #ffaa44;
         }
 
         .massive-result-grid .massive-item .number {
@@ -744,6 +750,63 @@
         .massive-result-grid .massive-item .result {
             font-weight: bold;
             font-size: 0.8rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+        }
+
+        .massive-result-grid .massive-item .result.valid {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.15);
+        }
+
+        .massive-result-grid .massive-item .result.invalid {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.15);
+        }
+
+        .massive-result-grid .massive-item .result.pending {
+            color: #ffaa44;
+            background: rgba(255, 170, 68, 0.15);
+        }
+
+        .massive-result-grid .massive-item .info-badge-sm {
+            font-size: 0.65rem;
+            padding: 1px 8px;
+            border-radius: 6px;
+            background: #1a4a7a;
+            color: #88bbff;
+            white-space: nowrap;
+        }
+
+        .massive-summary {
+            display: flex;
+            gap: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .massive-summary .stat {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .massive-summary .stat .num {
+            font-size: 1.2rem;
+        }
+
+        .massive-summary .stat.valid .num {
+            color: #00ff88;
+        }
+
+        .massive-summary .stat.invalid .num {
+            color: #ff4444;
+        }
+
+        .massive-summary .stat.total .num {
+            color: #66ddff;
         }
 
         /* ===== SPINNER ===== */
@@ -827,6 +890,16 @@
 
             .massive-result-grid .massive-item {
                 font-size: 0.75rem;
+                padding: 4px 8px;
+            }
+
+            .massive-summary {
+                gap: 10px;
+                padding: 8px;
+            }
+
+            .massive-summary .stat {
+                font-size: 0.8rem;
             }
         }
 
@@ -903,6 +976,10 @@
                 align-items: stretch;
                 gap: 2px;
             }
+
+            .massive-summary .stat {
+                font-size: 0.7rem;
+            }
         }
 
         .hidden {
@@ -945,6 +1022,33 @@
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
+        }
+
+        .btn-massive-lg {
+            padding: 14px 28px;
+            font-size: 1.1rem;
+            background: linear-gradient(135deg, #ff8800, #cc5500);
+            box-shadow: 0 0 30px rgba(255, 136, 0, 0.3);
+            animation: pulse-massive 2s ease-in-out infinite;
+            border: none;
+            border-radius: 25px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.15s;
+            min-width: 200px;
+        }
+
+        .btn-massive-lg:hover {
+            transform: scale(1.03);
+            box-shadow: 0 0 40px rgba(255, 136, 0, 0.5);
+        }
+
+        .btn-massive-lg:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+            animation: none !important;
         }
     </style>
 </head>
@@ -998,8 +1102,8 @@
             <!-- TABS -->
             <div class="tabs-container">
                 <button class="tab-btn active" onclick="switchTab('generator')">🎲 GENERADOR</button>
-                <button class="tab-btn" onclick="switchTab('live')">🔴 CHECKER LIVE</button>
-                <button class="tab-btn" onclick="switchTab('massive')">📊 LIVE MASIVO</button>
+                <button class="tab-btn" onclick="switchTab('live')">🔴 LIVE INDIVIDUAL</button>
+                <button class="tab-btn" onclick="switchTab('massive')" style="color:#ff8800;font-weight:700;">📊 LIVE MASIVO</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
                 <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMIN</button>
             </div>
@@ -1054,9 +1158,13 @@
                             <button class="btn-block btn-start" onclick="copiarTodo()" style="flex:1;min-width:100px;background:linear-gradient(135deg,#00cc88,#008866);">
                                 📋 COPIAR TODO
                             </button>
-                            <button class="btn-block btn-massive" onclick="liveMasivo()" style="flex:1;min-width:100px;">
+                            <button class="btn-block btn-massive" onclick="liveMasivoDesdeGenerador()" style="flex:1;min-width:100px;">
                                 📊 LIVE MASIVO x10 (7 créditos)
                             </button>
+                        </div>
+
+                        <div style="margin-top:10px;color:#6688aa;font-size:0.8rem;">
+                            📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ddff;font-weight:bold;">0</span>
                         </div>
                     </div>
 
@@ -1073,15 +1181,15 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: CHECKER LIVE INDIVIDUAL ===== -->
+                <!-- ===== PANEL: LIVE INDIVIDUAL ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-live" class="panel">
-                    <h3>🔴 CHECKER LIVE - VERIFICACIÓN INDIVIDUAL</h3>
+                    <h3>🔴 LIVE INDIVIDUAL - VERIFICACIÓN 1 TARJETA</h3>
 
                     <div class="item-card">
                         <div class="info-box live">
-                            ⚡ <strong>CHECKER LIVE</strong> - Cada verificación cuesta <strong>2 créditos</strong>.
-                            Verifica si la tarjeta tiene fondos y obtén <strong>detalles REALES del BIN</strong> (banco, país, tipo, nivel).
+                            ⚡ <strong>LIVE INDIVIDUAL</strong> - Cada verificación cuesta <strong>2 créditos</strong>.
+                            Verifica 1 tarjeta y obtén <strong>detalles REALES del BIN</strong> (banco, país, tipo, nivel).
                             <br><br>
                             <strong>🔐 CVV:</strong> 3 dígitos (Visa/Mastercard) | 4 dígitos (American Express)
                         </div>
@@ -1127,28 +1235,31 @@
                 <!-- ===== PANEL: LIVE MASIVO ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-massive" class="panel">
-                    <h3>📊 LIVE MASIVO - VERIFICACIÓN x10</h3>
+                    <h3>📊 LIVE MASIVO - VERIFICACIÓN x10 TARJETAS</h3>
 
                     <div class="item-card">
                         <div class="info-box massive">
-                            ⚡ <strong>LIVE MASIVO</strong> - Verifica <strong>10 tarjetas</strong> de una vez por <strong>7 créditos</strong>.
+                            ⚡ <strong>LIVE MASIVO</strong> - Verifica <strong>hasta 10 tarjetas</strong> de una vez por <strong>7 créditos</strong>.
                             <br><br>
                             📋 Las tarjetas se toman automáticamente de las <strong>últimas generadas</strong>.
                             <br>
-                            🔍 Cada tarjeta se verifica individualmente y se muestran los resultados.
+                            🔍 Cada tarjeta se verifica individualmente y se muestran los resultados con <strong>colores</strong>:
+                            <br>
+                            <span style="color:#00ff88;">🟢 Válida con fondos</span> | <span style="color:#ffaa44;">🟡 Válida sin fondos</span> | <span style="color:#ff4444;">🔴 Inválida</span>
                         </div>
 
                         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                            <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">
+                            <button class="btn-massive-lg" onclick="liveMasivoDesdePanel()" id="massiveBtn">
                                 📊 LIVE MASIVO x10 (7 créditos)
                             </button>
-                            <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled>
-                                ⬇️ DESCARGAR RESULTADOS
+                            <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled style="flex:1;min-width:140px;">
+                                ⬇️ DESCARGAR
                             </button>
                         </div>
 
                         <div style="margin-top:12px; color:#88bbff; font-size:0.85rem;">
-                            📊 Tarjetas disponibles: <span id="massiveCount">0</span>
+                            📊 Tarjetas disponibles: <span id="massiveCount" style="color:#66ddff;font-weight:bold;">0</span>
+                            <span style="color:#6688aa;margin-left:15px;">💎 Costo: 7 créditos</span>
                         </div>
                     </div>
 
@@ -1175,7 +1286,7 @@
                             <span style="font-size:1.8rem;">💎 <span id="creditsBalance" style="color:#66ddff;">0</span> créditos</span>
                             <span style="color:#88bbff; font-size:0.85rem;">
                                 🔹 Generar tarjetas: 2 créditos<br>
-                                🔹 Verificar LIVE: 2 créditos<br>
+                                🔹 LIVE Individual: 2 créditos<br>
                                 🔹 LIVE Masivo x10: 7 créditos
                             </span>
                         </div>
@@ -1455,6 +1566,7 @@
             mostrarGeneradas(cards);
             document.getElementById('btnDownloadGen').disabled = false;
             document.getElementById('actionButtons').style.display = 'flex';
+            document.getElementById('generatedCount').textContent = cards.length;
             document.getElementById('massiveCount').textContent = cards.length;
 
             guardarHistorialGen(binInput, cards.length);
@@ -1519,7 +1631,7 @@
             document.getElementById('liveCardYear').value = card.year;
             document.getElementById('liveCardCVV').value = card.cvv;
             switchTab('live');
-            mostrarNotificacion('📤 Enviada a Checker LIVE', 'info');
+            mostrarNotificacion('📤 Enviada a LIVE Individual', 'info');
         }
 
         function descargarGeneradas() {
@@ -1787,9 +1899,9 @@
             const count = Math.min(cards.length, 10);
             if (!await gastarCredito(7, `LIVE Masivo x${count} tarjetas`)) return;
 
-            const btn = document.getElementById('massiveBtn') || document.querySelector('.btn-massive');
+            const btn = document.getElementById('massiveBtn');
             if (btn) { btn.disabled = true;
-                btn.innerHTML = '<span class="spinner"></span> Verificando...'; }
+                btn.textContent = '⏳ Verificando...'; }
 
             massiveResults = [];
 
@@ -1819,10 +1931,20 @@
             cargarHistorialMasivo();
 
             if (btn) { btn.disabled = false;
-                btn.innerHTML = '📊 LIVE MASIVO x10 (7 créditos)'; }
+                btn.textContent = '📊 LIVE MASIVO x10 (7 créditos)'; }
 
-            const validCount = massiveResults.filter(r => r.result.estado === 'valid').length;
-            mostrarNotificacion(`✅ ${validCount}/${count} tarjetas válidas encontradas`, 'success');
+            const validCount = massiveResults.filter(r => r.result.estado === 'valid' || r.result.estado === 'insufficient')
+                .length;
+            const fondosCount = massiveResults.filter(r => r.result.estado === 'valid').length;
+            mostrarNotificacion(`✅ ${fondosCount} con fondos | ${validCount} válidas de ${count}`, 'success');
+        }
+
+        function liveMasivoDesdeGenerador() {
+            if (!generatedCardsList.length) {
+                mostrarNotificacion('❌ Primero genera tarjetas', 'error');
+                return;
+            }
+            liveMasivo();
         }
 
         function liveMasivoDesdePanel() {
@@ -1837,31 +1959,54 @@
         function mostrarResultadoMasivo(results) {
             const container = document.getElementById('massiveResultBox');
 
+            const validCount = results.filter(r => r.result.estado === 'valid' || r.result.estado === 'insufficient').length;
+            const fondosCount = results.filter(r => r.result.estado === 'valid').length;
+
             let html = `
                 <div style="border-bottom:2px solid #1a4a7a;padding-bottom:12px;margin-bottom:12px;">
                     <div style="font-size:1.1rem;font-weight:bold;color:#66ddff;margin-bottom:10px;">
                         📊 RESULTADOS MASIVOS (${results.length} tarjetas)
                     </div>
+                    <div class="massive-summary">
+                        <div class="stat total">📊 Total: <span class="num">${results.length}</span></div>
+                        <div class="stat valid">🟢 Con fondos: <span class="num">${fondosCount}</span></div>
+                        <div class="stat valid">🟡 Válidas: <span class="num">${validCount}</span></div>
+                        <div class="stat invalid">🔴 Inválidas: <span class="num">${results.length - validCount}</span></div>
+                    </div>
                     <div class="massive-result-grid">
             `;
 
-            results.forEach((item, index) => {
+            results.forEach((item) => {
                 const r = item.result;
-                const estadoClass = r.estado === 'valid' ? 'text-success' :
-                    r.estado === 'insufficient' ? 'text-warning' : 'text-danger';
-                const icono = r.estado === 'valid' ? '✅' :
-                    r.estado === 'insufficient' ? '⚠️' : '❌';
+                let estadoClass = 'invalid';
+                let estadoText = 'INVÁLIDA';
+                let icono = '❌';
+
+                if (r.estado === 'valid') {
+                    estadoClass = 'valid';
+                    estadoText = '✅ CON FONDOS';
+                    icono = '🟢';
+                } else if (r.estado === 'insufficient') {
+                    estadoClass = 'pending';
+                    estadoText = '⚠️ SIN FONDOS';
+                    icono = '🟡';
+                } else if (r.estado === 'expired') {
+                    estadoClass = 'invalid';
+                    estadoText = '❌ EXPIRADA';
+                    icono = '🔴';
+                }
+
                 const numeroFormateado = item.number.replace(/(\d{4})/g, '$1 ').trim();
 
                 html += `
-                    <div class="massive-item">
+                    <div class="massive-item ${estadoClass}">
                         <span class="number">${numeroFormateado}</span>
-                        <span class="info-badge">${item.brand}</span>
-                        <span class="info-badge fecha">${item.month}/${item.year}</span>
-                        <span class="info-badge ${item.cvv.length === 4 ? 'cvv4' : 'cvv'}">🔐 ${item.cvv}</span>
-                        <span class="result ${estadoClass}">${icono} ${r.mensaje}</span>
-                        <span class="info-badge" style="background:#1a4a7a;color:#88bbff;">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
-                        <span class="info-badge" style="background:#1a4a7a;color:#88bbff;">🏦 ${item.binInfo.bank}</span>
+                        <span class="info-badge-sm">${item.brand}</span>
+                        <span class="info-badge-sm">${item.month}/${item.year}</span>
+                        <span class="info-badge-sm" style="${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv}</span>
+                        <span class="result ${estadoClass}">${icono} ${estadoText}</span>
+                        <span class="info-badge-sm">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
+                        <span class="info-badge-sm" style="background:#1a4a7a;color:#88bbff;">🏦 ${item.binInfo.bank}</span>
                     </div>
                 `;
             });
@@ -1955,16 +2100,13 @@
             if (!currentUser) return;
             const key = `massive_history_${currentUser.uid}`;
             const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const validCount = results.filter(r => r.result.estado === 'valid').length;
+            const validCount = results.filter(r => r.result.estado === 'valid' || r.result.estado === 'insufficient').length;
+            const fondosCount = results.filter(r => r.result.estado === 'valid').length;
             history.unshift({
                 total: results.length,
                 valid: validCount,
-                fecha: new Date().toLocaleString(),
-                resultados: results.map(r => ({
-                    number: r.number,
-                    estado: r.result.estado,
-                    mensaje: r.result.mensaje
-                }))
+                fondos: fondosCount,
+                fecha: new Date().toLocaleString()
             });
             if (history.length > 30) history.length = 30;
             localStorage.setItem(key, JSON.stringify(history));
@@ -1977,7 +2119,7 @@
             const container = document.getElementById('massiveHistory');
             if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin verificaciones masivas</p>'; return; }
             container.innerHTML = history.map(h =>
-                `<div class="credit-item">📊 ${h.total} tarjetas | ✅ ${h.valid} válidas | ${h.fecha}</div>`
+                `<div class="credit-item">📊 ${h.total} tarjetas | 🟢 ${h.fondos} con fondos | 🟡 ${h.valid} válidas | ${h.fecha}</div>`
             ).join('');
         }
 
@@ -2027,6 +2169,11 @@
             cargarHistorialGen();
             cargarHistorialLive();
             cargarHistorialMasivo();
+
+            // Actualizar contadores
+            document.getElementById('generatedCount').textContent = generatedCardsList.length;
+            document.getElementById('massiveCount').textContent = generatedCardsList.length;
+
             switchTab('generator');
         }
 
@@ -2184,7 +2331,10 @@
             if (btn) btn.classList.add('active');
 
             if (tabName === 'credits') cargarCreditosUsuario();
-            if (tabName === 'generator') cargarHistorialGen();
+            if (tabName === 'generator') {
+                cargarHistorialGen();
+                document.getElementById('generatedCount').textContent = generatedCardsList.length;
+            }
             if (tabName === 'live') cargarHistorialLive();
             if (tabName === 'massive') {
                 cargarHistorialMasivo();
@@ -2196,11 +2346,12 @@
         // 14. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CON LIVE MASIVO');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CON LIVE MASIVO MEJORADO');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
-        console.log('💎 Generar: 2 créditos | LIVE: 2 créditos | LIVE Masivo x10: 7 créditos');
+        console.log('💎 Generar: 2 créditos | LIVE Individual: 2 créditos | LIVE Masivo x10: 7 créditos');
         console.log('📌 Visa/Mastercard: CVV 3 dígitos | American Express: CVV 4 dígitos');
         console.log('🌍 API real de BIN - Muestra banco y país');
+        console.log('🟢 Resultados con colores: Válida ✅ | Sin fondos ⚠️ | Inválida ❌');
     </script>
 
 </body>
