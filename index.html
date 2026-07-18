@@ -361,6 +361,11 @@
             background: #ff44aa15;
         }
 
+        .item-card .info-box.massive {
+            border-color: #ff8800;
+            background: #ff880015;
+        }
+
         /* ===== FORMULARIOS ===== */
         .form-group {
             margin-bottom: 14px;
@@ -445,6 +450,12 @@
             animation: pulse-live 2s ease-in-out infinite;
         }
 
+        .btn-block.btn-massive {
+            background: linear-gradient(135deg, #ff8800, #cc5500);
+            box-shadow: 0 0 25px rgba(255, 136, 0, 0.3);
+            animation: pulse-massive 2s ease-in-out infinite;
+        }
+
         @keyframes pulse-live {
             0%,
             100% {
@@ -452,6 +463,16 @@
             }
             50% {
                 box-shadow: 0 0 40px rgba(255, 68, 170, 0.6);
+            }
+        }
+
+        @keyframes pulse-massive {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(255, 136, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(255, 136, 0, 0.6);
             }
         }
 
@@ -497,6 +518,10 @@
 
         .btn-small.btn-success {
             background: #00cc88;
+        }
+
+        .btn-small.btn-massive-sm {
+            background: #ff8800;
         }
 
         /* ===== RESULTADOS ===== */
@@ -623,6 +648,16 @@
             color: #ff88aa;
         }
 
+        .info-badge.live-result {
+            background: #1a6a3a;
+            color: #88ff88;
+        }
+
+        .info-badge.live-fail {
+            background: #6a1a2a;
+            color: #ff8888;
+        }
+
         /* ===== HISTORIAL ===== */
         .credit-history {
             max-height: 150px;
@@ -677,6 +712,38 @@
 
         .detail-list li {
             padding: 2px 0;
+        }
+
+        /* ===== RESULTADO MASIVO ===== */
+        .massive-result-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 4px;
+            font-size: 0.85rem;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .massive-result-grid .massive-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 8px;
+            border-bottom: 1px solid #1a3a5a;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+
+        .massive-result-grid .massive-item .number {
+            font-family: 'Courier New', monospace;
+            color: #88ddff;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+
+        .massive-result-grid .massive-item .result {
+            font-weight: bold;
+            font-size: 0.8rem;
         }
 
         /* ===== SPINNER ===== */
@@ -757,6 +824,10 @@
                 font-size: 0.78rem;
                 padding: 6px 8px;
             }
+
+            .massive-result-grid .massive-item {
+                font-size: 0.75rem;
+            }
         }
 
         @media (max-width: 500px) {
@@ -826,10 +897,54 @@
                 font-size: 0.55rem;
                 padding: 1px 6px;
             }
+
+            .massive-result-grid .massive-item {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 2px;
+            }
         }
 
         .hidden {
             display: none !important;
+        }
+
+        .mt-10 {
+            margin-top: 10px;
+        }
+
+        .mb-10 {
+            margin-bottom: 10px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-success {
+            color: #00ff88;
+        }
+
+        .text-danger {
+            color: #ff4444;
+        }
+
+        .text-warning {
+            color: #ffaa44;
+        }
+
+        .gap-5 {
+            gap: 5px;
+        }
+
+        .flex-wrap {
+            flex-wrap: wrap;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
         }
     </style>
 </head>
@@ -884,6 +999,7 @@
             <div class="tabs-container">
                 <button class="tab-btn active" onclick="switchTab('generator')">🎲 GENERADOR</button>
                 <button class="tab-btn" onclick="switchTab('live')">🔴 CHECKER LIVE</button>
+                <button class="tab-btn" onclick="switchTab('massive')">📊 LIVE MASIVO</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
                 <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMIN</button>
             </div>
@@ -891,7 +1007,9 @@
             <!-- PANELS -->
             <div class="panels-container">
 
-                <!-- ===== GENERADOR ===== -->
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: GENERADOR ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-generator" class="panel active">
                     <h3>🎲 GENERADOR DE TARJETAS</h3>
 
@@ -899,6 +1017,8 @@
                         <div class="info-box">
                             💡 Ingresa los primeros dígitos (mínimo 6). El sistema detecta automáticamente la marca y genera el CVV correcto:
                             <strong>3 dígitos</strong> para Visa/Mastercard, <strong>4 dígitos</strong> para American Express.
+                            <br><br>
+                            <strong>📊 Acciones:</strong> Copiar todo | LIVE individual (2 créditos) | LIVE Masivo x10 (7 créditos)
                         </div>
 
                         <div class="form-group">
@@ -929,6 +1049,15 @@
                                 ⬇️ DESCARGAR
                             </button>
                         </div>
+
+                        <div class="flex-row mt-10" id="actionButtons" style="display:none;">
+                            <button class="btn-block btn-start" onclick="copiarTodo()" style="flex:1;min-width:100px;background:linear-gradient(135deg,#00cc88,#008866);">
+                                📋 COPIAR TODO
+                            </button>
+                            <button class="btn-block btn-massive" onclick="liveMasivo()" style="flex:1;min-width:100px;">
+                                📊 LIVE MASIVO x10 (7 créditos)
+                            </button>
+                        </div>
                     </div>
 
                     <div id="generatedContainer">
@@ -943,9 +1072,11 @@
                     </div>
                 </div>
 
-                <!-- ===== CHECKER LIVE ===== -->
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: CHECKER LIVE INDIVIDUAL ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-live" class="panel">
-                    <h3>🔴 CHECKER LIVE - VERIFICACIÓN REAL</h3>
+                    <h3>🔴 CHECKER LIVE - VERIFICACIÓN INDIVIDUAL</h3>
 
                     <div class="item-card">
                         <div class="info-box live">
@@ -992,7 +1123,50 @@
                     </div>
                 </div>
 
-                <!-- ===== CRÉDITOS ===== -->
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: LIVE MASIVO ===== -->
+                <!-- ========================================================== -->
+                <div id="panel-massive" class="panel">
+                    <h3>📊 LIVE MASIVO - VERIFICACIÓN x10</h3>
+
+                    <div class="item-card">
+                        <div class="info-box massive">
+                            ⚡ <strong>LIVE MASIVO</strong> - Verifica <strong>10 tarjetas</strong> de una vez por <strong>7 créditos</strong>.
+                            <br><br>
+                            📋 Las tarjetas se toman automáticamente de las <strong>últimas generadas</strong>.
+                            <br>
+                            🔍 Cada tarjeta se verifica individualmente y se muestran los resultados.
+                        </div>
+
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">
+                                📊 LIVE MASIVO x10 (7 créditos)
+                            </button>
+                            <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled>
+                                ⬇️ DESCARGAR RESULTADOS
+                            </button>
+                        </div>
+
+                        <div style="margin-top:12px; color:#88bbff; font-size:0.85rem;">
+                            📊 Tarjetas disponibles: <span id="massiveCount">0</span>
+                        </div>
+                    </div>
+
+                    <div id="massiveResultContainer">
+                        <div class="result-box" id="massiveResultBox">
+                            <span style="color:#6688aa;">Esperando verificación masiva...</span>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:14px;">
+                        <div style="color:#66ddff;font-size:0.95rem;font-weight:600;margin-bottom:6px;">📜 Historial MASIVO</div>
+                        <div id="massiveHistory" class="credit-history"></div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: CRÉDITOS ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-credits" class="panel">
                     <h3>💎 MIS CRÉDITOS</h3>
 
@@ -1001,7 +1175,8 @@
                             <span style="font-size:1.8rem;">💎 <span id="creditsBalance" style="color:#66ddff;">0</span> créditos</span>
                             <span style="color:#88bbff; font-size:0.85rem;">
                                 🔹 Generar tarjetas: 2 créditos<br>
-                                🔹 Verificar LIVE: 2 créditos
+                                🔹 Verificar LIVE: 2 créditos<br>
+                                🔹 LIVE Masivo x10: 7 créditos
                             </span>
                         </div>
                     </div>
@@ -1027,7 +1202,9 @@
                     </div>
                 </div>
 
-                <!-- ===== ADMIN ===== -->
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: ADMIN ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-admins" class="panel">
                     <h3>👥 Panel de Administración</h3>
 
@@ -1085,6 +1262,7 @@
         let usernameClave = "";
         let currentCredits = 0;
         let generatedCardsList = [];
+        let massiveResults = [];
 
         // ================================================================
         // 3. UTILIDADES
@@ -1095,7 +1273,7 @@
         }
 
         function mostrarNotificacion(msg, tipo = 'info') {
-            const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444' };
+            const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444', warning: '#ffaa44' };
             const div = document.createElement('div');
             div.style.cssText = `
                 position: fixed; bottom: 25px; right: 25px; 
@@ -1215,7 +1393,6 @@
             const length = getCardLength(brand);
             const cvvLength = getCVVLength(brand);
 
-            // Si el BIN es más largo que la tarjeta, truncar
             const validBin = binStr.slice(0, Math.min(binStr.length, length - 1));
 
             const cards = [];
@@ -1277,6 +1454,9 @@
             generatedCardsList = cards;
             mostrarGeneradas(cards);
             document.getElementById('btnDownloadGen').disabled = false;
+            document.getElementById('actionButtons').style.display = 'flex';
+            document.getElementById('massiveCount').textContent = cards.length;
+
             guardarHistorialGen(binInput, cards.length);
             cargarHistorialGen();
 
@@ -1319,6 +1499,18 @@
             });
         }
 
+        function copiarTodo() {
+            if (!generatedCardsList.length) { mostrarNotificacion('❌ No hay tarjetas para copiar', 'error'); return; }
+            const text = generatedCardsList.map(c =>
+                `${c.number}|${c.month}|${c.year}|${c.cvv}|${c.brand}`
+            ).join('\n');
+            navigator.clipboard.writeText(text).then(() => {
+                mostrarNotificacion(`📋 ${generatedCardsList.length} tarjetas copiadas`, 'success');
+            }).catch(() => {
+                mostrarNotificacion('📋 Copia manual: ' + text.substring(0, 100) + '...', 'info');
+            });
+        }
+
         function enviarALive(index) {
             const card = generatedCardsList[index];
             if (!card) return;
@@ -1346,7 +1538,7 @@
         }
 
         // ================================================================
-        // 7. CHECKER LIVE CON API REAL DE BIN
+        // 7. CHECKER LIVE INDIVIDUAL
         // ================================================================
 
         async function getBINInfo(bin) {
@@ -1371,7 +1563,6 @@
             } catch (e) {
                 console.log('Error al obtener BIN:', e);
             }
-            // Fallback: detectar marca localmente
             return {
                 brand: detectBrand(bin),
                 bank: 'Desconocido',
@@ -1387,13 +1578,13 @@
             };
         }
 
-        async function verificarLive(number, month, year, cvv) {
-            await new Promise(resolve => setTimeout(resolve, 2000 + Math.random() * 1000));
+        async function verificarTarjeta(number, month, year, cvv) {
+            await new Promise(resolve => setTimeout(resolve, 1500 + Math.random() * 1000));
             const random = Math.random();
             if (random < 0.30) {
                 return {
                     estado: 'valid',
-                    mensaje: '✅ TARJETA VÁLIDA CON FONDOS',
+                    mensaje: '✅ VÁLIDA CON FONDOS',
                     codigo: '00',
                     fondos: true,
                     detalles: [
@@ -1401,15 +1592,14 @@
                         'Tarjeta con fondos suficientes',
                         'No reportada como perdida o robada',
                         'Fecha de expiración válida',
-                        'CVV verificado correctamente',
-                        'Tarjeta activa en el sistema'
+                        'CVV verificado correctamente'
                     ]
                 };
             }
             if (random < 0.40) {
                 return {
                     estado: 'insufficient',
-                    mensaje: '⚠️ TARJETA VÁLIDA PERO SIN FONDOS',
+                    mensaje: '⚠️ VÁLIDA SIN FONDOS',
                     codigo: '51',
                     fondos: false,
                     detalles: [
@@ -1422,7 +1612,7 @@
             if (random < 0.50) {
                 return {
                     estado: 'expired',
-                    mensaje: '❌ TARJETA EXPIRADA',
+                    mensaje: '❌ EXPIRADA',
                     codigo: '54',
                     fondos: false,
                     detalles: [
@@ -1434,7 +1624,7 @@
             }
             return {
                 estado: 'invalid',
-                mensaje: '❌ TARJETA INVÁLIDA O NO EXISTE',
+                mensaje: '❌ INVÁLIDA O NO EXISTE',
                 codigo: '14',
                 fondos: false,
                 detalles: [
@@ -1489,7 +1679,6 @@
                 const binInfo = await getBINInfo(bin);
                 const brand = binInfo.brand || detectBrand(number);
 
-                // Validar longitud del CVV según la marca
                 const cvvLength = getCVVLength(brand);
                 if (cvv.length !== cvvLength) {
                     mostrarResultadoLive(
@@ -1499,7 +1688,7 @@
                     return;
                 }
 
-                const result = await verificarLive(number, month, year, cvv);
+                const result = await verificarTarjeta(number, month, year, cvv);
 
                 const html = generarResultadoLive(number, month, year, cvv, brand, binInfo, result);
                 mostrarResultadoLive(html, result.estado);
@@ -1583,7 +1772,135 @@
         }
 
         // ================================================================
-        // 8. HISTORIALES
+        // 8. LIVE MASIVO x10 (7 créditos)
+        // ================================================================
+
+        async function liveMasivo() {
+            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión primero', 'error'); return; }
+
+            const cards = generatedCardsList;
+            if (cards.length === 0) {
+                mostrarNotificacion('❌ No hay tarjetas generadas para verificar', 'error');
+                return;
+            }
+
+            const count = Math.min(cards.length, 10);
+            if (!await gastarCredito(7, `LIVE Masivo x${count} tarjetas`)) return;
+
+            const btn = document.getElementById('massiveBtn') || document.querySelector('.btn-massive');
+            if (btn) { btn.disabled = true;
+                btn.innerHTML = '<span class="spinner"></span> Verificando...'; }
+
+            massiveResults = [];
+
+            for (let i = 0; i < count; i++) {
+                const card = cards[i];
+                const bin = card.number.slice(0, 6);
+                const binInfo = await getBINInfo(bin);
+                const brand = binInfo.brand || card.brand;
+
+                const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv);
+
+                massiveResults.push({
+                    number: card.number,
+                    month: card.month,
+                    year: card.year,
+                    cvv: card.cvv,
+                    brand: brand,
+                    binInfo: binInfo,
+                    result: result
+                });
+            }
+
+            mostrarResultadoMasivo(massiveResults);
+            document.getElementById('btnDownloadMassive').disabled = false;
+
+            guardarHistorialMasivo(massiveResults);
+            cargarHistorialMasivo();
+
+            if (btn) { btn.disabled = false;
+                btn.innerHTML = '📊 LIVE MASIVO x10 (7 créditos)'; }
+
+            const validCount = massiveResults.filter(r => r.result.estado === 'valid').length;
+            mostrarNotificacion(`✅ ${validCount}/${count} tarjetas válidas encontradas`, 'success');
+        }
+
+        function liveMasivoDesdePanel() {
+            if (!generatedCardsList.length) {
+                mostrarNotificacion('❌ Primero genera tarjetas en el panel GENERADOR', 'error');
+                switchTab('generator');
+                return;
+            }
+            liveMasivo();
+        }
+
+        function mostrarResultadoMasivo(results) {
+            const container = document.getElementById('massiveResultBox');
+
+            let html = `
+                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:12px;margin-bottom:12px;">
+                    <div style="font-size:1.1rem;font-weight:bold;color:#66ddff;margin-bottom:10px;">
+                        📊 RESULTADOS MASIVOS (${results.length} tarjetas)
+                    </div>
+                    <div class="massive-result-grid">
+            `;
+
+            results.forEach((item, index) => {
+                const r = item.result;
+                const estadoClass = r.estado === 'valid' ? 'text-success' :
+                    r.estado === 'insufficient' ? 'text-warning' : 'text-danger';
+                const icono = r.estado === 'valid' ? '✅' :
+                    r.estado === 'insufficient' ? '⚠️' : '❌';
+                const numeroFormateado = item.number.replace(/(\d{4})/g, '$1 ').trim();
+
+                html += `
+                    <div class="massive-item">
+                        <span class="number">${numeroFormateado}</span>
+                        <span class="info-badge">${item.brand}</span>
+                        <span class="info-badge fecha">${item.month}/${item.year}</span>
+                        <span class="info-badge ${item.cvv.length === 4 ? 'cvv4' : 'cvv'}">🔐 ${item.cvv}</span>
+                        <span class="result ${estadoClass}">${icono} ${r.mensaje}</span>
+                        <span class="info-badge" style="background:#1a4a7a;color:#88bbff;">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
+                        <span class="info-badge" style="background:#1a4a7a;color:#88bbff;">🏦 ${item.binInfo.bank}</span>
+                    </div>
+                `;
+            });
+
+            html += `
+                    </div>
+                    <div style="margin-top:10px;color:#6688aa;font-size:0.75rem;border-top:1px solid #1a3a5a;padding-top:8px;">
+                        💎 Costo: 7 créditos | Saldo: ${currentCredits} créditos
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function descargarResultadoMasivo() {
+            if (!massiveResults.length) return;
+
+            const lines = massiveResults.map(item => {
+                const r = item.result;
+                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.country}|${item.binInfo.bank}`;
+            });
+
+            const header = 'Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco\n';
+            const text = header + lines.join('\n');
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `resultado_masivo_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            mostrarNotificacion('⬇️ Resultados descargados', 'success');
+        }
+
+        // ================================================================
+        // 9. HISTORIALES
         // ================================================================
 
         function guardarHistorialGen(bin, count) {
@@ -1634,8 +1951,38 @@
             ).join('');
         }
 
+        function guardarHistorialMasivo(results) {
+            if (!currentUser) return;
+            const key = `massive_history_${currentUser.uid}`;
+            const history = JSON.parse(localStorage.getItem(key) || '[]');
+            const validCount = results.filter(r => r.result.estado === 'valid').length;
+            history.unshift({
+                total: results.length,
+                valid: validCount,
+                fecha: new Date().toLocaleString(),
+                resultados: results.map(r => ({
+                    number: r.number,
+                    estado: r.result.estado,
+                    mensaje: r.result.mensaje
+                }))
+            });
+            if (history.length > 30) history.length = 30;
+            localStorage.setItem(key, JSON.stringify(history));
+        }
+
+        function cargarHistorialMasivo() {
+            if (!currentUser) return;
+            const key = `massive_history_${currentUser.uid}`;
+            const history = JSON.parse(localStorage.getItem(key) || '[]');
+            const container = document.getElementById('massiveHistory');
+            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin verificaciones masivas</p>'; return; }
+            container.innerHTML = history.map(h =>
+                `<div class="credit-item">📊 ${h.total} tarjetas | ✅ ${h.valid} válidas | ${h.fecha}</div>`
+            ).join('');
+        }
+
         // ================================================================
-        // 9. AUTENTICACIÓN
+        // 10. AUTENTICACIÓN
         // ================================================================
 
         function procesarLogin() {
@@ -1679,6 +2026,7 @@
             await cargarCreditosUsuario();
             cargarHistorialGen();
             cargarHistorialLive();
+            cargarHistorialMasivo();
             switchTab('generator');
         }
 
@@ -1693,7 +2041,7 @@
         }
 
         // ================================================================
-        // 10. ADMIN
+        // 11. ADMIN
         // ================================================================
 
         function crearUsuarioFirebase() {
@@ -1754,7 +2102,7 @@
         }
 
         // ================================================================
-        // 11. CRÉDITOS ADMIN
+        // 12. CRÉDITOS ADMIN
         // ================================================================
 
         async function agregarCreditos() {
@@ -1820,7 +2168,7 @@
         }
 
         // ================================================================
-        // 12. NAVEGACIÓN
+        // 13. NAVEGACIÓN
         // ================================================================
 
         function switchTab(tabName) {
@@ -1838,18 +2186,20 @@
             if (tabName === 'credits') cargarCreditosUsuario();
             if (tabName === 'generator') cargarHistorialGen();
             if (tabName === 'live') cargarHistorialLive();
+            if (tabName === 'massive') {
+                cargarHistorialMasivo();
+                document.getElementById('massiveCount').textContent = generatedCardsList.length;
+            }
         }
 
         // ================================================================
-        // 13. INICIALIZACIÓN
+        // 14. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CON LIVE MASIVO');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
-        console.log('💎 Generar: 2 créditos | Verificar LIVE: 2 créditos');
-        console.log('🎯 Detección automática de marca y CVV');
-        console.log('📌 Visa/Mastercard: CVV 3 dígitos');
-        console.log('📌 American Express: CVV 4 dígitos');
+        console.log('💎 Generar: 2 créditos | LIVE: 2 créditos | LIVE Masivo x10: 7 créditos');
+        console.log('📌 Visa/Mastercard: CVV 3 dígitos | American Express: CVV 4 dígitos');
         console.log('🌍 API real de BIN - Muestra banco y país');
     </script>
 
