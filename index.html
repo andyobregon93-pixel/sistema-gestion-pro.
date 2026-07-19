@@ -2331,7 +2331,7 @@
                 const binInfo = await getBINInfo(bin);
                 const brand = binInfo.brand || card.brand;
 
-               const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv);
+                const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv);
 
                 massiveResults.push({
                     number: card.number,
@@ -2617,7 +2617,7 @@
         console.log('📱 Botón para pedir créditos por WhatsApp');
         console.log('💎 Generación GRATIS | LIVE: 2 créditos | Masivo: 7 créditos');
 
-        // Cargar promoción al inicio
+       // Cargar promoción al inicio
         cargarPromo();
     </script>
 
