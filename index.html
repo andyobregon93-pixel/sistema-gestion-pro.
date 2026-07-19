@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL */
+        /* ESTILOS - VERSIÓN FINAL CON BOTONES SEPARADOS */
         /* ============================================================== */
 
         * {
@@ -511,10 +511,12 @@
             outline: none;
         }
 
+        /* ===== BOTONES MEJORADOS (CON MÁS ESPACIADO) ===== */
         .flex-row {
             display: flex;
-            gap: 6px;
+            gap: 16px; /* ← Aumentado de 6px a 16px */
             flex-wrap: wrap;
+            margin-bottom: 10px; /* ← Separación entre filas */
         }
 
         .flex-row .form-group {
@@ -522,17 +524,18 @@
             min-width: 70px;
         }
 
-        /* ===== BOTONES ===== */
         .btn-block {
-            padding: 8px 14px;
-            font-size: 0.78rem;
+            padding: 10px 22px; /* ← Más padding horizontal */
+            font-size: 0.8rem;
             font-weight: 600;
             border: none;
             border-radius: 25px;
             cursor: pointer;
             color: white;
             transition: 0.15s;
-            min-width: 100px;
+            min-width: 130px; /* ← Un poco más de ancho mínimo */
+            text-align: center;
+            flex: 1;
         }
 
         .btn-block:hover {
@@ -606,9 +609,16 @@
 
         .flex-row .btn-block {
             flex: 1;
-            min-width: 80px;
+            min-width: 90px;
         }
 
+        /* Estilo para los botones de acción (no se estiran tanto) */
+        .btn-block.action-btn {
+            flex: 0 1 auto;
+            min-width: 120px;
+        }
+
+        /* ===== BOTONES PEQUEÑOS ===== */
         .btn-small {
             padding: 3px 8px;
             font-size: 0.6rem;
@@ -834,6 +844,7 @@
             display: flex;
             gap: 4px;
             flex-wrap: wrap;
+            align-items: center;
         }
 
         .user-status-badge {
@@ -915,8 +926,11 @@
             }
             .btn-block {
                 font-size: 0.7rem;
-                padding: 6px 10px;
+                padding: 8px 14px;
                 min-width: 70px;
+            }
+            .flex-row {
+                gap: 12px;
             }
             .auth-box {
                 padding: 20px 18px;
@@ -981,16 +995,17 @@
                 padding: 5px 6px;
             }
             .flex-row {
-                gap: 3px;
+                gap: 8px;
             }
             .flex-row .form-group {
                 min-width: 40px;
             }
             .btn-block {
                 font-size: 0.6rem;
-                padding: 5px 8px;
+                padding: 6px 10px;
                 min-width: 50px;
                 border-radius: 18px;
+                flex: 1 1 100%; /* En móvil ocupan toda la fila */
             }
             .generated-cards {
                 max-height: 160px;
@@ -1153,6 +1168,7 @@
                             </div>
                         </div>
 
+                        <!-- PRIMERA FILA: GENERAR + DESCARGAR -->
                         <div class="flex-row">
                             <button class="btn-block btn-start" onclick="generarTarjetas()">
                                 🎲 GENERAR (GRATIS)
@@ -1162,11 +1178,12 @@
                             </button>
                         </div>
 
-                        <div class="flex-row mt-8" id="actionButtons" style="display:none;">
-                            <button class="btn-block" onclick="copiarTodo()" style="flex:1;min-width:70px;background:linear-gradient(135deg,#00cc88,#008866);box-shadow:0 0 15px rgba(0,204,136,0.12);">
+                        <!-- SEGUNDA FILA: COPIAR TODO + MASIVO -->
+                        <div class="flex-row" id="actionButtons" style="display:none;">
+                            <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc88,#008866);box-shadow:0 0 15px rgba(0,204,136,0.12);">
                                 📋 COPIAR TODO
                             </button>
-                            <button class="btn-block btn-massive" onclick="liveMasivoDesdeGenerador()" style="flex:1;min-width:70px;">
+                            <button class="btn-block action-btn btn-massive" onclick="liveMasivoDesdeGenerador()">
                                 📊 MASIVO (7 créditos)
                             </button>
                         </div>
@@ -1257,11 +1274,11 @@
                             <span style="color:#00ff88;">🟢 Válida con fondos</span> | <span style="color:#ffaa44;">🟡 Válida sin fondos</span> | <span style="color:#ff4444;">🔴 Inválida</span>
                         </div>
 
-                        <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                            <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn" style="flex:1;min-width:120px;">
+                        <div class="flex-row">
+                            <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">
                                 📊 LIVE MASIVO (7 créditos)
                             </button>
-                            <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled style="flex:1;min-width:100px;">
+                            <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled>
                                 ⬇️ DESCARGAR
                             </button>
                         </div>
@@ -1316,7 +1333,7 @@
                     <div class="item-card" style="border:2px solid #ff44aa;">
                         <div class="info-box admin">
                             👥 <strong>GESTIÓN DE USUARIOS</strong><br>
-                            Bloquear/Desbloquear usuarios, ver sus datos y gestionar créditos/días.
+                            Bloquear/Desbloquear, gestionar créditos y días.
                         </div>
 
                         <div class="form-group">
@@ -1381,7 +1398,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCRIPTS -->
+    <!-- SCRIPTS (EXACTAMENTE IGUAL QUE ANTES) -->
     <!-- ============================================================== -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js">
     </script>
@@ -1726,7 +1743,7 @@
         }
 
         // ================================================================
-        // 9. ADMIN - BLOQUEAR USUARIOS Y GESTIÓN
+        // 9. ADMIN - BLOQUEAR, CRÉDITOS Y DÍAS
         // ================================================================
 
         async function toggleBloquearUsuario(email) {
@@ -1783,15 +1800,18 @@
                             </span>
                         </div>
                         <div class="user-actions">
+                            <!-- Botones de Créditos -->
+                            <button class="btn-small btn-success" onclick="adminAgregarCreditosManual('${user.email}')" title="Agregar créditos">➕</button>
+                            <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')" title="Restar créditos">➖</button>
+                            
+                            <!-- Botones de Días -->
+                            <button class="btn-small btn-warning" onclick="adminAgregarDiasManual('${user.email}')" title="Agregar días">📅+</button>
+                            <button class="btn-small" style="background:#cc8800;color:#fff;" onclick="adminRestarDiasManual('${user.email}')" title="Restar días">📅-</button>
+                            
+                            <!-- Botón Bloquear/Desbloquear -->
                             <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" 
                                     onclick="toggleBloquearUsuario('${user.email}')">
-                                ${bloqueado ? '🔓 Desbloquear' : '🔒 Bloquear'}
-                            </button>
-                            <button class="btn-small btn-warning" onclick="adminAgregarCreditosManual('${user.email}')">
-                                ➕
-                            </button>
-                            <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')">
-                                ➖
+                                ${bloqueado ? '🔓' : '🔒'}
                             </button>
                         </div>
                     `;
@@ -1800,7 +1820,7 @@
             });
         }
 
-        // Funciones rápidas para admin desde la lista
+        // ----- FUNCIONES PARA CRÉDITOS -----
         async function adminAgregarCreditosManual(email) {
             const cantidad = prompt(`¿Cuántos créditos agregar a ${email}?`, '10');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
@@ -1823,6 +1843,31 @@
             const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
             await ref.update({ credits: nuevo });
             mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
+        }
+
+        // ----- FUNCIONES PARA DÍAS -----
+        async function adminAgregarDiasManual(email) {
+            const cantidad = prompt(`¿Cuántos DÍAS agregar a ${email}?`, '5');
+            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = (data.days || 0) + parseInt(cantidad);
+            await ref.update({ days: nuevo });
+            mostrarNotificacion(`✅ +${cantidad} días a ${email}`, 'success');
+        }
+
+        async function adminRestarDiasManual(email) {
+            const cantidad = prompt(`¿Cuántos DÍAS restar a ${email}?`, '3');
+            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = Math.max(0, (data.days || 0) - parseInt(cantidad));
+            await ref.update({ days: nuevo });
+            mostrarNotificacion(`✅ -${cantidad} días a ${email}`, 'success');
         }
 
         function buscarUsuario() {
@@ -1856,7 +1901,7 @@
                             <div class="user-actions">
                                 <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" 
                                         onclick="toggleBloquearUsuario('${data.email}')">
-                                    ${bloqueado ? '🔓 Desbloquear' : '🔒 Bloquear'}
+                                    ${bloqueado ? '🔓' : '🔒'}
                                 </button>
                             </div>
                         `;
@@ -2610,10 +2655,10 @@
         // 16. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON REGISTRO Y ADMIN');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON ADMIN DE DÍAS');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
         console.log('🎁 Registro: días + créditos de regalo');
-        console.log('🔒 Admin puede bloquear/desbloquear usuarios');
+        console.log('🔒 Admin puede bloquear/desbloquear, gestionar créditos y días');
         console.log('📱 Botón para pedir créditos por WhatsApp');
         console.log('💎 Generación GRATIS | LIVE: 2 créditos | Masivo: 7 créditos');
 
