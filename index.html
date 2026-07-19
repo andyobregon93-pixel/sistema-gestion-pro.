@@ -1489,6 +1489,7 @@
 
                         <div style="margin-top:10px;">
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:5px;">📋 Todos los usuarios</div>
+                            <!-- Contenedor de lista de usuarios -->
                             <div id="listaUsuariosContainer" style="max-height:250px;overflow-y:auto;"></div>
                         </div>
                     </div>
@@ -1576,7 +1577,9 @@
         let massiveResults = [];
         let promoDias = 7;
         let promoCreditos = 50;
-        let pasarelaSeleccionada = 'stripe'; // <--- NUEVA VARIABLE
+        let pasarelaSeleccionada = 'stripe';
+        // Variable global para el listener de usuarios (para poder removerlo)
+        let usuariosUnsubscribe = null;
 
         // ================================================================
         // 3. UTILIDADES
@@ -1789,6 +1792,7 @@
                     👑 ${displayName} (Owner)
                     <span class="user-status active">✅ Activo</span>
                 `;
+                // Solo se llama una vez al iniciar sesión
                 escucharUsuarios();
                 cargarPromo();
             } else {
@@ -1811,7 +1815,11 @@
         }
 
         function cerrarSesion() {
-            if (window.usuariosUnsubscribe) window.usuariosUnsubscribe();
+            // Remover listener de usuarios
+            if (usuariosUnsubscribe) {
+                usuariosUnsubscribe();
+                usuariosUnsubscribe = null;
+            }
             currentUser = null;
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('main-app').style.display = 'none';
@@ -1903,7 +1911,7 @@
         }
 
         // ================================================================
-        // 10. ADMIN
+        // 10. ADMIN (CORREGIDO PARA EVITAR DUPLICADOS)
         // ================================================================
 
         async function toggleBloquearUsuario(email) {
@@ -1915,13 +1923,17 @@
             const actual = snap.val().bloqueado || false;
             await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
             mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
-            escucharUsuarios();
+            // No es necesario llamar a escucharUsuarios, el listener en tiempo real actualizará la lista
         }
 
-        let usuariosUnsubscribe = null;
-
+        // Función que se ejecuta al inicio (Owner) y se queda escuchando cambios en tiempo real
         function escucharUsuarios() {
-            if (usuariosUnsubscribe) usuariosUnsubscribe();
+            // Si ya existe un listener, lo removemos para evitar duplicados
+            if (usuariosUnsubscribe) {
+                usuariosUnsubscribe();
+                usuariosUnsubscribe = null;
+            }
+
             usuariosUnsubscribe = db.ref("usuarios").on("value", async (snapshot) => {
                 const container = document.getElementById("listaUsuariosContainer");
                 if (!container) return;
@@ -1938,6 +1950,7 @@
                     users.push({ key: hijo.key, ...data });
                 });
 
+                // Ordenar por fecha (más reciente primero)
                 users.sort((a, b) => (b.fechaRegistro || 0) - (a.fechaRegistro || 0));
 
                 for (const user of users) {
@@ -1973,6 +1986,7 @@
             });
         }
 
+        // Funciones de administración (créditos, días)
         async function adminAgregarCreditosManual(email) {
             const cantidad = prompt(`¿Cuántos créditos agregar a ${email}?`, '10');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
@@ -2797,9 +2811,11 @@
                 document.getElementById('massiveCount').textContent = generatedCardsList.length;
             }
             if (tabName === 'admins') {
+                // No volvemos a crear el listener, solo aseguramos que el contenedor esté actualizado
+                // (el listener ya está activo desde el login)
                 if (currentUser && currentUser.role === 'Owner') {
                     cargarPromo();
-                    escucharUsuarios();
+                    // El listener ya está corriendo, no lo reiniciamos
                 }
             }
             if (tabName === 'pasarela') {
@@ -2817,13 +2833,12 @@
         // 16. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - CON PASARELAS RESTAURADAS');
+        console.log('⚡ SYS ANDY PRO - CON PASARELAS Y CORRECCIÓN DE DUPLICADOS');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
         console.log('💎 Generación GRATIS | LIVE: 2 créditos | Masivo: 7 créditos');
         console.log('💳 Pasarelas: Stripe, Zuora, Auth (seleccionable)');
 
         cargarPromo();
-        // Seleccionar Stripe por defecto
         seleccionarPasarela('stripe');
     </script>
 
