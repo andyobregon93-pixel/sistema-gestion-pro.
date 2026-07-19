@@ -2,17 +2,18 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON DIRECCIONES */
+        /* ESTILOS - VERSIÓN FINAL CON DIRECCIONES Y TODO CORREGIDO       */
         /* ============================================================== */
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         :root {
@@ -25,12 +26,6 @@
             --borde-stripe: #6772e5;
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a3a, #050d1a);
             --border-radius: 10px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
 
         html,
@@ -1523,7 +1518,7 @@
                         <div class="info-box direcciones">
                             🌍 Genera direcciones realistas de varios países. <strong>Totalmente GRATIS</strong>.
                             <br>
-                            Selecciona un país y el sistema te dará una dirección aleatoria con código postal, ciudad y teléfono.
+                            Selecciona un país y el sistema te dará una dirección aleatoria con código postal, ciudad, teléfono con código de país.
                             <br><br>
                             <strong>Países disponibles:</strong> 🇺🇸 EE.UU. | 🇪🇸 España | 🇲🇽 México | 🇨🇴 Colombia | 🇪🇨 Ecuador | 🇫🇷 Francia | 🇨🇱 Chile | 🇵🇪 Perú
                         </div>
@@ -1596,7 +1591,6 @@
 
                         <div style="margin-top:10px;">
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:5px;">📋 Todos los usuarios</div>
-                            <!-- Contenedor de lista de usuarios -->
                             <div id="listaUsuariosContainer" style="max-height:250px;overflow-y:auto;"></div>
                         </div>
                     </div>
@@ -2177,7 +2171,7 @@
         }
 
         // ================================================================
-        // 11. GENERADOR DE TARJETAS (YA EXISTENTE)
+        // 11. GENERADOR DE TARJETAS (GRATIS)
         // ================================================================
 
         function detectBrand(cardNumber) {
@@ -2882,199 +2876,177 @@
         }
 
         // ================================================================
-        // 15. DIRECCIONES (NUEVO)
+        // 15. DIRECCIONES CON TELÉFONOS VÁLIDOS
         // ================================================================
 
-        // BASE DE DATOS DE DIRECCIONES POR PAÍS (10 c/u)
+        // BASE DE DATOS DE DIRECCIONES POR PAÍS
         const direccionesDB = {
-            usa: [
-                { direccion: '123 Main St, Apt 4B', ciudad: 'New York', estado: 'NY', zip: '10001',
-                telefono: '(212) 555-0173' },
-                { direccion: '456 Oak Avenue', ciudad: 'Los Angeles', estado: 'CA', zip: '90001',
-                telefono: '(310) 555-0284' },
-                { direccion: '789 Pine Street', ciudad: 'Chicago', estado: 'IL', zip: '60601',
-                telefono: '(312) 555-0395' },
-                { direccion: '101 Maple Drive', ciudad: 'Houston', estado: 'TX', zip: '77001',
-                telefono: '(713) 555-0406' },
-                { direccion: '202 Cedar Lane', ciudad: 'Phoenix', estado: 'AZ', zip: '85001',
-                telefono: '(602) 555-0517' },
-                { direccion: '303 Birch Blvd', ciudad: 'Philadelphia', estado: 'PA', zip: '19101',
-                telefono: '(215) 555-0628' },
-                { direccion: '404 Walnut St', ciudad: 'San Antonio', estado: 'TX', zip: '78201',
-                telefono: '(210) 555-0739' },
-                { direccion: '505 Elm Street', ciudad: 'San Diego', estado: 'CA', zip: '92101',
-                telefono: '(619) 555-0840' },
-                { direccion: '606 Spruce Ave', ciudad: 'Dallas', estado: 'TX', zip: '75201',
-                telefono: '(214) 555-0951' },
-                { direccion: '707 Willow Way', ciudad: 'Austin', estado: 'TX', zip: '78701',
-                telefono: '(512) 555-1062' }
-            ],
-            espana: [
-                { direccion: 'Calle Gran Vía 45, 3ºA', ciudad: 'Madrid', estado: 'Madrid', zip: '28013',
-                telefono: '91 123 45 67' },
-                { direccion: 'Passeig de Gràcia 88', ciudad: 'Barcelona', estado: 'Barcelona', zip: '08008',
-                telefono: '93 234 56 78' },
-                { direccion: 'Calle San Vicente 12', ciudad: 'Valencia', estado: 'Valencia', zip: '46001',
-                telefono: '96 345 67 89' },
-                { direccion: 'Avenida de la Constitución 30', ciudad: 'Sevilla', estado: 'Sevilla', zip: '41001',
-                telefono: '95 456 78 90' },
-                { direccion: 'Calle Alfonso I 18', ciudad: 'Zaragoza', estado: 'Zaragoza', zip: '50001',
-                telefono: '97 567 89 01' },
-                { direccion: 'Paseo de Reding 20', ciudad: 'Málaga', estado: 'Málaga', zip: '29001',
-                telefono: '95 678 90 12' },
-                { direccion: 'Calle Trapería 15', ciudad: 'Murcia', estado: 'Murcia', zip: '30001',
-                telefono: '96 789 01 23' },
-                { direccion: 'Calle Mayor 70', ciudad: 'Palma de Mallorca', estado: 'Baleares', zip: '07001',
-                telefono: '97 890 12 34' },
-                { direccion: 'Calle León y Castillo 55', ciudad: 'Las Palmas', estado: 'Las Palmas', zip: '35001',
-                telefono: '92 901 23 45' },
-                { direccion: 'Gran Vía 42', ciudad: 'Bilbao', estado: 'Vizcaya', zip: '48001',
-                telefono: '94 012 34 56' }
-            ],
-            mexico: [
-                { direccion: 'Av. Reforma 222, Col. Juárez', ciudad: 'Ciudad de México', estado: 'CDMX', zip: '06600',
-                    telefono: '55 1234 5678' },
-                { direccion: 'Av. Vallarta 1500', ciudad: 'Guadalajara', estado: 'Jalisco', zip: '44100',
-                    telefono: '33 2345 6789' },
-                { direccion: 'Av. Constitución 2050', ciudad: 'Monterrey', estado: 'Nuevo León', zip: '64000',
-                    telefono: '81 3456 7890' },
-                { direccion: 'Blvd. 5 de Mayo 100', ciudad: 'Puebla', estado: 'Puebla', zip: '72000',
-                    telefono: '22 4567 8901' },
-                { direccion: 'Av. Hidalgo 300', ciudad: 'Toluca', estado: 'Estado de México', zip: '50000',
-                    telefono: '72 5678 9012' },
-                { direccion: 'Av. Revolución 1200', ciudad: 'Tijuana', estado: 'Baja California', zip: '22000',
-                    telefono: '66 6789 0123' },
-                { direccion: 'Blvd. Adolfo López Mateos 1800', ciudad: 'León', estado: 'Guanajuato', zip: '37000',
-                    telefono: '47 7890 1234' },
-                { direccion: 'Av. 5 de Febrero 500', ciudad: 'Querétaro', estado: 'Querétaro', zip: '76000',
-                    telefono: '44 8901 2345' },
-                { direccion: 'Calle 60 456', ciudad: 'Mérida', estado: 'Yucatán', zip: '97000',
-                telefono: '99 9012 3456' },
-                { direccion: 'Av. Madero 800', ciudad: 'Mexicali', estado: 'Baja California', zip: '21000',
-                    telefono: '68 0123 4567' }
-            ],
-            colombia: [
-                { direccion: 'Calle 85 #12-45, Chapinero', ciudad: 'Bogotá', estado: 'Cundinamarca', zip: '110111',
-                    telefono: '300 123 4567' },
-                { direccion: 'Carrera 43A #10-20', ciudad: 'Medellín', estado: 'Antioquia', zip: '050001',
-                    telefono: '310 234 5678' },
-                { direccion: 'Avenida 6N #15-30', ciudad: 'Cali', estado: 'Valle del Cauca', zip: '760001',
-                    telefono: '320 345 6789' },
-                { direccion: 'Calle 72 #45-10', ciudad: 'Barranquilla', estado: 'Atlántico', zip: '080001',
-                    telefono: '315 456 7890' },
-                { direccion: 'Carrera 3 #35-60', ciudad: 'Cartagena', estado: 'Bolívar', zip: '130001',
-                    telefono: '305 567 8901' },
-                { direccion: 'Avenida 0 #10-20', ciudad: 'Cúcuta', estado: 'Norte de Santander', zip: '540001',
-                    telefono: '318 678 9012' },
-                { direccion: 'Calle 36 #22-56', ciudad: 'Bucaramanga', estado: 'Santander', zip: '680001',
-                    telefono: '311 789 0123' },
-                { direccion: 'Carrera 8 #20-30', ciudad: 'Pereira', estado: 'Risaralda', zip: '660001',
-                    telefono: '314 890 1234' },
-                { direccion: 'Calle 2 #15-45', ciudad: 'Santa Marta', estado: 'Magdalena', zip: '470001',
-                    telefono: '305 901 2345' },
-                { direccion: 'Carrera 23 #10-56', ciudad: 'Manizales', estado: 'Caldas', zip: '170001',
-                    telefono: '312 012 3456' }
-            ],
-            ecuador: [
-                { direccion: 'Av. Amazonas N24-33 y Veintimilla', ciudad: 'Quito', estado: 'Pichincha', zip: '170130',
-                    telefono: '02 1234 567' },
-                { direccion: 'Av. 9 de Octubre 1020 y Los Ríos', ciudad: 'Guayaquil', estado: 'Guayas', zip: '090306',
-                    telefono: '04 2345 678' },
-                { direccion: 'Calle Larga 12-30 y Benigno Malo', ciudad: 'Cuenca', estado: 'Azuay', zip: '010101',
-                    telefono: '07 3456 789' },
-                { direccion: 'Av. Tsáchila 500', ciudad: 'Santo Domingo', estado: 'Santo Domingo de los Tsáchilas',
-                    zip: '230101', telefono: '02 4567 890' },
-                { direccion: 'Calle Bolívar 1234', ciudad: 'Ambato', estado: 'Tungurahua', zip: '180101',
-                    telefono: '03 5678 901' },
-                { direccion: 'Av. Universitaria 2020', ciudad: 'Portoviejo', estado: 'Manabí', zip: '130101',
-                    telefono: '05 6789 012' },
-                { direccion: 'Calle Sucre 567', ciudad: 'Machala', estado: 'El Oro', zip: '070101',
-                telefono: '07 7890 123' },
-                { direccion: 'Av. 6 de Diciembre 3456', ciudad: 'Loja', estado: 'Loja', zip: '110101',
-                    telefono: '07 8901 234' },
-                { direccion: 'Calle García Moreno 123', ciudad: 'Ibarra', estado: 'Imbabura', zip: '100101',
-                    telefono: '06 9012 345' },
-                { direccion: 'Av. Velasco Ibarra 456', ciudad: 'Riobamba', estado: 'Chimborazo', zip: '060101',
-                    telefono: '03 0123 456' }
-            ],
-            francia: [
-                { direccion: '15 Rue de la Paix', ciudad: 'Paris', estado: 'Île-de-France', zip: '75002',
-                    telefono: '01 23 45 67 89' },
-                { direccion: '25 La Canebière', ciudad: 'Marseille', estado: 'Provence-Alpes-Côte d\'Azur', zip: '13001',
-                    telefono: '04 91 23 45 67' },
-                { direccion: '30 Rue de la République', ciudad: 'Lyon', estado: 'Auvergne-Rhône-Alpes', zip: '69002',
-                    telefono: '04 78 34 56 78' },
-                { direccion: '45 Rue d\'Alsace-Lorraine', ciudad: 'Toulouse', estado: 'Occitanie', zip: '31000',
-                    telefono: '05 61 45 67 89' },
-                { direccion: '55 Avenue Jean Médecin', ciudad: 'Nice', estado: 'Provence-Alpes-Côte d\'Azur', zip: '06000',
-                    telefono: '04 93 56 78 90' },
-                { direccion: '12 Rue de la Marne', ciudad: 'Nantes', estado: 'Pays de la Loire', zip: '44000',
-                    telefono: '02 40 67 89 01' },
-                { direccion: '23 Rue des Francs-Bourgeois', ciudad: 'Strasbourg', estado: 'Grand Est', zip: '67000',
-                    telefono: '03 88 78 90 12' },
-                { direccion: '34 Rue de la Loge', ciudad: 'Montpellier', estado: 'Occitanie', zip: '34000',
-                    telefono: '04 67 89 01 23' },
-                { direccion: '56 Rue Saint-Rémi', ciudad: 'Bordeaux', estado: 'Nouvelle-Aquitaine', zip: '33000',
-                    telefono: '05 56 90 12 34' },
-                { direccion: '78 Rue Nationale', ciudad: 'Lille', estado: 'Hauts-de-France', zip: '59000',
-                    telefono: '03 20 01 23 45' }
-            ],
-            chile: [
-                { direccion: 'Av. Providencia 1234', ciudad: 'Santiago', estado: 'Región Metropolitana', zip: '7500000',
-                    telefono: '9 1234 5678' },
-                { direccion: 'Calle Esmeralda 456', ciudad: 'Puente Alto', estado: 'Región Metropolitana', zip: '8150000',
-                    telefono: '9 2345 6789' },
-                { direccion: 'Av. Ahumada 789', ciudad: 'Maipú', estado: 'Región Metropolitana', zip: '9250000',
-                    telefono: '9 3456 7890' },
-                { direccion: 'Calle Gran Avenida 321', ciudad: 'La Florida', estado: 'Región Metropolitana', zip: '8240000',
-                    telefono: '9 4567 8901' },
-                { direccion: 'Av. Santa Rosa 654', ciudad: 'San Bernardo', estado: 'Región Metropolitana', zip: '8270000',
-                    telefono: '9 5678 9012' },
-                { direccion: 'Calle Valparaíso 987', ciudad: 'Viña del Mar', estado: 'Valparaíso', zip: '2520000',
-                    telefono: '9 6789 0123' },
-                { direccion: 'Av. Brasil 147', ciudad: 'Valparaíso', estado: 'Valparaíso', zip: '2340000',
-                    telefono: '9 7890 1234' },
-                { direccion: 'Calle Manuel Montt 369', ciudad: 'Temuco', estado: 'La Araucanía', zip: '4780000',
-                    telefono: '9 8901 2345' },
-                { direccion: 'Av. Libertador 258', ciudad: 'Rancagua', estado: 'O\'Higgins', zip: '2820000',
-                    telefono: '9 9012 3456' },
-                { direccion: 'Calle Barros Arana 741', ciudad: 'Concepción', estado: 'Biobío', zip: '4030000',
-                    telefono: '9 0123 4567' }
-            ],
-            peru: [
-                { direccion: 'Av. Javier Prado Este 1234', ciudad: 'Lima', estado: 'Lima', zip: '15023',
-                    telefono: '987 654 321' },
-                { direccion: 'Calle San Francisco 456', ciudad: 'Arequipa', estado: 'Arequipa', zip: '04001',
-                    telefono: '984 567 890' },
-                { direccion: 'Av. España 789', ciudad: 'Trujillo', estado: 'La Libertad', zip: '13001',
-                    telefono: '981 234 567' },
-                { direccion: 'Calle Jose Galvez 321', ciudad: 'Chiclayo', estado: 'Lambayeque', zip: '14001',
-                    telefono: '978 901 234' },
-                { direccion: 'Av. Grau 654', ciudad: 'Piura', estado: 'Piura', zip: '20001', telefono: '973 456 789' },
-                { direccion: 'Calle Putumayo 147', ciudad: 'Iquitos', estado: 'Loreto', zip: '16001',
-                    telefono: '965 678 901' },
-                { direccion: 'Av. El Sol 258', ciudad: 'Huancayo', estado: 'Junín', zip: '12001',
-                telefono: '964 567 890' },
-                { direccion: 'Calle Santa Catalina 369', ciudad: 'Cusco', estado: 'Cusco', zip: '08001',
-                    telefono: '984 567 890' },
-                { direccion: 'Av. San Martín 741', ciudad: 'Pucallpa', estado: 'Ucayali', zip: '25001',
-                    telefono: '961 234 567' },
-                { direccion: 'Calle Arica 852', ciudad: 'Tacna', estado: 'Tacna', zip: '23001', telefono: '952 345 678' }
-            ]
+            usa: {
+                codigoPais: '+1',
+                longitudTelefono: 10,
+                direcciones: [
+                    { direccion: '123 Main St, Apt 4B', ciudad: 'New York', estado: 'NY', zip: '10001' },
+                    { direccion: '456 Oak Avenue', ciudad: 'Los Angeles', estado: 'CA', zip: '90001' },
+                    { direccion: '789 Pine Street', ciudad: 'Chicago', estado: 'IL', zip: '60601' },
+                    { direccion: '101 Maple Drive', ciudad: 'Houston', estado: 'TX', zip: '77001' },
+                    { direccion: '202 Cedar Lane', ciudad: 'Phoenix', estado: 'AZ', zip: '85001' },
+                    { direccion: '303 Birch Blvd', ciudad: 'Philadelphia', estado: 'PA', zip: '19101' },
+                    { direccion: '404 Walnut St', ciudad: 'San Antonio', estado: 'TX', zip: '78201' },
+                    { direccion: '505 Elm Street', ciudad: 'San Diego', estado: 'CA', zip: '92101' },
+                    { direccion: '606 Spruce Ave', ciudad: 'Dallas', estado: 'TX', zip: '75201' },
+                    { direccion: '707 Willow Way', ciudad: 'Austin', estado: 'TX', zip: '78701' }
+                ]
+            },
+            espana: {
+                codigoPais: '+34',
+                longitudTelefono: 9,
+                direcciones: [
+                    { direccion: 'Calle Gran Vía 45, 3ºA', ciudad: 'Madrid', estado: 'Madrid', zip: '28013' },
+                    { direccion: 'Passeig de Gràcia 88', ciudad: 'Barcelona', estado: 'Barcelona', zip: '08008' },
+                    { direccion: 'Calle San Vicente 12', ciudad: 'Valencia', estado: 'Valencia', zip: '46001' },
+                    { direccion: 'Avenida de la Constitución 30', ciudad: 'Sevilla', estado: 'Sevilla', zip: '41001' },
+                    { direccion: 'Calle Alfonso I 18', ciudad: 'Zaragoza', estado: 'Zaragoza', zip: '50001' },
+                    { direccion: 'Paseo de Reding 20', ciudad: 'Málaga', estado: 'Málaga', zip: '29001' },
+                    { direccion: 'Calle Trapería 15', ciudad: 'Murcia', estado: 'Murcia', zip: '30001' },
+                    { direccion: 'Calle Mayor 70', ciudad: 'Palma de Mallorca', estado: 'Baleares', zip: '07001' },
+                    { direccion: 'Calle León y Castillo 55', ciudad: 'Las Palmas', estado: 'Las Palmas', zip: '35001' },
+                    { direccion: 'Gran Vía 42', ciudad: 'Bilbao', estado: 'Vizcaya', zip: '48001' }
+                ]
+            },
+            mexico: {
+                codigoPais: '+52',
+                longitudTelefono: 10,
+                direcciones: [
+                    { direccion: 'Av. Reforma 222, Col. Juárez', ciudad: 'Ciudad de México', estado: 'CDMX', zip: '06600' },
+                    { direccion: 'Av. Vallarta 1500', ciudad: 'Guadalajara', estado: 'Jalisco', zip: '44100' },
+                    { direccion: 'Av. Constitución 2050', ciudad: 'Monterrey', estado: 'Nuevo León', zip: '64000' },
+                    { direccion: 'Blvd. 5 de Mayo 100', ciudad: 'Puebla', estado: 'Puebla', zip: '72000' },
+                    { direccion: 'Av. Hidalgo 300', ciudad: 'Toluca', estado: 'Estado de México', zip: '50000' },
+                    { direccion: 'Av. Revolución 1200', ciudad: 'Tijuana', estado: 'Baja California', zip: '22000' },
+                    { direccion: 'Blvd. Adolfo López Mateos 1800', ciudad: 'León', estado: 'Guanajuato', zip: '37000' },
+                    { direccion: 'Av. 5 de Febrero 500', ciudad: 'Querétaro', estado: 'Querétaro', zip: '76000' },
+                    { direccion: 'Calle 60 456', ciudad: 'Mérida', estado: 'Yucatán', zip: '97000' },
+                    { direccion: 'Av. Madero 800', ciudad: 'Mexicali', estado: 'Baja California', zip: '21000' }
+                ]
+            },
+            colombia: {
+                codigoPais: '+57',
+                longitudTelefono: 10,
+                direcciones: [
+                    { direccion: 'Calle 85 #12-45, Chapinero', ciudad: 'Bogotá', estado: 'Cundinamarca', zip: '110111' },
+                    { direccion: 'Carrera 43A #10-20', ciudad: 'Medellín', estado: 'Antioquia', zip: '050001' },
+                    { direccion: 'Avenida 6N #15-30', ciudad: 'Cali', estado: 'Valle del Cauca', zip: '760001' },
+                    { direccion: 'Calle 72 #45-10', ciudad: 'Barranquilla', estado: 'Atlántico', zip: '080001' },
+                    { direccion: 'Carrera 3 #35-60', ciudad: 'Cartagena', estado: 'Bolívar', zip: '130001' },
+                    { direccion: 'Avenida 0 #10-20', ciudad: 'Cúcuta', estado: 'Norte de Santander', zip: '540001' },
+                    { direccion: 'Calle 36 #22-56', ciudad: 'Bucaramanga', estado: 'Santander', zip: '680001' },
+                    { direccion: 'Carrera 8 #20-30', ciudad: 'Pereira', estado: 'Risaralda', zip: '660001' },
+                    { direccion: 'Calle 2 #15-45', ciudad: 'Santa Marta', estado: 'Magdalena', zip: '470001' },
+                    { direccion: 'Carrera 23 #10-56', ciudad: 'Manizales', estado: 'Caldas', zip: '170001' }
+                ]
+            },
+            ecuador: {
+                codigoPais: '+593',
+                longitudTelefono: 9,
+                direcciones: [
+                    { direccion: 'Av. Amazonas N24-33 y Veintimilla', ciudad: 'Quito', estado: 'Pichincha', zip: '170130' },
+                    { direccion: 'Av. 9 de Octubre 1020 y Los Ríos', ciudad: 'Guayaquil', estado: 'Guayas', zip: '090306' },
+                    { direccion: 'Calle Larga 12-30 y Benigno Malo', ciudad: 'Cuenca', estado: 'Azuay', zip: '010101' },
+                    { direccion: 'Av. Tsáchila 500', ciudad: 'Santo Domingo', estado: 'Santo Domingo de los Tsáchilas', zip: '230101' },
+                    { direccion: 'Calle Bolívar 1234', ciudad: 'Ambato', estado: 'Tungurahua', zip: '180101' },
+                    { direccion: 'Av. Universitaria 2020', ciudad: 'Portoviejo', estado: 'Manabí', zip: '130101' },
+                    { direccion: 'Calle Sucre 567', ciudad: 'Machala', estado: 'El Oro', zip: '070101' },
+                    { direccion: 'Av. 6 de Diciembre 3456', ciudad: 'Loja', estado: 'Loja', zip: '110101' },
+                    { direccion: 'Calle García Moreno 123', ciudad: 'Ibarra', estado: 'Imbabura', zip: '100101' },
+                    { direccion: 'Av. Velasco Ibarra 456', ciudad: 'Riobamba', estado: 'Chimborazo', zip: '060101' }
+                ]
+            },
+            francia: {
+                codigoPais: '+33',
+                longitudTelefono: 9,
+                direcciones: [
+                    { direccion: '15 Rue de la Paix', ciudad: 'Paris', estado: 'Île-de-France', zip: '75002' },
+                    { direccion: '25 La Canebière', ciudad: 'Marseille', estado: 'Provence-Alpes-Côte d\'Azur', zip: '13001' },
+                    { direccion: '30 Rue de la République', ciudad: 'Lyon', estado: 'Auvergne-Rhône-Alpes', zip: '69002' },
+                    { direccion: '45 Rue d\'Alsace-Lorraine', ciudad: 'Toulouse', estado: 'Occitanie', zip: '31000' },
+                    { direccion: '55 Avenue Jean Médecin', ciudad: 'Nice', estado: 'Provence-Alpes-Côte d\'Azur', zip: '06000' },
+                    { direccion: '12 Rue de la Marne', ciudad: 'Nantes', estado: 'Pays de la Loire', zip: '44000' },
+                    { direccion: '23 Rue des Francs-Bourgeois', ciudad: 'Strasbourg', estado: 'Grand Est', zip: '67000' },
+                    { direccion: '34 Rue de la Loge', ciudad: 'Montpellier', estado: 'Occitanie', zip: '34000' },
+                    { direccion: '56 Rue Saint-Rémi', ciudad: 'Bordeaux', estado: 'Nouvelle-Aquitaine', zip: '33000' },
+                    { direccion: '78 Rue Nationale', ciudad: 'Lille', estado: 'Hauts-de-France', zip: '59000' }
+                ]
+            },
+            chile: {
+                codigoPais: '+56',
+                longitudTelefono: 9,
+                direcciones: [
+                    { direccion: 'Av. Providencia 1234', ciudad: 'Santiago', estado: 'Región Metropolitana', zip: '7500000' },
+                    { direccion: 'Calle Esmeralda 456', ciudad: 'Puente Alto', estado: 'Región Metropolitana', zip: '8150000' },
+                    { direccion: 'Av. Ahumada 789', ciudad: 'Maipú', estado: 'Región Metropolitana', zip: '9250000' },
+                    { direccion: 'Calle Gran Avenida 321', ciudad: 'La Florida', estado: 'Región Metropolitana', zip: '8240000' },
+                    { direccion: 'Av. Santa Rosa 654', ciudad: 'San Bernardo', estado: 'Región Metropolitana', zip: '8270000' },
+                    { direccion: 'Calle Valparaíso 987', ciudad: 'Viña del Mar', estado: 'Valparaíso', zip: '2520000' },
+                    { direccion: 'Av. Brasil 147', ciudad: 'Valparaíso', estado: 'Valparaíso', zip: '2340000' },
+                    { direccion: 'Calle Manuel Montt 369', ciudad: 'Temuco', estado: 'La Araucanía', zip: '4780000' },
+                    { direccion: 'Av. Libertador 258', ciudad: 'Rancagua', estado: 'O\'Higgins', zip: '2820000' },
+                    { direccion: 'Calle Barros Arana 741', ciudad: 'Concepción', estado: 'Biobío', zip: '4030000' }
+                ]
+            },
+            peru: {
+                codigoPais: '+51',
+                longitudTelefono: 9,
+                direcciones: [
+                    { direccion: 'Av. Javier Prado Este 1234', ciudad: 'Lima', estado: 'Lima', zip: '15023' },
+                    { direccion: 'Calle San Francisco 456', ciudad: 'Arequipa', estado: 'Arequipa', zip: '04001' },
+                    { direccion: 'Av. España 789', ciudad: 'Trujillo', estado: 'La Libertad', zip: '13001' },
+                    { direccion: 'Calle Jose Galvez 321', ciudad: 'Chiclayo', estado: 'Lambayeque', zip: '14001' },
+                    { direccion: 'Av. Grau 654', ciudad: 'Piura', estado: 'Piura', zip: '20001' },
+                    { direccion: 'Calle Putumayo 147', ciudad: 'Iquitos', estado: 'Loreto', zip: '16001' },
+                    { direccion: 'Av. El Sol 258', ciudad: 'Huancayo', estado: 'Junín', zip: '12001' },
+                    { direccion: 'Calle Santa Catalina 369', ciudad: 'Cusco', estado: 'Cusco', zip: '08001' },
+                    { direccion: 'Av. San Martín 741', ciudad: 'Pucallpa', estado: 'Ucayali', zip: '25001' },
+                    { direccion: 'Calle Arica 852', ciudad: 'Tacna', estado: 'Tacna', zip: '23001' }
+                ]
+            }
         };
+
+        // Función para generar número de teléfono según país
+        function generarTelefono(codigoPais, longitud) {
+            let numero = '';
+            for (let i = 0; i < longitud; i++) {
+                numero += Math.floor(Math.random() * 10);
+            }
+            // Formatear según el país (mejora visual)
+            const formatos = {
+                '+1': (n) => `(${n.slice(0,3)}) ${n.slice(3,6)}-${n.slice(6,10)}`,
+                '+34': (n) => `${n.slice(0,3)} ${n.slice(3,5)} ${n.slice(5,7)} ${n.slice(7,9)}`,
+                '+52': (n) => `${n.slice(0,2)} ${n.slice(2,6)} ${n.slice(6,10)}`,
+                '+57': (n) => `${n.slice(0,3)} ${n.slice(3,6)} ${n.slice(6,10)}`,
+                '+593': (n) => `${n.slice(0,2)} ${n.slice(2,5)} ${n.slice(5,9)}`,
+                '+33': (n) => `${n.slice(0,1)} ${n.slice(1,3)} ${n.slice(3,5)} ${n.slice(5,7)} ${n.slice(7,9)}`,
+                '+56': (n) => `${n.slice(0,1)} ${n.slice(1,5)} ${n.slice(5,9)}`,
+                '+51': (n) => `${n.slice(0,3)} ${n.slice(3,6)} ${n.slice(6,9)}`
+            };
+            const formateador = formatos[codigoPais] || ((n) => n);
+            return `${codigoPais} ${formateador(numero)}`;
+        }
 
         function generarDireccion() {
             const paisSelect = document.getElementById('paisDireccion');
             const pais = paisSelect.value;
             const data = direccionesDB[pais];
 
-            if (!data || data.length === 0) {
+            if (!data || !data.direcciones || data.direcciones.length === 0) {
                 mostrarNotificacion('❌ No hay direcciones para este país.', 'error');
                 return;
             }
 
-            const randomIndex = Math.floor(Math.random() * data.length);
-            const entry = data[randomIndex];
+            const randomIndex = Math.floor(Math.random() * data.direcciones.length);
+            const entry = data.direcciones[randomIndex];
+
+            // Generar teléfono con código de país
+            const telefono = generarTelefono(data.codigoPais, data.longitudTelefono);
 
             // Nombres de países para mostrar
             const nombrePais = {
@@ -3087,7 +3059,6 @@
                 chile: '🇨🇱 Chile',
                 peru: '🇵🇪 Perú'
             };
-
             const paisNombre = nombrePais[pais] || pais;
 
             // Construir HTML del resultado
@@ -3098,7 +3069,7 @@
                         <div><span class="label">🏙️ Ciudad:</span> <span class="value">${entry.ciudad}</span></div>
                         <div><span class="label">📌 Estado/Región:</span> <span class="value">${entry.estado}</span></div>
                         <div><span class="label">📮 Código Postal:</span> <span class="value">${entry.zip}</span></div>
-                        <div><span class="label">📞 Teléfono:</span> <span class="value">${entry.telefono}</span></div>
+                        <div><span class="label">📞 Teléfono:</span> <span class="value" style="color:#88ddff;">${telefono}</span></div>
                         <div><span class="label">🌍 País:</span> <span class="value" style="color:#ffaa44;font-weight:bold;">${paisNombre}</span></div>
                     </div>
                     <div style="margin-top:8px;">
@@ -3115,12 +3086,12 @@
 
             // Guardar la dirección actual para copiar
             window._ultimaDireccion = `
-                📍 Dirección: ${entry.direccion}
-                🏙️ Ciudad: ${entry.ciudad}
-                📌 Estado/Región: ${entry.estado}
-                📮 Código Postal: ${entry.zip}
-                📞 Teléfono: ${entry.telefono}
-                🌍 País: ${paisNombre}
+📍 Dirección: ${entry.direccion}
+🏙️ Ciudad: ${entry.ciudad}
+📌 Estado/Región: ${entry.estado}
+📮 Código Postal: ${entry.zip}
+📞 Teléfono: ${telefono}
+🌍 País: ${paisNombre}
             `;
 
             mostrarNotificacion(`✅ Dirección generada para ${paisNombre}`, 'success');
@@ -3178,18 +3149,17 @@
                 document.getElementById('pasarelaLiveLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
                 document.getElementById('pasarelaMasivoLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
             }
-            if (tabName === 'direcciones') {
-                // Solo mostramos el panel
-            }
         }
 
         // ================================================================
         // 17. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - CON DIRECCIONES');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
-        console.log('📍 Generador de direcciones gratuito para 8 países');
+        console.log('📍 Generador de direcciones con teléfonos válidos por país');
+        console.log('💳 Pasarelas: Stripe, Zuora, Auth');
+        console.log('🎲 Generación de tarjetas GRATIS | LIVE: 2 créditos | Masivo: 7 créditos');
 
         cargarPromo();
         seleccionarPasarela('stripe');
