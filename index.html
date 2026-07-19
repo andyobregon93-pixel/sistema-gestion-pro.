@@ -23,14 +23,10 @@
             --texto-secundario: #88bbff;
             --borde-neon: #00ccff;
             --borde-stripe: #6772e5;
+            --borde-zuora: #00a3e0;
+            --sombra-difusa: 0 0 30px rgba(0, 180, 255, 0.12);
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a3a, #050d1a);
             --border-radius: 10px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
 
         html,
@@ -54,7 +50,7 @@
             backdrop-filter: blur(10px);
             border-radius: 20px;
             border: 1px solid rgba(0, 200, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0, 180, 255, 0.1);
+            box-shadow: var(--sombra-difusa);
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -62,8 +58,8 @@
             max-height: 98vh;
         }
 
-        /* ===== LOGIN / REGISTRO ===== */
-        #auth-screen {
+        /* ===== LOGIN ===== */
+        #login-screen {
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -73,17 +69,17 @@
             padding: 20px;
         }
 
-        .auth-box {
+        .login-box {
             background: rgba(15, 31, 58, 0.95);
             border: 2px solid var(--borde-neon);
             border-radius: 24px;
             padding: 30px 35px;
             width: 100%;
-            max-width: 420px;
-            box-shadow: 0 0 30px rgba(0, 180, 255, 0.1);
+            max-width: 400px;
+            box-shadow: var(--sombra-difusa);
         }
 
-        .auth-box h2 {
+        .login-box h2 {
             text-align: center;
             font-size: 1.6rem;
             background: linear-gradient(135deg, #66ddff, #0088cc);
@@ -93,53 +89,18 @@
             margin-bottom: 4px;
         }
 
-        .auth-box .subtitle {
+        .login-box .subtitle {
             text-align: center;
             color: var(--texto-secundario);
             font-size: 0.75rem;
             margin-bottom: 18px;
         }
 
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
-            border-bottom: 1px solid rgba(0, 200, 255, 0.15);
-            padding-bottom: 8px;
-        }
-
-        .auth-tab {
-            flex: 1;
-            background: transparent;
-            border: none;
-            color: var(--texto-secundario);
-            font-weight: 600;
-            padding: 6px;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: 0.2s;
-            font-size: 0.85rem;
-        }
-
-        .auth-tab.active {
-            color: #66ddff;
-            background: rgba(0, 100, 200, 0.1);
-            border-bottom: 2px solid var(--borde-neon);
-        }
-
-        .auth-panel {
-            display: none;
-        }
-
-        .auth-panel.active {
-            display: block;
-        }
-
-        .auth-box .form-group {
+        .login-box .form-group {
             margin-bottom: 12px;
         }
 
-        .auth-box label {
+        .login-box label {
             display: block;
             margin-bottom: 3px;
             color: var(--texto-secundario);
@@ -147,7 +108,7 @@
             font-size: 0.75rem;
         }
 
-        .auth-box input {
+        .login-box input {
             width: 100%;
             padding: 9px 12px;
             background-color: var(--bg-inputs);
@@ -158,13 +119,13 @@
             transition: 0.2s;
         }
 
-        .auth-box input:focus {
+        .login-box input:focus {
             border-color: var(--borde-neon);
-            box-shadow: 0 0 20px rgba(0, 200, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.12);
             outline: none;
         }
 
-        .auth-box .btn-block {
+        .login-box .btn-block {
             width: 100%;
             padding: 10px;
             font-size: 0.95rem;
@@ -174,41 +135,25 @@
             cursor: pointer;
             color: white;
             background: linear-gradient(135deg, #00ccff, #0088cc);
-            box-shadow: 0 0 20px rgba(0, 200, 255, 0.12);
+            box-shadow: 0 0 20px rgba(0, 200, 255, 0.15);
             transition: 0.15s;
             margin-top: 4px;
         }
 
-        .auth-box .btn-block:hover {
+        .login-box .btn-block:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.25);
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.3);
         }
 
-        .auth-box .btn-block:active {
+        .login-box .btn-block:active {
             transform: scale(0.97);
         }
 
-        .auth-box .footer-text {
+        .login-box .footer-text {
             text-align: center;
             margin-top: 10px;
             font-size: 0.65rem;
             color: #6688aa;
-        }
-
-        .auth-box .register-info {
-            background: rgba(0, 255, 136, 0.06);
-            border: 1px solid #00ff8833;
-            border-radius: 8px;
-            padding: 8px 12px;
-            margin-bottom: 14px;
-            font-size: 0.7rem;
-            color: #88ddff;
-            text-align: center;
-            line-height: 1.6;
-        }
-
-        .auth-box .register-info strong {
-            color: #00ff88;
         }
 
         /* ============================================================== */
@@ -260,27 +205,10 @@
             margin-top: -2px;
         }
 
-        .navbar .user-status {
-            font-size: 0.55rem;
-            padding: 1px 8px;
-            border-radius: 10px;
-            margin-left: 4px;
-        }
-
-        .navbar .user-status.active {
-            background: #00cc8833;
-            color: #00ff88;
-        }
-
-        .navbar .user-status.blocked {
-            background: #ff444433;
-            color: #ff4444;
-        }
-
         .navbar .nav-right {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
@@ -291,7 +219,7 @@
             font-weight: bold;
             color: white;
             font-size: 0.7rem;
-            box-shadow: 0 0 15px rgba(0, 150, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 150, 255, 0.15);
             white-space: nowrap;
         }
 
@@ -302,7 +230,7 @@
             font-weight: bold;
             color: white;
             font-size: 0.7rem;
-            box-shadow: 0 0 15px rgba(255, 136, 0, 0.1);
+            box-shadow: 0 0 15px rgba(255, 136, 0, 0.15);
             white-space: nowrap;
         }
 
@@ -378,15 +306,15 @@
             background: rgba(255, 136, 0, 0.08);
         }
 
-        .tab-btn.admin-tab {
-            color: #ff44aa;
+        .tab-btn.pasarela-tab {
+            color: #6772e5;
             font-weight: 700;
         }
 
-        .tab-btn.admin-tab.active {
-            color: #ff44aa;
-            border-bottom-color: #ff44aa;
-            background: rgba(255, 68, 170, 0.08);
+        .tab-btn.pasarela-tab.active {
+            color: #6772e5;
+            border-bottom-color: #6772e5;
+            background: rgba(103, 114, 229, 0.08);
         }
 
         /* ===== PANELES ===== */
@@ -453,11 +381,6 @@
             line-height: 1.5;
         }
 
-        .item-card .info-box.free {
-            border-color: #00ff88;
-            background: #00ff8806;
-        }
-
         .item-card .info-box.live {
             border-color: #ff44aa;
             background: #ff44aa06;
@@ -468,14 +391,14 @@
             background: #ff880006;
         }
 
-        .item-card .info-box.admin {
-            border-color: #ff44aa;
-            background: #ff44aa06;
+        .item-card .info-box.pasarela {
+            border-color: #6772e5;
+            background: #6772e506;
         }
 
-        .item-card .info-box.promo {
-            border-color: #ffaa44;
-            background: #ffaa4406;
+        .item-card .info-box.free {
+            border-color: #00ff88;
+            background: #00ff8806;
         }
 
         /* ===== FORMULARIOS ===== */
@@ -509,6 +432,11 @@
             border-color: var(--borde-neon);
             box-shadow: 0 0 15px rgba(0, 200, 255, 0.08);
             outline: none;
+        }
+
+        .form-group select option {
+            background: #0a1a3a;
+            color: #d4e4ff;
         }
 
         .flex-row {
@@ -545,55 +473,62 @@
 
         .btn-block.btn-start {
             background: linear-gradient(135deg, #00ccff, #0088cc);
-            box-shadow: 0 0 15px rgba(0, 200, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 200, 255, 0.12);
+        }
+
+        .btn-block.btn-start:hover {
+            box-shadow: 0 0 25px rgba(0, 200, 255, 0.25);
         }
 
         .btn-block.btn-save {
             background: linear-gradient(135deg, #ff8800, #cc6600);
-            box-shadow: 0 0 15px rgba(255, 136, 0, 0.1);
+            box-shadow: 0 0 15px rgba(255, 136, 0, 0.12);
         }
 
         .btn-block.btn-live {
             background: linear-gradient(135deg, #ff44aa, #cc0088);
-            box-shadow: 0 0 20px rgba(255, 68, 170, 0.12);
+            box-shadow: 0 0 20px rgba(255, 68, 170, 0.15);
             animation: pulse-live 2s ease-in-out infinite;
         }
 
         .btn-block.btn-massive {
             background: linear-gradient(135deg, #ff8800, #cc5500);
-            box-shadow: 0 0 20px rgba(255, 136, 0, 0.12);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.15);
             animation: pulse-massive 2s ease-in-out infinite;
         }
 
-        .btn-block.btn-danger {
-            background: linear-gradient(135deg, #ff4444, #cc0000);
+        .btn-block.btn-stripe {
+            background: linear-gradient(135deg, #6772e5, #5469d4);
+            box-shadow: 0 0 20px rgba(103, 114, 229, 0.15);
         }
 
-        .btn-block.btn-success {
-            background: linear-gradient(135deg, #00cc88, #008866);
+        .btn-block.btn-zuora {
+            background: linear-gradient(135deg, #00a3e0, #0077b3);
+            box-shadow: 0 0 20px rgba(0, 163, 224, 0.15);
         }
 
-        .btn-block.btn-warning {
-            background: linear-gradient(135deg, #ffaa44, #cc8800);
+        .btn-block.btn-auth {
+            background: linear-gradient(135deg, #00cc88, #009966);
+            box-shadow: 0 0 20px rgba(0, 204, 136, 0.15);
         }
 
         @keyframes pulse-live {
             0%,
             100% {
-                box-shadow: 0 0 15px rgba(255, 68, 170, 0.12);
+                box-shadow: 0 0 15px rgba(255, 68, 170, 0.15);
             }
             50% {
-                box-shadow: 0 0 30px rgba(255, 68, 170, 0.25);
+                box-shadow: 0 0 30px rgba(255, 68, 170, 0.35);
             }
         }
 
         @keyframes pulse-massive {
             0%,
             100% {
-                box-shadow: 0 0 15px rgba(255, 136, 0, 0.12);
+                box-shadow: 0 0 15px rgba(255, 136, 0, 0.15);
             }
             50% {
-                box-shadow: 0 0 30px rgba(255, 136, 0, 0.25);
+                box-shadow: 0 0 30px rgba(255, 136, 0, 0.35);
             }
         }
 
@@ -609,6 +544,7 @@
             min-width: 80px;
         }
 
+        /* ===== BOTONES PEQUEÑOS ===== */
         .btn-small {
             padding: 3px 8px;
             font-size: 0.6rem;
@@ -642,10 +578,6 @@
 
         .btn-small.btn-success {
             background: #00cc88;
-        }
-
-        .btn-small.btn-warning {
-            background: #ff8800;
         }
 
         /* ===== RESULTADOS ===== */
@@ -774,12 +706,6 @@
             font-weight: bold;
         }
 
-        .info-badge.blocked-tag {
-            background: #ff4444;
-            color: #fff;
-            font-weight: bold;
-        }
-
         /* ===== HISTORIAL ===== */
         .credit-history {
             max-height: 100px;
@@ -809,75 +735,303 @@
             border-bottom: none;
         }
 
-        /* ===== USUARIOS LISTA ===== */
-        .user-list-item {
-            padding: 6px 10px;
-            border-bottom: 1px solid #1a3a5a;
+        /* ===== RESULTADO LIVE ===== */
+        .live-result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3px 10px;
+            font-size: 0.78rem;
+        }
+
+        .live-result-grid .label {
+            color: #88bbff;
+        }
+
+        .live-result-grid .value {
+            color: #d4e4ff;
+            font-weight: 600;
+        }
+
+        .detail-list {
+            margin: 3px 0 0 16px;
+            color: #c0d8f0;
+            font-size: 0.75rem;
+        }
+
+        .detail-list li {
+            padding: 1px 0;
+        }
+
+        /* ===== RESULTADO MASIVO ===== */
+        .massive-result-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2px;
+            font-size: 0.7rem;
+            max-height: 220px;
+            overflow-y: auto;
+        }
+
+        .massive-result-grid .massive-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 3px 6px;
+            border-radius: 6px;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 2px;
         }
 
-        .user-list-item .user-email {
+        .massive-result-grid .massive-item.valid {
+            background: rgba(0, 255, 136, 0.05);
+            border-left: 3px solid #00ff88;
+        }
+
+        .massive-result-grid .massive-item.invalid {
+            background: rgba(255, 68, 68, 0.04);
+            border-left: 3px solid #ff4444;
+        }
+
+        .massive-result-grid .massive-item.pending {
+            background: rgba(255, 170, 68, 0.04);
+            border-left: 3px solid #ffaa44;
+        }
+
+        .massive-result-grid .massive-item .number {
+            font-family: 'Courier New', monospace;
+            color: #88ddff;
+            font-weight: bold;
+            font-size: 0.65rem;
+        }
+
+        .massive-result-grid .massive-item .result {
+            font-weight: bold;
+            font-size: 0.6rem;
+            padding: 1px 6px;
+            border-radius: 8px;
+        }
+
+        .massive-result-grid .massive-item .result.valid {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.08);
+        }
+
+        .massive-result-grid .massive-item .result.invalid {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.08);
+        }
+
+        .massive-result-grid .massive-item .result.pending {
+            color: #ffaa44;
+            background: rgba(255, 170, 68, 0.08);
+        }
+
+        .massive-result-grid .massive-item .info-badge-sm {
+            font-size: 0.5rem;
+            padding: 1px 5px;
+            border-radius: 4px;
+            background: #1a4a7a;
+            color: #88bbff;
+            white-space: nowrap;
+        }
+
+        .massive-summary {
+            display: flex;
+            gap: 10px;
+            padding: 4px 8px;
+            border-radius: 6px;
+            background: rgba(0, 0, 0, 0.15);
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .massive-summary .stat {
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .massive-summary .stat .num {
+            font-size: 0.85rem;
+        }
+
+        .massive-summary .stat.valid .num {
+            color: #00ff88;
+        }
+
+        .massive-summary .stat.invalid .num {
+            color: #ff4444;
+        }
+
+        .massive-summary .stat.total .num {
+            color: #66ddff;
+        }
+
+        .massive-item .copy-btn {
+            padding: 1px 6px;
+            font-size: 0.48rem;
+            border: none;
+            border-radius: 4px;
+            background: #0088cc;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+
+        .massive-item .copy-btn:hover {
+            background: #00aaff;
+            transform: scale(1.05);
+        }
+
+        /* ===== PASARELA ===== */
+        .pasarela-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .pasarela-card {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+            text-align: center;
+            border: 1px solid #1a4a7a;
+            transition: 0.2s;
+        }
+
+        .pasarela-card:hover {
+            border-color: var(--borde-neon);
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .pasarela-card .icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .pasarela-card .name {
+            font-weight: 600;
             font-size: 0.75rem;
             color: #88ddff;
         }
 
-        .user-list-item .user-info {
+        .pasarela-card .status {
             font-size: 0.6rem;
             color: #6688aa;
+            margin-top: 2px;
         }
 
-        .user-list-item .user-actions {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
-        .user-status-badge {
-            font-size: 0.55rem;
-            padding: 1px 8px;
-            border-radius: 10px;
-        }
-
-        .user-status-badge.active {
-            background: #00cc8833;
+        .pasarela-card .status.active {
             color: #00ff88;
         }
 
-        .user-status-badge.blocked {
-            background: #ff444433;
+        /* ===== SPINNER ===== */
+        .spinner {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 0.7s linear infinite;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== SCROLL ===== */
+        ::-webkit-scrollbar {
+            width: 3px;
+            height: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #1a4a7a;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        /* ===== UTILIDADES ===== */
+        .hidden {
+            display: none !important;
+        }
+
+        .mt-8 {
+            margin-top: 8px;
+        }
+
+        .mb-8 {
+            margin-bottom: 8px;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-success {
+            color: #00ff88;
+        }
+
+        .text-danger {
             color: #ff4444;
         }
 
-        /* ===== BOTÓN PEDIR CRÉDITOS ===== */
-        .btn-pedir-creditos {
-            background: linear-gradient(135deg, #25D366, #128C7E);
-            color: white;
+        .text-warning {
+            color: #ffaa44;
+        }
+
+        .text-muted {
+            color: #6688aa;
+        }
+
+        .text-small {
+            font-size: 0.7rem;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .btn-massive-lg {
+            padding: 8px 16px;
+            font-size: 0.8rem;
+            background: linear-gradient(135deg, #ff8800, #cc5500);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.15);
+            animation: pulse-massive 2s ease-in-out infinite;
             border: none;
-            padding: 10px 20px;
             border-radius: 25px;
-            font-weight: bold;
-            font-size: 0.85rem;
+            color: white;
+            font-weight: 700;
             cursor: pointer;
             transition: 0.15s;
-            box-shadow: 0 0 20px rgba(37, 211, 102, 0.2);
-            width: 100%;
+            min-width: 150px;
         }
 
-        .btn-pedir-creditos:hover {
+        .btn-massive-lg:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(37, 211, 102, 0.35);
+            box-shadow: 0 0 30px rgba(255, 136, 0, 0.3);
         }
 
-        .btn-pedir-creditos:active {
+        .btn-massive-lg:active {
             transform: scale(0.97);
         }
 
-        .btn-pedir-creditos::before {
-            content: "📱 ";
+        .btn-massive-lg:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+            animation: none !important;
         }
 
         /* ============================================================== */
@@ -888,40 +1042,74 @@
             body {
                 padding: 8px;
             }
+
             .app-container {
                 max-height: 100vh;
                 min-height: 95vh;
                 border-radius: 14px;
             }
+
             .panels-container {
                 padding: 8px 10px 12px 10px;
             }
+
             .navbar {
                 padding: 6px 12px;
                 min-height: 44px;
             }
+
             .navbar .logo-title {
                 font-size: 1rem;
             }
+
             .tabs-container {
                 padding: 2px 6px;
             }
+
             .tab-btn {
                 padding: 5px 10px;
                 font-size: 0.65rem;
             }
+
+            .pasarela-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
             .flex-row .form-group {
                 min-width: 55px;
             }
+
+            .live-result-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .generated-cards .card-item {
+                font-size: 0.65rem;
+                padding: 3px 4px;
+            }
+
+            .massive-result-grid .massive-item {
+                font-size: 0.6rem;
+                padding: 2px 4px;
+            }
+
             .btn-block {
                 font-size: 0.7rem;
                 padding: 6px 10px;
                 min-width: 70px;
             }
-            .auth-box {
+
+            .btn-massive-lg {
+                font-size: 0.7rem;
+                padding: 6px 12px;
+                min-width: 110px;
+            }
+
+            .login-box {
                 padding: 20px 18px;
             }
-            .auth-box h2 {
+
+            .login-box h2 {
                 font-size: 1.3rem;
             }
         }
@@ -930,97 +1118,198 @@
             body {
                 padding: 4px;
             }
+
             .app-container {
                 border-radius: 10px;
                 max-height: 100vh;
                 min-height: 98vh;
             }
+
             .navbar {
                 padding: 4px 8px;
                 min-height: 38px;
             }
+
             .navbar .logo-title {
                 font-size: 0.8rem;
             }
+
             .navbar .credits-display,
             .navbar .days-display {
                 font-size: 0.55rem;
                 padding: 2px 8px;
             }
+
             .navbar .btn-salir {
                 font-size: 0.55rem;
                 padding: 2px 8px;
             }
-            .tab-btn {
-                padding: 4px 6px;
-                font-size: 0.55rem;
+
+            .navbar .user-info {
+                font-size: 0.5rem;
             }
+
             .panels-container {
                 padding: 4px 6px 8px 6px;
             }
+
             .panel h3 {
                 font-size: 0.8rem;
                 margin-bottom: 6px;
             }
+
+            .tab-btn {
+                padding: 4px 6px;
+                font-size: 0.55rem;
+            }
+
             .item-card {
                 padding: 6px 8px;
                 margin-bottom: 6px;
             }
+
             .item-card .info-box {
                 font-size: 0.6rem;
                 padding: 4px 6px;
             }
+
             .form-group {
                 margin-bottom: 4px;
             }
+
             .form-group label {
                 font-size: 0.55rem;
             }
+
             .form-group input {
                 font-size: 0.7rem;
                 padding: 5px 6px;
             }
+
             .flex-row {
                 gap: 3px;
             }
+
             .flex-row .form-group {
                 min-width: 40px;
             }
+
             .btn-block {
                 font-size: 0.6rem;
                 padding: 5px 8px;
                 min-width: 50px;
                 border-radius: 18px;
             }
+
+            .flex-row .btn-block {
+                min-width: 40px;
+            }
+
+            .btn-massive-lg {
+                font-size: 0.6rem;
+                padding: 5px 10px;
+                min-width: 80px;
+            }
+
             .generated-cards {
                 max-height: 160px;
                 padding: 4px 6px;
             }
+
             .generated-cards .card-item {
                 font-size: 0.55rem;
                 padding: 2px 3px;
             }
+
             .generated-cards .card-number {
                 font-size: 0.55rem;
             }
+
             .info-badge {
                 font-size: 0.45rem;
                 padding: 1px 4px;
             }
+
             .result-box {
                 max-height: 200px;
                 padding: 6px 8px;
                 font-size: 0.65rem;
             }
-            .auth-box {
+
+            .live-result-grid {
+                font-size: 0.65rem;
+                gap: 2px 4px;
+            }
+
+            .detail-list {
+                font-size: 0.6rem;
+                margin-left: 10px;
+            }
+
+            .massive-result-grid {
+                max-height: 150px;
+                font-size: 0.55rem;
+            }
+
+            .massive-result-grid .massive-item {
+                padding: 2px 3px;
+            }
+
+            .massive-result-grid .massive-item .number {
+                font-size: 0.55rem;
+            }
+
+            .massive-summary {
+                gap: 4px;
+                padding: 3px 5px;
+            }
+
+            .massive-summary .stat {
+                font-size: 0.55rem;
+            }
+
+            .massive-summary .stat .num {
+                font-size: 0.65rem;
+            }
+
+            .pasarela-grid {
+                grid-template-columns: 1fr;
+                gap: 4px;
+            }
+
+            .pasarela-card {
+                padding: 6px 8px;
+            }
+
+            .pasarela-card .icon {
+                font-size: 1.2rem;
+            }
+
+            .pasarela-card .name {
+                font-size: 0.65rem;
+            }
+
+            .credit-history {
+                max-height: 60px;
+                padding: 3px 5px;
+            }
+
+            .credit-item {
+                font-size: 0.55rem;
+                padding: 2px 0;
+            }
+
+            .login-box {
                 padding: 16px 14px;
             }
-            .auth-box h2 {
+
+            .login-box h2 {
                 font-size: 1.1rem;
             }
-            .btn-pedir-creditos {
-                font-size: 0.7rem;
-                padding: 8px 14px;
+
+            .btn-small {
+                font-size: 0.45rem;
+                padding: 2px 5px;
             }
         }
     </style>
@@ -1032,56 +1321,25 @@
     <!-- ============================================================== -->
     <div class="app-container">
 
-        <!-- ===== AUTH (LOGIN / REGISTRO) ===== -->
-        <div id="auth-screen">
-            <div class="auth-box">
+        <!-- ===== LOGIN ===== -->
+        <div id="login-screen">
+            <div class="login-box">
                 <h2>⚡ SYS ANDY PRO</h2>
                 <div class="subtitle">Generador + Checker LIVE de Tarjetas</div>
 
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-auth="login">🔐 Iniciar Sesión</button>
-                    <button class="auth-tab" data-auth="register">📝 Registrarse</button>
+                <div class="form-group">
+                    <label>Usuario o Correo</label>
+                    <input type="text" id="loginEmail" placeholder="usuario@ejemplo.com">
+                </div>
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input type="password" id="loginPass" placeholder="••••••••">
                 </div>
 
-                <!-- ===== LOGIN ===== -->
-                <div id="auth-login" class="auth-panel active">
-                    <div class="form-group">
-                        <label>Usuario o Correo</label>
-                        <input type="text" id="loginEmail" placeholder="usuario@ejemplo.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña</label>
-                        <input type="password" id="loginPass" placeholder="••••••••">
-                    </div>
-                    <button class="btn-block" onclick="procesarLogin()">INGRESAR</button>
-                    <div class="footer-text">
-                        ¿No tienes cuenta? <a href="#" onclick="cambiarAuthTab('register')" style="color:#66ddff;">Regístrate</a>
-                    </div>
-                </div>
+                <button class="btn-block" onclick="procesarLogin()">INGRESAR</button>
 
-                <!-- ===== REGISTRO ===== -->
-                <div id="auth-register" class="auth-panel">
-                    <div class="register-info">
-                        🎁 <strong>REGALO DE BIENVENIDA</strong><br>
-                        Al registrarte obtendrás <strong id="promoDaysDisplay">7</strong> días gratis y
-                        <strong id="promoCreditsDisplay">50</strong> créditos para usar en LIVE.
-                    </div>
-                    <div class="form-group">
-                        <label>Correo Electrónico</label>
-                        <input type="email" id="regEmail" placeholder="usuario@ejemplo.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña</label>
-                        <input type="password" id="regPass" placeholder="mínimo 4 caracteres">
-                    </div>
-                    <div class="form-group">
-                        <label>Confirmar Contraseña</label>
-                        <input type="password" id="regPassConfirm" placeholder="repita contraseña">
-                    </div>
-                    <button class="btn-block btn-success" onclick="procesarRegistro()">📝 REGISTRARSE</button>
-                    <div class="footer-text">
-                        ¿Ya tienes cuenta? <a href="#" onclick="cambiarAuthTab('login')" style="color:#66ddff;">Inicia sesión</a>
-                    </div>
+                <div class="footer-text">
+                    Contacta al administrador para crear tu cuenta
                 </div>
             </div>
         </div>
@@ -1095,10 +1353,7 @@
             <div class="navbar">
                 <div class="logo-area">
                     <div class="logo-title">SYS ANDY PRO</div>
-                    <div class="user-info" id="userDisplay">
-                        Cargando...
-                        <span class="user-status active" id="userStatusBadge">✅ Activo</span>
-                    </div>
+                    <div class="user-info" id="userDisplay">Cargando...</div>
                 </div>
                 <div class="nav-right">
                     <span class="days-display" id="daysDisplay">📅 0 días</span>
@@ -1112,8 +1367,9 @@
                 <button class="tab-btn active" onclick="switchTab('generator')">🎲 GENERADOR</button>
                 <button class="tab-btn" onclick="switchTab('live')">🔴 LIVE</button>
                 <button class="tab-btn massive-tab" onclick="switchTab('massive')">📊 MASIVO</button>
-                <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
+                <button class="tab-btn pasarela-tab" onclick="switchTab('pasarela')">💳 PASARELA</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
+                <button class="tab-btn" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👥 ADMIN</button>
             </div>
 
             <!-- PANELS -->
@@ -1258,7 +1514,7 @@
                         </div>
 
                         <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                            <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn" style="flex:1;min-width:120px;">
+                            <button class="btn-massive-lg" onclick="liveMasivoDesdePanel()" id="massiveBtn">
                                 📊 LIVE MASIVO (7 créditos)
                             </button>
                             <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled style="flex:1;min-width:100px;">
@@ -1285,50 +1541,55 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: ADMIN ===== -->
+                <!-- ===== PANEL: PASARELA (Stripe/Zuora/Auth) ===== -->
                 <!-- ========================================================== -->
-                <div id="panel-admins" class="panel">
-                    <h3>👑 PANEL DE ADMINISTRACIÓN</h3>
+                <div id="panel-pasarela" class="panel">
+                    <h3>💳 PASARELA DE PAGO - STRIPE / ZUORA / AUTH</h3>
 
-                    <!-- Configuración de Promo -->
-                    <div class="item-card" style="border:2px solid #ffaa44;">
-                        <div class="info-box promo">
-                            🎁 <strong>CONFIGURAR REGALO DE BIENVENIDA</strong><br>
-                            Los nuevos usuarios reciben automáticamente estos valores al registrarse.
+                    <div class="item-card">
+                        <div class="info-box pasarela">
+                            ⚡ <strong>Pasarelas disponibles</strong> - Todas las LIVE son muy buenas.
+                            <br>
+                            💳 <strong>Stripe</strong> - API de pagos más usada
+                            <br>
+                            📊 <strong>Zuora</strong> - Plataforma de suscripciones
+                            <br>
+                            🔐 <strong>Auth</strong> - Autorización de pagos
                         </div>
-                        <div class="flex-row">
-                            <div class="form-group">
-                                <label>📅 Días de regalo</label>
-                                <input type="number" id="promoDays" value="7" min="0" max="365">
+
+                        <div class="pasarela-grid">
+                            <div class="pasarela-card" onclick="seleccionarPasarela('stripe')">
+                                <span class="icon">💳</span>
+                                <div class="name">Stripe</div>
+                                <div class="status active">✅ Activa</div>
                             </div>
-                            <div class="form-group">
-                                <label>💎 Créditos de regalo</label>
-                                <input type="number" id="promoCredits" value="50" min="0" max="9999">
+                            <div class="pasarela-card" onclick="seleccionarPasarela('zuora')">
+                                <span class="icon">📊</span>
+                                <div class="name">Zuora</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                            <div class="pasarela-card" onclick="seleccionarPasarela('auth')">
+                                <span class="icon">🔐</span>
+                                <div class="name">Auth</div>
+                                <div class="status active">✅ Activa</div>
                             </div>
                         </div>
-                        <button class="btn-block btn-warning" onclick="guardarPromo()">💾 GUARDAR PROMOCIÓN</button>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;">
-                            📌 Valor actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos
+
+                        <div style="margin-top:10px;padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:8px;border:1px solid #1a4a7a;">
+                            <div style="color:#88bbff;font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionada" style="color:#66ddff;">Stripe</strong></div>
+                            <div style="color:#6688aa;font-size:0.65rem;margin-top:3px;">✅ Todas las pasarelas están configuradas y activas</div>
                         </div>
                     </div>
 
-                    <!-- Gestión de Usuarios -->
-                    <div class="item-card" style="border:2px solid #ff44aa;">
-                        <div class="info-box admin">
-                            👥 <strong>GESTIÓN DE USUARIOS</strong><br>
-                            Bloquear/Desbloquear usuarios, ver sus datos y gestionar créditos/días.
+                    <div class="item-card" style="border-color:#6772e5;">
+                        <div style="color:#88ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Estado de pasarelas</div>
+                        <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:0.75rem;">
+                            <span>💳 Stripe: <span style="color:#00ff88;">✅ Conectada</span></span>
+                            <span>📊 Zuora: <span style="color:#00ff88;">✅ Conectada</span></span>
+                            <span>🔐 Auth: <span style="color:#00ff88;">✅ Conectada</span></span>
                         </div>
-
-                        <div class="form-group">
-                            <label>🔍 Buscar usuario por email</label>
-                            <input type="text" id="searchUserInput" placeholder="usuario@ejemplo.com" oninput="buscarUsuario()">
-                        </div>
-
-                        <div id="userSearchResult" style="margin-top:6px;"></div>
-
-                        <div style="margin-top:10px;">
-                            <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:5px;">📋 Todos los usuarios</div>
-                            <div id="listaUsuariosContainer" style="max-height:250px;overflow-y:auto;"></div>
+                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;">
+                            ⚡ Todas las pasarelas están funcionando correctamente
                         </div>
                     </div>
                 </div>
@@ -1357,22 +1618,57 @@
                         </div>
                     </div>
 
-                    <!-- Botón Pedir Créditos -->
-                    <div class="item-card" style="border:2px solid #25D366;">
-                        <div style="color:#88ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📱 ¿Sin créditos?</div>
-                        <button class="btn-pedir-creditos" onclick="pedirCreditosWhatsApp()">
-                            PEDIR CRÉDITOS AL ADMIN
-                        </button>
-                        <div style="margin-top:4px;color:#6688aa;font-size:0.55rem;text-align:center;">
-                            📲 Enviarás un mensaje directo al administrador por WhatsApp
-                        </div>
-                    </div>
-
                     <div class="item-card">
                         <div style="color:#66ddff;font-weight:600;margin-bottom:5px;font-size:0.8rem;">📋 Historial</div>
                         <div id="creditHistory" class="credit-history">
                             <p style="color:#6688aa;">Sin movimientos</p>
                         </div>
+                    </div>
+
+                    <div id="adminCreditPanel" style="display:none;" class="item-card" style="border:2px solid #00ff88;">
+                        <div style="color:#00ff88;font-weight:600;margin-bottom:6px;font-size:0.8rem;">👑 Admin - Gestionar</div>
+                        <div class="form-group">
+                            <label>Usuario</label>
+                            <input type="text" id="creditUserEmail" placeholder="usuario@ejemplo.com">
+                        </div>
+                        <div class="flex-row">
+                            <input type="number" id="creditAmount" placeholder="Créditos" style="flex:1;min-width:60px;background:var(--bg-inputs);border:2px solid #1a4a7a;border-radius:var(--border-radius);color:#d4e4ff;padding:6px 8px;">
+                            <button class="btn-small btn-success" onclick="agregarCreditos()">➕</button>
+                            <button class="btn-small btn-danger" onclick="restarCreditos()">➖</button>
+                        </div>
+                        <div class="flex-row mt-8">
+                            <input type="number" id="daysAmount" placeholder="Días" style="flex:1;min-width:60px;background:var(--bg-inputs);border:2px solid #1a4a7a;border-radius:var(--border-radius);color:#d4e4ff;padding:6px 8px;">
+                            <button class="btn-small btn-success" onclick="agregarDias()">📅 +Días</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: ADMIN ===== -->
+                <!-- ========================================================== -->
+                <div id="panel-admins" class="panel">
+                    <h3>👥 Panel de Administración</h3>
+
+                    <div class="item-card">
+                        <div style="color:#66ddff;font-weight:600;margin-bottom:6px;font-size:0.8rem;">➕ Crear nuevo usuario</div>
+                        <div class="form-group">
+                            <label>Usuario o Correo</label>
+                            <input type="text" id="newAdminEmail" placeholder="usuario@ejemplo.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input type="text" id="newAdminPass" placeholder="contraseña">
+                        </div>
+                        <div class="flex-row">
+                            <input type="number" id="newAdminDays" placeholder="Días iniciales" style="flex:1;min-width:60px;background:var(--bg-inputs);border:2px solid #1a4a7a;border-radius:var(--border-radius);color:#d4e4ff;padding:6px 8px;">
+                            <input type="number" id="newAdminCredits" placeholder="Créditos" style="flex:1;min-width:60px;background:var(--bg-inputs);border:2px solid #1a4a7a;border-radius:var(--border-radius);color:#d4e4ff;padding:6px 8px;">
+                        </div>
+                        <button class="btn-block btn-start" onclick="crearUsuarioFirebase()">⚡ CREAR USUARIO</button>
+                    </div>
+
+                    <div class="item-card">
+                        <div style="color:#66ddff;font-weight:600;margin-bottom:5px;font-size:0.8rem;">📋 Usuarios Activos</div>
+                        <div id="listaUsuariosContainer" style="max-height:160px;overflow-y:auto;"></div>
                     </div>
                 </div>
 
@@ -1411,11 +1707,9 @@
         let usernameClave = "";
         let currentCredits = 0;
         let currentDays = 0;
-        let currentUserBlocked = false;
         let generatedCardsList = [];
         let massiveResults = [];
-        let promoDias = 7;
-        let promoCreditos = 50;
+        let pasarelaSeleccionada = 'stripe';
 
         // ================================================================
         // 3. UTILIDADES
@@ -1445,206 +1739,46 @@
         }
 
         // ================================================================
-        // 4. AUTH - TABS
+        // 4. DETECCIÓN DE MARCA
         // ================================================================
-        document.querySelectorAll('.auth-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const target = this.getAttribute('data-auth');
-                document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
-                document.getElementById('auth-' + target).classList.add('active');
-            });
-        });
 
-        function cambiarAuthTab(tab) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.querySelector(`.auth-tab[data-auth="${tab}"]`).classList.add('active');
-            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
-            document.getElementById('auth-' + tab).classList.add('active');
+        function detectBrand(cardNumber) {
+            const num = String(cardNumber).replace(/\s/g, '');
+            const patterns = {
+                'Visa': /^4/,
+                'Mastercard': /^(5[1-5]|2[2-7])/,
+                'American Express': /^(34|37)/,
+                'Discover': /^(6011|65|64[4-9]|622)/,
+                'JCB': /^35/,
+                'Diners Club': /^(30|36|38|39)/
+            };
+            for (const [brand, pattern] of Object.entries(patterns)) {
+                if (pattern.test(num)) return brand;
+            }
+            return 'Desconocida';
         }
 
-        // ================================================================
-        // 5. REGISTRO CON PROMO
-        // ================================================================
-        async function cargarPromo() {
-            const snap = await db.ref('promocion').once('value');
-            if (snap.exists()) {
-                promoDias = snap.val().dias || 7;
-                promoCreditos = snap.val().creditos || 50;
-            } else {
-                await db.ref('promocion').set({ dias: 7, creditos: 50 });
-            }
-            document.getElementById('promoDaysDisplay').textContent = promoDias;
-            document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
-            document.getElementById('promoDaysActual').textContent = promoDias;
-            document.getElementById('promoCreditsActual').textContent = promoCreditos;
-            document.getElementById('promoDays').value = promoDias;
-            document.getElementById('promoCredits').value = promoCreditos;
+        function getCardLength(brand) {
+            if (brand === 'American Express') return 15;
+            return 16;
         }
 
-        async function guardarPromo() {
-            const dias = parseInt(document.getElementById('promoDays').value) || 7;
-            const credits = parseInt(document.getElementById('promoCredits').value) || 50;
-            await db.ref('promocion').set({ dias: dias, creditos: credits });
-            promoDias = dias;
-            promoCreditos = credits;
-            document.getElementById('promoDaysDisplay').textContent = dias;
-            document.getElementById('promoCreditsDisplay').textContent = credits;
-            document.getElementById('promoDaysActual').textContent = dias;
-            document.getElementById('promoCreditsActual').textContent = credits;
-            mostrarNotificacion(`✅ Promoción actualizada: ${dias} días y ${credits} créditos`, 'success');
+        function getCVVLength(brand) {
+            if (brand === 'American Express') return 4;
+            return 3;
         }
 
-        async function procesarRegistro() {
-            const email = document.getElementById('regEmail').value.trim().toLowerCase();
-            const pass = document.getElementById('regPass').value.trim();
-            const passConfirm = document.getElementById('regPassConfirm').value.trim();
-
-            if (!email || !pass || !passConfirm) {
-                mostrarNotificacion('❌ Completa todos los campos', 'error');
-                return;
+        function generarCVV(brand) {
+            const length = getCVVLength(brand);
+            let cvv = '';
+            for (let i = 0; i < length; i++) {
+                cvv += Math.floor(Math.random() * 10);
             }
-            if (pass !== passConfirm) {
-                mostrarNotificacion('❌ Las contraseñas no coinciden', 'error');
-                return;
-            }
-            if (pass.length < 4) {
-                mostrarNotificacion('❌ La contraseña debe tener al menos 4 caracteres', 'error');
-                return;
-            }
-
-            const nodo = limpiarClave(email);
-            const exist = await db.ref(`usuarios/${nodo}`).once('value');
-            if (exist.exists()) {
-                mostrarNotificacion('❌ Este correo ya está registrado', 'error');
-                return;
-            }
-
-            // Crear usuario
-            await db.ref(`usuarios/${nodo}`).set({
-                email: email,
-                pass: pass,
-                fechaRegistro: firebase.database.ServerValue.TIMESTAMP,
-                bloqueado: false
-            });
-
-            // Asignar regalo de bienvenida
-            await db.ref(`usuarios_datos/${nodo}`).set({
-                credits: promoCreditos,
-                days: promoDias
-            });
-
-            // Historial de bienvenida
-            await db.ref(`creditos/${nodo}/historial`).push({
-                tipo: 'recarga',
-                monto: promoCreditos,
-                descripcion: `🎁 Regalo de bienvenida: ${promoDias} días + ${promoCreditos} créditos`,
-                fecha: Date.now(),
-                saldo_actual: promoCreditos,
-                dias_actuales: promoDias
-            });
-
-            mostrarNotificacion(`✅ Registro exitoso! Recibiste ${promoDias} días y ${promoCreditos} créditos`, 'success');
-
-            // Limpiar campos
-            document.getElementById('regEmail').value = '';
-            document.getElementById('regPass').value = '';
-            document.getElementById('regPassConfirm').value = '';
-
-            // Cambiar a login
-            cambiarAuthTab('login');
-            document.getElementById('loginEmail').value = email;
+            return cvv;
         }
 
         // ================================================================
-        // 6. LOGIN
-        // ================================================================
-        function procesarLogin() {
-            const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
-            const passInput = document.getElementById('loginPass').value.trim();
-            if (!emailInput || !passInput) { mostrarNotificacion('Completa los campos.', 'error'); return; }
-
-            if ((emailInput === "andy" || emailInput === "andyobregon799@gmail.com") && passInput === "andy799") {
-                ingresarAlSistema(emailInput, "Owner");
-                return;
-            }
-
-            const nodoBuscado = limpiarClave(emailInput);
-            db.ref("usuarios/" + nodoBuscado).once("value").then((snapshot) => {
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    if (data.pass === passInput) {
-                        if (data.bloqueado === true) {
-                            mostrarNotificacion('⛔ Tu cuenta ha sido bloqueada. Contacta al administrador.', 'error');
-                            return;
-                        }
-                        ingresarAlSistema(data.email, "User");
-                    } else {
-                        mostrarNotificacion('❌ Contraseña incorrecta.', 'error');
-                    }
-                } else {
-                    mostrarNotificacion('❌ Usuario no encontrado.', 'error');
-                }
-            }).catch(err => mostrarNotificacion('Error de conexión.', 'error'));
-        }
-
-        async function ingresarAlSistema(email, elRol) {
-            currentUser = { email: email, role: elRol, uid: limpiarClave(email) };
-            usernameClave = currentUser.uid;
-
-            // Verificar si está bloqueado
-            const userSnap = await db.ref(`usuarios/${usernameClave}`).once('value');
-            if (userSnap.exists() && userSnap.val().bloqueado === true) {
-                mostrarNotificacion('⛔ Tu cuenta ha sido bloqueada.', 'error');
-                return;
-            }
-
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
-
-            const displayName = email.split('@')[0];
-            document.getElementById('userDisplay').innerHTML = `
-                👤 ${displayName}
-                <span class="user-status active" id="userStatusBadge">✅ Activo</span>
-            `;
-
-            if (elRol === "Owner") {
-                document.getElementById('tabAdminBtn').style.display = 'block';
-                document.getElementById('userDisplay').innerHTML = `
-                    👑 ${displayName} (Owner)
-                    <span class="user-status active">✅ Activo</span>
-                `;
-                escucharUsuarios();
-                cargarPromo();
-            } else {
-                document.getElementById('tabAdminBtn').style.display = 'none';
-            }
-
-            await cargarDatosUsuario();
-            await cargarCreditosUsuario();
-            cargarHistorialGen();
-            cargarHistorialLive();
-            cargarHistorialMasivo();
-
-            document.getElementById('generatedCount').textContent = generatedCardsList.length;
-            document.getElementById('massiveCount').textContent = generatedCardsList.length;
-
-            switchTab('generator');
-        }
-
-        function cerrarSesion() {
-            if (window.usuariosUnsubscribe) window.usuariosUnsubscribe();
-            currentUser = null;
-            document.getElementById('auth-screen').style.display = 'flex';
-            document.getElementById('main-app').style.display = 'none';
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPass').value = '';
-            mostrarNotificacion('Sesión cerrada', 'info');
-        }
-
-        // ================================================================
-        // 7. SISTEMA DE DÍAS Y CRÉDITOS
+        // 5. SISTEMA DE DÍAS Y CRÉDITOS
         // ================================================================
 
         async function cargarDatosUsuario() {
@@ -1682,6 +1816,7 @@
         }
 
         async function gastarCredito(cantidad, descripcion) {
+            // Verificar días primero
             if (currentDays <= 0) {
                 mostrarNotificacion(`❌ No tienes días activos. Contacta al admin.`, 'error');
                 return false;
@@ -1713,200 +1848,8 @@
         }
 
         // ================================================================
-        // 8. BOTÓN PEDIR CRÉDITOS - WHATSAPP
+        // 6. GENERADOR DE TARJETAS (GRATIS)
         // ================================================================
-
-        function pedirCreditosWhatsApp() {
-            const numero = '593990434546'; // +593 99 043 4546
-            const usuario = currentUser ? currentUser.email : 'Usuario';
-            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos para el checker. Mi saldo actual es de ${currentCredits} créditos y ${currentDays} días. ¡Gracias!`;
-            const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
-            window.open(url, '_blank');
-            mostrarNotificacion('📱 Abriendo WhatsApp...', 'info');
-        }
-
-        // ================================================================
-        // 9. ADMIN - BLOQUEAR USUARIOS Y GESTIÓN
-        // ================================================================
-
-        async function toggleBloquearUsuario(email) {
-            if (!currentUser || currentUser.role !== 'Owner') return;
-            const nodo = limpiarClave(email);
-            const snap = await db.ref(`usuarios/${nodo}`).once('value');
-            if (!snap.exists()) { mostrarNotificacion('Usuario no encontrado', 'error'); return; }
-
-            const actual = snap.val().bloqueado || false;
-            await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
-            mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
-            escucharUsuarios(); // Refrescar lista
-        }
-
-        let usuariosUnsubscribe = null;
-
-        function escucharUsuarios() {
-            if (usuariosUnsubscribe) usuariosUnsubscribe();
-            usuariosUnsubscribe = db.ref("usuarios").on("value", async (snapshot) => {
-                const container = document.getElementById("listaUsuariosContainer");
-                if (!container) return;
-                container.innerHTML = "";
-
-                if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;font-size:0.75rem;">No hay usuarios</p>';
-                    return;
-                }
-
-                const users = [];
-                snapshot.forEach((hijo) => {
-                    const data = hijo.val();
-                    users.push({ key: hijo.key, ...data });
-                });
-
-                // Ordenar por fecha (más reciente primero)
-                users.sort((a, b) => (b.fechaRegistro || 0) - (a.fechaRegistro || 0));
-
-                for (const user of users) {
-                    // Obtener datos de créditos/días
-                    const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
-                    const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
-
-                    const div = document.createElement('div');
-                    div.className = 'user-list-item';
-
-                    const bloqueado = user.bloqueado || false;
-
-                    div.innerHTML = `
-                        <div>
-                            <span class="user-email">${user.email}</span>
-                            <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                            <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">
-                                ${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}
-                            </span>
-                        </div>
-                        <div class="user-actions">
-                            <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" 
-                                    onclick="toggleBloquearUsuario('${user.email}')">
-                                ${bloqueado ? '🔓 Desbloquear' : '🔒 Bloquear'}
-                            </button>
-                            <button class="btn-small btn-warning" onclick="adminAgregarCreditosManual('${user.email}')">
-                                ➕
-                            </button>
-                            <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')">
-                                ➖
-                            </button>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                }
-            });
-        }
-
-        // Funciones rápidas para admin desde la lista
-        async function adminAgregarCreditosManual(email) {
-            const cantidad = prompt(`¿Cuántos créditos agregar a ${email}?`, '10');
-            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = (data.credits || 0) + parseInt(cantidad);
-            await ref.update({ credits: nuevo });
-            mostrarNotificacion(`✅ +${cantidad} créditos a ${email}`, 'success');
-        }
-
-        async function adminRestarCreditosManual(email) {
-            const cantidad = prompt(`¿Cuántos créditos restar a ${email}?`, '5');
-            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
-            await ref.update({ credits: nuevo });
-            mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
-        }
-
-        function buscarUsuario() {
-            const search = document.getElementById('searchUserInput').value.trim().toLowerCase();
-            const container = document.getElementById('userSearchResult');
-            if (!search) {
-                container.innerHTML = '';
-                return;
-            }
-
-            db.ref("usuarios").once('value').then(async (snapshot) => {
-                container.innerHTML = '';
-                let found = false;
-                snapshot.forEach(async (hijo) => {
-                    const data = hijo.val();
-                    if (data.email.toLowerCase().includes(search)) {
-                        found = true;
-                        const datosSnap = await db.ref(`usuarios_datos/${hijo.key}`).once('value');
-                        const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
-                        const bloqueado = data.bloqueado || false;
-                        const div = document.createElement('div');
-                        div.className = 'user-list-item';
-                        div.innerHTML = `
-                            <div>
-                                <span class="user-email">${data.email}</span>
-                                <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                                <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">
-                                    ${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}
-                                </span>
-                            </div>
-                            <div class="user-actions">
-                                <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" 
-                                        onclick="toggleBloquearUsuario('${data.email}')">
-                                    ${bloqueado ? '🔓 Desbloquear' : '🔒 Bloquear'}
-                                </button>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    }
-                });
-                if (!found) {
-                    container.innerHTML = '<p style="color:#6688aa;font-size:0.75rem;">Usuario no encontrado</p>';
-                }
-            });
-        }
-
-        // ================================================================
-        // 10. DETECCIÓN DE MARCA Y GENERADOR
-        // ================================================================
-
-        function detectBrand(cardNumber) {
-            const num = String(cardNumber).replace(/\s/g, '');
-            const patterns = {
-                'Visa': /^4/,
-                'Mastercard': /^(5[1-5]|2[2-7])/,
-                'American Express': /^(34|37)/,
-                'Discover': /^(6011|65|64[4-9]|622)/,
-                'JCB': /^35/,
-                'Diners Club': /^(30|36|38|39)/
-            };
-            for (const [brand, pattern] of Object.entries(patterns)) {
-                if (pattern.test(num)) return brand;
-            }
-            return 'Desconocida';
-        }
-
-        function getCardLength(brand) {
-            if (brand === 'American Express') return 15;
-            return 16;
-        }
-
-        function getCVVLength(brand) {
-            if (brand === 'American Express') return 4;
-            return 3;
-        }
-
-        function generarCVV(brand) {
-            const length = getCVVLength(brand);
-            let cvv = '';
-            for (let i = 0; i < length; i++) {
-                cvv += Math.floor(Math.random() * 10);
-            }
-            return cvv;
-        }
 
         function luhnCheck(cardNumber) {
             const digits = String(cardNumber).replace(/\s/g, '');
@@ -1966,13 +1909,10 @@
             return cards;
         }
 
-        // ================================================================
-        // 11. GENERAR TARJETAS (GRATIS)
-        // ================================================================
-
         async function generarTarjetas() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión primero', 'error'); return; }
 
+            // Verificar días
             if (currentDays <= 0) {
                 mostrarNotificacion('❌ No tienes días activos. Contacta al admin.', 'error');
                 return;
@@ -1986,7 +1926,7 @@
             if (!binInput || binInput.length < 6) { mostrarNotificacion('❌ Ingresa al menos 6 dígitos', 'error'); return; }
             if (!/^\d+$/.test(binInput)) { mostrarNotificacion('❌ Solo números', 'error'); return; }
 
-            // GENERACIÓN GRATIS
+            // GENERACIÓN GRATIS - Sin gastar créditos
             const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
 
             if (cards.length === 0) {
@@ -2082,7 +2022,7 @@
         }
 
         // ================================================================
-        // 12. CHECKER LIVE INDIVIDUAL (2 créditos)
+        // 7. CHECKER LIVE INDIVIDUAL (2 créditos)
         // ================================================================
 
         async function getBINInfo(bin) {
@@ -2206,6 +2146,7 @@
                     return;
                 }
 
+                // GASTAR 2 CRÉDITOS
                 if (!await gastarCredito(2, `LIVE Individual: ${number}`)) {
                     btn.disabled = false;
                     btn.innerHTML = '🔴 VERIFICAR (2 créditos)';
@@ -2259,11 +2200,13 @@
 
             const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
             const cvvInfo = getCVVLength(brand) === 4 ? '4 dígitos (Amex)' : '3 dígitos';
+            const pasarela = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
 
             return `
                 <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
                     <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;">
                         <span class="${estadoClass}">${icono} ${result.mensaje}</span>
+                        <span style="color:#6688aa;font-size:0.6rem;margin-left:8px;">💳 ${pasarela}</span>
                     </div>
                     <div class="live-result-grid">
                         <div><span class="label">🔢 Número:</span> <span class="value">${formatoNumero}</span></div>
@@ -2278,6 +2221,7 @@
                         <div><span class="label">💰 Prepago:</span> <span class="value">${binInfo.prepaid ? 'Sí' : 'No'}</span></div>
                         <div><span class="label">🏢 Comercial:</span> <span class="value">${binInfo.commercial ? 'Sí' : 'No'}</span></div>
                         <div><span class="label">📊 Código:</span> <span class="value">${result.codigo || 'N/A'}</span></div>
+                        <div><span class="label">💳 Pasarela:</span> <span class="value" style="color:#6772e5;">${pasarela}</span></div>
                     </div>
                     <div style="margin-top:8px;border-top:1px solid #1a4a7a;padding-top:6px;">
                         <strong style="color:#66ddff;">📋 Detalles:</strong>
@@ -2301,7 +2245,7 @@
         }
 
         // ================================================================
-        // 13. LIVE MASIVO (7 créditos)
+        // 8. LIVE MASIVO (7 créditos)
         // ================================================================
 
         async function liveMasivo() {
@@ -2317,6 +2261,7 @@
 
             const count = Math.min(cards.length, 10);
 
+            // GASTAR 7 CRÉDITOS
             if (!await gastarCredito(7, `LIVE Masivo x${count} tarjetas`)) return;
 
             const btn = document.getElementById('massiveBtn');
@@ -2380,11 +2325,12 @@
 
             const validCount = results.filter(r => r.result.estado === 'valid' || r.result.estado === 'insufficient').length;
             const fondosCount = results.filter(r => r.result.estado === 'valid').length;
+            const pasarela = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
 
             let html = `
                 <div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
                     <div style="font-size:0.9rem;font-weight:bold;color:#66ddff;margin-bottom:6px;">
-                        📊 RESULTADOS (${results.length} tarjetas)
+                        📊 RESULTADOS (${results.length} tarjetas) 💳 ${pasarela}
                     </div>
                     <div class="massive-summary">
                         <div class="stat total">📊 Total: <span class="num">${results.length}</span></div>
@@ -2417,7 +2363,7 @@
 
                 const numeroFormateado = item.number.replace(/(\d{4})/g, '$1 ').trim();
                 const textoCompleto =
-                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.country}|${item.binInfo.bank}`;
+                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.country}|${item.binInfo.bank}|${pasarela}`;
 
                 html += `
                     <div class="massive-item ${estadoClass}">
@@ -2456,12 +2402,13 @@
         function descargarResultadoMasivo() {
             if (!massiveResults.length) return;
 
+            const pasarela = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
             const lines = massiveResults.map(item => {
                 const r = item.result;
-                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.country}|${item.binInfo.bank}`;
+                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.country}|${item.binInfo.bank}|${pasarela}`;
             });
 
-            const header = 'Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco\n';
+            const header = 'Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco|Pasarela\n';
             const text = header + lines.join('\n');
 
             const blob = new Blob([text], { type: 'text/plain' });
@@ -2475,7 +2422,22 @@
         }
 
         // ================================================================
-        // 14. HISTORIALES
+        // 9. PASARELA
+        // ================================================================
+
+        function seleccionarPasarela(pasarela) {
+            pasarelaSeleccionada = pasarela;
+            const nombres = {
+                'stripe': 'Stripe',
+                'zuora': 'Zuora',
+                'auth': 'Auth'
+            };
+            document.getElementById('pasarelaSeleccionada').textContent = nombres[pasarela] || 'Stripe';
+            mostrarNotificacion(`💳 Pasarela seleccionada: ${nombres[pasarela]}`, 'success');
+        }
+
+        // ================================================================
+        // 10. HISTORIALES
         // ================================================================
 
         function guardarHistorialGen(bin, count) {
@@ -2509,6 +2471,7 @@
                 mensaje: result.mensaje,
                 codigo: result.codigo,
                 fondos: result.fondos,
+                pasarela: pasarelaSeleccionada,
                 fecha: new Date().toLocaleString()
             });
             if (history.length > 50) history.length = 50;
@@ -2522,7 +2485,7 @@
             const container = document.getElementById('liveHistory');
             if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin LIVE</p>'; return; }
             container.innerHTML = history.map(h =>
-                `<div class="credit-item">🔴 ${h.number} | ${h.brand} | ${h.estado === 'valid' ? '✅' : h.estado === 'insufficient' ? '⚠️' : '❌'} ${h.mensaje} | ${h.fecha}</div>`
+                `<div class="credit-item">🔴 ${h.number} | ${h.brand} | ${h.estado === 'valid' ? '✅' : h.estado === 'insufficient' ? '⚠️' : '❌'} ${h.mensaje} | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`
             ).join('');
         }
 
@@ -2536,6 +2499,7 @@
                 total: results.length,
                 valid: validCount,
                 fondos: fondosCount,
+                pasarela: pasarelaSeleccionada,
                 fecha: new Date().toLocaleString()
             });
             if (history.length > 30) history.length = 30;
@@ -2549,8 +2513,203 @@
             const container = document.getElementById('massiveHistory');
             if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin masivos</p>'; return; }
             container.innerHTML = history.map(h =>
-                `<div class="credit-item">📊 ${h.total} tarjetas | 🟢 ${h.fondos} fondos | 🟡 ${h.valid} válidas | ${h.fecha}</div>`
+                `<div class="credit-item">📊 ${h.total} tarjetas | 🟢 ${h.fondos} fondos | 🟡 ${h.valid} válidas | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`
             ).join('');
+        }
+
+        // ================================================================
+        // 11. AUTENTICACIÓN
+        // ================================================================
+
+        function procesarLogin() {
+            const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const passInput = document.getElementById('loginPass').value.trim();
+            if (!emailInput || !passInput) { mostrarNotificacion('Completa los campos.', 'error'); return; }
+
+            if ((emailInput === "andy" || emailInput === "andyobregon799@gmail.com") && passInput === "andy799") {
+                ingresarAlSistema(emailInput, "Owner");
+                return;
+            }
+
+            const nodoBuscado = limpiarClave(emailInput);
+            db.ref("usuarios/" + nodoBuscado).once("value").then((snapshot) => {
+                if (snapshot.exists() && snapshot.val().pass === passInput) {
+                    ingresarAlSistema(snapshot.val().email, "User");
+                } else {
+                    mostrarNotificacion('❌ Credencial incorrecta.', 'error');
+                }
+            }).catch(err => mostrarNotificacion('Error de conexión.', 'error'));
+        }
+
+        async function ingresarAlSistema(email, elRol) {
+            currentUser = { email: email, role: elRol, uid: limpiarClave(email) };
+            usernameClave = currentUser.uid;
+
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+            document.getElementById('userDisplay').textContent = `👤 ${email}`;
+
+            if (elRol === "Owner") {
+                document.getElementById('tabAdminBtn').style.display = 'block';
+                document.getElementById('adminCreditPanel').style.display = 'block';
+                escucharUsuarios();
+            } else {
+                document.getElementById('tabAdminBtn').style.display = 'none';
+                document.getElementById('adminCreditPanel').style.display = 'none';
+            }
+
+            await cargarDatosUsuario();
+            await cargarCreditosUsuario();
+            cargarHistorialGen();
+            cargarHistorialLive();
+            cargarHistorialMasivo();
+
+            document.getElementById('generatedCount').textContent = generatedCardsList.length;
+            document.getElementById('massiveCount').textContent = generatedCardsList.length;
+
+            // Seleccionar Stripe por defecto
+            seleccionarPasarela('stripe');
+
+            switchTab('generator');
+        }
+
+        function cerrarSesion() {
+            if (window.usuariosUnsubscribe) window.usuariosUnsubscribe();
+            currentUser = null;
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPass').value = '';
+            mostrarNotificacion('Sesión cerrada', 'info');
+        }
+
+        // ================================================================
+        // 12. ADMIN
+        // ================================================================
+
+        function crearUsuarioFirebase() {
+            const email = document.getElementById("newAdminEmail").value.trim();
+            const pass = document.getElementById("newAdminPass").value.trim();
+            const days = parseInt(document.getElementById("newAdminDays").value) || 30;
+            const credits = parseInt(document.getElementById("newAdminCredits").value) || 10;
+
+            if (!email || !pass) { mostrarNotificacion('Completa los campos.', 'error'); return; }
+
+            const nodo = limpiarClave(email);
+            const btn = document.querySelector('#panel-admins .btn-block');
+            btn.disabled = true;
+            btn.textContent = "⌛ Guardando...";
+
+            db.ref("usuarios/" + nodo).set({
+                email: email,
+                pass: pass,
+                fechaCreado: firebase.database.ServerValue.TIMESTAMP
+            }, (error) => {
+                if (error) {
+                    btn.disabled = false;
+                    btn.textContent = "⚡ CREAR USUARIO";
+                    mostrarNotificacion('Error: ' + error.message, 'error');
+                    return;
+                }
+
+                // Guardar días y créditos iniciales
+                db.ref(`usuarios_datos/${nodo}`).set({
+                    credits: credits,
+                    days: days
+                }).then(() => {
+                    btn.disabled = false;
+                    btn.textContent = "⚡ CREAR USUARIO";
+                    mostrarNotificacion(`✅ Usuario creado con ${days} días y ${credits} créditos`, 'success');
+                    document.getElementById("newAdminEmail").value = "";
+                    document.getElementById("newAdminPass").value = "";
+                    document.getElementById("newAdminDays").value = "";
+                    document.getElementById("newAdminCredits").value = "";
+                }).catch(err => {
+                    btn.disabled = false;
+                    btn.textContent = "⚡ CREAR USUARIO";
+                    mostrarNotificacion('Error: ' + err.message, 'error');
+                });
+            });
+        }
+
+        let usuariosUnsubscribe = null;
+
+        function escucharUsuarios() {
+            if (usuariosUnsubscribe) usuariosUnsubscribe();
+            usuariosUnsubscribe = db.ref("usuarios").on("value", (snapshot) => {
+                const container = document.getElementById("listaUsuariosContainer");
+                if (!container) return;
+                container.innerHTML = "";
+                if (!snapshot.exists()) { container.innerHTML = '<p style="color:#6688aa;">No hay usuarios</p>'; return; }
+                snapshot.forEach((hijo) => {
+                    const data = hijo.val();
+                    const div = document.createElement("div");
+                    div.style.cssText =
+                        'padding:4px 8px;border-bottom:1px solid #1a3a5a;display:flex;justify-content:space-between;align-items:center;';
+                    div.innerHTML = `
+                        <span style="font-size:0.75rem;">👤 <strong>${data.email}</strong></span>
+                        <button class="btn-small btn-danger" onclick="eliminarUsuario('${hijo.key}')">Eliminar</button>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+
+        function eliminarUsuario(key) {
+            if (confirm("¿Eliminar este usuario?")) {
+                db.ref("usuarios/" + key).remove();
+                db.ref(`usuarios_datos/${key}`).remove();
+                mostrarNotificacion('Usuario eliminado', 'info');
+            }
+        }
+
+        // ================================================================
+        // 13. CRÉDITOS Y DÍAS ADMIN
+        // ================================================================
+
+        async function agregarCreditos() {
+            const email = document.getElementById('creditUserEmail').value.trim();
+            const amount = parseInt(document.getElementById('creditAmount').value);
+            if (!email || !amount || amount < 1) { mostrarNotificacion('❌ Completa los campos', 'error'); return; }
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = (data.credits || 0) + amount;
+            await ref.update({ credits: nuevo });
+            mostrarNotificacion(`✅ +${amount} créditos a ${email}`, 'success');
+            document.getElementById('creditUserEmail').value = '';
+            document.getElementById('creditAmount').value = '';
+        }
+
+        async function restarCreditos() {
+            const email = document.getElementById('creditUserEmail').value.trim();
+            const amount = parseInt(document.getElementById('creditAmount').value);
+            if (!email || !amount || amount < 1) { mostrarNotificacion('❌ Completa los campos', 'error'); return; }
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = Math.max(0, (data.credits || 0) - amount);
+            await ref.update({ credits: nuevo });
+            mostrarNotificacion(`✅ -${amount} créditos a ${email}`, 'success');
+            document.getElementById('creditUserEmail').value = '';
+            document.getElementById('creditAmount').value = '';
+        }
+
+        async function agregarDias() {
+            const email = document.getElementById('creditUserEmail').value.trim();
+            const amount = parseInt(document.getElementById('daysAmount').value);
+            if (!email || !amount || amount < 1) { mostrarNotificacion('❌ Completa los campos', 'error'); return; }
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = (data.days || 0) + amount;
+            await ref.update({ days: nuevo });
+            mostrarNotificacion(`📅 +${amount} días a ${email}`, 'success');
+            document.getElementById('creditUserEmail').value = '';
+            document.getElementById('daysAmount').value = '';
         }
 
         async function cargarCreditosUsuario() {
@@ -2573,7 +2732,7 @@
         }
 
         // ================================================================
-        // 15. NAVEGACIÓN
+        // 14. NAVEGACIÓN
         // ================================================================
 
         function switchTab(tabName) {
@@ -2598,27 +2757,23 @@
                 cargarHistorialMasivo();
                 document.getElementById('massiveCount').textContent = generatedCardsList.length;
             }
-            if (tabName === 'admins') {
-                if (currentUser && currentUser.role === 'Owner') {
-                    cargarPromo();
-                    escucharUsuarios();
-                }
+            if (tabName === 'pasarela') {
+                document.getElementById('pasarelaSeleccionada').textContent =
+                    pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
             }
         }
 
         // ================================================================
-        // 16. INICIALIZACIÓN
+        // 15. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON REGISTRO Y ADMIN');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
-        console.log('🎁 Registro: días + créditos de regalo');
-        console.log('🔒 Admin puede bloquear/desbloquear usuarios');
-        console.log('📱 Botón para pedir créditos por WhatsApp');
-        console.log('💎 Generación GRATIS | LIVE: 2 créditos | Masivo: 7 créditos');
-
-        // Cargar promoción al inicio
-        cargarPromo();
+        console.log('🎲 Generar tarjetas: GRATIS');
+        console.log('🔴 LIVE Individual: 2 créditos');
+        console.log('📊 LIVE Masivo: 7 créditos');
+        console.log('💳 Pasarelas: Stripe | Zuora | Auth');
+        console.log('📅 Sistema por días y créditos');
     </script>
 
 </body>
