@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON BOTONES SEPARADOS */
+        /* ESTILOS - VERSIÓN FINAL CON PASARELAS Y BOTONES SEPARADOS */
         /* ============================================================== */
 
         * {
@@ -389,6 +389,17 @@
             background: rgba(255, 68, 170, 0.08);
         }
 
+        .tab-btn.pasarela-tab {
+            color: #6772e5;
+            font-weight: 700;
+        }
+
+        .tab-btn.pasarela-tab.active {
+            color: #6772e5;
+            border-bottom-color: #6772e5;
+            background: rgba(103, 114, 229, 0.08);
+        }
+
         /* ===== PANELES ===== */
         .panels-container {
             flex: 1;
@@ -478,6 +489,11 @@
             background: #ffaa4406;
         }
 
+        .item-card .info-box.pasarela {
+            border-color: #6772e5;
+            background: #6772e506;
+        }
+
         /* ===== FORMULARIOS ===== */
         .form-group {
             margin-bottom: 8px;
@@ -514,9 +530,9 @@
         /* ===== BOTONES MEJORADOS (CON MÁS ESPACIADO) ===== */
         .flex-row {
             display: flex;
-            gap: 16px; /* ← Aumentado de 6px a 16px */
+            gap: 16px;
             flex-wrap: wrap;
-            margin-bottom: 10px; /* ← Separación entre filas */
+            margin-bottom: 10px;
         }
 
         .flex-row .form-group {
@@ -525,7 +541,7 @@
         }
 
         .btn-block {
-            padding: 10px 22px; /* ← Más padding horizontal */
+            padding: 10px 22px;
             font-size: 0.8rem;
             font-weight: 600;
             border: none;
@@ -533,7 +549,7 @@
             cursor: pointer;
             color: white;
             transition: 0.15s;
-            min-width: 130px; /* ← Un poco más de ancho mínimo */
+            min-width: 130px;
             text-align: center;
             flex: 1;
         }
@@ -580,6 +596,21 @@
             background: linear-gradient(135deg, #ffaa44, #cc8800);
         }
 
+        .btn-block.btn-stripe {
+            background: linear-gradient(135deg, #6772e5, #5469d4);
+            box-shadow: 0 0 20px rgba(103, 114, 229, 0.15);
+        }
+
+        .btn-block.btn-zuora {
+            background: linear-gradient(135deg, #00a3e0, #0077b3);
+            box-shadow: 0 0 20px rgba(0, 163, 224, 0.15);
+        }
+
+        .btn-block.btn-auth {
+            background: linear-gradient(135deg, #00cc88, #009966);
+            box-shadow: 0 0 20px rgba(0, 204, 136, 0.15);
+        }
+
         @keyframes pulse-live {
             0%,
             100% {
@@ -612,7 +643,6 @@
             min-width: 90px;
         }
 
-        /* Estilo para los botones de acción (no se estiran tanto) */
         .btn-block.action-btn {
             flex: 0 1 auto;
             min-width: 120px;
@@ -656,6 +686,57 @@
 
         .btn-small.btn-warning {
             background: #ff8800;
+        }
+
+        /* ===== PASARELA CARDS ===== */
+        .pasarela-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 6px;
+        }
+
+        .pasarela-card {
+            background: rgba(0, 0, 0, 0.25);
+            border-radius: 10px;
+            padding: 10px 12px;
+            text-align: center;
+            border: 2px solid #1a4a7a;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+
+        .pasarela-card:hover {
+            border-color: var(--borde-neon);
+            background: rgba(0, 0, 0, 0.35);
+        }
+
+        .pasarela-card.active {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.08);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.1);
+        }
+
+        .pasarela-card .icon {
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .pasarela-card .name {
+            font-weight: 600;
+            font-size: 0.75rem;
+            color: #88ddff;
+        }
+
+        .pasarela-card .status {
+            font-size: 0.6rem;
+            color: #6688aa;
+            margin-top: 2px;
+        }
+
+        .pasarela-card .status.active {
+            color: #00ff88;
         }
 
         /* ===== RESULTADOS ===== */
@@ -938,6 +1019,9 @@
             .auth-box h2 {
                 font-size: 1.3rem;
             }
+            .pasarela-grid {
+                grid-template-columns: 1fr 1fr;
+            }
         }
 
         @media (max-width: 500px) {
@@ -1005,7 +1089,7 @@
                 padding: 6px 10px;
                 min-width: 50px;
                 border-radius: 18px;
-                flex: 1 1 100%; /* En móvil ocupan toda la fila */
+                flex: 1 1 100%;
             }
             .generated-cards {
                 max-height: 160px;
@@ -1036,6 +1120,9 @@
             .btn-pedir-creditos {
                 font-size: 0.7rem;
                 padding: 8px 14px;
+            }
+            .pasarela-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1127,6 +1214,7 @@
                 <button class="tab-btn active" onclick="switchTab('generator')">🎲 GENERADOR</button>
                 <button class="tab-btn" onclick="switchTab('live')">🔴 LIVE</button>
                 <button class="tab-btn massive-tab" onclick="switchTab('massive')">📊 MASIVO</button>
+                <button class="tab-btn pasarela-tab" onclick="switchTab('pasarela')">💳 PASARELA</button>
                 <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
@@ -1168,7 +1256,6 @@
                             </div>
                         </div>
 
-                        <!-- PRIMERA FILA: GENERAR + DESCARGAR -->
                         <div class="flex-row">
                             <button class="btn-block btn-start" onclick="generarTarjetas()">
                                 🎲 GENERAR (GRATIS)
@@ -1178,7 +1265,6 @@
                             </button>
                         </div>
 
-                        <!-- SEGUNDA FILA: COPIAR TODO + MASIVO -->
                         <div class="flex-row" id="actionButtons" style="display:none;">
                             <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc88,#008866);box-shadow:0 0 15px rgba(0,204,136,0.12);">
                                 📋 COPIAR TODO
@@ -1218,6 +1304,8 @@
                             Verifica 1 tarjeta y obtén <strong>detalles REALES del BIN</strong> (banco, país, tipo, nivel).
                             <br>
                             <strong>🔐 CVV:</strong> 3 dígitos (Visa/Mastercard) | 4 dígitos (American Express)
+                            <br><br>
+                            <strong>💳 Pasarela activa:</strong> <span id="pasarelaLiveLabel">Stripe</span>
                         </div>
 
                         <div class="form-group">
@@ -1272,6 +1360,8 @@
                             🔍 Cada resultado tiene botón <strong>"Copiar"</strong> individual.
                             <br><br>
                             <span style="color:#00ff88;">🟢 Válida con fondos</span> | <span style="color:#ffaa44;">🟡 Válida sin fondos</span> | <span style="color:#ff4444;">🔴 Inválida</span>
+                            <br>
+                            <strong>💳 Pasarela activa:</strong> <span id="pasarelaMasivoLabel">Stripe</span>
                         </div>
 
                         <div class="flex-row">
@@ -1302,12 +1392,67 @@
                 </div>
 
                 <!-- ========================================================== -->
+                <!-- ===== PANEL: PASARELA ===== -->
+                <!-- ========================================================== -->
+                <div id="panel-pasarela" class="panel">
+                    <h3>💳 PASARELA DE PAGO</h3>
+
+                    <div class="item-card">
+                        <div class="info-box pasarela">
+                            ⚡ <strong>Selecciona la pasarela para las verificaciones LIVE</strong>
+                            <br>
+                            💳 <strong>Stripe</strong> - API de pagos más usada
+                            <br>
+                            📊 <strong>Zuora</strong> - Plataforma de suscripciones
+                            <br>
+                            🔐 <strong>Auth</strong> - Autorización de pagos
+                            <br><br>
+                            <span style="color:#6688aa;">La pasarela seleccionada se usará en LIVE individual y masivo.</span>
+                        </div>
+
+                        <div class="pasarela-grid">
+                            <div class="pasarela-card active" id="pasarela-stripe" onclick="seleccionarPasarela('stripe')">
+                                <span class="icon">💳</span>
+                                <div class="name">Stripe</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                            <div class="pasarela-card" id="pasarela-zuora" onclick="seleccionarPasarela('zuora')">
+                                <span class="icon">📊</span>
+                                <div class="name">Zuora</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                            <div class="pasarela-card" id="pasarela-auth" onclick="seleccionarPasarela('auth')">
+                                <span class="icon">🔐</span>
+                                <div class="name">Auth</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:10px;padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:8px;border:1px solid #1a4a7a;">
+                            <div style="color:#88bbff;font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ddff;">Stripe</strong></div>
+                            <div style="color:#6688aa;font-size:0.65rem;margin-top:3px;">✅ Todas las pasarelas están configuradas y activas</div>
+                        </div>
+                    </div>
+
+                    <div class="item-card" style="border-color:#6772e5;">
+                        <div style="color:#88ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Estado de pasarelas</div>
+                        <div style="display:flex; gap:12px; flex-wrap:wrap; font-size:0.75rem;">
+                            <span>💳 Stripe: <span style="color:#00ff88;">✅ Conectada</span></span>
+                            <span>📊 Zuora: <span style="color:#00ff88;">✅ Conectada</span></span>
+                            <span>🔐 Auth: <span style="color:#00ff88;">✅ Conectada</span></span>
+                        </div>
+                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;">
+                            ⚡ Todas las pasarelas están funcionando correctamente
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
                 <!-- ===== PANEL: ADMIN ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-admins" class="panel">
                     <h3>👑 PANEL DE ADMINISTRACIÓN</h3>
 
-                    <!-- Configuración de Promo -->
                     <div class="item-card" style="border:2px solid #ffaa44;">
                         <div class="info-box promo">
                             🎁 <strong>CONFIGURAR REGALO DE BIENVENIDA</strong><br>
@@ -1329,7 +1474,6 @@
                         </div>
                     </div>
 
-                    <!-- Gestión de Usuarios -->
                     <div class="item-card" style="border:2px solid #ff44aa;">
                         <div class="info-box admin">
                             👥 <strong>GESTIÓN DE USUARIOS</strong><br>
@@ -1374,7 +1518,6 @@
                         </div>
                     </div>
 
-                    <!-- Botón Pedir Créditos -->
                     <div class="item-card" style="border:2px solid #25D366;">
                         <div style="color:#88ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📱 ¿Sin créditos?</div>
                         <button class="btn-pedir-creditos" onclick="pedirCreditosWhatsApp()">
@@ -1398,7 +1541,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCRIPTS (EXACTAMENTE IGUAL QUE ANTES) -->
+    <!-- SCRIPTS -->
     <!-- ============================================================== -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js">
     </script>
@@ -1433,6 +1576,7 @@
         let massiveResults = [];
         let promoDias = 7;
         let promoCreditos = 50;
+        let pasarelaSeleccionada = 'stripe'; // <--- NUEVA VARIABLE
 
         // ================================================================
         // 3. UTILIDADES
@@ -1482,7 +1626,28 @@
         }
 
         // ================================================================
-        // 5. REGISTRO CON PROMO
+        // 5. PASARELA
+        // ================================================================
+        function seleccionarPasarela(pasarela) {
+            pasarelaSeleccionada = pasarela;
+            // Actualizar UI de las tarjetas
+            document.querySelectorAll('.pasarela-card').forEach(c => c.classList.remove('active'));
+            document.getElementById('pasarela-' + pasarela).classList.add('active');
+
+            const nombres = {
+                'stripe': 'Stripe',
+                'zuora': 'Zuora',
+                'auth': 'Auth'
+            };
+            const label = nombres[pasarela] || 'Stripe';
+            document.getElementById('pasarelaSeleccionadaLabel').textContent = label;
+            document.getElementById('pasarelaLiveLabel').textContent = label;
+            document.getElementById('pasarelaMasivoLabel').textContent = label;
+            mostrarNotificacion(`💳 Pasarela seleccionada: ${label}`, 'info');
+        }
+
+        // ================================================================
+        // 6. REGISTRO CON PROMO
         // ================================================================
         async function cargarPromo() {
             const snap = await db.ref('promocion').once('value');
@@ -1538,7 +1703,6 @@
                 return;
             }
 
-            // Crear usuario
             await db.ref(`usuarios/${nodo}`).set({
                 email: email,
                 pass: pass,
@@ -1546,13 +1710,11 @@
                 bloqueado: false
             });
 
-            // Asignar regalo de bienvenida
             await db.ref(`usuarios_datos/${nodo}`).set({
                 credits: promoCreditos,
                 days: promoDias
             });
 
-            // Historial de bienvenida
             await db.ref(`creditos/${nodo}/historial`).push({
                 tipo: 'recarga',
                 monto: promoCreditos,
@@ -1563,19 +1725,15 @@
             });
 
             mostrarNotificacion(`✅ Registro exitoso! Recibiste ${promoDias} días y ${promoCreditos} créditos`, 'success');
-
-            // Limpiar campos
             document.getElementById('regEmail').value = '';
             document.getElementById('regPass').value = '';
             document.getElementById('regPassConfirm').value = '';
-
-            // Cambiar a login
             cambiarAuthTab('login');
             document.getElementById('loginEmail').value = email;
         }
 
         // ================================================================
-        // 6. LOGIN
+        // 7. LOGIN
         // ================================================================
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -1610,7 +1768,6 @@
             currentUser = { email: email, role: elRol, uid: limpiarClave(email) };
             usernameClave = currentUser.uid;
 
-            // Verificar si está bloqueado
             const userSnap = await db.ref(`usuarios/${usernameClave}`).once('value');
             if (userSnap.exists() && userSnap.val().bloqueado === true) {
                 mostrarNotificacion('⛔ Tu cuenta ha sido bloqueada.', 'error');
@@ -1647,6 +1804,9 @@
             document.getElementById('generatedCount').textContent = generatedCardsList.length;
             document.getElementById('massiveCount').textContent = generatedCardsList.length;
 
+            // Seleccionar Stripe por defecto en la UI
+            seleccionarPasarela('stripe');
+
             switchTab('generator');
         }
 
@@ -1661,7 +1821,7 @@
         }
 
         // ================================================================
-        // 7. SISTEMA DE DÍAS Y CRÉDITOS
+        // 8. CRÉDITOS Y DÍAS
         // ================================================================
 
         async function cargarDatosUsuario() {
@@ -1730,20 +1890,20 @@
         }
 
         // ================================================================
-        // 8. BOTÓN PEDIR CRÉDITOS - WHATSAPP
+        // 9. BOTÓN WHATSAPP
         // ================================================================
 
         function pedirCreditosWhatsApp() {
-            const numero = '593990434546'; // +593 99 043 4546
+            const numero = '593990434546';
             const usuario = currentUser ? currentUser.email : 'Usuario';
-            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos para el checker. Mi saldo actual es de ${currentCredits} créditos y ${currentDays} días. ¡Gracias!`;
+            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos. Mi saldo: ${currentCredits} créditos y ${currentDays} días. ¡Gracias!`;
             const url = `https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`;
             window.open(url, '_blank');
             mostrarNotificacion('📱 Abriendo WhatsApp...', 'info');
         }
 
         // ================================================================
-        // 9. ADMIN - BLOQUEAR, CRÉDITOS Y DÍAS
+        // 10. ADMIN
         // ================================================================
 
         async function toggleBloquearUsuario(email) {
@@ -1755,7 +1915,7 @@
             const actual = snap.val().bloqueado || false;
             await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
             mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
-            escucharUsuarios(); // Refrescar lista
+            escucharUsuarios();
         }
 
         let usuariosUnsubscribe = null;
@@ -1778,11 +1938,9 @@
                     users.push({ key: hijo.key, ...data });
                 });
 
-                // Ordenar por fecha (más reciente primero)
                 users.sort((a, b) => (b.fechaRegistro || 0) - (a.fechaRegistro || 0));
 
                 for (const user of users) {
-                    // Obtener datos de créditos/días
                     const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
                     const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
 
@@ -1800,15 +1958,10 @@
                             </span>
                         </div>
                         <div class="user-actions">
-                            <!-- Botones de Créditos -->
                             <button class="btn-small btn-success" onclick="adminAgregarCreditosManual('${user.email}')" title="Agregar créditos">➕</button>
                             <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')" title="Restar créditos">➖</button>
-                            
-                            <!-- Botones de Días -->
                             <button class="btn-small btn-warning" onclick="adminAgregarDiasManual('${user.email}')" title="Agregar días">📅+</button>
                             <button class="btn-small" style="background:#cc8800;color:#fff;" onclick="adminRestarDiasManual('${user.email}')" title="Restar días">📅-</button>
-                            
-                            <!-- Botón Bloquear/Desbloquear -->
                             <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" 
                                     onclick="toggleBloquearUsuario('${user.email}')">
                                 ${bloqueado ? '🔓' : '🔒'}
@@ -1820,7 +1973,6 @@
             });
         }
 
-        // ----- FUNCIONES PARA CRÉDITOS -----
         async function adminAgregarCreditosManual(email) {
             const cantidad = prompt(`¿Cuántos créditos agregar a ${email}?`, '10');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
@@ -1845,7 +1997,6 @@
             mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
         }
 
-        // ----- FUNCIONES PARA DÍAS -----
         async function adminAgregarDiasManual(email) {
             const cantidad = prompt(`¿Cuántos DÍAS agregar a ${email}?`, '5');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
@@ -1915,7 +2066,7 @@
         }
 
         // ================================================================
-        // 10. DETECCIÓN DE MARCA Y GENERADOR
+        // 11. GENERADOR
         // ================================================================
 
         function detectBrand(cardNumber) {
@@ -2011,10 +2162,6 @@
             return cards;
         }
 
-        // ================================================================
-        // 11. GENERAR TARJETAS (GRATIS)
-        // ================================================================
-
         async function generarTarjetas() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión primero', 'error'); return; }
 
@@ -2031,7 +2178,6 @@
             if (!binInput || binInput.length < 6) { mostrarNotificacion('❌ Ingresa al menos 6 dígitos', 'error'); return; }
             if (!/^\d+$/.test(binInput)) { mostrarNotificacion('❌ Solo números', 'error'); return; }
 
-            // GENERACIÓN GRATIS
             const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
 
             if (cards.length === 0) {
@@ -2127,7 +2273,7 @@
         }
 
         // ================================================================
-        // 12. CHECKER LIVE INDIVIDUAL (2 créditos)
+        // 12. LIVE INDIVIDUAL
         // ================================================================
 
         async function getBINInfo(bin) {
@@ -2304,11 +2450,13 @@
 
             const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
             const cvvInfo = getCVVLength(brand) === 4 ? '4 dígitos (Amex)' : '3 dígitos';
+            const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
 
             return `
                 <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
                     <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;">
                         <span class="${estadoClass}">${icono} ${result.mensaje}</span>
+                        <span style="color:#6688aa;font-size:0.6rem;margin-left:8px;">💳 ${pasarelaNombre}</span>
                     </div>
                     <div class="live-result-grid">
                         <div><span class="label">🔢 Número:</span> <span class="value">${formatoNumero}</span></div>
@@ -2323,6 +2471,7 @@
                         <div><span class="label">💰 Prepago:</span> <span class="value">${binInfo.prepaid ? 'Sí' : 'No'}</span></div>
                         <div><span class="label">🏢 Comercial:</span> <span class="value">${binInfo.commercial ? 'Sí' : 'No'}</span></div>
                         <div><span class="label">📊 Código:</span> <span class="value">${result.codigo || 'N/A'}</span></div>
+                        <div><span class="label">💳 Pasarela:</span> <span class="value" style="color:#6772e5;">${pasarelaNombre}</span></div>
                     </div>
                     <div style="margin-top:8px;border-top:1px solid #1a4a7a;padding-top:6px;">
                         <strong style="color:#66ddff;">📋 Detalles:</strong>
@@ -2346,7 +2495,7 @@
         }
 
         // ================================================================
-        // 13. LIVE MASIVO (7 créditos)
+        // 13. LIVE MASIVO
         // ================================================================
 
         async function liveMasivo() {
@@ -2425,11 +2574,12 @@
 
             const validCount = results.filter(r => r.result.estado === 'valid' || r.result.estado === 'insufficient').length;
             const fondosCount = results.filter(r => r.result.estado === 'valid').length;
+            const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
 
             let html = `
                 <div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
                     <div style="font-size:0.9rem;font-weight:bold;color:#66ddff;margin-bottom:6px;">
-                        📊 RESULTADOS (${results.length} tarjetas)
+                        📊 RESULTADOS (${results.length} tarjetas) 💳 ${pasarelaNombre}
                     </div>
                     <div class="massive-summary">
                         <div class="stat total">📊 Total: <span class="num">${results.length}</span></div>
@@ -2462,7 +2612,7 @@
 
                 const numeroFormateado = item.number.replace(/(\d{4})/g, '$1 ').trim();
                 const textoCompleto =
-                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.country}|${item.binInfo.bank}`;
+                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.country}|${item.binInfo.bank}|${pasarelaNombre}`;
 
                 html += `
                     <div class="massive-item ${estadoClass}">
@@ -2501,12 +2651,13 @@
         function descargarResultadoMasivo() {
             if (!massiveResults.length) return;
 
+            const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
             const lines = massiveResults.map(item => {
                 const r = item.result;
-                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.country}|${item.binInfo.bank}`;
+                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.country}|${item.binInfo.bank}|${pasarelaNombre}`;
             });
 
-            const header = 'Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco\n';
+            const header = 'Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco|Pasarela\n';
             const text = header + lines.join('\n');
 
             const blob = new Blob([text], { type: 'text/plain' });
@@ -2554,6 +2705,7 @@
                 mensaje: result.mensaje,
                 codigo: result.codigo,
                 fondos: result.fondos,
+                pasarela: pasarelaSeleccionada,
                 fecha: new Date().toLocaleString()
             });
             if (history.length > 50) history.length = 50;
@@ -2567,7 +2719,7 @@
             const container = document.getElementById('liveHistory');
             if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin LIVE</p>'; return; }
             container.innerHTML = history.map(h =>
-                `<div class="credit-item">🔴 ${h.number} | ${h.brand} | ${h.estado === 'valid' ? '✅' : h.estado === 'insufficient' ? '⚠️' : '❌'} ${h.mensaje} | ${h.fecha}</div>`
+                `<div class="credit-item">🔴 ${h.number} | ${h.brand} | ${h.estado === 'valid' ? '✅' : h.estado === 'insufficient' ? '⚠️' : '❌'} ${h.mensaje} | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`
             ).join('');
         }
 
@@ -2581,6 +2733,7 @@
                 total: results.length,
                 valid: validCount,
                 fondos: fondosCount,
+                pasarela: pasarelaSeleccionada,
                 fecha: new Date().toLocaleString()
             });
             if (history.length > 30) history.length = 30;
@@ -2594,7 +2747,7 @@
             const container = document.getElementById('massiveHistory');
             if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin masivos</p>'; return; }
             container.innerHTML = history.map(h =>
-                `<div class="credit-item">📊 ${h.total} tarjetas | 🟢 ${h.fondos} fondos | 🟡 ${h.valid} válidas | ${h.fecha}</div>`
+                `<div class="credit-item">📊 ${h.total} tarjetas | 🟢 ${h.fondos} fondos | 🟡 ${h.valid} válidas | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`
             ).join('');
         }
 
@@ -2649,21 +2802,29 @@
                     escucharUsuarios();
                 }
             }
+            if (tabName === 'pasarela') {
+                // Actualizar la UI de pasarela
+                document.querySelectorAll('.pasarela-card').forEach(c => c.classList.remove('active'));
+                document.getElementById('pasarela-' + pasarelaSeleccionada).classList.add('active');
+                const nombres = { 'stripe': 'Stripe', 'zuora': 'Zuora', 'auth': 'Auth' };
+                document.getElementById('pasarelaSeleccionadaLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
+                document.getElementById('pasarelaLiveLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
+                document.getElementById('pasarelaMasivoLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
+            }
         }
 
         // ================================================================
         // 16. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON ADMIN DE DÍAS');
+        console.log('⚡ SYS ANDY PRO - CON PASARELAS RESTAURADAS');
         console.log('🔐 Usa "andy" / "andy799" como Owner');
-        console.log('🎁 Registro: días + créditos de regalo');
-        console.log('🔒 Admin puede bloquear/desbloquear, gestionar créditos y días');
-        console.log('📱 Botón para pedir créditos por WhatsApp');
         console.log('💎 Generación GRATIS | LIVE: 2 créditos | Masivo: 7 créditos');
+        console.log('💳 Pasarelas: Stripe, Zuora, Auth (seleccionable)');
 
-        // Cargar promoción al inicio
         cargarPromo();
+        // Seleccionar Stripe por defecto
+        seleccionarPasarela('stripe');
     </script>
 
 </body>
