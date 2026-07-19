@@ -2331,7 +2331,7 @@
                 const binInfo = await getBINInfo(bin);
                 const brand = binInfo.brand || card.brand;
 
-                const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv);
+               const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv);
 
                 massiveResults.push({
                     number: card.number,
