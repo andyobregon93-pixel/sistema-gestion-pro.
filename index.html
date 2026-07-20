@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON CHAT Y NOTAS                       */
+        /* ESTILOS - VERSIÓN FINAL CON SALAS PRIVADAS                    */
         /* ============================================================== */
 
         * {
@@ -389,6 +389,15 @@
             border-bottom-color: #ff88cc;
             background: rgba(255, 136, 204, 0.08);
         }
+        .tab-btn.sala-tab {
+            color: #ff44aa;
+            font-weight: 700;
+        }
+        .tab-btn.sala-tab.active {
+            color: #ff44aa;
+            border-bottom-color: #ff44aa;
+            background: rgba(255, 68, 170, 0.08);
+        }
 
         /* ===== PANELES ===== */
         .panels-container {
@@ -474,6 +483,10 @@
         .item-card .info-box.direcciones {
             border-color: #ffaa44;
             background: #ffaa4406;
+        }
+        .item-card .info-box.sala {
+            border-color: #ff44aa;
+            background: #ff44aa06;
         }
 
         /* ===== FORMULARIOS ===== */
@@ -579,6 +592,11 @@
             background: linear-gradient(135deg, #ffaa44, #cc8800);
             box-shadow: 0 0 20px rgba(255, 170, 68, 0.15);
         }
+        .btn-block.btn-sala {
+            background: linear-gradient(135deg, #ff44aa, #cc0088);
+            box-shadow: 0 0 20px rgba(255, 68, 170, 0.15);
+            animation: pulse-sala 2s ease-in-out infinite;
+        }
 
         @keyframes pulse-live {
             0%,
@@ -596,6 +614,15 @@
             }
             50% {
                 box-shadow: 0 0 30px rgba(255, 136, 0, 0.25);
+            }
+        }
+        @keyframes pulse-sala {
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(255, 68, 170, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(255, 68, 170, 0.35);
             }
         }
 
@@ -644,6 +671,9 @@
         }
         .btn-small.btn-warning {
             background: #ff8800;
+        }
+        .btn-small.btn-sala-sm {
+            background: #ff44aa;
         }
 
         /* ===== PASARELA CARDS ===== */
@@ -1122,6 +1152,41 @@
             font-size: 2.5rem;
         }
 
+        /* ===== SALA PRIVADA ===== */
+        .sala-card {
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px solid #ff44aa;
+            border-radius: 12px;
+            padding: 12px;
+            margin-top: 8px;
+        }
+        .sala-card .codigo-sala {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #ff88cc;
+            letter-spacing: 4px;
+            background: #1a0a0a;
+            padding: 8px 16px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px dashed #ff44aa;
+            margin: 6px 0;
+            user-select: all;
+        }
+        .sala-card .copy-btn-sala {
+            background: #0088cc;
+            border: none;
+            border-radius: 8px;
+            padding: 4px 12px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.7rem;
+        }
+        .sala-card .copy-btn-sala:hover {
+            background: #00aaff;
+        }
+
         /* ===== NOTAS ===== */
         .nota-editor textarea {
             width: 100%;
@@ -1396,6 +1461,7 @@
                 <button class="tab-btn pasarela-tab" onclick="switchTab('pasarela')">💳 PASARELA</button>
                 <button class="tab-btn direcciones-tab" onclick="switchTab('direcciones')">📍 DIRECCIONES</button>
                 <button class="tab-btn chat-tab" onclick="switchTab('chat')">💬 CHAT</button>
+                <button class="tab-btn sala-tab" onclick="switchTab('sala')">🔒 SALA PRIVADA</button>
                 <button class="tab-btn notas-tab" onclick="switchTab('notas')">📝 NOTAS</button>
                 <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
@@ -1580,12 +1646,11 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: CHAT EN VIVO (MEJORADO) ===== -->
+                <!-- ===== PANEL: CHAT EN VIVO ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-chat" class="panel">
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
 
-                    <!-- Configurar perfil del chat -->
                     <div class="chat-profile-setup" id="chatProfileSetup">
                         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                             <div class="avatar-selector" id="chatAvatarSelector" onclick="cambiarAvatarChat()">🦁</div>
@@ -1598,12 +1663,10 @@
                         <div style="margin-top:6px;color:#6688aa;font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
                     </div>
 
-                    <!-- Mensajes -->
                     <div class="chat-messages" id="chatMessages">
                         <div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>
                     </div>
 
-                    <!-- Input de chat -->
                     <div class="chat-input-area">
                         <button class="chat-btn" onclick="toggleEmojiPicker()" title="Emojis">😊</button>
                         <button class="chat-btn" onclick="toggleStickerPicker()" title="Stickers">🎨</button>
@@ -1613,7 +1676,6 @@
                         <button class="chat-btn send" onclick="enviarMensaje()">➤</button>
                     </div>
 
-                    <!-- Emoji Picker -->
                     <div class="emoji-picker" id="emojiPicker">
                         <span onclick="insertEmoji('😀')">😀</span><span onclick="insertEmoji('😂')">😂</span>
                         <span onclick="insertEmoji('😍')">😍</span><span onclick="insertEmoji('😡')">😡</span>
@@ -1624,7 +1686,6 @@
                         <span onclick="insertEmoji('👀')">👀</span><span onclick="insertEmoji('💯')">💯</span>
                     </div>
 
-                    <!-- Sticker Picker -->
                     <div class="sticker-picker" id="stickerPicker">
                         <span onclick="enviarSticker('🦁')">🦁</span>
                         <span onclick="enviarSticker('🔥')">🔥</span>
@@ -1636,6 +1697,57 @@
                         <span onclick="enviarSticker('💪')">💪</span>
                         <span onclick="enviarSticker('🤖')">🤖</span>
                         <span onclick="enviarSticker('👾')">👾</span>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: SALA PRIVADA (NUEVO) ===== -->
+                <!-- ========================================================== -->
+                <div id="panel-sala" class="panel">
+                    <h3>🔒 SALA PRIVADA <span class="info-badge" style="background:#ff44aa;color:#fff;">5 créditos</span></h3>
+
+                    <div class="item-card">
+                        <div class="info-box sala">
+                            💬 <strong>Crea una sala privada</strong> para chatear con tus amigos.
+                            <br>💰 <strong>Costo: 5 créditos</strong> (solo el creador paga).
+                            <br>📋 Comparte el código con quien quieras para que entren gratis.
+                            <br>🔐 <strong>Chat privado</strong> - solo los que tengan el código pueden entrar.
+                        </div>
+
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="btn-block btn-sala" onclick="crearSalaPrivada()" id="btnCrearSala">
+                                🔒 CREAR SALA PRIVADA (5 créditos)
+                            </button>
+                            <button class="btn-block btn-start" onclick="unirseASala()" id="btnUnirseSala" style="flex:0.5;">
+                                🔑 UNIRSE CON CÓDIGO
+                            </button>
+                        </div>
+
+                        <div class="flex-row" style="margin-top:8px;">
+                            <div class="form-group">
+                                <label>🔑 Ingresa el código de la sala</label>
+                                <input type="text" id="inputCodigoSala" placeholder="Ej: ABC123" maxlength="10" style="text-transform:uppercase;">
+                            </div>
+                            <button class="btn-small btn-success" onclick="unirseASala()" style="padding:6px 16px;align-self:flex-end;margin-bottom:8px;">▶️ Entrar</button>
+                        </div>
+                    </div>
+
+                    <div id="salaPrivadaContainer">
+                        <div class="sala-card" id="salaPrivadaCard" style="display:none;">
+                            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+                                <span style="color:#ff88cc;font-weight:bold;">🔒 Sala privada</span>
+                                <span style="color:#6688aa;font-size:0.7rem;">Código: <strong id="salaCodigoDisplay" style="color:#ff88cc;letter-spacing:2px;">---</strong></span>
+                                <button class="copy-btn-sala" onclick="copiarCodigoSala()">📋 Copiar código</button>
+                                <button class="btn-small btn-danger" onclick="salirDeSala()">🚪 Salir</button>
+                            </div>
+                            <div id="salaMessages" class="chat-messages" style="height:250px;margin-top:8px;">
+                                <div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>
+                            </div>
+                            <div class="chat-input-area" style="margin-top:6px;">
+                                <textarea class="chat-input" id="salaChatInput" rows="1" placeholder="Mensaje privado..."></textarea>
+                                <button class="chat-btn send" onclick="enviarMensajeSala()">➤</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -1690,7 +1802,7 @@
                     <div class="item-card">
                         <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:1.5rem;">💎 <span id="creditsBalance" style="color:#66ddff;">0</span> créditos</span>
-                            <span style="color:#88bbff; font-size:0.7rem;">🔹 Generar: GRATIS<br>🔹 LIVE: 2 créditos<br>🔹 Masivo: 7 créditos</span>
+                            <span style="color:#88bbff; font-size:0.7rem;">🔹 Generar: GRATIS<br>🔹 LIVE: 2 créditos<br>🔹 Masivo: 7 créditos<br>🔹 Sala Privada: 5 créditos</span>
                         </div>
                     </div>
                     <div class="item-card">
@@ -1748,12 +1860,18 @@
         let promoCreditos = 50;
         let pasarelaSeleccionada = 'stripe';
         let usuariosUnsubscribe = null;
+        let esOwner = false;
 
         // Chat variables
         let chatDisplayName = "";
         let chatAvatar = "🦁";
         let chatUnsubscribe = null;
-        let chatNameBloqueado = false; // si ya se guardó el nombre una vez
+        let chatNameBloqueado = false;
+
+        // Sala Privada
+        let salaActual = null;
+        let salaUnsubscribe = null;
+        let salaCodigo = null;
 
         // ================================================================
         // 3. UTILIDADES
@@ -1782,22 +1900,34 @@
                 setTimeout(() => div.remove(), 500); }, 3000);
         }
 
-        // ================================================================
-        // 4. FUNCIÓN PARA COLOR ÚNICO POR USUARIO
-        // ================================================================
         function getUserColor(userId, userName) {
-            // Usar userId o userName para generar un hash consistente
             const str = userId || userName || 'default';
             let hash = 0;
             for (let i = 0; i < str.length; i++) {
                 hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                hash = hash & hash; // Convertir a 32bits
+                hash = hash & hash;
             }
-            // Asegurar saturación y luminosidad agradables
             const h = Math.abs(hash % 360);
-            const s = 65 + (hash % 20); // 65-85%
-            const l = 55 + (hash % 15); // 55-70%
+            const s = 65 + (hash % 20);
+            const l = 55 + (hash % 15);
             return `hsl(${h}, ${s}%, ${l}%)`;
+        }
+
+        function generarCodigoSala() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let codigo = '';
+            for (let i = 0; i < 6; i++) {
+                codigo += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return codigo;
+        }
+
+        // ================================================================
+        // 4. FUNCIÓN PARA SABER SI ES OWNER
+        // ================================================================
+        function esUsuarioOwner(email) {
+            const owners = ['andyobregon799@gmail.com', 'andy'];
+            return owners.includes(email);
         }
 
         // ================================================================
@@ -1942,6 +2072,7 @@
         async function ingresarAlSistema(email, elRol) {
             currentUser = { email: email, role: elRol, uid: limpiarClave(email) };
             usernameClave = currentUser.uid;
+            esOwner = esUsuarioOwner(email);
 
             const userSnap = await db.ref(`usuarios/${usernameClave}`).once('value');
             if (userSnap.exists() && userSnap.val().bloqueado === true) {
@@ -1966,7 +2097,20 @@
                 document.getElementById('tabAdminBtn').style.display = 'none';
             }
 
-            await cargarDatosUsuario();
+            // Si es Owner, poner créditos y días infinitos
+            if (esOwner) {
+                await db.ref(`usuarios_datos/${usernameClave}`).set({
+                    credits: 999999,
+                    days: 999999
+                });
+                // También asegurar en la base de datos local
+                currentCredits = 999999;
+                currentDays = 999999;
+                actualizarDisplayDatos();
+            } else {
+                await cargarDatosUsuario();
+            }
+
             await cargarCreditosUsuario();
             cargarHistorialGen();
             cargarHistorialLive();
@@ -1975,7 +2119,6 @@
             document.getElementById('generatedCount').textContent = generatedCardsList.length;
             document.getElementById('massiveCount').textContent = generatedCardsList.length;
 
-            // Cargar perfil de chat y nota
             await cargarPerfilChat();
             await cargarNota();
 
@@ -1988,6 +2131,11 @@
                 usuariosUnsubscribe = null; }
             if (chatUnsubscribe) { chatUnsubscribe();
                 chatUnsubscribe = null; }
+            if (salaUnsubscribe) { salaUnsubscribe();
+                salaUnsubscribe = null; }
+            salaActual = null;
+            salaCodigo = null;
+            document.getElementById('salaPrivadaCard').style.display = 'none';
             currentUser = null;
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('main-app').style.display = 'none';
@@ -2001,6 +2149,13 @@
         // ================================================================
         async function cargarDatosUsuario() {
             if (!currentUser) return;
+            // Si es owner, ya tiene infinitos
+            if (esOwner) {
+                currentCredits = 999999;
+                currentDays = 999999;
+                actualizarDisplayDatos();
+                return { credits: currentCredits, days: currentDays };
+            }
             const ref = db.ref(`usuarios_datos/${currentUser.uid}`);
             const snap = await ref.once('value');
             if (snap.exists()) {
@@ -2017,14 +2172,21 @@
         }
 
         function actualizarDisplayDatos() {
-            document.getElementById('creditsDisplay').textContent = `💎 ${currentCredits} créditos`;
-            document.getElementById('daysDisplay').textContent = `📅 ${currentDays} días`;
-            document.getElementById('creditsBalance').textContent = currentCredits;
-            document.getElementById('daysBalance').textContent = currentDays;
+            if (esOwner) {
+                document.getElementById('creditsDisplay').textContent = `💎 ∞ créditos`;
+                document.getElementById('daysDisplay').textContent = `📅 ∞ días`;
+                document.getElementById('creditsBalance').textContent = '∞';
+                document.getElementById('daysBalance').textContent = '∞';
+            } else {
+                document.getElementById('creditsDisplay').textContent = `💎 ${currentCredits} créditos`;
+                document.getElementById('daysDisplay').textContent = `📅 ${currentDays} días`;
+                document.getElementById('creditsBalance').textContent = currentCredits;
+                document.getElementById('daysBalance').textContent = currentDays;
+            }
         }
 
         async function guardarDatosUsuario() {
-            if (!currentUser) return;
+            if (!currentUser || esOwner) return;
             await db.ref(`usuarios_datos/${currentUser.uid}`).update({
                 credits: currentCredits,
                 days: currentDays
@@ -2032,6 +2194,11 @@
         }
 
         async function gastarCredito(cantidad, descripcion) {
+            // Si es owner, no gasta créditos
+            if (esOwner) {
+                mostrarNotificacion(`👑 Owner: no gastas créditos (${descripcion})`, 'success');
+                return true;
+            }
             if (currentDays <= 0) {
                 mostrarNotificacion(`❌ No tienes días activos. Contacta al admin.`, 'error');
                 return false;
@@ -2048,7 +2215,7 @@
         }
 
         async function registrarMovimiento(tipo, monto, descripcion) {
-            if (!currentUser) return;
+            if (!currentUser || esOwner) return;
             const ref = db.ref(`creditos/${currentUser.uid}/historial`);
             await ref.push({
                 tipo: tipo,
@@ -2205,7 +2372,7 @@
         }
 
         // ================================================================
-        // 10. GENERADOR DE TARJETAS (GRATIS)
+        // 10. GENERADOR DE TARJETAS (GRATIS) - CÓDIGO COMPLETO
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '');
@@ -2279,7 +2446,7 @@
 
         async function generarTarjetas() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            if (currentDays <= 0) { mostrarNotificacion('❌ Sin días activos.', 'error'); return; }
+            if (!esOwner && currentDays <= 0) { mostrarNotificacion('❌ Sin días activos.', 'error'); return; }
 
             const binInput = document.getElementById('binInput').value.trim();
             const month = document.getElementById('cardMonth').value.trim() || '12';
@@ -2368,7 +2535,7 @@
         }
 
         // ================================================================
-        // 11. LIVE Y MASIVO (resumido por espacio, lógica igual que antes)
+        // 11. LIVE Y MASIVO (resumido por espacio)
         // ================================================================
         async function getBINInfo(bin) {
             try {
@@ -2471,7 +2638,7 @@
                         <strong style="color:#66ddff;">📋 Detalles:</strong>
                         <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
                     </div>
-                    <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 2 créditos | Saldo: ${currentCredits}</div>
+                    <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div>
                 </div>
             `;
         }
@@ -2563,7 +2730,7 @@
                 `;
             });
             html +=
-                `</div><div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 7 créditos | Saldo: ${currentCredits}</div></div>`;
+                `</div><div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 7 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div></div>`;
             container.innerHTML = html;
         }
 
@@ -2660,6 +2827,12 @@
 
         async function cargarCreditosUsuario() {
             if (!currentUser) return;
+            // Si es owner, mostrar mensaje especial
+            if (esOwner) {
+                document.getElementById('creditHistory').innerHTML =
+                    '<div style="color:#ffaa44;font-size:0.8rem;">👑 Owner - Créditos infinitos</div>';
+                return;
+            }
             const ref = db.ref(`creditos/${currentUser.uid}/historial`);
             const snap = await ref.orderByChild('fecha').limitToLast(20).once('value');
             const container = document.getElementById('creditHistory');
@@ -2843,7 +3016,7 @@
         }
 
         // ================================================================
-        // 14. CHAT EN VIVO (MEJORADO)
+        // 15. CHAT EN VIVO
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -2854,7 +3027,6 @@
             }
             document.getElementById('chatAvatarSelector').textContent = nuevo;
             chatAvatar = nuevo;
-            // Guardar avatar en Firebase (si el perfil ya existe)
             if (currentUser && chatDisplayName) {
                 db.ref(`chat_profiles/${currentUser.uid}`).update({ avatar: chatAvatar });
             }
@@ -2865,19 +3037,16 @@
             const name = document.getElementById('chatDisplayName').value.trim();
             if (!name) { mostrarNotificacion('❌ Escribe un nombre', 'error'); return; }
 
-            // Verificar si ya existe un perfil (nombre guardado anteriormente)
             const snap = await db.ref(`chat_profiles/${currentUser.uid}`).once('value');
             const existe = snap.exists();
 
-            if (existe && snap.val().name) {
-                // Si ya tiene nombre guardado, no permitir cambiarlo
+            // Si es owner, puede cambiar su nombre cuando quiera
+            if (existe && snap.val().name && !esOwner) {
                 mostrarNotificacion('❌ Ya tienes un nombre guardado, no puedes cambiarlo.', 'error');
-                // Actualizar el campo para mostrar el nombre actual
                 document.getElementById('chatDisplayName').value = snap.val().name;
                 return;
             }
 
-            // Si no existe o no tiene nombre, guardamos
             chatDisplayName = name;
             chatAvatar = document.getElementById('chatAvatarSelector').textContent;
             await db.ref(`chat_profiles/${currentUser.uid}`).set({
@@ -2885,14 +3054,24 @@
                 avatar: chatAvatar
             });
             chatNameBloqueado = true;
-            // Deshabilitar el campo de nombre
-            document.getElementById('chatDisplayName').disabled = true;
-            document.getElementById('btnGuardarPerfilChat').style.display = 'none';
-            document.getElementById('nombreBloqueadoMsg').style.display = 'inline';
-            document.getElementById('chatProfileInfo').textContent = '✅ Nombre guardado permanentemente. Solo puedes cambiar tu avatar.';
-            mostrarNotificacion('✅ Perfil de chat guardado permanentemente', 'success');
 
-            // Reiniciar listener para actualizar mensajes con el nuevo nombre
+            // Si no es owner, bloquear el campo
+            if (!esOwner) {
+                document.getElementById('chatDisplayName').disabled = true;
+                document.getElementById('btnGuardarPerfilChat').style.display = 'none';
+                document.getElementById('nombreBloqueadoMsg').style.display = 'inline';
+                document.getElementById('chatProfileInfo').textContent =
+                    '✅ Nombre guardado permanentemente. Solo puedes cambiar tu avatar.';
+            } else {
+                document.getElementById('chatProfileInfo').textContent =
+                    '👑 Owner - Puedes cambiar tu nombre cuando quieras.';
+                document.getElementById('chatDisplayName').disabled = false;
+                document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+            }
+
+            mostrarNotificacion('✅ Perfil de chat guardado', 'success');
+
             if (chatUnsubscribe) {
                 chatUnsubscribe();
                 chatUnsubscribe = null;
@@ -2907,24 +3086,36 @@
                 const data = snap.val();
                 chatDisplayName = data.name || currentUser.email.split('@')[0];
                 chatAvatar = data.avatar || '🦁';
-                // Si ya tiene nombre guardado, bloquear el campo
-                if (data.name) {
+                if (data.name && !esOwner) {
                     chatNameBloqueado = true;
                     document.getElementById('chatDisplayName').disabled = true;
                     document.getElementById('btnGuardarPerfilChat').style.display = 'none';
                     document.getElementById('nombreBloqueadoMsg').style.display = 'inline';
                     document.getElementById('chatProfileInfo').textContent =
                         '✅ Nombre guardado permanentemente. Solo puedes cambiar tu avatar.';
+                } else if (esOwner) {
+                    document.getElementById('chatDisplayName').disabled = false;
+                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+                    document.getElementById('chatProfileInfo').textContent =
+                        '👑 Owner - Puedes cambiar tu nombre cuando quieras.';
                 }
             } else {
                 chatDisplayName = currentUser.email.split('@')[0];
                 chatAvatar = '🦁';
-                // No guardamos automáticamente, dejamos que el usuario lo haga
-                document.getElementById('chatDisplayName').disabled = false;
-                document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
-                document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-                document.getElementById('chatProfileInfo').textContent =
-                    '💡 Elige un avatar y escribe tu nombre para chatear (solo se guarda una vez).';
+                if (esOwner) {
+                    document.getElementById('chatDisplayName').disabled = false;
+                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+                    document.getElementById('chatProfileInfo').textContent =
+                        '👑 Owner - Elige tu nombre y avatar.';
+                } else {
+                    document.getElementById('chatDisplayName').disabled = false;
+                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+                    document.getElementById('chatProfileInfo').textContent =
+                        '💡 Elige un avatar y escribe tu nombre para chatear (solo se guarda una vez).';
+                }
             }
             document.getElementById('chatDisplayName').value = chatDisplayName;
             document.getElementById('chatAvatarSelector').textContent = chatAvatar;
@@ -3017,7 +3208,6 @@
             chatUnsubscribe = messagesRef.on('child_added', function(snapshot) {
                 const msg = snapshot.val();
                 const container = document.getElementById('chatMessages');
-                // Remover mensaje de "Cargando"
                 if (container.querySelector('div[style*="color:#6688aa"]')) {
                     container.innerHTML = '';
                 }
@@ -3054,7 +3244,6 @@
             });
         }
 
-        // Enter para enviar mensaje
         document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('chatInput').addEventListener('keydown', function(e) {
                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -3062,10 +3251,205 @@
                     enviarMensaje();
                 }
             });
+            document.getElementById('salaChatInput').addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    enviarMensajeSala();
+                }
+            });
         });
 
         // ================================================================
-        // 15. NOTAS
+        // 16. SALA PRIVADA (NUEVO)
+        // ================================================================
+
+        async function crearSalaPrivada() {
+            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
+            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil de chat primero', 'error'); return; }
+
+            // Gastar 5 créditos (si no es owner)
+            if (!await gastarCredito(5, 'Creación de sala privada')) return;
+
+            const codigo = generarCodigoSala();
+            const salaRef = db.ref(`salas_privadas/${codigo}`);
+
+            // Verificar si el código ya existe (muy improbable pero por seguridad)
+            const snap = await salaRef.once('value');
+            if (snap.exists()) {
+                mostrarNotificacion('❌ Código ya existe, intenta de nuevo', 'error');
+                return;
+            }
+
+            // Crear la sala en Firebase
+            await salaRef.set({
+                creador: currentUser.uid,
+                creadorNombre: chatDisplayName,
+                creadorAvatar: chatAvatar,
+                creado: Date.now(),
+                activa: true
+            });
+
+            // Iniciar la sala para el creador
+            salaCodigo = codigo;
+            salaActual = codigo;
+            document.getElementById('salaCodigoDisplay').textContent = codigo;
+            document.getElementById('salaPrivadaCard').style.display = 'block';
+            document.getElementById('inputCodigoSala').value = '';
+
+            // Mostrar mensaje de bienvenida
+            const salaMsgRef = db.ref(`salas_privadas_mensajes/${codigo}`);
+            await salaMsgRef.push({
+                userId: 'system',
+                userName: 'Sistema',
+                avatar: '🤖',
+                text: `🔒 Sala creada por ${chatDisplayName}. Código: ${codigo}. ¡Comparte el código para que otros se unan!`,
+                timestamp: Date.now()
+            });
+
+            // Escuchar mensajes de la sala
+            escucharSalaPrivada();
+            mostrarNotificacion(`✅ Sala creada! Código: ${codigo}`, 'success');
+        }
+
+        async function unirseASala() {
+            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
+            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil de chat primero', 'error'); return; }
+
+            const codigo = document.getElementById('inputCodigoSala').value.trim().toUpperCase();
+            if (!codigo) { mostrarNotificacion('❌ Ingresa un código', 'error'); return; }
+
+            const salaRef = db.ref(`salas_privadas/${codigo}`);
+            const snap = await salaRef.once('value');
+
+            if (!snap.exists()) {
+                mostrarNotificacion('❌ Sala no encontrada. Verifica el código.', 'error');
+                return;
+            }
+
+            const data = snap.val();
+            if (!data.activa) {
+                mostrarNotificacion('❌ Esta sala ya no está activa.', 'error');
+                return;
+            }
+
+            // Unirse a la sala
+            salaCodigo = codigo;
+            salaActual = codigo;
+            document.getElementById('salaCodigoDisplay').textContent = codigo;
+            document.getElementById('salaPrivadaCard').style.display = 'block';
+            document.getElementById('inputCodigoSala').value = '';
+
+            // Mensaje de bienvenida
+            const salaMsgRef = db.ref(`salas_privadas_mensajes/${codigo}`);
+            await salaMsgRef.push({
+                userId: currentUser.uid,
+                userName: chatDisplayName,
+                avatar: chatAvatar,
+                text: `👋 ${chatDisplayName} se ha unido a la sala!`,
+                timestamp: Date.now()
+            });
+
+            escucharSalaPrivada();
+            mostrarNotificacion(`✅ Te has unido a la sala ${codigo}`, 'success');
+        }
+
+        function escucharSalaPrivada() {
+            if (salaUnsubscribe) { salaUnsubscribe();
+                salaUnsubscribe = null; }
+
+            if (!salaActual) return;
+
+            const msgRef = db.ref(`salas_privadas_mensajes/${salaActual}`).orderByChild('timestamp').limitToLast(100);
+            salaUnsubscribe = msgRef.on('child_added', function(snapshot) {
+                const msg = snapshot.val();
+                const container = document.getElementById('salaMessages');
+                // Remover mensaje de carga
+                if (container.querySelector('div[style*="color:#6688aa"]')) {
+                    container.innerHTML = '';
+                }
+
+                const isOwn = msg.userId === currentUser.uid;
+                const div = document.createElement('div');
+                div.className = `message ${isOwn ? 'own' : 'other'}`;
+
+                let content = '';
+                if (msg.text) {
+                    content += `<div class="msg-text">${msg.text}</div>`;
+                }
+                if (msg.image) {
+                    content += `<img src="${msg.image}" class="msg-image" onclick="window.open('${msg.image}','_blank')" />`;
+                }
+                if (msg.sticker) {
+                    content += `<span class="msg-sticker">${msg.sticker}</span>`;
+                }
+
+                const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const userName = msg.userName || 'Anónimo';
+                const userId = msg.userId || 'default';
+                const color = getUserColor(userId, userName);
+
+                div.innerHTML = `
+                    <div class="msg-header">
+                        <span class="avatar">${msg.avatar || '🦁'}</span>
+                        <span class="name" style="color:${color};">${userName}</span>
+                        <span class="time">${time}</span>
+                    </div>
+                    ${content}
+                `;
+                container.appendChild(div);
+                container.scrollTop = container.scrollHeight;
+            });
+        }
+
+        function enviarMensajeSala() {
+            const input = document.getElementById('salaChatInput');
+            const text = input.value.trim();
+            if (!text) return;
+            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
+            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
+
+            db.ref(`salas_privadas_mensajes/${salaActual}`).push({
+                userId: currentUser.uid,
+                userName: chatDisplayName,
+                avatar: chatAvatar,
+                text: text,
+                timestamp: Date.now()
+            });
+            input.value = '';
+            input.focus();
+        }
+
+        function copiarCodigoSala() {
+            if (!salaCodigo) { mostrarNotificacion('❌ No hay código', 'error'); return; }
+            navigator.clipboard.writeText(salaCodigo).then(() => {
+                mostrarNotificacion('📋 Código copiado: ' + salaCodigo, 'success');
+            });
+        }
+
+        function salirDeSala() {
+            if (!salaActual) return;
+
+            // Mensaje de salida
+            if (chatDisplayName) {
+                db.ref(`salas_privadas_mensajes/${salaActual}`).push({
+                    userId: 'system',
+                    userName: 'Sistema',
+                    avatar: '🤖',
+                    text: `🚪 ${chatDisplayName} ha salido de la sala.`,
+                    timestamp: Date.now()
+                });
+            }
+
+            if (salaUnsubscribe) { salaUnsubscribe();
+                salaUnsubscribe = null; }
+            salaActual = null;
+            salaCodigo = null;
+            document.getElementById('salaPrivadaCard').style.display = 'none';
+            mostrarNotificacion('🚪 Has salido de la sala privada', 'info');
+        }
+
+        // ================================================================
+        // 17. NOTAS
         // ================================================================
         async function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3085,7 +3469,7 @@
         }
 
         // ================================================================
-        // 16. NAVEGACIÓN
+        // 18. NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -3098,6 +3482,7 @@
                 'pasarela': 'panel-pasarela',
                 'direcciones': 'panel-direcciones',
                 'chat': 'panel-chat',
+                'sala': 'panel-sala',
                 'notas': 'panel-notas',
                 'admins': 'panel-admins',
                 'credits': 'panel-credits'
@@ -3110,7 +3495,6 @@
             );
             if (btn) btn.classList.add('active');
 
-            // Cargar datos específicos de cada panel
             if (tabName === 'credits') cargarCreditosUsuario();
             if (tabName === 'generator') {
                 cargarHistorialGen();
@@ -3139,19 +3523,28 @@
                 cargarPerfilChat();
                 if (!chatUnsubscribe) escucharMensajes();
             }
+            if (tabName === 'sala') {
+                if (salaActual) {
+                    document.getElementById('salaCodigoDisplay').textContent = salaActual;
+                    document.getElementById('salaPrivadaCard').style.display = 'block';
+                    if (!salaUnsubscribe) escucharSalaPrivada();
+                } else {
+                    document.getElementById('salaPrivadaCard').style.display = 'none';
+                }
+            }
             if (tabName === 'notas') {
                 cargarNota();
             }
         }
 
         // ================================================================
-        // 17. INICIALIZACIÓN
+        // 19. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON CHAT Y NOTAS (MEJORADO)');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON SALAS PRIVADAS');
         console.log('🔐 Nuevo dueño: andyobregon799@gmail.com / Andyjoel12');
-        console.log('💬 Chat con colores únicos por usuario y nombre guardado permanentemente');
-        console.log('📝 Notas personales guardadas en Firebase');
+        console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
+        console.log('👑 Owner: créditos y días infinitos, puede cambiar su nombre en el chat');
 
         cargarPromo();
         seleccionarPasarela('stripe');
