@@ -508,6 +508,10 @@
             box-shadow: 0 0 15px rgba(0, 200, 255, 0.08);
             outline: none;
         }
+        .form-group input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
         .form-group textarea {
             resize: vertical;
             min-height: 100px;
@@ -947,6 +951,26 @@
         .chat-profile-setup .avatar-selector:hover {
             border-color: var(--borde-neon);
         }
+        .chat-profile-setup .profile-name-input {
+            background: var(--bg-inputs);
+            border: 2px solid #1a4a7a;
+            border-radius: var(--border-radius);
+            color: #d4e4ff;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .chat-profile-setup .profile-name-input:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            border-color: #3a3a5a;
+        }
+        .chat-profile-setup .profile-name-input:focus {
+            border-color: var(--borde-neon);
+            outline: none;
+        }
+
         .chat-messages {
             background: rgba(0, 0, 0, 0.3);
             border-radius: 12px;
@@ -986,7 +1010,6 @@
             gap: 6px;
             font-size: 0.65rem;
             font-weight: bold;
-            color: #88bbff;
             margin-bottom: 2px;
         }
         .chat-messages .message .msg-header .avatar {
@@ -994,6 +1017,7 @@
         }
         .chat-messages .message .msg-header .name {
             color: #88ddff;
+            transition: color 0.2s;
         }
         .chat-messages .message .msg-header .time {
             color: #6688aa;
@@ -1556,7 +1580,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: CHAT EN VIVO (NUEVO) ===== -->
+                <!-- ===== PANEL: CHAT EN VIVO (MEJORADO) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-chat" class="panel">
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
@@ -1566,12 +1590,12 @@
                         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                             <div class="avatar-selector" id="chatAvatarSelector" onclick="cambiarAvatarChat()">🦁</div>
                             <div style="flex:1; min-width:150px;">
-                                <label style="color:#88bbff;font-size:0.7rem;">Tu nombre en el chat</label>
-                                <input type="text" id="chatDisplayName" placeholder="Escribe tu nombre..." style="width:100%;">
+                                <label style="color:#88bbff;font-size:0.7rem;">Tu nombre en el chat <span id="nombreBloqueadoMsg" style="color:#ffaa44;font-size:0.55rem;display:none;">(no se puede cambiar)</span></label>
+                                <input type="text" id="chatDisplayName" class="profile-name-input" placeholder="Escribe tu nombre..." style="width:100%;">
                             </div>
-                            <button class="btn-small btn-success" onclick="guardarPerfilChat()" style="padding:6px 16px;">💾 Guardar</button>
+                            <button class="btn-small btn-success" onclick="guardarPerfilChat()" id="btnGuardarPerfilChat" style="padding:6px 16px;">💾 Guardar</button>
                         </div>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.6rem;">💡 Elige un avatar y escribe tu nombre para chatear.</div>
+                        <div style="margin-top:6px;color:#6688aa;font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
                     </div>
 
                     <!-- Mensajes -->
@@ -1616,7 +1640,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: NOTAS (NUEVO) ===== -->
+                <!-- ===== PANEL: NOTAS ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-notas" class="panel">
                     <h3>📝 BLOG DE NOTAS <span class="info-badge free-tag">GRATIS</span></h3>
@@ -1729,6 +1753,7 @@
         let chatDisplayName = "";
         let chatAvatar = "🦁";
         let chatUnsubscribe = null;
+        let chatNameBloqueado = false; // si ya se guardó el nombre una vez
 
         // ================================================================
         // 3. UTILIDADES
@@ -1758,7 +1783,25 @@
         }
 
         // ================================================================
-        // 4. AUTH - TABS
+        // 4. FUNCIÓN PARA COLOR ÚNICO POR USUARIO
+        // ================================================================
+        function getUserColor(userId, userName) {
+            // Usar userId o userName para generar un hash consistente
+            const str = userId || userName || 'default';
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                hash = str.charCodeAt(i) + ((hash << 5) - hash);
+                hash = hash & hash; // Convertir a 32bits
+            }
+            // Asegurar saturación y luminosidad agradables
+            const h = Math.abs(hash % 360);
+            const s = 65 + (hash % 20); // 65-85%
+            const l = 55 + (hash % 15); // 55-70%
+            return `hsl(${h}, ${s}%, ${l}%)`;
+        }
+
+        // ================================================================
+        // 5. AUTH - TABS
         // ================================================================
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -1778,7 +1821,7 @@
         }
 
         // ================================================================
-        // 5. PASARELA
+        // 6. PASARELA
         // ================================================================
         function seleccionarPasarela(pasarela) {
             pasarelaSeleccionada = pasarela;
@@ -1793,7 +1836,7 @@
         }
 
         // ================================================================
-        // 6. REGISTRO / LOGIN
+        // 7. REGISTRO / LOGIN
         // ================================================================
         async function cargarPromo() {
             const snap = await db.ref('promocion').once('value');
@@ -1954,7 +1997,7 @@
         }
 
         // ================================================================
-        // 7. CRÉDITOS Y DÍAS
+        // 8. CRÉDITOS Y DÍAS
         // ================================================================
         async function cargarDatosUsuario() {
             if (!currentUser) return;
@@ -2027,7 +2070,7 @@
         }
 
         // ================================================================
-        // 8. ADMIN
+        // 9. ADMIN
         // ================================================================
         async function toggleBloquearUsuario(email) {
             if (!currentUser || currentUser.role !== 'Owner') return;
@@ -2162,7 +2205,7 @@
         }
 
         // ================================================================
-        // 9. GENERADOR DE TARJETAS (GRATIS)
+        // 10. GENERADOR DE TARJETAS (GRATIS)
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '');
@@ -2325,7 +2368,7 @@
         }
 
         // ================================================================
-        // 10. LIVE Y MASIVO (resumido por espacio, lógica igual que antes)
+        // 11. LIVE Y MASIVO (resumido por espacio, lógica igual que antes)
         // ================================================================
         async function getBINInfo(bin) {
             try {
@@ -2434,7 +2477,7 @@
         }
 
         // ================================================================
-        // 11. MASIVO
+        // 12. MASIVO
         // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -2546,7 +2589,7 @@
         }
 
         // ================================================================
-        // 12. HISTORIALES
+        // 13. HISTORIALES
         // ================================================================
         function guardarHistorialGen(bin, count) {
             if (!currentUser) return;
@@ -2630,7 +2673,7 @@
         }
 
         // ================================================================
-        // 13. DIRECCIONES
+        // 14. DIRECCIONES
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -2800,7 +2843,7 @@
         }
 
         // ================================================================
-        // 14. CHAT EN VIVO
+        // 14. CHAT EN VIVO (MEJORADO)
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -2811,20 +2854,45 @@
             }
             document.getElementById('chatAvatarSelector').textContent = nuevo;
             chatAvatar = nuevo;
+            // Guardar avatar en Firebase (si el perfil ya existe)
+            if (currentUser && chatDisplayName) {
+                db.ref(`chat_profiles/${currentUser.uid}`).update({ avatar: chatAvatar });
+            }
         }
 
         async function guardarPerfilChat() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             const name = document.getElementById('chatDisplayName').value.trim();
             if (!name) { mostrarNotificacion('❌ Escribe un nombre', 'error'); return; }
+
+            // Verificar si ya existe un perfil (nombre guardado anteriormente)
+            const snap = await db.ref(`chat_profiles/${currentUser.uid}`).once('value');
+            const existe = snap.exists();
+
+            if (existe && snap.val().name) {
+                // Si ya tiene nombre guardado, no permitir cambiarlo
+                mostrarNotificacion('❌ Ya tienes un nombre guardado, no puedes cambiarlo.', 'error');
+                // Actualizar el campo para mostrar el nombre actual
+                document.getElementById('chatDisplayName').value = snap.val().name;
+                return;
+            }
+
+            // Si no existe o no tiene nombre, guardamos
             chatDisplayName = name;
             chatAvatar = document.getElementById('chatAvatarSelector').textContent;
             await db.ref(`chat_profiles/${currentUser.uid}`).set({
                 name: chatDisplayName,
                 avatar: chatAvatar
             });
-            mostrarNotificacion('✅ Perfil de chat guardado', 'success');
-            // Si ya estaba escuchando, reiniciar para actualizar nombre
+            chatNameBloqueado = true;
+            // Deshabilitar el campo de nombre
+            document.getElementById('chatDisplayName').disabled = true;
+            document.getElementById('btnGuardarPerfilChat').style.display = 'none';
+            document.getElementById('nombreBloqueadoMsg').style.display = 'inline';
+            document.getElementById('chatProfileInfo').textContent = '✅ Nombre guardado permanentemente. Solo puedes cambiar tu avatar.';
+            mostrarNotificacion('✅ Perfil de chat guardado permanentemente', 'success');
+
+            // Reiniciar listener para actualizar mensajes con el nuevo nombre
             if (chatUnsubscribe) {
                 chatUnsubscribe();
                 chatUnsubscribe = null;
@@ -2839,10 +2907,24 @@
                 const data = snap.val();
                 chatDisplayName = data.name || currentUser.email.split('@')[0];
                 chatAvatar = data.avatar || '🦁';
+                // Si ya tiene nombre guardado, bloquear el campo
+                if (data.name) {
+                    chatNameBloqueado = true;
+                    document.getElementById('chatDisplayName').disabled = true;
+                    document.getElementById('btnGuardarPerfilChat').style.display = 'none';
+                    document.getElementById('nombreBloqueadoMsg').style.display = 'inline';
+                    document.getElementById('chatProfileInfo').textContent =
+                        '✅ Nombre guardado permanentemente. Solo puedes cambiar tu avatar.';
+                }
             } else {
                 chatDisplayName = currentUser.email.split('@')[0];
                 chatAvatar = '🦁';
-                await db.ref(`chat_profiles/${currentUser.uid}`).set({ name: chatDisplayName, avatar: chatAvatar });
+                // No guardamos automáticamente, dejamos que el usuario lo haga
+                document.getElementById('chatDisplayName').disabled = false;
+                document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+                document.getElementById('chatProfileInfo').textContent =
+                    '💡 Elige un avatar y escribe tu nombre para chatear (solo se guarda una vez).';
             }
             document.getElementById('chatDisplayName').value = chatDisplayName;
             document.getElementById('chatAvatarSelector').textContent = chatAvatar;
@@ -2886,7 +2968,6 @@
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
 
-            // Limitar tamaño a 200KB
             if (file.size > 200 * 1024) {
                 mostrarNotificacion('❌ Imagen muy grande (máx 200KB)', 'error');
                 event.target.value = '';
@@ -2946,7 +3027,7 @@
 
                 let content = '';
                 if (msg.text) {
-                    content = `<div class="msg-text">${msg.text}</div>`;
+                    content += `<div class="msg-text">${msg.text}</div>`;
                 }
                 if (msg.image) {
                     content += `<img src="${msg.image}" class="msg-image" onclick="window.open('${msg.image}','_blank')" />`;
@@ -2956,11 +3037,14 @@
                 }
 
                 const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const userName = msg.userName || 'Anónimo';
+                const userId = msg.userId || 'default';
+                const color = getUserColor(userId, userName);
 
                 div.innerHTML = `
                     <div class="msg-header">
                         <span class="avatar">${msg.avatar || '🦁'}</span>
-                        <span class="name">${msg.userName || 'Anónimo'}</span>
+                        <span class="name" style="color:${color};">${userName}</span>
                         <span class="time">${time}</span>
                     </div>
                     ${content}
@@ -3064,11 +3148,10 @@
         // 17. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON CHAT Y NOTAS');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON CHAT Y NOTAS (MEJORADO)');
         console.log('🔐 Nuevo dueño: andyobregon799@gmail.com / Andyjoel12');
-        console.log('💬 Chat en vivo con imágenes, stickers y emojis');
+        console.log('💬 Chat con colores únicos por usuario y nombre guardado permanentemente');
         console.log('📝 Notas personales guardadas en Firebase');
-        console.log('📍 Direcciones con teléfonos válidos por país');
 
         cargarPromo();
         seleccionarPasarela('stripe');
