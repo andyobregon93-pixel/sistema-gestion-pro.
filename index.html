@@ -1449,7 +1449,7 @@
                 <div class="nav-right">
                     <span class="days-display" id="daysDisplay">📅 0 días</span>
                     <span class="credits-display" id="creditsDisplay">💎 0 créditos</span>
-                    <button class="btn-salir" onclick="cerrarSesion()">SALIR</button>
+                    <button class="btn-salir" onclick="cerrarSesion()" id="btnCerrarSesion">SALIR</button>
                 </div>
             </div>
 
@@ -1701,7 +1701,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: SALA PRIVADA (NUEVO) ===== -->
+                <!-- ===== PANEL: SALA PRIVADA ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-sala" class="panel">
                     <h3>🔒 SALA PRIVADA <span class="info-badge" style="background:#ff44aa;color:#fff;">5 créditos</span></h3>
@@ -1885,14 +1885,14 @@
             const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444', warning: '#ffaa44' };
             const div = document.createElement('div');
             div.style.cssText = `
-                position: fixed; bottom: 15px; right: 15px; 
-                background: #0a1a3a; border: 2px solid ${colors[tipo] || '#66ddff'};
-                color: white; padding: 8px 16px; border-radius: 10px;
-                z-index: 9999; max-width: 320px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
-                font-weight: 600; font-size: 0.75rem;
-                animation: fadeIn 0.2s ease;
-                backdrop-filter: blur(5px);
-            `;
+                    position: fixed; bottom: 15px; right: 15px; 
+                    background: #0a1a3a; border: 2px solid ${colors[tipo] || '#66ddff'};
+                    color: white; padding: 8px 16px; border-radius: 10px;
+                    z-index: 9999; max-width: 320px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
+                    font-weight: 600; font-size: 0.75rem;
+                    animation: fadeIn 0.2s ease;
+                    backdrop-filter: blur(5px);
+                `;
             div.textContent = msg;
             document.body.appendChild(div);
             setTimeout(() => { div.style.opacity = '0';
@@ -1922,12 +1922,87 @@
             return codigo;
         }
 
-        // ================================================================
-        // 4. FUNCIÓN PARA SABER SI ES OWNER
-        // ================================================================
         function esUsuarioOwner(email) {
             const owners = ['andyobregon799@gmail.com', 'andy'];
             return owners.includes(email);
+        }
+
+        // ================================================================
+        // 4. CERRAR SESIÓN (CORREGIDO)
+        // ================================================================
+        function cerrarSesion() {
+            // Remover listeners
+            if (usuariosUnsubscribe) {
+                usuariosUnsubscribe();
+                usuariosUnsubscribe = null;
+            }
+            if (chatUnsubscribe) {
+                chatUnsubscribe();
+                chatUnsubscribe = null;
+            }
+            if (salaUnsubscribe) {
+                salaUnsubscribe();
+                salaUnsubscribe = null;
+            }
+
+            // Limpiar variables globales
+            currentUser = null;
+            usernameClave = "";
+            currentCredits = 0;
+            currentDays = 0;
+            esOwner = false;
+            chatDisplayName = "";
+            chatAvatar = "🦁";
+            chatNameBloqueado = false;
+            salaActual = null;
+            salaCodigo = null;
+            generatedCardsList = [];
+            massiveResults = [];
+
+            // Ocultar sala privada
+            document.getElementById('salaPrivadaCard').style.display = 'none';
+
+            // Mostrar pantalla de login
+            document.getElementById('auth-screen').style.display = 'flex';
+            document.getElementById('main-app').style.display = 'none';
+
+            // Limpiar campos de login
+            document.getElementById('loginEmail').value = '';
+            document.getElementById('loginPass').value = '';
+
+            // Limpiar campos del chat
+            document.getElementById('chatDisplayName').value = '';
+            document.getElementById('chatAvatarSelector').textContent = '🦁';
+            document.getElementById('chatDisplayName').disabled = false;
+            document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+            document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+            document.getElementById('chatProfileInfo').textContent =
+                '💡 Elige un avatar y escribe tu nombre para chatear.';
+
+            // Limpiar mensajes
+            document.getElementById('chatMessages').innerHTML =
+                '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>';
+            document.getElementById('salaMessages').innerHTML =
+                '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>';
+            document.getElementById('chatInput').value = '';
+            document.getElementById('salaChatInput').value = '';
+
+            // Resetear display de créditos
+            document.getElementById('creditsDisplay').textContent = '💎 0 créditos';
+            document.getElementById('daysDisplay').textContent = '📅 0 días';
+            document.getElementById('creditsBalance').textContent = '0';
+            document.getElementById('daysBalance').textContent = '0';
+
+            // Resetear contadores de tarjetas
+            document.getElementById('generatedCount').textContent = '0';
+            document.getElementById('massiveCount').textContent = '0';
+            document.getElementById('generatedCards').innerHTML =
+                '<p style="color:#6688aa;text-align:center;padding:10px;font-size:0.8rem;">Genera tus tarjetas aquí (GRATIS)</p>';
+            document.getElementById('btnDownloadGen').disabled = true;
+            document.getElementById('actionButtons').style.display = 'none';
+
+            mostrarNotificacion('👋 Sesión cerrada correctamente', 'info');
+            console.log('🔐 Sesión cerrada');
         }
 
         // ================================================================
@@ -2039,12 +2114,10 @@
             const passInput = document.getElementById('loginPass').value.trim();
             if (!emailInput || !passInput) { mostrarNotificacion('Completa los campos.', 'error'); return; }
 
-            // NUEVO DUEÑO: andyobregon799@gmail.com / Andyjoel12
             if (emailInput === "andyobregon799@gmail.com" && passInput === "Andyjoel12") {
                 ingresarAlSistema(emailInput, "Owner");
                 return;
             }
-            // Dueño antiguo
             if (emailInput === "andy" && passInput === "andy799") {
                 ingresarAlSistema(emailInput, "Owner");
                 return;
@@ -2085,9 +2158,9 @@
 
             const displayName = email.split('@')[0];
             document.getElementById('userDisplay').innerHTML = `
-                👤 ${displayName} ${elRol === 'Owner' ? '👑' : ''}
-                <span class="user-status active">✅ Activo</span>
-            `;
+                    👤 ${displayName} ${elRol === 'Owner' ? '👑' : ''}
+                    <span class="user-status active">✅ Activo</span>
+                `;
 
             if (elRol === "Owner") {
                 document.getElementById('tabAdminBtn').style.display = 'block';
@@ -2097,13 +2170,11 @@
                 document.getElementById('tabAdminBtn').style.display = 'none';
             }
 
-            // Si es Owner, poner créditos y días infinitos
             if (esOwner) {
                 await db.ref(`usuarios_datos/${usernameClave}`).set({
                     credits: 999999,
                     days: 999999
                 });
-                // También asegurar en la base de datos local
                 currentCredits = 999999;
                 currentDays = 999999;
                 actualizarDisplayDatos();
@@ -2124,24 +2195,8 @@
 
             seleccionarPasarela('stripe');
             switchTab('generator');
-        }
 
-        function cerrarSesion() {
-            if (usuariosUnsubscribe) { usuariosUnsubscribe();
-                usuariosUnsubscribe = null; }
-            if (chatUnsubscribe) { chatUnsubscribe();
-                chatUnsubscribe = null; }
-            if (salaUnsubscribe) { salaUnsubscribe();
-                salaUnsubscribe = null; }
-            salaActual = null;
-            salaCodigo = null;
-            document.getElementById('salaPrivadaCard').style.display = 'none';
-            currentUser = null;
-            document.getElementById('auth-screen').style.display = 'flex';
-            document.getElementById('main-app').style.display = 'none';
-            document.getElementById('loginEmail').value = '';
-            document.getElementById('loginPass').value = '';
-            mostrarNotificacion('Sesión cerrada', 'info');
+            mostrarNotificacion(`✅ Bienvenido ${displayName}`, 'success');
         }
 
         // ================================================================
@@ -2149,7 +2204,6 @@
         // ================================================================
         async function cargarDatosUsuario() {
             if (!currentUser) return;
-            // Si es owner, ya tiene infinitos
             if (esOwner) {
                 currentCredits = 999999;
                 currentDays = 999999;
@@ -2194,7 +2248,6 @@
         }
 
         async function gastarCredito(cantidad, descripcion) {
-            // Si es owner, no gasta créditos
             if (esOwner) {
                 mostrarNotificacion(`👑 Owner: no gastas créditos (${descripcion})`, 'success');
                 return true;
@@ -2274,19 +2327,19 @@
                     const div = document.createElement('div');
                     div.className = 'user-list-item';
                     div.innerHTML = `
-                        <div>
-                            <span class="user-email">${user.email}</span>
-                            <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                            <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
-                        </div>
-                        <div class="user-actions">
-                            <button class="btn-small btn-success" onclick="adminAgregarCreditosManual('${user.email}')">➕</button>
-                            <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')">➖</button>
-                            <button class="btn-small btn-warning" onclick="adminAgregarDiasManual('${user.email}')">📅+</button>
-                            <button class="btn-small" style="background:#cc8800;color:#fff;" onclick="adminRestarDiasManual('${user.email}')">📅-</button>
-                            <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${user.email}')">${bloqueado ? '🔓' : '🔒'}</button>
-                        </div>
-                    `;
+                            <div>
+                                <span class="user-email">${user.email}</span>
+                                <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
+                                <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                            </div>
+                            <div class="user-actions">
+                                <button class="btn-small btn-success" onclick="adminAgregarCreditosManual('${user.email}')">➕</button>
+                                <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')">➖</button>
+                                <button class="btn-small btn-warning" onclick="adminAgregarDiasManual('${user.email}')">📅+</button>
+                                <button class="btn-small" style="background:#cc8800;color:#fff;" onclick="adminRestarDiasManual('${user.email}')">📅-</button>
+                                <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${user.email}')">${bloqueado ? '🔓' : '🔒'}</button>
+                            </div>
+                        `;
                     container.appendChild(div);
                 }
             });
@@ -2357,13 +2410,13 @@
                         const div = document.createElement('div');
                         div.className = 'user-list-item';
                         div.innerHTML = `
-                            <div>
-                                <span class="user-email">${data.email}</span>
-                                <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                                <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
-                            </div>
-                            <div><button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${data.email}')">${bloqueado ? '🔓' : '🔒'}</button></div>
-                        `;
+                                <div>
+                                    <span class="user-email">${data.email}</span>
+                                    <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
+                                    <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                </div>
+                                <div><button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${data.email}')">${bloqueado ? '🔓' : '🔒'}</button></div>
+                            `;
                         container.appendChild(div);
                     }
                 });
@@ -2372,7 +2425,7 @@
         }
 
         // ================================================================
-        // 10. GENERADOR DE TARJETAS (GRATIS) - CÓDIGO COMPLETO
+        // 10. GENERADOR DE TARJETAS (GRATIS)
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '');
@@ -2477,21 +2530,21 @@
                 const brandClass = card.brand === 'American Express' ? 'amex' : 'brand';
                 const cvvLabel = card.cvvLength === 4 ? '🔐 CVV(4)' : '🔐 CVV';
                 return `
-                    <div class="card-item">
-                        <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
-                        <div class="card-info">
-                            <span class="info-badge ${brandClass}">${card.brand}</span>
-                            <span class="info-badge fecha">${card.month}/${card.year}</span>
-                            <span class="info-badge ${cvvClass}">${cvvLabel} ${card.cvv}</span>
-                            <span class="info-badge">Serie: ${card.series}</span>
-                            <span class="info-badge free-tag">GRATIS</span>
+                        <div class="card-item">
+                            <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
+                            <div class="card-info">
+                                <span class="info-badge ${brandClass}">${card.brand}</span>
+                                <span class="info-badge fecha">${card.month}/${card.year}</span>
+                                <span class="info-badge ${cvvClass}">${cvvLabel} ${card.cvv}</span>
+                                <span class="info-badge">Serie: ${card.series}</span>
+                                <span class="info-badge free-tag">GRATIS</span>
+                            </div>
+                            <div class="card-actions">
+                                <button class="btn-small btn-copy" onclick="copiarTarjeta(${index})">📋</button>
+                                <button class="btn-small btn-live-sm" onclick="enviarALive(${index})">🔴</button>
+                            </div>
                         </div>
-                        <div class="card-actions">
-                            <button class="btn-small btn-copy" onclick="copiarTarjeta(${index})">📋</button>
-                            <button class="btn-small btn-live-sm" onclick="enviarALive(${index})">🔴</button>
-                        </div>
-                    </div>
-                `;
+                    `;
             }).join('');
         }
 
@@ -2535,7 +2588,7 @@
         }
 
         // ================================================================
-        // 11. LIVE Y MASIVO (resumido por espacio)
+        // 11. LIVE Y MASIVO
         // ================================================================
         async function getBINInfo(bin) {
             try {
@@ -2620,32 +2673,29 @@
             const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
             const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
             return `
-                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
-                    <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;"><span class="${cls}">${icon} ${result.mensaje}</span> <span style="color:#6688aa;font-size:0.6rem;">💳 ${pasarelaNombre}</span></div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
-                        <div><span style="color:#88bbff;">🔢 Número:</span> ${formatoNumero}</div>
-                        <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
-                        <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
-                        <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv}</div>
-                        <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.bank}</div>
-                        <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.country_emoji} ${binInfo.country}</div>
-                        <div><span style="color:#88bbff;">📋 Tipo:</span> ${binInfo.type}</div>
-                        <div><span style="color:#88bbff;">🔝 Nivel:</span> ${binInfo.level}</div>
-                        <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
-                        <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaNombre}</div>
+                    <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
+                        <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;"><span class="${cls}">${icon} ${result.mensaje}</span> <span style="color:#6688aa;font-size:0.6rem;">💳 ${pasarelaNombre}</span></div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
+                            <div><span style="color:#88bbff;">🔢 Número:</span> ${formatoNumero}</div>
+                            <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
+                            <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
+                            <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv}</div>
+                            <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.bank}</div>
+                            <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.country_emoji} ${binInfo.country}</div>
+                            <div><span style="color:#88bbff;">📋 Tipo:</span> ${binInfo.type}</div>
+                            <div><span style="color:#88bbff;">🔝 Nivel:</span> ${binInfo.level}</div>
+                            <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
+                            <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaNombre}</div>
+                        </div>
+                        <div style="margin-top:6px;border-top:1px solid #1a4a7a;padding-top:6px;">
+                            <strong style="color:#66ddff;">📋 Detalles:</strong>
+                            <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
+                        </div>
+                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div>
                     </div>
-                    <div style="margin-top:6px;border-top:1px solid #1a4a7a;padding-top:6px;">
-                        <strong style="color:#66ddff;">📋 Detalles:</strong>
-                        <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
-                    </div>
-                    <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div>
-                </div>
-            `;
+                `;
         }
 
-        // ================================================================
-        // 12. MASIVO
-        // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             const cards = generatedCardsList;
@@ -2695,13 +2745,13 @@
             const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
             let html =
                 `<div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;"><div style="font-size:0.9rem;font-weight:bold;color:#66ddff;">📊 RESULTADOS (${results.length}) 💳 ${pasarelaNombre}</div>
-                <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:6px;flex-wrap:wrap;">
-                    <span style="font-size:0.7rem;">📊 Total: <span style="color:#66ddff;">${results.length}</span></span>
-                    <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
-                    <span style="font-size:0.7rem;">🟡 Válidas: <span style="color:#ffaa44;">${validCount}</span></span>
-                    <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.length - validCount}</span></span>
-                </div>
-                <div style="display:grid;grid-template-columns:1fr;gap:2px;font-size:0.7rem;max-height:220px;overflow-y:auto;">`;
+                    <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:6px;flex-wrap:wrap;">
+                        <span style="font-size:0.7rem;">📊 Total: <span style="color:#66ddff;">${results.length}</span></span>
+                        <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
+                        <span style="font-size:0.7rem;">🟡 Válidas: <span style="color:#ffaa44;">${validCount}</span></span>
+                        <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.length - validCount}</span></span>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr;gap:2px;font-size:0.7rem;max-height:220px;overflow-y:auto;">`;
             results.forEach((item) => {
                 const r = item.result;
                 let estadoClass = 'invalid',
@@ -2718,16 +2768,16 @@
                 const texto =
                     `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.country}|${item.binInfo.bank}|${pasarelaNombre}`;
                 html += `
-                    <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:6px;flex-wrap:wrap;gap:2px;${r.estado === 'valid' ? 'background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;' : r.estado === 'insufficient' ? 'background:rgba(255,170,68,0.05);border-left:3px solid #ffaa44;' : 'background:rgba(255,68,68,0.04);border-left:3px solid #ff4444;'}">
-                        <span style="font-family:monospace;color:#88ddff;font-weight:bold;font-size:0.65rem;">${num}</span>
-                        <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.brand}</span>
-                        <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a6a4a;color:#88ffbb;">${item.month}/${item.year}</span>
-                        <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv}</span>
-                        <span style="font-weight:bold;font-size:0.6rem;padding:1px 6px;border-radius:8px;${estadoClass === 'valid' ? 'color:#00ff88;background:rgba(0,255,136,0.1);' : estadoClass === 'pending' ? 'color:#ffaa44;background:rgba(255,170,68,0.1);' : 'color:#ff4444;background:rgba(255,68,68,0.1);'}">${icon} ${estadoText}</span>
-                        <span style="font-size:0.5rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
-                        <button style="padding:1px 6px;font-size:0.45rem;border:none;border-radius:4px;background:#0088cc;color:white;cursor:pointer;" onclick="copiarResultadoMasivo('${texto.replace(/'/g, "\\'")}')">📋</button>
-                    </div>
-                `;
+                        <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:6px;flex-wrap:wrap;gap:2px;${r.estado === 'valid' ? 'background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;' : r.estado === 'insufficient' ? 'background:rgba(255,170,68,0.05);border-left:3px solid #ffaa44;' : 'background:rgba(255,68,68,0.04);border-left:3px solid #ff4444;'}">
+                            <span style="font-family:monospace;color:#88ddff;font-weight:bold;font-size:0.65rem;">${num}</span>
+                            <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.brand}</span>
+                            <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a6a4a;color:#88ffbb;">${item.month}/${item.year}</span>
+                            <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv}</span>
+                            <span style="font-weight:bold;font-size:0.6rem;padding:1px 6px;border-radius:8px;${estadoClass === 'valid' ? 'color:#00ff88;background:rgba(0,255,136,0.1);' : estadoClass === 'pending' ? 'color:#ffaa44;background:rgba(255,170,68,0.1);' : 'color:#ff4444;background:rgba(255,68,68,0.1);'}">${icon} ${estadoText}</span>
+                            <span style="font-size:0.5rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
+                            <button style="padding:1px 6px;font-size:0.45rem;border:none;border-radius:4px;background:#0088cc;color:white;cursor:pointer;" onclick="copiarResultadoMasivo('${texto.replace(/'/g, "\\'")}')">📋</button>
+                        </div>
+                    `;
             });
             html +=
                 `</div><div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 7 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div></div>`;
@@ -2756,7 +2806,7 @@
         }
 
         // ================================================================
-        // 13. HISTORIALES
+        // 12. HISTORIALES
         // ================================================================
         function guardarHistorialGen(bin, count) {
             if (!currentUser) return;
@@ -2827,7 +2877,6 @@
 
         async function cargarCreditosUsuario() {
             if (!currentUser) return;
-            // Si es owner, mostrar mensaje especial
             if (esOwner) {
                 document.getElementById('creditHistory').innerHTML =
                     '<div style="color:#ffaa44;font-size:0.8rem;">👑 Owner - Créditos infinitos</div>';
@@ -2846,7 +2895,7 @@
         }
 
         // ================================================================
-        // 14. DIRECCIONES
+        // 13. DIRECCIONES
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -2903,7 +2952,7 @@
                     { direccion: 'Av. Amazonas N24-33 y Veintimilla', ciudad: 'Quito', estado: 'Pichincha',
                         zip: '170130' },
                     { direccion: 'Av. 9 de Octubre 1020 y Los Ríos', ciudad: 'Guayaquil', estado: 'Guayas',
-                        zip: '090306' },
+                    zip: '090306' },
                     { direccion: 'Calle Larga 12-30 y Benigno Malo', ciudad: 'Cuenca', estado: 'Azuay', zip: '010101' },
                     { direccion: 'Av. Tsáchila 500', ciudad: 'Santo Domingo', estado: 'Santo Domingo de los Tsáchilas',
                         zip: '230101' },
@@ -2919,7 +2968,7 @@
                     { direccion: '25 La Canebière', ciudad: 'Marseille', estado: 'Provence-Alpes-Côte d\'Azur',
                         zip: '13001' },
                     { direccion: '30 Rue de la République', ciudad: 'Lyon', estado: 'Auvergne-Rhône-Alpes',
-                        zip: '69002' },
+                    zip: '69002' },
                     { direccion: '45 Rue d\'Alsace-Lorraine', ciudad: 'Toulouse', estado: 'Occitanie', zip: '31000' },
                     { direccion: '55 Avenue Jean Médecin', ciudad: 'Nice', estado: 'Provence-Alpes-Côte d\'Azur',
                         zip: '06000' },
@@ -2988,21 +3037,21 @@
             const paisNombre = nombrePais[pais] || pais;
 
             const html = `
-                <div style="border-bottom:1px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
-                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:0.9rem;">
-                        <div><span class="label">📍 Dirección:</span> <span class="value">${entry.direccion}</span></div>
-                        <div><span class="label">🏙️ Ciudad:</span> <span class="value">${entry.ciudad}</span></div>
-                        <div><span class="label">📌 Estado:</span> <span class="value">${entry.estado}</span></div>
-                        <div><span class="label">📮 Código Postal:</span> <span class="value">${entry.zip}</span></div>
-                        <div><span class="label">📞 Teléfono:</span> <span class="value" style="color:#88ddff;">${telefono}</span></div>
-                        <div><span class="label">🌍 País:</span> <span class="value" style="color:#ffaa44;font-weight:bold;">${paisNombre}</span></div>
+                    <div style="border-bottom:1px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
+                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:0.9rem;">
+                            <div><span class="label">📍 Dirección:</span> <span class="value">${entry.direccion}</span></div>
+                            <div><span class="label">🏙️ Ciudad:</span> <span class="value">${entry.ciudad}</span></div>
+                            <div><span class="label">📌 Estado:</span> <span class="value">${entry.estado}</span></div>
+                            <div><span class="label">📮 Código Postal:</span> <span class="value">${entry.zip}</span></div>
+                            <div><span class="label">📞 Teléfono:</span> <span class="value" style="color:#88ddff;">${telefono}</span></div>
+                            <div><span class="label">🌍 País:</span> <span class="value" style="color:#ffaa44;font-weight:bold;">${paisNombre}</span></div>
+                        </div>
+                        <div style="margin-top:8px;">
+                            <button class="copy-btn-dir" onclick="copiarDireccion()">📋 COPIAR DIRECCIÓN COMPLETA</button>
+                        </div>
+                        <div style="margin-top:4px;color:#6688aa;font-size:0.65rem;">💎 Generación GRATIS</div>
                     </div>
-                    <div style="margin-top:8px;">
-                        <button class="copy-btn-dir" onclick="copiarDireccion()">📋 COPIAR DIRECCIÓN COMPLETA</button>
-                    </div>
-                    <div style="margin-top:4px;color:#6688aa;font-size:0.65rem;">💎 Generación GRATIS</div>
-                </div>
-            `;
+                `;
             document.getElementById('direccionResultBox').innerHTML = html;
             window._ultimaDireccion =
                 `📍 Dirección: ${entry.direccion}\n🏙️ Ciudad: ${entry.ciudad}\n📌 Estado: ${entry.estado}\n📮 Código Postal: ${entry.zip}\n📞 Teléfono: ${telefono}\n🌍 País: ${paisNombre}`;
@@ -3016,7 +3065,7 @@
         }
 
         // ================================================================
-        // 15. CHAT EN VIVO
+        // 14. CHAT EN VIVO
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3040,7 +3089,6 @@
             const snap = await db.ref(`chat_profiles/${currentUser.uid}`).once('value');
             const existe = snap.exists();
 
-            // Si es owner, puede cambiar su nombre cuando quiera
             if (existe && snap.val().name && !esOwner) {
                 mostrarNotificacion('❌ Ya tienes un nombre guardado, no puedes cambiarlo.', 'error');
                 document.getElementById('chatDisplayName').value = snap.val().name;
@@ -3055,7 +3103,6 @@
             });
             chatNameBloqueado = true;
 
-            // Si no es owner, bloquear el campo
             if (!esOwner) {
                 document.getElementById('chatDisplayName').disabled = true;
                 document.getElementById('btnGuardarPerfilChat').style.display = 'none';
@@ -3232,13 +3279,13 @@
                 const color = getUserColor(userId, userName);
 
                 div.innerHTML = `
-                    <div class="msg-header">
-                        <span class="avatar">${msg.avatar || '🦁'}</span>
-                        <span class="name" style="color:${color};">${userName}</span>
-                        <span class="time">${time}</span>
-                    </div>
-                    ${content}
-                `;
+                        <div class="msg-header">
+                            <span class="avatar">${msg.avatar || '🦁'}</span>
+                            <span class="name" style="color:${color};">${userName}</span>
+                            <span class="time">${time}</span>
+                        </div>
+                        ${content}
+                    `;
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
             });
@@ -3260,27 +3307,24 @@
         });
 
         // ================================================================
-        // 16. SALA PRIVADA (NUEVO)
+        // 15. SALA PRIVADA
         // ================================================================
 
         async function crearSalaPrivada() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil de chat primero', 'error'); return; }
 
-            // Gastar 5 créditos (si no es owner)
             if (!await gastarCredito(5, 'Creación de sala privada')) return;
 
             const codigo = generarCodigoSala();
             const salaRef = db.ref(`salas_privadas/${codigo}`);
 
-            // Verificar si el código ya existe (muy improbable pero por seguridad)
             const snap = await salaRef.once('value');
             if (snap.exists()) {
                 mostrarNotificacion('❌ Código ya existe, intenta de nuevo', 'error');
                 return;
             }
 
-            // Crear la sala en Firebase
             await salaRef.set({
                 creador: currentUser.uid,
                 creadorNombre: chatDisplayName,
@@ -3289,14 +3333,12 @@
                 activa: true
             });
 
-            // Iniciar la sala para el creador
             salaCodigo = codigo;
             salaActual = codigo;
             document.getElementById('salaCodigoDisplay').textContent = codigo;
             document.getElementById('salaPrivadaCard').style.display = 'block';
             document.getElementById('inputCodigoSala').value = '';
 
-            // Mostrar mensaje de bienvenida
             const salaMsgRef = db.ref(`salas_privadas_mensajes/${codigo}`);
             await salaMsgRef.push({
                 userId: 'system',
@@ -3306,7 +3348,6 @@
                 timestamp: Date.now()
             });
 
-            // Escuchar mensajes de la sala
             escucharSalaPrivada();
             mostrarNotificacion(`✅ Sala creada! Código: ${codigo}`, 'success');
         }
@@ -3332,14 +3373,12 @@
                 return;
             }
 
-            // Unirse a la sala
             salaCodigo = codigo;
             salaActual = codigo;
             document.getElementById('salaCodigoDisplay').textContent = codigo;
             document.getElementById('salaPrivadaCard').style.display = 'block';
             document.getElementById('inputCodigoSala').value = '';
 
-            // Mensaje de bienvenida
             const salaMsgRef = db.ref(`salas_privadas_mensajes/${codigo}`);
             await salaMsgRef.push({
                 userId: currentUser.uid,
@@ -3363,7 +3402,6 @@
             salaUnsubscribe = msgRef.on('child_added', function(snapshot) {
                 const msg = snapshot.val();
                 const container = document.getElementById('salaMessages');
-                // Remover mensaje de carga
                 if (container.querySelector('div[style*="color:#6688aa"]')) {
                     container.innerHTML = '';
                 }
@@ -3389,13 +3427,13 @@
                 const color = getUserColor(userId, userName);
 
                 div.innerHTML = `
-                    <div class="msg-header">
-                        <span class="avatar">${msg.avatar || '🦁'}</span>
-                        <span class="name" style="color:${color};">${userName}</span>
-                        <span class="time">${time}</span>
-                    </div>
-                    ${content}
-                `;
+                        <div class="msg-header">
+                            <span class="avatar">${msg.avatar || '🦁'}</span>
+                            <span class="name" style="color:${color};">${userName}</span>
+                            <span class="time">${time}</span>
+                        </div>
+                        ${content}
+                    `;
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
             });
@@ -3429,7 +3467,6 @@
         function salirDeSala() {
             if (!salaActual) return;
 
-            // Mensaje de salida
             if (chatDisplayName) {
                 db.ref(`salas_privadas_mensajes/${salaActual}`).push({
                     userId: 'system',
@@ -3449,7 +3486,7 @@
         }
 
         // ================================================================
-        // 17. NOTAS
+        // 16. NOTAS
         // ================================================================
         async function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3469,7 +3506,7 @@
         }
 
         // ================================================================
-        // 18. NAVEGACIÓN
+        // 17. NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -3538,7 +3575,7 @@
         }
 
         // ================================================================
-        // 19. INICIALIZACIÓN
+        // 18. INICIALIZACIÓN
         // ================================================================
 
         console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON SALAS PRIVADAS');
