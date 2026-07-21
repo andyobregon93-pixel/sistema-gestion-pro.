@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON SALAS PRIVADAS                    */
+        /* ESTILOS - VERSIÓN FINAL CON TEMA DÍA/NOCHE                    */
         /* ============================================================== */
 
         * {
@@ -16,6 +16,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        /* ===== TEMA OSCURO (por defecto) ===== */
         :root {
             --bg-principal: #0a1628;
             --bg-tarjeta: #0f1f3a;
@@ -24,9 +25,38 @@
             --texto-secundario: #88bbff;
             --borde-neon: #00ccff;
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a3a, #050d1a);
-            --border-radius: 10px;
+            --bg-auth: rgba(15, 31, 58, 0.95);
+            --bg-panel: rgba(10, 22, 40, 0.92);
+            --bg-card: rgba(15, 31, 58, 0.85);
+            --bg-result: rgba(0, 0, 0, 0.3);
+            --text-muted: #6688aa;
             --chat-msg-own: #005c4b;
             --chat-msg-other: #1f2c3a;
+            --sombra: 0 0 30px rgba(0, 180, 255, 0.1);
+            --border-color: #1a4a7a;
+            --input-bg: #1a2a4a;
+        }
+
+        /* ===== TEMA DÍA (CLARO) ===== */
+        body.theme-day {
+            --bg-principal: #e8f0fe;
+            --bg-tarjeta: #d4e4f7;
+            --bg-inputs: #ffffff;
+            --texto-principal: #1a2a4a;
+            --texto-secundario: #2a4a7a;
+            --borde-neon: #0088cc;
+            --grad-fondo: radial-gradient(ellipse at 50% 30%, #d4e4f7, #b8cce6);
+            --bg-auth: rgba(200, 220, 245, 0.95);
+            --bg-panel: rgba(200, 220, 245, 0.92);
+            --bg-card: rgba(200, 220, 245, 0.85);
+            --bg-result: rgba(0, 0, 0, 0.05);
+            --text-muted: #4a6a8a;
+            --chat-msg-own: #0088cc;
+            --chat-msg-other: #d4e4f7;
+            --sombra: 0 0 30px rgba(0, 100, 200, 0.1);
+            --border-color: #88bbdd;
+            --input-bg: #ffffff;
+            --auth-box-shadow: 0 0 30px rgba(0, 100, 200, 0.15);
         }
 
         html,
@@ -41,21 +71,23 @@
             align-items: flex-start;
             padding: 15px;
             overflow-y: auto;
+            transition: background 0.3s, color 0.3s;
         }
 
         .app-container {
             width: 100%;
             max-width: 920px;
-            background: rgba(10, 22, 40, 0.92);
+            background: var(--bg-panel);
             backdrop-filter: blur(10px);
             border-radius: 20px;
-            border: 1px solid rgba(0, 200, 255, 0.1);
-            box-shadow: 0 0 30px rgba(0, 180, 255, 0.1);
+            border: 1px solid var(--borde-neon);
+            box-shadow: var(--sombra);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             min-height: 90vh;
             max-height: 98vh;
+            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
         }
 
         /* ===== LOGIN / REGISTRO ===== */
@@ -70,13 +102,14 @@
         }
 
         .auth-box {
-            background: rgba(15, 31, 58, 0.95);
+            background: var(--bg-auth);
             border: 2px solid var(--borde-neon);
             border-radius: 24px;
             padding: 30px 35px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 0 30px rgba(0, 180, 255, 0.1);
+            box-shadow: var(--auth-box-shadow);
+            transition: background 0.3s, border-color 0.3s;
         }
 
         .auth-box h2 {
@@ -100,7 +133,7 @@
             display: flex;
             gap: 10px;
             margin-bottom: 18px;
-            border-bottom: 1px solid rgba(0, 200, 255, 0.15);
+            border-bottom: 1px solid var(--border-color);
             padding-bottom: 8px;
         }
 
@@ -142,10 +175,10 @@
         .auth-box input {
             width: 100%;
             padding: 9px 12px;
-            background-color: var(--bg-inputs);
-            border: 2px solid #1a4a7a;
+            background-color: var(--input-bg);
+            border: 2px solid var(--border-color);
             border-radius: var(--border-radius);
-            color: #d4e4ff;
+            color: var(--texto-principal);
             font-size: 0.9rem;
             transition: 0.2s;
         }
@@ -180,7 +213,7 @@
             text-align: center;
             margin-top: 10px;
             font-size: 0.65rem;
-            color: #6688aa;
+            color: var(--text-muted);
         }
         .auth-box .register-info {
             background: rgba(0, 255, 136, 0.06);
@@ -219,7 +252,12 @@
             min-height: 52px;
             flex-wrap: wrap;
             gap: 4px;
+            transition: background 0.3s, border-color 0.3s;
         }
+        body.theme-day .navbar {
+            background: linear-gradient(90deg, #c0d8ec, #d4e4f7, #c0d8ec);
+        }
+
         .navbar .logo-area {
             display: flex;
             flex-direction: column;
@@ -237,7 +275,7 @@
         }
         .navbar .user-info {
             font-size: 0.6rem;
-            color: #88bbff;
+            color: var(--texto-secundario);
             margin-top: -2px;
         }
         .navbar .user-status {
@@ -296,15 +334,46 @@
             transform: scale(1.05);
         }
 
+        /* Botón de tema */
+        .btn-theme {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--borde-neon);
+            color: var(--texto-principal);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-theme:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        body.theme-day .btn-theme {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: #0088cc;
+        }
+        body.theme-day .btn-theme:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
         /* ===== TABS ===== */
         .tabs-container {
             display: flex;
-            background: #0a1a3a;
-            border-bottom: 2px solid rgba(0, 200, 255, 0.08);
+            background: rgba(10, 26, 58, 0.5);
+            border-bottom: 2px solid var(--border-color);
             padding: 3px 10px;
             flex-shrink: 0;
             gap: 3px;
             overflow-x: auto;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        body.theme-day .tabs-container {
+            background: rgba(200, 220, 245, 0.5);
         }
         .tabs-container::-webkit-scrollbar {
             height: 3px;
@@ -318,7 +387,7 @@
             padding: 6px 14px;
             background: transparent;
             border: none;
-            color: #88bbff;
+            color: var(--texto-secundario);
             font-weight: 600;
             font-size: 0.75rem;
             cursor: pointer;
@@ -405,12 +474,16 @@
             overflow-y: auto;
             padding: 12px 16px 16px 16px;
             background: rgba(10, 26, 58, 0.15);
+            transition: background 0.3s;
+        }
+        body.theme-day .panels-container {
+            background: rgba(200, 220, 245, 0.15);
         }
         .panels-container::-webkit-scrollbar {
             width: 4px;
         }
         .panels-container::-webkit-scrollbar-thumb {
-            background: #1a4a7a;
+            background: var(--border-color);
             border-radius: 4px;
         }
 
@@ -436,25 +509,28 @@
             font-size: 1rem;
             margin-bottom: 10px;
             font-weight: 600;
+            transition: color 0.3s;
         }
 
         /* ===== TARJETAS ===== */
         .item-card {
-            background: rgba(15, 31, 58, 0.85);
-            border: 1px solid #1a4a7a;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 12px 14px;
             margin-bottom: 10px;
+            transition: background 0.3s, border-color 0.3s;
         }
         .item-card .info-box {
             background: rgba(0, 68, 170, 0.08);
             padding: 6px 10px;
             border-radius: 8px;
-            border: 1px solid rgba(0, 170, 255, 0.08);
+            border: 1px solid var(--border-color);
             margin-bottom: 10px;
             font-size: 0.75rem;
-            color: #88ddff;
+            color: var(--texto-secundario);
             line-height: 1.5;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
         }
         .item-card .info-box.free {
             border-color: #00ff88;
@@ -506,10 +582,10 @@
         .form-group textarea {
             width: 100%;
             padding: 7px 10px;
-            background: var(--bg-inputs);
-            border: 2px solid #1a4a7a;
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
             border-radius: var(--border-radius);
-            color: #d4e4ff;
+            color: var(--texto-principal);
             font-size: 0.85rem;
             transition: 0.2s;
             font-family: inherit;
@@ -684,17 +760,20 @@
             margin-top: 6px;
         }
         .pasarela-card {
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.15);
             border-radius: 10px;
             padding: 10px 12px;
             text-align: center;
-            border: 2px solid #1a4a7a;
+            border: 2px solid var(--border-color);
             transition: 0.2s;
             cursor: pointer;
         }
+        body.theme-day .pasarela-card {
+            background: rgba(255, 255, 255, 0.3);
+        }
         .pasarela-card:hover {
             border-color: var(--borde-neon);
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.25);
         }
         .pasarela-card.active {
             border-color: #00ff88;
@@ -709,11 +788,11 @@
         .pasarela-card .name {
             font-weight: 600;
             font-size: 0.75rem;
-            color: #88ddff;
+            color: var(--texto-principal);
         }
         .pasarela-card .status {
             font-size: 0.6rem;
-            color: #6688aa;
+            color: var(--text-muted);
             margin-top: 2px;
         }
         .pasarela-card .status.active {
@@ -722,7 +801,7 @@
 
         /* ===== DIRECCIONES RESULT ===== */
         .direccion-result {
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--bg-result);
             border: 2px solid #ffaa44;
             border-radius: 12px;
             padding: 12px 15px;
@@ -731,13 +810,13 @@
             line-height: 1.8;
         }
         .direccion-result .label {
-            color: #88bbff;
+            color: var(--texto-secundario);
             font-weight: 600;
             min-width: 100px;
             display: inline-block;
         }
         .direccion-result .value {
-            color: #d4e4ff;
+            color: var(--texto-principal);
             font-weight: 500;
         }
         .direccion-result .copy-btn-dir {
@@ -761,7 +840,7 @@
 
         /* ===== RESULTADOS ===== */
         .result-box {
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--bg-result);
             border: 2px solid var(--borde-neon);
             border-radius: 12px;
             padding: 10px 12px;
@@ -769,12 +848,13 @@
             max-height: 320px;
             overflow-y: auto;
             font-size: 0.82rem;
+            transition: background 0.3s, border-color 0.3s;
         }
         .result-box::-webkit-scrollbar {
             width: 4px;
         }
         .result-box::-webkit-scrollbar-thumb {
-            background: #1a4a7a;
+            background: var(--border-color);
             border-radius: 4px;
         }
 
@@ -793,23 +873,27 @@
 
         /* ===== TARJETAS GENERADAS ===== */
         .generated-cards {
-            background: rgba(0, 20, 50, 0.4);
+            background: rgba(0, 20, 50, 0.3);
             border: 2px solid #00aaff;
             border-radius: 12px;
             padding: 8px 10px;
             max-height: 250px;
             overflow-y: auto;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        body.theme-day .generated-cards {
+            background: rgba(200, 220, 245, 0.5);
         }
         .generated-cards::-webkit-scrollbar {
             width: 4px;
         }
         .generated-cards::-webkit-scrollbar-thumb {
-            background: #1a4a7a;
+            background: var(--border-color);
             border-radius: 4px;
         }
         .generated-cards .card-item {
             padding: 4px 6px;
-            border-bottom: 1px solid #1a3a5a;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -839,13 +923,14 @@
         }
 
         .info-badge {
-            background: #1a4a7a;
+            background: var(--border-color);
             padding: 1px 6px;
             border-radius: 4px;
             font-size: 0.5rem;
-            color: #88ddff;
+            color: var(--texto-principal);
             white-space: nowrap;
             font-family: 'Segoe UI', sans-serif;
+            transition: background 0.3s, color 0.3s;
         }
         .info-badge.cvv {
             background: #4a1a7a;
@@ -873,22 +958,26 @@
         .credit-history {
             max-height: 100px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.18);
+            background: rgba(0, 0, 0, 0.1);
             border-radius: 8px;
             padding: 4px 8px;
+            transition: background 0.3s;
+        }
+        body.theme-day .credit-history {
+            background: rgba(0, 0, 0, 0.03);
         }
         .credit-history::-webkit-scrollbar {
             width: 3px;
         }
         .credit-history::-webkit-scrollbar-thumb {
-            background: #1a4a7a;
+            background: var(--border-color);
             border-radius: 3px;
         }
         .credit-item {
-            border-bottom: 1px solid #1a3a5a;
+            border-bottom: 1px solid var(--border-color);
             padding: 3px 0;
             font-size: 0.68rem;
-            color: #aaccee;
+            color: var(--texto-secundario);
         }
         .credit-item:last-child {
             border-bottom: none;
@@ -897,7 +986,7 @@
         /* ===== USUARIOS LISTA ===== */
         .user-list-item {
             padding: 6px 10px;
-            border-bottom: 1px solid #1a3a5a;
+            border-bottom: 1px solid var(--border-color);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -906,11 +995,11 @@
         }
         .user-list-item .user-email {
             font-size: 0.75rem;
-            color: #88ddff;
+            color: var(--texto-principal);
         }
         .user-list-item .user-info {
             font-size: 0.6rem;
-            color: #6688aa;
+            color: var(--text-muted);
         }
         .user-list-item .user-actions {
             display: flex;
@@ -961,31 +1050,32 @@
         /* ===== CHAT ESTILOS ===== */
         /* ============================================================== */
         .chat-profile-setup {
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--bg-result);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 10px;
-            border: 1px solid #1a4a7a;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s, border-color 0.3s;
         }
         .chat-profile-setup .avatar-selector {
             font-size: 2.5rem;
             cursor: pointer;
             display: inline-block;
             padding: 5px 15px;
-            border: 2px solid #1a4a7a;
+            border: 2px solid var(--border-color);
             border-radius: 50%;
             transition: 0.2s;
-            background: #0a1628;
+            background: var(--bg-inputs);
             user-select: none;
         }
         .chat-profile-setup .avatar-selector:hover {
             border-color: var(--borde-neon);
         }
         .chat-profile-setup .profile-name-input {
-            background: var(--bg-inputs);
-            border: 2px solid #1a4a7a;
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
             border-radius: var(--border-radius);
-            color: #d4e4ff;
+            color: var(--texto-principal);
             padding: 6px 12px;
             font-size: 0.85rem;
             width: 100%;
@@ -1002,7 +1092,7 @@
         }
 
         .chat-messages {
-            background: rgba(0, 0, 0, 0.3);
+            background: var(--bg-result);
             border-radius: 12px;
             padding: 10px;
             height: 350px;
@@ -1011,7 +1101,8 @@
             flex-direction: column;
             gap: 6px;
             margin-bottom: 10px;
-            border: 1px solid #1a4a7a;
+            border: 1px solid var(--border-color);
+            transition: background 0.3s, border-color 0.3s;
         }
         .chat-messages .message {
             max-width: 85%;
@@ -1032,7 +1123,7 @@
             align-self: flex-start;
             background: var(--chat-msg-other);
             border-bottom-left-radius: 4px;
-            color: #e1e9f0;
+            color: var(--texto-principal);
         }
         .chat-messages .message .msg-header {
             display: flex;
@@ -1046,11 +1137,11 @@
             font-size: 1rem;
         }
         .chat-messages .message .msg-header .name {
-            color: #88ddff;
+            color: var(--texto-secundario);
             transition: color 0.2s;
         }
         .chat-messages .message .msg-header .time {
-            color: #6688aa;
+            color: var(--text-muted);
             font-weight: normal;
             font-size: 0.55rem;
         }
@@ -1079,26 +1170,27 @@
         .chat-input-area .chat-input {
             flex: 1;
             padding: 8px 12px;
-            background: var(--bg-inputs);
-            border: 2px solid #1a4a7a;
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
             border-radius: 25px;
-            color: #d4e4ff;
+            color: var(--texto-principal);
             font-size: 0.85rem;
             resize: none;
             min-height: 38px;
             max-height: 100px;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
         }
         .chat-input-area .chat-input:focus {
             border-color: var(--borde-neon);
             outline: none;
         }
         .chat-input-area .chat-btn {
-            background: #1a4a7a;
+            background: var(--border-color);
             border: none;
             border-radius: 50%;
             width: 38px;
             height: 38px;
-            color: white;
+            color: var(--texto-principal);
             font-size: 1.2rem;
             cursor: pointer;
             transition: 0.15s;
@@ -1112,6 +1204,7 @@
         }
         .chat-input-area .chat-btn.send {
             background: linear-gradient(135deg, #00cc88, #008866);
+            color: white;
         }
         .chat-input-area .chat-btn.send:hover {
             background: linear-gradient(135deg, #00dd99, #009977);
@@ -1120,8 +1213,8 @@
         .emoji-picker,
         .sticker-picker {
             display: none;
-            background: rgba(10, 22, 40, 0.95);
-            border: 2px solid #1a4a7a;
+            background: var(--bg-panel);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 8px;
             margin-top: 6px;
@@ -1145,7 +1238,7 @@
         }
         .emoji-picker span:hover,
         .sticker-picker span:hover {
-            background: #1a4a7a;
+            background: var(--border-color);
             transform: scale(1.1);
         }
         .sticker-picker span {
@@ -1154,18 +1247,19 @@
 
         /* ===== SALA PRIVADA ===== */
         .sala-card {
-            background: rgba(0, 0, 0, 0.2);
+            background: var(--bg-result);
             border: 2px solid #ff44aa;
             border-radius: 12px;
             padding: 12px;
             margin-top: 8px;
+            transition: background 0.3s;
         }
         .sala-card .codigo-sala {
             font-size: 1.5rem;
             font-weight: bold;
             color: #ff88cc;
             letter-spacing: 4px;
-            background: #1a0a0a;
+            background: rgba(0, 0, 0, 0.2);
             padding: 8px 16px;
             border-radius: 10px;
             text-align: center;
@@ -1191,13 +1285,14 @@
         .nota-editor textarea {
             width: 100%;
             min-height: 200px;
-            background: var(--bg-inputs);
-            border: 2px solid #1a4a7a;
+            background: var(--input-bg);
+            border: 2px solid var(--border-color);
             border-radius: var(--border-radius);
-            color: #d4e4ff;
+            color: var(--texto-principal);
             padding: 10px;
             font-size: 0.9rem;
             resize: vertical;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
         }
         .nota-editor textarea:focus {
             border-color: var(--borde-neon);
@@ -1369,6 +1464,33 @@
                 font-size: 0.75rem;
             }
         }
+
+        /* ===== VARIABLES PARA BOTONES ===== */
+        .btn-theme {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--borde-neon);
+            color: var(--texto-principal);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.2s;
+        }
+        .btn-theme:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        body.theme-day .btn-theme {
+            background: rgba(0, 0, 0, 0.05);
+            border-color: #0088cc;
+        }
+        body.theme-day .btn-theme:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 <body>
@@ -1447,6 +1569,7 @@
                     </div>
                 </div>
                 <div class="nav-right">
+                    <button class="btn-theme" onclick="toggleTheme()" title="Cambiar tema">🌓</button>
                     <span class="days-display" id="daysDisplay">📅 0 días</span>
                     <span class="credits-display" id="creditsDisplay">💎 0 créditos</span>
                     <button class="btn-salir" onclick="cerrarSesion()" id="btnCerrarSesion">SALIR</button>
@@ -1467,7 +1590,7 @@
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
 
-            <!-- PANELS -->
+            <!-- PANELS (solo se incluye la estructura, el script carga el contenido dinámicamente) -->
             <div class="panels-container">
 
                 <!-- ========================================================== -->
@@ -1478,13 +1601,14 @@
                     <div class="item-card">
                         <div class="info-box free">
                             💡 <strong>Generación GRATUITA</strong> - Sin gastar créditos.
-                            Ingresa los primeros dígitos (mínimo 6). El sistema detecta automáticamente la marca y genera el CVV correcto.
+                            Ingresa los primeros dígitos (mínimo 6). Puedes usar <strong>X</strong> como comodín.
+                            <br>Ejemplo: <strong>41691614x2xxxxx1</strong> (las X se reemplazan con números aleatorios).
                             <br><br>
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
                         </div>
                         <div class="form-group">
-                            <label>🔢 Ingresa los primeros dígitos (BIN)</label>
-                            <input type="text" id="binInput" placeholder="Ej: 411111 o 371449" maxlength="16">
+                            <label>🔢 Ingresa los primeros dígitos (BIN) - usa X como comodín</label>
+                            <input type="text" id="binInput" placeholder="Ej: 411111 o 41691614x2xxxxx1" maxlength="19">
                         </div>
                         <div class="flex-row">
                             <div class="form-group">
@@ -1508,14 +1632,14 @@
                             <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc88,#008866);box-shadow:0 0 15px rgba(0,204,136,0.12);">📋 COPIAR TODO</button>
                             <button class="btn-block action-btn btn-massive" onclick="liveMasivoDesdeGenerador()">📊 MASIVO (7 créditos)</button>
                         </div>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.7rem;">
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.7rem;">
                             📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ddff;font-weight:bold;">0</span>
                             <span style="margin-left:12px;">💎 Generación <span style="color:#00ff88;">GRATIS</span></span>
                         </div>
                     </div>
                     <div id="generatedContainer">
                         <div class="generated-cards" id="generatedCards">
-                            <p style="color:#6688aa;text-align:center;padding:10px;font-size:0.8rem;">Genera tus tarjetas aquí (GRATIS)</p>
+                            <p style="color:var(--text-muted);text-align:center;padding:10px;font-size:0.8rem;">Genera tus tarjetas aquí (GRATIS)</p>
                         </div>
                     </div>
                     <div style="margin-top:8px;">
@@ -1546,7 +1670,7 @@
                         <button class="btn-block btn-live" id="liveCheckBtn" onclick="checkCardLive()">🔴 VERIFICAR (2 créditos)</button>
                     </div>
                     <div id="liveResultContainer">
-                        <div class="result-box" id="liveResultBox"><span style="color:#6688aa;">Esperando verificación...</span></div>
+                        <div class="result-box" id="liveResultBox"><span style="color:var(--text-muted);">Esperando verificación...</span></div>
                     </div>
                     <div style="margin-top:8px;">
                         <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial LIVE</div>
@@ -1569,13 +1693,13 @@
                             <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">📊 LIVE MASIVO (7 créditos)</button>
                             <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled>⬇️ DESCARGAR</button>
                         </div>
-                        <div style="margin-top:6px; color:#88bbff; font-size:0.75rem;">
+                        <div style="margin-top:6px; color:var(--texto-secundario); font-size:0.75rem;">
                             📊 Tarjetas disponibles: <span id="massiveCount" style="color:#66ddff;font-weight:bold;">0</span>
-                            <span style="color:#6688aa;margin-left:10px;">💎 Costo: 7 créditos</span>
+                            <span style="color:var(--text-muted);margin-left:10px;">💎 Costo: 7 créditos</span>
                         </div>
                     </div>
                     <div id="massiveResultContainer">
-                        <div class="result-box" id="massiveResultBox"><span style="color:#6688aa;">Esperando verificación masiva...</span></div>
+                        <div class="result-box" id="massiveResultBox"><span style="color:var(--text-muted);">Esperando verificación masiva...</span></div>
                     </div>
                     <div style="margin-top:8px;">
                         <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial MASIVO</div>
@@ -1608,8 +1732,8 @@
                                 <div class="status active">✅ Activa</div>
                             </div>
                         </div>
-                        <div style="margin-top:10px;padding:8px 12px;background:rgba(0,0,0,0.2);border-radius:8px;border:1px solid #1a4a7a;">
-                            <div style="color:#88bbff;font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ddff;">Stripe</strong></div>
+                        <div style="margin-top:10px;padding:8px 12px;background:var(--bg-result);border-radius:8px;border:1px solid var(--border-color);">
+                            <div style="color:var(--texto-secundario);font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ddff;">Stripe</strong></div>
                         </div>
                     </div>
                 </div>
@@ -1640,7 +1764,7 @@
                     </div>
                     <div id="direccionResultContainer">
                         <div class="direccion-result" id="direccionResultBox">
-                            <span style="color:#6688aa;font-size:0.85rem;">Selecciona un país y presiona generar.</span>
+                            <span style="color:var(--text-muted);font-size:0.85rem;">Selecciona un país y presiona generar.</span>
                         </div>
                     </div>
                 </div>
@@ -1655,16 +1779,16 @@
                         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                             <div class="avatar-selector" id="chatAvatarSelector" onclick="cambiarAvatarChat()">🦁</div>
                             <div style="flex:1; min-width:150px;">
-                                <label style="color:#88bbff;font-size:0.7rem;">Tu nombre en el chat <span id="nombreBloqueadoMsg" style="color:#ffaa44;font-size:0.55rem;display:none;">(no se puede cambiar)</span></label>
+                                <label style="color:var(--texto-secundario);font-size:0.7rem;">Tu nombre en el chat <span id="nombreBloqueadoMsg" style="color:#ffaa44;font-size:0.55rem;display:none;">(no se puede cambiar)</span></label>
                                 <input type="text" id="chatDisplayName" class="profile-name-input" placeholder="Escribe tu nombre..." style="width:100%;">
                             </div>
                             <button class="btn-small btn-success" onclick="guardarPerfilChat()" id="btnGuardarPerfilChat" style="padding:6px 16px;">💾 Guardar</button>
                         </div>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
                     </div>
 
                     <div class="chat-messages" id="chatMessages">
-                        <div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>
+                        <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>
                     </div>
 
                     <div class="chat-input-area">
@@ -1736,12 +1860,12 @@
                         <div class="sala-card" id="salaPrivadaCard" style="display:none;">
                             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
                                 <span style="color:#ff88cc;font-weight:bold;">🔒 Sala privada</span>
-                                <span style="color:#6688aa;font-size:0.7rem;">Código: <strong id="salaCodigoDisplay" style="color:#ff88cc;letter-spacing:2px;">---</strong></span>
+                                <span style="color:var(--text-muted);font-size:0.7rem;">Código: <strong id="salaCodigoDisplay" style="color:#ff88cc;letter-spacing:2px;">---</strong></span>
                                 <button class="copy-btn-sala" onclick="copiarCodigoSala()">📋 Copiar código</button>
                                 <button class="btn-small btn-danger" onclick="salirDeSala()">🚪 Salir</button>
                             </div>
                             <div id="salaMessages" class="chat-messages" style="height:250px;margin-top:8px;">
-                                <div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>
+                                <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>
                             </div>
                             <div class="chat-input-area" style="margin-top:6px;">
                                 <textarea class="chat-input" id="salaChatInput" rows="1" placeholder="Mensaje privado..."></textarea>
@@ -1765,7 +1889,7 @@
                             <textarea id="notaContent" placeholder="Escribe tus notas aquí..."></textarea>
                         </div>
                         <button class="btn-block btn-success" onclick="guardarNota()" style="margin-top:8px;">💾 GUARDAR NOTA</button>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;">✅ Guardado automático en Firebase.</div>
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">✅ Guardado automático en Firebase.</div>
                     </div>
                 </div>
 
@@ -1781,7 +1905,7 @@
                             <div class="form-group"><label>💎 Créditos</label><input type="number" id="promoCredits" value="50" min="0"></div>
                         </div>
                         <button class="btn-block btn-warning" onclick="guardarPromo()">💾 GUARDAR</button>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;">Actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos</div>
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">Actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos</div>
                     </div>
                     <div class="item-card" style="border:2px solid #ff44aa;">
                         <div class="info-box admin">👥 <strong>GESTIÓN DE USUARIOS</strong></div>
@@ -1802,7 +1926,7 @@
                     <div class="item-card">
                         <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
                             <span style="font-size:1.5rem;">💎 <span id="creditsBalance" style="color:#66ddff;">0</span> créditos</span>
-                            <span style="color:#88bbff; font-size:0.7rem;">🔹 Generar: GRATIS<br>🔹 LIVE: 2 créditos<br>🔹 Masivo: 7 créditos<br>🔹 Sala Privada: 5 créditos</span>
+                            <span style="color:var(--texto-secundario); font-size:0.7rem;">🔹 Generar: GRATIS<br>🔹 LIVE: 2 créditos<br>🔹 Masivo: 7 créditos<br>🔹 Sala Privada: 5 créditos</span>
                         </div>
                     </div>
                     <div class="item-card">
@@ -1815,7 +1939,7 @@
                     </div>
                     <div class="item-card">
                         <div style="color:#66ddff;font-weight:600;font-size:0.8rem;">📋 Historial</div>
-                        <div id="creditHistory" class="credit-history"><p style="color:#6688aa;">Sin movimientos</p></div>
+                        <div id="creditHistory" class="credit-history"><p style="color:var(--text-muted);">Sin movimientos</p></div>
                     </div>
                 </div>
 
@@ -1848,7 +1972,28 @@
         const db = firebase.database();
 
         // ================================================================
-        // 2. VARIABLES GLOBALES
+        // 2. TEMA - DÍA/NOCHE
+        // ================================================================
+        function toggleTheme() {
+            const body = document.body;
+            const isDay = body.classList.toggle('theme-day');
+            localStorage.setItem('sysTheme', isDay ? 'day' : 'night');
+            document.querySelector('.btn-theme').textContent = isDay ? '🌙' : '🌓';
+        }
+
+        // Cargar tema guardado
+        (function() {
+            const saved = localStorage.getItem('sysTheme');
+            if (saved === 'day') {
+                document.body.classList.add('theme-day');
+                document.querySelector('.btn-theme').textContent = '🌙';
+            } else {
+                document.querySelector('.btn-theme').textContent = '🌓';
+            }
+        })();
+
+        // ================================================================
+        // 3. VARIABLES GLOBALES
         // ================================================================
         let currentUser = null;
         let usernameClave = "";
@@ -1874,7 +2019,7 @@
         let salaCodigo = null;
 
         // ================================================================
-        // 3. UTILIDADES
+        // 4. UTILIDADES
         // ================================================================
         function limpiarClave(str) {
             if (!str) return "";
@@ -1885,14 +2030,14 @@
             const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444', warning: '#ffaa44' };
             const div = document.createElement('div');
             div.style.cssText = `
-                    position: fixed; bottom: 15px; right: 15px; 
-                    background: #0a1a3a; border: 2px solid ${colors[tipo] || '#66ddff'};
-                    color: white; padding: 8px 16px; border-radius: 10px;
-                    z-index: 9999; max-width: 320px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
-                    font-weight: 600; font-size: 0.75rem;
-                    animation: fadeIn 0.2s ease;
-                    backdrop-filter: blur(5px);
-                `;
+                        position: fixed; bottom: 15px; right: 15px; 
+                        background: #0a1a3a; border: 2px solid ${colors[tipo] || '#66ddff'};
+                        color: white; padding: 8px 16px; border-radius: 10px;
+                        z-index: 9999; max-width: 320px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
+                        font-weight: 600; font-size: 0.75rem;
+                        animation: fadeIn 0.2s ease;
+                        backdrop-filter: blur(5px);
+                    `;
             div.textContent = msg;
             document.body.appendChild(div);
             setTimeout(() => { div.style.opacity = '0';
@@ -1928,10 +2073,9 @@
         }
 
         // ================================================================
-        // 4. CERRAR SESIÓN (CORREGIDO)
+        // 5. CERRAR SESIÓN (CORREGIDO)
         // ================================================================
         function cerrarSesion() {
-            // Remover listeners
             if (usuariosUnsubscribe) {
                 usuariosUnsubscribe();
                 usuariosUnsubscribe = null;
@@ -1945,7 +2089,6 @@
                 salaUnsubscribe = null;
             }
 
-            // Limpiar variables globales
             currentUser = null;
             usernameClave = "";
             currentCredits = 0;
@@ -1959,18 +2102,14 @@
             generatedCardsList = [];
             massiveResults = [];
 
-            // Ocultar sala privada
             document.getElementById('salaPrivadaCard').style.display = 'none';
 
-            // Mostrar pantalla de login
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('main-app').style.display = 'none';
 
-            // Limpiar campos de login
             document.getElementById('loginEmail').value = '';
             document.getElementById('loginPass').value = '';
 
-            // Limpiar campos del chat
             document.getElementById('chatDisplayName').value = '';
             document.getElementById('chatAvatarSelector').textContent = '🦁';
             document.getElementById('chatDisplayName').disabled = false;
@@ -1979,7 +2118,6 @@
             document.getElementById('chatProfileInfo').textContent =
                 '💡 Elige un avatar y escribe tu nombre para chatear.';
 
-            // Limpiar mensajes
             document.getElementById('chatMessages').innerHTML =
                 '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>';
             document.getElementById('salaMessages').innerHTML =
@@ -1987,13 +2125,11 @@
             document.getElementById('chatInput').value = '';
             document.getElementById('salaChatInput').value = '';
 
-            // Resetear display de créditos
             document.getElementById('creditsDisplay').textContent = '💎 0 créditos';
             document.getElementById('daysDisplay').textContent = '📅 0 días';
             document.getElementById('creditsBalance').textContent = '0';
             document.getElementById('daysBalance').textContent = '0';
 
-            // Resetear contadores de tarjetas
             document.getElementById('generatedCount').textContent = '0';
             document.getElementById('massiveCount').textContent = '0';
             document.getElementById('generatedCards').innerHTML =
@@ -2006,7 +2142,7 @@
         }
 
         // ================================================================
-        // 5. AUTH - TABS
+        // 6. AUTH - TABS
         // ================================================================
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -2026,7 +2162,7 @@
         }
 
         // ================================================================
-        // 6. PASARELA
+        // 7. PASARELA
         // ================================================================
         function seleccionarPasarela(pasarela) {
             pasarelaSeleccionada = pasarela;
@@ -2041,7 +2177,7 @@
         }
 
         // ================================================================
-        // 7. REGISTRO / LOGIN
+        // 8. REGISTRO / LOGIN
         // ================================================================
         async function cargarPromo() {
             const snap = await db.ref('promocion').once('value');
@@ -2158,9 +2294,9 @@
 
             const displayName = email.split('@')[0];
             document.getElementById('userDisplay').innerHTML = `
-                    👤 ${displayName} ${elRol === 'Owner' ? '👑' : ''}
-                    <span class="user-status active">✅ Activo</span>
-                `;
+                            👤 ${displayName} ${elRol === 'Owner' ? '👑' : ''}
+                            <span class="user-status active">✅ Activo</span>
+                        `;
 
             if (elRol === "Owner") {
                 document.getElementById('tabAdminBtn').style.display = 'block';
@@ -2200,7 +2336,7 @@
         }
 
         // ================================================================
-        // 8. CRÉDITOS Y DÍAS
+        // 9. CRÉDITOS Y DÍAS
         // ================================================================
         async function cargarDatosUsuario() {
             if (!currentUser) return;
@@ -2290,7 +2426,7 @@
         }
 
         // ================================================================
-        // 9. ADMIN
+        // 10. ADMIN
         // ================================================================
         async function toggleBloquearUsuario(email) {
             if (!currentUser || currentUser.role !== 'Owner') return;
@@ -2327,19 +2463,19 @@
                     const div = document.createElement('div');
                     div.className = 'user-list-item';
                     div.innerHTML = `
-                            <div>
-                                <span class="user-email">${user.email}</span>
-                                <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                                <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
-                            </div>
-                            <div class="user-actions">
-                                <button class="btn-small btn-success" onclick="adminAgregarCreditosManual('${user.email}')">➕</button>
-                                <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')">➖</button>
-                                <button class="btn-small btn-warning" onclick="adminAgregarDiasManual('${user.email}')">📅+</button>
-                                <button class="btn-small" style="background:#cc8800;color:#fff;" onclick="adminRestarDiasManual('${user.email}')">📅-</button>
-                                <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${user.email}')">${bloqueado ? '🔓' : '🔒'}</button>
-                            </div>
-                        `;
+                                    <div>
+                                        <span class="user-email">${user.email}</span>
+                                        <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
+                                        <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                    </div>
+                                    <div class="user-actions">
+                                        <button class="btn-small btn-success" onclick="adminAgregarCreditosManual('${user.email}')">➕</button>
+                                        <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')">➖</button>
+                                        <button class="btn-small btn-warning" onclick="adminAgregarDiasManual('${user.email}')">📅+</button>
+                                        <button class="btn-small" style="background:#cc8800;color:#fff;" onclick="adminRestarDiasManual('${user.email}')">📅-</button>
+                                        <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${user.email}')">${bloqueado ? '🔓' : '🔒'}</button>
+                                    </div>
+                                `;
                     container.appendChild(div);
                 }
             });
@@ -2410,13 +2546,13 @@
                         const div = document.createElement('div');
                         div.className = 'user-list-item';
                         div.innerHTML = `
-                                <div>
-                                    <span class="user-email">${data.email}</span>
-                                    <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                                    <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
-                                </div>
-                                <div><button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${data.email}')">${bloqueado ? '🔓' : '🔒'}</button></div>
-                            `;
+                                        <div>
+                                            <span class="user-email">${data.email}</span>
+                                            <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
+                                            <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                        </div>
+                                        <div><button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${data.email}')">${bloqueado ? '🔓' : '🔒'}</button></div>
+                                    `;
                         container.appendChild(div);
                     }
                 });
@@ -2425,10 +2561,10 @@
         }
 
         // ================================================================
-        // 10. GENERADOR DE TARJETAS (GRATIS)
+        // 11. GENERADOR DE TARJETAS (CON X COMO COMODÍN)
         // ================================================================
         function detectBrand(cardNumber) {
-            const num = String(cardNumber).replace(/\s/g, '');
+            const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
             if (/^4/.test(num)) return 'Visa';
             if (/^(5[1-5]|2[2-7])/.test(num)) return 'Mastercard';
             if (/^(34|37)/.test(num)) return 'American Express';
@@ -2461,24 +2597,76 @@
         }
 
         function generateUniqueCards(binPrefix, count, month, year) {
-            const binStr = String(binPrefix).replace(/\s/g, '');
-            const brand = detectBrand(binStr);
+            let binPattern = String(binPrefix).replace(/\s/g, '').toUpperCase();
+
+            const hasX = binPattern.includes('X');
+            const cleanBinForBrand = binPattern.replace(/X/g, '');
+            const brand = detectBrand(cleanBinForBrand);
             const length = getCardLength(brand);
             const cvvLen = getCVVLength(brand);
-            const validBin = binStr.slice(0, Math.min(binStr.length, length - 1));
+
+            if (!hasX) {
+                const validBin = binPattern.slice(0, Math.min(binPattern.length, length - 1));
+                const cards = [];
+                const usedSeries = new Set();
+                let attempts = 0;
+                const maxAttempts = count * 50;
+
+                while (cards.length < count && attempts < maxAttempts) {
+                    attempts++;
+                    const remaining = length - validBin.length - 1;
+                    let middle = '';
+                    for (let j = 0; j < remaining; j++) middle += Math.floor(Math.random() * 10);
+                    const base = validBin + middle;
+                    for (let checkDigit = 0; checkDigit < 10; checkDigit++) {
+                        const candidate = base + checkDigit;
+                        const series = candidate.slice(-4);
+                        if (!usedSeries.has(series) && luhnCheck(candidate)) {
+                            usedSeries.add(series);
+                            cards.push({
+                                number: candidate,
+                                month: month.padStart(2, '0'),
+                                year: year.padStart(2, '0'),
+                                brand: brand,
+                                series: series,
+                                cvv: generarCVV(brand),
+                                cvvLength: cvvLen
+                            });
+                            break;
+                        }
+                    }
+                }
+                return cards;
+            }
+
             const cards = [];
             const usedSeries = new Set();
             let attempts = 0;
-            const maxAttempts = count * 50;
+            const maxAttempts = count * 100;
+
             while (cards.length < count && attempts < maxAttempts) {
                 attempts++;
-                const remaining = length - validBin.length - 1;
+                let numberBase = '';
+                for (let i = 0; i < binPattern.length; i++) {
+                    if (binPattern[i] === 'X') {
+                        numberBase += Math.floor(Math.random() * 10);
+                    } else {
+                        numberBase += binPattern[i];
+                    }
+                }
+
+                const remaining = length - numberBase.length;
                 let middle = '';
-                for (let j = 0; j < remaining; j++) middle += Math.floor(Math.random() * 10);
-                const base = validBin + middle;
+                for (let j = 0; j < remaining - 1; j++) {
+                    middle += Math.floor(Math.random() * 10);
+                }
+
+                const baseCandidate = (numberBase + middle).slice(0, length - 1);
+
                 for (let checkDigit = 0; checkDigit < 10; checkDigit++) {
-                    const candidate = base + checkDigit;
+                    const candidate = baseCandidate + checkDigit;
                     const series = candidate.slice(-4);
+
                     if (!usedSeries.has(series) && luhnCheck(candidate)) {
                         usedSeries.add(series);
                         cards.push({
@@ -2494,6 +2682,7 @@
                     }
                 }
             }
+
             return cards;
         }
 
@@ -2501,16 +2690,26 @@
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!esOwner && currentDays <= 0) { mostrarNotificacion('❌ Sin días activos.', 'error'); return; }
 
-            const binInput = document.getElementById('binInput').value.trim();
+            let binInput = document.getElementById('binInput').value.trim();
             const month = document.getElementById('cardMonth').value.trim() || '12';
             const year = document.getElementById('cardYear').value.trim() || '26';
             const count = parseInt(document.getElementById('genCount').value) || 10;
 
             if (!binInput || binInput.length < 6) { mostrarNotificacion('❌ Ingresa al menos 6 dígitos', 'error'); return; }
-            if (!/^\d+$/.test(binInput)) { mostrarNotificacion('❌ Solo números', 'error'); return; }
+
+            const cleanInput = binInput.replace(/X/g, '');
+            if (!/^\d+$/.test(cleanInput)) {
+                mostrarNotificacion('❌ Solo números y X (mayúscula) permitidos', 'error');
+                return;
+            }
+
+            if (cleanInput.length < 6) {
+                mostrarNotificacion('❌ Necesitas al menos 6 dígitos fijos (sin contar X)', 'error');
+                return;
+            }
 
             const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
-            if (cards.length === 0) { mostrarNotificacion('❌ No se pudieron generar', 'error'); return; }
+            if (cards.length === 0) { mostrarNotificacion('❌ No se pudieron generar tarjetas válidas', 'error'); return; }
 
             generatedCardsList = cards;
             mostrarGeneradas(cards);
@@ -2530,21 +2729,21 @@
                 const brandClass = card.brand === 'American Express' ? 'amex' : 'brand';
                 const cvvLabel = card.cvvLength === 4 ? '🔐 CVV(4)' : '🔐 CVV';
                 return `
-                        <div class="card-item">
-                            <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
-                            <div class="card-info">
-                                <span class="info-badge ${brandClass}">${card.brand}</span>
-                                <span class="info-badge fecha">${card.month}/${card.year}</span>
-                                <span class="info-badge ${cvvClass}">${cvvLabel} ${card.cvv}</span>
-                                <span class="info-badge">Serie: ${card.series}</span>
-                                <span class="info-badge free-tag">GRATIS</span>
-                            </div>
-                            <div class="card-actions">
-                                <button class="btn-small btn-copy" onclick="copiarTarjeta(${index})">📋</button>
-                                <button class="btn-small btn-live-sm" onclick="enviarALive(${index})">🔴</button>
-                            </div>
-                        </div>
-                    `;
+                                <div class="card-item">
+                                    <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
+                                    <div class="card-info">
+                                        <span class="info-badge ${brandClass}">${card.brand}</span>
+                                        <span class="info-badge fecha">${card.month}/${card.year}</span>
+                                        <span class="info-badge ${cvvClass}">${cvvLabel} ${card.cvv}</span>
+                                        <span class="info-badge">Serie: ${card.series}</span>
+                                        <span class="info-badge free-tag">GRATIS</span>
+                                    </div>
+                                    <div class="card-actions">
+                                        <button class="btn-small btn-copy" onclick="copiarTarjeta(${index})">📋</button>
+                                        <button class="btn-small btn-live-sm" onclick="enviarALive(${index})">🔴</button>
+                                    </div>
+                                </div>
+                            `;
             }).join('');
         }
 
@@ -2588,7 +2787,7 @@
         }
 
         // ================================================================
-        // 11. LIVE Y MASIVO
+        // 12. LIVE Y MASIVO
         // ================================================================
         async function getBINInfo(bin) {
             try {
@@ -2673,27 +2872,27 @@
             const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
             const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
             return `
-                    <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
-                        <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;"><span class="${cls}">${icon} ${result.mensaje}</span> <span style="color:#6688aa;font-size:0.6rem;">💳 ${pasarelaNombre}</span></div>
-                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
-                            <div><span style="color:#88bbff;">🔢 Número:</span> ${formatoNumero}</div>
-                            <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
-                            <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
-                            <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv}</div>
-                            <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.bank}</div>
-                            <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.country_emoji} ${binInfo.country}</div>
-                            <div><span style="color:#88bbff;">📋 Tipo:</span> ${binInfo.type}</div>
-                            <div><span style="color:#88bbff;">🔝 Nivel:</span> ${binInfo.level}</div>
-                            <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
-                            <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaNombre}</div>
-                        </div>
-                        <div style="margin-top:6px;border-top:1px solid #1a4a7a;padding-top:6px;">
-                            <strong style="color:#66ddff;">📋 Detalles:</strong>
-                            <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
-                        </div>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div>
-                    </div>
-                `;
+                            <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
+                                <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;"><span class="${cls}">${icon} ${result.mensaje}</span> <span style="color:#6688aa;font-size:0.6rem;">💳 ${pasarelaNombre}</span></div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
+                                    <div><span style="color:#88bbff;">🔢 Número:</span> ${formatoNumero}</div>
+                                    <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
+                                    <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
+                                    <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv}</div>
+                                    <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.bank}</div>
+                                    <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.country_emoji} ${binInfo.country}</div>
+                                    <div><span style="color:#88bbff;">📋 Tipo:</span> ${binInfo.type}</div>
+                                    <div><span style="color:#88bbff;">🔝 Nivel:</span> ${binInfo.level}</div>
+                                    <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
+                                    <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaNombre}</div>
+                                </div>
+                                <div style="margin-top:6px;border-top:1px solid #1a4a7a;padding-top:6px;">
+                                    <strong style="color:#66ddff;">📋 Detalles:</strong>
+                                    <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
+                                </div>
+                                <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div>
+                            </div>
+                        `;
         }
 
         async function liveMasivo() {
@@ -2745,13 +2944,13 @@
             const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
             let html =
                 `<div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;"><div style="font-size:0.9rem;font-weight:bold;color:#66ddff;">📊 RESULTADOS (${results.length}) 💳 ${pasarelaNombre}</div>
-                    <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:6px;flex-wrap:wrap;">
-                        <span style="font-size:0.7rem;">📊 Total: <span style="color:#66ddff;">${results.length}</span></span>
-                        <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
-                        <span style="font-size:0.7rem;">🟡 Válidas: <span style="color:#ffaa44;">${validCount}</span></span>
-                        <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.length - validCount}</span></span>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr;gap:2px;font-size:0.7rem;max-height:220px;overflow-y:auto;">`;
+                            <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:6px;flex-wrap:wrap;">
+                                <span style="font-size:0.7rem;">📊 Total: <span style="color:#66ddff;">${results.length}</span></span>
+                                <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
+                                <span style="font-size:0.7rem;">🟡 Válidas: <span style="color:#ffaa44;">${validCount}</span></span>
+                                <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.length - validCount}</span></span>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr;gap:2px;font-size:0.7rem;max-height:220px;overflow-y:auto;">`;
             results.forEach((item) => {
                 const r = item.result;
                 let estadoClass = 'invalid',
@@ -2768,16 +2967,16 @@
                 const texto =
                     `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.country}|${item.binInfo.bank}|${pasarelaNombre}`;
                 html += `
-                        <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:6px;flex-wrap:wrap;gap:2px;${r.estado === 'valid' ? 'background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;' : r.estado === 'insufficient' ? 'background:rgba(255,170,68,0.05);border-left:3px solid #ffaa44;' : 'background:rgba(255,68,68,0.04);border-left:3px solid #ff4444;'}">
-                            <span style="font-family:monospace;color:#88ddff;font-weight:bold;font-size:0.65rem;">${num}</span>
-                            <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.brand}</span>
-                            <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a6a4a;color:#88ffbb;">${item.month}/${item.year}</span>
-                            <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv}</span>
-                            <span style="font-weight:bold;font-size:0.6rem;padding:1px 6px;border-radius:8px;${estadoClass === 'valid' ? 'color:#00ff88;background:rgba(0,255,136,0.1);' : estadoClass === 'pending' ? 'color:#ffaa44;background:rgba(255,170,68,0.1);' : 'color:#ff4444;background:rgba(255,68,68,0.1);'}">${icon} ${estadoText}</span>
-                            <span style="font-size:0.5rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
-                            <button style="padding:1px 6px;font-size:0.45rem;border:none;border-radius:4px;background:#0088cc;color:white;cursor:pointer;" onclick="copiarResultadoMasivo('${texto.replace(/'/g, "\\'")}')">📋</button>
-                        </div>
-                    `;
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:6px;flex-wrap:wrap;gap:2px;${r.estado === 'valid' ? 'background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;' : r.estado === 'insufficient' ? 'background:rgba(255,170,68,0.05);border-left:3px solid #ffaa44;' : 'background:rgba(255,68,68,0.04);border-left:3px solid #ff4444;'}">
+                                    <span style="font-family:monospace;color:#88ddff;font-weight:bold;font-size:0.65rem;">${num}</span>
+                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.brand}</span>
+                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a6a4a;color:#88ffbb;">${item.month}/${item.year}</span>
+                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv}</span>
+                                    <span style="font-weight:bold;font-size:0.6rem;padding:1px 6px;border-radius:8px;${estadoClass === 'valid' ? 'color:#00ff88;background:rgba(0,255,136,0.1);' : estadoClass === 'pending' ? 'color:#ffaa44;background:rgba(255,170,68,0.1);' : 'color:#ff4444;background:rgba(255,68,68,0.1);'}">${icon} ${estadoText}</span>
+                                    <span style="font-size:0.5rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
+                                    <button style="padding:1px 6px;font-size:0.45rem;border:none;border-radius:4px;background:#0088cc;color:white;cursor:pointer;" onclick="copiarResultadoMasivo('${texto.replace(/'/g, "\\'")}')">📋</button>
+                                </div>
+                            `;
             });
             html +=
                 `</div><div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 7 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div></div>`;
@@ -2806,7 +3005,7 @@
         }
 
         // ================================================================
-        // 12. HISTORIALES
+        // 13. HISTORIALES
         // ================================================================
         function guardarHistorialGen(bin, count) {
             if (!currentUser) return;
@@ -2895,7 +3094,7 @@
         }
 
         // ================================================================
-        // 13. DIRECCIONES
+        // 14. DIRECCIONES
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -3037,21 +3236,21 @@
             const paisNombre = nombrePais[pais] || pais;
 
             const html = `
-                    <div style="border-bottom:1px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
-                        <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:0.9rem;">
-                            <div><span class="label">📍 Dirección:</span> <span class="value">${entry.direccion}</span></div>
-                            <div><span class="label">🏙️ Ciudad:</span> <span class="value">${entry.ciudad}</span></div>
-                            <div><span class="label">📌 Estado:</span> <span class="value">${entry.estado}</span></div>
-                            <div><span class="label">📮 Código Postal:</span> <span class="value">${entry.zip}</span></div>
-                            <div><span class="label">📞 Teléfono:</span> <span class="value" style="color:#88ddff;">${telefono}</span></div>
-                            <div><span class="label">🌍 País:</span> <span class="value" style="color:#ffaa44;font-weight:bold;">${paisNombre}</span></div>
-                        </div>
-                        <div style="margin-top:8px;">
-                            <button class="copy-btn-dir" onclick="copiarDireccion()">📋 COPIAR DIRECCIÓN COMPLETA</button>
-                        </div>
-                        <div style="margin-top:4px;color:#6688aa;font-size:0.65rem;">💎 Generación GRATIS</div>
-                    </div>
-                `;
+                            <div style="border-bottom:1px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
+                                <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:0.9rem;">
+                                    <div><span class="label">📍 Dirección:</span> <span class="value">${entry.direccion}</span></div>
+                                    <div><span class="label">🏙️ Ciudad:</span> <span class="value">${entry.ciudad}</span></div>
+                                    <div><span class="label">📌 Estado:</span> <span class="value">${entry.estado}</span></div>
+                                    <div><span class="label">📮 Código Postal:</span> <span class="value">${entry.zip}</span></div>
+                                    <div><span class="label">📞 Teléfono:</span> <span class="value" style="color:#88ddff;">${telefono}</span></div>
+                                    <div><span class="label">🌍 País:</span> <span class="value" style="color:#ffaa44;font-weight:bold;">${paisNombre}</span></div>
+                                </div>
+                                <div style="margin-top:8px;">
+                                    <button class="copy-btn-dir" onclick="copiarDireccion()">📋 COPIAR DIRECCIÓN COMPLETA</button>
+                                </div>
+                                <div style="margin-top:4px;color:var(--text-muted);font-size:0.65rem;">💎 Generación GRATIS</div>
+                            </div>
+                        `;
             document.getElementById('direccionResultBox').innerHTML = html;
             window._ultimaDireccion =
                 `📍 Dirección: ${entry.direccion}\n🏙️ Ciudad: ${entry.ciudad}\n📌 Estado: ${entry.estado}\n📮 Código Postal: ${entry.zip}\n📞 Teléfono: ${telefono}\n🌍 País: ${paisNombre}`;
@@ -3065,7 +3264,7 @@
         }
 
         // ================================================================
-        // 14. CHAT EN VIVO
+        // 15. CHAT EN VIVO
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3279,13 +3478,13 @@
                 const color = getUserColor(userId, userName);
 
                 div.innerHTML = `
-                        <div class="msg-header">
-                            <span class="avatar">${msg.avatar || '🦁'}</span>
-                            <span class="name" style="color:${color};">${userName}</span>
-                            <span class="time">${time}</span>
-                        </div>
-                        ${content}
-                    `;
+                                <div class="msg-header">
+                                    <span class="avatar">${msg.avatar || '🦁'}</span>
+                                    <span class="name" style="color:${color};">${userName}</span>
+                                    <span class="time">${time}</span>
+                                </div>
+                                ${content}
+                            `;
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
             });
@@ -3307,7 +3506,7 @@
         });
 
         // ================================================================
-        // 15. SALA PRIVADA
+        // 16. SALA PRIVADA
         // ================================================================
 
         async function crearSalaPrivada() {
@@ -3427,13 +3626,13 @@
                 const color = getUserColor(userId, userName);
 
                 div.innerHTML = `
-                        <div class="msg-header">
-                            <span class="avatar">${msg.avatar || '🦁'}</span>
-                            <span class="name" style="color:${color};">${userName}</span>
-                            <span class="time">${time}</span>
-                        </div>
-                        ${content}
-                    `;
+                                <div class="msg-header">
+                                    <span class="avatar">${msg.avatar || '🦁'}</span>
+                                    <span class="name" style="color:${color};">${userName}</span>
+                                    <span class="time">${time}</span>
+                                </div>
+                                ${content}
+                            `;
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
             });
@@ -3486,7 +3685,7 @@
         }
 
         // ================================================================
-        // 16. NOTAS
+        // 17. NOTAS
         // ================================================================
         async function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3506,7 +3705,7 @@
         }
 
         // ================================================================
-        // 17. NAVEGACIÓN
+        // 18. NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -3552,7 +3751,7 @@
                 document.getElementById('pasarela-' + pasarelaSeleccionada).classList.add('active');
                 const nombres = { 'stripe': 'Stripe', 'zuora': 'Zuora', 'auth': 'Auth' };
                 document.getElementById('pasarelaSeleccionadaLabel').textContent = nombres[pasarelaSeleccionada] ||
-                'Stripe';
+                    'Stripe';
                 document.getElementById('pasarelaLiveLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
                 document.getElementById('pasarelaMasivoLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
             }
@@ -3575,13 +3774,15 @@
         }
 
         // ================================================================
-        // 18. INICIALIZACIÓN
+        // 19. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON SALAS PRIVADAS');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON TEMA DÍA/NOCHE');
         console.log('🔐 Nuevo dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos, puede cambiar su nombre en el chat');
+        console.log('❌ Usa X como comodín al generar tarjetas');
+        console.log('🌓 Botón para cambiar entre día y noche');
 
         cargarPromo();
         seleccionarPasarela('stripe');
