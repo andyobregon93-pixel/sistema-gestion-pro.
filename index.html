@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON TEMA DÍA/NOCHE                    */
+        /* ESTILOS - VERSIÓN FINAL CON PAÍS REAL EN BINS                */
         /* ============================================================== */
 
         * {
@@ -16,7 +16,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* ===== TEMA OSCURO (por defecto) ===== */
         :root {
             --bg-principal: #0a1628;
             --bg-tarjeta: #0f1f3a;
@@ -25,19 +24,19 @@
             --texto-secundario: #88bbff;
             --borde-neon: #00ccff;
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a3a, #050d1a);
+            --border-radius: 10px;
+            --chat-msg-own: #005c4b;
+            --chat-msg-other: #1f2c3a;
             --bg-auth: rgba(15, 31, 58, 0.95);
             --bg-panel: rgba(10, 22, 40, 0.92);
             --bg-card: rgba(15, 31, 58, 0.85);
             --bg-result: rgba(0, 0, 0, 0.3);
             --text-muted: #6688aa;
-            --chat-msg-own: #005c4b;
-            --chat-msg-other: #1f2c3a;
             --sombra: 0 0 30px rgba(0, 180, 255, 0.1);
             --border-color: #1a4a7a;
             --input-bg: #1a2a4a;
         }
 
-        /* ===== TEMA DÍA (CLARO) ===== */
         body.theme-day {
             --bg-principal: #e8f0fe;
             --bg-tarjeta: #d4e4f7;
@@ -334,7 +333,6 @@
             transform: scale(1.05);
         }
 
-        /* Botón de tema */
         .btn-theme {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--borde-neon);
@@ -1464,33 +1462,6 @@
                 font-size: 0.75rem;
             }
         }
-
-        /* ===== VARIABLES PARA BOTONES ===== */
-        .btn-theme {
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--borde-neon);
-            color: var(--texto-principal);
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: 0.2s;
-        }
-        .btn-theme:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
-        }
-        body.theme-day .btn-theme {
-            background: rgba(0, 0, 0, 0.05);
-            border-color: #0088cc;
-        }
-        body.theme-day .btn-theme:hover {
-            background: rgba(0, 0, 0, 0.1);
-        }
     </style>
 </head>
 <body>
@@ -1590,7 +1561,7 @@
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
 
-            <!-- PANELS (solo se incluye la estructura, el script carga el contenido dinámicamente) -->
+            <!-- PANELS -->
             <div class="panels-container">
 
                 <!-- ========================================================== -->
@@ -1648,7 +1619,9 @@
                     </div>
                 </div>
 
+                <!-- ========================================================== -->
                 <!-- ===== PANEL: LIVE INDIVIDUAL ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-live" class="panel">
                     <h3>🔴 LIVE INDIVIDUAL <span class="info-badge" style="background:#ff44aa;color:#fff;">2 créditos</span></h3>
                     <div class="item-card">
@@ -1678,7 +1651,9 @@
                     </div>
                 </div>
 
+                <!-- ========================================================== -->
                 <!-- ===== PANEL: LIVE MASIVO ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-massive" class="panel">
                     <h3>📊 LIVE MASIVO <span class="info-badge" style="background:#ff8800;color:#fff;">7 créditos</span></h3>
                     <div class="item-card">
@@ -1707,7 +1682,9 @@
                     </div>
                 </div>
 
+                <!-- ========================================================== -->
                 <!-- ===== PANEL: PASARELA ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-pasarela" class="panel">
                     <h3>💳 PASARELA DE PAGO</h3>
                     <div class="item-card">
@@ -1738,7 +1715,9 @@
                     </div>
                 </div>
 
+                <!-- ========================================================== -->
                 <!-- ===== PANEL: DIRECCIONES ===== -->
+                <!-- ========================================================== -->
                 <div id="panel-direcciones" class="panel">
                     <h3>📍 GENERADOR DE DIRECCIONES</h3>
                     <div class="item-card">
@@ -1981,7 +1960,6 @@
             document.querySelector('.btn-theme').textContent = isDay ? '🌙' : '🌓';
         }
 
-        // Cargar tema guardado
         (function() {
             const saved = localStorage.getItem('sysTheme');
             if (saved === 'day') {
@@ -2007,7 +1985,7 @@
         let usuariosUnsubscribe = null;
         let esOwner = false;
 
-        // Chat variables
+        // Chat
         let chatDisplayName = "";
         let chatAvatar = "🦁";
         let chatUnsubscribe = null;
@@ -2561,7 +2539,7 @@
         }
 
         // ================================================================
-        // 11. GENERADOR DE TARJETAS (CON X COMO COMODÍN)
+        // 11. GENERADOR DE TARJETAS (CON X COMO COMODÍN Y PAÍS REAL)
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
@@ -2594,6 +2572,36 @@
                 alt = !alt;
             }
             return sum % 10 === 0;
+        }
+
+        // 🔥 OBTENER INFO REAL DEL BIN (PAÍS Y BANCO)
+        async function obtenerInfoBIN(bin) {
+            try {
+                const response = await fetch(`https://binlist.io/lookup/${bin}`);
+                if (response.ok) {
+                    const data = await response.json();
+                    return {
+                        pais: data.country?.name || 'Desconocido',
+                        paisCodigo: data.country?.alpha2 || 'N/A',
+                        paisEmoji: data.country?.emoji || '🌍',
+                        banco: data.bank?.name || 'Desconocido',
+                        marca: data.scheme || 'Desconocida',
+                        tipo: data.type || 'Desconocido',
+                        nivel: data.level || 'Desconocido'
+                    };
+                }
+            } catch (e) {
+                console.log('Error al obtener info del BIN:', e);
+            }
+            return {
+                pais: 'Desconocido',
+                paisCodigo: 'N/A',
+                paisEmoji: '🌍',
+                banco: 'Desconocido',
+                marca: detectBrand(bin),
+                tipo: 'Desconocido',
+                nivel: 'Desconocido'
+            };
         }
 
         function generateUniqueCards(binPrefix, count, month, year) {
@@ -2708,8 +2716,26 @@
                 return;
             }
 
+            // 🔥 OBTENER INFO REAL DEL BIN (PAÍS)
+            const binReal = cleanInput.slice(0, 6);
+            const infoBIN = await obtenerInfoBIN(binReal);
+
+            if (infoBIN.pais !== 'Desconocido') {
+                mostrarNotificacion(`🌍 BIN detectado: ${infoBIN.paisEmoji} ${infoBIN.pais} - ${infoBIN.banco}`, 'info');
+            } else {
+                mostrarNotificacion('⚠️ No se pudo detectar el país del BIN', 'warning');
+            }
+
             const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
             if (cards.length === 0) { mostrarNotificacion('❌ No se pudieron generar tarjetas válidas', 'error'); return; }
+
+            // Agregar info del país a cada tarjeta
+            cards.forEach(card => {
+                card.pais = infoBIN.pais;
+                card.paisEmoji = infoBIN.paisEmoji;
+                card.paisCodigo = infoBIN.paisCodigo;
+                card.banco = infoBIN.banco;
+            });
 
             generatedCardsList = cards;
             mostrarGeneradas(cards);
@@ -2717,9 +2743,9 @@
             document.getElementById('actionButtons').style.display = 'flex';
             document.getElementById('generatedCount').textContent = cards.length;
             document.getElementById('massiveCount').textContent = cards.length;
-            guardarHistorialGen(binInput, cards.length);
+            guardarHistorialGen(binInput, cards.length, infoBIN);
             cargarHistorialGen();
-            mostrarNotificacion(`✅ ${cards.length} tarjetas generadas GRATIS`, 'success');
+            mostrarNotificacion(`✅ ${cards.length} tarjetas generadas - ${infoBIN.paisEmoji} ${infoBIN.pais}`, 'success');
         }
 
         function mostrarGeneradas(cards) {
@@ -2728,6 +2754,9 @@
                 const cvvClass = card.cvvLength === 4 ? 'cvv4' : 'cvv';
                 const brandClass = card.brand === 'American Express' ? 'amex' : 'brand';
                 const cvvLabel = card.cvvLength === 4 ? '🔐 CVV(4)' : '🔐 CVV';
+                const paisInfo = card.pais && card.pais !== 'Desconocido' ?
+                    `${card.paisEmoji} ${card.pais}` :
+                    '🌍 Desconocido';
                 return `
                                 <div class="card-item">
                                     <span class="card-number">${card.number.slice(0,6)} ${card.number.slice(6,10)} ${card.number.slice(10,14)} ${card.number.slice(14)}</span>
@@ -2735,6 +2764,7 @@
                                         <span class="info-badge ${brandClass}">${card.brand}</span>
                                         <span class="info-badge fecha">${card.month}/${card.year}</span>
                                         <span class="info-badge ${cvvClass}">${cvvLabel} ${card.cvv}</span>
+                                        <span class="info-badge" style="background:#1a4a6a;color:#88ddff;">${paisInfo}</span>
                                         <span class="info-badge">Serie: ${card.series}</span>
                                         <span class="info-badge free-tag">GRATIS</span>
                                     </div>
@@ -2750,13 +2780,16 @@
         function copiarTarjeta(index) {
             const card = generatedCardsList[index];
             if (!card) return;
-            const text = `${card.number}|${card.month}|${card.year}|${card.cvv}|${card.brand}`;
+            const text =
+            `${card.number}|${card.month}|${card.year}|${card.cvv}|${card.brand}|${card.paisEmoji || '🌍'} ${card.pais || 'Desconocido'}`;
             navigator.clipboard.writeText(text).then(() => mostrarNotificacion('📋 Copiada', 'success'));
         }
 
         function copiarTodo() {
             if (!generatedCardsList.length) { mostrarNotificacion('❌ No hay tarjetas', 'error'); return; }
-            const text = generatedCardsList.map(c => `${c.number}|${c.month}|${c.year}|${c.cvv}|${c.brand}`).join('\n');
+            const text = generatedCardsList.map(c =>
+                `${c.number}|${c.month}|${c.year}|${c.cvv}|${c.brand}|${c.paisEmoji || '🌍'} ${c.pais || 'Desconocido'}`
+                ).join('\n');
             navigator.clipboard.writeText(text).then(() => mostrarNotificacion(`📋 ${generatedCardsList.length} copiadas`,
                 'success'));
         }
@@ -2775,7 +2808,8 @@
         function descargarGeneradas() {
             if (!generatedCardsList.length) return;
             const lines = generatedCardsList.map(c =>
-                `${c.number}|${c.month}|${c.year}|${c.cvv}|${c.brand}|Serie:${c.series}`);
+                `${c.number}|${c.month}|${c.year}|${c.cvv}|${c.brand}|${c.paisEmoji || '🌍'} ${c.pais || 'Desconocido'}|Serie:${c.series}`
+                );
             const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
@@ -2787,7 +2821,40 @@
         }
 
         // ================================================================
-        // 12. LIVE Y MASIVO
+        // 12. HISTORIAL CON PAÍS
+        // ================================================================
+        function guardarHistorialGen(bin, count, infoBIN) {
+            if (!currentUser) return;
+            const key = `gen_history_${currentUser.uid}`;
+            const history = JSON.parse(localStorage.getItem(key) || '[]');
+            history.unshift({
+                bin: bin,
+                count: count,
+                pais: infoBIN?.pais || 'Desconocido',
+                paisEmoji: infoBIN?.paisEmoji || '🌍',
+                banco: infoBIN?.banco || 'Desconocido',
+                fecha: new Date().toLocaleString()
+            });
+            if (history.length > 50) history.length = 50;
+            localStorage.setItem(key, JSON.stringify(history));
+        }
+
+        function cargarHistorialGen() {
+            if (!currentUser) return;
+            const key = `gen_history_${currentUser.uid}`;
+            const history = JSON.parse(localStorage.getItem(key) || '[]');
+            const container = document.getElementById('genHistory');
+            container.innerHTML = '';
+            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin generaciones</p>'; return; }
+            container.innerHTML = history.map(h =>
+                `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">
+                            🎲 ${h.bin} | ${h.count} tarjetas | ${h.paisEmoji || '🌍'} ${h.pais || 'Desconocido'} | ${h.banco || ''} | ${h.fecha}
+                        </div>`
+            ).join('');
+        }
+
+        // ================================================================
+        // 13. LIVE Y MASIVO (resumido para no exceder)
         // ================================================================
         async function getBINInfo(bin) {
             try {
@@ -3005,29 +3072,8 @@
         }
 
         // ================================================================
-        // 13. HISTORIALES
+        // 14. RESTO DE HISTORIALES (LIVE, MASIVO, CRÉDITOS)
         // ================================================================
-        function guardarHistorialGen(bin, count) {
-            if (!currentUser) return;
-            const key = `gen_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            history.unshift({ bin, count, fecha: new Date().toLocaleString() });
-            if (history.length > 50) history.length = 50;
-            localStorage.setItem(key, JSON.stringify(history));
-        }
-
-        function cargarHistorialGen() {
-            if (!currentUser) return;
-            const key = `gen_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const container = document.getElementById('genHistory');
-            container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin generaciones</p>'; return; }
-            container.innerHTML = history.map(h =>
-                `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">🎲 ${h.bin} | ${h.count} | ${h.fecha}</div>`
-            ).join('');
-        }
-
         function guardarHistorialLive(number, brand, result) {
             if (!currentUser) return;
             const key = `live_history_${currentUser.uid}`;
@@ -3094,7 +3140,7 @@
         }
 
         // ================================================================
-        // 14. DIRECCIONES
+        // 15. DIRECCIONES (ya incluido)
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -3264,7 +3310,7 @@
         }
 
         // ================================================================
-        // 15. CHAT EN VIVO
+        // 16. CHAT EN VIVO
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3506,7 +3552,7 @@
         });
 
         // ================================================================
-        // 16. SALA PRIVADA
+        // 17. SALA PRIVADA
         // ================================================================
 
         async function crearSalaPrivada() {
@@ -3685,7 +3731,7 @@
         }
 
         // ================================================================
-        // 17. NOTAS
+        // 18. NOTAS
         // ================================================================
         async function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3705,7 +3751,7 @@
         }
 
         // ================================================================
-        // 18. NAVEGACIÓN
+        // 19. NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -3774,15 +3820,16 @@
         }
 
         // ================================================================
-        // 19. INICIALIZACIÓN
+        // 20. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON TEMA DÍA/NOCHE');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON PAÍS REAL EN BINS');
         console.log('🔐 Nuevo dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos, puede cambiar su nombre en el chat');
         console.log('❌ Usa X como comodín al generar tarjetas');
         console.log('🌓 Botón para cambiar entre día y noche');
+        console.log('🌍 Detección de país REAL del BIN usando BinList API');
 
         cargarPromo();
         seleccionarPasarela('stripe');
