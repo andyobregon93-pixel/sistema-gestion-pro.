@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON FECHAS MEZCLADAS                  */
+        /* ESTILOS - VERSIÓN FINAL CON CHAT TIPO WHATSAPP                */
         /* ============================================================== */
 
         * {
@@ -35,6 +35,10 @@
             --sombra: 0 0 30px rgba(0, 180, 255, 0.1);
             --border-color: #1a4a7a;
             --input-bg: #1a2a4a;
+            --reply-border: #00ccff;
+            --mention-color: #00ff88;
+            --call-incoming: #00cc88;
+            --call-outgoing: #ff44aa;
         }
 
         body.theme-day {
@@ -56,6 +60,10 @@
             --border-color: #88bbdd;
             --input-bg: #ffffff;
             --auth-box-shadow: 0 0 30px rgba(0, 100, 200, 0.15);
+            --reply-border: #0088cc;
+            --mention-color: #00aa66;
+            --call-incoming: #00aa66;
+            --call-outgoing: #cc3388;
         }
 
         html,
@@ -749,6 +757,18 @@
         .btn-small.btn-sala-sm {
             background: #ff44aa;
         }
+        .btn-small.btn-reply {
+            background: #0088cc;
+            font-size: 0.5rem;
+        }
+        .btn-small.btn-call {
+            background: #25D366;
+            font-size: 0.5rem;
+        }
+        .btn-small.btn-mention {
+            background: #ffaa44;
+            font-size: 0.5rem;
+        }
 
         /* ===== PASARELA CARDS ===== */
         .pasarela-grid {
@@ -1049,7 +1069,7 @@
         }
 
         /* ============================================================== */
-        /* ===== CHAT ESTILOS ===== */
+        /* ===== CHAT ESTILOS TIPO WHATSAPP ===== */
         /* ============================================================== */
         .chat-profile-setup {
             background: var(--bg-result);
@@ -1162,6 +1182,64 @@
             display: block;
             margin-top: 2px;
         }
+        .chat-messages .message .msg-reply {
+            background: rgba(255, 255, 255, 0.05);
+            border-left: 3px solid var(--reply-border);
+            padding: 4px 8px;
+            border-radius: 4px;
+            margin-bottom: 4px;
+            font-size: 0.7rem;
+            color: var(--texto-secundario);
+        }
+        .chat-messages .message .msg-reply .reply-author {
+            font-weight: 600;
+            color: var(--reply-border);
+        }
+        .chat-messages .message .msg-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 4px;
+            justify-content: flex-end;
+        }
+        .chat-messages .message .msg-actions button {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 0.55rem;
+            cursor: pointer;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: 0.15s;
+        }
+        .chat-messages .message .msg-actions button:hover {
+            background: var(--border-color);
+            color: var(--texto-principal);
+        }
+        .chat-messages .message .mention {
+            color: var(--mention-color);
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .chat-messages .message .call-notification {
+            background: var(--bg-result);
+            border-radius: 10px;
+            padding: 6px 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.7rem;
+            border: 1px solid var(--border-color);
+            margin-top: 4px;
+        }
+        .chat-messages .message .call-notification .call-icon {
+            font-size: 1.2rem;
+        }
+        .chat-messages .message .call-notification .call-incoming {
+            color: var(--call-incoming);
+        }
+        .chat-messages .message .call-notification .call-outgoing {
+            color: var(--call-outgoing);
+        }
 
         .chat-input-area {
             display: flex;
@@ -1210,6 +1288,45 @@
         }
         .chat-input-area .chat-btn.send:hover {
             background: linear-gradient(135deg, #00dd99, #009977);
+        }
+        .chat-input-area .chat-btn.call-btn {
+            background: #25D366;
+            color: white;
+        }
+        .chat-input-area .chat-btn.call-btn:hover {
+            background: #1a9b4a;
+        }
+        .chat-input-area .chat-btn.mention-btn {
+            background: #ffaa44;
+            color: white;
+        }
+        .chat-input-area .chat-btn.mention-btn:hover {
+            background: #cc8800;
+        }
+        .chat-input-area .chat-btn.reply-btn {
+            background: #0088cc;
+            color: white;
+        }
+        .chat-input-area .chat-btn.reply-btn:hover {
+            background: #006699;
+        }
+
+        .chat-reply-preview {
+            background: var(--bg-result);
+            border-left: 3px solid var(--reply-border);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            color: var(--texto-secundario);
+            display: none;
+            margin-bottom: 4px;
+            width: 100%;
+        }
+        .chat-reply-preview .reply-cancel {
+            cursor: pointer;
+            color: #ff4444;
+            font-weight: bold;
+            margin-left: 8px;
         }
 
         .emoji-picker,
@@ -1465,6 +1582,11 @@
             .chat-input-area .chat-input {
                 font-size: 0.75rem;
             }
+            .chat-input-area .chat-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
@@ -1582,8 +1704,6 @@
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
                             <br><br>
                             <strong style="color:#00ff88;">🔄 FECHAS MEZCLADAS:</strong> Cada tarjeta genera su propia fecha aleatoria entre 2024-2038. Si quieres una fecha fija, pon Mes y Año.
-                            <br><br>
-                            <strong style="color:#ffaa44;">💡 EJEMPLO:</strong> 414444XXXXXXXXXX genera tarjetas con fechas mezcladas como 03/2038, 07/2032, 09/2037, etc.
                         </div>
                         <div class="form-group">
                             <label>🔢 Ingresa los primeros dígitos (BIN) - usa X como comodín</label>
@@ -1591,11 +1711,11 @@
                         </div>
                         <div class="flex-row">
                             <div class="form-group">
-                                <label>📅 Mes (MM) - OPCIONAL (Dejar vacío para aleatorio)</label>
+                                <label>📅 Mes (MM) - OPCIONAL</label>
                                 <input type="text" id="cardMonth" placeholder="12" maxlength="2" value="">
                             </div>
                             <div class="form-group">
-                                <label>📅 Año (YY) - OPCIONAL (Dejar vacío para aleatorio)</label>
+                                <label>📅 Año (YY) - OPCIONAL</label>
                                 <input type="text" id="cardYear" placeholder="26" maxlength="2" value="">
                             </div>
                             <div class="form-group">
@@ -1758,7 +1878,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: CHAT EN VIVO ===== -->
+                <!-- ===== PANEL: CHAT EN VIVO (TIPO WHATSAPP) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-chat" class="panel">
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
@@ -1775,6 +1895,12 @@
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
                     </div>
 
+                    <!-- Reply Preview -->
+                    <div class="chat-reply-preview" id="chatReplyPreview">
+                        <span>📩 Respondiendo a: <span id="replyPreviewText"></span></span>
+                        <span class="reply-cancel" onclick="cancelarRespuesta()">✕</span>
+                    </div>
+
                     <div class="chat-messages" id="chatMessages">
                         <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>
                     </div>
@@ -1783,6 +1909,8 @@
                         <button class="chat-btn" onclick="toggleEmojiPicker()" title="Emojis">😊</button>
                         <button class="chat-btn" onclick="toggleStickerPicker()" title="Stickers">🎨</button>
                         <button class="chat-btn" onclick="document.getElementById('chatImageInput').click()" title="Imagen">📷</button>
+                        <button class="chat-btn mention-btn" onclick="insertarMencion()" title="Mencionar @">@</button>
+                        <button class="chat-btn call-btn" onclick="hacerLlamada()" title="Llamada">📞</button>
                         <input type="file" id="chatImageInput" accept="image/*" style="display:none;" onchange="enviarImagen(event)">
                         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escribe un mensaje..."></textarea>
                         <button class="chat-btn send" onclick="enviarMensaje()">➤</button>
@@ -1796,6 +1924,8 @@
                         <span onclick="insertEmoji('🚀')">🚀</span><span onclick="insertEmoji('🎉')">🎉</span>
                         <span onclick="insertEmoji('❤️')">❤️</span><span onclick="insertEmoji('💀')">💀</span>
                         <span onclick="insertEmoji('👀')">👀</span><span onclick="insertEmoji('💯')">💯</span>
+                        <span onclick="insertEmoji('😎')">😎</span><span onclick="insertEmoji('🤣')">🤣</span>
+                        <span onclick="insertEmoji('🥰')">🥰</span><span onclick="insertEmoji('😱')">😱</span>
                     </div>
 
                     <div class="sticker-picker" id="stickerPicker">
@@ -1809,11 +1939,17 @@
                         <span onclick="enviarSticker('💪')">💪</span>
                         <span onclick="enviarSticker('🤖')">🤖</span>
                         <span onclick="enviarSticker('👾')">👾</span>
+                        <span onclick="enviarSticker('😎')">😎</span>
+                        <span onclick="enviarSticker('🐉')">🐉</span>
+                        <span onclick="enviarSticker('🌈')">🌈</span>
+                        <span onclick="enviarSticker('⭐')">⭐</span>
+                        <span onclick="enviarSticker('🎨')">🎨</span>
+                        <span onclick="enviarSticker('🦊')">🦊</span>
                     </div>
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: SALA PRIVADA ===== -->
+                <!-- ===== PANEL: SALA PRIVADA (TIPO WHATSAPP) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-sala" class="panel">
                     <h3>🔒 SALA PRIVADA <span class="info-badge" style="background:#ff44aa;color:#fff;">5 créditos</span></h3>
@@ -1824,6 +1960,8 @@
                             <br>💰 <strong>Costo: 5 créditos</strong> (solo el creador paga).
                             <br>📋 Comparte el código con quien quieras para que entren gratis.
                             <br>🔐 <strong>Chat privado</strong> - solo los que tengan el código pueden entrar.
+                            <br><br>
+                            <strong>📱 Funcionalidades tipo WhatsApp:</strong> Responder mensajes | Etiquetar | Imágenes | Stickers | Llamadas
                         </div>
 
                         <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -1852,10 +1990,19 @@
                                 <button class="copy-btn-sala" onclick="copiarCodigoSala()">📋 Copiar código</button>
                                 <button class="btn-small btn-danger" onclick="salirDeSala()">🚪 Salir</button>
                             </div>
+                            <!-- Reply Preview Sala -->
+                            <div class="chat-reply-preview" id="salaReplyPreview">
+                                <span>📩 Respondiendo a: <span id="salaReplyPreviewText"></span></span>
+                                <span class="reply-cancel" onclick="cancelarRespuestaSala()">✕</span>
+                            </div>
                             <div id="salaMessages" class="chat-messages" style="height:250px;margin-top:8px;">
                                 <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>
                             </div>
                             <div class="chat-input-area" style="margin-top:6px;">
+                                <button class="chat-btn" onclick="document.getElementById('salaImageInput').click()" title="Imagen">📷</button>
+                                <button class="chat-btn mention-btn" onclick="insertarMencionSala()" title="Mencionar @">@</button>
+                                <button class="chat-btn call-btn" onclick="hacerLlamadaSala()" title="Llamada">📞</button>
+                                <input type="file" id="salaImageInput" accept="image/*" style="display:none;" onchange="enviarImagenSala(event)">
                                 <textarea class="chat-input" id="salaChatInput" rows="1" placeholder="Mensaje privado..."></textarea>
                                 <button class="chat-btn send" onclick="enviarMensajeSala()">➤</button>
                             </div>
@@ -1999,6 +2146,8 @@
         let chatAvatar = "🦁";
         let chatUnsubscribe = null;
         let chatNameBloqueado = false;
+        let mensajeRespondiendo = null;
+        let mensajeRespondiendoSala = null;
 
         // Sala Privada
         let salaActual = null;
@@ -2060,11 +2209,10 @@
         }
 
         // ================================================================
-        // 5. GENERAR FECHA ALEATORIA INDIVIDUAL (MEZCLADA)
+        // 5. GENERAR FECHA ALEATORIA
         // ================================================================
         function generarFechaAleatoria() {
-            // Genera año entre 2024 y 2038, mes entre 1-12
-            const year = Math.floor(Math.random() * 15) + 24; // 24-38 (2024-2038)
+            const year = Math.floor(Math.random() * 15) + 24;
             const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
             return { month, year: String(year) };
         }
@@ -2098,6 +2246,8 @@
             salaCodigo = null;
             generatedCardsList = [];
             massiveResults = [];
+            mensajeRespondiendo = null;
+            mensajeRespondiendoSala = null;
 
             document.getElementById('salaPrivadaCard').style.display = 'none';
 
@@ -2121,6 +2271,8 @@
                 '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>';
             document.getElementById('chatInput').value = '';
             document.getElementById('salaChatInput').value = '';
+            document.getElementById('chatReplyPreview').style.display = 'none';
+            document.getElementById('salaReplyPreview').style.display = 'none';
 
             document.getElementById('creditsDisplay').textContent = '💎 0 créditos';
             document.getElementById('daysDisplay').textContent = '📅 0 días';
@@ -2558,7 +2710,7 @@
         }
 
         // ================================================================
-        // 12. GENERADOR DE TARJETAS (CON FECHAS MEZCLADAS)
+        // 12. GENERADOR DE TARJETAS
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
@@ -2631,8 +2783,6 @@
             const length = getCardLength(brand);
             const cvvLen = getCVVLength(brand);
 
-            // Si el usuario puso mes y año fijos, usarlos para TODAS las tarjetas
-            // Si no, CADA tarjeta tendrá su propia fecha aleatoria (MEZCLADA)
             const usarFechaFija = month && year;
 
             if (!hasX) {
@@ -2653,15 +2803,14 @@
                         const series = candidate.slice(-4);
                         if (!usedSeries.has(series) && luhnCheck(candidate)) {
                             usedSeries.add(series);
-                            
-                            // 🔥 CADA TARJETA CON SU PROPIA FECHA (MEZCLADA)
+
                             let fecha;
                             if (usarFechaFija) {
                                 fecha = { month: month.padStart(2, '0'), year: year.padStart(2, '0') };
                             } else {
                                 fecha = generarFechaAleatoria();
                             }
-                            
+
                             cards.push({
                                 number: candidate,
                                 month: fecha.month,
@@ -2708,15 +2857,14 @@
 
                     if (!usedSeries.has(series) && luhnCheck(candidate)) {
                         usedSeries.add(series);
-                        
-                        // 🔥 CADA TARJETA CON SU PROPIA FECHA (MEZCLADA)
+
                         let fecha;
                         if (usarFechaFija) {
                             fecha = { month: month.padStart(2, '0'), year: year.padStart(2, '0') };
                         } else {
                             fecha = generarFechaAleatoria();
                         }
-                        
+
                         cards.push({
                             number: candidate,
                             month: fecha.month,
@@ -3522,7 +3670,7 @@
         }
 
         // ================================================================
-        // 18. CHAT EN VIVO
+        // 18. CHAT EN VIVO - FUNCIONES MEJORADAS (TIPO WHATSAPP)
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3644,6 +3792,61 @@
             document.getElementById('emojiPicker').classList.remove('show');
         }
 
+        function insertarMencion() {
+            const input = document.getElementById('chatInput');
+            input.value += '@';
+            input.focus();
+            mostrarNotificacion('💡 Escribe el nombre del usuario después de @', 'info');
+        }
+
+        function insertarMencionSala() {
+            const input = document.getElementById('salaChatInput');
+            input.value += '@';
+            input.focus();
+            mostrarNotificacion('💡 Escribe el nombre del usuario después de @', 'info');
+        }
+
+        function hacerLlamada() {
+            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
+            mostrarNotificacion('📞 Llamando... (Simulación)', 'info');
+            // Simular llamada
+            const llamada = {
+                userId: currentUser.uid,
+                userName: chatDisplayName,
+                avatar: chatAvatar,
+                tipo: 'llamada',
+                estado: 'incoming',
+                timestamp: Date.now()
+            };
+            db.ref('chat_messages').push({
+                userId: 'system',
+                userName: 'Sistema',
+                avatar: '📞',
+                text: `📞 ${chatDisplayName} está llamando...`,
+                tipo: 'llamada',
+                timestamp: Date.now()
+            });
+            setTimeout(() => {
+                mostrarNotificacion('📞 Llamada finalizada', 'success');
+            }, 5000);
+        }
+
+        function hacerLlamadaSala() {
+            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
+            mostrarNotificacion('📞 Llamando en sala privada...', 'info');
+            db.ref(`salas_privadas_mensajes/${salaActual}`).push({
+                userId: 'system',
+                userName: 'Sistema',
+                avatar: '📞',
+                text: `📞 ${chatDisplayName} está llamando en la sala...`,
+                tipo: 'llamada',
+                timestamp: Date.now()
+            });
+            setTimeout(() => {
+                mostrarNotificacion('📞 Llamada finalizada', 'success');
+            }, 5000);
+        }
+
         function enviarSticker(sticker) {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil primero', 'error'); return; }
@@ -3652,6 +3855,7 @@
                 userName: chatDisplayName,
                 avatar: chatAvatar,
                 sticker: sticker,
+                tipo: 'sticker',
                 timestamp: Date.now()
             });
             document.getElementById('stickerPicker').classList.remove('show');
@@ -3672,13 +3876,21 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const dataUrl = e.target.result;
-                db.ref('chat_messages').push({
+                const msgData = {
                     userId: currentUser.uid,
                     userName: chatDisplayName,
                     avatar: chatAvatar,
                     image: dataUrl,
+                    tipo: 'imagen',
                     timestamp: Date.now()
-                });
+                };
+                if (mensajeRespondiendo) {
+                    msgData.replyTo = mensajeRespondiendo;
+                    msgData.replyText = mensajeRespondiendo.text || mensajeRespondiendo.sticker || '📷 Imagen';
+                    msgData.replyAuthor = mensajeRespondiendo.userName || 'Anónimo';
+                }
+                db.ref('chat_messages').push(msgData);
+                cancelarRespuesta();
                 mostrarNotificacion('📷 Imagen enviada', 'success');
                 event.target.value = '';
             };
@@ -3692,17 +3904,54 @@
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
 
-            db.ref('chat_messages').push({
+            const msgData = {
                 userId: currentUser.uid,
                 userName: chatDisplayName,
                 avatar: chatAvatar,
                 text: text,
+                tipo: 'texto',
                 timestamp: Date.now()
-            });
+            };
+
+            if (mensajeRespondiendo) {
+                msgData.replyTo = mensajeRespondiendo;
+                msgData.replyText = mensajeRespondiendo.text || mensajeRespondiendo.sticker || '📷 Imagen';
+                msgData.replyAuthor = mensajeRespondiendo.userName || 'Anónimo';
+            }
+
+            db.ref('chat_messages').push(msgData);
             input.value = '';
             input.focus();
+            cancelarRespuesta();
             document.getElementById('emojiPicker').classList.remove('show');
             document.getElementById('stickerPicker').classList.remove('show');
+        }
+
+        function responderMensaje(msg, sala = false) {
+            if (!msg) return;
+            if (sala) {
+                mensajeRespondiendoSala = msg;
+                document.getElementById('salaReplyPreviewText').textContent =
+                    `${msg.userName || 'Anónimo'}: ${msg.text || msg.sticker || '📷 Imagen'}`;
+                document.getElementById('salaReplyPreview').style.display = 'block';
+            } else {
+                mensajeRespondiendo = msg;
+                document.getElementById('replyPreviewText').textContent =
+                    `${msg.userName || 'Anónimo'}: ${msg.text || msg.sticker || '📷 Imagen'}`;
+                document.getElementById('chatReplyPreview').style.display = 'block';
+                document.getElementById('chatInput').focus();
+            }
+            mostrarNotificacion('📩 Respondiendo mensaje', 'info');
+        }
+
+        function cancelarRespuesta() {
+            mensajeRespondiendo = null;
+            document.getElementById('chatReplyPreview').style.display = 'none';
+        }
+
+        function cancelarRespuestaSala() {
+            mensajeRespondiendoSala = null;
+            document.getElementById('salaReplyPreview').style.display = 'none';
         }
 
         function escucharMensajes() {
@@ -3720,8 +3969,28 @@
                 div.className = `message ${isOwn ? 'own' : 'other'}`;
 
                 let content = '';
+
+                // Reply quote
+                if (msg.replyTo) {
+                    content += `<div class="msg-reply">
+                                    <span class="reply-author">${msg.replyAuthor || 'Anónimo'}</span>
+                                    <span>${msg.replyText || 'Mensaje'}</span>
+                                </div>`;
+                }
+
                 if (msg.text) {
-                    content += `<div class="msg-text">${msg.text}</div>`;
+                    // Detectar menciones (@)
+                    let processedText = msg.text;
+                    const mentionRegex = /@(\w+)/g;
+                    const mentions = processedText.match(mentionRegex);
+                    if (mentions) {
+                        mentions.forEach(mention => {
+                            const user = mention.substring(1);
+                            processedText = processedText.replace(mention,
+                                `<span class="mention">@${user}</span>`);
+                        });
+                    }
+                    content += `<div class="msg-text">${processedText}</div>`;
                 }
                 if (msg.image) {
                     content += `<img src="${msg.image}" class="msg-image" onclick="window.open('${msg.image}','_blank')" />`;
@@ -3729,11 +3998,27 @@
                 if (msg.sticker) {
                     content += `<span class="msg-sticker">${msg.sticker}</span>`;
                 }
+                if (msg.tipo === 'llamada') {
+                    content += `<div class="call-notification">
+                                    <span class="call-icon">📞</span>
+                                    <span class="call-${msg.estado || 'incoming'}">${msg.text || 'Llamada'}</span>
+                                </div>`;
+                }
 
                 const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const userName = msg.userName || 'Anónimo';
                 const userId = msg.userId || 'default';
                 const color = getUserColor(userId, userName);
+
+                // Acciones: Responder, Mencionar, Llamar
+                const actions = `
+                                <div class="msg-actions">
+                                    <button onclick="responderMensaje(${JSON.stringify(msg).replace(/"/g, '&quot;')}, false)" title="Responder">💬</button>
+                                    <button onclick="insertarMencionUsuario('${userName}')" title="Mencionar">@</button>
+                                    <button onclick="hacerLlamadaUsuario('${userName}')" title="Llamar">📞</button>
+                                    ${isOwn ? '' : `<button onclick="window.open('https://wa.me/?text=${encodeURIComponent('Hola ' + userName)}', '_blank')" title="WhatsApp">📱</button>`}
+                                </div>
+                            `;
 
                 div.innerHTML = `
                                 <div class="msg-header">
@@ -3742,9 +4027,29 @@
                                     <span class="time">${time}</span>
                                 </div>
                                 ${content}
+                                ${actions}
                             `;
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
+            });
+        }
+
+        function insertarMencionUsuario(nombre) {
+            const input = document.getElementById('chatInput');
+            input.value += `@${nombre} `;
+            input.focus();
+            mostrarNotificacion(`✏️ Mencionando a ${nombre}`, 'info');
+        }
+
+        function hacerLlamadaUsuario(nombre) {
+            mostrarNotificacion(`📞 Llamando a ${nombre}... (Simulación)`, 'info');
+            db.ref('chat_messages').push({
+                userId: 'system',
+                userName: 'Sistema',
+                avatar: '📞',
+                text: `📞 ${chatDisplayName} está llamando a ${nombre}...`,
+                tipo: 'llamada',
+                timestamp: Date.now()
             });
         }
 
@@ -3764,7 +4069,7 @@
         });
 
         // ================================================================
-        // 19. SALA PRIVADA
+        // 19. SALA PRIVADA - FUNCIONES MEJORADAS
         // ================================================================
 
         async function crearSalaPrivada() {
@@ -3868,8 +4173,27 @@
                 div.className = `message ${isOwn ? 'own' : 'other'}`;
 
                 let content = '';
+
+                // Reply quote
+                if (msg.replyTo) {
+                    content += `<div class="msg-reply">
+                                    <span class="reply-author">${msg.replyAuthor || 'Anónimo'}</span>
+                                    <span>${msg.replyText || 'Mensaje'}</span>
+                                </div>`;
+                }
+
                 if (msg.text) {
-                    content += `<div class="msg-text">${msg.text}</div>`;
+                    let processedText = msg.text;
+                    const mentionRegex = /@(\w+)/g;
+                    const mentions = processedText.match(mentionRegex);
+                    if (mentions) {
+                        mentions.forEach(mention => {
+                            const user = mention.substring(1);
+                            processedText = processedText.replace(mention,
+                                `<span class="mention">@${user}</span>`);
+                        });
+                    }
+                    content += `<div class="msg-text">${processedText}</div>`;
                 }
                 if (msg.image) {
                     content += `<img src="${msg.image}" class="msg-image" onclick="window.open('${msg.image}','_blank')" />`;
@@ -3877,11 +4201,25 @@
                 if (msg.sticker) {
                     content += `<span class="msg-sticker">${msg.sticker}</span>`;
                 }
+                if (msg.tipo === 'llamada') {
+                    content += `<div class="call-notification">
+                                    <span class="call-icon">📞</span>
+                                    <span>${msg.text || 'Llamada'}</span>
+                                </div>`;
+                }
 
                 const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const userName = msg.userName || 'Anónimo';
                 const userId = msg.userId || 'default';
                 const color = getUserColor(userId, userName);
+
+                const actions = `
+                                <div class="msg-actions">
+                                    <button onclick="responderMensajeSala(${JSON.stringify(msg).replace(/"/g, '&quot;')})" title="Responder">💬</button>
+                                    <button onclick="insertarMencionSalaUsuario('${userName}')" title="Mencionar">@</button>
+                                    <button onclick="hacerLlamadaSalaUsuario('${userName}')" title="Llamar">📞</button>
+                                </div>
+                            `;
 
                 div.innerHTML = `
                                 <div class="msg-header">
@@ -3890,9 +4228,40 @@
                                     <span class="time">${time}</span>
                                 </div>
                                 ${content}
+                                ${actions}
                             `;
                 container.appendChild(div);
                 container.scrollTop = container.scrollHeight;
+            });
+        }
+
+        function responderMensajeSala(msg) {
+            if (!msg) return;
+            mensajeRespondiendoSala = msg;
+            document.getElementById('salaReplyPreviewText').textContent =
+                `${msg.userName || 'Anónimo'}: ${msg.text || msg.sticker || '📷 Imagen'}`;
+            document.getElementById('salaReplyPreview').style.display = 'block';
+            document.getElementById('salaChatInput').focus();
+            mostrarNotificacion('📩 Respondiendo mensaje en sala', 'info');
+        }
+
+        function insertarMencionSalaUsuario(nombre) {
+            const input = document.getElementById('salaChatInput');
+            input.value += `@${nombre} `;
+            input.focus();
+            mostrarNotificacion(`✏️ Mencionando a ${nombre} en sala`, 'info');
+        }
+
+        function hacerLlamadaSalaUsuario(nombre) {
+            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
+            mostrarNotificacion(`📞 Llamando a ${nombre} en sala...`, 'info');
+            db.ref(`salas_privadas_mensajes/${salaActual}`).push({
+                userId: 'system',
+                userName: 'Sistema',
+                avatar: '📞',
+                text: `📞 ${chatDisplayName} está llamando a ${nombre} en la sala...`,
+                tipo: 'llamada',
+                timestamp: Date.now()
             });
         }
 
@@ -3903,15 +4272,61 @@
             if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
 
-            db.ref(`salas_privadas_mensajes/${salaActual}`).push({
+            const msgData = {
                 userId: currentUser.uid,
                 userName: chatDisplayName,
                 avatar: chatAvatar,
                 text: text,
+                tipo: 'texto',
                 timestamp: Date.now()
-            });
+            };
+
+            if (mensajeRespondiendoSala) {
+                msgData.replyTo = mensajeRespondiendoSala;
+                msgData.replyText = mensajeRespondiendoSala.text || mensajeRespondiendoSala.sticker || '📷 Imagen';
+                msgData.replyAuthor = mensajeRespondiendoSala.userName || 'Anónimo';
+            }
+
+            db.ref(`salas_privadas_mensajes/${salaActual}`).push(msgData);
             input.value = '';
             input.focus();
+            cancelarRespuestaSala();
+        }
+
+        async function enviarImagenSala(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
+            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
+
+            if (file.size > 200 * 1024) {
+                mostrarNotificacion('❌ Imagen muy grande (máx 200KB)', 'error');
+                event.target.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const dataUrl = e.target.result;
+                const msgData = {
+                    userId: currentUser.uid,
+                    userName: chatDisplayName,
+                    avatar: chatAvatar,
+                    image: dataUrl,
+                    tipo: 'imagen',
+                    timestamp: Date.now()
+                };
+                if (mensajeRespondiendoSala) {
+                    msgData.replyTo = mensajeRespondiendoSala;
+                    msgData.replyText = mensajeRespondiendoSala.text || mensajeRespondiendoSala.sticker || '📷 Imagen';
+                    msgData.replyAuthor = mensajeRespondiendoSala.userName || 'Anónimo';
+                }
+                db.ref(`salas_privadas_mensajes/${salaActual}`).push(msgData);
+                cancelarRespuestaSala();
+                mostrarNotificacion('📷 Imagen enviada a sala', 'success');
+                event.target.value = '';
+            };
+            reader.readAsDataURL(file);
         }
 
         function copiarCodigoSala() {
@@ -3939,6 +4354,8 @@
             salaActual = null;
             salaCodigo = null;
             document.getElementById('salaPrivadaCard').style.display = 'none';
+            document.getElementById('salaReplyPreview').style.display = 'none';
+            mensajeRespondiendoSala = null;
             mostrarNotificacion('🚪 Has salido de la sala privada', 'info');
         }
 
@@ -4035,7 +4452,7 @@
         // 22. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON FECHAS MEZCLADAS');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON CHAT TIPO WHATSAPP');
         console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos');
@@ -4044,6 +4461,7 @@
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
         console.log('🟠 Detección de CVV INCORRECTO (invalid_cvc)');
         console.log('🔄 Cada tarjeta genera su propia fecha ALEATORIA (MEZCLADA)');
+        console.log('💬 CHAT TIPO WHATSAPP: Responder mensajes | Etiquetar | Imágenes | Stickers | Llamadas');
 
         cargarPromo();
         seleccionarPasarela('stripe');
