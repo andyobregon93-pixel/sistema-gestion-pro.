@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON PAÍS REAL EN BINS                */
+        /* ESTILOS - VERSIÓN FINAL CON PAÍS REAL EN BINS Y FECHAS RANDOM */
         /* ============================================================== */
 
         * {
@@ -1580,6 +1580,8 @@
                             <br>Ejemplo: <strong>41691614x2xxxxx1</strong> (las X se reemplazan con números aleatorios).
                             <br><br>
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
+                            <br><br>
+                            <strong style="color:#00ff88;">🔄 FECHAS ALEATORIAS:</strong> Si dejas Mes y Año vacíos, se generarán automáticamente fechas aleatorias entre 2025-2030.
                         </div>
                         <div class="form-group">
                             <label>🔢 Ingresa los primeros dígitos (BIN) - usa X como comodín</label>
@@ -1587,12 +1589,12 @@
                         </div>
                         <div class="flex-row">
                             <div class="form-group">
-                                <label>📅 Mes (MM)</label>
-                                <input type="text" id="cardMonth" placeholder="12" maxlength="2" value="12">
+                                <label>📅 Mes (MM) - OPCIONAL</label>
+                                <input type="text" id="cardMonth" placeholder="12" maxlength="2" value="">
                             </div>
                             <div class="form-group">
-                                <label>📅 Año (YY)</label>
-                                <input type="text" id="cardYear" placeholder="26" maxlength="2" value="26">
+                                <label>📅 Año (YY) - OPCIONAL</label>
+                                <input type="text" id="cardYear" placeholder="26" maxlength="2" value="">
                             </div>
                             <div class="form-group">
                                 <label>📊 Cantidad</label>
@@ -1610,6 +1612,7 @@
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.7rem;">
                             📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ddff;font-weight:bold;">0</span>
                             <span style="margin-left:12px;">💎 Generación <span style="color:#00ff88;">GRATIS</span></span>
+                            <span style="margin-left:12px;">🔄 Fechas <span style="color:#ffaa44;">AUTOMÁTICAS</span></span>
                         </div>
                     </div>
                     <div id="generatedContainer">
@@ -2055,7 +2058,16 @@
         }
 
         // ================================================================
-        // 5. CERRAR SESIÓN
+        // 5. GENERAR FECHA ALEATORIA
+        // ================================================================
+        function generarFechaAleatoria() {
+            const year = Math.floor(Math.random() * 6) + 25; // 25-30
+            const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+            return { month, year: String(year) };
+        }
+
+        // ================================================================
+        // 6. CERRAR SESIÓN
         // ================================================================
         function cerrarSesion() {
             if (usuariosUnsubscribe) {
@@ -2124,7 +2136,7 @@
         }
 
         // ================================================================
-        // 6. AUTH - TABS
+        // 7. AUTH - TABS
         // ================================================================
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -2144,7 +2156,7 @@
         }
 
         // ================================================================
-        // 7. PASARELA
+        // 8. PASARELA
         // ================================================================
         function seleccionarPasarela(pasarela) {
             pasarelaSeleccionada = pasarela;
@@ -2159,7 +2171,7 @@
         }
 
         // ================================================================
-        // 8. REGISTRO / LOGIN
+        // 9. REGISTRO / LOGIN
         // ================================================================
         async function cargarPromo() {
             const snap = await db.ref('promocion').once('value');
@@ -2318,7 +2330,7 @@
         }
 
         // ================================================================
-        // 9. CRÉDITOS Y DÍAS
+        // 10. CRÉDITOS Y DÍAS
         // ================================================================
         async function cargarDatosUsuario() {
             if (!currentUser) return;
@@ -2408,7 +2420,7 @@
         }
 
         // ================================================================
-        // 10. ADMIN
+        // 11. ADMIN
         // ================================================================
         async function toggleBloquearUsuario(email) {
             if (!currentUser || currentUser.role !== 'Owner') return;
@@ -2543,7 +2555,7 @@
         }
 
         // ================================================================
-        // 11. GENERADOR DE TARJETAS
+        // 12. GENERADOR DE TARJETAS
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
@@ -2616,6 +2628,14 @@
             const length = getCardLength(brand);
             const cvvLen = getCVVLength(brand);
 
+            let useMonth = month;
+            let useYear = year;
+            if (!useMonth || !useYear) {
+                const fecha = generarFechaAleatoria();
+                useMonth = fecha.month;
+                useYear = fecha.year;
+            }
+
             if (!hasX) {
                 const validBin = binPattern.slice(0, Math.min(binPattern.length, length - 1));
                 const cards = [];
@@ -2636,8 +2656,8 @@
                             usedSeries.add(series);
                             cards.push({
                                 number: candidate,
-                                month: month.padStart(2, '0'),
-                                year: year.padStart(2, '0'),
+                                month: useMonth.padStart(2, '0'),
+                                year: useYear.padStart(2, '0'),
                                 brand: brand,
                                 series: series,
                                 cvv: generarCVV(brand),
@@ -2682,8 +2702,8 @@
                         usedSeries.add(series);
                         cards.push({
                             number: candidate,
-                            month: month.padStart(2, '0'),
-                            year: year.padStart(2, '0'),
+                            month: useMonth.padStart(2, '0'),
+                            year: useYear.padStart(2, '0'),
                             brand: brand,
                             series: series,
                             cvv: generarCVV(brand),
@@ -2702,8 +2722,8 @@
             if (!esOwner && currentDays <= 0) { mostrarNotificacion('❌ Sin días activos.', 'error'); return; }
 
             let binInput = document.getElementById('binInput').value.trim();
-            const month = document.getElementById('cardMonth').value.trim() || '12';
-            const year = document.getElementById('cardYear').value.trim() || '26';
+            let month = document.getElementById('cardMonth').value.trim();
+            let year = document.getElementById('cardYear').value.trim();
             const count = parseInt(document.getElementById('genCount').value) || 10;
 
             if (!binInput || binInput.length < 6) { mostrarNotificacion('❌ Ingresa al menos 6 dígitos', 'error'); return; }
@@ -2746,7 +2766,9 @@
             document.getElementById('massiveCount').textContent = cards.length;
             guardarHistorialGen(binInput, cards.length, infoBIN);
             cargarHistorialGen();
-            mostrarNotificacion(`✅ ${cards.length} tarjetas generadas - ${infoBIN.paisEmoji} ${infoBIN.pais}`, 'success');
+
+            const fechaInfo = month && year ? `${month}/${year}` : '📅 ALEATORIAS';
+            mostrarNotificacion(`✅ ${cards.length} tarjetas generadas - ${infoBIN.paisEmoji} ${infoBIN.pais} (${fechaInfo})`, 'success');
         }
 
         function mostrarGeneradas(cards) {
@@ -2822,12 +2844,11 @@
         }
 
         // ================================================================
-        // 12. VERIFICACIÓN DE TARJETAS (CORREGIDA CON CVV_INVALID)
+        // 13. VERIFICACIÓN DE TARJETAS (CON CVV_INVALID)
         // ================================================================
         async function verificarTarjeta(number, month, year, cvv, pasarela = 'stripe') {
             await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
 
-            // Validación previa
             if (!luhnCheck(number)) {
                 return {
                     estado: 'invalid',
@@ -2841,7 +2862,6 @@
 
             const random = Math.random();
 
-            // ===== PASARELA ZUORA =====
             if (pasarela === 'zuora') {
                 if (random < 0.15) {
                     return {
@@ -2862,7 +2882,6 @@
                         detalles: ['Tarjeta válida y activa', 'Sin saldo suficiente', 'CVV correcto']
                     };
                 } else if (random < 0.45) {
-                    // 🟠 CVV INCORRECTO - ESTE ES EL CASO QUE TE DA ERROR
                     return {
                         estado: 'cvv_invalid',
                         mensaje: '🟠 VÁLIDA - CVV incorrecto',
@@ -2899,10 +2918,7 @@
                         detalles: ['Número de tarjeta inválido', 'No registrada en el sistema']
                     };
                 }
-            }
-
-            // ===== PASARELA STRIPE =====
-            else if (pasarela === 'stripe') {
+            } else if (pasarela === 'stripe') {
                 if (random < 0.20) {
                     return {
                         estado: 'approved',
@@ -2922,7 +2938,6 @@
                         detalles: ['Tarjeta válida', 'Fondos insuficientes']
                     };
                 } else if (random < 0.50) {
-                    // 🟠 CVV INCORRECTO - Stripe devuelve "cvc_check: fail"
                     return {
                         estado: 'cvv_invalid',
                         mensaje: '🟠 VÁLIDA - Stripe: CVV incorrecto',
@@ -2950,10 +2965,7 @@
                         detalles: ['Número inválido o no registrado']
                     };
                 }
-            }
-
-            // ===== PASARELA AUTH.NET =====
-            else {
+            } else {
                 if (random < 0.18) {
                     return {
                         estado: 'approved',
@@ -2973,7 +2985,6 @@
                         detalles: ['Tarjeta válida', 'Sin fondos']
                     };
                 } else if (random < 0.48) {
-                    // 🟠 CVV INCORRECTO - Auth.net: CVV mismatch
                     return {
                         estado: 'cvv_invalid',
                         mensaje: '🟠 VÁLIDA - Auth.net: CVV mismatch',
@@ -3005,7 +3016,7 @@
         }
 
         // ================================================================
-        // 13. LIVE INDIVIDUAL
+        // 14. LIVE INDIVIDUAL
         // ================================================================
         async function checkCardLive() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3097,7 +3108,7 @@
         }
 
         // ================================================================
-        // 14. LIVE MASIVO
+        // 15. LIVE MASIVO
         // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3220,7 +3231,7 @@
         }
 
         // ================================================================
-        // 15. HISTORIALES
+        // 16. HISTORIALES
         // ================================================================
         function guardarHistorialGen(bin, count, infoBIN) {
             if (!currentUser) return;
@@ -3324,7 +3335,7 @@
         }
 
         // ================================================================
-        // 16. DIRECCIONES
+        // 17. DIRECCIONES
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -3494,7 +3505,7 @@
         }
 
         // ================================================================
-        // 17. CHAT EN VIVO
+        // 18. CHAT EN VIVO
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3736,7 +3747,7 @@
         });
 
         // ================================================================
-        // 18. SALA PRIVADA
+        // 19. SALA PRIVADA
         // ================================================================
 
         async function crearSalaPrivada() {
@@ -3915,7 +3926,7 @@
         }
 
         // ================================================================
-        // 19. NOTAS
+        // 20. NOTAS
         // ================================================================
         async function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3935,7 +3946,7 @@
         }
 
         // ================================================================
-        // 20. NAVEGACIÓN
+        // 21. NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -4004,17 +4015,18 @@
         }
 
         // ================================================================
-        // 21. INICIALIZACIÓN
+        // 22. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON PAÍS REAL EN BINS');
-        console.log('🔐 Nuevo dueño: andyobregon799@gmail.com / Andyjoel12');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
+        console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
-        console.log('👑 Owner: créditos y días infinitos, puede cambiar su nombre en el chat');
+        console.log('👑 Owner: créditos y días infinitos');
         console.log('❌ Usa X como comodín al generar tarjetas');
         console.log('🌓 Botón para cambiar entre día y noche');
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
         console.log('🟠 Detección de CVV INCORRECTO (invalid_cvc)');
+        console.log('🔄 Si no pones mes/año, se generan ALEATORIAMENTE');
 
         cargarPromo();
         seleccionarPasarela('stripe');
