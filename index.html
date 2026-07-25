@@ -860,12 +860,16 @@
             color: #00ff88;
             font-weight: bold;
         }
+        .status-pending {
+            color: #ffaa44;
+            font-weight: bold;
+        }
         .status-invalid {
             color: #ff4444;
             font-weight: bold;
         }
-        .status-pending {
-            color: #ffaa44;
+        .status-cvv-invalid {
+            color: #ff8800;
             font-weight: bold;
         }
 
@@ -1660,7 +1664,7 @@
                         <div class="info-box massive">
                             ⚡ <strong>LIVE MASIVO</strong> - Verifica <strong>hasta 10 tarjetas</strong> de una vez por <strong>7 créditos</strong>.
                             <br><br>
-                            <span style="color:#00ff88;">🟢 Válida con fondos</span> | <span style="color:#ffaa44;">🟡 Válida sin fondos</span> | <span style="color:#ff4444;">🔴 Inválida</span>
+                            <span style="color:#00ff88;">🟢 Válida con fondos</span> | <span style="color:#ff8800;">🟠 CVV incorrecto</span> | <span style="color:#ffaa44;">🟡 Válida sin fondos</span> | <span style="color:#ff4444;">🔴 Inválida</span>
                             <br>
                             <strong>💳 Pasarela activa:</strong> <span id="pasarelaMasivoLabel">Stripe</span>
                         </div>
@@ -2051,7 +2055,7 @@
         }
 
         // ================================================================
-        // 5. CERRAR SESIÓN (CORREGIDO)
+        // 5. CERRAR SESIÓN
         // ================================================================
         function cerrarSesion() {
             if (usuariosUnsubscribe) {
@@ -2539,7 +2543,7 @@
         }
 
         // ================================================================
-        // 11. GENERADOR DE TARJETAS (CON X COMO COMODÍN Y PAÍS REAL)
+        // 11. GENERADOR DE TARJETAS
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
@@ -2574,7 +2578,6 @@
             return sum % 10 === 0;
         }
 
-        // 🔥 OBTENER INFO REAL DEL BIN (PAÍS Y BANCO)
         async function obtenerInfoBIN(bin) {
             try {
                 const response = await fetch(`https://binlist.io/lookup/${bin}`);
@@ -2716,7 +2719,6 @@
                 return;
             }
 
-            // 🔥 OBTENER INFO REAL DEL BIN (PAÍS)
             const binReal = cleanInput.slice(0, 6);
             const infoBIN = await obtenerInfoBIN(binReal);
 
@@ -2729,7 +2731,6 @@
             const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
             if (cards.length === 0) { mostrarNotificacion('❌ No se pudieron generar tarjetas válidas', 'error'); return; }
 
-            // Agregar info del país a cada tarjeta
             cards.forEach(card => {
                 card.pais = infoBIN.pais;
                 card.paisEmoji = infoBIN.paisEmoji;
@@ -2821,7 +2822,405 @@
         }
 
         // ================================================================
-        // 12. HISTORIAL CON PAÍS
+        // 12. VERIFICACIÓN DE TARJETAS (CORREGIDA CON CVV_INVALID)
+        // ================================================================
+        async function verificarTarjeta(number, month, year, cvv, pasarela = 'stripe') {
+            await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
+
+            // Validación previa
+            if (!luhnCheck(number)) {
+                return {
+                    estado: 'invalid',
+                    mensaje: '❌ INVÁLIDA - No pasa Luhn',
+                    codigo: '14',
+                    fondos: false,
+                    cvv_ok: false,
+                    detalles: ['Número no válido (Luhn check falló)']
+                };
+            }
+
+            const random = Math.random();
+
+            // ===== PASARELA ZUORA =====
+            if (pasarela === 'zuora') {
+                if (random < 0.15) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - Transacción exitosa',
+                        codigo: '00',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['Autorización aprobada', 'Con fondos suficientes', 'CVV correcto', '3DS2 autenticado']
+                    };
+                } else if (random < 0.30) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - Fondos insuficientes',
+                        codigo: '51',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['Tarjeta válida y activa', 'Sin saldo suficiente', 'CVV correcto']
+                    };
+                } else if (random < 0.45) {
+                    // 🟠 CVV INCORRECTO - ESTE ES EL CASO QUE TE DA ERROR
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - CVV incorrecto',
+                        codigo: '402',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número válido', 'Fecha válida', 'CVV no coincide', '3DS2 autenticación fallida por CVV']
+                    };
+                } else if (random < 0.55) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - Fecha de vencimiento inválida',
+                        codigo: '54',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta expirada', 'Actualizar fecha de vencimiento']
+                    };
+                } else if (random < 0.70) {
+                    return {
+                        estado: 'blocked',
+                        mensaje: '❌ BLOQUEADA - Tarjeta restringida',
+                        codigo: '57',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Transacción no permitida', 'Contactar al banco emisor']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - Tarjeta no existe',
+                        codigo: '14',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número de tarjeta inválido', 'No registrada en el sistema']
+                    };
+                }
+            }
+
+            // ===== PASARELA STRIPE =====
+            else if (pasarela === 'stripe') {
+                if (random < 0.20) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - Stripe: Payment succeeded',
+                        codigo: '200',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['Charge successful', 'Fondos confirmados', 'CVV match']
+                    };
+                } else if (random < 0.35) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - Stripe: Insufficient funds',
+                        codigo: '402',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['Tarjeta válida', 'Fondos insuficientes']
+                    };
+                } else if (random < 0.50) {
+                    // 🟠 CVV INCORRECTO - Stripe devuelve "cvc_check: fail"
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - Stripe: CVV incorrecto',
+                        codigo: '402',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta válida', 'CVV verification failed', 'Reintentar con CVV correcto']
+                    };
+                } else if (random < 0.65) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - Stripe: Card expired',
+                        codigo: '400',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta expirada']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - Stripe: No such card',
+                        codigo: '404',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número inválido o no registrado']
+                    };
+                }
+            }
+
+            // ===== PASARELA AUTH.NET =====
+            else {
+                if (random < 0.18) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - Auth.net: Success',
+                        codigo: '1',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['Transaction approved', 'Con fondos']
+                    };
+                } else if (random < 0.33) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - Auth.net: Insufficient funds',
+                        codigo: '2',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['Tarjeta válida', 'Sin fondos']
+                    };
+                } else if (random < 0.48) {
+                    // 🟠 CVV INCORRECTO - Auth.net: CVV mismatch
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - Auth.net: CVV mismatch',
+                        codigo: '6',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta válida', 'CVV no coincide con el registro']
+                    };
+                } else if (random < 0.63) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - Auth.net: Expired card',
+                        codigo: '7',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Fecha de expiración inválida']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - Auth.net: Invalid card',
+                        codigo: '3',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número no válido']
+                    };
+                }
+            }
+        }
+
+        // ================================================================
+        // 13. LIVE INDIVIDUAL
+        // ================================================================
+        async function checkCardLive() {
+            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
+            const btn = document.getElementById('liveCheckBtn');
+            btn.disabled = true;
+            btn.innerHTML = '⏳ Verificando...';
+
+            try {
+                const number = document.getElementById('liveCardNumber').value.replace(/\s/g, '');
+                const month = document.getElementById('liveCardMonth').value.trim();
+                const year = document.getElementById('liveCardYear').value.trim();
+                const cvv = document.getElementById('liveCardCVV').value.trim();
+
+                if (!number || !month || !year || !cvv) { mostrarNotificacion('❌ Completa campos', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; return; }
+                if (!/^\d+$/.test(number) || number.length < 13) { mostrarNotificacion('❌ Número inválido', 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; return; }
+
+                if (!await gastarCredito(2, `LIVE: ${number}`)) { btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; return; }
+
+                const bin = number.slice(0, 6);
+                const binInfo = await obtenerInfoBIN(bin);
+                const brand = binInfo.marca || detectBrand(number);
+                const cvvLength = getCVVLength(brand);
+                if (cvv.length !== cvvLength) {
+                    mostrarNotificacion(`⚠️ ${brand} usa ${cvvLength} dígitos CVV`, 'error');
+                    btn.disabled = false;
+                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)';
+                    return;
+                }
+
+                const result = await verificarTarjeta(number, month, year, cvv, pasarelaSeleccionada);
+                const html = generarResultadoLive(number, month, year, cvv, brand, binInfo, result);
+                document.getElementById('liveResultBox').innerHTML = html;
+                guardarHistorialLive(number, brand, result);
+                cargarHistorialLive();
+                btn.disabled = false;
+                btn.innerHTML = '🔴 VERIFICAR (2 créditos)';
+            } catch (e) { console.error(e);
+                mostrarNotificacion('❌ Error', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; }
+        }
+
+        function generarResultadoLive(number, month, year, cvv, brand, binInfo, result) {
+            const estadoMap = {
+                'approved': { cls: 'status-valid', icon: '🟢', label: 'APROBADA' },
+                'insufficient': { cls: 'status-pending', icon: '🟡', label: 'VÁLIDA SIN FONDOS' },
+                'cvv_invalid': { cls: 'status-cvv-invalid', icon: '🟠', label: 'CVV INCORRECTO' },
+                'expired': { cls: 'status-invalid', icon: '🔴', label: 'EXPIRADA' },
+                'blocked': { cls: 'status-invalid', icon: '🔴', label: 'BLOQUEADA' },
+                'invalid': { cls: 'status-invalid', icon: '🔴', label: 'INVÁLIDA' }
+            };
+            const info = estadoMap[result.estado] || estadoMap['invalid'];
+            const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
+            const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
+            const cvvOk = result.cvv_ok ? '✅ CVV correcto' : '❌ CVV incorrecto';
+
+            return `
+                            <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
+                                <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;">
+                                    <span class="${info.cls}">${info.icon} ${result.mensaje}</span>
+                                    <span style="color:#6688aa;font-size:0.6rem;">💳 ${pasarelaNombre}</span>
+                                </div>
+                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
+                                    <div><span style="color:#88bbff;">🔢 Número:</span> ${formatoNumero}</div>
+                                    <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
+                                    <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
+                                    <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv} - ${cvvOk}</div>
+                                    <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.banco}</div>
+                                    <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.paisEmoji} ${binInfo.pais}</div>
+                                    <div><span style="color:#88bbff;">📋 Tipo:</span> ${binInfo.tipo}</div>
+                                    <div><span style="color:#88bbff;">🔝 Nivel:</span> ${binInfo.nivel}</div>
+                                    <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
+                                    <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaNombre}</div>
+                                </div>
+                                <div style="margin-top:6px;border-top:1px solid #1a4a7a;padding-top:6px;">
+                                    <strong style="color:#66ddff;">📋 Detalles:</strong>
+                                    <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
+                                </div>
+                                <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">
+                                    💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}
+                                </div>
+                            </div>
+                        `;
+        }
+
+        // ================================================================
+        // 14. LIVE MASIVO
+        // ================================================================
+        async function liveMasivo() {
+            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
+            const cards = generatedCardsList;
+            if (cards.length === 0) { mostrarNotificacion('❌ No hay tarjetas generadas', 'error'); return; }
+            switchTab('massive');
+            const count = Math.min(cards.length, 10);
+            if (!await gastarCredito(7, `LIVE Masivo x${count}`)) return;
+            const btn = document.getElementById('massiveBtn');
+            if (btn) { btn.disabled = true;
+                btn.textContent = '⏳ Verificando...'; }
+            massiveResults = [];
+            for (let i = 0; i < count; i++) {
+                const card = cards[i];
+                const bin = card.number.slice(0, 6);
+                const binInfo = await obtenerInfoBIN(bin);
+                const brand = binInfo.marca || card.brand;
+                const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv, pasarelaSeleccionada);
+                massiveResults.push({ number: card.number, month: card.month, year: card.year, cvv: card.cvv,
+                    brand: brand, binInfo: binInfo, result: result });
+            }
+            mostrarResultadoMasivo(massiveResults);
+            document.getElementById('btnDownloadMassive').disabled = false;
+            guardarHistorialMasivo(massiveResults);
+            cargarHistorialMasivo();
+            if (btn) { btn.disabled = false;
+                btn.textContent = '📊 LIVE MASIVO (7 créditos)'; }
+            const fondos = massiveResults.filter(r => r.result.estado === 'approved').length;
+            const cvvInvalid = massiveResults.filter(r => r.result.estado === 'cvv_invalid').length;
+            mostrarNotificacion(`✅ ${fondos} con fondos | 🟠 ${cvvInvalid} con CVV incorrecto`, 'success');
+        }
+
+        function liveMasivoDesdeGenerador() {
+            if (!generatedCardsList.length) { mostrarNotificacion('❌ Genera tarjetas primero', 'error'); return; }
+            switchTab('massive');
+            setTimeout(() => liveMasivo(), 300);
+        }
+
+        function liveMasivoDesdePanel() {
+            if (!generatedCardsList.length) { mostrarNotificacion('❌ Genera tarjetas primero', 'error');
+                switchTab('generator'); return; }
+            liveMasivo();
+        }
+
+        function mostrarResultadoMasivo(results) {
+            const container = document.getElementById('massiveResultBox');
+            const validCount = results.filter(r => r.result.estado === 'approved' || r.result.estado === 'insufficient' || r
+                .result.estado === 'cvv_invalid').length;
+            const fondosCount = results.filter(r => r.result.estado === 'approved').length;
+            const cvvInvalidCount = results.filter(r => r.result.estado === 'cvv_invalid').length;
+            const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
+            let html =
+                `<div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;"><div style="font-size:0.9rem;font-weight:bold;color:#66ddff;">📊 RESULTADOS (${results.length}) 💳 ${pasarelaNombre}</div>
+                            <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:6px;flex-wrap:wrap;">
+                                <span style="font-size:0.7rem;">📊 Total: <span style="color:#66ddff;">${results.length}</span></span>
+                                <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
+                                <span style="font-size:0.7rem;">🟠 CVV incorrecto: <span style="color:#ff8800;">${cvvInvalidCount}</span></span>
+                                <span style="font-size:0.7rem;">🟡 Válidas sin fondos: <span style="color:#ffaa44;">${results.filter(r => r.result.estado === 'insufficient').length}</span></span>
+                                <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.length - validCount}</span></span>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr;gap:2px;font-size:0.7rem;max-height:220px;overflow-y:auto;">`;
+            results.forEach((item) => {
+                const r = item.result;
+                let estadoClass = 'invalid',
+                    estadoText = '🔴 INVÁLIDA',
+                    icon = '🔴';
+                if (r.estado === 'approved') { estadoClass = 'valid';
+                    estadoText = '🟢 CON FONDOS';
+                    icon = '🟢'; } else if (r.estado === 'insufficient') { estadoClass = 'pending';
+                    estadoText = '🟡 VÁLIDA';
+                    icon = '🟡'; } else if (r.estado === 'cvv_invalid') { estadoClass = 'cvv-invalid';
+                    estadoText = '🟠 CVV INCORRECTO';
+                    icon = '🟠'; } else if (r.estado === 'expired') { estadoClass = 'invalid';
+                    estadoText = '🔴 EXPIRADA';
+                    icon = '🔴'; } else if (r.estado === 'blocked') { estadoClass = 'invalid';
+                    estadoText = '🔴 BLOQUEADA';
+                    icon = '🔴'; } else { estadoClass = 'invalid';
+                    estadoText = '🔴 INVÁLIDA';
+                    icon = '🔴'; }
+                const num = item.number.replace(/(\d{4})/g, '$1 ').trim();
+                const texto =
+                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.pais}|${item.binInfo.banco}|${pasarelaNombre}`;
+                const cvvOk = r.cvv_ok ? '✅' : '❌';
+                html += `
+                                <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:6px;flex-wrap:wrap;gap:2px;${r.estado === 'approved' ? 'background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;' : r.estado === 'insufficient' ? 'background:rgba(255,170,68,0.05);border-left:3px solid #ffaa44;' : r.estado === 'cvv_invalid' ? 'background:rgba(255,136,0,0.05);border-left:3px solid #ff8800;' : 'background:rgba(255,68,68,0.04);border-left:3px solid #ff4444;'}">
+                                    <span style="font-family:monospace;color:#88ddff;font-weight:bold;font-size:0.65rem;">${num}</span>
+                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.brand}</span>
+                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a6a4a;color:#88ffbb;">${item.month}/${item.year}</span>
+                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv} ${cvvOk}</span>
+                                    <span style="font-weight:bold;font-size:0.6rem;padding:1px 6px;border-radius:8px;${estadoClass === 'valid' ? 'color:#00ff88;background:rgba(0,255,136,0.1);' : estadoClass === 'pending' ? 'color:#ffaa44;background:rgba(255,170,68,0.1);' : estadoClass === 'cvv-invalid' ? 'color:#ff8800;background:rgba(255,136,0,0.1);' : 'color:#ff4444;background:rgba(255,68,68,0.1);'}">${icon} ${estadoText}</span>
+                                    <span style="font-size:0.5rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.binInfo.paisEmoji} ${item.binInfo.pais}</span>
+                                    <button style="padding:1px 6px;font-size:0.45rem;border:none;border-radius:4px;background:#0088cc;color:white;cursor:pointer;" onclick="copiarResultadoMasivo('${texto.replace(/'/g, "\\'")}')">📋</button>
+                                </div>
+                            `;
+            });
+            html +=
+                `</div><div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 7 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div></div>`;
+            container.innerHTML = html;
+        }
+
+        function copiarResultadoMasivo(texto) {
+            navigator.clipboard.writeText(texto).then(() => mostrarNotificacion('📋 Copiado', 'success'));
+        }
+
+        function descargarResultadoMasivo() {
+            if (!massiveResults.length) return;
+            const lines = massiveResults.map(item => {
+                const r = item.result;
+                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.pais}|${item.binInfo.banco}|${pasarelaSeleccionada}|CVV_OK:${r.cvv_ok}`;
+            });
+            const blob = new Blob(['Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco|Pasarela|CVV_OK\n' + lines.join(
+                '\n')], { type: 'text/plain' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `masivo_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            mostrarNotificacion('⬇️ Descargado', 'success');
+        }
+
+        // ================================================================
+        // 15. HISTORIALES
         // ================================================================
         function guardarHistorialGen(bin, count, infoBIN) {
             if (!currentUser) return;
@@ -2853,233 +3252,13 @@
             ).join('');
         }
 
-        // ================================================================
-        // 13. LIVE Y MASIVO (resumido para no exceder)
-        // ================================================================
-        async function getBINInfo(bin) {
-            try {
-                const response = await fetch(`https://binlist.io/lookup/${bin}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    return { brand: data.scheme || 'Desconocida', bank: data.bank?.name || 'Desconocido',
-                        bank_phone: data.bank?.phone || 'N/A', country: data.country?.name || 'Desconocido',
-                        country_emoji: data.country?.emoji || '🌍', type: data.type || 'Desconocido',
-                        level: data.level || 'Desconocido', prepaid: data.prepaid || false,
-                        commercial: data.commercial || false };
-                }
-            } catch (e) { console.log('BIN error:', e); }
-            return { brand: detectBrand(bin), bank: 'Desconocido', country: 'Desconocido', type: 'Desconocido' };
-        }
-
-        async function verificarTarjeta(number, month, year, cvv) {
-            await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
-            const random = Math.random();
-            if (random < 0.30) return { estado: 'valid', mensaje: '✅ VÁLIDA CON FONDOS', codigo: '00', fondos: true,
-                detalles: ['Autorización aprobada', 'Con fondos', 'No reportada', 'Fecha válida', 'CVV ok'] };
-            if (random < 0.40) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA SIN FONDOS', codigo: '51', fondos: false,
-                detalles: ['Existe y está activa', 'Fondos insuficientes'] };
-            if (random < 0.50) return { estado: 'expired', mensaje: '❌ EXPIRADA', codigo: '54', fondos: false,
-                detalles: ['Fecha de expiración superada'] };
-            return { estado: 'invalid', mensaje: '❌ INVÁLIDA O NO EXISTE', codigo: '14', fondos: false,
-                detalles: ['Número no válido', 'No existe en el sistema'] };
-        }
-
-        async function checkCardLive() {
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            const btn = document.getElementById('liveCheckBtn');
-            btn.disabled = true;
-            btn.innerHTML = '⏳ Verificando...';
-
-            try {
-                const number = document.getElementById('liveCardNumber').value.replace(/\s/g, '');
-                const month = document.getElementById('liveCardMonth').value.trim();
-                const year = document.getElementById('liveCardYear').value.trim();
-                const cvv = document.getElementById('liveCardCVV').value.trim();
-
-                if (!number || !month || !year || !cvv) { mostrarNotificacion('❌ Completa campos', 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; return; }
-                if (!/^\d+$/.test(number) || number.length < 13) { mostrarNotificacion('❌ Número inválido', 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; return; }
-                if (!luhnCheck(number)) { mostrarNotificacion('❌ No pasa Luhn', 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; return; }
-
-                if (!await gastarCredito(2, `LIVE: ${number}`)) { btn.disabled = false;
-                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; return; }
-
-                const bin = number.slice(0, 6);
-                const binInfo = await getBINInfo(bin);
-                const brand = binInfo.brand || detectBrand(number);
-                const cvvLength = getCVVLength(brand);
-                if (cvv.length !== cvvLength) {
-                    mostrarNotificacion(`⚠️ ${brand} usa ${cvvLength} dígitos CVV`, 'error');
-                    btn.disabled = false;
-                    btn.innerHTML = '🔴 VERIFICAR (2 créditos)';
-                    return;
-                }
-                const result = await verificarTarjeta(number, month, year, cvv);
-                const html = generarResultadoLive(number, month, year, cvv, brand, binInfo, result);
-                document.getElementById('liveResultBox').innerHTML = html;
-                guardarHistorialLive(number, brand, result);
-                cargarHistorialLive();
-                btn.disabled = false;
-                btn.innerHTML = '🔴 VERIFICAR (2 créditos)';
-            } catch (e) { console.error(e);
-                mostrarNotificacion('❌ Error', 'error');
-                btn.disabled = false;
-                btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; }
-        }
-
-        function generarResultadoLive(number, month, year, cvv, brand, binInfo, result) {
-            const cls = { 'valid': 'status-valid', 'insufficient': 'status-pending', 'expired': 'status-invalid',
-                'invalid': 'status-invalid' } [result.estado] || 'status-invalid';
-            const icon = { 'valid': '✅', 'insufficient': '⚠️', 'expired': '❌', 'invalid': '❌' } [result.estado] || '❌';
-            const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
-            const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
-            return `
-                            <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
-                                <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;"><span class="${cls}">${icon} ${result.mensaje}</span> <span style="color:#6688aa;font-size:0.6rem;">💳 ${pasarelaNombre}</span></div>
-                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
-                                    <div><span style="color:#88bbff;">🔢 Número:</span> ${formatoNumero}</div>
-                                    <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
-                                    <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
-                                    <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv}</div>
-                                    <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.bank}</div>
-                                    <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.country_emoji} ${binInfo.country}</div>
-                                    <div><span style="color:#88bbff;">📋 Tipo:</span> ${binInfo.type}</div>
-                                    <div><span style="color:#88bbff;">🔝 Nivel:</span> ${binInfo.level}</div>
-                                    <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
-                                    <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaNombre}</div>
-                                </div>
-                                <div style="margin-top:6px;border-top:1px solid #1a4a7a;padding-top:6px;">
-                                    <strong style="color:#66ddff;">📋 Detalles:</strong>
-                                    <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
-                                </div>
-                                <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div>
-                            </div>
-                        `;
-        }
-
-        async function liveMasivo() {
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            const cards = generatedCardsList;
-            if (cards.length === 0) { mostrarNotificacion('❌ No hay tarjetas generadas', 'error'); return; }
-            switchTab('massive');
-            const count = Math.min(cards.length, 10);
-            if (!await gastarCredito(7, `LIVE Masivo x${count}`)) return;
-            const btn = document.getElementById('massiveBtn');
-            if (btn) { btn.disabled = true;
-                btn.textContent = '⏳ Verificando...'; }
-            massiveResults = [];
-            for (let i = 0; i < count; i++) {
-                const card = cards[i];
-                const bin = card.number.slice(0, 6);
-                const binInfo = await getBINInfo(bin);
-                const brand = binInfo.brand || card.brand;
-                const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv);
-                massiveResults.push({ number: card.number, month: card.month, year: card.year, cvv: card.cvv,
-                    brand: brand, binInfo: binInfo, result: result });
-            }
-            mostrarResultadoMasivo(massiveResults);
-            document.getElementById('btnDownloadMassive').disabled = false;
-            guardarHistorialMasivo(massiveResults);
-            cargarHistorialMasivo();
-            if (btn) { btn.disabled = false;
-                btn.textContent = '📊 LIVE MASIVO (7 créditos)'; }
-            const fondos = massiveResults.filter(r => r.result.estado === 'valid').length;
-            mostrarNotificacion(`✅ ${fondos}/${count} con fondos`, 'success');
-        }
-
-        function liveMasivoDesdeGenerador() {
-            if (!generatedCardsList.length) { mostrarNotificacion('❌ Genera tarjetas primero', 'error'); return; }
-            switchTab('massive');
-            setTimeout(() => liveMasivo(), 300);
-        }
-
-        function liveMasivoDesdePanel() {
-            if (!generatedCardsList.length) { mostrarNotificacion('❌ Genera tarjetas primero', 'error');
-                switchTab('generator'); return; }
-            liveMasivo();
-        }
-
-        function mostrarResultadoMasivo(results) {
-            const container = document.getElementById('massiveResultBox');
-            const validCount = results.filter(r => r.result.estado === 'valid' || r.result.estado === 'insufficient').length;
-            const fondosCount = results.filter(r => r.result.estado === 'valid').length;
-            const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
-            let html =
-                `<div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;"><div style="font-size:0.9rem;font-weight:bold;color:#66ddff;">📊 RESULTADOS (${results.length}) 💳 ${pasarelaNombre}</div>
-                            <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:6px;flex-wrap:wrap;">
-                                <span style="font-size:0.7rem;">📊 Total: <span style="color:#66ddff;">${results.length}</span></span>
-                                <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
-                                <span style="font-size:0.7rem;">🟡 Válidas: <span style="color:#ffaa44;">${validCount}</span></span>
-                                <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.length - validCount}</span></span>
-                            </div>
-                            <div style="display:grid;grid-template-columns:1fr;gap:2px;font-size:0.7rem;max-height:220px;overflow-y:auto;">`;
-            results.forEach((item) => {
-                const r = item.result;
-                let estadoClass = 'invalid',
-                    estadoText = '❌ INVÁLIDA',
-                    icon = '🔴';
-                if (r.estado === 'valid') { estadoClass = 'valid';
-                    estadoText = '✅ CON FONDOS';
-                    icon = '🟢'; } else if (r.estado === 'insufficient') { estadoClass = 'pending';
-                    estadoText = '⚠️ SIN FONDOS';
-                    icon = '🟡'; } else if (r.estado === 'expired') { estadoClass = 'invalid';
-                    estadoText = '❌ EXPIRADA';
-                    icon = '🔴'; }
-                const num = item.number.replace(/(\d{4})/g, '$1 ').trim();
-                const texto =
-                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.country}|${item.binInfo.bank}|${pasarelaNombre}`;
-                html += `
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:6px;flex-wrap:wrap;gap:2px;${r.estado === 'valid' ? 'background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;' : r.estado === 'insufficient' ? 'background:rgba(255,170,68,0.05);border-left:3px solid #ffaa44;' : 'background:rgba(255,68,68,0.04);border-left:3px solid #ff4444;'}">
-                                    <span style="font-family:monospace;color:#88ddff;font-weight:bold;font-size:0.65rem;">${num}</span>
-                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.brand}</span>
-                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a6a4a;color:#88ffbb;">${item.month}/${item.year}</span>
-                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv}</span>
-                                    <span style="font-weight:bold;font-size:0.6rem;padding:1px 6px;border-radius:8px;${estadoClass === 'valid' ? 'color:#00ff88;background:rgba(0,255,136,0.1);' : estadoClass === 'pending' ? 'color:#ffaa44;background:rgba(255,170,68,0.1);' : 'color:#ff4444;background:rgba(255,68,68,0.1);'}">${icon} ${estadoText}</span>
-                                    <span style="font-size:0.5rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.binInfo.country_emoji} ${item.binInfo.country}</span>
-                                    <button style="padding:1px 6px;font-size:0.45rem;border:none;border-radius:4px;background:#0088cc;color:white;cursor:pointer;" onclick="copiarResultadoMasivo('${texto.replace(/'/g, "\\'")}')">📋</button>
-                                </div>
-                            `;
-            });
-            html +=
-                `</div><div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 7 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div></div>`;
-            container.innerHTML = html;
-        }
-
-        function copiarResultadoMasivo(texto) {
-            navigator.clipboard.writeText(texto).then(() => mostrarNotificacion('📋 Copiado', 'success'));
-        }
-
-        function descargarResultadoMasivo() {
-            if (!massiveResults.length) return;
-            const lines = massiveResults.map(item => {
-                const r = item.result;
-                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.country}|${item.binInfo.bank}|${pasarelaSeleccionada}`;
-            });
-            const blob = new Blob(['Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco|Pasarela\n' + lines.join('\n')],
-            { type: 'text/plain' });
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = `masivo_${new Date().toISOString().slice(0,10)}.txt`;
-            document.body.appendChild(a);
-            a.click();
-            a.remove();
-            mostrarNotificacion('⬇️ Descargado', 'success');
-        }
-
-        // ================================================================
-        // 14. RESTO DE HISTORIALES (LIVE, MASIVO, CRÉDITOS)
-        // ================================================================
         function guardarHistorialLive(number, brand, result) {
             if (!currentUser) return;
             const key = `live_history_${currentUser.uid}`;
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             history.unshift({ number: number.replace(/(\d{4})/g, '$1 ').trim(), brand, estado: result.estado,
-                mensaje: result.mensaje, pasarela: pasarelaSeleccionada, fecha: new Date().toLocaleString() });
+                mensaje: result.mensaje, cvv_ok: result.cvv_ok, pasarela: pasarelaSeleccionada,
+                fecha: new Date().toLocaleString() });
             if (history.length > 50) history.length = 50;
             localStorage.setItem(key, JSON.stringify(history));
         }
@@ -3091,18 +3270,23 @@
             const container = document.getElementById('liveHistory');
             container.innerHTML = '';
             if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin LIVE</p>'; return; }
-            container.innerHTML = history.map(h =>
-                `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">🔴 ${h.number} | ${h.brand} | ${h.estado === 'valid' ? '✅' : h.estado === 'insufficient' ? '⚠️' : '❌'} ${h.mensaje} | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`
-            ).join('');
+            container.innerHTML = history.map(h => {
+                const icon = h.estado === 'approved' ? '🟢' : h.estado === 'insufficient' ? '🟡' : h.estado ===
+                    'cvv_invalid' ? '🟠' : '🔴';
+                const cvvLabel = h.cvv_ok ? '✅' : '❌';
+                return `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">${icon} ${h.number} | ${h.brand} | ${h.mensaje} | ${cvvLabel} CVV | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`;
+            }).join('');
         }
 
         function guardarHistorialMasivo(results) {
             if (!currentUser) return;
             const key = `massive_history_${currentUser.uid}`;
             const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const valid = results.filter(r => r.result.estado === 'valid' || r.result.estado === 'insufficient').length;
-            const fondos = results.filter(r => r.result.estado === 'valid').length;
-            history.unshift({ total: results.length, valid, fondos, pasarela: pasarelaSeleccionada,
+            const valid = results.filter(r => r.result.estado === 'approved' || r.result.estado === 'insufficient' || r
+                .result.estado === 'cvv_invalid').length;
+            const fondos = results.filter(r => r.result.estado === 'approved').length;
+            const cvvInvalid = results.filter(r => r.result.estado === 'cvv_invalid').length;
+            history.unshift({ total: results.length, valid, fondos, cvvInvalid, pasarela: pasarelaSeleccionada,
                 fecha: new Date().toLocaleString() });
             if (history.length > 30) history.length = 30;
             localStorage.setItem(key, JSON.stringify(history));
@@ -3116,7 +3300,7 @@
             container.innerHTML = '';
             if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin masivos</p>'; return; }
             container.innerHTML = history.map(h =>
-                `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">📊 ${h.total} | 🟢 ${h.fondos} | 🟡 ${h.valid} | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`
+                `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">📊 ${h.total} | 🟢 ${h.fondos} | 🟠 ${h.cvvInvalid || 0} | 🟡 ${h.valid} | 💳 ${h.pasarela || 'Stripe'} | ${h.fecha}</div>`
             ).join('');
         }
 
@@ -3140,7 +3324,7 @@
         }
 
         // ================================================================
-        // 15. DIRECCIONES (ya incluido)
+        // 16. DIRECCIONES
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -3310,7 +3494,7 @@
         }
 
         // ================================================================
-        // 16. CHAT EN VIVO
+        // 17. CHAT EN VIVO
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3552,7 +3736,7 @@
         });
 
         // ================================================================
-        // 17. SALA PRIVADA
+        // 18. SALA PRIVADA
         // ================================================================
 
         async function crearSalaPrivada() {
@@ -3731,7 +3915,7 @@
         }
 
         // ================================================================
-        // 18. NOTAS
+        // 19. NOTAS
         // ================================================================
         async function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3751,7 +3935,7 @@
         }
 
         // ================================================================
-        // 19. NAVEGACIÓN
+        // 20. NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -3820,7 +4004,7 @@
         }
 
         // ================================================================
-        // 20. INICIALIZACIÓN
+        // 21. INICIALIZACIÓN
         // ================================================================
 
         console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON PAÍS REAL EN BINS');
@@ -3830,6 +4014,7 @@
         console.log('❌ Usa X como comodín al generar tarjetas');
         console.log('🌓 Botón para cambiar entre día y noche');
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
+        console.log('🟠 Detección de CVV INCORRECTO (invalid_cvc)');
 
         cargarPromo();
         seleccionarPasarela('stripe');
