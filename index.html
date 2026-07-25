@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON PAÍS REAL EN BINS Y FECHAS RANDOM */
+        /* ESTILOS - VERSIÓN FINAL CON FECHAS MEZCLADAS                  */
         /* ============================================================== */
 
         * {
@@ -1581,19 +1581,21 @@
                             <br><br>
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
                             <br><br>
-                            <strong style="color:#00ff88;">🔄 FECHAS ALEATORIAS:</strong> Si dejas Mes y Año vacíos, se generarán automáticamente fechas aleatorias entre 2025-2030.
+                            <strong style="color:#00ff88;">🔄 FECHAS MEZCLADAS:</strong> Cada tarjeta genera su propia fecha aleatoria entre 2024-2038. Si quieres una fecha fija, pon Mes y Año.
+                            <br><br>
+                            <strong style="color:#ffaa44;">💡 EJEMPLO:</strong> 414444XXXXXXXXXX genera tarjetas con fechas mezcladas como 03/2038, 07/2032, 09/2037, etc.
                         </div>
                         <div class="form-group">
                             <label>🔢 Ingresa los primeros dígitos (BIN) - usa X como comodín</label>
-                            <input type="text" id="binInput" placeholder="Ej: 411111 o 41691614x2xxxxx1" maxlength="19">
+                            <input type="text" id="binInput" placeholder="Ej: 414444XXXXXXXXXX" maxlength="19">
                         </div>
                         <div class="flex-row">
                             <div class="form-group">
-                                <label>📅 Mes (MM) - OPCIONAL</label>
+                                <label>📅 Mes (MM) - OPCIONAL (Dejar vacío para aleatorio)</label>
                                 <input type="text" id="cardMonth" placeholder="12" maxlength="2" value="">
                             </div>
                             <div class="form-group">
-                                <label>📅 Año (YY) - OPCIONAL</label>
+                                <label>📅 Año (YY) - OPCIONAL (Dejar vacío para aleatorio)</label>
                                 <input type="text" id="cardYear" placeholder="26" maxlength="2" value="">
                             </div>
                             <div class="form-group">
@@ -1612,7 +1614,7 @@
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.7rem;">
                             📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ddff;font-weight:bold;">0</span>
                             <span style="margin-left:12px;">💎 Generación <span style="color:#00ff88;">GRATIS</span></span>
-                            <span style="margin-left:12px;">🔄 Fechas <span style="color:#ffaa44;">AUTOMÁTICAS</span></span>
+                            <span style="margin-left:12px;">🔄 Fechas <span style="color:#ffaa44;">MEZCLADAS</span></span>
                         </div>
                     </div>
                     <div id="generatedContainer">
@@ -2058,10 +2060,11 @@
         }
 
         // ================================================================
-        // 5. GENERAR FECHA ALEATORIA
+        // 5. GENERAR FECHA ALEATORIA INDIVIDUAL (MEZCLADA)
         // ================================================================
         function generarFechaAleatoria() {
-            const year = Math.floor(Math.random() * 6) + 25; // 25-30
+            // Genera año entre 2024 y 2038, mes entre 1-12
+            const year = Math.floor(Math.random() * 15) + 24; // 24-38 (2024-2038)
             const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
             return { month, year: String(year) };
         }
@@ -2555,7 +2558,7 @@
         }
 
         // ================================================================
-        // 12. GENERADOR DE TARJETAS
+        // 12. GENERADOR DE TARJETAS (CON FECHAS MEZCLADAS)
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
@@ -2628,13 +2631,9 @@
             const length = getCardLength(brand);
             const cvvLen = getCVVLength(brand);
 
-            let useMonth = month;
-            let useYear = year;
-            if (!useMonth || !useYear) {
-                const fecha = generarFechaAleatoria();
-                useMonth = fecha.month;
-                useYear = fecha.year;
-            }
+            // Si el usuario puso mes y año fijos, usarlos para TODAS las tarjetas
+            // Si no, CADA tarjeta tendrá su propia fecha aleatoria (MEZCLADA)
+            const usarFechaFija = month && year;
 
             if (!hasX) {
                 const validBin = binPattern.slice(0, Math.min(binPattern.length, length - 1));
@@ -2654,10 +2653,19 @@
                         const series = candidate.slice(-4);
                         if (!usedSeries.has(series) && luhnCheck(candidate)) {
                             usedSeries.add(series);
+                            
+                            // 🔥 CADA TARJETA CON SU PROPIA FECHA (MEZCLADA)
+                            let fecha;
+                            if (usarFechaFija) {
+                                fecha = { month: month.padStart(2, '0'), year: year.padStart(2, '0') };
+                            } else {
+                                fecha = generarFechaAleatoria();
+                            }
+                            
                             cards.push({
                                 number: candidate,
-                                month: useMonth.padStart(2, '0'),
-                                year: useYear.padStart(2, '0'),
+                                month: fecha.month,
+                                year: fecha.year,
                                 brand: brand,
                                 series: series,
                                 cvv: generarCVV(brand),
@@ -2700,10 +2708,19 @@
 
                     if (!usedSeries.has(series) && luhnCheck(candidate)) {
                         usedSeries.add(series);
+                        
+                        // 🔥 CADA TARJETA CON SU PROPIA FECHA (MEZCLADA)
+                        let fecha;
+                        if (usarFechaFija) {
+                            fecha = { month: month.padStart(2, '0'), year: year.padStart(2, '0') };
+                        } else {
+                            fecha = generarFechaAleatoria();
+                        }
+                        
                         cards.push({
                             number: candidate,
-                            month: useMonth.padStart(2, '0'),
-                            year: useYear.padStart(2, '0'),
+                            month: fecha.month,
+                            year: fecha.year,
                             brand: brand,
                             series: series,
                             cvv: generarCVV(brand),
@@ -2767,7 +2784,7 @@
             guardarHistorialGen(binInput, cards.length, infoBIN);
             cargarHistorialGen();
 
-            const fechaInfo = month && year ? `${month}/${year}` : '📅 ALEATORIAS';
+            const fechaInfo = month && year ? `${month}/${year} (FIJA)` : '📅 MEZCLADAS (cada una diferente)';
             mostrarNotificacion(`✅ ${cards.length} tarjetas generadas - ${infoBIN.paisEmoji} ${infoBIN.pais} (${fechaInfo})`, 'success');
         }
 
@@ -2844,7 +2861,7 @@
         }
 
         // ================================================================
-        // 13. VERIFICACIÓN DE TARJETAS (CON CVV_INVALID)
+        // 13. VERIFICACIÓN DE TARJETAS
         // ================================================================
         async function verificarTarjeta(number, month, year, cvv, pasarela = 'stripe') {
             await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
@@ -4018,7 +4035,7 @@
         // 22. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON FECHAS MEZCLADAS');
         console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos');
@@ -4026,7 +4043,7 @@
         console.log('🌓 Botón para cambiar entre día y noche');
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
         console.log('🟠 Detección de CVV INCORRECTO (invalid_cvc)');
-        console.log('🔄 Si no pones mes/año, se generan ALEATORIAMENTE');
+        console.log('🔄 Cada tarjeta genera su propia fecha ALEATORIA (MEZCLADA)');
 
         cargarPromo();
         seleccionarPasarela('stripe');
