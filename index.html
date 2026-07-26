@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON CHAT TIPO WHATSAPP                */
+        /* ESTILOS - VERSIÓN FINAL CON CHAT TIPO WHATSAPP Y NOTAS       */
         /* ============================================================== */
 
         * {
@@ -37,8 +37,8 @@
             --input-bg: #1a2a4a;
             --reply-border: #00ccff;
             --mention-color: #00ff88;
-            --call-incoming: #00cc88;
-            --call-outgoing: #ff44aa;
+            --nota-bg: rgba(15, 31, 58, 0.6);
+            --nota-border: #00ccff;
         }
 
         body.theme-day {
@@ -62,8 +62,8 @@
             --auth-box-shadow: 0 0 30px rgba(0, 100, 200, 0.15);
             --reply-border: #0088cc;
             --mention-color: #00aa66;
-            --call-incoming: #00aa66;
-            --call-outgoing: #cc3388;
+            --nota-bg: rgba(200, 220, 245, 0.6);
+            --nota-border: #0088cc;
         }
 
         html,
@@ -679,6 +679,10 @@
             box-shadow: 0 0 20px rgba(255, 68, 170, 0.15);
             animation: pulse-sala 2s ease-in-out infinite;
         }
+        .btn-block.btn-nota {
+            background: linear-gradient(135deg, #ff88cc, #cc5599);
+            box-shadow: 0 0 20px rgba(255, 136, 204, 0.15);
+        }
 
         @keyframes pulse-live {
             0%,
@@ -761,12 +765,12 @@
             background: #0088cc;
             font-size: 0.5rem;
         }
-        .btn-small.btn-call {
-            background: #25D366;
-            font-size: 0.5rem;
-        }
         .btn-small.btn-mention {
             background: #ffaa44;
+            font-size: 0.5rem;
+        }
+        .btn-small.btn-whatsapp {
+            background: #25D366;
             font-size: 0.5rem;
         }
 
@@ -1200,6 +1204,7 @@
             gap: 4px;
             margin-top: 4px;
             justify-content: flex-end;
+            flex-wrap: wrap;
         }
         .chat-messages .message .msg-actions button {
             background: transparent;
@@ -1215,30 +1220,17 @@
             background: var(--border-color);
             color: var(--texto-principal);
         }
+        .chat-messages .message .msg-actions .whatsapp-btn {
+            color: #25D366;
+        }
+        .chat-messages .message .msg-actions .whatsapp-btn:hover {
+            background: #25D366;
+            color: white;
+        }
         .chat-messages .message .mention {
             color: var(--mention-color);
             font-weight: 600;
             cursor: pointer;
-        }
-        .chat-messages .message .call-notification {
-            background: var(--bg-result);
-            border-radius: 10px;
-            padding: 6px 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.7rem;
-            border: 1px solid var(--border-color);
-            margin-top: 4px;
-        }
-        .chat-messages .message .call-notification .call-icon {
-            font-size: 1.2rem;
-        }
-        .chat-messages .message .call-notification .call-incoming {
-            color: var(--call-incoming);
-        }
-        .chat-messages .message .call-notification .call-outgoing {
-            color: var(--call-outgoing);
         }
 
         .chat-input-area {
@@ -1289,13 +1281,6 @@
         .chat-input-area .chat-btn.send:hover {
             background: linear-gradient(135deg, #00dd99, #009977);
         }
-        .chat-input-area .chat-btn.call-btn {
-            background: #25D366;
-            color: white;
-        }
-        .chat-input-area .chat-btn.call-btn:hover {
-            background: #1a9b4a;
-        }
         .chat-input-area .chat-btn.mention-btn {
             background: #ffaa44;
             color: white;
@@ -1309,6 +1294,13 @@
         }
         .chat-input-area .chat-btn.reply-btn:hover {
             background: #006699;
+        }
+        .chat-input-area .chat-btn.whatsapp-btn {
+            background: #25D366;
+            color: white;
+        }
+        .chat-input-area .chat-btn.whatsapp-btn:hover {
+            background: #1a9b4a;
         }
 
         .chat-reply-preview {
@@ -1364,6 +1356,229 @@
             font-size: 2.5rem;
         }
 
+        /* ============================================================== */
+        /* ===== NOTAS - ESTILOS PROFESIONALES ===== */
+        /* ============================================================== */
+        .nota-container {
+            background: var(--nota-bg);
+            border: 2px solid var(--nota-border);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 8px;
+            transition: background 0.3s, border-color 0.3s;
+            box-shadow: 0 0 30px rgba(0, 200, 255, 0.05);
+        }
+        .nota-container .nota-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .nota-container .nota-header .nota-titulo {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--texto-principal);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .nota-container .nota-header .nota-titulo span {
+            font-size: 1.3rem;
+        }
+        .nota-container .nota-header .nota-info {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .nota-container .nota-header .nota-info .nota-fecha {
+            background: var(--bg-result);
+            padding: 2px 10px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .nota-container .nota-editor {
+            position: relative;
+        }
+        .nota-container .nota-editor textarea {
+            width: 100%;
+            min-height: 280px;
+            background: var(--bg-inputs);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--texto-principal);
+            padding: 16px 18px;
+            font-size: 0.95rem;
+            font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+            resize: vertical;
+            transition: background 0.3s, border-color 0.3s, color 0.3s;
+            line-height: 1.7;
+        }
+        .nota-container .nota-editor textarea:focus {
+            border-color: var(--borde-neon);
+            box-shadow: 0 0 25px rgba(0, 200, 255, 0.08);
+            outline: none;
+        }
+        .nota-container .nota-editor textarea::placeholder {
+            color: var(--text-muted);
+            font-style: italic;
+        }
+        .nota-container .nota-editor .nota-char-count {
+            position: absolute;
+            bottom: 12px;
+            right: 16px;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            background: var(--bg-result);
+            padding: 2px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            pointer-events: none;
+        }
+        .nota-container .nota-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+            flex-wrap: wrap;
+        }
+        .nota-container .nota-actions .btn-nota {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+            justify-content: center;
+            min-width: 100px;
+        }
+        .nota-container .nota-actions .btn-nota:hover {
+            transform: scale(1.02);
+        }
+        .nota-container .nota-actions .btn-nota:active {
+            transform: scale(0.97);
+        }
+        .nota-container .nota-actions .btn-nota.guardar {
+            background: linear-gradient(135deg, #00cc88, #008866);
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 204, 136, 0.15);
+        }
+        .nota-container .nota-actions .btn-nota.guardar:hover {
+            box-shadow: 0 0 30px rgba(0, 204, 136, 0.25);
+        }
+        .nota-container .nota-actions .btn-nota.limpiar {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.1);
+        }
+        .nota-container .nota-actions .btn-nota.limpiar:hover {
+            box-shadow: 0 0 30px rgba(255, 68, 68, 0.2);
+        }
+        .nota-container .nota-actions .btn-nota.exportar {
+            background: linear-gradient(135deg, #ffaa44, #cc8800);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 170, 68, 0.1);
+        }
+        .nota-container .nota-actions .btn-nota.exportar:hover {
+            box-shadow: 0 0 30px rgba(255, 170, 68, 0.2);
+        }
+        .nota-container .nota-actions .btn-nota.copiar {
+            background: linear-gradient(135deg, #0088cc, #006699);
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 136, 204, 0.1);
+        }
+        .nota-container .nota-actions .btn-nota.copiar:hover {
+            box-shadow: 0 0 30px rgba(0, 136, 204, 0.2);
+        }
+        .nota-container .nota-actions .btn-nota.stats {
+            background: linear-gradient(135deg, #6772e5, #4a54c4);
+            color: white;
+            box-shadow: 0 0 20px rgba(103, 114, 229, 0.1);
+        }
+        .nota-container .nota-actions .btn-nota.stats:hover {
+            box-shadow: 0 0 30px rgba(103, 114, 229, 0.2);
+        }
+        .nota-container .nota-footer {
+            margin-top: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 10px;
+        }
+        .nota-container .nota-footer .nota-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nota-container .nota-footer .nota-status .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .nota-container .nota-footer .nota-status .dot.saved {
+            background: #00ff88;
+        }
+        .nota-container .nota-footer .nota-status .dot.unsaved {
+            background: #ffaa44;
+        }
+        .nota-container .nota-footer .nota-status .dot.error {
+            background: #ff4444;
+        }
+        .nota-container .nota-stats-box {
+            background: var(--bg-result);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 10px;
+            display: none;
+            border: 1px solid var(--border-color);
+            font-size: 0.8rem;
+        }
+        .nota-container .nota-stats-box.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .nota-container .nota-stats-box .stat-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .nota-container .nota-stats-box .stat-item:last-child {
+            border-bottom: none;
+        }
+        .nota-container .nota-stats-box .stat-item .stat-label {
+            color: var(--texto-secundario);
+        }
+        .nota-container .nota-stats-box .stat-item .stat-value {
+            color: var(--texto-principal);
+            font-weight: 600;
+        }
+        .nota-container .nota-stats-box .stat-item .stat-value.palabras {
+            color: #00ff88;
+        }
+        .nota-container .nota-stats-box .stat-item .stat-value.caracteres {
+            color: #66ddff;
+        }
+        .nota-container .nota-stats-box .stat-item .stat-value.parrafos {
+            color: #ffaa44;
+        }
+        .nota-container .nota-stats-box .stat-item .stat-value.lineas {
+            color: #ff88cc;
+        }
+
         /* ===== SALA PRIVADA ===== */
         .sala-card {
             background: var(--bg-result);
@@ -1398,24 +1613,6 @@
         }
         .sala-card .copy-btn-sala:hover {
             background: #00aaff;
-        }
-
-        /* ===== NOTAS ===== */
-        .nota-editor textarea {
-            width: 100%;
-            min-height: 200px;
-            background: var(--input-bg);
-            border: 2px solid var(--border-color);
-            border-radius: var(--border-radius);
-            color: var(--texto-principal);
-            padding: 10px;
-            font-size: 0.9rem;
-            resize: vertical;
-            transition: background 0.3s, border-color 0.3s, color 0.3s;
-        }
-        .nota-editor textarea:focus {
-            border-color: var(--borde-neon);
-            outline: none;
         }
 
         /* ============================================================== */
@@ -1469,6 +1666,15 @@
             }
             .chat-messages {
                 height: 250px;
+            }
+            .nota-container .nota-editor textarea {
+                min-height: 200px;
+                font-size: 0.85rem;
+            }
+            .nota-container .nota-actions .btn-nota {
+                font-size: 0.7rem;
+                padding: 6px 14px;
+                min-width: 70px;
             }
         }
 
@@ -1586,6 +1792,25 @@
                 width: 32px;
                 height: 32px;
                 font-size: 1rem;
+            }
+            .nota-container {
+                padding: 12px;
+            }
+            .nota-container .nota-editor textarea {
+                min-height: 160px;
+                font-size: 0.8rem;
+                padding: 10px 12px;
+            }
+            .nota-container .nota-actions .btn-nota {
+                font-size: 0.6rem;
+                padding: 5px 10px;
+                min-width: 50px;
+            }
+            .nota-container .nota-header .nota-titulo {
+                font-size: 0.9rem;
+            }
+            .nota-container .nota-header .nota-info {
+                font-size: 0.55rem;
             }
         }
     </style>
@@ -1910,7 +2135,7 @@
                         <button class="chat-btn" onclick="toggleStickerPicker()" title="Stickers">🎨</button>
                         <button class="chat-btn" onclick="document.getElementById('chatImageInput').click()" title="Imagen">📷</button>
                         <button class="chat-btn mention-btn" onclick="insertarMencion()" title="Mencionar @">@</button>
-                        <button class="chat-btn call-btn" onclick="hacerLlamada()" title="Llamada">📞</button>
+                        <button class="chat-btn whatsapp-btn" onclick="abrirWhatsAppDirecto()" title="WhatsApp">📱</button>
                         <input type="file" id="chatImageInput" accept="image/*" style="display:none;" onchange="enviarImagen(event)">
                         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escribe un mensaje..."></textarea>
                         <button class="chat-btn send" onclick="enviarMensaje()">➤</button>
@@ -1949,7 +2174,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: SALA PRIVADA (TIPO WHATSAPP) ===== -->
+                <!-- ===== PANEL: SALA PRIVADA ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-sala" class="panel">
                     <h3>🔒 SALA PRIVADA <span class="info-badge" style="background:#ff44aa;color:#fff;">5 créditos</span></h3>
@@ -1961,7 +2186,7 @@
                             <br>📋 Comparte el código con quien quieras para que entren gratis.
                             <br>🔐 <strong>Chat privado</strong> - solo los que tengan el código pueden entrar.
                             <br><br>
-                            <strong>📱 Funcionalidades tipo WhatsApp:</strong> Responder mensajes | Etiquetar | Imágenes | Stickers | Llamadas
+                            <strong>📱 Funcionalidades:</strong> Responder mensajes | Etiquetar | Imágenes | Stickers | WhatsApp directo
                         </div>
 
                         <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -2001,7 +2226,7 @@
                             <div class="chat-input-area" style="margin-top:6px;">
                                 <button class="chat-btn" onclick="document.getElementById('salaImageInput').click()" title="Imagen">📷</button>
                                 <button class="chat-btn mention-btn" onclick="insertarMencionSala()" title="Mencionar @">@</button>
-                                <button class="chat-btn call-btn" onclick="hacerLlamadaSala()" title="Llamada">📞</button>
+                                <button class="chat-btn whatsapp-btn" onclick="abrirWhatsAppSalaDirecto()" title="WhatsApp">📱</button>
                                 <input type="file" id="salaImageInput" accept="image/*" style="display:none;" onchange="enviarImagenSala(event)">
                                 <textarea class="chat-input" id="salaChatInput" rows="1" placeholder="Mensaje privado..."></textarea>
                                 <button class="chat-btn send" onclick="enviarMensajeSala()">➤</button>
@@ -2011,20 +2236,59 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: NOTAS ===== -->
+                <!-- ===== PANEL: NOTAS (PROFESIONAL) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-notas" class="panel">
                     <h3>📝 BLOG DE NOTAS <span class="info-badge free-tag">GRATIS</span></h3>
-                    <div class="item-card">
-                        <div class="info-box" style="border-color:#ff88cc;">
-                            📌 Escribe tus notas personales. Se guardan automáticamente en tu cuenta.
-                            <br> <strong>100% privado</strong> - Solo tú puedes verlas.
+                    <div class="nota-container">
+                        <div class="nota-header">
+                            <div class="nota-titulo">
+                                <span>📓</span> Mi Nota Personal
+                            </div>
+                            <div class="nota-info">
+                                <span class="nota-fecha" id="notaFecha">📅 Sin fecha</span>
+                                <span id="notaEstado" style="display:flex;align-items:center;gap:4px;">
+                                    <span class="dot unsaved" id="notaDot"></span>
+                                    <span id="notaEstadoText">Sin guardar</span>
+                                </span>
+                            </div>
                         </div>
                         <div class="nota-editor">
-                            <textarea id="notaContent" placeholder="Escribe tus notas aquí..."></textarea>
+                            <textarea id="notaContent" placeholder="✍️ Escribe tus notas, ideas, pensamientos o lo que quieras recordar..."></textarea>
+                            <span class="nota-char-count" id="notaCharCount">0 caracteres</span>
                         </div>
-                        <button class="btn-block btn-success" onclick="guardarNota()" style="margin-top:8px;">💾 GUARDAR NOTA</button>
-                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">✅ Guardado automático en Firebase.</div>
+                        <div class="nota-actions">
+                            <button class="btn-nota guardar" onclick="guardarNota()">💾 GUARDAR NOTA</button>
+                            <button class="btn-nota limpiar" onclick="limpiarNota()">🗑️ LIMPIAR</button>
+                            <button class="btn-nota exportar" onclick="exportarNota()">📤 EXPORTAR</button>
+                            <button class="btn-nota copiar" onclick="copiarNota()">📋 COPIAR</button>
+                            <button class="btn-nota stats" onclick="toggleStats()">📊 ESTADÍSTICAS</button>
+                        </div>
+                        <div class="nota-stats-box" id="notaStatsBox">
+                            <div class="stat-item">
+                                <span class="stat-label">📝 Palabras</span>
+                                <span class="stat-value palabras" id="statPalabras">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">🔤 Caracteres</span>
+                                <span class="stat-value caracteres" id="statCaracteres">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">📄 Párrafos</span>
+                                <span class="stat-value parrafos" id="statParrafos">0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">📏 Líneas</span>
+                                <span class="stat-value lineas" id="statLineas">0</span>
+                            </div>
+                        </div>
+                        <div class="nota-footer">
+                            <span class="nota-status">
+                                <span class="dot saved" id="notaDotFooter"></span>
+                                <span id="notaStatusFooter">Nota guardada automáticamente</span>
+                            </span>
+                            <span id="notaUltimaActualizacion">🔄 Última actualización: --</span>
+                        </div>
                     </div>
                 </div>
 
@@ -2285,6 +2549,17 @@
                 '<p style="color:#6688aa;text-align:center;padding:10px;font-size:0.8rem;">Genera tus tarjetas aquí (GRATIS)</p>';
             document.getElementById('btnDownloadGen').disabled = true;
             document.getElementById('actionButtons').style.display = 'none';
+
+            // Resetear nota
+            document.getElementById('notaContent').value = '';
+            document.getElementById('notaFecha').textContent = '📅 Sin fecha';
+            document.getElementById('notaUltimaActualizacion').textContent = '🔄 Última actualización: --';
+            document.getElementById('notaCharCount').textContent = '0 caracteres';
+            document.getElementById('notaEstadoText').textContent = 'Sin guardar';
+            document.getElementById('notaDot').className = 'dot unsaved';
+            document.getElementById('notaDotFooter').className = 'dot unsaved';
+            document.getElementById('notaStatusFooter').textContent = 'Nota sin guardar';
+            document.getElementById('notaStatsBox').classList.remove('show');
 
             mostrarNotificacion('👋 Sesión cerrada correctamente', 'info');
             console.log('🔐 Sesión cerrada');
@@ -3670,7 +3945,7 @@
         }
 
         // ================================================================
-        // 18. CHAT EN VIVO - FUNCIONES MEJORADAS (TIPO WHATSAPP)
+        // 18. CHAT EN VIVO - FUNCIONES
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3806,58 +4081,49 @@
             mostrarNotificacion('💡 Escribe el nombre del usuario después de @', 'info');
         }
 
-        function hacerLlamada() {
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            mostrarNotificacion('📞 Llamando... (Simulación)', 'info');
-            // Simular llamada
-            const llamada = {
-                userId: currentUser.uid,
-                userName: chatDisplayName,
-                avatar: chatAvatar,
-                tipo: 'llamada',
-                estado: 'incoming',
-                timestamp: Date.now()
-            };
-            db.ref('chat_messages').push({
-                userId: 'system',
-                userName: 'Sistema',
-                avatar: '📞',
-                text: `📞 ${chatDisplayName} está llamando...`,
-                tipo: 'llamada',
-                timestamp: Date.now()
-            });
-            setTimeout(() => {
-                mostrarNotificacion('📞 Llamada finalizada', 'success');
-            }, 5000);
+        function abrirWhatsAppDirecto() {
+            const numero = prompt('📱 Ingresa el número de teléfono (con código de país, ej: 593990434546):', '593');
+            if (!numero) return;
+            const numeroLimpio = numero.replace(/[^0-9]/g, '');
+            if (numeroLimpio.length < 7) {
+                mostrarNotificacion('❌ Número inválido. Mínimo 7 dígitos.', 'error');
+                return;
+            }
+            window.open(`https://wa.me/${numeroLimpio}`, '_blank');
+            mostrarNotificacion('📱 Abriendo WhatsApp...', 'success');
         }
 
-        function hacerLlamadaSala() {
+        function abrirWhatsAppSalaDirecto() {
             if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
-            mostrarNotificacion('📞 Llamando en sala privada...', 'info');
-            db.ref(`salas_privadas_mensajes/${salaActual}`).push({
-                userId: 'system',
-                userName: 'Sistema',
-                avatar: '📞',
-                text: `📞 ${chatDisplayName} está llamando en la sala...`,
-                tipo: 'llamada',
-                timestamp: Date.now()
-            });
-            setTimeout(() => {
-                mostrarNotificacion('📞 Llamada finalizada', 'success');
-            }, 5000);
+            const numero = prompt('📱 Ingresa el número de teléfono (con código de país):', '593');
+            if (!numero) return;
+            const numeroLimpio = numero.replace(/[^0-9]/g, '');
+            if (numeroLimpio.length < 7) {
+                mostrarNotificacion('❌ Número inválido.', 'error');
+                return;
+            }
+            window.open(`https://wa.me/${numeroLimpio}`, '_blank');
+            mostrarNotificacion('📱 Abriendo WhatsApp desde la sala...', 'success');
         }
 
         function enviarSticker(sticker) {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil primero', 'error'); return; }
-            db.ref('chat_messages').push({
+            const msgData = {
                 userId: currentUser.uid,
                 userName: chatDisplayName,
                 avatar: chatAvatar,
                 sticker: sticker,
                 tipo: 'sticker',
                 timestamp: Date.now()
-            });
+            };
+            if (mensajeRespondiendo) {
+                msgData.replyTo = mensajeRespondiendo;
+                msgData.replyText = mensajeRespondiendo.text || mensajeRespondiendo.sticker || '📷 Imagen';
+                msgData.replyAuthor = mensajeRespondiendo.userName || 'Anónimo';
+            }
+            db.ref('chat_messages').push(msgData);
+            cancelarRespuesta();
             document.getElementById('stickerPicker').classList.remove('show');
         }
 
@@ -3970,7 +4236,6 @@
 
                 let content = '';
 
-                // Reply quote
                 if (msg.replyTo) {
                     content += `<div class="msg-reply">
                                     <span class="reply-author">${msg.replyAuthor || 'Anónimo'}</span>
@@ -3979,7 +4244,6 @@
                 }
 
                 if (msg.text) {
-                    // Detectar menciones (@)
                     let processedText = msg.text;
                     const mentionRegex = /@(\w+)/g;
                     const mentions = processedText.match(mentionRegex);
@@ -3998,25 +4262,17 @@
                 if (msg.sticker) {
                     content += `<span class="msg-sticker">${msg.sticker}</span>`;
                 }
-                if (msg.tipo === 'llamada') {
-                    content += `<div class="call-notification">
-                                    <span class="call-icon">📞</span>
-                                    <span class="call-${msg.estado || 'incoming'}">${msg.text || 'Llamada'}</span>
-                                </div>`;
-                }
 
                 const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const userName = msg.userName || 'Anónimo';
                 const userId = msg.userId || 'default';
                 const color = getUserColor(userId, userName);
 
-                // Acciones: Responder, Mencionar, Llamar
                 const actions = `
                                 <div class="msg-actions">
                                     <button onclick="responderMensaje(${JSON.stringify(msg).replace(/"/g, '&quot;')}, false)" title="Responder">💬</button>
                                     <button onclick="insertarMencionUsuario('${userName}')" title="Mencionar">@</button>
-                                    <button onclick="hacerLlamadaUsuario('${userName}')" title="Llamar">📞</button>
-                                    ${isOwn ? '' : `<button onclick="window.open('https://wa.me/?text=${encodeURIComponent('Hola ' + userName)}', '_blank')" title="WhatsApp">📱</button>`}
+                                    <button class="whatsapp-btn" onclick="abrirWhatsAppUsuario('${userName}')" title="WhatsApp">📱</button>
                                 </div>
                             `;
 
@@ -4041,16 +4297,16 @@
             mostrarNotificacion(`✏️ Mencionando a ${nombre}`, 'info');
         }
 
-        function hacerLlamadaUsuario(nombre) {
-            mostrarNotificacion(`📞 Llamando a ${nombre}... (Simulación)`, 'info');
-            db.ref('chat_messages').push({
-                userId: 'system',
-                userName: 'Sistema',
-                avatar: '📞',
-                text: `📞 ${chatDisplayName} está llamando a ${nombre}...`,
-                tipo: 'llamada',
-                timestamp: Date.now()
-            });
+        function abrirWhatsAppUsuario(nombre) {
+            const numero = prompt(`📱 Ingresa el número de teléfono de ${nombre} (con código de país):`, '593');
+            if (!numero) return;
+            const numeroLimpio = numero.replace(/[^0-9]/g, '');
+            if (numeroLimpio.length < 7) {
+                mostrarNotificacion('❌ Número inválido.', 'error');
+                return;
+            }
+            window.open(`https://wa.me/${numeroLimpio}`, '_blank');
+            mostrarNotificacion(`📱 Abriendo WhatsApp con ${nombre}...`, 'success');
         }
 
         document.addEventListener('DOMContentLoaded', function() {
@@ -4069,7 +4325,7 @@
         });
 
         // ================================================================
-        // 19. SALA PRIVADA - FUNCIONES MEJORADAS
+        // 19. SALA PRIVADA - FUNCIONES
         // ================================================================
 
         async function crearSalaPrivada() {
@@ -4174,7 +4430,6 @@
 
                 let content = '';
 
-                // Reply quote
                 if (msg.replyTo) {
                     content += `<div class="msg-reply">
                                     <span class="reply-author">${msg.replyAuthor || 'Anónimo'}</span>
@@ -4201,12 +4456,6 @@
                 if (msg.sticker) {
                     content += `<span class="msg-sticker">${msg.sticker}</span>`;
                 }
-                if (msg.tipo === 'llamada') {
-                    content += `<div class="call-notification">
-                                    <span class="call-icon">📞</span>
-                                    <span>${msg.text || 'Llamada'}</span>
-                                </div>`;
-                }
 
                 const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const userName = msg.userName || 'Anónimo';
@@ -4217,7 +4466,7 @@
                                 <div class="msg-actions">
                                     <button onclick="responderMensajeSala(${JSON.stringify(msg).replace(/"/g, '&quot;')})" title="Responder">💬</button>
                                     <button onclick="insertarMencionSalaUsuario('${userName}')" title="Mencionar">@</button>
-                                    <button onclick="hacerLlamadaSalaUsuario('${userName}')" title="Llamar">📞</button>
+                                    <button class="whatsapp-btn" onclick="abrirWhatsAppSalaUsuario('${userName}')" title="WhatsApp">📱</button>
                                 </div>
                             `;
 
@@ -4252,17 +4501,17 @@
             mostrarNotificacion(`✏️ Mencionando a ${nombre} en sala`, 'info');
         }
 
-        function hacerLlamadaSalaUsuario(nombre) {
+        function abrirWhatsAppSalaUsuario(nombre) {
             if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
-            mostrarNotificacion(`📞 Llamando a ${nombre} en sala...`, 'info');
-            db.ref(`salas_privadas_mensajes/${salaActual}`).push({
-                userId: 'system',
-                userName: 'Sistema',
-                avatar: '📞',
-                text: `📞 ${chatDisplayName} está llamando a ${nombre} en la sala...`,
-                tipo: 'llamada',
-                timestamp: Date.now()
-            });
+            const numero = prompt(`📱 Ingresa el número de teléfono de ${nombre} (con código de país):`, '593');
+            if (!numero) return;
+            const numeroLimpio = numero.replace(/[^0-9]/g, '');
+            if (numeroLimpio.length < 7) {
+                mostrarNotificacion('❌ Número inválido.', 'error');
+                return;
+            }
+            window.open(`https://wa.me/${numeroLimpio}`, '_blank');
+            mostrarNotificacion(`📱 Abriendo WhatsApp con ${nombre} desde la sala...`, 'success');
         }
 
         function enviarMensajeSala() {
@@ -4360,24 +4609,203 @@
         }
 
         // ================================================================
-        // 20. NOTAS
+        // 20. NOTAS - FUNCIONES MEJORADAS
         // ================================================================
+
+        let notaGuardada = false;
+
+        function actualizarStatsNota() {
+            const textarea = document.getElementById('notaContent');
+            const text = textarea.value;
+            const caracteres = text.length;
+            const palabras = text.trim() ? text.trim().split(/\s+/).length : 0;
+            const parrafos = text.trim() ? text.trim().split(/\n\n+/).length : 0;
+            const lineas = text ? text.split('\n').length : 0;
+
+            document.getElementById('statPalabras').textContent = palabras;
+            document.getElementById('statCaracteres').textContent = caracteres;
+            document.getElementById('statParrafos').textContent = parrafos;
+            document.getElementById('statLineas').textContent = lineas;
+            document.getElementById('notaCharCount').textContent = `${caracteres} caracteres`;
+        }
+
+        function toggleStats() {
+            const box = document.getElementById('notaStatsBox');
+            box.classList.toggle('show');
+            if (box.classList.contains('show')) {
+                actualizarStatsNota();
+                document.querySelector('.btn-nota.stats').textContent = '📊 OCULTAR ESTADÍSTICAS';
+            } else {
+                document.querySelector('.btn-nota.stats').textContent = '📊 ESTADÍSTICAS';
+            }
+        }
+
+        function actualizarEstadoNota(guardado, mensaje = '') {
+            const dot = document.getElementById('notaDot');
+            const dotFooter = document.getElementById('notaDotFooter');
+            const estadoText = document.getElementById('notaEstadoText');
+            const statusFooter = document.getElementById('notaStatusFooter');
+
+            if (guardado) {
+                dot.className = 'dot saved';
+                dotFooter.className = 'dot saved';
+                estadoText.textContent = '✅ Guardado';
+                statusFooter.textContent = '✅ Nota guardada correctamente';
+                notaGuardada = true;
+            } else {
+                dot.className = 'dot unsaved';
+                dotFooter.className = 'dot unsaved';
+                estadoText.textContent = '🔄 Sin guardar';
+                statusFooter.textContent = '🔄 Nota sin guardar (escribe algo)';
+                notaGuardada = false;
+            }
+        }
+
+        function actualizarFechaNota() {
+            const ahora = new Date();
+            const fechaStr = ahora.toLocaleString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            });
+            document.getElementById('notaFecha').textContent = `📅 ${fechaStr}`;
+            document.getElementById('notaUltimaActualizacion').textContent = `🔄 Última actualización: ${fechaStr}`;
+        }
+
         async function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             const content = document.getElementById('notaContent').value;
-            await db.ref(`notas/${currentUser.uid}`).set({ content: content, updated: Date.now() });
-            mostrarNotificacion('✅ Nota guardada', 'success');
+            if (!content.trim()) {
+                mostrarNotificacion('⚠️ Escribe algo antes de guardar', 'warning');
+                return;
+            }
+
+            try {
+                await db.ref(`notas/${currentUser.uid}`).set({
+                    content: content,
+                    updated: Date.now()
+                });
+                actualizarEstadoNota(true);
+                actualizarFechaNota();
+                mostrarNotificacion('✅ Nota guardada exitosamente', 'success');
+            } catch (e) {
+                mostrarNotificacion('❌ Error al guardar la nota', 'error');
+                console.error(e);
+            }
         }
 
         async function cargarNota() {
             if (!currentUser) return;
-            const snap = await db.ref(`notas/${currentUser.uid}`).once('value');
-            if (snap.exists()) {
-                document.getElementById('notaContent').value = snap.val().content || '';
-            } else {
-                document.getElementById('notaContent').value = '';
+            try {
+                const snap = await db.ref(`notas/${currentUser.uid}`).once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    document.getElementById('notaContent').value = data.content || '';
+                    if (data.updated) {
+                        const fecha = new Date(data.updated);
+                        const fechaStr = fecha.toLocaleString('es-ES', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            second: '2-digit'
+                        });
+                        document.getElementById('notaFecha').textContent = `📅 ${fechaStr}`;
+                        document.getElementById('notaUltimaActualizacion').textContent = `🔄 Última actualización: ${fechaStr}`;
+                    }
+                    actualizarEstadoNota(true);
+                    actualizarStatsNota();
+                } else {
+                    document.getElementById('notaContent').value = '';
+                    document.getElementById('notaFecha').textContent = '📅 Sin fecha';
+                    document.getElementById('notaUltimaActualizacion').textContent = '🔄 Última actualización: --';
+                    actualizarEstadoNota(false);
+                }
+            } catch (e) {
+                console.error('Error al cargar nota:', e);
             }
         }
+
+        function limpiarNota() {
+            if (confirm('⚠️ ¿Estás seguro de que quieres limpiar la nota? Perderás los cambios no guardados.')) {
+                document.getElementById('notaContent').value = '';
+                actualizarEstadoNota(false);
+                actualizarStatsNota();
+                document.getElementById('notaFecha').textContent = '📅 Sin fecha';
+                document.getElementById('notaUltimaActualizacion').textContent = '🔄 Última actualización: --';
+                mostrarNotificacion('🗑️ Nota limpiada', 'info');
+            }
+        }
+
+        function exportarNota() {
+            const content = document.getElementById('notaContent').value;
+            if (!content.trim()) {
+                mostrarNotificacion('⚠️ No hay contenido para exportar', 'warning');
+                return;
+            }
+            const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `nota_${new Date().toISOString().slice(0,10)}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            mostrarNotificacion('📤 Nota exportada', 'success');
+        }
+
+        function copiarNota() {
+            const content = document.getElementById('notaContent').value;
+            if (!content.trim()) {
+                mostrarNotificacion('⚠️ No hay contenido para copiar', 'warning');
+                return;
+            }
+            navigator.clipboard.writeText(content).then(() => {
+                mostrarNotificacion('📋 Nota copiada al portapapeles', 'success');
+            }).catch(() => {
+                // Fallback
+                const textarea = document.getElementById('notaContent');
+                textarea.select();
+                document.execCommand('copy');
+                mostrarNotificacion('📋 Nota copiada al portapapeles', 'success');
+            });
+        }
+
+        // Auto-guardar cada 30 segundos
+        let autoSaveInterval = null;
+
+        function iniciarAutoGuardar() {
+            if (autoSaveInterval) clearInterval(autoSaveInterval);
+            autoSaveInterval = setInterval(() => {
+                if (currentUser && document.getElementById('notaContent').value.trim()) {
+                    guardarNota();
+                }
+            }, 30000);
+        }
+
+        // Detectar cambios en tiempo real
+        document.addEventListener('DOMContentLoaded', function() {
+            const notaTextarea = document.getElementById('notaContent');
+            if (notaTextarea) {
+                notaTextarea.addEventListener('input', function() {
+                    actualizarStatsNota();
+                    if (notaGuardada) {
+                        actualizarEstadoNota(false);
+                    }
+                });
+                // Ctrl+S para guardar
+                notaTextarea.addEventListener('keydown', function(e) {
+                    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                        e.preventDefault();
+                        guardarNota();
+                    }
+                });
+            }
+            iniciarAutoGuardar();
+        });
 
         // ================================================================
         // 21. NAVEGACIÓN
@@ -4445,6 +4873,7 @@
             }
             if (tabName === 'notas') {
                 cargarNota();
+                actualizarStatsNota();
             }
         }
 
@@ -4452,7 +4881,7 @@
         // 22. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON CHAT TIPO WHATSAPP');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON CHAT Y NOTAS MEJORADAS');
         console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos');
@@ -4461,7 +4890,8 @@
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
         console.log('🟠 Detección de CVV INCORRECTO (invalid_cvc)');
         console.log('🔄 Cada tarjeta genera su propia fecha ALEATORIA (MEZCLADA)');
-        console.log('💬 CHAT TIPO WHATSAPP: Responder mensajes | Etiquetar | Imágenes | Stickers | Llamadas');
+        console.log('💬 CHAT TIPO WHATSAPP: Responder mensajes | Etiquetar | Imágenes | Stickers');
+        console.log('📝 NOTAS PROFESIONALES: Guardado automático | Estadísticas | Exportar | Copiar');
 
         cargarPromo();
         seleccionarPasarela('stripe');
