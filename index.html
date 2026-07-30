@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON TEMA MEJORADO Y JUEGO            */
+        /* ESTILOS - VERSIÓN CORREGIDA Y ESTABLE                        */
         /* ============================================================== */
 
         * {
@@ -17,7 +17,6 @@
         }
 
         :root {
-            /* === TEMA OSCURO (MEJORADO) === */
             --bg-principal: #0a1628;
             --bg-tarjeta: #0f1f3a;
             --bg-inputs: #1a2a4a;
@@ -46,7 +45,6 @@
         }
 
         body.theme-day {
-            /* === TEMA CLARO (CORREGIDO - SE VEN TODOS LOS NÚMEROS) === */
             --bg-principal: #e8f0fe;
             --bg-tarjeta: #d4e4f7;
             --bg-inputs: #ffffff;
@@ -74,7 +72,6 @@
             --text-bright: #0a1a3a;
         }
 
-        /* ===== ESTILOS BASE ===== */
         html,
         body {
             width: 100%;
@@ -245,6 +242,14 @@
         }
         .auth-box .register-info strong {
             color: #00ff88;
+        }
+
+        /* ===== APLICACIÓN PRINCIPAL - OCULTA POR DEFECTO ===== */
+        #main-app {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
         }
 
         /* ===== NAVBAR ===== */
@@ -803,7 +808,7 @@
             font-size: 0.5rem;
         }
 
-        /* ===== PASARELA CARDS (ACTUALIZADO CON NUEVAS PASARELAS) ===== */
+        /* ===== PASARELA CARDS ===== */
         .pasarela-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -1386,7 +1391,7 @@
         }
 
         /* ============================================================== */
-        /* ===== NOTAS - ESTILOS PROFESIONALES ===== */
+        /* ===== NOTAS ===== */
         /* ============================================================== */
         .nota-container {
             background: var(--nota-bg);
@@ -1609,7 +1614,7 @@
         }
 
         /* ============================================================== */
-        /* ===== JUEGO DE BALONCESTO POR MISIONES ===== */
+        /* ===== JUEGO DE BALONCESTO ===== */
         /* ============================================================== */
         .juego-container {
             background: var(--card-bg);
@@ -2139,7 +2144,7 @@
             <div class="panels-container">
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: GENERADOR (GRATIS) ===== -->
+                <!-- ===== PANEL: GENERADOR ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-generator" class="panel active">
                     <h3>🎲 GENERADOR DE TARJETAS <span class="info-badge free-tag">GRATIS</span></h3>
@@ -2197,7 +2202,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: LIVE INDIVIDUAL ===== -->
+                <!-- ===== PANEL: LIVE ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-live" class="panel">
                     <h3>🔴 LIVE INDIVIDUAL <span class="info-badge" style="background:#ff44aa;color:#fff;">2 créditos</span></h3>
@@ -2229,7 +2234,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: LIVE MASIVO ===== -->
+                <!-- ===== PANEL: MASIVO ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-massive" class="panel">
                     <h3>📊 LIVE MASIVO <span class="info-badge" style="background:#ff8800;color:#fff;">7 créditos</span></h3>
@@ -2260,7 +2265,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: PASARELA (CON NUEVAS PASARELAS) ===== -->
+                <!-- ===== PANEL: PASARELA ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-pasarela" class="panel">
                     <h3>💳 PASARELA DE PAGO</h3>
@@ -2346,7 +2351,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: CHAT EN VIVO ===== -->
+                <!-- ===== PANEL: CHAT ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-chat" class="panel">
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
@@ -2458,7 +2463,6 @@
                                 <button class="copy-btn-sala" onclick="copiarCodigoSala()">📋 Copiar código</button>
                                 <button class="btn-small btn-danger" onclick="salirDeSala()">🚪 Salir</button>
                             </div>
-                            <!-- Reply Preview Sala -->
                             <div class="chat-reply-preview" id="salaReplyPreview">
                                 <span>📩 Respondiendo a: <span id="salaReplyPreviewText"></span></span>
                                 <span class="reply-cancel" onclick="cancelarRespuestaSala()">✕</span>
@@ -2536,7 +2540,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: JUEGO DE BALONCESTO POR MISIONES ===== -->
+                <!-- ===== PANEL: JUEGO ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-juego" class="panel">
                     <h3>🏀 JUEGO DE MISIONES <span class="info-badge" style="background:#ff6b35;color:#fff;">GANAR CRÉDITOS</span></h3>
@@ -2551,7 +2555,6 @@
                             </div>
                         </div>
 
-                        <!-- CANCHA DE JUEGO -->
                         <div class="juego-cancha" id="juegoCancha">
                             <div class="cancha-texto" id="canchaTexto">🎯 Haz clic en el botón para lanzar</div>
                             <div class="cancha-emojis" id="canchaEmojis">🏀</div>
@@ -2560,7 +2563,6 @@
                             <button class="cancha-boton" id="btnLanzar" onclick="lanzarBalon()">🏀 LANZAR</button>
                         </div>
 
-                        <!-- MISIONES -->
                         <div class="juego-misiones" id="juegoMisiones">
                             <div class="mision-item" id="mision1">
                                 <div class="mision-info">
@@ -2623,14 +2625,12 @@
                             </div>
                         </div>
 
-                        <!-- RECOMPENSAS CONFIGURABLES -->
                         <div class="juego-recompensas">
                             <div class="recompensa-box">🏀 Encestes: <span id="totalEncestes">0</span></div>
                             <div class="recompensa-box">📊 Tiros: <span id="totalTiros">0</span></div>
                             <div class="recompensa-box">🎯 Precisión: <span id="precisionTiros">0%</span></div>
                         </div>
 
-                        <!-- ADMIN - CONFIGURACIÓN DE RECOMPENSAS -->
                         <div style="margin-top:14px;padding:12px;background:var(--bg-result);border-radius:10px;border:1px solid var(--border-color);">
                             <div style="color:var(--texto-secundario);font-size:0.7rem;font-weight:600;margin-bottom:6px;">⚙️ CONFIGURAR RECOMPENSAS POR MISIÓN (SOLO ADMIN)</div>
                             <div class="flex-row">
@@ -2732,7 +2732,7 @@
 
     <script>
         // ================================================================
-        // 1. CONFIGURACIÓN FIREBASE
+        // CONFIGURACIÓN FIREBASE
         // ================================================================
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
@@ -2747,7 +2747,7 @@
         const db = firebase.database();
 
         // ================================================================
-        // 2. TEMA - DÍA/NOCHE
+        // TEMA - DÍA/NOCHE
         // ================================================================
         function toggleTheme() {
             const body = document.body;
@@ -2767,7 +2767,7 @@
         })();
 
         // ================================================================
-        // 3. VARIABLES GLOBALES
+        // VARIABLES GLOBALES
         // ================================================================
         let currentUser = null;
         let usernameClave = "";
@@ -2801,7 +2801,6 @@
         let misionProgreso = [0, 0, 0, 0, 0];
         let juegoPuntos = 0;
 
-        // Recompensas configurables
         let recompensas = {
             mision1: 2,
             mision2: 5,
@@ -2812,7 +2811,7 @@
         };
 
         // ================================================================
-        // 4. UTILIDADES
+        // UTILIDADES
         // ================================================================
         function limpiarClave(str) {
             if (!str) return "";
@@ -2865,9 +2864,6 @@
             return owners.includes(email);
         }
 
-        // ================================================================
-        // 5. GENERAR FECHA ALEATORIA
-        // ================================================================
         function generarFechaAleatoria() {
             const year = Math.floor(Math.random() * 15) + 24;
             const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
@@ -2875,7 +2871,7 @@
         }
 
         // ================================================================
-        // 6. CERRAR SESIÓN
+        // CERRAR SESIÓN
         // ================================================================
         function cerrarSesion() {
             if (usuariosUnsubscribe) {
@@ -2906,7 +2902,6 @@
             mensajeRespondiendo = null;
             mensajeRespondiendoSala = null;
 
-            // Resetear juego
             totalEncestes = 0;
             totalTiros = 0;
             misionesCompletadas = [false, false, false, false, false];
@@ -2950,7 +2945,6 @@
             document.getElementById('btnDownloadGen').disabled = true;
             document.getElementById('actionButtons').style.display = 'none';
 
-            // Resetear nota
             document.getElementById('notaContent').value = '';
             document.getElementById('notaFecha').textContent = '📅 Sin fecha';
             document.getElementById('notaUltimaActualizacion').textContent = '🔄 Última actualización: --';
@@ -2961,7 +2955,6 @@
             document.getElementById('notaStatusFooter').textContent = 'Nota sin guardar';
             document.getElementById('notaStatsBox').classList.remove('show');
 
-            // Resetear juego
             document.getElementById('totalEncestes').textContent = '0';
             document.getElementById('totalTiros').textContent = '0';
             document.getElementById('precisionTiros').textContent = '0%';
@@ -2983,7 +2976,7 @@
         }
 
         // ================================================================
-        // 7. AUTH - TABS
+        // AUTH - TABS
         // ================================================================
         document.querySelectorAll('.auth-tab').forEach(tab => {
             tab.addEventListener('click', function() {
@@ -3003,7 +2996,7 @@
         }
 
         // ================================================================
-        // 8. PASARELA (CON NUEVAS PASARELAS)
+        // PASARELA
         // ================================================================
         function seleccionarPasarela(pasarela) {
             pasarelaSeleccionada = pasarela;
@@ -3026,7 +3019,7 @@
         }
 
         // ================================================================
-        // 9. REGISTRO / LOGIN
+        // REGISTRO / LOGIN
         // ================================================================
         async function cargarPromo() {
             const snap = await db.ref('promocion').once('value');
@@ -3187,7 +3180,7 @@
         }
 
         // ================================================================
-        // 10. CRÉDITOS Y DÍAS
+        // CRÉDITOS Y DÍAS
         // ================================================================
         async function cargarDatosUsuario() {
             if (!currentUser) return;
@@ -3277,7 +3270,7 @@
         }
 
         // ================================================================
-        // 11. ADMIN
+        // ADMIN
         // ================================================================
         async function toggleBloquearUsuario(email) {
             if (!currentUser || currentUser.role !== 'Owner') return;
@@ -3412,7 +3405,7 @@
         }
 
         // ================================================================
-        // 12. GENERADOR DE TARJETAS
+        // GENERADOR DE TARJETAS
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
@@ -3711,7 +3704,7 @@
         }
 
         // ================================================================
-        // 13. VERIFICACIÓN DE TARJETAS (CON NUEVAS PASARELAS)
+        // VERIFICACIÓN DE TARJETAS
         // ================================================================
         async function verificarTarjeta(number, month, year, cvv, pasarela = 'stripe') {
             await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
@@ -3729,7 +3722,6 @@
 
             const random = Math.random();
 
-            // Respuestas específicas por pasarela
             if (pasarela === 'zuora') {
                 if (random < 0.15) {
                     return {
@@ -4069,7 +4061,6 @@
                     };
                 }
             } else {
-                // Fallback
                 if (random < 0.15) {
                     return {
                         estado: 'approved',
@@ -4120,7 +4111,7 @@
         }
 
         // ================================================================
-        // 14. LIVE INDIVIDUAL
+        // LIVE INDIVIDUAL
         // ================================================================
         async function checkCardLive() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -4212,7 +4203,7 @@
         }
 
         // ================================================================
-        // 15. LIVE MASIVO
+        // LIVE MASIVO
         // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -4335,7 +4326,7 @@
         }
 
         // ================================================================
-        // 16. HISTORIALES
+        // HISTORIALES
         // ================================================================
         function guardarHistorialGen(bin, count, infoBIN) {
             if (!currentUser) return;
@@ -4439,7 +4430,7 @@
         }
 
         // ================================================================
-        // 17. DIRECCIONES
+        // DIRECCIONES
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -4609,7 +4600,7 @@
         }
 
         // ================================================================
-        // 18. CHAT EN VIVO - FUNCIONES
+        // CHAT - FUNCIONES
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -4989,7 +4980,7 @@
         });
 
         // ================================================================
-        // 19. SALA PRIVADA - FUNCIONES
+        // SALA PRIVADA
         // ================================================================
 
         async function crearSalaPrivada() {
@@ -5273,7 +5264,7 @@
         }
 
         // ================================================================
-        // 20. NOTAS - FUNCIONES
+        // NOTAS
         // ================================================================
 
         let notaGuardada = false;
@@ -5468,7 +5459,7 @@
         });
 
         // ================================================================
-        // 21. JUEGO DE BALONCESTO POR MISIONES
+        // JUEGO DE BALONCESTO
         // ================================================================
 
         function lanzarBalon() {
@@ -5476,9 +5467,8 @@
             btn.disabled = true;
             btn.textContent = '⏳ Lanzando...';
 
-            // Simular lanzamiento
             setTimeout(() => {
-                const esCanasta = Math.random() < 0.35; // 35% de probabilidad de encestar
+                const esCanasta = Math.random() < 0.35;
                 totalTiros++;
 
                 if (esCanasta) {
@@ -5496,20 +5486,17 @@
                     if (navigator.vibrate) navigator.vibrate([30, 30, 30]);
                 }
 
-                // Actualizar estadísticas
                 document.getElementById('totalEncestes').textContent = totalEncestes;
                 document.getElementById('totalTiros').textContent = totalTiros;
                 const precision = totalTiros > 0 ? Math.round((totalEncestes / totalTiros) * 100) : 0;
                 document.getElementById('precisionTiros').textContent = precision + '%';
                 document.getElementById('juegoPuntosTotal').textContent = juegoPuntos;
 
-                // Verificar misiones
                 verificarMisiones();
 
                 btn.disabled = false;
                 btn.textContent = '🏀 LANZAR';
 
-                // Animación de reset
                 setTimeout(() => {
                     if (!btn.disabled) {
                         document.getElementById('canchaEmojis').textContent = '🏀';
@@ -5538,17 +5525,14 @@
                     document.getElementById(`mision${mision.id}Progreso`).textContent = progreso;
 
                     if (progreso >= mision.meta) {
-                        // ¡Misión completada!
                         misionesCompletadas[idx] = true;
                         document.getElementById(`mision${mision.id}Estado`).textContent = '✅ Completada';
                         document.getElementById(`mision${mision.id}Estado`).className = 'mision-estado completada';
                         document.getElementById(`mision${mision.id}`).classList.add('completada');
 
-                        // Entregar recompensa
                         let recompensa = mision.recompensa;
                         let descripcion = `🏀 Misión ${mision.id} completada: ${recompensa} créditos`;
 
-                        // Misión 4 y 5 también dan días extra
                         if (mision.id === 4) {
                             const diasExtra = recompensas.diasExtra;
                             if (!esOwner) {
@@ -5559,7 +5543,7 @@
                             actualizarDisplayDatos();
                             mostrarNotificacion(`🎉 ¡Misión ${mision.id} completada! +${recompensa} créditos y +${diasExtra} días`, 'success');
                         } else if (mision.id === 5) {
-                            const diasExtra = recompensas.diasExtra * 2 + 1; // 7 días
+                            const diasExtra = recompensas.diasExtra * 2 + 1;
                             if (!esOwner) {
                                 currentDays += diasExtra;
                                 descripcion += ` + ${diasExtra} días`;
@@ -5633,7 +5617,6 @@
             }).catch(e => console.error('Error al guardar progreso del juego:', e));
         }
 
-        // Guardar progreso cada 10 segundos
         setInterval(() => {
             if (currentUser) {
                 guardarProgresoJuego();
@@ -5641,7 +5624,7 @@
         }, 10000);
 
         // ================================================================
-        // 22. RECOMPENSAS CONFIGURABLES
+        // RECOMPENSAS CONFIGURABLES
         // ================================================================
 
         async function cargarRecompensas() {
@@ -5696,7 +5679,6 @@
                 diasExtra: recompensas.diasExtra
             }).then(() => {
                 mostrarNotificacion('✅ Recompensas guardadas correctamente', 'success');
-                // Actualizar visualización
                 document.getElementById('mision1Recompensa').textContent = `+${recompensas.mision1} créditos`;
                 document.getElementById('mision2Recompensa').textContent = `+${recompensas.mision2} créditos`;
                 document.getElementById('mision3Recompensa').textContent = `+${recompensas.mision3} créditos`;
@@ -5709,7 +5691,7 @@
         }
 
         // ================================================================
-        // 23. NAVEGACIÓN
+        // NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -5792,7 +5774,7 @@
         }
 
         // ================================================================
-        // 24. INICIALIZACIÓN
+        // INICIALIZACIÓN
         // ================================================================
 
         console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
