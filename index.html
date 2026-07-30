@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN CORREGIDA Y ESTABLE                        */
+        /* ESTILOS - VERSIÓN FINAL CON JUEGO MEJORADO                   */
         /* ============================================================== */
 
         * {
@@ -244,7 +244,7 @@
             color: #00ff88;
         }
 
-        /* ===== APLICACIÓN PRINCIPAL - OCULTA POR DEFECTO ===== */
+        /* ===== APLICACIÓN PRINCIPAL ===== */
         #main-app {
             display: none;
             flex-direction: column;
@@ -1107,6 +1107,86 @@
         }
 
         /* ============================================================== */
+        /* ===== MODAL DE CRÉDITOS INSUFICIENTES ===== */
+        /* ============================================================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+        .modal-overlay.show {
+            display: flex;
+        }
+        .modal-overlay .modal-box {
+            background: var(--bg-panel);
+            border: 2px solid var(--borde-neon);
+            border-radius: 20px;
+            padding: 30px 25px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(0, 200, 255, 0.2);
+        }
+        .modal-overlay .modal-box .modal-icon {
+            font-size: 3.5rem;
+            margin-bottom: 10px;
+        }
+        .modal-overlay .modal-box .modal-titulo {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffaa44;
+            margin-bottom: 6px;
+        }
+        .modal-overlay .modal-box .modal-texto {
+            font-size: 0.85rem;
+            color: var(--texto-secundario);
+            margin-bottom: 16px;
+            line-height: 1.6;
+        }
+        .modal-overlay .modal-box .modal-botones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .modal-overlay .modal-box .modal-botones .modal-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.15s;
+            min-width: 100px;
+        }
+        .modal-overlay .modal-box .modal-botones .modal-btn:hover {
+            transform: scale(1.03);
+        }
+        .modal-overlay .modal-box .modal-botones .modal-btn:active {
+            transform: scale(0.97);
+        }
+        .modal-overlay .modal-box .modal-botones .modal-btn.whatsapp {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+        }
+        .modal-overlay .modal-box .modal-botones .modal-btn.juego {
+            background: linear-gradient(135deg, #ff6b35, #cc4400);
+            color: white;
+        }
+        .modal-overlay .modal-box .modal-botones .modal-btn.cerrar {
+            background: var(--border-color);
+            color: var(--texto-principal);
+        }
+
+        /* ============================================================== */
         /* ===== CHAT ESTILOS TIPO WHATSAPP ===== */
         /* ============================================================== */
         .chat-profile-setup {
@@ -1614,7 +1694,7 @@
         }
 
         /* ============================================================== */
-        /* ===== JUEGO DE BALONCESTO ===== */
+        /* ===== JUEGO MEJORADO - PIEDRA, PAPEL O TIJERA ===== */
         /* ============================================================== */
         .juego-container {
             background: var(--card-bg);
@@ -1653,63 +1733,97 @@
             color: var(--texto-principal);
         }
         .juego-container .juego-header .juego-puntos span {
-            color: #ff6b35;
+            color: #ffd700;
         }
 
-        .juego-container .juego-cancha {
+        .juego-container .juego-area {
             background: var(--bg-result);
             border-radius: 12px;
-            padding: 15px;
+            padding: 20px;
             text-align: center;
-            min-height: 180px;
+            min-height: 200px;
+            border: 1px solid var(--border-color);
+        }
+        .juego-container .juego-area .juego-vs {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .juego-container .juego-area .juego-vs .jugador {
+            flex: 1;
+            text-align: center;
+        }
+        .juego-container .juego-area .juego-vs .jugador .emoji {
+            font-size: 3.5rem;
+            display: block;
+            margin-bottom: 4px;
+            transition: 0.3s;
+        }
+        .juego-container .juego-area .juego-vs .jugador .nombre {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+        }
+        .juego-container .juego-area .juego-vs .jugador .nombre span {
+            color: var(--texto-principal);
+            font-weight: 600;
+        }
+        .juego-container .juego-area .juego-vs .vs-texto {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #ff6b35;
+            text-shadow: 0 0 20px rgba(255, 107, 53, 0.3);
+        }
+        .juego-container .juego-area .juego-resultado {
+            font-size: 1.2rem;
+            font-weight: 700;
+            padding: 8px;
+            border-radius: 10px;
+            margin: 8px 0;
+            min-height: 50px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            border: 1px solid var(--border-color);
-            position: relative;
         }
-        .juego-container .juego-cancha .cancha-texto {
-            font-size: 0.9rem;
-            color: var(--texto-secundario);
-            margin-bottom: 10px;
+        .juego-container .juego-area .juego-resultado.ganaste {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.08);
         }
-        .juego-container .juego-cancha .cancha-emojis {
-            font-size: 3.5rem;
-            margin-bottom: 8px;
-            letter-spacing: 8px;
+        .juego-container .juego-area .juego-resultado.perdiste {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.08);
         }
-        .juego-container .juego-cancha .cancha-resultado {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #ff6b35;
+        .juego-container .juego-area .juego-resultado.empate {
+            color: #ffaa44;
+            background: rgba(255, 170, 68, 0.08);
         }
-        .juego-container .juego-cancha .cancha-mensaje {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            margin-top: 6px;
+        .juego-container .juego-area .juego-opciones {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
         }
-        .juego-container .juego-cancha .cancha-boton {
-            margin-top: 12px;
-            padding: 8px 28px;
-            border: none;
-            border-radius: 25px;
-            font-weight: 700;
-            font-size: 0.85rem;
+        .juego-container .juego-area .juego-opciones .opcion-btn {
+            font-size: 2.5rem;
+            padding: 10px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 16px;
+            background: var(--bg-inputs);
             cursor: pointer;
-            transition: 0.15s;
-            background: linear-gradient(135deg, #ff6b35, #cc4400);
-            color: white;
-            box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
+            transition: 0.2s;
+            min-width: 70px;
         }
-        .juego-container .juego-cancha .cancha-boton:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 35px rgba(255, 107, 53, 0.35);
+        .juego-container .juego-area .juego-opciones .opcion-btn:hover {
+            transform: scale(1.08);
+            border-color: #ff6b35;
+            box-shadow: 0 0 25px rgba(255, 107, 53, 0.2);
         }
-        .juego-container .juego-cancha .cancha-boton:active {
-            transform: scale(0.97);
+        .juego-container .juego-area .juego-opciones .opcion-btn:active {
+            transform: scale(0.95);
         }
-        .juego-container .juego-cancha .cancha-boton:disabled {
+        .juego-container .juego-area .juego-opciones .opcion-btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
@@ -1721,13 +1835,13 @@
         .juego-container .juego-misiones .mision-item {
             background: var(--bg-result);
             border-radius: 10px;
-            padding: 10px 14px;
-            margin-bottom: 8px;
+            padding: 8px 12px;
+            margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 4px;
             border: 1px solid var(--border-color);
             transition: 0.2s;
         }
@@ -1738,32 +1852,32 @@
         .juego-container .juego-misiones .mision-item .mision-info {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
         .juego-container .juego-misiones .mision-item .mision-info .mision-icon {
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
         .juego-container .juego-misiones .mision-item .mision-info .mision-texto {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--texto-principal);
         }
         .juego-container .juego-misiones .mision-item .mision-info .mision-texto .mision-progreso {
             color: var(--text-muted);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
         }
         .juego-container .juego-misiones .mision-item .mision-recompensa {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 600;
             color: #ffd700;
             background: rgba(255, 215, 0, 0.1);
-            padding: 2px 10px;
-            border-radius: 12px;
+            padding: 2px 8px;
+            border-radius: 10px;
             border: 1px solid #ffd70033;
         }
         .juego-container .juego-misiones .mision-item .mision-estado {
-            font-size: 0.55rem;
-            padding: 2px 8px;
+            font-size: 0.5rem;
+            padding: 1px 8px;
             border-radius: 10px;
         }
         .juego-container .juego-misiones .mision-item .mision-estado.pendiente {
@@ -1775,25 +1889,25 @@
             color: #00ff88;
         }
 
-        .juego-container .juego-recompensas {
-            margin-top: 12px;
+        .juego-container .juego-stats {
+            margin-top: 10px;
             display: flex;
-            gap: 12px;
+            gap: 10px;
             flex-wrap: wrap;
             justify-content: center;
         }
-        .juego-container .juego-recompensas .recompensa-box {
+        .juego-container .juego-stats .stat-box {
             background: var(--bg-result);
-            border-radius: 10px;
-            padding: 6px 14px;
+            border-radius: 8px;
+            padding: 4px 12px;
             border: 1px solid var(--border-color);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             color: var(--texto-secundario);
             display: flex;
             align-items: center;
             gap: 4px;
         }
-        .juego-container .juego-recompensas .recompensa-box span {
+        .juego-container .juego-stats .stat-box span {
             font-weight: 700;
             color: #ffd700;
         }
@@ -1896,6 +2010,14 @@
                 font-size: 0.7rem;
                 padding: 6px 14px;
                 min-width: 70px;
+            }
+            .juego-container .juego-area .juego-vs .jugador .emoji {
+                font-size: 2.5rem;
+            }
+            .juego-container .juego-area .juego-opciones .opcion-btn {
+                font-size: 2rem;
+                padding: 8px 14px;
+                min-width: 55px;
             }
         }
 
@@ -2033,16 +2155,41 @@
             .nota-container .nota-header .nota-info {
                 font-size: 0.55rem;
             }
-            .juego-container .juego-cancha .cancha-emojis {
-                font-size: 2.5rem;
+            .juego-container .juego-area .juego-vs .jugador .emoji {
+                font-size: 2rem;
             }
-            .juego-container .juego-cancha .cancha-resultado {
+            .juego-container .juego-area .juego-opciones .opcion-btn {
+                font-size: 1.5rem;
+                padding: 6px 10px;
+                min-width: 45px;
+            }
+            .juego-container .juego-area .juego-vs .vs-texto {
                 font-size: 1.2rem;
+            }
+            .modal-overlay .modal-box {
+                padding: 20px 16px;
             }
         }
     </style>
 </head>
 <body>
+
+    <!-- ===== MODAL DE CRÉDITOS INSUFICIENTES ===== -->
+    <div class="modal-overlay" id="modalCreditos">
+        <div class="modal-box">
+            <div class="modal-icon">😱</div>
+            <div class="modal-titulo">¡Sin créditos!</div>
+            <div class="modal-texto">
+                No tienes créditos suficientes para usar esta función.<br>
+                <strong>¿Qué quieres hacer?</strong>
+            </div>
+            <div class="modal-botones">
+                <button class="modal-btn whatsapp" onclick="irWhatsAppAdmin()">📱 Pedir al Admin</button>
+                <button class="modal-btn juego" onclick="irAlJuego()">🎮 Jugar y ganar</button>
+                <button class="modal-btn cerrar" onclick="cerrarModalCreditos()">✕ Cerrar</button>
+            </div>
+        </div>
+    </div>
 
     <!-- ============================================================== -->
     <!-- CONTENEDOR PRINCIPAL -->
@@ -2135,7 +2282,8 @@
                 <button class="tab-btn chat-tab" onclick="switchTab('chat')">💬 CHAT</button>
                 <button class="tab-btn sala-tab" onclick="switchTab('sala')">🔒 SALA PRIVADA</button>
                 <button class="tab-btn notas-tab" onclick="switchTab('notas')">📝 NOTAS</button>
-                <button class="tab-btn juego-tab" onclick="switchTab('juego')">🏀 JUEGO</button>
+                <!-- El tab de juego SOLO se muestra para usuarios normales (no admin) -->
+                <button class="tab-btn juego-tab" id="tabJuegoBtn" onclick="switchTab('juego')" style="display:none;">🎮 JUEGO</button>
                 <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
@@ -2540,35 +2688,50 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: JUEGO ===== -->
+                <!-- ===== PANEL: JUEGO (SOLO PARA USUARIOS NORMALES) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-juego" class="panel">
-                    <h3>🏀 JUEGO DE MISIONES <span class="info-badge" style="background:#ff6b35;color:#fff;">GANAR CRÉDITOS</span></h3>
+                    <h3>🎮 JUEGO - PIEDRA, PAPEL O TIJERA <span class="info-badge" style="background:#ff6b35;color:#fff;">GANAR CRÉDITOS</span></h3>
 
                     <div class="juego-container">
                         <div class="juego-header">
                             <div class="juego-titulo">
-                                <span>🏀</span> Baloncesto Pro
+                                <span>🎮</span> Piedra, Papel o Tijera
                             </div>
                             <div class="juego-puntos">
-                                🏆 Puntos: <span id="juegoPuntosTotal">0</span>
+                                🏆 Victorias: <span id="juegoVictorias">0</span>
                             </div>
                         </div>
 
-                        <div class="juego-cancha" id="juegoCancha">
-                            <div class="cancha-texto" id="canchaTexto">🎯 Haz clic en el botón para lanzar</div>
-                            <div class="cancha-emojis" id="canchaEmojis">🏀</div>
-                            <div class="cancha-resultado" id="canchaResultado">--</div>
-                            <div class="cancha-mensaje" id="canchaMensaje">¡Tira al aro!</div>
-                            <button class="cancha-boton" id="btnLanzar" onclick="lanzarBalon()">🏀 LANZAR</button>
+                        <div class="juego-area">
+                            <div class="juego-vs">
+                                <div class="jugador">
+                                    <span class="emoji" id="jugadorEmoji">🤚</span>
+                                    <div class="nombre"><span id="jugadorNombre">Tú</span></div>
+                                </div>
+                                <div class="vs-texto">⚡</div>
+                                <div class="jugador">
+                                    <span class="emoji" id="cpuEmoji">🤖</span>
+                                    <div class="nombre"><span>CPU</span></div>
+                                </div>
+                            </div>
+
+                            <div class="juego-resultado" id="juegoResultado">🎯 Elige una opción</div>
+
+                            <div class="juego-opciones">
+                                <button class="opcion-btn" onclick="jugar('piedra')" id="btnPiedra">🪨</button>
+                                <button class="opcion-btn" onclick="jugar('papel')" id="btnPapel">📄</button>
+                                <button class="opcion-btn" onclick="jugar('tijera')" id="btnTijera">✂️</button>
+                            </div>
                         </div>
 
+                        <!-- MISIONES -->
                         <div class="juego-misiones" id="juegoMisiones">
                             <div class="mision-item" id="mision1">
                                 <div class="mision-info">
                                     <span class="mision-icon">🎯</span>
                                     <div class="mision-texto">
-                                        <strong>Misión 1:</strong> Encestar 3 veces
+                                        <strong>Misión 1:</strong> Ganar 3 partidas
                                         <div class="mision-progreso">Progreso: <span id="mision1Progreso">0</span>/3</div>
                                     </div>
                                 </div>
@@ -2580,7 +2743,7 @@
                                 <div class="mision-info">
                                     <span class="mision-icon">🌟</span>
                                     <div class="mision-texto">
-                                        <strong>Misión 2:</strong> Encestar 7 veces
+                                        <strong>Misión 2:</strong> Ganar 7 partidas
                                         <div class="mision-progreso">Progreso: <span id="mision2Progreso">0</span>/7</div>
                                     </div>
                                 </div>
@@ -2592,7 +2755,7 @@
                                 <div class="mision-info">
                                     <span class="mision-icon">🏆</span>
                                     <div class="mision-texto">
-                                        <strong>Misión 3:</strong> Encestar 15 veces
+                                        <strong>Misión 3:</strong> Ganar 15 partidas
                                         <div class="mision-progreso">Progreso: <span id="mision3Progreso">0</span>/15</div>
                                     </div>
                                 </div>
@@ -2604,7 +2767,7 @@
                                 <div class="mision-info">
                                     <span class="mision-icon">👑</span>
                                     <div class="mision-texto">
-                                        <strong>Misión 4:</strong> Encestar 30 veces
+                                        <strong>Misión 4:</strong> Ganar 30 partidas
                                         <div class="mision-progreso">Progreso: <span id="mision4Progreso">0</span>/30</div>
                                     </div>
                                 </div>
@@ -2616,7 +2779,7 @@
                                 <div class="mision-info">
                                     <span class="mision-icon">💎</span>
                                     <div class="mision-texto">
-                                        <strong>Misión 5:</strong> Encestar 50 veces
+                                        <strong>Misión 5:</strong> Ganar 50 partidas
                                         <div class="mision-progreso">Progreso: <span id="mision5Progreso">0</span>/50</div>
                                     </div>
                                 </div>
@@ -2625,37 +2788,39 @@
                             </div>
                         </div>
 
-                        <div class="juego-recompensas">
-                            <div class="recompensa-box">🏀 Encestes: <span id="totalEncestes">0</span></div>
-                            <div class="recompensa-box">📊 Tiros: <span id="totalTiros">0</span></div>
-                            <div class="recompensa-box">🎯 Precisión: <span id="precisionTiros">0%</span></div>
+                        <div class="juego-stats">
+                            <div class="stat-box">🏆 Victorias: <span id="statVictorias">0</span></div>
+                            <div class="stat-box">📊 Derrotas: <span id="statDerrotas">0</span></div>
+                            <div class="stat-box">🤝 Empates: <span id="statEmpates">0</span></div>
+                            <div class="stat-box">🎯 Total: <span id="statTotal">0</span></div>
                         </div>
 
-                        <div style="margin-top:14px;padding:12px;background:var(--bg-result);border-radius:10px;border:1px solid var(--border-color);">
+                        <!-- CONFIGURACIÓN DE RECOMPENSAS (SOLO ADMIN) -->
+                        <div style="margin-top:14px;padding:12px;background:var(--bg-result);border-radius:10px;border:1px solid var(--border-color);" id="configRecompensas">
                             <div style="color:var(--texto-secundario);font-size:0.7rem;font-weight:600;margin-bottom:6px;">⚙️ CONFIGURAR RECOMPENSAS POR MISIÓN (SOLO ADMIN)</div>
                             <div class="flex-row">
                                 <div class="form-group">
-                                    <label>Misión 1 (3 encestes) - Créditos</label>
+                                    <label>Misión 1 (3 victorias) - Créditos</label>
                                     <input type="number" id="recompensaMision1" value="2" min="0" style="width:100%;">
                                 </div>
                                 <div class="form-group">
-                                    <label>Misión 2 (7 encestes) - Créditos</label>
+                                    <label>Misión 2 (7 victorias) - Créditos</label>
                                     <input type="number" id="recompensaMision2" value="5" min="0" style="width:100%;">
                                 </div>
                             </div>
                             <div class="flex-row">
                                 <div class="form-group">
-                                    <label>Misión 3 (15 encestes) - Créditos</label>
+                                    <label>Misión 3 (15 victorias) - Créditos</label>
                                     <input type="number" id="recompensaMision3" value="12" min="0" style="width:100%;">
                                 </div>
                                 <div class="form-group">
-                                    <label>Misión 4 (30 encestes) - Créditos</label>
+                                    <label>Misión 4 (30 victorias) - Créditos</label>
                                     <input type="number" id="recompensaMision4" value="25" min="0" style="width:100%;">
                                 </div>
                             </div>
                             <div class="flex-row">
                                 <div class="form-group">
-                                    <label>Misión 5 (50 encestes) - Créditos</label>
+                                    <label>Misión 5 (50 victorias) - Créditos</label>
                                     <input type="number" id="recompensaMision5" value="50" min="0" style="width:100%;">
                                 </div>
                                 <div class="form-group">
@@ -2795,11 +2960,11 @@
         let salaCodigo = null;
 
         // Juego
-        let totalEncestes = 0;
-        let totalTiros = 0;
+        let totalVictorias = 0;
+        let totalDerrotas = 0;
+        let totalEmpates = 0;
         let misionesCompletadas = [false, false, false, false, false];
         let misionProgreso = [0, 0, 0, 0, 0];
-        let juegoPuntos = 0;
 
         let recompensas = {
             mision1: 2,
@@ -2902,11 +3067,11 @@
             mensajeRespondiendo = null;
             mensajeRespondiendoSala = null;
 
-            totalEncestes = 0;
-            totalTiros = 0;
+            totalVictorias = 0;
+            totalDerrotas = 0;
+            totalEmpates = 0;
             misionesCompletadas = [false, false, false, false, false];
             misionProgreso = [0, 0, 0, 0, 0];
-            juegoPuntos = 0;
 
             document.getElementById('salaPrivadaCard').style.display = 'none';
 
@@ -2955,14 +3120,19 @@
             document.getElementById('notaStatusFooter').textContent = 'Nota sin guardar';
             document.getElementById('notaStatsBox').classList.remove('show');
 
-            document.getElementById('totalEncestes').textContent = '0';
-            document.getElementById('totalTiros').textContent = '0';
-            document.getElementById('precisionTiros').textContent = '0%';
-            document.getElementById('juegoPuntosTotal').textContent = '0';
-            document.getElementById('canchaResultado').textContent = '--';
-            document.getElementById('canchaEmojis').textContent = '🏀';
-            document.getElementById('canchaMensaje').textContent = '¡Tira al aro!';
-            document.getElementById('btnLanzar').disabled = false;
+            // Resetear juego
+            document.getElementById('jugadorEmoji').textContent = '🤚';
+            document.getElementById('cpuEmoji').textContent = '🤖';
+            document.getElementById('juegoResultado').textContent = '🎯 Elige una opción';
+            document.getElementById('juegoResultado').className = 'juego-resultado';
+            document.getElementById('juegoVictorias').textContent = '0';
+            document.getElementById('statVictorias').textContent = '0';
+            document.getElementById('statDerrotas').textContent = '0';
+            document.getElementById('statEmpates').textContent = '0';
+            document.getElementById('statTotal').textContent = '0';
+            document.getElementById('btnPiedra').disabled = false;
+            document.getElementById('btnPapel').disabled = false;
+            document.getElementById('btnTijera').disabled = false;
 
             for (let i = 1; i <= 5; i++) {
                 document.getElementById(`mision${i}Progreso`).textContent = '0';
@@ -3016,6 +3186,38 @@
             document.getElementById('pasarelaLiveLabel').textContent = label;
             document.getElementById('pasarelaMasivoLabel').textContent = label;
             mostrarNotificacion(`💳 Pasarela: ${label}`, 'info');
+        }
+
+        // ================================================================
+        // MODAL DE CRÉDITOS INSUFICIENTES
+        // ================================================================
+        function mostrarModalCreditos() {
+            document.getElementById('modalCreditos').classList.add('show');
+        }
+
+        function cerrarModalCreditos() {
+            document.getElementById('modalCreditos').classList.remove('show');
+        }
+
+        function irWhatsAppAdmin() {
+            const numero = '593990434546';
+            const usuario = currentUser ? currentUser.email : 'Usuario';
+            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos porque se me acabaron. ¿Me puedes recargar? ¡Gracias!`;
+            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+            cerrarModalCreditos();
+        }
+
+        function irAlJuego() {
+            cerrarModalCreditos();
+            switchTab('juego');
+            mostrarNotificacion('🎮 ¡Ve al juego y gana créditos!', 'success');
+        }
+
+        function verificarCreditos(cantidadNecesaria) {
+            if (esOwner) return true;
+            if (currentCredits >= cantidadNecesaria) return true;
+            mostrarModalCreditos();
+            return false;
         }
 
         // ================================================================
@@ -3140,12 +3342,17 @@
                             <span class="user-status active">✅ Activo</span>
                         `;
 
+            // Mostrar tabs según rol
             if (elRol === "Owner") {
                 document.getElementById('tabAdminBtn').style.display = 'block';
+                document.getElementById('tabJuegoBtn').style.display = 'none'; // Admin NO ve el juego
                 escucharUsuarios();
                 cargarPromo();
+                document.getElementById('configRecompensas').style.display = 'block'; // Admin ve configuración
             } else {
                 document.getElementById('tabAdminBtn').style.display = 'none';
+                document.getElementById('tabJuegoBtn').style.display = 'block'; // Usuario ve el juego
+                document.getElementById('configRecompensas').style.display = 'none'; // Usuario NO ve configuración
             }
 
             if (esOwner) {
@@ -3237,7 +3444,7 @@
                 return false;
             }
             if (currentCredits < cantidad) {
-                mostrarNotificacion(`❌ Necesitas ${cantidad} créditos. Tienes ${currentCredits}`, 'error');
+                mostrarModalCreditos();
                 return false;
             }
             currentCredits -= cantidad;
@@ -5459,56 +5666,83 @@
         });
 
         // ================================================================
-        // JUEGO DE BALONCESTO
+        // JUEGO - PIEDRA, PAPEL O TIJERA
         // ================================================================
 
-        function lanzarBalon() {
-            const btn = document.getElementById('btnLanzar');
-            btn.disabled = true;
-            btn.textContent = '⏳ Lanzando...';
+        function jugar(opcionJugador) {
+            // Deshabilitar botones durante la jugada
+            document.getElementById('btnPiedra').disabled = true;
+            document.getElementById('btnPapel').disabled = true;
+            document.getElementById('btnTijera').disabled = true;
+
+            // Animación
+            document.getElementById('jugadorEmoji').textContent = '⏳';
 
             setTimeout(() => {
-                const esCanasta = Math.random() < 0.35;
-                totalTiros++;
+                const opciones = ['piedra', 'papel', 'tijera'];
+                const emojis = { piedra: '🪨', papel: '📄', tijera: '✂️' };
+                const opcionCPU = opciones[Math.floor(Math.random() * opciones.length)];
 
-                if (esCanasta) {
-                    totalEncestes++;
-                    document.getElementById('canchaEmojis').textContent = '🏀🔥🎉';
-                    document.getElementById('canchaResultado').textContent = '✅ ¡CANASTA!';
-                    document.getElementById('canchaMensaje').textContent = '🎯 ¡Excelente tiro! +1 punto';
-                    juegoPuntos++;
-                    mostrarNotificacion('🏀 ¡Canasta! +1 punto', 'success');
-                    if (navigator.vibrate) navigator.vibrate(50);
+                // Mostrar elecciones
+                document.getElementById('jugadorEmoji').textContent = emojis[opcionJugador];
+                document.getElementById('cpuEmoji').textContent = emojis[opcionCPU];
+
+                // Determinar resultado
+                let resultado = '';
+                let resultadoClass = '';
+
+                if (opcionJugador === opcionCPU) {
+                    resultado = '🤝 ¡Empate!';
+                    resultadoClass = 'empate';
+                    totalEmpates++;
+                } else if (
+                    (opcionJugador === 'piedra' && opcionCPU === 'tijera') ||
+                    (opcionJugador === 'papel' && opcionCPU === 'piedra') ||
+                    (opcionJugador === 'tijera' && opcionCPU === 'papel')
+                ) {
+                    resultado = '🎉 ¡Ganaste! +1 punto';
+                    resultadoClass = 'ganaste';
+                    totalVictorias++;
+                    // Recompensa inmediata: +1 crédito por victoria
+                    if (!esOwner) {
+                        currentCredits += 1;
+                        guardarDatosUsuario();
+                        actualizarDisplayDatos();
+                        mostrarNotificacion('💎 +1 crédito por ganar', 'success');
+                    }
                 } else {
-                    document.getElementById('canchaEmojis').textContent = '🏀❌😅';
-                    document.getElementById('canchaResultado').textContent = '❌ Fallaste';
-                    document.getElementById('canchaMensaje').textContent = '😅 ¡Sigue intentando!';
-                    if (navigator.vibrate) navigator.vibrate([30, 30, 30]);
+                    resultado = '😅 Perdiste';
+                    resultadoClass = 'perdiste';
+                    totalDerrotas++;
                 }
 
-                document.getElementById('totalEncestes').textContent = totalEncestes;
-                document.getElementById('totalTiros').textContent = totalTiros;
-                const precision = totalTiros > 0 ? Math.round((totalEncestes / totalTiros) * 100) : 0;
-                document.getElementById('precisionTiros').textContent = precision + '%';
-                document.getElementById('juegoPuntosTotal').textContent = juegoPuntos;
+                // Mostrar resultado
+                const resultadoDiv = document.getElementById('juegoResultado');
+                resultadoDiv.textContent = resultado;
+                resultadoDiv.className = `juego-resultado ${resultadoClass}`;
 
-                verificarMisiones();
+                // Actualizar estadísticas
+                document.getElementById('juegoVictorias').textContent = totalVictorias;
+                document.getElementById('statVictorias').textContent = totalVictorias;
+                document.getElementById('statDerrotas').textContent = totalDerrotas;
+                document.getElementById('statEmpates').textContent = totalEmpates;
+                document.getElementById('statTotal').textContent = totalVictorias + totalDerrotas + totalEmpates;
 
-                btn.disabled = false;
-                btn.textContent = '🏀 LANZAR';
+                // Actualizar créditos
+                document.getElementById('creditsBalance').textContent = esOwner ? '∞' : currentCredits;
 
-                setTimeout(() => {
-                    if (!btn.disabled) {
-                        document.getElementById('canchaEmojis').textContent = '🏀';
-                        document.getElementById('canchaResultado').textContent = '--';
-                        document.getElementById('canchaMensaje').textContent = '¡Tira al aro!';
-                    }
-                }, 2000);
+                // Verificar misiones
+                verificarMisionesJuego();
 
-            }, 800 + Math.random() * 600);
+                // Rehabilitar botones
+                document.getElementById('btnPiedra').disabled = false;
+                document.getElementById('btnPapel').disabled = false;
+                document.getElementById('btnTijera').disabled = false;
+
+            }, 500);
         }
 
-        function verificarMisiones() {
+        function verificarMisionesJuego() {
             const misiones = [
                 { id: 1, meta: 3, recompensa: recompensas.mision1, tipo: 'creditos' },
                 { id: 2, meta: 7, recompensa: recompensas.mision2, tipo: 'creditos' },
@@ -5520,7 +5754,7 @@
             misiones.forEach(mision => {
                 const idx = mision.id - 1;
                 if (!misionesCompletadas[idx]) {
-                    const progreso = Math.min(totalEncestes, mision.meta);
+                    const progreso = Math.min(totalVictorias, mision.meta);
                     misionProgreso[idx] = progreso;
                     document.getElementById(`mision${mision.id}Progreso`).textContent = progreso;
 
@@ -5531,7 +5765,7 @@
                         document.getElementById(`mision${mision.id}`).classList.add('completada');
 
                         let recompensa = mision.recompensa;
-                        let descripcion = `🏀 Misión ${mision.id} completada: ${recompensa} créditos`;
+                        let descripcion = `🎮 Misión ${mision.id} completada: ${recompensa} créditos`;
 
                         if (mision.id === 4) {
                             const diasExtra = recompensas.diasExtra;
@@ -5577,17 +5811,17 @@
                 const snap = await db.ref(`juego/${currentUser.uid}`).once('value');
                 if (snap.exists()) {
                     const data = snap.val();
-                    totalEncestes = data.totalEncestes || 0;
-                    totalTiros = data.totalTiros || 0;
-                    juegoPuntos = data.juegoPuntos || 0;
+                    totalVictorias = data.totalVictorias || 0;
+                    totalDerrotas = data.totalDerrotas || 0;
+                    totalEmpates = data.totalEmpates || 0;
                     misionesCompletadas = data.misionesCompletadas || [false, false, false, false, false];
                     misionProgreso = data.misionProgreso || [0, 0, 0, 0, 0];
 
-                    document.getElementById('totalEncestes').textContent = totalEncestes;
-                    document.getElementById('totalTiros').textContent = totalTiros;
-                    const precision = totalTiros > 0 ? Math.round((totalEncestes / totalTiros) * 100) : 0;
-                    document.getElementById('precisionTiros').textContent = precision + '%';
-                    document.getElementById('juegoPuntosTotal').textContent = juegoPuntos;
+                    document.getElementById('juegoVictorias').textContent = totalVictorias;
+                    document.getElementById('statVictorias').textContent = totalVictorias;
+                    document.getElementById('statDerrotas').textContent = totalDerrotas;
+                    document.getElementById('statEmpates').textContent = totalEmpates;
+                    document.getElementById('statTotal').textContent = totalVictorias + totalDerrotas + totalEmpates;
 
                     for (let i = 1; i <= 5; i++) {
                         const idx = i - 1;
@@ -5608,9 +5842,9 @@
         function guardarProgresoJuego() {
             if (!currentUser) return;
             db.ref(`juego/${currentUser.uid}`).set({
-                totalEncestes: totalEncestes,
-                totalTiros: totalTiros,
-                juegoPuntos: juegoPuntos,
+                totalVictorias: totalVictorias,
+                totalDerrotas: totalDerrotas,
+                totalEmpates: totalEmpates,
                 misionesCompletadas: misionesCompletadas,
                 misionProgreso: misionProgreso,
                 updated: Date.now()
@@ -5777,10 +6011,11 @@
         // INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA CON JUEGO MEJORADO');
         console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
-        console.log('👑 Owner: créditos y días infinitos');
+        console.log('👑 Owner: créditos y días infinitos (NO ve el juego)');
+        console.log('🎮 Usuarios normales: ven el juego y pueden ganar créditos');
         console.log('❌ Usa X como comodín al generar tarjetas');
         console.log('🌓 Botón para cambiar entre día y noche (MEJORADO)');
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
@@ -5788,8 +6023,9 @@
         console.log('🔄 Cada tarjeta genera su propia fecha ALEATORIA (MEZCLADA)');
         console.log('💬 CHAT TIPO WHATSAPP: Responder mensajes | Etiquetar | Imágenes | Stickers');
         console.log('📝 NOTAS PROFESIONALES: Guardado automático | Estadísticas | Exportar | Copiar');
-        console.log('🏀 JUEGO DE BALONCESTO: 5 misiones con recompensas configurables');
+        console.log('🎮 JUEGO: Piedra, Papel o Tijera - +1 crédito por victoria + misiones');
         console.log('💳 PASARELAS: Stripe, Zuora, Auth, Braintree, CCN, CVV, Braintree Auth');
+        console.log('📱 Modal de créditos insuficientes: WhatsApp Admin o Jugar');
 
         cargarPromo();
         seleccionarPasarela('stripe');
