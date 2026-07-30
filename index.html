@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON CHAT TIPO WHATSAPP Y NOTAS       */
+        /* ESTILOS - VERSIÓN FINAL CON TEMA MEJORADO Y JUEGO            */
         /* ============================================================== */
 
         * {
@@ -17,11 +17,12 @@
         }
 
         :root {
+            /* === TEMA OSCURO (MEJORADO) === */
             --bg-principal: #0a1628;
             --bg-tarjeta: #0f1f3a;
             --bg-inputs: #1a2a4a;
-            --texto-principal: #d4e4ff;
-            --texto-secundario: #88bbff;
+            --texto-principal: #e8f0ff;
+            --texto-secundario: #8ab4ff;
             --borde-neon: #00ccff;
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a3a, #050d1a);
             --border-radius: 10px;
@@ -31,7 +32,7 @@
             --bg-panel: rgba(10, 22, 40, 0.92);
             --bg-card: rgba(15, 31, 58, 0.85);
             --bg-result: rgba(0, 0, 0, 0.3);
-            --text-muted: #6688aa;
+            --text-muted: #6a8aaa;
             --sombra: 0 0 30px rgba(0, 180, 255, 0.1);
             --border-color: #1a4a7a;
             --input-bg: #1a2a4a;
@@ -39,14 +40,18 @@
             --mention-color: #00ff88;
             --nota-bg: rgba(15, 31, 58, 0.6);
             --nota-border: #00ccff;
+            --card-bg: rgba(15, 31, 58, 0.7);
+            --hover-bg: rgba(0, 100, 200, 0.15);
+            --text-bright: #ffffff;
         }
 
         body.theme-day {
+            /* === TEMA CLARO (CORREGIDO - SE VEN TODOS LOS NÚMEROS) === */
             --bg-principal: #e8f0fe;
             --bg-tarjeta: #d4e4f7;
             --bg-inputs: #ffffff;
-            --texto-principal: #1a2a4a;
-            --texto-secundario: #2a4a7a;
+            --texto-principal: #0a1a3a;
+            --texto-secundario: #1a4a7a;
             --borde-neon: #0088cc;
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #d4e4f7, #b8cce6);
             --bg-auth: rgba(200, 220, 245, 0.95);
@@ -64,8 +69,12 @@
             --mention-color: #00aa66;
             --nota-bg: rgba(200, 220, 245, 0.6);
             --nota-border: #0088cc;
+            --card-bg: rgba(200, 220, 245, 0.7);
+            --hover-bg: rgba(0, 100, 200, 0.08);
+            --text-bright: #0a1a3a;
         }
 
+        /* ===== ESTILOS BASE ===== */
         html,
         body {
             width: 100%;
@@ -169,6 +178,7 @@
         .auth-panel.active {
             display: block;
         }
+
         .auth-box .form-group {
             margin-bottom: 12px;
         }
@@ -235,16 +245,6 @@
         }
         .auth-box .register-info strong {
             color: #00ff88;
-        }
-
-        /* ============================================================== */
-        /* ===== APLICACIÓN PRINCIPAL ===== */
-        /* ============================================================== */
-        #main-app {
-            display: none;
-            flex-direction: column;
-            height: 100%;
-            width: 100%;
         }
 
         /* ===== NAVBAR ===== */
@@ -473,6 +473,15 @@
             border-bottom-color: #ff44aa;
             background: rgba(255, 68, 170, 0.08);
         }
+        .tab-btn.juego-tab {
+            color: #ff6b35;
+            font-weight: 700;
+        }
+        .tab-btn.juego-tab.active {
+            color: #ff6b35;
+            border-bottom-color: #ff6b35;
+            background: rgba(255, 107, 53, 0.08);
+        }
 
         /* ===== PANELES ===== */
         .panels-container {
@@ -500,6 +509,7 @@
         .panel.active {
             display: block;
         }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -510,6 +520,7 @@
                 transform: translateY(0);
             }
         }
+
         .panel h3 {
             color: #66ddff;
             font-size: 1rem;
@@ -569,6 +580,10 @@
         .item-card .info-box.sala {
             border-color: #ff44aa;
             background: #ff44aa06;
+        }
+        .item-card .info-box.juego {
+            border-color: #ff6b35;
+            background: #ff6b3506;
         }
 
         /* ===== FORMULARIOS ===== */
@@ -683,6 +698,11 @@
             background: linear-gradient(135deg, #ff88cc, #cc5599);
             box-shadow: 0 0 20px rgba(255, 136, 204, 0.15);
         }
+        .btn-block.btn-juego {
+            background: linear-gradient(135deg, #ff6b35, #cc4400);
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.15);
+            animation: pulse-juego 2s ease-in-out infinite;
+        }
 
         @keyframes pulse-live {
             0%,
@@ -709,6 +729,15 @@
             }
             50% {
                 box-shadow: 0 0 30px rgba(255, 68, 170, 0.35);
+            }
+        }
+        @keyframes pulse-juego {
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(255, 107, 53, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(255, 107, 53, 0.35);
             }
         }
 
@@ -774,10 +803,10 @@
             font-size: 0.5rem;
         }
 
-        /* ===== PASARELA CARDS ===== */
+        /* ===== PASARELA CARDS (ACTUALIZADO CON NUEVAS PASARELAS) ===== */
         .pasarela-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
             gap: 10px;
             margin-top: 6px;
         }
@@ -1579,7 +1608,194 @@
             color: #ff88cc;
         }
 
+        /* ============================================================== */
+        /* ===== JUEGO DE BALONCESTO POR MISIONES ===== */
+        /* ============================================================== */
+        .juego-container {
+            background: var(--card-bg);
+            border: 2px solid #ff6b35;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 8px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .juego-container .juego-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        .juego-container .juego-header .juego-titulo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #ff6b35;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .juego-container .juego-header .juego-titulo span {
+            font-size: 1.5rem;
+        }
+        .juego-container .juego-header .juego-puntos {
+            background: var(--bg-result);
+            padding: 4px 14px;
+            border-radius: 20px;
+            border: 1px solid #ff6b35;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--texto-principal);
+        }
+        .juego-container .juego-header .juego-puntos span {
+            color: #ff6b35;
+        }
+
+        .juego-container .juego-cancha {
+            background: var(--bg-result);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            min-height: 180px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+            position: relative;
+        }
+        .juego-container .juego-cancha .cancha-texto {
+            font-size: 0.9rem;
+            color: var(--texto-secundario);
+            margin-bottom: 10px;
+        }
+        .juego-container .juego-cancha .cancha-emojis {
+            font-size: 3.5rem;
+            margin-bottom: 8px;
+            letter-spacing: 8px;
+        }
+        .juego-container .juego-cancha .cancha-resultado {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ff6b35;
+        }
+        .juego-container .juego-cancha .cancha-mensaje {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+        .juego-container .juego-cancha .cancha-boton {
+            margin-top: 12px;
+            padding: 8px 28px;
+            border: none;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.15s;
+            background: linear-gradient(135deg, #ff6b35, #cc4400);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 107, 53, 0.2);
+        }
+        .juego-container .juego-cancha .cancha-boton:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 35px rgba(255, 107, 53, 0.35);
+        }
+        .juego-container .juego-cancha .cancha-boton:active {
+            transform: scale(0.97);
+        }
+        .juego-container .juego-cancha .cancha-boton:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .juego-container .juego-misiones {
+            margin-top: 14px;
+        }
+        .juego-container .juego-misiones .mision-item {
+            background: var(--bg-result);
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            border: 1px solid var(--border-color);
+            transition: 0.2s;
+        }
+        .juego-container .juego-misiones .mision-item.completada {
+            border-color: #00ff88;
+            background: rgba(0, 255, 136, 0.05);
+        }
+        .juego-container .juego-misiones .mision-item .mision-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .juego-container .juego-misiones .mision-item .mision-info .mision-icon {
+            font-size: 1.2rem;
+        }
+        .juego-container .juego-misiones .mision-item .mision-info .mision-texto {
+            font-size: 0.75rem;
+            color: var(--texto-principal);
+        }
+        .juego-container .juego-misiones .mision-item .mision-info .mision-texto .mision-progreso {
+            color: var(--text-muted);
+            font-size: 0.65rem;
+        }
+        .juego-container .juego-misiones .mision-item .mision-recompensa {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #ffd700;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 2px 10px;
+            border-radius: 12px;
+            border: 1px solid #ffd70033;
+        }
+        .juego-container .juego-misiones .mision-item .mision-estado {
+            font-size: 0.55rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .juego-container .juego-misiones .mision-item .mision-estado.pendiente {
+            background: #ffaa4433;
+            color: #ffaa44;
+        }
+        .juego-container .juego-misiones .mision-item .mision-estado.completada {
+            background: #00ff8833;
+            color: #00ff88;
+        }
+
+        .juego-container .juego-recompensas {
+            margin-top: 12px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .juego-container .juego-recompensas .recompensa-box {
+            background: var(--bg-result);
+            border-radius: 10px;
+            padding: 6px 14px;
+            border: 1px solid var(--border-color);
+            font-size: 0.65rem;
+            color: var(--texto-secundario);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .juego-container .juego-recompensas .recompensa-box span {
+            font-weight: 700;
+            color: #ffd700;
+        }
+
+        /* ============================================================== */
         /* ===== SALA PRIVADA ===== */
+        /* ============================================================== */
         .sala-card {
             background: var(--bg-result);
             border: 2px solid #ff44aa;
@@ -1662,7 +1878,7 @@
                 font-size: 1.3rem;
             }
             .pasarela-grid {
-                grid-template-columns: 1fr 1fr;
+                grid-template-columns: 1fr 1fr 1fr;
             }
             .chat-messages {
                 height: 250px;
@@ -1776,7 +1992,7 @@
                 padding: 8px 14px;
             }
             .pasarela-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: 1fr 1fr;
             }
             .chat-messages {
                 height: 200px;
@@ -1811,6 +2027,12 @@
             }
             .nota-container .nota-header .nota-info {
                 font-size: 0.55rem;
+            }
+            .juego-container .juego-cancha .cancha-emojis {
+                font-size: 2.5rem;
+            }
+            .juego-container .juego-cancha .cancha-resultado {
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -1908,6 +2130,7 @@
                 <button class="tab-btn chat-tab" onclick="switchTab('chat')">💬 CHAT</button>
                 <button class="tab-btn sala-tab" onclick="switchTab('sala')">🔒 SALA PRIVADA</button>
                 <button class="tab-btn notas-tab" onclick="switchTab('notas')">📝 NOTAS</button>
+                <button class="tab-btn juego-tab" onclick="switchTab('juego')">🏀 JUEGO</button>
                 <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
@@ -2037,14 +2260,14 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: PASARELA ===== -->
+                <!-- ===== PANEL: PASARELA (CON NUEVAS PASARELAS) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-pasarela" class="panel">
                     <h3>💳 PASARELA DE PAGO</h3>
                     <div class="item-card">
                         <div class="info-box pasarela">
                             ⚡ <strong>Selecciona la pasarela para las verificaciones LIVE</strong>
-                            <br> 💳 Stripe | 📊 Zuora | 🔐 Auth
+                            <br> 💳 Stripe | 📊 Zuora | 🔐 Auth | 🌐 Braintree | 🛡️ CCN | 🔑 CVV | 🏦 Braintree Auth
                         </div>
                         <div class="pasarela-grid">
                             <div class="pasarela-card active" id="pasarela-stripe" onclick="seleccionarPasarela('stripe')">
@@ -2060,6 +2283,26 @@
                             <div class="pasarela-card" id="pasarela-auth" onclick="seleccionarPasarela('auth')">
                                 <span class="icon">🔐</span>
                                 <div class="name">Auth</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                            <div class="pasarela-card" id="pasarela-braintree" onclick="seleccionarPasarela('braintree')">
+                                <span class="icon">🌐</span>
+                                <div class="name">Braintree</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                            <div class="pasarela-card" id="pasarela-ccn" onclick="seleccionarPasarela('ccn')">
+                                <span class="icon">🛡️</span>
+                                <div class="name">CCN</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                            <div class="pasarela-card" id="pasarela-cvv" onclick="seleccionarPasarela('cvv')">
+                                <span class="icon">🔑</span>
+                                <div class="name">CVV</div>
+                                <div class="status active">✅ Activa</div>
+                            </div>
+                            <div class="pasarela-card" id="pasarela-braintreeauth" onclick="seleccionarPasarela('braintreeauth')">
+                                <span class="icon">🏦</span>
+                                <div class="name">Braintree Auth</div>
                                 <div class="status active">✅ Activa</div>
                             </div>
                         </div>
@@ -2103,7 +2346,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: CHAT EN VIVO (TIPO WHATSAPP) ===== -->
+                <!-- ===== PANEL: CHAT EN VIVO ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-chat" class="panel">
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
@@ -2236,7 +2479,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: NOTAS (PROFESIONAL) ===== -->
+                <!-- ===== PANEL: NOTAS ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-notas" class="panel">
                     <h3>📝 BLOG DE NOTAS <span class="info-badge free-tag">GRATIS</span></h3>
@@ -2288,6 +2531,139 @@
                                 <span id="notaStatusFooter">Nota guardada automáticamente</span>
                             </span>
                             <span id="notaUltimaActualizacion">🔄 Última actualización: --</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: JUEGO DE BALONCESTO POR MISIONES ===== -->
+                <!-- ========================================================== -->
+                <div id="panel-juego" class="panel">
+                    <h3>🏀 JUEGO DE MISIONES <span class="info-badge" style="background:#ff6b35;color:#fff;">GANAR CRÉDITOS</span></h3>
+
+                    <div class="juego-container">
+                        <div class="juego-header">
+                            <div class="juego-titulo">
+                                <span>🏀</span> Baloncesto Pro
+                            </div>
+                            <div class="juego-puntos">
+                                🏆 Puntos: <span id="juegoPuntosTotal">0</span>
+                            </div>
+                        </div>
+
+                        <!-- CANCHA DE JUEGO -->
+                        <div class="juego-cancha" id="juegoCancha">
+                            <div class="cancha-texto" id="canchaTexto">🎯 Haz clic en el botón para lanzar</div>
+                            <div class="cancha-emojis" id="canchaEmojis">🏀</div>
+                            <div class="cancha-resultado" id="canchaResultado">--</div>
+                            <div class="cancha-mensaje" id="canchaMensaje">¡Tira al aro!</div>
+                            <button class="cancha-boton" id="btnLanzar" onclick="lanzarBalon()">🏀 LANZAR</button>
+                        </div>
+
+                        <!-- MISIONES -->
+                        <div class="juego-misiones" id="juegoMisiones">
+                            <div class="mision-item" id="mision1">
+                                <div class="mision-info">
+                                    <span class="mision-icon">🎯</span>
+                                    <div class="mision-texto">
+                                        <strong>Misión 1:</strong> Encestar 3 veces
+                                        <div class="mision-progreso">Progreso: <span id="mision1Progreso">0</span>/3</div>
+                                    </div>
+                                </div>
+                                <div class="mision-recompensa" id="mision1Recompensa">+2 créditos</div>
+                                <span class="mision-estado pendiente" id="mision1Estado">⏳ Pendiente</span>
+                            </div>
+
+                            <div class="mision-item" id="mision2">
+                                <div class="mision-info">
+                                    <span class="mision-icon">🌟</span>
+                                    <div class="mision-texto">
+                                        <strong>Misión 2:</strong> Encestar 7 veces
+                                        <div class="mision-progreso">Progreso: <span id="mision2Progreso">0</span>/7</div>
+                                    </div>
+                                </div>
+                                <div class="mision-recompensa" id="mision2Recompensa">+5 créditos</div>
+                                <span class="mision-estado pendiente" id="mision2Estado">⏳ Pendiente</span>
+                            </div>
+
+                            <div class="mision-item" id="mision3">
+                                <div class="mision-info">
+                                    <span class="mision-icon">🏆</span>
+                                    <div class="mision-texto">
+                                        <strong>Misión 3:</strong> Encestar 15 veces
+                                        <div class="mision-progreso">Progreso: <span id="mision3Progreso">0</span>/15</div>
+                                    </div>
+                                </div>
+                                <div class="mision-recompensa" id="mision3Recompensa">+12 créditos</div>
+                                <span class="mision-estado pendiente" id="mision3Estado">⏳ Pendiente</span>
+                            </div>
+
+                            <div class="mision-item" id="mision4">
+                                <div class="mision-info">
+                                    <span class="mision-icon">👑</span>
+                                    <div class="mision-texto">
+                                        <strong>Misión 4:</strong> Encestar 30 veces
+                                        <div class="mision-progreso">Progreso: <span id="mision4Progreso">0</span>/30</div>
+                                    </div>
+                                </div>
+                                <div class="mision-recompensa" id="mision4Recompensa">+25 créditos + 3 días</div>
+                                <span class="mision-estado pendiente" id="mision4Estado">⏳ Pendiente</span>
+                            </div>
+
+                            <div class="mision-item" id="mision5">
+                                <div class="mision-info">
+                                    <span class="mision-icon">💎</span>
+                                    <div class="mision-texto">
+                                        <strong>Misión 5:</strong> Encestar 50 veces
+                                        <div class="mision-progreso">Progreso: <span id="mision5Progreso">0</span>/50</div>
+                                    </div>
+                                </div>
+                                <div class="mision-recompensa" id="mision5Recompensa">+50 créditos + 7 días</div>
+                                <span class="mision-estado pendiente" id="mision5Estado">⏳ Pendiente</span>
+                            </div>
+                        </div>
+
+                        <!-- RECOMPENSAS CONFIGURABLES -->
+                        <div class="juego-recompensas">
+                            <div class="recompensa-box">🏀 Encestes: <span id="totalEncestes">0</span></div>
+                            <div class="recompensa-box">📊 Tiros: <span id="totalTiros">0</span></div>
+                            <div class="recompensa-box">🎯 Precisión: <span id="precisionTiros">0%</span></div>
+                        </div>
+
+                        <!-- ADMIN - CONFIGURACIÓN DE RECOMPENSAS -->
+                        <div style="margin-top:14px;padding:12px;background:var(--bg-result);border-radius:10px;border:1px solid var(--border-color);">
+                            <div style="color:var(--texto-secundario);font-size:0.7rem;font-weight:600;margin-bottom:6px;">⚙️ CONFIGURAR RECOMPENSAS POR MISIÓN (SOLO ADMIN)</div>
+                            <div class="flex-row">
+                                <div class="form-group">
+                                    <label>Misión 1 (3 encestes) - Créditos</label>
+                                    <input type="number" id="recompensaMision1" value="2" min="0" style="width:100%;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Misión 2 (7 encestes) - Créditos</label>
+                                    <input type="number" id="recompensaMision2" value="5" min="0" style="width:100%;">
+                                </div>
+                            </div>
+                            <div class="flex-row">
+                                <div class="form-group">
+                                    <label>Misión 3 (15 encestes) - Créditos</label>
+                                    <input type="number" id="recompensaMision3" value="12" min="0" style="width:100%;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Misión 4 (30 encestes) - Créditos</label>
+                                    <input type="number" id="recompensaMision4" value="25" min="0" style="width:100%;">
+                                </div>
+                            </div>
+                            <div class="flex-row">
+                                <div class="form-group">
+                                    <label>Misión 5 (50 encestes) - Créditos</label>
+                                    <input type="number" id="recompensaMision5" value="50" min="0" style="width:100%;">
+                                </div>
+                                <div class="form-group">
+                                    <label>Días extra (Misión 4 y 5)</label>
+                                    <input type="number" id="recompensaDiasExtra" value="3" min="0" style="width:100%;">
+                                </div>
+                            </div>
+                            <button class="btn-block btn-warning" onclick="guardarRecompensas()" style="margin-top:4px;">💾 GUARDAR RECOMPENSAS</button>
                         </div>
                     </div>
                 </div>
@@ -2418,6 +2794,23 @@
         let salaUnsubscribe = null;
         let salaCodigo = null;
 
+        // Juego
+        let totalEncestes = 0;
+        let totalTiros = 0;
+        let misionesCompletadas = [false, false, false, false, false];
+        let misionProgreso = [0, 0, 0, 0, 0];
+        let juegoPuntos = 0;
+
+        // Recompensas configurables
+        let recompensas = {
+            mision1: 2,
+            mision2: 5,
+            mision3: 12,
+            mision4: 25,
+            mision5: 50,
+            diasExtra: 3
+        };
+
         // ================================================================
         // 4. UTILIDADES
         // ================================================================
@@ -2513,6 +2906,13 @@
             mensajeRespondiendo = null;
             mensajeRespondiendoSala = null;
 
+            // Resetear juego
+            totalEncestes = 0;
+            totalTiros = 0;
+            misionesCompletadas = [false, false, false, false, false];
+            misionProgreso = [0, 0, 0, 0, 0];
+            juegoPuntos = 0;
+
             document.getElementById('salaPrivadaCard').style.display = 'none';
 
             document.getElementById('auth-screen').style.display = 'flex';
@@ -2561,6 +2961,23 @@
             document.getElementById('notaStatusFooter').textContent = 'Nota sin guardar';
             document.getElementById('notaStatsBox').classList.remove('show');
 
+            // Resetear juego
+            document.getElementById('totalEncestes').textContent = '0';
+            document.getElementById('totalTiros').textContent = '0';
+            document.getElementById('precisionTiros').textContent = '0%';
+            document.getElementById('juegoPuntosTotal').textContent = '0';
+            document.getElementById('canchaResultado').textContent = '--';
+            document.getElementById('canchaEmojis').textContent = '🏀';
+            document.getElementById('canchaMensaje').textContent = '¡Tira al aro!';
+            document.getElementById('btnLanzar').disabled = false;
+
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById(`mision${i}Progreso`).textContent = '0';
+                document.getElementById(`mision${i}Estado`).textContent = '⏳ Pendiente';
+                document.getElementById(`mision${i}Estado`).className = 'mision-estado pendiente';
+                document.getElementById(`mision${i}`).classList.remove('completada');
+            }
+
             mostrarNotificacion('👋 Sesión cerrada correctamente', 'info');
             console.log('🔐 Sesión cerrada');
         }
@@ -2586,13 +3003,21 @@
         }
 
         // ================================================================
-        // 8. PASARELA
+        // 8. PASARELA (CON NUEVAS PASARELAS)
         // ================================================================
         function seleccionarPasarela(pasarela) {
             pasarelaSeleccionada = pasarela;
             document.querySelectorAll('.pasarela-card').forEach(c => c.classList.remove('active'));
             document.getElementById('pasarela-' + pasarela).classList.add('active');
-            const nombres = { 'stripe': 'Stripe', 'zuora': 'Zuora', 'auth': 'Auth' };
+            const nombres = {
+                'stripe': 'Stripe',
+                'zuora': 'Zuora',
+                'auth': 'Auth',
+                'braintree': 'Braintree',
+                'ccn': 'CCN',
+                'cvv': 'CVV',
+                'braintreeauth': 'Braintree Auth'
+            };
             const label = nombres[pasarela] || 'Stripe';
             document.getElementById('pasarelaSeleccionadaLabel').textContent = label;
             document.getElementById('pasarelaLiveLabel').textContent = label;
@@ -2752,6 +3177,8 @@
 
             await cargarPerfilChat();
             await cargarNota();
+            await cargarProgresoJuego();
+            await cargarRecompensas();
 
             seleccionarPasarela('stripe');
             switchTab('generator');
@@ -3284,7 +3711,7 @@
         }
 
         // ================================================================
-        // 13. VERIFICACIÓN DE TARJETAS
+        // 13. VERIFICACIÓN DE TARJETAS (CON NUEVAS PASARELAS)
         // ================================================================
         async function verificarTarjeta(number, month, year, cvv, pasarela = 'stripe') {
             await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
@@ -3302,6 +3729,7 @@
 
             const random = Math.random();
 
+            // Respuestas específicas por pasarela
             if (pasarela === 'zuora') {
                 if (random < 0.15) {
                     return {
@@ -3405,7 +3833,7 @@
                         detalles: ['Número inválido o no registrado']
                     };
                 }
-            } else {
+            } else if (pasarela === 'auth') {
                 if (random < 0.18) {
                     return {
                         estado: 'approved',
@@ -3450,6 +3878,242 @@
                         fondos: false,
                         cvv_ok: false,
                         detalles: ['Número no válido']
+                    };
+                }
+            } else if (pasarela === 'braintree') {
+                if (random < 0.16) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - Braintree: Success',
+                        codigo: '1000',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['Transacción aprobada', 'Con fondos', 'Braintree verificada']
+                    };
+                } else if (random < 0.32) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - Braintree: Insufficient funds',
+                        codigo: '1001',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['Tarjeta válida', 'Sin fondos suficientes']
+                    };
+                } else if (random < 0.48) {
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - Braintree: CVV incorrecto',
+                        codigo: '1002',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['CVV verification failed', 'Reintentar con CVV correcto']
+                    };
+                } else if (random < 0.62) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - Braintree: Card expired',
+                        codigo: '1003',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta expirada']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - Braintree: Invalid card',
+                        codigo: '1004',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número no válido']
+                    };
+                }
+            } else if (pasarela === 'ccn') {
+                if (random < 0.14) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - CCN: Success',
+                        codigo: '000',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['CCN verificada', 'Con fondos']
+                    };
+                } else if (random < 0.30) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - CCN: Insufficient funds',
+                        codigo: '001',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['Tarjeta válida', 'Sin fondos']
+                    };
+                } else if (random < 0.46) {
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - CCN: CVV incorrecto',
+                        codigo: '002',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['CVV no coincide']
+                    };
+                } else if (random < 0.60) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - CCN: Card expired',
+                        codigo: '003',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Fecha de vencimiento inválida']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - CCN: Invalid card',
+                        codigo: '004',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número no válido']
+                    };
+                }
+            } else if (pasarela === 'cvv') {
+                if (random < 0.12) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - CVV Check: Success',
+                        codigo: 'CVV00',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['CVV verificado correctamente', 'Con fondos']
+                    };
+                } else if (random < 0.28) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - CVV Check: Insufficient funds',
+                        codigo: 'CVV01',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['CVV correcto', 'Sin fondos']
+                    };
+                } else if (random < 0.44) {
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - CVV Check: CVV incorrecto',
+                        codigo: 'CVV02',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['CVV no coincide con el banco']
+                    };
+                } else if (random < 0.58) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - CVV Check: Card expired',
+                        codigo: 'CVV03',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta expirada']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - CVV Check: Invalid card',
+                        codigo: 'CVV04',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número no válido']
+                    };
+                }
+            } else if (pasarela === 'braintreeauth') {
+                if (random < 0.17) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - Braintree Auth: Success',
+                        codigo: 'AUTH00',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['Autenticación Braintree exitosa', 'Con fondos']
+                    };
+                } else if (random < 0.33) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - Braintree Auth: Insufficient funds',
+                        codigo: 'AUTH01',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['Autenticación válida', 'Sin fondos']
+                    };
+                } else if (random < 0.49) {
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - Braintree Auth: CVV incorrecto',
+                        codigo: 'AUTH02',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['CVV no coincide', 'Autenticación fallida']
+                    };
+                } else if (random < 0.63) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - Braintree Auth: Card expired',
+                        codigo: 'AUTH03',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta expirada']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - Braintree Auth: Invalid card',
+                        codigo: 'AUTH04',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número no válido']
+                    };
+                }
+            } else {
+                // Fallback
+                if (random < 0.15) {
+                    return {
+                        estado: 'approved',
+                        mensaje: '✅ APROBADA - Transacción exitosa',
+                        codigo: '00',
+                        fondos: true,
+                        cvv_ok: true,
+                        detalles: ['Autorización aprobada', 'Con fondos']
+                    };
+                } else if (random < 0.30) {
+                    return {
+                        estado: 'insufficient',
+                        mensaje: '⚠️ VÁLIDA - Fondos insuficientes',
+                        codigo: '51',
+                        fondos: false,
+                        cvv_ok: true,
+                        detalles: ['Tarjeta válida', 'Sin fondos']
+                    };
+                } else if (random < 0.45) {
+                    return {
+                        estado: 'cvv_invalid',
+                        mensaje: '🟠 VÁLIDA - CVV incorrecto',
+                        codigo: '402',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['CVV no coincide']
+                    };
+                } else if (random < 0.55) {
+                    return {
+                        estado: 'expired',
+                        mensaje: '❌ EXPIRADA - Fecha inválida',
+                        codigo: '54',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Tarjeta expirada']
+                    };
+                } else {
+                    return {
+                        estado: 'invalid',
+                        mensaje: '❌ INVÁLIDA - Tarjeta no existe',
+                        codigo: '14',
+                        fondos: false,
+                        cvv_ok: false,
+                        detalles: ['Número inválido']
                     };
                 }
             }
@@ -4609,7 +5273,7 @@
         }
 
         // ================================================================
-        // 20. NOTAS - FUNCIONES MEJORADAS
+        // 20. NOTAS - FUNCIONES
         // ================================================================
 
         let notaGuardada = false;
@@ -4766,7 +5430,6 @@
             navigator.clipboard.writeText(content).then(() => {
                 mostrarNotificacion('📋 Nota copiada al portapapeles', 'success');
             }).catch(() => {
-                // Fallback
                 const textarea = document.getElementById('notaContent');
                 textarea.select();
                 document.execCommand('copy');
@@ -4774,7 +5437,6 @@
             });
         }
 
-        // Auto-guardar cada 30 segundos
         let autoSaveInterval = null;
 
         function iniciarAutoGuardar() {
@@ -4786,7 +5448,6 @@
             }, 30000);
         }
 
-        // Detectar cambios en tiempo real
         document.addEventListener('DOMContentLoaded', function() {
             const notaTextarea = document.getElementById('notaContent');
             if (notaTextarea) {
@@ -4796,7 +5457,6 @@
                         actualizarEstadoNota(false);
                     }
                 });
-                // Ctrl+S para guardar
                 notaTextarea.addEventListener('keydown', function(e) {
                     if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                         e.preventDefault();
@@ -4808,7 +5468,248 @@
         });
 
         // ================================================================
-        // 21. NAVEGACIÓN
+        // 21. JUEGO DE BALONCESTO POR MISIONES
+        // ================================================================
+
+        function lanzarBalon() {
+            const btn = document.getElementById('btnLanzar');
+            btn.disabled = true;
+            btn.textContent = '⏳ Lanzando...';
+
+            // Simular lanzamiento
+            setTimeout(() => {
+                const esCanasta = Math.random() < 0.35; // 35% de probabilidad de encestar
+                totalTiros++;
+
+                if (esCanasta) {
+                    totalEncestes++;
+                    document.getElementById('canchaEmojis').textContent = '🏀🔥🎉';
+                    document.getElementById('canchaResultado').textContent = '✅ ¡CANASTA!';
+                    document.getElementById('canchaMensaje').textContent = '🎯 ¡Excelente tiro! +1 punto';
+                    juegoPuntos++;
+                    mostrarNotificacion('🏀 ¡Canasta! +1 punto', 'success');
+                    if (navigator.vibrate) navigator.vibrate(50);
+                } else {
+                    document.getElementById('canchaEmojis').textContent = '🏀❌😅';
+                    document.getElementById('canchaResultado').textContent = '❌ Fallaste';
+                    document.getElementById('canchaMensaje').textContent = '😅 ¡Sigue intentando!';
+                    if (navigator.vibrate) navigator.vibrate([30, 30, 30]);
+                }
+
+                // Actualizar estadísticas
+                document.getElementById('totalEncestes').textContent = totalEncestes;
+                document.getElementById('totalTiros').textContent = totalTiros;
+                const precision = totalTiros > 0 ? Math.round((totalEncestes / totalTiros) * 100) : 0;
+                document.getElementById('precisionTiros').textContent = precision + '%';
+                document.getElementById('juegoPuntosTotal').textContent = juegoPuntos;
+
+                // Verificar misiones
+                verificarMisiones();
+
+                btn.disabled = false;
+                btn.textContent = '🏀 LANZAR';
+
+                // Animación de reset
+                setTimeout(() => {
+                    if (!btn.disabled) {
+                        document.getElementById('canchaEmojis').textContent = '🏀';
+                        document.getElementById('canchaResultado').textContent = '--';
+                        document.getElementById('canchaMensaje').textContent = '¡Tira al aro!';
+                    }
+                }, 2000);
+
+            }, 800 + Math.random() * 600);
+        }
+
+        function verificarMisiones() {
+            const misiones = [
+                { id: 1, meta: 3, recompensa: recompensas.mision1, tipo: 'creditos' },
+                { id: 2, meta: 7, recompensa: recompensas.mision2, tipo: 'creditos' },
+                { id: 3, meta: 15, recompensa: recompensas.mision3, tipo: 'creditos' },
+                { id: 4, meta: 30, recompensa: recompensas.mision4, tipo: 'creditos' },
+                { id: 5, meta: 50, recompensa: recompensas.mision5, tipo: 'creditos' }
+            ];
+
+            misiones.forEach(mision => {
+                const idx = mision.id - 1;
+                if (!misionesCompletadas[idx]) {
+                    const progreso = Math.min(totalEncestes, mision.meta);
+                    misionProgreso[idx] = progreso;
+                    document.getElementById(`mision${mision.id}Progreso`).textContent = progreso;
+
+                    if (progreso >= mision.meta) {
+                        // ¡Misión completada!
+                        misionesCompletadas[idx] = true;
+                        document.getElementById(`mision${mision.id}Estado`).textContent = '✅ Completada';
+                        document.getElementById(`mision${mision.id}Estado`).className = 'mision-estado completada';
+                        document.getElementById(`mision${mision.id}`).classList.add('completada');
+
+                        // Entregar recompensa
+                        let recompensa = mision.recompensa;
+                        let descripcion = `🏀 Misión ${mision.id} completada: ${recompensa} créditos`;
+
+                        // Misión 4 y 5 también dan días extra
+                        if (mision.id === 4) {
+                            const diasExtra = recompensas.diasExtra;
+                            if (!esOwner) {
+                                currentDays += diasExtra;
+                                descripcion += ` + ${diasExtra} días`;
+                            }
+                            guardarDatosUsuario();
+                            actualizarDisplayDatos();
+                            mostrarNotificacion(`🎉 ¡Misión ${mision.id} completada! +${recompensa} créditos y +${diasExtra} días`, 'success');
+                        } else if (mision.id === 5) {
+                            const diasExtra = recompensas.diasExtra * 2 + 1; // 7 días
+                            if (!esOwner) {
+                                currentDays += diasExtra;
+                                descripcion += ` + ${diasExtra} días`;
+                            }
+                            guardarDatosUsuario();
+                            actualizarDisplayDatos();
+                            mostrarNotificacion(`🎉 ¡Misión ${mision.id} completada! +${recompensa} créditos y +${diasExtra} días`, 'success');
+                        } else {
+                            if (!esOwner) {
+                                currentCredits += recompensa;
+                            }
+                            guardarDatosUsuario();
+                            actualizarDisplayDatos();
+                            mostrarNotificacion(`🎉 ¡Misión ${mision.id} completada! +${recompensa} créditos`, 'success');
+                        }
+
+                        if (!esOwner) {
+                            registrarMovimiento('recarga', recompensa, descripcion);
+                        }
+
+                        document.getElementById('creditsBalance').textContent = esOwner ? '∞' : currentCredits;
+                        document.getElementById('daysBalance').textContent = esOwner ? '∞' : currentDays;
+                    }
+                }
+            });
+        }
+
+        async function cargarProgresoJuego() {
+            if (!currentUser) return;
+            try {
+                const snap = await db.ref(`juego/${currentUser.uid}`).once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    totalEncestes = data.totalEncestes || 0;
+                    totalTiros = data.totalTiros || 0;
+                    juegoPuntos = data.juegoPuntos || 0;
+                    misionesCompletadas = data.misionesCompletadas || [false, false, false, false, false];
+                    misionProgreso = data.misionProgreso || [0, 0, 0, 0, 0];
+
+                    document.getElementById('totalEncestes').textContent = totalEncestes;
+                    document.getElementById('totalTiros').textContent = totalTiros;
+                    const precision = totalTiros > 0 ? Math.round((totalEncestes / totalTiros) * 100) : 0;
+                    document.getElementById('precisionTiros').textContent = precision + '%';
+                    document.getElementById('juegoPuntosTotal').textContent = juegoPuntos;
+
+                    for (let i = 1; i <= 5; i++) {
+                        const idx = i - 1;
+                        document.getElementById(`mision${i}Progreso`).textContent = Math.min(misionProgreso[idx], i === 1 ? 3 :
+                            i === 2 ? 7 : i === 3 ? 15 : i === 4 ? 30 : 50);
+                        if (misionesCompletadas[idx]) {
+                            document.getElementById(`mision${i}Estado`).textContent = '✅ Completada';
+                            document.getElementById(`mision${i}Estado`).className = 'mision-estado completada';
+                            document.getElementById(`mision${i}`).classList.add('completada');
+                        }
+                    }
+                }
+            } catch (e) {
+                console.error('Error al cargar progreso del juego:', e);
+            }
+        }
+
+        function guardarProgresoJuego() {
+            if (!currentUser) return;
+            db.ref(`juego/${currentUser.uid}`).set({
+                totalEncestes: totalEncestes,
+                totalTiros: totalTiros,
+                juegoPuntos: juegoPuntos,
+                misionesCompletadas: misionesCompletadas,
+                misionProgreso: misionProgreso,
+                updated: Date.now()
+            }).catch(e => console.error('Error al guardar progreso del juego:', e));
+        }
+
+        // Guardar progreso cada 10 segundos
+        setInterval(() => {
+            if (currentUser) {
+                guardarProgresoJuego();
+            }
+        }, 10000);
+
+        // ================================================================
+        // 22. RECOMPENSAS CONFIGURABLES
+        // ================================================================
+
+        async function cargarRecompensas() {
+            try {
+                const snap = await db.ref('recompensas_juego').once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    recompensas.mision1 = data.mision1 || 2;
+                    recompensas.mision2 = data.mision2 || 5;
+                    recompensas.mision3 = data.mision3 || 12;
+                    recompensas.mision4 = data.mision4 || 25;
+                    recompensas.mision5 = data.mision5 || 50;
+                    recompensas.diasExtra = data.diasExtra || 3;
+
+                    document.getElementById('recompensaMision1').value = recompensas.mision1;
+                    document.getElementById('recompensaMision2').value = recompensas.mision2;
+                    document.getElementById('recompensaMision3').value = recompensas.mision3;
+                    document.getElementById('recompensaMision4').value = recompensas.mision4;
+                    document.getElementById('recompensaMision5').value = recompensas.mision5;
+                    document.getElementById('recompensaDiasExtra').value = recompensas.diasExtra;
+
+                    document.getElementById('mision1Recompensa').textContent = `+${recompensas.mision1} créditos`;
+                    document.getElementById('mision2Recompensa').textContent = `+${recompensas.mision2} créditos`;
+                    document.getElementById('mision3Recompensa').textContent = `+${recompensas.mision3} créditos`;
+                    document.getElementById('mision4Recompensa').textContent = `+${recompensas.mision4} créditos + ${recompensas.diasExtra} días`;
+                    document.getElementById('mision5Recompensa').textContent = `+${recompensas.mision5} créditos + ${recompensas.diasExtra * 2 + 1} días`;
+                }
+            } catch (e) {
+                console.error('Error al cargar recompensas:', e);
+            }
+        }
+
+        function guardarRecompensas() {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede configurar recompensas', 'error');
+                return;
+            }
+
+            recompensas.mision1 = parseInt(document.getElementById('recompensaMision1').value) || 2;
+            recompensas.mision2 = parseInt(document.getElementById('recompensaMision2').value) || 5;
+            recompensas.mision3 = parseInt(document.getElementById('recompensaMision3').value) || 12;
+            recompensas.mision4 = parseInt(document.getElementById('recompensaMision4').value) || 25;
+            recompensas.mision5 = parseInt(document.getElementById('recompensaMision5').value) || 50;
+            recompensas.diasExtra = parseInt(document.getElementById('recompensaDiasExtra').value) || 3;
+
+            db.ref('recompensas_juego').set({
+                mision1: recompensas.mision1,
+                mision2: recompensas.mision2,
+                mision3: recompensas.mision3,
+                mision4: recompensas.mision4,
+                mision5: recompensas.mision5,
+                diasExtra: recompensas.diasExtra
+            }).then(() => {
+                mostrarNotificacion('✅ Recompensas guardadas correctamente', 'success');
+                // Actualizar visualización
+                document.getElementById('mision1Recompensa').textContent = `+${recompensas.mision1} créditos`;
+                document.getElementById('mision2Recompensa').textContent = `+${recompensas.mision2} créditos`;
+                document.getElementById('mision3Recompensa').textContent = `+${recompensas.mision3} créditos`;
+                document.getElementById('mision4Recompensa').textContent = `+${recompensas.mision4} créditos + ${recompensas.diasExtra} días`;
+                document.getElementById('mision5Recompensa').textContent = `+${recompensas.mision5} créditos + ${recompensas.diasExtra * 2 + 1} días`;
+            }).catch(e => {
+                mostrarNotificacion('❌ Error al guardar recompensas', 'error');
+                console.error(e);
+            });
+        }
+
+        // ================================================================
+        // 23. NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
@@ -4823,6 +5724,7 @@
                 'chat': 'panel-chat',
                 'sala': 'panel-sala',
                 'notas': 'panel-notas',
+                'juego': 'panel-juego',
                 'admins': 'panel-admins',
                 'credits': 'panel-credits'
             };
@@ -4852,7 +5754,15 @@
             if (tabName === 'pasarela') {
                 document.querySelectorAll('.pasarela-card').forEach(c => c.classList.remove('active'));
                 document.getElementById('pasarela-' + pasarelaSeleccionada).classList.add('active');
-                const nombres = { 'stripe': 'Stripe', 'zuora': 'Zuora', 'auth': 'Auth' };
+                const nombres = {
+                    'stripe': 'Stripe',
+                    'zuora': 'Zuora',
+                    'auth': 'Auth',
+                    'braintree': 'Braintree',
+                    'ccn': 'CCN',
+                    'cvv': 'CVV',
+                    'braintreeauth': 'Braintree Auth'
+                };
                 document.getElementById('pasarelaSeleccionadaLabel').textContent = nombres[pasarelaSeleccionada] ||
                     'Stripe';
                 document.getElementById('pasarelaLiveLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
@@ -4875,23 +5785,29 @@
                 cargarNota();
                 actualizarStatsNota();
             }
+            if (tabName === 'juego') {
+                cargarProgresoJuego();
+                cargarRecompensas();
+            }
         }
 
         // ================================================================
-        // 22. INICIALIZACIÓN
+        // 24. INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL CON CHAT Y NOTAS MEJORADAS');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
         console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos');
         console.log('❌ Usa X como comodín al generar tarjetas');
-        console.log('🌓 Botón para cambiar entre día y noche');
+        console.log('🌓 Botón para cambiar entre día y noche (MEJORADO)');
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
         console.log('🟠 Detección de CVV INCORRECTO (invalid_cvc)');
         console.log('🔄 Cada tarjeta genera su propia fecha ALEATORIA (MEZCLADA)');
         console.log('💬 CHAT TIPO WHATSAPP: Responder mensajes | Etiquetar | Imágenes | Stickers');
         console.log('📝 NOTAS PROFESIONALES: Guardado automático | Estadísticas | Exportar | Copiar');
+        console.log('🏀 JUEGO DE BALONCESTO: 5 misiones con recompensas configurables');
+        console.log('💳 PASARELAS: Stripe, Zuora, Auth, Braintree, CCN, CVV, Braintree Auth');
 
         cargarPromo();
         seleccionarPasarela('stripe');
