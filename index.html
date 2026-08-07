@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN FINAL CON JUEGO MEJORADO                   */
+        /* ESTILOS - VERSIÓN COMPLETA CON ADMIN MEJORADO                */
         /* ============================================================== */
 
         * {
@@ -42,6 +42,8 @@
             --card-bg: rgba(15, 31, 58, 0.7);
             --hover-bg: rgba(0, 100, 200, 0.15);
             --text-bright: #ffffff;
+            --admin-btn-bg: #1a2a4a;
+            --admin-btn-hover: #2a4a6a;
         }
 
         body.theme-day {
@@ -70,6 +72,8 @@
             --card-bg: rgba(200, 220, 245, 0.7);
             --hover-bg: rgba(0, 100, 200, 0.08);
             --text-bright: #0a1a3a;
+            --admin-btn-bg: #d4e4f7;
+            --admin-btn-hover: #b8cce6;
         }
 
         html,
@@ -708,6 +712,22 @@
             box-shadow: 0 0 20px rgba(255, 107, 53, 0.15);
             animation: pulse-juego 2s ease-in-out infinite;
         }
+        .btn-block.btn-admin-danger {
+            background: linear-gradient(135deg, #ff3333, #cc0000);
+            box-shadow: 0 0 15px rgba(255, 51, 51, 0.2);
+        }
+        .btn-block.btn-admin-success {
+            background: linear-gradient(135deg, #00cc88, #008866);
+            box-shadow: 0 0 15px rgba(0, 204, 136, 0.2);
+        }
+        .btn-block.btn-admin-warning {
+            background: linear-gradient(135deg, #ffaa44, #cc8800);
+            box-shadow: 0 0 15px rgba(255, 170, 68, 0.2);
+        }
+        .btn-block.btn-admin-info {
+            background: linear-gradient(135deg, #00aaff, #0066cc);
+            box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+        }
 
         @keyframes pulse-live {
             0%,
@@ -806,6 +826,52 @@
         .btn-small.btn-whatsapp {
             background: #25D366;
             font-size: 0.5rem;
+        }
+        .btn-small.btn-admin {
+            font-size: 0.5rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .btn-small.btn-admin:hover {
+            transform: scale(1.05);
+        }
+        .btn-small.btn-admin:active {
+            transform: scale(0.95);
+        }
+        .btn-small.btn-admin.btn-admin-add {
+            background: #00cc88;
+        }
+        .btn-small.btn-admin.btn-admin-add:hover {
+            background: #00dd99;
+        }
+        .btn-small.btn-admin.btn-admin-remove {
+            background: #ff4444;
+        }
+        .btn-small.btn-admin.btn-admin-remove:hover {
+            background: #ff6666;
+        }
+        .btn-small.btn-admin.btn-admin-block {
+            background: #ff8800;
+        }
+        .btn-small.btn-admin.btn-admin-block:hover {
+            background: #ffaa44;
+        }
+        .btn-small.btn-admin.btn-admin-unblock {
+            background: #00cc88;
+        }
+        .btn-small.btn-admin.btn-admin-unblock:hover {
+            background: #00dd99;
+        }
+        .btn-small.btn-admin.btn-admin-delete {
+            background: #cc0000;
+        }
+        .btn-small.btn-admin.btn-admin-delete:hover {
+            background: #ff0000;
         }
 
         /* ===== PASARELA CARDS ===== */
@@ -1043,7 +1109,7 @@
             border-bottom: none;
         }
 
-        /* ===== USUARIOS LISTA ===== */
+        /* ===== USUARIOS LISTA (ADMIN) ===== */
         .user-list-item {
             padding: 6px 10px;
             border-bottom: 1px solid var(--border-color);
@@ -1052,33 +1118,101 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 4px;
+            transition: background 0.3s;
+        }
+        .user-list-item:hover {
+            background: var(--hover-bg);
         }
         .user-list-item .user-email {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--texto-principal);
+            font-weight: 600;
+            min-width: 120px;
         }
         .user-list-item .user-info {
             font-size: 0.6rem;
             color: var(--text-muted);
-        }
-        .user-list-item .user-actions {
             display: flex;
-            gap: 4px;
+            gap: 6px;
             flex-wrap: wrap;
-            align-items: center;
         }
-        .user-status-badge {
-            font-size: 0.55rem;
-            padding: 1px 8px;
+        .user-list-item .user-info .badge {
+            padding: 1px 6px;
             border-radius: 10px;
+            font-size: 0.5rem;
+            font-weight: 600;
         }
-        .user-status-badge.active {
+        .user-list-item .user-info .badge.active {
             background: #00cc8833;
             color: #00ff88;
         }
-        .user-status-badge.blocked {
+        .user-list-item .user-info .badge.blocked {
             background: #ff444433;
             color: #ff4444;
+        }
+        .user-list-item .user-actions {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin {
+            font-size: 0.5rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin:hover {
+            transform: scale(1.05);
+        }
+        .user-list-item .user-actions .btn-small.btn-admin:active {
+            transform: scale(0.95);
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-add {
+            background: #00cc88;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-add:hover {
+            background: #00dd99;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-remove {
+            background: #ff4444;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-remove:hover {
+            background: #ff6666;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-block {
+            background: #ff8800;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-block:hover {
+            background: #ffaa44;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-unblock {
+            background: #00cc88;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-unblock:hover {
+            background: #00dd99;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-delete {
+            background: #cc0000;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-delete:hover {
+            background: #ff0000;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-days-add {
+            background: #ff8800;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-days-add:hover {
+            background: #ffaa44;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-days-remove {
+            background: #cc4444;
+        }
+        .user-list-item .user-actions .btn-small.btn-admin.btn-days-remove:hover {
+            background: #ff6666;
         }
 
         /* ===== BOTÓN PEDIR CRÉDITOS ===== */
@@ -1694,7 +1828,7 @@
         }
 
         /* ============================================================== */
-        /* ===== JUEGO MEJORADO - PIEDRA, PAPEL O TIJERA ===== */
+        /* ===== JUEGO - PIEDRA, PAPEL O TIJERA ===== */
         /* ============================================================== */
         .juego-container {
             background: var(--card-bg);
@@ -1951,6 +2085,99 @@
         }
 
         /* ============================================================== */
+        /* ===== LIVE MASIVO - RESULTADO MEJORADO ===== */
+        /* ============================================================== */
+        .resultado-masivo-item {
+            background: var(--bg-result);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 12px;
+            margin-bottom: 8px;
+            transition: background 0.3s, border-color 0.3s;
+        }
+        .resultado-masivo-item:hover {
+            border-color: var(--borde-neon);
+        }
+        .resultado-masivo-item .row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .resultado-masivo-item .row .num {
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: #88ddff;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+        .resultado-masivo-item .row .estado {
+            font-size: 0.6rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+        .resultado-masivo-item .row .estado.approved {
+            color: #00ff88;
+            background: rgba(0, 255, 136, 0.1);
+        }
+        .resultado-masivo-item .row .estado.insufficient {
+            color: #ffaa44;
+            background: rgba(255, 170, 68, 0.1);
+        }
+        .resultado-masivo-item .row .estado.cvv_invalid {
+            color: #ff8800;
+            background: rgba(255, 136, 0, 0.1);
+        }
+        .resultado-masivo-item .row .estado.invalid {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+        .resultado-masivo-item .row .estado.expired {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+        .resultado-masivo-item .row .estado.blocked {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+        }
+        .resultado-masivo-item .detalles {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px 10px;
+        }
+        .resultado-masivo-item .detalles span {
+            background: var(--bg-card);
+            padding: 1px 6px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+        .resultado-masivo-item .detalles .cvv-ok {
+            color: #00ff88;
+        }
+        .resultado-masivo-item .detalles .cvv-fail {
+            color: #ff4444;
+        }
+        .resultado-masivo-item .btn-copy-result {
+            padding: 2px 8px;
+            font-size: 0.5rem;
+            border: none;
+            border-radius: 4px;
+            background: #0088cc;
+            color: white;
+            cursor: pointer;
+            transition: 0.1s;
+        }
+        .resultado-masivo-item .btn-copy-result:hover {
+            background: #00aaff;
+            transform: scale(1.05);
+        }
+
+        /* ============================================================== */
         /* RESPONSIVE */
         /* ============================================================== */
         @media (max-width: 768px) {
@@ -2018,6 +2245,15 @@
                 font-size: 2rem;
                 padding: 8px 14px;
                 min-width: 55px;
+            }
+            .user-list-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .user-list-item .user-actions {
+                margin-top: 4px;
+                width: 100%;
+                justify-content: flex-start;
             }
         }
 
@@ -2169,6 +2405,18 @@
             .modal-overlay .modal-box {
                 padding: 20px 16px;
             }
+            .user-list-item .user-email {
+                font-size: 0.6rem;
+                min-width: 80px;
+            }
+            .user-list-item .user-info .badge {
+                font-size: 0.45rem;
+                padding: 1px 4px;
+            }
+            .user-list-item .user-actions .btn-small.btn-admin {
+                font-size: 0.4rem;
+                padding: 1px 4px;
+            }
         }
     </style>
 </head>
@@ -2282,7 +2530,6 @@
                 <button class="tab-btn chat-tab" onclick="switchTab('chat')">💬 CHAT</button>
                 <button class="tab-btn sala-tab" onclick="switchTab('sala')">🔒 SALA PRIVADA</button>
                 <button class="tab-btn notas-tab" onclick="switchTab('notas')">📝 NOTAS</button>
-                <!-- El tab de juego SOLO se muestra para usuarios normales (no admin) -->
                 <button class="tab-btn juego-tab" id="tabJuegoBtn" onclick="switchTab('juego')" style="display:none;">🎮 JUEGO</button>
                 <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
@@ -2299,7 +2546,7 @@
                     <div class="item-card">
                         <div class="info-box free">
                             💡 <strong>Generación GRATUITA</strong> - Sin gastar créditos.
-                            Ingresa los primeros dígitos (mínimo 6). Puedes usar <strong>X</strong> como comodín.
+                            Ingresa los primeros dígitos (mínimo 6). Puedes usar <strong>X</strong> o <strong>x</strong> como comodín.
                             <br>Ejemplo: <strong>41691614x2xxxxx1</strong> (las X se reemplazan con números aleatorios).
                             <br><br>
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
@@ -2307,7 +2554,7 @@
                             <strong style="color:#00ff88;">🔄 FECHAS MEZCLADAS:</strong> Cada tarjeta genera su propia fecha aleatoria entre 2024-2038. Si quieres una fecha fija, pon Mes y Año.
                         </div>
                         <div class="form-group">
-                            <label>🔢 Ingresa los primeros dígitos (BIN) - usa X como comodín</label>
+                            <label>🔢 Ingresa los primeros dígitos (BIN) - usa X o x como comodín</label>
                             <input type="text" id="binInput" placeholder="Ej: 414444XXXXXXXXXX" maxlength="19">
                         </div>
                         <div class="flex-row">
@@ -2382,7 +2629,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: MASIVO ===== -->
+                <!-- ===== PANEL: MASIVO (MEJORADO) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-massive" class="panel">
                     <h3>📊 LIVE MASIVO <span class="info-badge" style="background:#ff8800;color:#fff;">7 créditos</span></h3>
@@ -2688,7 +2935,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: JUEGO (SOLO PARA USUARIOS NORMALES) ===== -->
+                <!-- ===== PANEL: JUEGO ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-juego" class="panel">
                     <h3>🎮 JUEGO - PIEDRA, PAPEL O TIJERA <span class="info-badge" style="background:#ff6b35;color:#fff;">GANAR CRÉDITOS</span></h3>
@@ -2834,7 +3081,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: ADMIN ===== -->
+                <!-- ===== PANEL: ADMIN (MEJORADO) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-admins" class="panel">
                     <h3>👑 PANEL DE ADMINISTRACIÓN</h3>
@@ -2853,7 +3100,7 @@
                         <div id="userSearchResult" style="margin-top:6px;"></div>
                         <div style="margin-top:10px;">
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
-                            <div id="listaUsuariosContainer" style="max-height:250px;overflow-y:auto;"></div>
+                            <div id="listaUsuariosContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
                     </div>
                 </div>
@@ -3477,7 +3724,7 @@
         }
 
         // ================================================================
-        // ADMIN
+        // ADMIN - FUNCIONES MEJORADAS
         // ================================================================
         async function toggleBloquearUsuario(email) {
             if (!currentUser || currentUser.role !== 'Owner') return;
@@ -3487,6 +3734,93 @@
             const actual = snap.val().bloqueado || false;
             await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
             mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
+            // Recargar lista
+            escucharUsuarios();
+        }
+
+        async function eliminarUsuario(email) {
+            if (!currentUser || currentUser.role !== 'Owner') return;
+            if (email === currentUser.email) {
+                mostrarNotificacion('❌ No puedes eliminar tu propia cuenta', 'error');
+                return;
+            }
+            if (!confirm(`⚠️ ¿Estás seguro de eliminar al usuario ${email}? Esta acción NO se puede deshacer.`)) return;
+
+            const nodo = limpiarClave(email);
+            try {
+                await db.ref(`usuarios/${nodo}`).remove();
+                await db.ref(`usuarios_datos/${nodo}`).remove();
+                await db.ref(`creditos/${nodo}`).remove();
+                await db.ref(`chat_profiles/${nodo}`).remove();
+                await db.ref(`notas/${nodo}`).remove();
+                await db.ref(`juego/${nodo}`).remove();
+                mostrarNotificacion(`✅ Usuario ${email} eliminado completamente`, 'success');
+                // Recargar lista
+                escucharUsuarios();
+            } catch (e) {
+                mostrarNotificacion('❌ Error al eliminar usuario', 'error');
+                console.error(e);
+            }
+        }
+
+        async function adminAgregarCreditosManual(email) {
+            if (!currentUser || currentUser.role !== 'Owner') return;
+            const cantidad = prompt(`¿Créditos a agregar a ${email}?`, '10');
+            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = (data.credits || 0) + parseInt(cantidad);
+            await ref.update({ credits: nuevo });
+            mostrarNotificacion(`✅ +${cantidad} créditos a ${email}`, 'success');
+            // Recargar lista
+            escucharUsuarios();
+        }
+
+        async function adminRestarCreditosManual(email) {
+            if (!currentUser || currentUser.role !== 'Owner') return;
+            const cantidad = prompt(`¿Créditos a restar a ${email}?`, '5');
+            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
+            await ref.update({ credits: nuevo });
+            mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
+            // Recargar lista
+            escucharUsuarios();
+        }
+
+        async function adminAgregarDiasManual(email) {
+            if (!currentUser || currentUser.role !== 'Owner') return;
+            const cantidad = prompt(`¿Días a agregar a ${email}?`, '5');
+            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = (data.days || 0) + parseInt(cantidad);
+            await ref.update({ days: nuevo });
+            mostrarNotificacion(`✅ +${cantidad} días a ${email}`, 'success');
+            // Recargar lista
+            escucharUsuarios();
+        }
+
+        async function adminRestarDiasManual(email) {
+            if (!currentUser || currentUser.role !== 'Owner') return;
+            const cantidad = prompt(`¿Días a restar a ${email}?`, '3');
+            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
+            const uid = limpiarClave(email);
+            const ref = db.ref(`usuarios_datos/${uid}`);
+            const snap = await ref.once('value');
+            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
+            const nuevo = Math.max(0, (data.days || 0) - parseInt(cantidad));
+            await ref.update({ days: nuevo });
+            mostrarNotificacion(`✅ -${cantidad} días a ${email}`, 'success');
+            // Recargar lista
+            escucharUsuarios();
         }
 
         function escucharUsuarios() {
@@ -3497,7 +3831,7 @@
                 if (!container) return;
                 container.innerHTML = "";
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;">No hay usuarios</p>';
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;">No hay usuarios registrados</p>';
                     return;
                 }
                 const users = [];
@@ -3511,73 +3845,38 @@
                     const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
                     const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                     const bloqueado = user.bloqueado || false;
+
                     const div = document.createElement('div');
                     div.className = 'user-list-item';
+
+                    const email = user.email || user.key;
+                    const emailDisplay = email.length > 25 ? email.substring(0, 22) + '...' : email;
+                    const isOwner = esUsuarioOwner(email);
+
                     div.innerHTML = `
                                     <div>
-                                        <span class="user-email">${user.email}</span>
-                                        <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                                        <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                        <span class="user-email">${emailDisplay} ${isOwner ? '👑' : ''}</span>
+                                        <div class="user-info">
+                                            <span>💎 ${datos.credits || 0}</span>
+                                            <span>📅 ${datos.days || 0}</span>
+                                            <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                        </div>
                                     </div>
                                     <div class="user-actions">
-                                        <button class="btn-small btn-success" onclick="adminAgregarCreditosManual('${user.email}')">➕</button>
-                                        <button class="btn-small btn-danger" onclick="adminRestarCreditosManual('${user.email}')">➖</button>
-                                        <button class="btn-small btn-warning" onclick="adminAgregarDiasManual('${user.email}')">📅+</button>
-                                        <button class="btn-small" style="background:#cc8800;color:#fff;" onclick="adminRestarDiasManual('${user.email}')">📅-</button>
-                                        <button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${user.email}')">${bloqueado ? '🔓' : '🔒'}</button>
+                                        <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${email}')" title="Sumar créditos">➕</button>
+                                        <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${email}')" title="Restar créditos">➖</button>
+                                        <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${email}')" title="Sumar días">📅+</button>
+                                        <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${email}')" title="Restar días">📅-</button>
+                                        ${bloqueado
+                                            ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
+                                            : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
+                                        }
+                                        <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
                                     </div>
                                 `;
                     container.appendChild(div);
                 }
             });
-        }
-
-        async function adminAgregarCreditosManual(email) {
-            const cantidad = prompt(`¿Créditos a agregar a ${email}?`, '10');
-            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = (data.credits || 0) + parseInt(cantidad);
-            await ref.update({ credits: nuevo });
-            mostrarNotificacion(`✅ +${cantidad} créditos a ${email}`, 'success');
-        }
-
-        async function adminRestarCreditosManual(email) {
-            const cantidad = prompt(`¿Créditos a restar a ${email}?`, '5');
-            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
-            await ref.update({ credits: nuevo });
-            mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
-        }
-
-        async function adminAgregarDiasManual(email) {
-            const cantidad = prompt(`¿Días a agregar a ${email}?`, '5');
-            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = (data.days || 0) + parseInt(cantidad);
-            await ref.update({ days: nuevo });
-            mostrarNotificacion(`✅ +${cantidad} días a ${email}`, 'success');
-        }
-
-        async function adminRestarDiasManual(email) {
-            const cantidad = prompt(`¿Días a restar a ${email}?`, '3');
-            if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = Math.max(0, (data.days || 0) - parseInt(cantidad));
-            await ref.update({ days: nuevo });
-            mostrarNotificacion(`✅ -${cantidad} días a ${email}`, 'success');
         }
 
         function buscarUsuario() {
@@ -3589,33 +3888,48 @@
                 let found = false;
                 snapshot.forEach(async (hijo) => {
                     const data = hijo.val();
-                    if (data.email.toLowerCase().includes(search)) {
+                    const email = data.email || hijo.key;
+                    if (email.toLowerCase().includes(search)) {
                         found = true;
                         const datosSnap = await db.ref(`usuarios_datos/${hijo.key}`).once('value');
                         const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                         const bloqueado = data.bloqueado || false;
+                        const isOwner = esUsuarioOwner(email);
                         const div = document.createElement('div');
                         div.className = 'user-list-item';
                         div.innerHTML = `
                                         <div>
-                                            <span class="user-email">${data.email}</span>
-                                            <span class="user-info">💎 ${datos.credits || 0} | 📅 ${datos.days || 0}</span>
-                                            <span class="user-status-badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                            <span class="user-email">${email} ${isOwner ? '👑' : ''}</span>
+                                            <div class="user-info">
+                                                <span>💎 ${datos.credits || 0}</span>
+                                                <span>📅 ${datos.days || 0}</span>
+                                                <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                            </div>
                                         </div>
-                                        <div><button class="btn-small ${bloqueado ? 'btn-success' : 'btn-danger'}" onclick="toggleBloquearUsuario('${data.email}')">${bloqueado ? '🔓' : '🔒'}</button></div>
+                                        <div class="user-actions">
+                                            <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${email}')" title="Sumar créditos">➕</button>
+                                            <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${email}')" title="Restar créditos">➖</button>
+                                            <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${email}')" title="Sumar días">📅+</button>
+                                            <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${email}')" title="Restar días">📅-</button>
+                                            ${bloqueado
+                                                ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
+                                                : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
+                                            }
+                                            <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
+                                        </div>
                                     `;
                         container.appendChild(div);
                     }
                 });
-                if (!found) container.innerHTML = '<p style="color:#6688aa;">Usuario no encontrado</p>';
+                if (!found) container.innerHTML = '<p style="color:#6688aa;padding:6px;">Usuario no encontrado</p>';
             });
         }
 
         // ================================================================
-        // GENERADOR DE TARJETAS
+        // GENERADOR DE TARJETAS (CON SOPORTE PARA X MINÚSCULA)
         // ================================================================
         function detectBrand(cardNumber) {
-            const num = String(cardNumber).replace(/\s/g, '').replace(/X/g, '');
+            const num = String(cardNumber).replace(/\s/g, '').replace(/[Xx]/g, '');
             if (/^4/.test(num)) return 'Visa';
             if (/^(5[1-5]|2[2-7])/.test(num)) return 'Mastercard';
             if (/^(34|37)/.test(num)) return 'American Express';
@@ -3677,6 +3991,7 @@
         }
 
         function generateUniqueCards(binPrefix, count, month, year) {
+            // Convertir a mayúsculas para el procesamiento pero aceptar minúsculas
             let binPattern = String(binPrefix).replace(/\s/g, '').toUpperCase();
 
             const hasX = binPattern.includes('X');
@@ -3795,9 +4110,10 @@
 
             if (!binInput || binInput.length < 6) { mostrarNotificacion('❌ Ingresa al menos 6 dígitos', 'error'); return; }
 
-            const cleanInput = binInput.replace(/X/g, '');
+            // Limpiar X (mayúscula y minúscula) para validar números
+            const cleanInput = binInput.replace(/[Xx]/g, '');
             if (!/^\d+$/.test(cleanInput)) {
-                mostrarNotificacion('❌ Solo números y X (mayúscula) permitidos', 'error');
+                mostrarNotificacion('❌ Solo números y X (mayúscula o minúscula) permitidos', 'error');
                 return;
             }
 
@@ -4410,7 +4726,7 @@
         }
 
         // ================================================================
-        // LIVE MASIVO
+        // LIVE MASIVO (MEJORADO CON FORMATO)
         // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -4462,26 +4778,28 @@
             const fondosCount = results.filter(r => r.result.estado === 'approved').length;
             const cvvInvalidCount = results.filter(r => r.result.estado === 'cvv_invalid').length;
             const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
+
             let html =
-                `<div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;"><div style="font-size:0.9rem;font-weight:bold;color:#66ddff;">📊 RESULTADOS (${results.length}) 💳 ${pasarelaNombre}</div>
-                            <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:6px;flex-wrap:wrap;">
+                `<div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
+                            <div style="font-size:0.9rem;font-weight:bold;color:#66ddff;">📊 RESULTADOS (${results.length}) 💳 ${pasarelaNombre}</div>
+                            <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:8px;flex-wrap:wrap;">
                                 <span style="font-size:0.7rem;">📊 Total: <span style="color:#66ddff;">${results.length}</span></span>
                                 <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
                                 <span style="font-size:0.7rem;">🟠 CVV incorrecto: <span style="color:#ff8800;">${cvvInvalidCount}</span></span>
                                 <span style="font-size:0.7rem;">🟡 Válidas sin fondos: <span style="color:#ffaa44;">${results.filter(r => r.result.estado === 'insufficient').length}</span></span>
                                 <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.length - validCount}</span></span>
-                            </div>
-                            <div style="display:grid;grid-template-columns:1fr;gap:2px;font-size:0.7rem;max-height:220px;overflow-y:auto;">`;
-            results.forEach((item) => {
+                            </div>`;
+
+            results.forEach((item, index) => {
                 const r = item.result;
                 let estadoClass = 'invalid',
                     estadoText = '🔴 INVÁLIDA',
                     icon = '🔴';
-                if (r.estado === 'approved') { estadoClass = 'valid';
+                if (r.estado === 'approved') { estadoClass = 'approved';
                     estadoText = '🟢 CON FONDOS';
-                    icon = '🟢'; } else if (r.estado === 'insufficient') { estadoClass = 'pending';
+                    icon = '🟢'; } else if (r.estado === 'insufficient') { estadoClass = 'insufficient';
                     estadoText = '🟡 VÁLIDA';
-                    icon = '🟡'; } else if (r.estado === 'cvv_invalid') { estadoClass = 'cvv-invalid';
+                    icon = '🟡'; } else if (r.estado === 'cvv_invalid') { estadoClass = 'cvv_invalid';
                     estadoText = '🟠 CVV INCORRECTO';
                     icon = '🟠'; } else if (r.estado === 'expired') { estadoClass = 'invalid';
                     estadoText = '🔴 EXPIRADA';
@@ -4490,24 +4808,39 @@
                     icon = '🔴'; } else { estadoClass = 'invalid';
                     estadoText = '🔴 INVÁLIDA';
                     icon = '🔴'; }
-                const num = item.number.replace(/(\d{4})/g, '$1 ').trim();
-                const texto =
-                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${item.binInfo.pais}|${item.binInfo.banco}|${pasarelaNombre}`;
-                const cvvOk = r.cvv_ok ? '✅' : '❌';
+
+                const numFormatted = item.number.replace(/(\d{4})/g, '$1 ').trim();
+                const cvvOkText = r.cvv_ok ? '✅' : '❌';
+                const cvvOkClass = r.cvv_ok ? 'cvv-ok' : 'cvv-fail';
+
+                const textoCompleto =
+                    `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.pais}|${item.binInfo.banco}|${pasarelaNombre}|CVV_OK:${r.cvv_ok}`;
+
                 html += `
-                                <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 6px;border-radius:6px;flex-wrap:wrap;gap:2px;${r.estado === 'approved' ? 'background:rgba(0,255,136,0.05);border-left:3px solid #00ff88;' : r.estado === 'insufficient' ? 'background:rgba(255,170,68,0.05);border-left:3px solid #ffaa44;' : r.estado === 'cvv_invalid' ? 'background:rgba(255,136,0,0.05);border-left:3px solid #ff8800;' : 'background:rgba(255,68,68,0.04);border-left:3px solid #ff4444;'}">
-                                    <span style="font-family:monospace;color:#88ddff;font-weight:bold;font-size:0.65rem;">${num}</span>
-                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.brand}</span>
-                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;background:#1a6a4a;color:#88ffbb;">${item.month}/${item.year}</span>
-                                    <span style="font-size:0.55rem;padding:1px 5px;border-radius:4px;${item.cvv.length === 4 ? 'background:#6a1a3a;color:#ff88aa;' : 'background:#4a1a7a;color:#dd88ff;'}">🔐 ${item.cvv} ${cvvOk}</span>
-                                    <span style="font-weight:bold;font-size:0.6rem;padding:1px 6px;border-radius:8px;${estadoClass === 'valid' ? 'color:#00ff88;background:rgba(0,255,136,0.1);' : estadoClass === 'pending' ? 'color:#ffaa44;background:rgba(255,170,68,0.1);' : estadoClass === 'cvv-invalid' ? 'color:#ff8800;background:rgba(255,136,0,0.1);' : 'color:#ff4444;background:rgba(255,68,68,0.1);'}">${icon} ${estadoText}</span>
-                                    <span style="font-size:0.5rem;padding:1px 5px;border-radius:4px;background:#1a4a7a;color:#88bbff;">${item.binInfo.paisEmoji} ${item.binInfo.pais}</span>
-                                    <button style="padding:1px 6px;font-size:0.45rem;border:none;border-radius:4px;background:#0088cc;color:white;cursor:pointer;" onclick="copiarResultadoMasivo('${texto.replace(/'/g, "\\'")}')">📋</button>
+                            <div class="resultado-masivo-item">
+                                <div class="row">
+                                    <span class="num">${numFormatted}</span>
+                                    <span class="estado ${estadoClass}">${icon} ${estadoText}</span>
+                                    <button class="btn-copy-result" onclick="copiarResultadoMasivo('${textoCompleto.replace(/'/g, "\\'")}')">📋 Copiar</button>
                                 </div>
-                            `;
+                                <div class="detalles">
+                                    <span>🏷️ ${item.brand}</span>
+                                    <span>📅 ${item.month}/${item.year}</span>
+                                    <span>🔐 ${item.cvv} <span class="${cvvOkClass}">${cvvOkText}</span></span>
+                                    <span>🌍 ${item.binInfo.paisEmoji} ${item.binInfo.pais}</span>
+                                    <span>🏦 ${item.binInfo.banco}</span>
+                                    <span>💳 ${pasarelaNombre}</span>
+                                    <span>📊 ${r.codigo || 'N/A'}</span>
+                                </div>
+                            </div>
+                        `;
             });
-            html +=
-                `</div><div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">💎 Costo: 7 créditos | Saldo: ${esOwner ? '∞' : currentCredits}</div></div>`;
+
+            html += `
+                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">
+                            💎 Costo: 7 créditos | Saldo: ${esOwner ? '∞' : currentCredits}
+                        </div>
+                    `;
             container.innerHTML = html;
         }
 
@@ -5670,12 +6003,10 @@
         // ================================================================
 
         function jugar(opcionJugador) {
-            // Deshabilitar botones durante la jugada
             document.getElementById('btnPiedra').disabled = true;
             document.getElementById('btnPapel').disabled = true;
             document.getElementById('btnTijera').disabled = true;
 
-            // Animación
             document.getElementById('jugadorEmoji').textContent = '⏳';
 
             setTimeout(() => {
@@ -5683,11 +6014,9 @@
                 const emojis = { piedra: '🪨', papel: '📄', tijera: '✂️' };
                 const opcionCPU = opciones[Math.floor(Math.random() * opciones.length)];
 
-                // Mostrar elecciones
                 document.getElementById('jugadorEmoji').textContent = emojis[opcionJugador];
                 document.getElementById('cpuEmoji').textContent = emojis[opcionCPU];
 
-                // Determinar resultado
                 let resultado = '';
                 let resultadoClass = '';
 
@@ -5703,7 +6032,6 @@
                     resultado = '🎉 ¡Ganaste! +1 punto';
                     resultadoClass = 'ganaste';
                     totalVictorias++;
-                    // Recompensa inmediata: +1 crédito por victoria
                     if (!esOwner) {
                         currentCredits += 1;
                         guardarDatosUsuario();
@@ -5716,25 +6044,20 @@
                     totalDerrotas++;
                 }
 
-                // Mostrar resultado
                 const resultadoDiv = document.getElementById('juegoResultado');
                 resultadoDiv.textContent = resultado;
                 resultadoDiv.className = `juego-resultado ${resultadoClass}`;
 
-                // Actualizar estadísticas
                 document.getElementById('juegoVictorias').textContent = totalVictorias;
                 document.getElementById('statVictorias').textContent = totalVictorias;
                 document.getElementById('statDerrotas').textContent = totalDerrotas;
                 document.getElementById('statEmpates').textContent = totalEmpates;
                 document.getElementById('statTotal').textContent = totalVictorias + totalDerrotas + totalEmpates;
 
-                // Actualizar créditos
                 document.getElementById('creditsBalance').textContent = esOwner ? '∞' : currentCredits;
 
-                // Verificar misiones
                 verificarMisionesJuego();
 
-                // Rehabilitar botones
                 document.getElementById('btnPiedra').disabled = false;
                 document.getElementById('btnPapel').disabled = false;
                 document.getElementById('btnTijera').disabled = false;
@@ -5883,8 +6206,10 @@
                     document.getElementById('mision1Recompensa').textContent = `+${recompensas.mision1} créditos`;
                     document.getElementById('mision2Recompensa').textContent = `+${recompensas.mision2} créditos`;
                     document.getElementById('mision3Recompensa').textContent = `+${recompensas.mision3} créditos`;
-                    document.getElementById('mision4Recompensa').textContent = `+${recompensas.mision4} créditos + ${recompensas.diasExtra} días`;
-                    document.getElementById('mision5Recompensa').textContent = `+${recompensas.mision5} créditos + ${recompensas.diasExtra * 2 + 1} días`;
+                    document.getElementById('mision4Recompensa').textContent =
+                        `+${recompensas.mision4} créditos + ${recompensas.diasExtra} días`;
+                    document.getElementById('mision5Recompensa').textContent =
+                        `+${recompensas.mision5} créditos + ${recompensas.diasExtra * 2 + 1} días`;
                 }
             } catch (e) {
                 console.error('Error al cargar recompensas:', e);
@@ -5916,8 +6241,10 @@
                 document.getElementById('mision1Recompensa').textContent = `+${recompensas.mision1} créditos`;
                 document.getElementById('mision2Recompensa').textContent = `+${recompensas.mision2} créditos`;
                 document.getElementById('mision3Recompensa').textContent = `+${recompensas.mision3} créditos`;
-                document.getElementById('mision4Recompensa').textContent = `+${recompensas.mision4} créditos + ${recompensas.diasExtra} días`;
-                document.getElementById('mision5Recompensa').textContent = `+${recompensas.mision5} créditos + ${recompensas.diasExtra * 2 + 1} días`;
+                document.getElementById('mision4Recompensa').textContent =
+                    `+${recompensas.mision4} créditos + ${recompensas.diasExtra} días`;
+                document.getElementById('mision5Recompensa').textContent =
+                    `+${recompensas.mision5} créditos + ${recompensas.diasExtra * 2 + 1} días`;
             }).catch(e => {
                 mostrarNotificacion('❌ Error al guardar recompensas', 'error');
                 console.error(e);
@@ -6011,12 +6338,12 @@
         // INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA CON JUEGO MEJORADO');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA CON ADMIN MEJORADO');
         console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos (NO ve el juego)');
         console.log('🎮 Usuarios normales: ven el juego y pueden ganar créditos');
-        console.log('❌ Usa X como comodín al generar tarjetas');
+        console.log('❌ Usa X o x como comodín al generar tarjetas');
         console.log('🌓 Botón para cambiar entre día y noche (MEJORADO)');
         console.log('🌍 Detección de país REAL del BIN usando BinList API');
         console.log('🟠 Detección de CVV INCORRECTO (invalid_cvc)');
@@ -6026,6 +6353,8 @@
         console.log('🎮 JUEGO: Piedra, Papel o Tijera - +1 crédito por victoria + misiones');
         console.log('💳 PASARELAS: Stripe, Zuora, Auth, Braintree, CCN, CVV, Braintree Auth');
         console.log('📱 Modal de créditos insuficientes: WhatsApp Admin o Jugar');
+        console.log('👑 ADMIN: Eliminar usuario | Sumar/Restar créditos | Sumar/Restar días | Bloquear/Desbloquear');
+        console.log('📊 LIVE MASIVO: Formato mejorado con copia individual');
 
         cargarPromo();
         seleccionarPasarela('stripe');
