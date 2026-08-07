@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN COMPLETA CON ADMIN MEJORADO                */
+        /* ESTILOS - VERSIÓN COMPLETA CON FORMATO LIVE MEJORADO          */
         /* ============================================================== */
 
         * {
@@ -44,6 +44,8 @@
             --text-bright: #ffffff;
             --admin-btn-bg: #1a2a4a;
             --admin-btn-hover: #2a4a6a;
+            --spam-alert: #ff4444;
+            --spam-warning: #ff8800;
         }
 
         body.theme-day {
@@ -74,6 +76,8 @@
             --text-bright: #0a1a3a;
             --admin-btn-bg: #d4e4f7;
             --admin-btn-hover: #b8cce6;
+            --spam-alert: #cc0000;
+            --spam-warning: #cc7700;
         }
 
         html,
@@ -491,6 +495,15 @@
             border-bottom-color: #ff6b35;
             background: rgba(255, 107, 53, 0.08);
         }
+        .tab-btn.registros-tab {
+            color: #00ccff;
+            font-weight: 700;
+        }
+        .tab-btn.registros-tab.active {
+            color: #00ccff;
+            border-bottom-color: #00ccff;
+            background: rgba(0, 204, 255, 0.08);
+        }
 
         /* ===== PANELES ===== */
         .panels-container {
@@ -593,6 +606,10 @@
         .item-card .info-box.juego {
             border-color: #ff6b35;
             background: #ff6b3506;
+        }
+        .item-card .info-box.registros {
+            border-color: #00ccff;
+            background: #00ccff06;
         }
 
         /* ===== FORMULARIOS ===== */
@@ -727,6 +744,21 @@
         .btn-block.btn-admin-info {
             background: linear-gradient(135deg, #00aaff, #0066cc);
             box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
+        }
+        .btn-block.btn-spam {
+            background: linear-gradient(135deg, #ff4444, #cc0000);
+            box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
+            animation: pulse-spam 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse-spam {
+            0%,
+            100% {
+                box-shadow: 0 0 15px rgba(255, 68, 68, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(255, 68, 68, 0.35);
+            }
         }
 
         @keyframes pulse-live {
@@ -960,14 +992,14 @@
             transform: scale(0.95);
         }
 
-        /* ===== RESULTADOS ===== */
+        /* ===== RESULTADOS LIVE (FORMATO MEJORADO) ===== */
         .result-box {
             background: var(--bg-result);
             border: 2px solid var(--borde-neon);
             border-radius: 12px;
             padding: 10px 12px;
             margin-top: 8px;
-            max-height: 320px;
+            max-height: 500px;
             overflow-y: auto;
             font-size: 0.82rem;
             transition: background 0.3s, border-color 0.3s;
@@ -978,6 +1010,101 @@
         .result-box::-webkit-scrollbar-thumb {
             background: var(--border-color);
             border-radius: 4px;
+        }
+
+        .live-result-moderno {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s, background 0.3s;
+        }
+        .live-result-moderno .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 4px;
+            margin-bottom: 6px;
+        }
+        .live-result-moderno .header .gate {
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--texto-secundario);
+        }
+        .live-result-moderno .numero {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #88ddff;
+            letter-spacing: 2px;
+            font-family: 'Courier New', monospace;
+        }
+        .live-result-moderno .info-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 4px;
+        }
+        .live-result-moderno .info-line .estado {
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .live-result-moderno .info-line .estado.approved {
+            color: #00ff88;
+        }
+        .live-result-moderno .info-line .estado.insufficient {
+            color: #ffaa44;
+        }
+        .live-result-moderno .info-line .estado.cvv_invalid {
+            color: #ff8800;
+        }
+        .live-result-moderno .info-line .estado.invalid {
+            color: #ff4444;
+        }
+        .live-result-moderno .info-line .estado.expired {
+            color: #ff4444;
+        }
+        .live-result-moderno .info-line .estado.blocked {
+            color: #ff4444;
+        }
+        .live-result-moderno .info-line .estado .icon {
+            margin-right: 4px;
+        }
+        .live-result-moderno .detalles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            margin-top: 6px;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            border-top: 1px solid var(--border-color);
+            padding-top: 6px;
+        }
+        .live-result-moderno .detalles span {
+            background: var(--bg-result);
+            padding: 1px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+        .live-result-moderno .detalles .cvv-ok {
+            color: #00ff88;
+        }
+        .live-result-moderno .detalles .cvv-fail {
+            color: #ff4444;
+        }
+        .live-result-moderno .tiempo {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            text-align: right;
+            border-top: 1px solid var(--border-color);
+            padding-top: 4px;
         }
 
         .status-valid {
@@ -1077,6 +1204,11 @@
         .info-badge.free-tag {
             background: #00cc88;
             color: #000;
+            font-weight: bold;
+        }
+        .info-badge.spam-tag {
+            background: #ff4444;
+            color: #fff;
             font-weight: bold;
         }
 
@@ -1213,6 +1345,38 @@
         }
         .user-list-item .user-actions .btn-small.btn-admin.btn-days-remove:hover {
             background: #ff6666;
+        }
+
+        /* ===== REGISTROS ===== */
+        .registro-item {
+            padding: 6px 10px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px;
+            font-size: 0.7rem;
+        }
+        .registro-item .registro-email {
+            color: var(--texto-principal);
+            font-weight: 600;
+        }
+        .registro-item .registro-ip {
+            color: var(--text-muted);
+            font-family: monospace;
+        }
+        .registro-item .registro-fecha {
+            color: var(--text-muted);
+            font-size: 0.6rem;
+        }
+        .registro-item .registro-spam {
+            color: #ff4444;
+            font-weight: 700;
+            font-size: 0.55rem;
+            padding: 1px 8px;
+            border-radius: 10px;
+            background: rgba(255, 68, 68, 0.15);
         }
 
         /* ===== BOTÓN PEDIR CRÉDITOS ===== */
@@ -2417,6 +2581,16 @@
                 font-size: 0.4rem;
                 padding: 1px 4px;
             }
+            .registro-item {
+                font-size: 0.6rem;
+            }
+            .live-result-moderno .numero {
+                font-size: 0.9rem;
+            }
+            .live-result-moderno .info-line {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
@@ -2532,6 +2706,7 @@
                 <button class="tab-btn notas-tab" onclick="switchTab('notas')">📝 NOTAS</button>
                 <button class="tab-btn juego-tab" id="tabJuegoBtn" onclick="switchTab('juego')" style="display:none;">🎮 JUEGO</button>
                 <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
+                <button class="tab-btn registros-tab" id="tabRegistrosBtn" onclick="switchTab('registros')" style="display:none;">📋 REGISTROS</button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
 
@@ -2597,7 +2772,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: LIVE ===== -->
+                <!-- ===== PANEL: LIVE (FORMATO MEJORADO) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-live" class="panel">
                     <h3>🔴 LIVE INDIVIDUAL <span class="info-badge" style="background:#ff44aa;color:#fff;">2 créditos</span></h3>
@@ -2629,7 +2804,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: MASIVO (MEJORADO) ===== -->
+                <!-- ===== PANEL: MASIVO ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-massive" class="panel">
                     <h3>📊 LIVE MASIVO <span class="info-badge" style="background:#ff8800;color:#fff;">7 créditos</span></h3>
@@ -3081,7 +3256,7 @@
                 </div>
 
                 <!-- ========================================================== -->
-                <!-- ===== PANEL: ADMIN (MEJORADO) ===== -->
+                <!-- ===== PANEL: ADMIN ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-admins" class="panel">
                     <h3>👑 PANEL DE ADMINISTRACIÓN</h3>
@@ -3101,6 +3276,61 @@
                         <div style="margin-top:10px;">
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
                             <div id="listaUsuariosContainer" style="max-height:400px;overflow-y:auto;"></div>
+                        </div>
+                    </div>
+                    <div class="item-card" style="border:2px solid #ffaa44;">
+                        <div class="info-box admin">🔑 <strong>CAMBIO DE CONTRASEÑA</strong></div>
+                        <div class="form-group">
+                            <label>Nueva Contraseña</label>
+                            <input type="password" id="newPassInput" placeholder="Nueva contraseña (mínimo 4 caracteres)">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirmar Contraseña</label>
+                            <input type="password" id="confirmPassInput" placeholder="Confirmar contraseña">
+                        </div>
+                        <button class="btn-block btn-admin-success" onclick="cambiarContraseñaOwner()">🔑 CAMBIAR CONTRASEÑA</button>
+                    </div>
+                    <div class="item-card" style="border:2px solid #ff4444;background:rgba(255,68,68,0.05);">
+                        <div class="info-box" style="border-color:#ff4444;color:#ff4444;">
+                            🚨 <strong>ACCIONES PELIGROSAS</strong> - Usar con cuidado
+                        </div>
+                        <button class="btn-block btn-spam" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos">
+                            🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)
+                        </button>
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">
+                            ⚠️ Esta acción eliminará TODOS los usuarios registrados, incluyendo sus créditos, días, notas y datos. <strong>No se puede deshacer.</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- ===== PANEL: REGISTROS (SOLO ADMIN) ===== -->
+                <!-- ========================================================== -->
+                <div id="panel-registros" class="panel">
+                    <h3>📋 REGISTROS DE USUARIOS <span class="info-badge" style="background:#00ccff;color:#fff;">ANTI-SPAM</span></h3>
+                    <div class="item-card">
+                        <div class="info-box registros">
+                            🛡️ <strong>Control de registros</strong> - Aquí puedes ver quién se ha registrado, desde qué IP y cuándo.
+                            <br><br>
+                            <strong>🚫 Límite anti-spam:</strong> <span id="spamLimitDisplay">5</span> registros por IP en <span id="spamTimeDisplay">60</span> minutos.
+                            <br>
+                            <span style="color:#ff4444;">🔴 Usuarios marcados como SPAM serán bloqueados automáticamente.</span>
+                        </div>
+                        <div class="flex-row">
+                            <div class="form-group">
+                                <label>📊 Límite de registros por IP</label>
+                                <input type="number" id="spamLimit" value="5" min="1" max="20">
+                            </div>
+                            <div class="form-group">
+                                <label>⏱️ Tiempo (minutos)</label>
+                                <input type="number" id="spamTime" value="60" min="5" max="1440">
+                            </div>
+                        </div>
+                        <button class="btn-block btn-admin-info" onclick="guardarConfiguracionSpam()">💾 GUARDAR CONFIGURACIÓN</button>
+                        <button class="btn-block btn-danger" onclick="limpiarRegistros()" style="margin-top:6px;">🗑️ LIMPIAR REGISTROS ANTIGUOS</button>
+                        <div style="margin-top:10px;">
+                            <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Historial de registros</div>
+                            <div id="registrosContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
                     </div>
                 </div>
@@ -3191,6 +3421,7 @@
         let promoCreditos = 50;
         let pasarelaSeleccionada = 'stripe';
         let usuariosUnsubscribe = null;
+        let registrosUnsubscribe = null;
         let esOwner = false;
 
         // Chat
@@ -3221,6 +3452,9 @@
             mision5: 50,
             diasExtra: 3
         };
+
+        // Anti-Spam
+        let spamConfig = { limit: 5, time: 60 };
 
         // ================================================================
         // UTILIDADES
@@ -3282,6 +3516,20 @@
             return { month, year: String(year) };
         }
 
+        function obtenerIP() {
+            return new Promise((resolve) => {
+                fetch('https://api.ipify.org?format=json')
+                    .then(response => response.json())
+                    .then(data => resolve(data.ip))
+                    .catch(() => resolve('0.0.0.0'));
+            });
+        }
+
+        function generarTiempoRespuesta() {
+            const segundos = (Math.random() * 2 + 0.8).toFixed(4);
+            return segundos;
+        }
+
         // ================================================================
         // CERRAR SESIÓN
         // ================================================================
@@ -3297,6 +3545,10 @@
             if (salaUnsubscribe) {
                 salaUnsubscribe();
                 salaUnsubscribe = null;
+            }
+            if (registrosUnsubscribe) {
+                registrosUnsubscribe();
+                registrosUnsubscribe = null;
             }
 
             currentUser = null;
@@ -3468,6 +3720,209 @@
         }
 
         // ================================================================
+        // ANTI-SPAM - REGISTRO
+        // ================================================================
+        async function verificarSpam(ip, email) {
+            try {
+                const snap = await db.ref('registros').orderByChild('ip').equalTo(ip).once('value');
+                let count = 0;
+                const ahora = Date.now();
+                const tiempoLimite = spamConfig.time * 60 * 1000;
+
+                snap.forEach(child => {
+                    const data = child.val();
+                    if (ahora - data.timestamp < tiempoLimite) {
+                        count++;
+                    }
+                });
+
+                await db.ref('registros').push({
+                    ip: ip,
+                    email: email,
+                    timestamp: ahora,
+                    fecha: new Date().toLocaleString()
+                });
+
+                if (count >= spamConfig.limit) {
+                    await db.ref('spam_ips/' + ip).set({
+                        email: email,
+                        timestamp: ahora,
+                        fecha: new Date().toLocaleString(),
+                        intentos: count
+                    });
+                    return false;
+                }
+                return true;
+            } catch (e) {
+                console.error('Error al verificar spam:', e);
+                return true;
+            }
+        }
+
+        async function cargarConfiguracionSpam() {
+            try {
+                const snap = await db.ref('config_spam').once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    spamConfig.limit = data.limit || 5;
+                    spamConfig.time = data.time || 60;
+                }
+                document.getElementById('spamLimit').value = spamConfig.limit;
+                document.getElementById('spamTime').value = spamConfig.time;
+                document.getElementById('spamLimitDisplay').textContent = spamConfig.limit;
+                document.getElementById('spamTimeDisplay').textContent = spamConfig.time;
+            } catch (e) {
+                console.error('Error al cargar configuración spam:', e);
+            }
+        }
+
+        function guardarConfiguracionSpam() {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede configurar', 'error');
+                return;
+            }
+            const limit = parseInt(document.getElementById('spamLimit').value) || 5;
+            const time = parseInt(document.getElementById('spamTime').value) || 60;
+            spamConfig.limit = limit;
+            spamConfig.time = time;
+            db.ref('config_spam').set({ limit: limit, time: time });
+            document.getElementById('spamLimitDisplay').textContent = limit;
+            document.getElementById('spamTimeDisplay').textContent = time;
+            mostrarNotificacion('✅ Configuración anti-spam guardada', 'success');
+        }
+
+        function escucharRegistros() {
+            if (registrosUnsubscribe) { registrosUnsubscribe();
+                registrosUnsubscribe = null; }
+            registrosUnsubscribe = db.ref('registros').orderByChild('timestamp').limitToLast(100).on('value', (snapshot) => {
+                const container = document.getElementById('registrosContainer');
+                if (!container) return;
+                container.innerHTML = '';
+                if (!snapshot.exists()) {
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">No hay registros</p>';
+                    return;
+                }
+
+                const registros = [];
+                snapshot.forEach(child => {
+                    registros.push({ key: child.key, ...child.val() });
+                });
+                registros.reverse();
+
+                registros.forEach(reg => {
+                    const div = document.createElement('div');
+                    div.className = 'registro-item';
+                    div.innerHTML = `
+                                    <span class="registro-email">${reg.email || 'Desconocido'}</span>
+                                    <span class="registro-ip">🌐 ${reg.ip || '0.0.0.0'}</span>
+                                    <span class="registro-fecha">${reg.fecha || new Date(reg.timestamp).toLocaleString()}</span>
+                                    ${reg.spam ? '<span class="registro-spam">🚫 SPAM</span>' : ''}
+                                `;
+                    container.appendChild(div);
+                });
+            });
+        }
+
+        function limpiarRegistros() {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede limpiar registros', 'error');
+                return;
+            }
+            if (!confirm('⚠️ ¿Estás seguro de que quieres limpiar todos los registros antiguos?')) return;
+            const ahora = Date.now();
+            const limite = 30 * 24 * 60 * 60 * 1000;
+            db.ref('registros').once('value', (snapshot) => {
+                snapshot.forEach(child => {
+                    const data = child.val();
+                    if (ahora - data.timestamp > limite) {
+                        child.ref.remove();
+                    }
+                });
+                mostrarNotificacion('✅ Registros antiguos eliminados', 'success');
+            });
+        }
+
+        async function eliminarTodosLosUsuarios() {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
+                return;
+            }
+            if (!confirm('🚨 ¿ESTÁS SEGURO? Esto ELIMINARÁ TODOS los usuarios excepto tú. Esta acción NO se puede deshacer.')) return;
+            if (!confirm('⚠️ ¿REALMENTE SEGURO? Todos los datos de los usuarios se perderán PERMANENTEMENTE.')) return;
+
+            const btn = document.getElementById('btnEliminarTodos');
+            btn.disabled = true;
+            btn.textContent = '⏳ Eliminando...';
+
+            try {
+                const snap = await db.ref('usuarios').once('value');
+                let eliminados = 0;
+                const promesas = [];
+
+                snap.forEach(child => {
+                    const data = child.val();
+                    const email = data.email || child.key;
+                    if (email !== currentUser.email && !esUsuarioOwner(email)) {
+                        const uid = child.key;
+                        promesas.push(db.ref(`usuarios/${uid}`).remove());
+                        promesas.push(db.ref(`usuarios_datos/${uid}`).remove());
+                        promesas.push(db.ref(`creditos/${uid}`).remove());
+                        promesas.push(db.ref(`chat_profiles/${uid}`).remove());
+                        promesas.push(db.ref(`notas/${uid}`).remove());
+                        promesas.push(db.ref(`juego/${uid}`).remove());
+                        eliminados++;
+                    }
+                });
+
+                await Promise.all(promesas);
+                mostrarNotificacion(`✅ ${eliminados} usuarios eliminados correctamente`, 'success');
+                escucharUsuarios();
+            } catch (e) {
+                mostrarNotificacion('❌ Error al eliminar usuarios', 'error');
+                console.error(e);
+            }
+
+            btn.disabled = false;
+            btn.textContent = '🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)';
+        }
+
+        // ================================================================
+        // CAMBIO DE CONTRASEÑA PARA OWNER
+        // ================================================================
+        async function cambiarContraseñaOwner() {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede cambiar su contraseña', 'error');
+                return;
+            }
+
+            const newPass = document.getElementById('newPassInput').value.trim();
+            const confirmPass = document.getElementById('confirmPassInput').value.trim();
+
+            if (!newPass || !confirmPass) {
+                mostrarNotificacion('❌ Completa ambos campos', 'error');
+                return;
+            }
+            if (newPass.length < 4) {
+                mostrarNotificacion('❌ Mínimo 4 caracteres', 'error');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                mostrarNotificacion('❌ Las contraseñas no coinciden', 'error');
+                return;
+            }
+
+            try {
+                await db.ref(`usuarios/${usernameClave}`).update({ pass: newPass });
+                mostrarNotificacion('✅ Contraseña actualizada correctamente', 'success');
+                document.getElementById('newPassInput').value = '';
+                document.getElementById('confirmPassInput').value = '';
+            } catch (e) {
+                mostrarNotificacion('❌ Error al cambiar la contraseña', 'error');
+                console.error(e);
+            }
+        }
+
+        // ================================================================
         // REGISTRO / LOGIN
         // ================================================================
         async function cargarPromo() {
@@ -3512,11 +3967,28 @@
             const exist = await db.ref(`usuarios/${nodo}`).once('value');
             if (exist.exists()) { mostrarNotificacion('❌ Este correo ya está registrado', 'error'); return; }
 
+            const ip = await obtenerIP();
+            const spamCheck = await verificarSpam(ip, email);
+            if (!spamCheck) {
+                mostrarNotificacion('🚫 DEMASIADOS REGISTROS DESDE ESTA IP. ESPERA UN MOMENTO.', 'error');
+                await db.ref(`usuarios/${nodo}`).set({
+                    email: email,
+                    pass: pass,
+                    fechaRegistro: firebase.database.ServerValue.TIMESTAMP,
+                    bloqueado: true,
+                    spam: true,
+                    ip: ip
+                });
+                mostrarNotificacion('⛔ Cuenta bloqueada por spam. Contacta al admin.', 'error');
+                return;
+            }
+
             await db.ref(`usuarios/${nodo}`).set({
                 email: email,
                 pass: pass,
                 fechaRegistro: firebase.database.ServerValue.TIMESTAMP,
-                bloqueado: false
+                bloqueado: false,
+                ip: ip
             });
             await db.ref(`usuarios_datos/${nodo}`).set({ credits: promoCreditos, days: promoDias });
             await db.ref(`creditos/${nodo}/historial`).push({
@@ -3589,17 +4061,20 @@
                             <span class="user-status active">✅ Activo</span>
                         `;
 
-            // Mostrar tabs según rol
             if (elRol === "Owner") {
                 document.getElementById('tabAdminBtn').style.display = 'block';
-                document.getElementById('tabJuegoBtn').style.display = 'none'; // Admin NO ve el juego
+                document.getElementById('tabRegistrosBtn').style.display = 'block';
+                document.getElementById('tabJuegoBtn').style.display = 'none';
                 escucharUsuarios();
+                escucharRegistros();
                 cargarPromo();
-                document.getElementById('configRecompensas').style.display = 'block'; // Admin ve configuración
+                cargarConfiguracionSpam();
+                document.getElementById('configRecompensas').style.display = 'block';
             } else {
                 document.getElementById('tabAdminBtn').style.display = 'none';
-                document.getElementById('tabJuegoBtn').style.display = 'block'; // Usuario ve el juego
-                document.getElementById('configRecompensas').style.display = 'none'; // Usuario NO ve configuración
+                document.getElementById('tabRegistrosBtn').style.display = 'none';
+                document.getElementById('tabJuegoBtn').style.display = 'block';
+                document.getElementById('configRecompensas').style.display = 'none';
             }
 
             if (esOwner) {
@@ -3724,7 +4199,7 @@
         }
 
         // ================================================================
-        // ADMIN - FUNCIONES MEJORADAS
+        // ADMIN - FUNCIONES
         // ================================================================
         async function toggleBloquearUsuario(email) {
             if (!currentUser || currentUser.role !== 'Owner') return;
@@ -3734,7 +4209,6 @@
             const actual = snap.val().bloqueado || false;
             await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
             mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
-            // Recargar lista
             escucharUsuarios();
         }
 
@@ -3755,7 +4229,6 @@
                 await db.ref(`notas/${nodo}`).remove();
                 await db.ref(`juego/${nodo}`).remove();
                 mostrarNotificacion(`✅ Usuario ${email} eliminado completamente`, 'success');
-                // Recargar lista
                 escucharUsuarios();
             } catch (e) {
                 mostrarNotificacion('❌ Error al eliminar usuario', 'error');
@@ -3774,7 +4247,6 @@
             const nuevo = (data.credits || 0) + parseInt(cantidad);
             await ref.update({ credits: nuevo });
             mostrarNotificacion(`✅ +${cantidad} créditos a ${email}`, 'success');
-            // Recargar lista
             escucharUsuarios();
         }
 
@@ -3789,7 +4261,6 @@
             const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
             await ref.update({ credits: nuevo });
             mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
-            // Recargar lista
             escucharUsuarios();
         }
 
@@ -3804,7 +4275,6 @@
             const nuevo = (data.days || 0) + parseInt(cantidad);
             await ref.update({ days: nuevo });
             mostrarNotificacion(`✅ +${cantidad} días a ${email}`, 'success');
-            // Recargar lista
             escucharUsuarios();
         }
 
@@ -3819,7 +4289,6 @@
             const nuevo = Math.max(0, (data.days || 0) - parseInt(cantidad));
             await ref.update({ days: nuevo });
             mostrarNotificacion(`✅ -${cantidad} días a ${email}`, 'success');
-            // Recargar lista
             escucharUsuarios();
         }
 
@@ -3845,6 +4314,8 @@
                     const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
                     const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                     const bloqueado = user.bloqueado || false;
+                    const spam = user.spam || false;
+                    const ip = user.ip || 'N/A';
 
                     const div = document.createElement('div');
                     div.className = 'user-list-item';
@@ -3855,11 +4326,13 @@
 
                     div.innerHTML = `
                                     <div>
-                                        <span class="user-email">${emailDisplay} ${isOwner ? '👑' : ''}</span>
+                                        <span class="user-email">${emailDisplay} ${isOwner ? '👑' : ''} ${spam ? '🚫' : ''}</span>
                                         <div class="user-info">
                                             <span>💎 ${datos.credits || 0}</span>
                                             <span>📅 ${datos.days || 0}</span>
                                             <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                            ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
+                                            <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
                                         </div>
                                     </div>
                                     <div class="user-actions">
@@ -3894,16 +4367,20 @@
                         const datosSnap = await db.ref(`usuarios_datos/${hijo.key}`).once('value');
                         const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                         const bloqueado = data.bloqueado || false;
+                        const spam = data.spam || false;
+                        const ip = data.ip || 'N/A';
                         const isOwner = esUsuarioOwner(email);
                         const div = document.createElement('div');
                         div.className = 'user-list-item';
                         div.innerHTML = `
                                         <div>
-                                            <span class="user-email">${email} ${isOwner ? '👑' : ''}</span>
+                                            <span class="user-email">${email} ${isOwner ? '👑' : ''} ${spam ? '🚫' : ''}</span>
                                             <div class="user-info">
                                                 <span>💎 ${datos.credits || 0}</span>
                                                 <span>📅 ${datos.days || 0}</span>
                                                 <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                                ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
+                                                <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
                                             </div>
                                         </div>
                                         <div class="user-actions">
@@ -3926,7 +4403,7 @@
         }
 
         // ================================================================
-        // GENERADOR DE TARJETAS (CON SOPORTE PARA X MINÚSCULA)
+        // GENERADOR DE TARJETAS
         // ================================================================
         function detectBrand(cardNumber) {
             const num = String(cardNumber).replace(/\s/g, '').replace(/[Xx]/g, '');
@@ -3991,7 +4468,6 @@
         }
 
         function generateUniqueCards(binPrefix, count, month, year) {
-            // Convertir a mayúsculas para el procesamiento pero aceptar minúsculas
             let binPattern = String(binPrefix).replace(/\s/g, '').toUpperCase();
 
             const hasX = binPattern.includes('X');
@@ -4110,7 +4586,6 @@
 
             if (!binInput || binInput.length < 6) { mostrarNotificacion('❌ Ingresa al menos 6 dígitos', 'error'); return; }
 
-            // Limpiar X (mayúscula y minúscula) para validar números
             const cleanInput = binInput.replace(/[Xx]/g, '');
             if (!/^\d+$/.test(cleanInput)) {
                 mostrarNotificacion('❌ Solo números y X (mayúscula o minúscula) permitidos', 'error');
@@ -4230,7 +4705,7 @@
         // VERIFICACIÓN DE TARJETAS
         // ================================================================
         async function verificarTarjeta(number, month, year, cvv, pasarela = 'stripe') {
-            await new Promise(resolve => setTimeout(resolve, 1200 + Math.random() * 800));
+            await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
 
             if (!luhnCheck(number)) {
                 return {
@@ -4634,7 +5109,7 @@
         }
 
         // ================================================================
-        // LIVE INDIVIDUAL
+        // LIVE INDIVIDUAL (FORMATO MEJORADO)
         // ================================================================
         async function checkCardLive() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -4669,8 +5144,11 @@
                     return;
                 }
 
+                const tiempo = generarTiempoRespuesta();
                 const result = await verificarTarjeta(number, month, year, cvv, pasarelaSeleccionada);
-                const html = generarResultadoLive(number, month, year, cvv, brand, binInfo, result);
+
+                // Formatear resultado en el nuevo estilo
+                const html = generarResultadoLiveModerno(number, month, year, cvv, brand, binInfo, result, tiempo);
                 document.getElementById('liveResultBox').innerHTML = html;
                 guardarHistorialLive(number, brand, result);
                 cargarHistorialLive();
@@ -4682,51 +5160,51 @@
                 btn.innerHTML = '🔴 VERIFICAR (2 créditos)'; }
         }
 
-        function generarResultadoLive(number, month, year, cvv, brand, binInfo, result) {
+        function generarResultadoLiveModerno(number, month, year, cvv, brand, binInfo, result, tiempo) {
             const estadoMap = {
-                'approved': { cls: 'status-valid', icon: '🟢', label: 'APROBADA' },
-                'insufficient': { cls: 'status-pending', icon: '🟡', label: 'VÁLIDA SIN FONDOS' },
-                'cvv_invalid': { cls: 'status-cvv-invalid', icon: '🟠', label: 'CVV INCORRECTO' },
-                'expired': { cls: 'status-invalid', icon: '🔴', label: 'EXPIRADA' },
-                'blocked': { cls: 'status-invalid', icon: '🔴', label: 'BLOQUEADA' },
-                'invalid': { cls: 'status-invalid', icon: '🔴', label: 'INVÁLIDA' }
+                'approved': { cls: 'approved', icon: '🟢', label: 'Approved ✅' },
+                'insufficient': { cls: 'insufficient', icon: '🟡', label: 'Declined ⚠️' },
+                'cvv_invalid': { cls: 'cvv_invalid', icon: '🟠', label: 'CVV Incorrecto 🟠' },
+                'expired': { cls: 'invalid', icon: '🔴', label: 'Expired ❌' },
+                'blocked': { cls: 'invalid', icon: '🔴', label: 'Bloqueada ❌' },
+                'invalid': { cls: 'invalid', icon: '🔴', label: 'Inválida ❌' }
             };
             const info = estadoMap[result.estado] || estadoMap['invalid'];
-            const formatoNumero = number.replace(/(\d{4})/g, '$1 ').trim();
             const pasarelaNombre = pasarelaSeleccionada.charAt(0).toUpperCase() + pasarelaSeleccionada.slice(1);
-            const cvvOk = result.cvv_ok ? '✅ CVV correcto' : '❌ CVV incorrecto';
+            const cvvOk = result.cvv_ok ? '✅' : '❌';
+            const numeroFormateado = number.replace(/(\d{4})/g, '$1 ').trim();
+            const binMostrar = number.slice(0, 6);
 
             return `
-                            <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
-                                <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;">
-                                    <span class="${info.cls}">${info.icon} ${result.mensaje}</span>
-                                    <span style="color:#6688aa;font-size:0.6rem;">💳 ${pasarelaNombre}</span>
-                                </div>
-                                <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
-                                    <div><span style="color:#88bbff;">🔢 Número:</span> ${formatoNumero}</div>
-                                    <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
-                                    <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
-                                    <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv} - ${cvvOk}</div>
-                                    <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.banco}</div>
-                                    <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.paisEmoji} ${binInfo.pais}</div>
-                                    <div><span style="color:#88bbff;">📋 Tipo:</span> ${binInfo.tipo}</div>
-                                    <div><span style="color:#88bbff;">🔝 Nivel:</span> ${binInfo.nivel}</div>
-                                    <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
-                                    <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaNombre}</div>
-                                </div>
-                                <div style="margin-top:6px;border-top:1px solid #1a4a7a;padding-top:6px;">
-                                    <strong style="color:#66ddff;">📋 Detalles:</strong>
-                                    <ul style="margin:3px 0 0 16px;color:#c0d8f0;font-size:0.75rem;">${result.detalles.map(d => `<li>${d}</li>`).join('')}</ul>
-                                </div>
-                                <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">
-                                    💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}
-                                </div>
+                        <div class="live-result-moderno">
+                            <div class="header">
+                                <span class="gate">🔗 GATE • ${pasarelaNombre}</span>
+                                <span style="font-size:0.6rem;">· · · · · · · · · ·</span>
                             </div>
-                        `;
+                            <div class="numero">${numeroFormateado}</div>
+                            <div class="info-line">
+                                <span>${binMostrar} • ${brand}</span>
+                                <span class="estado ${info.cls}">${info.icon} ${info.label}</span>
+                            </div>
+                            <div class="detalles">
+                                <span>📅 ${month}/${year}</span>
+                                <span>🔐 ${cvv} <span class="${result.cvv_ok ? 'cvv-ok' : 'cvv-fail'}">${cvvOk}</span></span>
+                                <span>🌍 ${binInfo.paisEmoji} ${binInfo.pais}</span>
+                                <span>🏦 ${binInfo.banco}</span>
+                                <span>📊 ${result.codigo || 'N/A'}</span>
+                            </div>
+                            <div class="tiempo">⏱ ${tiempo}s</div>
+                        </div>
+                    `;
+        }
+
+        function generarResultadoLive(number, month, year, cvv, brand, binInfo, result) {
+            const tiempo = generarTiempoRespuesta();
+            return generarResultadoLiveModerno(number, month, year, cvv, brand, binInfo, result, tiempo);
         }
 
         // ================================================================
-        // LIVE MASIVO (MEJORADO CON FORMATO)
+        // LIVE MASIVO
         // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -4744,9 +5222,10 @@
                 const bin = card.number.slice(0, 6);
                 const binInfo = await obtenerInfoBIN(bin);
                 const brand = binInfo.marca || card.brand;
+                const tiempo = generarTiempoRespuesta();
                 const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv, pasarelaSeleccionada);
                 massiveResults.push({ number: card.number, month: card.month, year: card.year, cvv: card.cvv,
-                    brand: brand, binInfo: binInfo, result: result });
+                    brand: brand, binInfo: binInfo, result: result, tiempo: tiempo });
             }
             mostrarResultadoMasivo(massiveResults);
             document.getElementById('btnDownloadMassive').disabled = false;
@@ -4812,6 +5291,7 @@
                 const numFormatted = item.number.replace(/(\d{4})/g, '$1 ').trim();
                 const cvvOkText = r.cvv_ok ? '✅' : '❌';
                 const cvvOkClass = r.cvv_ok ? 'cvv-ok' : 'cvv-fail';
+                const binMostrar = item.number.slice(0, 6);
 
                 const textoCompleto =
                     `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.pais}|${item.binInfo.banco}|${pasarelaNombre}|CVV_OK:${r.cvv_ok}`;
@@ -4820,17 +5300,18 @@
                             <div class="resultado-masivo-item">
                                 <div class="row">
                                     <span class="num">${numFormatted}</span>
+                                    <span style="font-size:0.55rem;color:#6688aa;">${binMostrar} • ${item.brand}</span>
                                     <span class="estado ${estadoClass}">${icon} ${estadoText}</span>
                                     <button class="btn-copy-result" onclick="copiarResultadoMasivo('${textoCompleto.replace(/'/g, "\\'")}')">📋 Copiar</button>
                                 </div>
                                 <div class="detalles">
-                                    <span>🏷️ ${item.brand}</span>
                                     <span>📅 ${item.month}/${item.year}</span>
                                     <span>🔐 ${item.cvv} <span class="${cvvOkClass}">${cvvOkText}</span></span>
                                     <span>🌍 ${item.binInfo.paisEmoji} ${item.binInfo.pais}</span>
                                     <span>🏦 ${item.binInfo.banco}</span>
                                     <span>💳 ${pasarelaNombre}</span>
                                     <span>📊 ${r.codigo || 'N/A'}</span>
+                                    <span>⏱ ${item.tiempo || '0.0000'}s</span>
                                 </div>
                             </div>
                         `;
@@ -4852,10 +5333,10 @@
             if (!massiveResults.length) return;
             const lines = massiveResults.map(item => {
                 const r = item.result;
-                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.pais}|${item.binInfo.banco}|${pasarelaSeleccionada}|CVV_OK:${r.cvv_ok}`;
+                return `${item.number}|${item.month}|${item.year}|${item.cvv}|${item.brand}|${r.estado}|${r.mensaje}|${r.codigo}|${item.binInfo.pais}|${item.binInfo.banco}|${pasarelaSeleccionada}|CVV_OK:${r.cvv_ok}|TIEMPO:${item.tiempo || '0.0000'}`;
             });
-            const blob = new Blob(['Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco|Pasarela|CVV_OK\n' + lines.join(
-                '\n')], { type: 'text/plain' });
+            const blob = new Blob(['Número|Mes|Año|CVV|Marca|Estado|Mensaje|Código|País|Banco|Pasarela|CVV_OK|Tiempo\n' + lines
+                .join('\n')], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = `masivo_${new Date().toISOString().slice(0,10)}.txt`;
@@ -4970,7 +5451,7 @@
         }
 
         // ================================================================
-        // DIRECCIONES
+        // DIRECCIONES (resumido para espacio)
         // ================================================================
         const direccionesDB = {
             usa: { codigoPais: '+1', longitudTelefono: 10, direcciones: [
@@ -5140,7 +5621,7 @@
         }
 
         // ================================================================
-        // CHAT - FUNCIONES
+        // CHAT - FUNCIONES (resumidas)
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -6269,6 +6750,7 @@
                 'notas': 'panel-notas',
                 'juego': 'panel-juego',
                 'admins': 'panel-admins',
+                'registros': 'panel-registros',
                 'credits': 'panel-credits'
             };
             const panel = document.getElementById(panelMap[tabName]);
@@ -6332,16 +6814,21 @@
                 cargarProgresoJuego();
                 cargarRecompensas();
             }
+            if (tabName === 'registros') {
+                if (currentUser && currentUser.role === 'Owner') {
+                    escucharRegistros();
+                }
+            }
         }
 
         // ================================================================
         // INICIALIZACIÓN
         // ================================================================
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA CON ADMIN MEJORADO');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
         console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
-        console.log('👑 Owner: créditos y días infinitos (NO ve el juego)');
+        console.log('👑 Owner: créditos y días infinitos');
         console.log('🎮 Usuarios normales: ven el juego y pueden ganar créditos');
         console.log('❌ Usa X o x como comodín al generar tarjetas');
         console.log('🌓 Botón para cambiar entre día y noche (MEJORADO)');
@@ -6355,6 +6842,9 @@
         console.log('📱 Modal de créditos insuficientes: WhatsApp Admin o Jugar');
         console.log('👑 ADMIN: Eliminar usuario | Sumar/Restar créditos | Sumar/Restar días | Bloquear/Desbloquear');
         console.log('📊 LIVE MASIVO: Formato mejorado con copia individual');
+        console.log('📋 REGISTROS: Anti-Spam | Control de IPs | Limpiar registros');
+        console.log('🔑 CAMBIO DE CONTRASEÑA: El admin puede cambiar su contraseña');
+        console.log('📱 LIVE FORMATO: GATE • AUTH | Número | Marca | Estado | Tiempo');
 
         cargarPromo();
         seleccionarPasarela('stripe');
