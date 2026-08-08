@@ -1990,7 +1990,10 @@
                             <div class="form-group"><label>📅 Días</label><input type="number" id="promoDays" value="7" min="0"></div>
                             <div class="form-group"><label>💎 Créditos</label><input type="number" id="promoCredits" value="50" min="0"></div>
                         </div>
-                        <button class="btn-block btn-warning" onclick="guardarPromo()">💾 GUARDAR</button>
+                        <div style="display:flex; gap:8px;">
+                            <button class="btn-block btn-warning" onclick="guardarPromo()" style="flex:1;">💾 GUARDAR</button>
+                            <button class="btn-block btn-start" onclick="recargarPromo()" style="flex:0.5;">🔄 RECARGAR</button>
+                        </div>
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">Actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos</div>
                     </div>
 
@@ -2017,8 +2020,6 @@
                             ⚠️ Esta acción eliminará TODOS los usuarios registrados. <strong>No se puede deshacer.</strong>
                         </div>
                     </div>
-
-                    <!-- ELIMINADA LA SECCIÓN DE CAMBIO DE CONTRASEÑA -->
                 </div>
 
                 <!-- ========================================================== -->
@@ -3157,32 +3158,116 @@
         // FUNCIONES AUXILIARES (promo, spam, etc.)
         // ================================================================
         async function cargarPromo() {
-            const snap = await db.ref('promocion').once('value');
-            if (snap.exists()) {
-                promoDias = snap.val().dias || 7;
-                promoCreditos = snap.val().creditos || 50;
-            } else {
-                await db.ref('promocion').set({ dias: 7, creditos: 50 });
+            try {
+                const snap = await db.ref('promocion').once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    promoDias = data.dias || 7;
+                    promoCreditos = data.creditos || 50;
+                } else {
+                    await db.ref('promocion').set({ dias: 7, creditos: 50 });
+                    promoDias = 7;
+                    promoCreditos = 50;
+                }
+                
+                // Actualizar TODOS los elementos de la UI
+                document.getElementById('promoDaysDisplay').textContent = promoDias;
+                document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
+                document.getElementById('promoDaysActual').textContent = promoDias;
+                document.getElementById('promoCreditsActual').textContent = promoCreditos;
+                document.getElementById('promoDays').value = promoDias;
+                document.getElementById('promoCredits').value = promoCreditos;
+                
+                console.log('📊 Promo cargada:', promoDias, 'días,', promoCreditos, 'créditos');
+            } catch (error) {
+                console.error('Error al cargar promo:', error);
             }
-            document.getElementById('promoDaysDisplay').textContent = promoDias;
-            document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
-            document.getElementById('promoDaysActual').textContent = promoDias;
-            document.getElementById('promoCreditsActual').textContent = promoCreditos;
-            document.getElementById('promoDays').value = promoDias;
-            document.getElementById('promoCredits').value = promoCreditos;
         }
 
+        // ================================================================
+        // RECARGAR PROMO - CORREGIDO
+        // ================================================================
+        async function recargarPromo() {
+            try {
+                const snap = await db.ref('promocion').once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    const dias = data.dias || 7;
+                    const credits = data.creditos || 50;
+                    
+                    promoDias = dias;
+                    promoCreditos = credits;
+                    
+                    // Actualizar TODOS los elementos de la UI
+                    document.getElementById('promoDaysDisplay').textContent = dias;
+                    document.getElementById('promoCreditsDisplay').textContent = credits;
+                    document.getElementById('promoDaysActual').textContent = dias;
+                    document.getElementById('promoCreditsActual').textContent = credits;
+                    document.getElementById('promoDays').value = dias;
+                    document.getElementById('promoCredits').value = credits;
+                    
+                    mostrarNotificacion('🔄 Configuración recargada: ' + dias + ' días, ' + credits + ' créditos', 'success');
+                    console.log('🔄 Promo recargada:', dias, 'días,', credits, 'créditos');
+                } else {
+                    mostrarNotificacion('⚠️ No hay configuración guardada, usando valores por defecto', 'warning');
+                    promoDias = 7;
+                    promoCreditos = 50;
+                    document.getElementById('promoDaysDisplay').textContent = '7';
+                    document.getElementById('promoCreditsDisplay').textContent = '50';
+                    document.getElementById('promoDaysActual').textContent = '7';
+                    document.getElementById('promoCreditsActual').textContent = '50';
+                    document.getElementById('promoDays').value = 7;
+                    document.getElementById('promoCredits').value = 50;
+                }
+            } catch (error) {
+                console.error('Error al recargar promo:', error);
+                mostrarNotificacion('❌ Error al recargar configuración', 'error');
+            }
+        }
+
+        // ================================================================
+        // GUARDAR PROMO - CORREGIDO
+        // ================================================================
         async function guardarPromo() {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
+                return;
+            }
+
             const dias = parseInt(document.getElementById('promoDays').value) || 7;
             const credits = parseInt(document.getElementById('promoCredits').value) || 50;
-            await db.ref('promocion').set({ dias: dias, creditos: credits });
-            promoDias = dias;
-            promoCreditos = credits;
-            document.getElementById('promoDaysDisplay').textContent = dias;
-            document.getElementById('promoCreditsDisplay').textContent = credits;
-            document.getElementById('promoDaysActual').textContent = dias;
-            document.getElementById('promoCreditsActual').textContent = credits;
-            mostrarNotificacion(`✅ Promo: ${dias} días, ${credits} créditos`, 'success');
+
+            if (dias < 0 || credits < 0) {
+                mostrarNotificacion('❌ Los valores no pueden ser negativos', 'error');
+                return;
+            }
+
+            try {
+                // Guardar en Firebase
+                await db.ref('promocion').set({ 
+                    dias: dias, 
+                    creditos: credits 
+                });
+
+                // Actualizar variables globales
+                promoDias = dias;
+                promoCreditos = credits;
+
+                // ACTUALIZAR TODOS LOS ELEMENTOS DE LA INTERFAZ
+                document.getElementById('promoDaysDisplay').textContent = dias;
+                document.getElementById('promoCreditsDisplay').textContent = credits;
+                document.getElementById('promoDaysActual').textContent = dias;
+                document.getElementById('promoCreditsActual').textContent = credits;
+                document.getElementById('promoDays').value = dias;
+                document.getElementById('promoCredits').value = credits;
+
+                mostrarNotificacion(`✅ Promo actualizada: ${dias} días y ${credits} créditos`, 'success');
+                console.log('📊 Promo guardada:', dias, 'días,', credits, 'créditos');
+
+            } catch (error) {
+                console.error('Error al guardar promo:', error);
+                mostrarNotificacion('❌ Error al guardar la configuración', 'error');
+            }
         }
 
         async function cargarConfiguracionSpam() {
