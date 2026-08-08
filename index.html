@@ -2018,19 +2018,7 @@
                         </div>
                     </div>
 
-                    <!-- Cambio de Contraseña -->
-                    <div class="item-card" style="border:2px solid #ffaa44;">
-                        <div class="info-box admin">🔑 <strong>CAMBIO DE CONTRASEÑA</strong></div>
-                        <div class="form-group">
-                            <label>Nueva Contraseña</label>
-                            <input type="password" id="newPassInput" placeholder="Nueva contraseña (mínimo 6 caracteres)">
-                        </div>
-                        <div class="form-group">
-                            <label>Confirmar Contraseña</label>
-                            <input type="password" id="confirmPassInput" placeholder="Confirmar contraseña">
-                        </div>
-                        <button class="btn-block btn-admin-success" onclick="cambiarContraseñaOwner()">🔑 CAMBIAR CONTRASEÑA</button>
-                    </div>
+                    <!-- ELIMINADA LA SECCIÓN DE CAMBIO DE CONTRASEÑA -->
                 </div>
 
                 <!-- ========================================================== -->
@@ -2562,8 +2550,10 @@
                 cargarConfiguracionSpam();
                 document.getElementById('configRecompensas').style.display = 'block';
                 // Cargar usuarios y registros automáticamente
-                escucharUsuarios();
-                escucharRegistros();
+                setTimeout(() => {
+                    escucharUsuarios();
+                    escucharRegistros();
+                }, 500);
             } else {
                 document.getElementById('tabAdminBtn').style.display = 'none';
                 document.getElementById('tabRegistrosBtn').style.display = 'none';
@@ -2834,7 +2824,6 @@
             const nuevo = (data.credits || 0) + parseInt(cantidad);
             await ref.update({ credits: nuevo });
             mostrarNotificacion(`✅ +${cantidad} créditos a ${email}`, 'success');
-            // La actualización automática se hace vía el listener de usuarios
         }
 
         async function adminRestarCreditosManual(email) {
@@ -2931,7 +2920,7 @@
         }
 
         // ================================================================
-        // ESCUCHAR USUARIOS - CON ACTUALIZACIÓN AUTOMÁTICA
+        // ESCUCHAR USUARIOS - CORREGIDO
         // ================================================================
         function escucharUsuarios() {
             if (usuariosUnsubscribe) {
@@ -2939,59 +2928,93 @@
                 usuariosUnsubscribe = null;
             }
 
+            console.log('🔄 Escuchando usuarios...');
+            
             usuariosUnsubscribe = db.ref("usuarios").on("value", async (snapshot) => {
                 const container = document.getElementById("listaUsuariosContainer");
-                if (!container) return;
-                container.innerHTML = "";
+                if (!container) {
+                    console.log('❌ Container de usuarios no encontrado');
+                    return;
+                }
+                
+                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando usuarios...</p>';
+                
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;">No hay usuarios registrados</p>';
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay usuarios registrados</p>';
+                    console.log('📭 No hay usuarios en la base de datos');
                     return;
                 }
 
                 const users = [];
                 snapshot.forEach((hijo) => {
                     const data = hijo.val();
-                    users.push({ key: hijo.key, ...data });
+                    if (data && data.email) {
+                        users.push({ 
+                            key: hijo.key, 
+                            ...data,
+                            uid: hijo.key
+                        });
+                    }
                 });
+
+                console.log(`📊 ${users.length} usuarios encontrados`);
+
+                if (users.length === 0) {
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay usuarios con email válido</p>';
+                    return;
+                }
+
                 users.sort((a, b) => (b.fechaRegistro || 0) - (a.fechaRegistro || 0));
+                container.innerHTML = '';
 
                 for (const user of users) {
-                    const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
-                    const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
-                    const bloqueado = user.bloqueado || false;
-                    const spam = user.spam || false;
-                    const ip = user.ip || 'N/A';
+                    try {
+                        const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
+                        const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
+                        const bloqueado = user.bloqueado || false;
+                        const spam = user.spam || false;
+                        const ip = user.ip || 'N/A';
+                        const email = user.email || user.key;
 
-                    const div = document.createElement('div');
-                    div.className = 'user-list-item';
+                        const div = document.createElement('div');
+                        div.className = 'user-list-item';
+                        const emailEscaped = email.replace(/'/g, "\\'");
 
-                    const email = user.email || user.key;
-                    const emailDisplay = email.length > 25 ? email.substring(0, 22) + '...' : email;
-
-                    div.innerHTML = `
-                        <div>
-                            <span class="user-email">${emailDisplay} ${spam ? '🚫' : ''}</span>
-                            <div class="user-info">
-                                <span>💎 ${datos.credits || 0}</span>
-                                <span>📅 ${datos.days || 0}</span>
-                                <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
-                                ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
-                                <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
+                        div.innerHTML = `
+                            <div>
+                                <span class="user-email">${email} ${spam ? '🚫' : ''}</span>
+                                <div class="user-info">
+                                    <span>💎 ${datos.credits || 0}</span>
+                                    <span>📅 ${datos.days || 0}</span>
+                                    <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                    ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
+                                    <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="user-actions">
-                            <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${email}')" title="Sumar créditos">➕</button>
-                            <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${email}')" title="Restar créditos">➖</button>
-                            <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${email}')" title="Sumar días">📅+</button>
-                            <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${email}')" title="Restar días">📅-</button>
-                            ${bloqueado
-                                ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
-                                : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
-                            }
-                            <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
-                        </div>
-                    `;
-                    container.appendChild(div);
+                            <div class="user-actions">
+                                <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${emailEscaped}')" title="Sumar créditos">➕</button>
+                                <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${emailEscaped}')" title="Restar créditos">➖</button>
+                                <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${emailEscaped}')" title="Sumar días">📅+</button>
+                                <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${emailEscaped}')" title="Restar días">📅-</button>
+                                ${bloqueado
+                                    ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Desbloquear">🔓</button>`
+                                    : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Bloquear">🔒</button>`
+                                }
+                                <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${emailEscaped}')" title="Eliminar usuario">🗑️</button>
+                            </div>
+                        `;
+                        container.appendChild(div);
+                    } catch (error) {
+                        console.error('Error al procesar usuario:', user.key, error);
+                    }
+                }
+                
+                console.log('✅ Usuarios cargados correctamente');
+            }, (error) => {
+                console.error('❌ Error al escuchar usuarios:', error);
+                const container = document.getElementById("listaUsuariosContainer");
+                if (container) {
+                    container.innerHTML = '<p style="color:#ff4444;padding:10px;text-align:center;">❌ Error al cargar usuarios</p>';
                 }
             });
         }
@@ -3020,6 +3043,7 @@
                         const ip = data.ip || 'N/A';
                         const div = document.createElement('div');
                         div.className = 'user-list-item';
+                        const emailEscaped = email.replace(/'/g, "\\'");
                         div.innerHTML = `
                             <div>
                                 <span class="user-email">${email} ${spam ? '🚫' : ''}</span>
@@ -3032,15 +3056,15 @@
                                 </div>
                             </div>
                             <div class="user-actions">
-                                <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${email}')" title="Sumar créditos">➕</button>
-                                <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${email}')" title="Restar créditos">➖</button>
-                                <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${email}')" title="Sumar días">📅+</button>
-                                <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${email}')" title="Restar días">📅-</button>
+                                <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${emailEscaped}')" title="Sumar créditos">➕</button>
+                                <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${emailEscaped}')" title="Restar créditos">➖</button>
+                                <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${emailEscaped}')" title="Sumar días">📅+</button>
+                                <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${emailEscaped}')" title="Restar días">📅-</button>
                                 ${bloqueado
-                                    ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
-                                    : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
+                                    ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Desbloquear">🔓</button>`
+                                    : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Bloquear">🔒</button>`
                                 }
-                                <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
+                                <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${emailEscaped}')" title="Eliminar usuario">🗑️</button>
                             </div>
                         `;
                         container.appendChild(div);
@@ -3179,7 +3203,7 @@
         }
 
         // ================================================================
-        // ESCUCHAR REGISTROS - MEJORADO
+        // ESCUCHAR REGISTROS - CORREGIDO
         // ================================================================
         function escucharRegistros() {
             if (registrosUnsubscribe) {
@@ -3187,20 +3211,26 @@
                 registrosUnsubscribe = null;
             }
 
+            console.log('🔄 Escuchando registros...');
+
             registrosUnsubscribe = db.ref('registros').on('value', (snapshot) => {
                 const container = document.getElementById('registrosContainer');
-                if (!container) return;
-                container.innerHTML = '';
+                if (!container) {
+                    console.log('❌ Container de registros no encontrado');
+                    return;
+                }
+                
+                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando registros...</p>';
                 
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">No hay registros</p>';
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros</p>';
+                    console.log('📭 No hay registros en la base de datos');
                     return;
                 }
 
                 const registros = [];
                 snapshot.forEach(child => {
                     const data = child.val();
-                    // Verificar que tenga los datos necesarios
                     if (data && data.email) {
                         registros.push({ 
                             key: child.key, 
@@ -3210,30 +3240,42 @@
                     }
                 });
 
-                // Ordenar por timestamp descendente (más reciente primero)
-                registros.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+                console.log(`📊 ${registros.length} registros encontrados`);
 
-                // Mostrar los últimos 50 registros
+                if (registros.length === 0) {
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros válidos</p>';
+                    return;
+                }
+
+                registros.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 const mostrar = registros.slice(0, 50);
                 
+                container.innerHTML = '';
+
                 mostrar.forEach(reg => {
                     const div = document.createElement('div');
                     div.className = 'registro-item';
                     const esSpam = reg.spam || false;
+                    const email = reg.email || 'Desconocido';
+                    const ip = reg.ip || '0.0.0.0';
+                    const fecha = reg.fecha || new Date(reg.timestamp || Date.now()).toLocaleString();
+                    
                     div.innerHTML = `
-                        <span class="registro-email">${reg.email || 'Desconocido'} ${esSpam ? '🚫' : ''}</span>
-                        <span class="registro-ip">🌐 ${reg.ip || '0.0.0.0'}</span>
-                        <span class="registro-fecha">${reg.fecha || new Date(reg.timestamp).toLocaleString()}</span>
+                        <span class="registro-email">${email} ${esSpam ? '🚫' : ''}</span>
+                        <span class="registro-ip">🌐 ${ip}</span>
+                        <span class="registro-fecha">${fecha}</span>
                         ${esSpam ? '<span class="registro-spam">🚫 SPAM</span>' : ''}
                     `;
                     container.appendChild(div);
                 });
 
+                console.log(`✅ ${mostrar.length} registros mostrados`);
+                
                 if (mostrar.length === 0) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">No hay registros válidos</p>';
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros para mostrar</p>';
                 }
             }, (error) => {
-                console.error('Error al escuchar registros:', error);
+                console.error('❌ Error al escuchar registros:', error);
                 const container = document.getElementById('registrosContainer');
                 if (container) {
                     container.innerHTML = '<p style="color:#ff4444;padding:10px;text-align:center;">❌ Error al cargar registros</p>';
@@ -3263,40 +3305,6 @@
                 });
                 mostrarNotificacion('✅ Registros antiguos eliminados', 'success');
             });
-        }
-
-        async function cambiarContraseñaOwner() {
-            if (!currentUser || !esOwner) {
-                mostrarNotificacion('❌ Solo el administrador puede cambiar su contraseña', 'error');
-                return;
-            }
-
-            const newPass = document.getElementById('newPassInput').value.trim();
-            const confirmPass = document.getElementById('confirmPassInput').value.trim();
-
-            if (!newPass || !confirmPass) {
-                mostrarNotificacion('❌ Completa ambos campos', 'error');
-                return;
-            }
-            if (newPass.length < 6) {
-                mostrarNotificacion('❌ Mínimo 6 caracteres', 'error');
-                return;
-            }
-            if (newPass !== confirmPass) {
-                mostrarNotificacion('❌ Las contraseñas no coinciden', 'error');
-                return;
-            }
-
-            try {
-                const user = auth.currentUser;
-                await user.updatePassword(newPass);
-                await db.ref(`usuarios/${usernameClave}`).update({ pass: newPass });
-                mostrarNotificacion('✅ Contraseña actualizada correctamente', 'success');
-                document.getElementById('newPassInput').value = '';
-                document.getElementById('confirmPassInput').value = '';
-            } catch (e) {
-                mostrarNotificacion(`❌ Error: ${e.message}`, 'error');
-            }
         }
 
         // ================================================================
@@ -5219,14 +5227,13 @@
             }
         });
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA MEJORADA');
-        console.log('🔐 Autenticación con Firebase Auth');
-        console.log('👑 Admin: andyobregon799@gmail.com');
-        console.log('✅ Feedback visual en botones');
-        console.log('✅ Actualización automática de datos');
-        console.log('✅ Botón SALIR 100% funcional');
-        console.log('✅ Panel de ADMIN y REGISTROS funcionando correctamente');
-        console.log('✅ Todas las funciones originales intactas');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CORREGIDA');
+        console.log('✅ Mensaje en ruso ELIMINADO');
+        console.log('✅ Usuarios y registros funcionando correctamente');
+        console.log('✅ Sin duplicación de usuarios');
+        console.log('✅ Configuración de bienvenida funcionando');
+        console.log('✅ Sección de cambio de contraseña ELIMINADA');
+        console.log('✅ Panel de ADMIN completamente funcional');
 
         cargarPromo();
         seleccionarPasarela('stripe');
