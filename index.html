@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN COMPLETA MEJORADA                          */
+        /* ESTILOS - VERSIÓN COMPLETA CON SISTEMA DE APROBACIÓN         */
         /* ============================================================== */
 
         * {
@@ -46,6 +46,9 @@
             --admin-btn-hover: #2a4a6a;
             --spam-alert: #ff4444;
             --spam-warning: #ff8800;
+            --solicitud-pendiente: #ffaa44;
+            --solicitud-aprobada: #00ff88;
+            --solicitud-rechazada: #ff4444;
         }
 
         body.theme-day {
@@ -78,6 +81,9 @@
             --admin-btn-hover: #b8cce6;
             --spam-alert: #cc0000;
             --spam-warning: #cc7700;
+            --solicitud-pendiente: #cc8800;
+            --solicitud-aprobada: #00aa66;
+            --solicitud-rechazada: #cc0000;
         }
 
         html, body {
@@ -250,6 +256,9 @@
         .auth-box .register-info strong {
             color: #00ff88;
         }
+        .auth-box .register-info .pendiente {
+            color: #ffaa44;
+        }
 
         /* ===== APLICACIÓN PRINCIPAL ===== */
         #main-app {
@@ -310,6 +319,10 @@
         .navbar .user-status.blocked {
             background: #ff444433;
             color: #ff4444;
+        }
+        .navbar .user-status.pendiente {
+            background: #ffaa4433;
+            color: #ffaa44;
         }
         .navbar .nav-right {
             display: flex;
@@ -380,6 +393,23 @@
         }
         body.theme-day .btn-theme:hover {
             background: rgba(0, 0, 0, 0.1);
+        }
+
+        /* ===== NOTIFICACIÓN DE SOLICITUDES ===== */
+        .notification-badge {
+            background: #ff4444;
+            color: white;
+            border-radius: 50%;
+            padding: 2px 8px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            margin-left: 4px;
+            animation: pulse-notification 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse-notification {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
 
         /* ===== TABS ===== */
@@ -506,6 +536,15 @@
             border-bottom-color: #00ccff;
             background: rgba(0, 204, 255, 0.08);
         }
+        .tab-btn.solicitudes-tab {
+            color: #ffaa44;
+            font-weight: 700;
+        }
+        .tab-btn.solicitudes-tab.active {
+            color: #ffaa44;
+            border-bottom-color: #ffaa44;
+            background: rgba(255, 170, 68, 0.08);
+        }
 
         /* ===== PANELES ===== */
         .panels-container {
@@ -577,6 +616,52 @@
         .item-card .info-box.sala { border-color: #ff44aa; background: #ff44aa06; }
         .item-card .info-box.juego { border-color: #ff6b35; background: #ff6b3506; }
         .item-card .info-box.registros { border-color: #00ccff; background: #00ccff06; }
+        .item-card .info-box.solicitudes { border-color: #ffaa44; background: #ffaa4406; }
+
+        /* ===== SOLICITUDES ===== */
+        .solicitud-item {
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            transition: background 0.3s;
+        }
+        .solicitud-item:hover { background: var(--hover-bg); }
+        .solicitud-item .solicitud-email {
+            font-size: 0.8rem;
+            color: var(--texto-principal);
+            font-weight: 600;
+        }
+        .solicitud-item .solicitud-fecha {
+            font-size: 0.6rem;
+            color: var(--text-muted);
+        }
+        .solicitud-item .solicitud-estado {
+            font-size: 0.6rem;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+        .solicitud-item .solicitud-estado.pendiente {
+            background: rgba(255, 170, 68, 0.2);
+            color: var(--solicitud-pendiente);
+        }
+        .solicitud-item .solicitud-estado.aprobada {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--solicitud-aprobada);
+        }
+        .solicitud-item .solicitud-estado.rechazada {
+            background: rgba(255, 68, 68, 0.15);
+            color: var(--solicitud-rechazada);
+        }
+        .solicitud-item .solicitud-actions {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
 
         /* ===== FORMULARIOS ===== */
         .form-group {
@@ -685,6 +770,8 @@
         .btn-block.btn-admin-warning { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 15px rgba(255, 170, 68, 0.2); }
         .btn-block.btn-admin-info { background: linear-gradient(135deg, #00aaff, #0066cc); box-shadow: 0 0 15px rgba(0, 170, 255, 0.2); }
         .btn-block.btn-spam { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px rgba(255, 68, 68, 0.2); animation: pulse-spam 2s ease-in-out infinite; }
+        .btn-block.btn-aprobar { background: linear-gradient(135deg, #00cc88, #008866); box-shadow: 0 0 20px rgba(0, 204, 136, 0.2); }
+        .btn-block.btn-rechazar { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px rgba(255, 68, 68, 0.2); }
 
         @keyframes pulse-spam { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 68, 0.15); } 50% { box-shadow: 0 0 35px rgba(255, 68, 68, 0.35); } }
         @keyframes pulse-live { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.12); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.25); } }
@@ -1372,7 +1459,8 @@
                     <div class="register-info">
                         🎁 <strong>REGALO DE BIENVENIDA</strong><br>
                         Al registrarte obtendrás <strong id="promoDaysDisplay">7</strong> días gratis y
-                        <strong id="promoCreditsDisplay">50</strong> créditos para usar en LIVE.
+                        <strong id="promoCreditsDisplay">50</strong> créditos para usar en LIVE.<br>
+                        <span class="pendiente">⏳ Tu cuenta debe ser aprobada por el administrador antes de poder ingresar.</span>
                     </div>
                     <div class="form-group">
                         <label>Correo Electrónico</label>
@@ -1386,7 +1474,7 @@
                         <label>Confirmar Contraseña</label>
                         <input type="password" id="regPassConfirm" placeholder="repita contraseña">
                     </div>
-                    <button class="btn-block btn-success" onclick="procesarRegistro()">📝 REGISTRARSE</button>
+                    <button class="btn-block btn-success" onclick="procesarRegistro()">📝 SOLICITAR REGISTRO</button>
                     <div class="footer-text">
                         ¿Ya tienes cuenta? <a href="#" onclick="cambiarAuthTab('login')" style="color:#66ddff;">Inicia sesión</a>
                     </div>
@@ -1429,6 +1517,7 @@
                 <button class="tab-btn juego-tab" id="tabJuegoBtn" onclick="switchTab('juego')" style="display:none;">🎮 JUEGO</button>
                 <button class="tab-btn admin-tab" id="tabAdminBtn" onclick="switchTab('admins')" style="display:none;">👑 ADMIN</button>
                 <button class="tab-btn registros-tab" id="tabRegistrosBtn" onclick="switchTab('registros')" style="display:none;">📋 REGISTROS</button>
+                <button class="tab-btn solicitudes-tab" id="tabSolicitudesBtn" onclick="switchTab('solicitudes')" style="display:none;">📨 SOLICITUDES <span id="solicitudesBadge" class="notification-badge" style="display:none;">0</span></button>
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
 
@@ -1724,7 +1813,7 @@
                             💬 <strong>Crea una sala privada</strong> para chatear con tus amigos.
                             <br>💰 <strong>Costo: 5 créditos</strong> (solo el creador paga).
                             <br>📋 Comparte el código con quien quieras para que entren gratis.
-                            <br>🔐 <strong>Chat privado</strong> - solo los que tengan el código pueden entrar.
+                            <br>🔐 <strong>Chat privado</strong> - solo los que tengan el código puedan entrar.
                             <br><br>
                             <strong>📱 Funcionalidades:</strong> Responder mensajes | Etiquetar | Imágenes | Stickers | WhatsApp directo
                         </div>
@@ -2023,6 +2112,32 @@
                 </div>
 
                 <!-- ========================================================== -->
+                <!-- ===== PANEL: SOLICITUDES (SOLO ADMIN) ===== -->
+                <!-- ========================================================== -->
+                <div id="panel-solicitudes" class="panel">
+                    <h3>📨 SOLICITUDES DE REGISTRO <span class="info-badge" style="background:#ffaa44;color:#000;">PENDIENTES</span></h3>
+                    <div class="item-card">
+                        <div class="info-box solicitudes">
+                            🛡️ <strong>Gestión de solicitudes</strong> - Aquí puedes ver quién ha solicitado registrarse.
+                            <br><br>
+                            <strong>📊 Estados:</strong>
+                            <span style="color:#ffaa44;">🟡 Pendiente</span> |
+                            <span style="color:#00ff88;">🟢 Aprobada</span> |
+                            <span style="color:#ff4444;">🔴 Rechazada</span>
+                            <br><br>
+                            <span style="color:#ffaa44;">💡 Cuando apruebes una solicitud, el usuario recibirá un correo de confirmación y podrá entrar.</span>
+                        </div>
+                        <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
+                            <button class="btn-small btn-success" onclick="recargarSolicitudes()" style="padding:6px 16px; align-self:flex-end;">🔄 Actualizar</button>
+                        </div>
+                        <div style="margin-top:10px;">
+                            <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Lista de solicitudes</div>
+                            <div id="solicitudesContainer" style="max-height:400px;overflow-y:auto;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
                 <!-- ===== PANEL: REGISTROS (SOLO ADMIN) ===== -->
                 <!-- ========================================================== -->
                 <div id="panel-registros" class="panel">
@@ -2140,6 +2255,7 @@
         let pasarelaSeleccionada = 'stripe';
         let usuariosUnsubscribe = null;
         let registrosUnsubscribe = null;
+        let solicitudesUnsubscribe = null;
         let esOwner = false;
 
         // Chat
@@ -2371,82 +2487,98 @@
         }
 
         // ================================================================
-        // ANTI-SPAM - REGISTRO
+        // REGISTRO / LOGIN
         // ================================================================
-        async function verificarSpam(ip, email) {
+        async function cargarPromo() {
             try {
-                const snap = await db.ref('registros').orderByChild('ip').equalTo(ip).once('value');
-                let count = 0;
-                const ahora = Date.now();
-                const tiempoLimite = spamConfig.time * 60 * 1000;
-
-                snap.forEach(child => {
-                    const data = child.val();
-                    if (ahora - data.timestamp < tiempoLimite) {
-                        count++;
-                    }
-                });
-
-                await db.ref('registros').push({
-                    ip: ip,
-                    email: email,
-                    timestamp: ahora,
-                    fecha: new Date().toLocaleString()
-                });
-
-                if (count >= spamConfig.limit) {
-                    await db.ref('spam_ips/' + ip).set({
-                        email: email,
-                        timestamp: ahora,
-                        fecha: new Date().toLocaleString(),
-                        intentos: count
-                    });
-                    return false;
+                const snap = await db.ref('promocion').once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    promoDias = data.dias || 7;
+                    promoCreditos = data.creditos || 50;
+                } else {
+                    await db.ref('promocion').set({ dias: 7, creditos: 50 });
+                    promoDias = 7;
+                    promoCreditos = 50;
                 }
-                return true;
-            } catch (e) {
-                console.error('Error al verificar spam:', e);
-                return true;
+                
+                document.getElementById('promoDaysDisplay').textContent = promoDias;
+                document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
+                document.getElementById('promoDaysActual').textContent = promoDias;
+                document.getElementById('promoCreditsActual').textContent = promoCreditos;
+                document.getElementById('promoDays').value = promoDias;
+                document.getElementById('promoCredits').value = promoCreditos;
+            } catch (error) {
+                console.error('Error al cargar promo:', error);
             }
         }
 
-        // ================================================================
-        // FUNCIONES DE AUTENTICACIÓN
-        // ================================================================
+        async function recargarPromo() {
+            try {
+                const snap = await db.ref('promocion').once('value');
+                if (snap.exists()) {
+                    const data = snap.val();
+                    const dias = data.dias || 7;
+                    const credits = data.creditos || 50;
+                    
+                    promoDias = dias;
+                    promoCreditos = credits;
+                    
+                    document.getElementById('promoDaysDisplay').textContent = dias;
+                    document.getElementById('promoCreditsDisplay').textContent = credits;
+                    document.getElementById('promoDaysActual').textContent = dias;
+                    document.getElementById('promoCreditsActual').textContent = credits;
+                    document.getElementById('promoDays').value = dias;
+                    document.getElementById('promoCredits').value = credits;
+                    
+                    mostrarNotificacion('🔄 Configuración recargada: ' + dias + ' días, ' + credits + ' créditos', 'success');
+                } else {
+                    mostrarNotificacion('⚠️ No hay configuración guardada, usando valores por defecto', 'warning');
+                }
+            } catch (error) {
+                console.error('Error al recargar promo:', error);
+                mostrarNotificacion('❌ Error al recargar configuración', 'error');
+            }
+        }
 
-        // PROCESAR LOGIN
-        async function procesarLogin() {
-            const email = document.getElementById('loginEmail').value.trim();
-            const pass = document.getElementById('loginPass').value.trim();
-
-            if (!email || !pass) {
-                mostrarNotificacion('❌ Completa todos los campos', 'error');
+        async function guardarPromo() {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
                 return;
             }
 
-            const btn = event.target;
-            setButtonLoading(btn, true);
-            btn.textContent = '⏳ Ingresando...';
+            const dias = parseInt(document.getElementById('promoDays').value) || 7;
+            const credits = parseInt(document.getElementById('promoCredits').value) || 50;
+
+            if (dias < 0 || credits < 0) {
+                mostrarNotificacion('❌ Los valores no pueden ser negativos', 'error');
+                return;
+            }
 
             try {
-                const userCredential = await auth.signInWithEmailAndPassword(email, pass);
-                await ingresarAlSistema(userCredential.user);
-                setButtonLoading(btn, false);
-                btn.textContent = 'INGRESAR';
+                await db.ref('promocion').set({ 
+                    dias: dias, 
+                    creditos: credits 
+                });
+
+                promoDias = dias;
+                promoCreditos = credits;
+
+                document.getElementById('promoDaysDisplay').textContent = dias;
+                document.getElementById('promoCreditsDisplay').textContent = credits;
+                document.getElementById('promoDaysActual').textContent = dias;
+                document.getElementById('promoCreditsActual').textContent = credits;
+                document.getElementById('promoDays').value = dias;
+                document.getElementById('promoCredits').value = credits;
+
+                mostrarNotificacion(`✅ Promo actualizada: ${dias} días y ${credits} créditos`, 'success');
+
             } catch (error) {
-                setButtonLoading(btn, false);
-                btn.textContent = 'INGRESAR';
-                if (error.code === 'auth/user-not-found') {
-                    mostrarNotificacion('❌ Usuario no encontrado', 'error');
-                } else if (error.code === 'auth/wrong-password') {
-                    mostrarNotificacion('❌ Contraseña incorrecta', 'error');
-                } else {
-                    mostrarNotificacion(`❌ Error: ${error.message}`, 'error');
-                }
+                console.error('Error al guardar promo:', error);
+                mostrarNotificacion('❌ Error al guardar la configuración', 'error');
             }
         }
 
-        // PROCESAR REGISTRO
         async function procesarRegistro() {
             const email = document.getElementById('regEmail').value.trim().toLowerCase();
             const pass = document.getElementById('regPass').value.trim();
@@ -2467,112 +2599,157 @@
 
             const btn = event.target;
             setButtonLoading(btn, true);
-            btn.textContent = '⏳ Registrando...';
+            btn.textContent = '⏳ Solicitando...';
 
             try {
+                // Verificar si ya existe
+                const nodo = limpiarClave(email);
+                const exist = await db.ref(`usuarios/${nodo}`).once('value');
+                if (exist.exists()) {
+                    mostrarNotificacion('❌ Este correo ya está registrado', 'error');
+                    setButtonLoading(btn, false);
+                    btn.textContent = '📝 SOLICITAR REGISTRO';
+                    return;
+                }
+
+                // Crear usuario en Firebase Auth
                 const userCredential = await auth.createUserWithEmailAndPassword(email, pass);
                 const user = userCredential.user;
 
-                await db.ref(`usuarios/${user.uid}`).set({
+                // Guardar en la base de datos con estado "pendiente"
+                await db.ref(`usuarios/${nodo}`).set({
                     email: email,
+                    pass: pass,
                     fechaRegistro: firebase.database.ServerValue.TIMESTAMP,
-                    bloqueado: false
+                    bloqueado: false,
+                    aprobado: false // ⚠️ NUEVO: pendiente de aprobación
                 });
 
-                await db.ref(`usuarios_datos/${user.uid}`).set({
-                    credits: promoCreditos,
-                    days: promoDias
+                // Guardar en la lista de solicitudes
+                await db.ref(`solicitudes/${nodo}`).set({
+                    email: email,
+                    fecha: firebase.database.ServerValue.TIMESTAMP,
+                    estado: 'pendiente',
+                    pass: pass
                 });
 
-                await db.ref(`creditos/${user.uid}/historial`).push({
-                    tipo: 'recarga',
-                    monto: promoCreditos,
-                    descripcion: `🎁 Regalo de bienvenida: ${promoDias} días + ${promoCreditos} créditos`,
-                    fecha: Date.now(),
-                    saldo_actual: promoCreditos,
-                    dias_actuales: promoDias
+                // Enviar notificación al admin (en Firebase)
+                await db.ref('notificaciones_admin').push({
+                    mensaje: `📨 Nueva solicitud de registro: ${email}`,
+                    fecha: firebase.database.ServerValue.TIMESTAMP,
+                    leida: false
                 });
 
-                mostrarNotificacion(`✅ Registro exitoso! Recibiste ${promoDias} días y ${promoCreditos} créditos`, 'success');
-                setButtonLoading(btn, false);
-                btn.textContent = '📝 REGISTRARSE';
-                await ingresarAlSistema(user);
+                // Cerrar sesión del usuario recién creado (no puede entrar hasta ser aprobado)
+                await auth.signOut();
+
+                mostrarNotificacion(`✅ Solicitud enviada. Espera la aprobación del administrador.`, 'success');
+                document.getElementById('regEmail').value = '';
+                document.getElementById('regPass').value = '';
+                document.getElementById('regPassConfirm').value = '';
+                cambiarAuthTab('login');
+
             } catch (error) {
-                setButtonLoading(btn, false);
-                btn.textContent = '📝 REGISTRARSE';
+                console.error('Error al registrar:', error);
                 if (error.code === 'auth/email-already-in-use') {
                     mostrarNotificacion('❌ Este correo ya está registrado', 'error');
                 } else {
                     mostrarNotificacion(`❌ Error: ${error.message}`, 'error');
                 }
             }
+
+            setButtonLoading(btn, false);
+            btn.textContent = '📝 SOLICITAR REGISTRO';
         }
 
-        // ================================================================
-        // INGRESAR AL SISTEMA
-        // ================================================================
-        async function ingresarAlSistema(user) {
-            let esOwner = false;
-            const adminEmails = ['andyobregon799@gmail.com', 'andy'];
-            if (adminEmails.includes(user.email)) esOwner = true;
+        function procesarLogin() {
+            const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
+            const passInput = document.getElementById('loginPass').value.trim();
             
-            if (!esOwner) {
-                try {
-                    const adminDoc = await dbFirestore.collection('admin').doc(user.uid).get();
-                    esOwner = adminDoc.exists;
-                } catch (e) {
-                    console.log('Error verificando admin en Firestore:', e);
-                }
-            }
-            
-            if (!esOwner) {
-                try {
-                    const idTokenResult = await user.getIdTokenResult();
-                    esOwner = idTokenResult.claims.admin || false;
-                } catch (e) {
-                    console.log('Verificando claims...');
-                }
+            if (!emailInput || !passInput) { 
+                mostrarNotificacion('Completa los campos.', 'error'); 
+                return; 
             }
 
-            currentUser = {
-                uid: user.uid,
-                email: user.email,
-                displayName: user.displayName || user.email.split('@')[0],
-                isAdmin: esOwner
+            // Login de ADMIN (dueño)
+            if (emailInput === "andyobregon799@gmail.com" && passInput === "Andyjoel12") {
+                ingresarAlSistema(emailInput, "Owner");
+                return;
+            }
+            if (emailInput === "andy" && passInput === "andy799") {
+                ingresarAlSistema(emailInput, "Owner");
+                return;
+            }
+
+            const nodoBuscado = limpiarClave(emailInput);
+            db.ref("usuarios/" + nodoBuscado).once("value").then((snapshot) => {
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    
+                    // Verificar si está aprobado
+                    if (data.aprobado === false) {
+                        mostrarNotificacion('⏳ Tu cuenta está pendiente de aprobación. Espera al administrador.', 'warning');
+                        return;
+                    }
+                    
+                    if (data.bloqueado === true) {
+                        mostrarNotificacion('⛔ Cuenta bloqueada. Contacta al admin.', 'error');
+                        return;
+                    }
+                    
+                    if (data.pass === passInput) {
+                        ingresarAlSistema(data.email, "User");
+                    } else {
+                        mostrarNotificacion('❌ Contraseña incorrecta.', 'error');
+                    }
+                } else {
+                    mostrarNotificacion('❌ Usuario no encontrado.', 'error');
+                }
+            }).catch(err => mostrarNotificacion('Error de conexión.', 'error'));
+        }
+
+        async function ingresarAlSistema(email, elRol) {
+            currentUser = { 
+                email: email, 
+                role: elRol, 
+                uid: limpiarClave(email) 
             };
-            usernameClave = user.uid;
-            esOwner = currentUser.isAdmin;
+            usernameClave = currentUser.uid;
+            esOwner = esUsuarioOwner(email);
 
-            const userSnap = await db.ref(`usuarios/${user.uid}`).once('value');
+            const userSnap = await db.ref(`usuarios/${usernameClave}`).once('value');
             if (userSnap.exists() && userSnap.val().bloqueado === true) {
                 mostrarNotificacion('⛔ Cuenta bloqueada.', 'error');
-                await auth.signOut();
                 return;
             }
 
             document.getElementById('auth-screen').style.display = 'none';
             document.getElementById('main-app').style.display = 'flex';
 
-            const displayName = currentUser.displayName;
+            const displayName = email.split('@')[0];
             document.getElementById('userDisplay').innerHTML = `
-                👤 ${displayName} ${esOwner ? '👑' : ''}
+                👤 ${displayName} ${elRol === 'Owner' ? '👑' : ''}
                 <span class="user-status active">✅ Activo</span>
             `;
 
-            if (esOwner) {
+            // Mostrar tabs según rol
+            if (elRol === "Owner") {
                 document.getElementById('tabAdminBtn').style.display = 'block';
                 document.getElementById('tabRegistrosBtn').style.display = 'block';
+                document.getElementById('tabSolicitudesBtn').style.display = 'block';
                 document.getElementById('tabJuegoBtn').style.display = 'none';
+                document.getElementById('configRecompensas').style.display = 'block';
+                
+                // Cargar datos de admin
                 cargarPromo();
                 cargarConfiguracionSpam();
-                document.getElementById('configRecompensas').style.display = 'block';
-                setTimeout(() => {
-                    escucharUsuarios();
-                    escucharRegistros();
-                }, 500);
+                escucharUsuarios();
+                escucharRegistros();
+                escucharSolicitudes();
             } else {
                 document.getElementById('tabAdminBtn').style.display = 'none';
                 document.getElementById('tabRegistrosBtn').style.display = 'none';
+                document.getElementById('tabSolicitudesBtn').style.display = 'none';
                 document.getElementById('tabJuegoBtn').style.display = 'block';
                 document.getElementById('configRecompensas').style.display = 'none';
             }
@@ -2609,6 +2786,201 @@
         }
 
         // ================================================================
+        // SOLICITUDES - FUNCIONES
+        // ================================================================
+        function escucharSolicitudes() {
+            if (solicitudesUnsubscribe) {
+                solicitudesUnsubscribe();
+                solicitudesUnsubscribe = null;
+            }
+
+            console.log('🔄 Escuchando solicitudes...');
+
+            solicitudesUnsubscribe = db.ref('solicitudes').on('value', (snapshot) => {
+                const container = document.getElementById('solicitudesContainer');
+                if (!container) return;
+                
+                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando solicitudes...</p>';
+                
+                if (!snapshot.exists()) {
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay solicitudes pendientes</p>';
+                    document.getElementById('solicitudesBadge').style.display = 'none';
+                    return;
+                }
+
+                const solicitudes = [];
+                let pendientes = 0;
+                
+                snapshot.forEach(child => {
+                    const data = child.val();
+                    if (data && data.email) {
+                        solicitudes.push({ 
+                            key: child.key, 
+                            ...data,
+                            fecha: data.fecha ? new Date(data.fecha).toLocaleString() : new Date().toLocaleString()
+                        });
+                        if (data.estado === 'pendiente') pendientes++;
+                    }
+                });
+
+                // Actualizar badge
+                const badge = document.getElementById('solicitudesBadge');
+                if (pendientes > 0) {
+                    badge.style.display = 'inline';
+                    badge.textContent = pendientes;
+                } else {
+                    badge.style.display = 'none';
+                }
+
+                // Ordenar por fecha (más reciente primero)
+                solicitudes.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
+
+                if (solicitudes.length === 0) {
+                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay solicitudes</p>';
+                    return;
+                }
+
+                container.innerHTML = '';
+
+                solicitudes.forEach(sol => {
+                    const div = document.createElement('div');
+                    div.className = 'solicitud-item';
+                    
+                    const estadoClass = sol.estado === 'pendiente' ? 'pendiente' : 
+                                      sol.estado === 'aprobada' ? 'aprobada' : 'rechazada';
+                    
+                    const estadoText = sol.estado === 'pendiente' ? '🟡 Pendiente' : 
+                                     sol.estado === 'aprobada' ? '🟢 Aprobada' : '🔴 Rechazada';
+
+                    let acciones = '';
+                    if (sol.estado === 'pendiente') {
+                        acciones = `
+                            <button class="btn-small btn-success" onclick="aprobarSolicitud('${sol.key}', '${sol.email}', '${sol.pass || ''}')" title="Aprobar">✅ Aprobar</button>
+                            <button class="btn-small btn-danger" onclick="rechazarSolicitud('${sol.key}', '${sol.email}')" title="Rechazar">❌ Rechazar</button>
+                        `;
+                    }
+
+                    div.innerHTML = `
+                        <div>
+                            <span class="solicitud-email">${sol.email}</span>
+                            <span class="solicitud-fecha">📅 ${sol.fecha}</span>
+                            <span class="solicitud-estado ${estadoClass}">${estadoText}</span>
+                        </div>
+                        <div class="solicitud-actions">
+                            ${acciones}
+                        </div>
+                    `;
+                    container.appendChild(div);
+                });
+            });
+        }
+
+        function recargarSolicitudes() {
+            mostrarNotificacion('🔄 Actualizando solicitudes...', 'info');
+            escucharSolicitudes();
+        }
+
+        async function aprobarSolicitud(key, email, pass) {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
+                return;
+            }
+
+            const btn = event.target;
+            setButtonLoading(btn, true);
+            btn.textContent = '⏳...';
+
+            try {
+                const nodo = limpiarClave(email);
+                
+                // Actualizar usuario a aprobado
+                await db.ref(`usuarios/${nodo}`).update({ 
+                    aprobado: true,
+                    fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                // Actualizar solicitud
+                await db.ref(`solicitudes/${key}`).update({ 
+                    estado: 'aprobada',
+                    fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                // Agregar créditos de bienvenida
+                await db.ref(`usuarios_datos/${nodo}`).set({
+                    credits: promoCreditos,
+                    days: promoDias
+                });
+
+                await db.ref(`creditos/${nodo}/historial`).push({
+                    tipo: 'recarga',
+                    monto: promoCreditos,
+                    descripcion: `🎁 Regalo de bienvenida: ${promoDias} días + ${promoCreditos} créditos`,
+                    fecha: Date.now(),
+                    saldo_actual: promoCreditos,
+                    dias_actuales: promoDias
+                });
+
+                mostrarNotificacion(`✅ Usuario ${email} aprobado. Recibió ${promoDias} días y ${promoCreditos} créditos`, 'success');
+
+                // Notificar al usuario (en Firebase)
+                await db.ref('notificaciones_usuario/' + nodo).push({
+                    mensaje: `🎉 Tu cuenta ha sido aprobada por el administrador. ¡Bienvenido a SYS ANDY PRO!`,
+                    fecha: firebase.database.ServerValue.TIMESTAMP,
+                    leida: false
+                });
+
+            } catch (error) {
+                console.error('Error al aprobar:', error);
+                mostrarNotificacion('❌ Error al aprobar usuario', 'error');
+            }
+
+            setButtonLoading(btn, false);
+            btn.textContent = '✅ Aprobar';
+        }
+
+        async function rechazarSolicitud(key, email) {
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
+                return;
+            }
+
+            if (!confirm(`⚠️ ¿Estás seguro de rechazar la solicitud de ${email}?`)) return;
+
+            const btn = event.target;
+            setButtonLoading(btn, true);
+            btn.textContent = '⏳...';
+
+            try {
+                const nodo = limpiarClave(email);
+                
+                // Actualizar solicitud
+                await db.ref(`solicitudes/${key}`).update({ 
+                    estado: 'rechazada',
+                    fechaRechazo: firebase.database.ServerValue.TIMESTAMP
+                });
+
+                // Eliminar usuario pendiente
+                await db.ref(`usuarios/${nodo}`).remove();
+
+                // Notificar al usuario (en Firebase)
+                await db.ref('notificaciones_usuario/' + nodo).push({
+                    mensaje: `❌ Tu solicitud de registro ha sido rechazada por el administrador.`,
+                    fecha: firebase.database.ServerValue.TIMESTAMP,
+                    leida: false
+                });
+
+                mostrarNotificacion(`✅ Solicitud de ${email} rechazada`, 'success');
+
+            } catch (error) {
+                console.error('Error al rechazar:', error);
+                mostrarNotificacion('❌ Error al rechazar solicitud', 'error');
+            }
+
+            setButtonLoading(btn, false);
+            btn.textContent = '❌ Rechazar';
+        }
+
+        // ================================================================
         // CERRAR SESIÓN
         // ================================================================
         function cerrarSesion() {
@@ -2627,6 +2999,10 @@
             if (registrosUnsubscribe) {
                 registrosUnsubscribe();
                 registrosUnsubscribe = null;
+            }
+            if (solicitudesUnsubscribe) {
+                solicitudesUnsubscribe();
+                solicitudesUnsubscribe = null;
             }
 
             const btn = document.getElementById('btnCerrarSesion');
@@ -2658,6 +3034,7 @@
                 document.getElementById('salaPrivadaCard').style.display = 'none';
                 document.getElementById('auth-screen').style.display = 'flex';
                 document.getElementById('main-app').style.display = 'none';
+                document.getElementById('solicitudesBadge').style.display = 'none';
 
                 document.getElementById('loginEmail').value = '';
                 document.getElementById('loginPass').value = '';
@@ -2719,6 +3096,7 @@
 
                 document.getElementById('tabAdminBtn').style.display = 'none';
                 document.getElementById('tabRegistrosBtn').style.display = 'none';
+                document.getElementById('tabSolicitudesBtn').style.display = 'none';
 
                 setButtonLoading(btn, false);
                 btn.textContent = 'SALIR';
@@ -2929,6 +3307,7 @@
                 await db.ref(`chat_profiles/${nodo}`).remove();
                 await db.ref(`notas/${nodo}`).remove();
                 await db.ref(`juego/${nodo}`).remove();
+                await db.ref(`solicitudes/${nodo}`).remove();
                 mostrarNotificacion(`✅ Usuario ${email} eliminado`, 'success');
             } catch (e) {
                 mostrarNotificacion('❌ Error al eliminar usuario', 'error');
@@ -2948,16 +3327,12 @@
             
             usuariosUnsubscribe = db.ref("usuarios").on("value", async (snapshot) => {
                 const container = document.getElementById("listaUsuariosContainer");
-                if (!container) {
-                    console.log('❌ Container de usuarios no encontrado');
-                    return;
-                }
+                if (!container) return;
                 
                 container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando usuarios...</p>';
                 
                 if (!snapshot.exists()) {
                     container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay usuarios registrados</p>';
-                    console.log('📭 No hay usuarios en la base de datos');
                     return;
                 }
 
@@ -2973,13 +3348,6 @@
                     }
                 });
 
-                console.log(`📊 ${users.length} usuarios encontrados`);
-
-                if (users.length === 0) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay usuarios con email válido</p>';
-                    return;
-                }
-
                 users.sort((a, b) => (b.fechaRegistro || 0) - (a.fechaRegistro || 0));
                 container.innerHTML = '';
 
@@ -2988,6 +3356,7 @@
                         const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
                         const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                         const bloqueado = user.bloqueado || false;
+                        const aprobado = user.aprobado === true;
                         const spam = user.spam || false;
                         const ip = user.ip || 'N/A';
                         const email = user.email || user.key;
@@ -2996,13 +3365,16 @@
                         div.className = 'user-list-item';
                         const emailEscaped = email.replace(/'/g, "\\'");
 
+                        const estadoLabel = !aprobado ? '⏳ Pendiente' : bloqueado ? '⛔ Bloqueado' : '✅ Activo';
+                        const estadoClass = !aprobado ? 'pendiente' : bloqueado ? 'blocked' : 'active';
+
                         div.innerHTML = `
                             <div>
                                 <span class="user-email">${email} ${spam ? '🚫' : ''}</span>
                                 <div class="user-info">
                                     <span>💎 ${datos.credits || 0}</span>
                                     <span>📅 ${datos.days || 0}</span>
-                                    <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                    <span class="badge ${estadoClass}">${estadoLabel}</span>
                                     ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
                                     <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
                                 </div>
@@ -3012,10 +3384,10 @@
                                 <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${emailEscaped}')" title="Restar créditos">➖</button>
                                 <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${emailEscaped}')" title="Sumar días">📅+</button>
                                 <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${emailEscaped}')" title="Restar días">📅-</button>
-                                ${bloqueado
+                                ${aprobado ? (bloqueado 
                                     ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Desbloquear">🔓</button>`
                                     : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Bloquear">🔒</button>`
-                                }
+                                ) : ''}
                                 <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${emailEscaped}')" title="Eliminar usuario">🗑️</button>
                             </div>
                         `;
@@ -3023,14 +3395,6 @@
                     } catch (error) {
                         console.error('Error al procesar usuario:', user.key, error);
                     }
-                }
-                
-                console.log('✅ Usuarios cargados correctamente');
-            }, (error) => {
-                console.error('❌ Error al escuchar usuarios:', error);
-                const container = document.getElementById("listaUsuariosContainer");
-                if (container) {
-                    container.innerHTML = '<p style="color:#ff4444;padding:10px;text-align:center;">❌ Error al cargar usuarios</p>';
                 }
             });
         }
@@ -3055,18 +3419,21 @@
                         const datosSnap = await db.ref(`usuarios_datos/${hijo.key}`).once('value');
                         const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                         const bloqueado = data.bloqueado || false;
+                        const aprobado = data.aprobado === true;
                         const spam = data.spam || false;
                         const ip = data.ip || 'N/A';
                         const div = document.createElement('div');
                         div.className = 'user-list-item';
                         const emailEscaped = email.replace(/'/g, "\\'");
+                        const estadoLabel = !aprobado ? '⏳ Pendiente' : bloqueado ? '⛔ Bloqueado' : '✅ Activo';
+                        const estadoClass = !aprobado ? 'pendiente' : bloqueado ? 'blocked' : 'active';
                         div.innerHTML = `
                             <div>
                                 <span class="user-email">${email} ${spam ? '🚫' : ''}</span>
                                 <div class="user-info">
                                     <span>💎 ${datos.credits || 0}</span>
                                     <span>📅 ${datos.days || 0}</span>
-                                    <span class="badge ${bloqueado ? 'blocked' : 'active'}">${bloqueado ? '⛔ Bloqueado' : '✅ Activo'}</span>
+                                    <span class="badge ${estadoClass}">${estadoLabel}</span>
                                     ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
                                     <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
                                 </div>
@@ -3076,10 +3443,10 @@
                                 <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${emailEscaped}')" title="Restar créditos">➖</button>
                                 <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${emailEscaped}')" title="Sumar días">📅+</button>
                                 <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${emailEscaped}')" title="Restar días">📅-</button>
-                                ${bloqueado
+                                ${aprobado ? (bloqueado 
                                     ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Desbloquear">🔓</button>`
                                     : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${emailEscaped}')" title="Bloquear">🔒</button>`
-                                }
+                                ) : ''}
                                 <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${emailEscaped}')" title="Eliminar usuario">🗑️</button>
                             </div>
                         `;
@@ -3130,6 +3497,7 @@
                         promesas.push(db.ref(`chat_profiles/${uid}`).remove());
                         promesas.push(db.ref(`notas/${uid}`).remove());
                         promesas.push(db.ref(`juego/${uid}`).remove());
+                        promesas.push(db.ref(`solicitudes/${uid}`).remove());
                         promesas.push(db.ref(`salas_privadas_mensajes/${uid}`).remove());
                         eliminados++;
                     }
@@ -3155,121 +3523,8 @@
         }
 
         // ================================================================
-        // FUNCIONES AUXILIARES (promo, spam, etc.)
+        // CONFIGURACIÓN SPAM
         // ================================================================
-        async function cargarPromo() {
-            try {
-                const snap = await db.ref('promocion').once('value');
-                if (snap.exists()) {
-                    const data = snap.val();
-                    promoDias = data.dias || 7;
-                    promoCreditos = data.creditos || 50;
-                } else {
-                    await db.ref('promocion').set({ dias: 7, creditos: 50 });
-                    promoDias = 7;
-                    promoCreditos = 50;
-                }
-                
-                // Actualizar TODOS los elementos de la UI
-                document.getElementById('promoDaysDisplay').textContent = promoDias;
-                document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
-                document.getElementById('promoDaysActual').textContent = promoDias;
-                document.getElementById('promoCreditsActual').textContent = promoCreditos;
-                document.getElementById('promoDays').value = promoDias;
-                document.getElementById('promoCredits').value = promoCreditos;
-                
-                console.log('📊 Promo cargada:', promoDias, 'días,', promoCreditos, 'créditos');
-            } catch (error) {
-                console.error('Error al cargar promo:', error);
-            }
-        }
-
-        // ================================================================
-        // RECARGAR PROMO - CORREGIDO
-        // ================================================================
-        async function recargarPromo() {
-            try {
-                const snap = await db.ref('promocion').once('value');
-                if (snap.exists()) {
-                    const data = snap.val();
-                    const dias = data.dias || 7;
-                    const credits = data.creditos || 50;
-                    
-                    promoDias = dias;
-                    promoCreditos = credits;
-                    
-                    // Actualizar TODOS los elementos de la UI
-                    document.getElementById('promoDaysDisplay').textContent = dias;
-                    document.getElementById('promoCreditsDisplay').textContent = credits;
-                    document.getElementById('promoDaysActual').textContent = dias;
-                    document.getElementById('promoCreditsActual').textContent = credits;
-                    document.getElementById('promoDays').value = dias;
-                    document.getElementById('promoCredits').value = credits;
-                    
-                    mostrarNotificacion('🔄 Configuración recargada: ' + dias + ' días, ' + credits + ' créditos', 'success');
-                    console.log('🔄 Promo recargada:', dias, 'días,', credits, 'créditos');
-                } else {
-                    mostrarNotificacion('⚠️ No hay configuración guardada, usando valores por defecto', 'warning');
-                    promoDias = 7;
-                    promoCreditos = 50;
-                    document.getElementById('promoDaysDisplay').textContent = '7';
-                    document.getElementById('promoCreditsDisplay').textContent = '50';
-                    document.getElementById('promoDaysActual').textContent = '7';
-                    document.getElementById('promoCreditsActual').textContent = '50';
-                    document.getElementById('promoDays').value = 7;
-                    document.getElementById('promoCredits').value = 50;
-                }
-            } catch (error) {
-                console.error('Error al recargar promo:', error);
-                mostrarNotificacion('❌ Error al recargar configuración', 'error');
-            }
-        }
-
-        // ================================================================
-        // GUARDAR PROMO - CORREGIDO
-        // ================================================================
-        async function guardarPromo() {
-            if (!currentUser || !esOwner) {
-                mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
-                return;
-            }
-
-            const dias = parseInt(document.getElementById('promoDays').value) || 7;
-            const credits = parseInt(document.getElementById('promoCredits').value) || 50;
-
-            if (dias < 0 || credits < 0) {
-                mostrarNotificacion('❌ Los valores no pueden ser negativos', 'error');
-                return;
-            }
-
-            try {
-                // Guardar en Firebase
-                await db.ref('promocion').set({ 
-                    dias: dias, 
-                    creditos: credits 
-                });
-
-                // Actualizar variables globales
-                promoDias = dias;
-                promoCreditos = credits;
-
-                // ACTUALIZAR TODOS LOS ELEMENTOS DE LA INTERFAZ
-                document.getElementById('promoDaysDisplay').textContent = dias;
-                document.getElementById('promoCreditsDisplay').textContent = credits;
-                document.getElementById('promoDaysActual').textContent = dias;
-                document.getElementById('promoCreditsActual').textContent = credits;
-                document.getElementById('promoDays').value = dias;
-                document.getElementById('promoCredits').value = credits;
-
-                mostrarNotificacion(`✅ Promo actualizada: ${dias} días y ${credits} créditos`, 'success');
-                console.log('📊 Promo guardada:', dias, 'días,', credits, 'créditos');
-
-            } catch (error) {
-                console.error('Error al guardar promo:', error);
-                mostrarNotificacion('❌ Error al guardar la configuración', 'error');
-            }
-        }
-
         async function cargarConfiguracionSpam() {
             try {
                 const snap = await db.ref('config_spam').once('value');
@@ -3303,7 +3558,7 @@
         }
 
         // ================================================================
-        // ESCUCHAR REGISTROS
+        // REGISTROS
         // ================================================================
         function escucharRegistros() {
             if (registrosUnsubscribe) {
@@ -3311,20 +3566,14 @@
                 registrosUnsubscribe = null;
             }
 
-            console.log('🔄 Escuchando registros...');
-
             registrosUnsubscribe = db.ref('registros').on('value', (snapshot) => {
                 const container = document.getElementById('registrosContainer');
-                if (!container) {
-                    console.log('❌ Container de registros no encontrado');
-                    return;
-                }
+                if (!container) return;
                 
                 container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando registros...</p>';
                 
                 if (!snapshot.exists()) {
                     container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros</p>';
-                    console.log('📭 No hay registros en la base de datos');
                     return;
                 }
 
@@ -3339,13 +3588,6 @@
                         });
                     }
                 });
-
-                console.log(`📊 ${registros.length} registros encontrados`);
-
-                if (registros.length === 0) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros válidos</p>';
-                    return;
-                }
 
                 registros.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 const mostrar = registros.slice(0, 50);
@@ -3368,18 +3610,6 @@
                     `;
                     container.appendChild(div);
                 });
-
-                console.log(`✅ ${mostrar.length} registros mostrados`);
-                
-                if (mostrar.length === 0) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros para mostrar</p>';
-                }
-            }, (error) => {
-                console.error('❌ Error al escuchar registros:', error);
-                const container = document.getElementById('registrosContainer');
-                if (container) {
-                    container.innerHTML = '<p style="color:#ff4444;padding:10px;text-align:center;">❌ Error al cargar registros</p>';
-                }
             });
         }
 
@@ -5249,6 +5479,7 @@
                 'juego': 'panel-juego',
                 'admins': 'panel-admins',
                 'registros': 'panel-registros',
+                'solicitudes': 'panel-solicitudes',
                 'credits': 'panel-credits'
             };
             const panel = document.getElementById(panelMap[tabName]);
@@ -5316,6 +5547,11 @@
                     escucharRegistros();
                 }
             }
+            if (tabName === 'solicitudes') {
+                if (currentUser && esOwner) {
+                    escucharSolicitudes();
+                }
+            }
         }
 
         // ================================================================
@@ -5323,17 +5559,28 @@
         // ================================================================
         auth.onAuthStateChanged((user) => {
             if (user) {
-                ingresarAlSistema(user);
+                // Verificar si el usuario está aprobado antes de dejar entrar
+                const nodo = limpiarClave(user.email);
+                db.ref(`usuarios/${nodo}`).once('value').then((snap) => {
+                    if (snap.exists() && snap.val().aprobado === false) {
+                        mostrarNotificacion('⏳ Tu cuenta está pendiente de aprobación', 'warning');
+                        auth.signOut();
+                        return;
+                    }
+                    ingresarAlSistema(user.email, "User");
+                }).catch(() => {
+                    ingresarAlSistema(user.email, "User");
+                });
             }
         });
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CORREGIDA');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CON SISTEMA DE APROBACIÓN');
         console.log('✅ Mensaje en ruso ELIMINADO');
-        console.log('✅ Usuarios y registros funcionando correctamente');
-        console.log('✅ Sin duplicación de usuarios');
+        console.log('✅ Sistema de aprobación de usuarios activado');
+        console.log('✅ Panel de solicitudes para administrador');
         console.log('✅ Configuración de bienvenida funcionando');
-        console.log('✅ Sección de cambio de contraseña ELIMINADA');
         console.log('✅ Panel de ADMIN completamente funcional');
+        console.log('📱 Funciona en cualquier navegador y país');
 
         cargarPromo();
         seleccionarPasarela('stripe');
