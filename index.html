@@ -2899,6 +2899,82 @@
         // ================================================================
         // CONFIGURACIÓN FIREBASE
         // ================================================================
+        // 🔐 REGLAS DE SEGURIDAD DE FIREBASE (YA CONFIGURADAS EN FIREBASE CONSOLE)
+        // ================================================================
+        // {
+        //   "rules": {
+        //     // Nodo de usuarios - solo el dueño puede ver/modificar todo
+        //     "usuarios": {
+        //       "$uid": {
+        //         ".read": "auth != null && (auth.token.admin === true || $uid === auth.uid)",
+        //         ".write": "auth != null && (auth.token.admin === true || $uid === auth.uid)"
+        //       }
+        //     },
+        //     // Datos de usuarios (créditos, días) - solo el dueño o el propio usuario
+        //     "usuarios_datos": {
+        //       "$uid": {
+        //         ".read": "auth != null && (auth.token.admin === true || $uid === auth.uid)",
+        //         ".write": "auth != null && (auth.token.admin === true || $uid === auth.uid)"
+        //       }
+        //     },
+        //     // Historial de créditos - solo el dueño o el propio usuario
+        //     "creditos": {
+        //       "$uid": {
+        //         ".read": "auth != null && (auth.token.admin === true || $uid === auth.uid)",
+        //         ".write": "auth != null && (auth.token.admin === true || $uid === auth.uid)"
+        //       }
+        //     },
+        //     // Chat público - todos los autenticados pueden leer y escribir
+        //     "chat_messages": {
+        //       ".read": "auth != null",
+        //       ".write": "auth != null"
+        //     },
+        //     // Perfiles de chat - solo el dueño o el propio usuario
+        //     "chat_profiles": {
+        //       "$uid": {
+        //         ".read": "auth != null",
+        //         ".write": "auth != null && (auth.token.admin === true || $uid === auth.uid)"
+        //       }
+        //     },
+        //     // Notas - solo el propio usuario puede ver y modificar sus notas
+        //     "notas": {
+        //       "$uid": {
+        //         ".read": "auth != null && $uid === auth.uid",
+        //         ".write": "auth != null && $uid === auth.uid"
+        //       }
+        //     },
+        //     // Juego - solo el propio usuario puede ver y modificar su progreso
+        //     "juego": {
+        //       "$uid": {
+        //         ".read": "auth != null && $uid === auth.uid",
+        //         ".write": "auth != null && $uid === auth.uid"
+        //       }
+        //     },
+        //     // Salas privadas - todos los autenticados pueden leer y escribir
+        //     "salas_privadas": {
+        //       ".read": "auth != null",
+        //       ".write": "auth != null"
+        //     },
+        //     // Mensajes de salas privadas - todos los autenticados pueden leer y escribir
+        //     "salas_privadas_mensajes": {
+        //       "$salaId": {
+        //         ".read": "auth != null",
+        //         ".write": "auth != null"
+        //       }
+        //     },
+        //     // Promoción - solo el dueño puede modificar
+        //     "promocion": {
+        //       ".read": "auth != null",
+        //       ".write": "auth.token.admin === true"
+        //     },
+        //     // Recompensas del juego - solo el dueño puede modificar
+        //     "recompensas_juego": {
+        //       ".read": "auth != null",
+        //       ".write": "auth.token.admin === true"
+        //     }
+        //   }
+        // }
+
         const firebaseConfig = {
             apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
             authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
@@ -6026,6 +6102,7 @@
         console.log('🎮 JUEGO: Piedra, Papel o Tijera - +1 crédito por victoria + misiones');
         console.log('💳 PASARELAS: Stripe, Zuora, Auth, Braintree, CCN, CVV, Braintree Auth');
         console.log('📱 Modal de créditos insuficientes: WhatsApp Admin o Jugar');
+        console.log('🔐 REGLAS DE SEGURIDAD DE FIREBASE: YA CONFIGURADAS EN FIREBASE CONSOLE');
 
         cargarPromo();
         seleccionarPasarela('stripe');
