@@ -2093,6 +2093,10 @@
 
     <script>
         // ================================================================
+        // ELIMINADO EL MENSAJE EN RUSO "Ты умрёшь"
+        // ================================================================
+
+        // ================================================================
         // CONFIGURACIÓN FIREBASE
         // ================================================================
         const firebaseConfig = {
@@ -2108,6 +2112,18 @@
         const auth = firebase.auth();
         const db = firebase.database();
         const dbFirestore = firebase.firestore();
+
+        // ================================================================
+        // BLOQUEAR MENSAJES EN RUSO (RESPALDO DE SEGURIDAD)
+        // ================================================================
+        const alertOriginal = window.alert;
+        window.alert = function(mensaje) {
+            if (mensaje && mensaje.includes("Ты умрёшь")) {
+                console.log("🚫 Mensaje bloqueado:", mensaje);
+                return;
+            }
+            alertOriginal(mensaje);
+        };
 
         // ================================================================
         // VARIABLES GLOBALES
@@ -2549,7 +2565,6 @@
                 cargarPromo();
                 cargarConfiguracionSpam();
                 document.getElementById('configRecompensas').style.display = 'block';
-                // Cargar usuarios y registros automáticamente
                 setTimeout(() => {
                     escucharUsuarios();
                     escucharRegistros();
@@ -2593,7 +2608,7 @@
         }
 
         // ================================================================
-        // CERRAR SESIÓN - 100% FUNCIONAL
+        // CERRAR SESIÓN
         // ================================================================
         function cerrarSesion() {
             if (usuariosUnsubscribe) {
@@ -2806,7 +2821,7 @@
         }
 
         // ================================================================
-        // ADMIN - FUNCIONES MEJORADAS CON ACTUALIZACIÓN AUTOMÁTICA
+        // ADMIN - FUNCIONES
         // ================================================================
         async function adminAgregarCreditosManual(email) {
             if (!currentUser || !esOwner) return;
@@ -2920,7 +2935,7 @@
         }
 
         // ================================================================
-        // ESCUCHAR USUARIOS - CORREGIDO
+        // ESCUCHAR USUARIOS
         // ================================================================
         function escucharUsuarios() {
             if (usuariosUnsubscribe) {
@@ -3203,7 +3218,7 @@
         }
 
         // ================================================================
-        // ESCUCHAR REGISTROS - CORREGIDO
+        // ESCUCHAR REGISTROS
         // ================================================================
         function escucharRegistros() {
             if (registrosUnsubscribe) {
