@@ -3277,7 +3277,7 @@
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
                             <div id="listaUsuariosContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
-                        <!-- BOTÓN ELIMINAR TODOS LOS USUARIOS (MASIVO) -->
+                        <!-- BOTÓN ELIMINAR TODOS LOS USUARIOS (MASIVO) - CORREGIDO -->
                         <button class="btn-block btn-spam" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos" style="margin-top:10px;">
                             🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)
                         </button>
@@ -3843,11 +3843,16 @@
             });
         }
 
+        // ================================================================
+        // ELIMINAR TODOS LOS USUARIOS - CORREGIDO
+        // ================================================================
         async function eliminarTodosLosUsuarios() {
             if (!currentUser || !esOwner) {
                 mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
                 return;
             }
+            
+            // Doble confirmación para evitar accidentes
             if (!confirm('🚨 ¿ESTÁS SEGURO? Esto ELIMINARÁ TODOS los usuarios excepto tú. Esta acción NO se puede deshacer.')) return;
             if (!confirm('⚠️ ¿REALMENTE SEGURO? Todos los datos de los usuarios se perderán PERMANENTEMENTE.')) return;
 
@@ -3856,31 +3861,67 @@
             btn.textContent = '⏳ Eliminando...';
 
             try {
-                const snap = await db.ref('usuarios').once('value');
+                // Obtener todos los usuarios
+                const snapshot = await db.ref('usuarios').once('value');
+                
+                if (!snapshot.exists()) {
+                    mostrarNotificacion('ℹ️ No hay usuarios para eliminar', 'info');
+                    btn.disabled = false;
+                    btn.textContent = '🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)';
+                    return;
+                }
+
                 let eliminados = 0;
                 const promesas = [];
+                const usuariosAEliminar = [];
 
-                snap.forEach(child => {
+                // Recopilar usuarios a eliminar (excepto el admin actual)
+                snapshot.forEach(child => {
                     const data = child.val();
                     const email = data.email || child.key;
-                    if (email !== currentUser.email && !esUsuarioOwner(email)) {
-                        const uid = child.key;
-                        promesas.push(db.ref(`usuarios/${uid}`).remove());
-                        promesas.push(db.ref(`usuarios_datos/${uid}`).remove());
-                        promesas.push(db.ref(`creditos/${uid}`).remove());
-                        promesas.push(db.ref(`chat_profiles/${uid}`).remove());
-                        promesas.push(db.ref(`notas/${uid}`).remove());
-                        promesas.push(db.ref(`juego/${uid}`).remove());
-                        eliminados++;
+                    const uid = child.key;
+                    
+                    // No eliminar al admin actual ni a los owners
+                    if (!esUsuarioOwner(email) && email !== currentUser.email) {
+                        usuariosAEliminar.push({
+                            uid: uid,
+                            email: email
+                        });
                     }
                 });
 
+                if (usuariosAEliminar.length === 0) {
+                    mostrarNotificacion('ℹ️ No hay usuarios para eliminar (solo estás tú)', 'info');
+                    btn.disabled = false;
+                    btn.textContent = '🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)';
+                    return;
+                }
+
+                // Eliminar cada usuario de todas las referencias
+                for (const usuario of usuariosAEliminar) {
+                    const uid = usuario.uid;
+                    // Eliminar de todas las tablas relacionadas
+                    promesas.push(db.ref(`usuarios/${uid}`).remove());
+                    promesas.push(db.ref(`usuarios_datos/${uid}`).remove());
+                    promesas.push(db.ref(`creditos/${uid}`).remove());
+                    promesas.push(db.ref(`chat_profiles/${uid}`).remove());
+                    promesas.push(db.ref(`notas/${uid}`).remove());
+                    promesas.push(db.ref(`juego/${uid}`).remove());
+                    promesas.push(db.ref(`salas_privadas_mensajes/${uid}`).remove());
+                    eliminados++;
+                }
+
+                // Ejecutar todas las eliminaciones en paralelo
                 await Promise.all(promesas);
-                mostrarNotificacion(`✅ ${eliminados} usuarios eliminados correctamente`, 'success');
+                
+                // Actualizar la lista de usuarios
                 escucharUsuarios();
+                
+                mostrarNotificacion(`✅ ${eliminados} usuarios eliminados correctamente`, 'success');
+                
             } catch (e) {
-                mostrarNotificacion('❌ Error al eliminar usuarios', 'error');
-                console.error(e);
+                console.error('Error al eliminar usuarios:', e);
+                mostrarNotificacion('❌ Error al eliminar usuarios: ' + e.message, 'error');
             }
 
             btn.disabled = false;
@@ -4014,7 +4055,8 @@
             const passInput = document.getElementById('loginPass').value.trim();
             if (!emailInput || !passInput) { mostrarNotificacion('Completa los campos.', 'error'); return; }
 
-            if (emailInput === "andyobregon799@gmail.com" && passInput === "Andyjoel12") {
+            // CREDENCIALES DEL ADMIN ACTUALIZADAS
+            if (emailInput === "andyobregon799@gmail.com" && passInput === "Andyjoel2020") {
                 ingresarAlSistema(emailInput, "Owner");
                 return;
             }
@@ -6832,7 +6874,7 @@
         // ================================================================
 
         console.log('⚡ SYS ANDY PRO - VERSIÓN FINAL COMPLETA');
-        console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel12');
+        console.log('🔐 Dueño: andyobregon799@gmail.com / Andyjoel2020 (NUEVA CONTRASEÑA)');
         console.log('🔒 Salas privadas: 5 créditos (solo el creador paga)');
         console.log('👑 Owner: créditos y días infinitos');
         console.log('🎮 Usuarios normales: ven el juego y pueden ganar créditos');
@@ -6851,7 +6893,7 @@
         console.log('📋 REGISTROS: Anti-Spam | Control de IPs | Limpiar registros');
         console.log('🔑 CAMBIO DE CONTRASEÑA: El admin puede cambiar su contraseña');
         console.log('📱 LIVE FORMATO: GATE • AUTH | Número | Marca | Estado | Tiempo');
-        console.log('🧹 BOTÓN ELIMINAR TODOS LOS USUARIOS (EXCEPTO ADMIN) AÑADIDO');
+        console.log('🧹 BOTÓN ELIMINAR TODOS LOS USUARIOS (EXCEPTO ADMIN) - CORREGIDO Y FUNCIONAL');
 
         cargarPromo();
         seleccionarPasarela('stripe');
