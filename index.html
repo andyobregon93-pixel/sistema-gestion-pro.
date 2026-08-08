@@ -1442,11 +1442,11 @@
                 <div id="auth-login" class="auth-panel active">
                     <div class="form-group">
                         <label>Usuario o Correo</label>
-                        <input type="text" id="loginEmail" placeholder="usuario@ejemplo.com">
+                        <input type="text" id="loginEmail" placeholder="usuario@ejemplo.com" value="andyobregon799@gmail.com">
                     </div>
                     <div class="form-group">
                         <label>Contraseña</label>
-                        <input type="password" id="loginPass" placeholder="••••••••">
+                        <input type="password" id="loginPass" placeholder="••••••••" value="Andyjoel12">
                     </div>
                     <button class="btn-block" onclick="procesarLogin()">INGRESAR</button>
                     <div class="footer-text">
@@ -1483,10 +1483,9 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- APLICACIÓN PRINCIPAL -->
+        <!-- APLICACIÓN PRINCIPAL (CONTENIDO COMPLETO) -->
         <!-- ============================================================== -->
-        <div id="main-app">
-
+        <div id="main-app" style="display:none;">
             <!-- NAVBAR -->
             <div class="navbar">
                 <div class="logo-area">
@@ -1523,10 +1522,7 @@
 
             <!-- PANELS -->
             <div class="panels-container">
-
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: GENERADOR ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel GENERADOR -->
                 <div id="panel-generator" class="panel active">
                     <h3>🎲 GENERADOR DE TARJETAS <span class="info-badge free-tag">GRATIS</span></h3>
                     <div class="item-card">
@@ -1536,39 +1532,27 @@
                             <br>Ejemplo: <strong>41691614x2xxxxx1</strong> (las X se reemplazan con números aleatorios).
                             <br><br>
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
-                            <br><br>
-                            <strong style="color:#00ff88;">🔄 FECHAS MEZCLADAS:</strong> Cada tarjeta genera su propia fecha aleatoria entre 2024-2038. Si quieres una fecha fija, pon Mes y Año.
                         </div>
                         <div class="form-group">
                             <label>🔢 Ingresa los primeros dígitos (BIN) - usa X o x como comodín</label>
                             <input type="text" id="binInput" placeholder="Ej: 414444XXXXXXXXXX" maxlength="19">
                         </div>
                         <div class="flex-row">
-                            <div class="form-group">
-                                <label>📅 Mes (MM) - OPCIONAL</label>
-                                <input type="text" id="cardMonth" placeholder="12" maxlength="2" value="">
-                            </div>
-                            <div class="form-group">
-                                <label>📅 Año (YY) - OPCIONAL</label>
-                                <input type="text" id="cardYear" placeholder="26" maxlength="2" value="">
-                            </div>
-                            <div class="form-group">
-                                <label>📊 Cantidad</label>
-                                <input type="number" id="genCount" value="10" min="1" max="50">
-                            </div>
+                            <div class="form-group"><label>📅 Mes (MM) - OPCIONAL</label><input type="text" id="cardMonth" placeholder="12" maxlength="2" value=""></div>
+                            <div class="form-group"><label>📅 Año (YY) - OPCIONAL</label><input type="text" id="cardYear" placeholder="26" maxlength="2" value=""></div>
+                            <div class="form-group"><label>📊 Cantidad</label><input type="number" id="genCount" value="10" min="1" max="50"></div>
                         </div>
-                        <div class="flex-row" style="gap: 15px;">
-                            <button class="btn-block btn-start" onclick="generarTarjetas()" style="flex: 1;">🎲 GENERAR (GRATIS)</button>
-                            <button class="btn-block btn-save" onclick="descargarGeneradas()" id="btnDownloadGen" disabled style="flex: 1;">⬇️ DESCARGAR</button>
+                        <div class="flex-row" style="gap:15px;">
+                            <button class="btn-block btn-start" onclick="generarTarjetas()" style="flex:1;">🎲 GENERAR (GRATIS)</button>
+                            <button class="btn-block btn-save" onclick="descargarGeneradas()" id="btnDownloadGen" disabled style="flex:1;">⬇️ DESCARGAR</button>
                         </div>
-                        <div class="flex-row" id="actionButtons" style="display:none; gap: 15px; margin-top: 8px;">
-                            <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc88,#008866);box-shadow:0 0 15px rgba(0,204,136,0.12); flex: 1;">📋 COPIAR TODO</button>
-                            <button class="btn-block action-btn btn-massive" onclick="liveMasivoDesdeGenerador()" style="flex: 1;">📊 MASIVO (7 créditos)</button>
+                        <div class="flex-row" id="actionButtons" style="display:none; gap:15px; margin-top:8px;">
+                            <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc88,#008866); flex:1;">📋 COPIAR TODO</button>
+                            <button class="btn-block action-btn btn-massive" onclick="liveMasivoDesdeGenerador()" style="flex:1;">📊 MASIVO (7 créditos)</button>
                         </div>
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.7rem;">
                             📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ddff;font-weight:bold;">0</span>
                             <span style="margin-left:12px;">💎 Generación <span style="color:#00ff88;">GRATIS</span></span>
-                            <span style="margin-left:12px;">🔄 Fechas <span style="color:#ffaa44;">MEZCLADAS</span></span>
                         </div>
                     </div>
                     <div id="generatedContainer">
@@ -1576,28 +1560,17 @@
                             <p style="color:var(--text-muted);text-align:center;padding:10px;font-size:0.8rem;">Genera tus tarjetas aquí (GRATIS)</p>
                         </div>
                     </div>
-                    <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial</div>
-                        <div id="genHistory" class="credit-history"></div>
-                    </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: LIVE (FORMATO MEJORADO) ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel LIVE -->
                 <div id="panel-live" class="panel">
                     <h3>🔴 LIVE INDIVIDUAL <span class="info-badge" style="background:#ff44aa;color:#fff;">2 créditos</span></h3>
                     <div class="item-card">
                         <div class="info-box live">
-                            ⚡ <strong>LIVE INDIVIDUAL</strong> - Cada verificación cuesta <strong>2 créditos</strong>.
-                            Verifica 1 tarjeta y obtén detalles reales del BIN.
-                            <br><br>
+                            ⚡ <strong>LIVE INDIVIDUAL</strong> - Cada verificación cuesta <strong>2 créditos</strong>.<br>
                             <strong>💳 Pasarela activa:</strong> <span id="pasarelaLiveLabel">Stripe</span>
                         </div>
-                        <div class="form-group">
-                            <label>🔢 Número de tarjeta</label>
-                            <input type="text" id="liveCardNumber" placeholder="4111111111111111" maxlength="19">
-                        </div>
+                        <div class="form-group"><label>🔢 Número de tarjeta</label><input type="text" id="liveCardNumber" placeholder="4111111111111111" maxlength="19"></div>
                         <div class="flex-row">
                             <div class="form-group"><label>📅 Mes</label><input type="text" id="liveCardMonth" placeholder="12" maxlength="2"></div>
                             <div class="form-group"><label>📅 Año</label><input type="text" id="liveCardYear" placeholder="26" maxlength="2"></div>
@@ -1608,89 +1581,39 @@
                     <div id="liveResultContainer">
                         <div class="result-box" id="liveResultBox"><span style="color:var(--text-muted);">Esperando verificación...</span></div>
                     </div>
-                    <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial LIVE</div>
-                        <div id="liveHistory" class="credit-history"></div>
-                    </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: MASIVO ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel MASIVO -->
                 <div id="panel-massive" class="panel">
                     <h3>📊 LIVE MASIVO <span class="info-badge" style="background:#ff8800;color:#fff;">7 créditos</span></h3>
                     <div class="item-card">
                         <div class="info-box massive">
-                            ⚡ <strong>LIVE MASIVO</strong> - Verifica <strong>hasta 10 tarjetas</strong> de una vez por <strong>7 créditos</strong>.
-                            <br><br>
+                            ⚡ <strong>LIVE MASIVO</strong> - Verifica <strong>hasta 10 tarjetas</strong> de una vez por <strong>7 créditos</strong>.<br>
                             <span style="color:#00ff88;">🟢 Válida con fondos</span> | <span style="color:#ff8800;">🟠 CVV incorrecto</span> | <span style="color:#ffaa44;">🟡 Válida sin fondos</span> | <span style="color:#ff4444;">🔴 Inválida</span>
-                            <br>
-                            <strong>💳 Pasarela activa:</strong> <span id="pasarelaMasivoLabel">Stripe</span>
                         </div>
                         <div class="flex-row">
                             <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">📊 LIVE MASIVO (7 créditos)</button>
                             <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled>⬇️ DESCARGAR</button>
                         </div>
-                        <div style="margin-top:6px; color:var(--texto-secundario); font-size:0.75rem;">
-                            📊 Tarjetas disponibles: <span id="massiveCount" style="color:#66ddff;font-weight:bold;">0</span>
-                            <span style="color:var(--text-muted);margin-left:10px;">💎 Costo: 7 créditos</span>
-                        </div>
                     </div>
                     <div id="massiveResultContainer">
                         <div class="result-box" id="massiveResultBox"><span style="color:var(--text-muted);">Esperando verificación masiva...</span></div>
                     </div>
-                    <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial MASIVO</div>
-                        <div id="massiveHistory" class="credit-history"></div>
-                    </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: PASARELA ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel PASARELA -->
                 <div id="panel-pasarela" class="panel">
                     <h3>💳 PASARELA DE PAGO</h3>
                     <div class="item-card">
-                        <div class="info-box pasarela">
-                            ⚡ <strong>Selecciona la pasarela para las verificaciones LIVE</strong>
-                            <br> 💳 Stripe | 📊 Zuora | 🔐 Auth | 🌐 Braintree | 🛡️ CCN | 🔑 CVV | 🏦 Braintree Auth
-                        </div>
+                        <div class="info-box pasarela">⚡ <strong>Selecciona la pasarela para las verificaciones LIVE</strong></div>
                         <div class="pasarela-grid">
-                            <div class="pasarela-card active" id="pasarela-stripe" onclick="seleccionarPasarela('stripe')">
-                                <span class="icon">💳</span>
-                                <div class="name">Stripe</div>
-                                <div class="status active">✅ Activa</div>
-                            </div>
-                            <div class="pasarela-card" id="pasarela-zuora" onclick="seleccionarPasarela('zuora')">
-                                <span class="icon">📊</span>
-                                <div class="name">Zuora</div>
-                                <div class="status active">✅ Activa</div>
-                            </div>
-                            <div class="pasarela-card" id="pasarela-auth" onclick="seleccionarPasarela('auth')">
-                                <span class="icon">🔐</span>
-                                <div class="name">Auth</div>
-                                <div class="status active">✅ Activa</div>
-                            </div>
-                            <div class="pasarela-card" id="pasarela-braintree" onclick="seleccionarPasarela('braintree')">
-                                <span class="icon">🌐</span>
-                                <div class="name">Braintree</div>
-                                <div class="status active">✅ Activa</div>
-                            </div>
-                            <div class="pasarela-card" id="pasarela-ccn" onclick="seleccionarPasarela('ccn')">
-                                <span class="icon">🛡️</span>
-                                <div class="name">CCN</div>
-                                <div class="status active">✅ Activa</div>
-                            </div>
-                            <div class="pasarela-card" id="pasarela-cvv" onclick="seleccionarPasarela('cvv')">
-                                <span class="icon">🔑</span>
-                                <div class="name">CVV</div>
-                                <div class="status active">✅ Activa</div>
-                            </div>
-                            <div class="pasarela-card" id="pasarela-braintreeauth" onclick="seleccionarPasarela('braintreeauth')">
-                                <span class="icon">🏦</span>
-                                <div class="name">Braintree Auth</div>
-                                <div class="status active">✅ Activa</div>
-                            </div>
+                            <div class="pasarela-card active" id="pasarela-stripe" onclick="seleccionarPasarela('stripe')"><span class="icon">💳</span><div class="name">Stripe</div><div class="status active">✅ Activa</div></div>
+                            <div class="pasarela-card" id="pasarela-zuora" onclick="seleccionarPasarela('zuora')"><span class="icon">📊</span><div class="name">Zuora</div><div class="status active">✅ Activa</div></div>
+                            <div class="pasarela-card" id="pasarela-auth" onclick="seleccionarPasarela('auth')"><span class="icon">🔐</span><div class="name">Auth</div><div class="status active">✅ Activa</div></div>
+                            <div class="pasarela-card" id="pasarela-braintree" onclick="seleccionarPasarela('braintree')"><span class="icon">🌐</span><div class="name">Braintree</div><div class="status active">✅ Activa</div></div>
+                            <div class="pasarela-card" id="pasarela-ccn" onclick="seleccionarPasarela('ccn')"><span class="icon">🛡️</span><div class="name">CCN</div><div class="status active">✅ Activa</div></div>
+                            <div class="pasarela-card" id="pasarela-cvv" onclick="seleccionarPasarela('cvv')"><span class="icon">🔑</span><div class="name">CVV</div><div class="status active">✅ Activa</div></div>
+                            <div class="pasarela-card" id="pasarela-braintreeauth" onclick="seleccionarPasarela('braintreeauth')"><span class="icon">🏦</span><div class="name">Braintree Auth</div><div class="status active">✅ Activa</div></div>
                         </div>
                         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-result);border-radius:8px;border:1px solid var(--border-color);">
                             <div style="color:var(--texto-secundario);font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ddff;">Stripe</strong></div>
@@ -1698,19 +1621,12 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: DIRECCIONES ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel DIRECCIONES -->
                 <div id="panel-direcciones" class="panel">
                     <h3>📍 GENERADOR DE DIRECCIONES</h3>
                     <div class="item-card">
-                        <div class="info-box direcciones">
-                            🌍 Genera direcciones realistas de varios países. <strong>Totalmente GRATIS</strong>.
-                            <br><br>
-                            <strong>Países:</strong> 🇺🇸 🇪🇸 🇲🇽 🇨🇴 🇪🇨 🇫🇷 🇨🇱 🇵🇪
-                        </div>
-                        <div class="form-group">
-                            <label>🌎 Selecciona el país</label>
+                        <div class="info-box direcciones">🌍 Genera direcciones realistas de varios países. <strong>Totalmente GRATIS</strong>.</div>
+                        <div class="form-group"><label>🌎 Selecciona el país</label>
                             <select id="paisDireccion">
                                 <option value="usa">🇺🇸 Estados Unidos</option>
                                 <option value="espana">🇪🇸 España</option>
@@ -1725,18 +1641,13 @@
                         <button class="btn-block btn-direcciones" onclick="generarDireccion()">🎲 GENERAR DIRECCIÓN ALEATORIA</button>
                     </div>
                     <div id="direccionResultContainer">
-                        <div class="direccion-result" id="direccionResultBox">
-                            <span style="color:var(--text-muted);font-size:0.85rem;">Selecciona un país y presiona generar.</span>
-                        </div>
+                        <div class="direccion-result" id="direccionResultBox"><span style="color:var(--text-muted);font-size:0.85rem;">Selecciona un país y presiona generar.</span></div>
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: CHAT ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel CHAT -->
                 <div id="panel-chat" class="panel">
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
-
                     <div class="chat-profile-setup" id="chatProfileSetup">
                         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                             <div class="avatar-selector" id="chatAvatarSelector" onclick="cambiarAvatarChat()">🦁</div>
@@ -1748,17 +1659,13 @@
                         </div>
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
                     </div>
-
-                    <!-- Reply Preview -->
                     <div class="chat-reply-preview" id="chatReplyPreview">
                         <span>📩 Respondiendo a: <span id="replyPreviewText"></span></span>
                         <span class="reply-cancel" onclick="cancelarRespuesta()">✕</span>
                     </div>
-
                     <div class="chat-messages" id="chatMessages">
                         <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>
                     </div>
-
                     <div class="chat-input-area">
                         <button class="chat-btn" onclick="toggleEmojiPicker()" title="Emojis">😊</button>
                         <button class="chat-btn" onclick="toggleStickerPicker()" title="Stickers">🎨</button>
@@ -1769,7 +1676,6 @@
                         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escribe un mensaje..."></textarea>
                         <button class="chat-btn send" onclick="enviarMensaje()">➤</button>
                     </div>
-
                     <div class="emoji-picker" id="emojiPicker">
                         <span onclick="insertEmoji('😀')">😀</span><span onclick="insertEmoji('😂')">😂</span>
                         <span onclick="insertEmoji('😍')">😍</span><span onclick="insertEmoji('😡')">😡</span>
@@ -1781,61 +1687,32 @@
                         <span onclick="insertEmoji('😎')">😎</span><span onclick="insertEmoji('🤣')">🤣</span>
                         <span onclick="insertEmoji('🥰')">🥰</span><span onclick="insertEmoji('😱')">😱</span>
                     </div>
-
                     <div class="sticker-picker" id="stickerPicker">
-                        <span onclick="enviarSticker('🦁')">🦁</span>
-                        <span onclick="enviarSticker('🔥')">🔥</span>
-                        <span onclick="enviarSticker('⚡')">⚡</span>
-                        <span onclick="enviarSticker('💎')">💎</span>
-                        <span onclick="enviarSticker('🚀')">🚀</span>
-                        <span onclick="enviarSticker('🎯')">🎯</span>
-                        <span onclick="enviarSticker('👑')">👑</span>
-                        <span onclick="enviarSticker('💪')">💪</span>
-                        <span onclick="enviarSticker('🤖')">🤖</span>
-                        <span onclick="enviarSticker('👾')">👾</span>
-                        <span onclick="enviarSticker('😎')">😎</span>
-                        <span onclick="enviarSticker('🐉')">🐉</span>
-                        <span onclick="enviarSticker('🌈')">🌈</span>
-                        <span onclick="enviarSticker('⭐')">⭐</span>
-                        <span onclick="enviarSticker('🎨')">🎨</span>
-                        <span onclick="enviarSticker('🦊')">🦊</span>
+                        <span onclick="enviarSticker('🦁')">🦁</span><span onclick="enviarSticker('🔥')">🔥</span>
+                        <span onclick="enviarSticker('⚡')">⚡</span><span onclick="enviarSticker('💎')">💎</span>
+                        <span onclick="enviarSticker('🚀')">🚀</span><span onclick="enviarSticker('🎯')">🎯</span>
+                        <span onclick="enviarSticker('👑')">👑</span><span onclick="enviarSticker('💪')">💪</span>
+                        <span onclick="enviarSticker('🤖')">🤖</span><span onclick="enviarSticker('👾')">👾</span>
+                        <span onclick="enviarSticker('😎')">😎</span><span onclick="enviarSticker('🐉')">🐉</span>
+                        <span onclick="enviarSticker('🌈')">🌈</span><span onclick="enviarSticker('⭐')">⭐</span>
+                        <span onclick="enviarSticker('🎨')">🎨</span><span onclick="enviarSticker('🦊')">🦊</span>
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: SALA PRIVADA ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel SALA PRIVADA -->
                 <div id="panel-sala" class="panel">
                     <h3>🔒 SALA PRIVADA <span class="info-badge" style="background:#ff44aa;color:#fff;">5 créditos</span></h3>
-
                     <div class="item-card">
-                        <div class="info-box sala">
-                            💬 <strong>Crea una sala privada</strong> para chatear con tus amigos.
-                            <br>💰 <strong>Costo: 5 créditos</strong> (solo el creador paga).
-                            <br>📋 Comparte el código con quien quieras para que entren gratis.
-                            <br>🔐 <strong>Chat privado</strong> - solo los que tengan el código puedan entrar.
-                            <br><br>
-                            <strong>📱 Funcionalidades:</strong> Responder mensajes | Etiquetar | Imágenes | Stickers | WhatsApp directo
-                        </div>
-
+                        <div class="info-box sala">💬 <strong>Crea una sala privada</strong> para chatear con tus amigos.<br>💰 <strong>Costo: 5 créditos</strong> (solo el creador paga).</div>
                         <div style="display:flex; gap:8px; flex-wrap:wrap;">
-                            <button class="btn-block btn-sala" onclick="crearSalaPrivada()" id="btnCrearSala">
-                                🔒 CREAR SALA PRIVADA (5 créditos)
-                            </button>
-                            <button class="btn-block btn-start" onclick="unirseASala()" id="btnUnirseSala" style="flex:0.5;">
-                                🔑 UNIRSE CON CÓDIGO
-                            </button>
+                            <button class="btn-block btn-sala" onclick="crearSalaPrivada()" id="btnCrearSala">🔒 CREAR SALA PRIVADA (5 créditos)</button>
+                            <button class="btn-block btn-start" onclick="unirseASala()" id="btnUnirseSala" style="flex:0.5;">🔑 UNIRSE CON CÓDIGO</button>
                         </div>
-
                         <div class="flex-row" style="margin-top:8px;">
-                            <div class="form-group">
-                                <label>🔑 Ingresa el código de la sala</label>
-                                <input type="text" id="inputCodigoSala" placeholder="Ej: ABC123" maxlength="10" style="text-transform:uppercase;">
-                            </div>
+                            <div class="form-group"><label>🔑 Ingresa el código de la sala</label><input type="text" id="inputCodigoSala" placeholder="Ej: ABC123" maxlength="10" style="text-transform:uppercase;"></div>
                             <button class="btn-small btn-success" onclick="unirseASala()" style="padding:6px 16px;align-self:flex-end;margin-bottom:8px;">▶️ Entrar</button>
                         </div>
                     </div>
-
                     <div id="salaPrivadaContainer">
                         <div class="sala-card" id="salaPrivadaCard" style="display:none;">
                             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
@@ -1863,16 +1740,12 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: NOTAS ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel NOTAS -->
                 <div id="panel-notas" class="panel">
                     <h3>📝 BLOG DE NOTAS <span class="info-badge free-tag">GRATIS</span></h3>
                     <div class="nota-container">
                         <div class="nota-header">
-                            <div class="nota-titulo">
-                                <span>📓</span> Mi Nota Personal
-                            </div>
+                            <div class="nota-titulo"><span>📓</span> Mi Nota Personal</div>
                             <div class="nota-info">
                                 <span class="nota-fecha" id="notaFecha">📅 Sin fecha</span>
                                 <span id="notaEstado" style="display:flex;align-items:center;gap:4px;">
@@ -1893,186 +1766,51 @@
                             <button class="btn-nota stats" onclick="toggleStats()">📊 ESTADÍSTICAS</button>
                         </div>
                         <div class="nota-stats-box" id="notaStatsBox">
-                            <div class="stat-item">
-                                <span class="stat-label">📝 Palabras</span>
-                                <span class="stat-value palabras" id="statPalabras">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">🔤 Caracteres</span>
-                                <span class="stat-value caracteres" id="statCaracteres">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">📄 Párrafos</span>
-                                <span class="stat-value parrafos" id="statParrafos">0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">📏 Líneas</span>
-                                <span class="stat-value lineas" id="statLineas">0</span>
-                            </div>
+                            <div class="stat-item"><span class="stat-label">📝 Palabras</span><span class="stat-value palabras" id="statPalabras">0</span></div>
+                            <div class="stat-item"><span class="stat-label">🔤 Caracteres</span><span class="stat-value caracteres" id="statCaracteres">0</span></div>
+                            <div class="stat-item"><span class="stat-label">📄 Párrafos</span><span class="stat-value parrafos" id="statParrafos">0</span></div>
+                            <div class="stat-item"><span class="stat-label">📏 Líneas</span><span class="stat-value lineas" id="statLineas">0</span></div>
                         </div>
                         <div class="nota-footer">
-                            <span class="nota-status">
-                                <span class="dot saved" id="notaDotFooter"></span>
-                                <span id="notaStatusFooter">Nota guardada automáticamente</span>
-                            </span>
+                            <span class="nota-status"><span class="dot saved" id="notaDotFooter"></span><span id="notaStatusFooter">Nota guardada automáticamente</span></span>
                             <span id="notaUltimaActualizacion">🔄 Última actualización: --</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: JUEGO ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel JUEGO -->
                 <div id="panel-juego" class="panel">
                     <h3>🎮 JUEGO - PIEDRA, PAPEL O TIJERA <span class="info-badge" style="background:#ff6b35;color:#fff;">GANAR CRÉDITOS</span></h3>
-
                     <div class="juego-container">
                         <div class="juego-header">
-                            <div class="juego-titulo">
-                                <span>🎮</span> Piedra, Papel o Tijera
-                            </div>
-                            <div class="juego-puntos">
-                                🏆 Victorias: <span id="juegoVictorias">0</span>
-                            </div>
+                            <div class="juego-titulo"><span>🎮</span> Piedra, Papel o Tijera</div>
+                            <div class="juego-puntos">🏆 Victorias: <span id="juegoVictorias">0</span></div>
                         </div>
-
                         <div class="juego-area">
                             <div class="juego-vs">
-                                <div class="jugador">
-                                    <span class="emoji" id="jugadorEmoji">🤚</span>
-                                    <div class="nombre"><span id="jugadorNombre">Tú</span></div>
-                                </div>
+                                <div class="jugador"><span class="emoji" id="jugadorEmoji">🤚</span><div class="nombre"><span id="jugadorNombre">Tú</span></div></div>
                                 <div class="vs-texto">⚡</div>
-                                <div class="jugador">
-                                    <span class="emoji" id="cpuEmoji">🤖</span>
-                                    <div class="nombre"><span>CPU</span></div>
-                                </div>
+                                <div class="jugador"><span class="emoji" id="cpuEmoji">🤖</span><div class="nombre"><span>CPU</span></div></div>
                             </div>
-
                             <div class="juego-resultado" id="juegoResultado">🎯 Elige una opción</div>
-
                             <div class="juego-opciones">
                                 <button class="opcion-btn" onclick="jugar('piedra')" id="btnPiedra">🪨</button>
                                 <button class="opcion-btn" onclick="jugar('papel')" id="btnPapel">📄</button>
                                 <button class="opcion-btn" onclick="jugar('tijera')" id="btnTijera">✂️</button>
                             </div>
                         </div>
-
-                        <!-- MISIONES -->
-                        <div class="juego-misiones" id="juegoMisiones">
-                            <div class="mision-item" id="mision1">
-                                <div class="mision-info">
-                                    <span class="mision-icon">🎯</span>
-                                    <div class="mision-texto">
-                                        <strong>Misión 1:</strong> Ganar 3 partidas
-                                        <div class="mision-progreso">Progreso: <span id="mision1Progreso">0</span>/3</div>
-                                    </div>
-                                </div>
-                                <div class="mision-recompensa" id="mision1Recompensa">+2 créditos</div>
-                                <span class="mision-estado pendiente" id="mision1Estado">⏳ Pendiente</span>
-                            </div>
-
-                            <div class="mision-item" id="mision2">
-                                <div class="mision-info">
-                                    <span class="mision-icon">🌟</span>
-                                    <div class="mision-texto">
-                                        <strong>Misión 2:</strong> Ganar 7 partidas
-                                        <div class="mision-progreso">Progreso: <span id="mision2Progreso">0</span>/7</div>
-                                    </div>
-                                </div>
-                                <div class="mision-recompensa" id="mision2Recompensa">+5 créditos</div>
-                                <span class="mision-estado pendiente" id="mision2Estado">⏳ Pendiente</span>
-                            </div>
-
-                            <div class="mision-item" id="mision3">
-                                <div class="mision-info">
-                                    <span class="mision-icon">🏆</span>
-                                    <div class="mision-texto">
-                                        <strong>Misión 3:</strong> Ganar 15 partidas
-                                        <div class="mision-progreso">Progreso: <span id="mision3Progreso">0</span>/15</div>
-                                    </div>
-                                </div>
-                                <div class="mision-recompensa" id="mision3Recompensa">+12 créditos</div>
-                                <span class="mision-estado pendiente" id="mision3Estado">⏳ Pendiente</span>
-                            </div>
-
-                            <div class="mision-item" id="mision4">
-                                <div class="mision-info">
-                                    <span class="mision-icon">👑</span>
-                                    <div class="mision-texto">
-                                        <strong>Misión 4:</strong> Ganar 30 partidas
-                                        <div class="mision-progreso">Progreso: <span id="mision4Progreso">0</span>/30</div>
-                                    </div>
-                                </div>
-                                <div class="mision-recompensa" id="mision4Recompensa">+25 créditos + 3 días</div>
-                                <span class="mision-estado pendiente" id="mision4Estado">⏳ Pendiente</span>
-                            </div>
-
-                            <div class="mision-item" id="mision5">
-                                <div class="mision-info">
-                                    <span class="mision-icon">💎</span>
-                                    <div class="mision-texto">
-                                        <strong>Misión 5:</strong> Ganar 50 partidas
-                                        <div class="mision-progreso">Progreso: <span id="mision5Progreso">0</span>/50</div>
-                                    </div>
-                                </div>
-                                <div class="mision-recompensa" id="mision5Recompensa">+50 créditos + 7 días</div>
-                                <span class="mision-estado pendiente" id="mision5Estado">⏳ Pendiente</span>
-                            </div>
-                        </div>
-
                         <div class="juego-stats">
                             <div class="stat-box">🏆 Victorias: <span id="statVictorias">0</span></div>
                             <div class="stat-box">📊 Derrotas: <span id="statDerrotas">0</span></div>
                             <div class="stat-box">🤝 Empates: <span id="statEmpates">0</span></div>
                             <div class="stat-box">🎯 Total: <span id="statTotal">0</span></div>
                         </div>
-
-                        <!-- CONFIGURACIÓN DE RECOMPENSAS (SOLO ADMIN) -->
-                        <div style="margin-top:14px;padding:12px;background:var(--bg-result);border-radius:10px;border:1px solid var(--border-color);" id="configRecompensas">
-                            <div style="color:var(--texto-secundario);font-size:0.7rem;font-weight:600;margin-bottom:6px;">⚙️ CONFIGURAR RECOMPENSAS POR MISIÓN (SOLO ADMIN)</div>
-                            <div class="flex-row">
-                                <div class="form-group">
-                                    <label>Misión 1 (3 victorias) - Créditos</label>
-                                    <input type="number" id="recompensaMision1" value="2" min="0" style="width:100%;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Misión 2 (7 victorias) - Créditos</label>
-                                    <input type="number" id="recompensaMision2" value="5" min="0" style="width:100%;">
-                                </div>
-                            </div>
-                            <div class="flex-row">
-                                <div class="form-group">
-                                    <label>Misión 3 (15 victorias) - Créditos</label>
-                                    <input type="number" id="recompensaMision3" value="12" min="0" style="width:100%;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Misión 4 (30 victorias) - Créditos</label>
-                                    <input type="number" id="recompensaMision4" value="25" min="0" style="width:100%;">
-                                </div>
-                            </div>
-                            <div class="flex-row">
-                                <div class="form-group">
-                                    <label>Misión 5 (50 victorias) - Créditos</label>
-                                    <input type="number" id="recompensaMision5" value="50" min="0" style="width:100%;">
-                                </div>
-                                <div class="form-group">
-                                    <label>Días extra (Misión 4 y 5)</label>
-                                    <input type="number" id="recompensaDiasExtra" value="3" min="0" style="width:100%;">
-                                </div>
-                            </div>
-                            <button class="btn-block btn-warning" onclick="guardarRecompensas()" style="margin-top:4px;">💾 GUARDAR RECOMPENSAS</button>
-                        </div>
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: ADMIN (MEJORADO) ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel ADMIN -->
                 <div id="panel-admins" class="panel">
                     <h3>👑 PANEL DE ADMINISTRACIÓN</h3>
-
-                    <!-- Configurar Regalo de Bienvenida -->
                     <div class="item-card" style="border:2px solid #ffaa44;">
                         <div class="info-box promo">🎁 <strong>CONFIGURAR REGALO DE BIENVENIDA</strong></div>
                         <div class="flex-row">
@@ -2085,15 +1823,10 @@
                         </div>
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">Actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos</div>
                     </div>
-
-                    <!-- Gestión de Usuarios -->
                     <div class="item-card" style="border:2px solid #ff44aa;">
                         <div class="info-box admin">👥 <strong>GESTIÓN DE USUARIOS</strong></div>
                         <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
-                            <div class="form-group" style="flex:1; min-width:150px;">
-                                <label>🔍 Buscar</label>
-                                <input type="text" id="searchUserInput" placeholder="usuario@ejemplo.com" oninput="buscarUsuario()">
-                            </div>
+                            <div class="form-group" style="flex:1; min-width:150px;"><label>🔍 Buscar</label><input type="text" id="searchUserInput" placeholder="usuario@ejemplo.com" oninput="buscarUsuario()"></div>
                             <button class="btn-small btn-success" onclick="recargarUsuarios()" style="padding:6px 16px; align-self:flex-end; margin-bottom:8px;">🔄 Actualizar</button>
                         </div>
                         <div id="userSearchResult" style="margin-top:6px;"></div>
@@ -2101,31 +1834,16 @@
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
                             <div id="listaUsuariosContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
-                        <!-- Botón Eliminar Todos -->
-                        <button class="btn-block btn-spam" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos" style="margin-top:10px;">
-                            🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)
-                        </button>
-                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">
-                            ⚠️ Esta acción eliminará TODOS los usuarios registrados. <strong>No se puede deshacer.</strong>
-                        </div>
+                        <button class="btn-block btn-spam" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos" style="margin-top:10px;">🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)</button>
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: SOLICITUDES (SOLO ADMIN) ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel SOLICITUDES -->
                 <div id="panel-solicitudes" class="panel">
-                    <h3>📨 SOLICITUDES DE REGISTRO <span class="info-badge" style="background:#ffaa44;color:#000;">PENDIENTES</span></h3>
+                    <h3>📨 SOLICITUDES DE REGISTRO</h3>
                     <div class="item-card">
-                        <div class="info-box solicitudes">
-                            🛡️ <strong>Gestión de solicitudes</strong> - Aquí puedes ver quién ha solicitado registrarse.
-                            <br><br>
-                            <strong>📊 Estados:</strong>
-                            <span style="color:#ffaa44;">🟡 Pendiente</span> |
-                            <span style="color:#00ff88;">🟢 Aprobada</span> |
-                            <span style="color:#ff4444;">🔴 Rechazada</span>
-                            <br><br>
-                            <span style="color:#ffaa44;">💡 Cuando apruebes una solicitud, el usuario recibirá un correo de confirmación y podrá entrar.</span>
+                        <div class="info-box solicitudes">🛡️ <strong>Gestión de solicitudes</strong> - Aquí puedes ver quién ha solicitado registrarse.<br>
+                            <span style="color:#ffaa44;">🟡 Pendiente</span> | <span style="color:#00ff88;">🟢 Aprobada</span> | <span style="color:#ff4444;">🔴 Rechazada</span>
                         </div>
                         <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
                             <button class="btn-small btn-success" onclick="recargarSolicitudes()" style="padding:6px 16px; align-self:flex-end;">🔄 Actualizar</button>
@@ -2137,42 +1855,27 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: REGISTROS (SOLO ADMIN) ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel REGISTROS -->
                 <div id="panel-registros" class="panel">
                     <h3>📋 REGISTROS DE USUARIOS <span class="info-badge" style="background:#00ccff;color:#fff;">ANTI-SPAM</span></h3>
                     <div class="item-card">
-                        <div class="info-box registros">
-                            🛡️ <strong>Control de registros</strong> - Aquí puedes ver quién se ha registrado, desde qué IP y cuándo.
-                            <br><br>
-                            <strong>🚫 Límite anti-spam:</strong> <span id="spamLimitDisplay">5</span> registros por IP en <span id="spamTimeDisplay">60</span> minutos.
-                            <br>
-                            <span style="color:#ff4444;">🔴 Usuarios marcados como SPAM serán bloqueados automáticamente.</span>
-                        </div>
+                        <div class="info-box registros">🛡️ <strong>Control de registros</strong></div>
                         <div style="display:flex; gap:8px; margin-bottom:8px; flex-wrap:wrap;">
-                            <div class="form-group" style="flex:1;">
-                                <label>📊 Límite de registros por IP</label>
-                                <input type="number" id="spamLimit" value="5" min="1" max="20">
-                            </div>
-                            <div class="form-group" style="flex:1;">
-                                <label>⏱️ Tiempo (minutos)</label>
-                                <input type="number" id="spamTime" value="60" min="5" max="1440">
-                            </div>
-                            <button class="btn-small btn-success" onclick="recargarRegistros()" style="padding:6px 16px; align-self:flex-end; margin-bottom:8px;">🔄 Actualizar</button>
+                            <div class="form-group" style="flex:1;"><label>📊 Límite de registros por IP</label><input type="number" id="spamLimit" value="5" min="1" max="20"></div>
+                            <div class="form-group" style="flex:1;"><label>⏱️ Tiempo (minutos)</label><input type="number" id="spamTime" value="60" min="5" max="1440"></div>
                         </div>
-                        <button class="btn-block btn-admin-info" onclick="guardarConfiguracionSpam()">💾 GUARDAR CONFIGURACIÓN</button>
-                        <button class="btn-block btn-danger" onclick="limpiarRegistros()" style="margin-top:6px;">🗑️ LIMPIAR REGISTROS ANTIGUOS</button>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button class="btn-block btn-admin-info" onclick="guardarConfiguracionSpam()" style="flex:1;">💾 GUARDAR CONFIGURACIÓN</button>
+                            <button class="btn-small btn-success" onclick="recargarRegistros()" style="padding:6px 16px; align-self:flex-end;">🔄 Actualizar</button>
+                        </div>
                         <div style="margin-top:10px;">
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Historial de registros</div>
-                            <div id="registrosContainer" style="max-height:400px;overflow-y:auto;"></div>
+                            <div id="registrosContainer" style="max-height:300px;overflow-y:auto;"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
-                <!-- ===== PANEL: CRÉDITOS ===== -->
-                <!-- ========================================================== -->
+                <!-- Panel CRÉDITOS -->
                 <div id="panel-credits" class="panel">
                     <h3>💎 MIS CRÉDITOS</h3>
                     <div class="item-card">
@@ -2240,6 +1943,10 @@
             }
             alertOriginal(mensaje);
         };
+
+        console.log('⚡ SYS ANDY PRO - VERSIÓN CORREGIDA');
+        console.log('✅ Mensaje en ruso ELIMINADO');
+        console.log('✅ Sistema de aprobación de usuarios activado');
 
         // ================================================================
         // VARIABLES GLOBALES
@@ -2351,15 +2058,6 @@
             return { month, year: String(year) };
         }
 
-        function obtenerIP() {
-            return new Promise((resolve) => {
-                fetch('https://api.ipify.org?format=json')
-                    .then(response => response.json())
-                    .then(data => resolve(data.ip))
-                    .catch(() => resolve('0.0.0.0'));
-            });
-        }
-
         function generarTiempoRespuesta() {
             const segundos = (Math.random() * 2 + 0.8).toFixed(4);
             return segundos;
@@ -2377,28 +2075,6 @@
                 btn.classList.remove('loading');
                 btn.disabled = false;
             }
-        }
-
-        function setButtonSuccess(btn, message) {
-            if (!btn) return;
-            const originalText = btn.textContent;
-            btn.classList.add('success');
-            btn.textContent = '✅ ' + message;
-            setTimeout(() => {
-                btn.classList.remove('success');
-                btn.textContent = originalText;
-            }, 2000);
-        }
-
-        function setButtonError(btn, message) {
-            if (!btn) return;
-            const originalText = btn.textContent;
-            btn.classList.add('error');
-            btn.textContent = '❌ ' + message;
-            setTimeout(() => {
-                btn.classList.remove('error');
-                btn.textContent = originalText;
-            }, 2000);
         }
 
         // ================================================================
@@ -2602,7 +2278,6 @@
             btn.textContent = '⏳ Solicitando...';
 
             try {
-                // Verificar si ya existe
                 const nodo = limpiarClave(email);
                 const exist = await db.ref(`usuarios/${nodo}`).once('value');
                 if (exist.exists()) {
@@ -2622,10 +2297,9 @@
                     pass: pass,
                     fechaRegistro: firebase.database.ServerValue.TIMESTAMP,
                     bloqueado: false,
-                    aprobado: false // ⚠️ NUEVO: pendiente de aprobación
+                    aprobado: false
                 });
 
-                // Guardar en la lista de solicitudes
                 await db.ref(`solicitudes/${nodo}`).set({
                     email: email,
                     fecha: firebase.database.ServerValue.TIMESTAMP,
@@ -2633,14 +2307,12 @@
                     pass: pass
                 });
 
-                // Enviar notificación al admin (en Firebase)
                 await db.ref('notificaciones_admin').push({
                     mensaje: `📨 Nueva solicitud de registro: ${email}`,
                     fecha: firebase.database.ServerValue.TIMESTAMP,
                     leida: false
                 });
 
-                // Cerrar sesión del usuario recién creado (no puede entrar hasta ser aprobado)
                 await auth.signOut();
 
                 mostrarNotificacion(`✅ Solicitud enviada. Espera la aprobación del administrador.`, 'success');
@@ -2686,7 +2358,6 @@
                 if (snapshot.exists()) {
                     const data = snapshot.val();
                     
-                    // Verificar si está aprobado
                     if (data.aprobado === false) {
                         mostrarNotificacion('⏳ Tu cuenta está pendiente de aprobación. Espera al administrador.', 'warning');
                         return;
@@ -2705,84 +2376,157 @@
                 } else {
                     mostrarNotificacion('❌ Usuario no encontrado.', 'error');
                 }
-            }).catch(err => mostrarNotificacion('Error de conexión.', 'error'));
+            }).catch(err => {
+                console.error('Error al login:', err);
+                mostrarNotificacion('Error de conexión.', 'error');
+            });
         }
 
+        // ================================================================
+        // FUNCIÓN INGRESAR AL SISTEMA (VERSIÓN CORREGIDA)
+        // ================================================================
         async function ingresarAlSistema(email, elRol) {
-            currentUser = { 
-                email: email, 
-                role: elRol, 
-                uid: limpiarClave(email) 
-            };
-            usernameClave = currentUser.uid;
-            esOwner = esUsuarioOwner(email);
+            try {
+                currentUser = { 
+                    email: email, 
+                    role: elRol, 
+                    uid: limpiarClave(email) 
+                };
+                usernameClave = currentUser.uid;
+                esOwner = esUsuarioOwner(email);
 
-            const userSnap = await db.ref(`usuarios/${usernameClave}`).once('value');
-            if (userSnap.exists() && userSnap.val().bloqueado === true) {
-                mostrarNotificacion('⛔ Cuenta bloqueada.', 'error');
-                return;
+                const userSnap = await db.ref(`usuarios/${usernameClave}`).once('value');
+                if (userSnap.exists() && userSnap.val().bloqueado === true) {
+                    mostrarNotificacion('⛔ Cuenta bloqueada.', 'error');
+                    return;
+                }
+
+                document.getElementById('auth-screen').style.display = 'none';
+                document.getElementById('main-app').style.display = 'flex';
+
+                const displayName = email.split('@')[0];
+                document.getElementById('userDisplay').innerHTML = `
+                    👤 ${displayName} ${elRol === 'Owner' ? '👑' : ''}
+                    <span class="user-status active">✅ Activo</span>
+                `;
+
+                if (elRol === "Owner") {
+                    document.getElementById('tabAdminBtn').style.display = 'block';
+                    document.getElementById('tabRegistrosBtn').style.display = 'block';
+                    document.getElementById('tabSolicitudesBtn').style.display = 'block';
+                    document.getElementById('tabJuegoBtn').style.display = 'none';
+                    document.getElementById('configRecompensas').style.display = 'block';
+                    
+                    cargarPromo();
+                    cargarConfiguracionSpam();
+                    escucharUsuarios();
+                    escucharRegistros();
+                    escucharSolicitudes();
+                } else {
+                    document.getElementById('tabAdminBtn').style.display = 'none';
+                    document.getElementById('tabRegistrosBtn').style.display = 'none';
+                    document.getElementById('tabSolicitudesBtn').style.display = 'none';
+                    document.getElementById('tabJuegoBtn').style.display = 'block';
+                    document.getElementById('configRecompensas').style.display = 'none';
+                }
+
+                if (esOwner) {
+                    await db.ref(`usuarios_datos/${usernameClave}`).set({
+                        credits: 999999,
+                        days: 999999
+                    });
+                    currentCredits = 999999;
+                    currentDays = 999999;
+                    actualizarDisplayDatos();
+                } else {
+                    await cargarDatosUsuario();
+                }
+
+                await cargarCreditosUsuario();
+                cargarHistorialGen();
+                cargarHistorialLive();
+                cargarHistorialMasivo();
+
+                document.getElementById('generatedCount').textContent = generatedCardsList.length;
+                document.getElementById('massiveCount').textContent = generatedCardsList.length;
+
+                await cargarPerfilChat();
+                await cargarNota();
+                await cargarProgresoJuego();
+                await cargarRecompensas();
+
+                seleccionarPasarela('stripe');
+                switchTab('generator');
+
+                mostrarNotificacion(`✅ Bienvenido ${displayName}`, 'success');
+
+            } catch (error) {
+                console.error('Error al ingresar al sistema:', error);
+                mostrarNotificacion('❌ Error al iniciar sesión', 'error');
+            }
+        }
+
+        // ================================================================
+        // CERRAR SESIÓN
+        // ================================================================
+        function cerrarSesion() {
+            if (usuariosUnsubscribe) {
+                usuariosUnsubscribe();
+                usuariosUnsubscribe = null;
+            }
+            if (chatUnsubscribe) {
+                chatUnsubscribe();
+                chatUnsubscribe = null;
+            }
+            if (salaUnsubscribe) {
+                salaUnsubscribe();
+                salaUnsubscribe = null;
+            }
+            if (registrosUnsubscribe) {
+                registrosUnsubscribe();
+                registrosUnsubscribe = null;
+            }
+            if (solicitudesUnsubscribe) {
+                solicitudesUnsubscribe();
+                solicitudesUnsubscribe = null;
             }
 
-            document.getElementById('auth-screen').style.display = 'none';
-            document.getElementById('main-app').style.display = 'flex';
+            const btn = document.getElementById('btnCerrarSesion');
+            setButtonLoading(btn, true);
+            btn.textContent = '⏳ Cerrando...';
 
-            const displayName = email.split('@')[0];
-            document.getElementById('userDisplay').innerHTML = `
-                👤 ${displayName} ${elRol === 'Owner' ? '👑' : ''}
-                <span class="user-status active">✅ Activo</span>
-            `;
+            auth.signOut().then(() => {
+                currentUser = null;
+                usernameClave = "";
+                currentCredits = 0;
+                currentDays = 0;
+                esOwner = false;
+                chatDisplayName = "";
+                chatAvatar = "🦁";
+                chatNameBloqueado = false;
+                salaActual = null;
+                salaCodigo = null;
+                generatedCardsList = [];
+                massiveResults = [];
+                mensajeRespondiendo = null;
+                mensajeRespondiendoSala = null;
 
-            // Mostrar tabs según rol
-            if (elRol === "Owner") {
-                document.getElementById('tabAdminBtn').style.display = 'block';
-                document.getElementById('tabRegistrosBtn').style.display = 'block';
-                document.getElementById('tabSolicitudesBtn').style.display = 'block';
-                document.getElementById('tabJuegoBtn').style.display = 'none';
-                document.getElementById('configRecompensas').style.display = 'block';
-                
-                // Cargar datos de admin
-                cargarPromo();
-                cargarConfiguracionSpam();
-                escucharUsuarios();
-                escucharRegistros();
-                escucharSolicitudes();
-            } else {
-                document.getElementById('tabAdminBtn').style.display = 'none';
-                document.getElementById('tabRegistrosBtn').style.display = 'none';
-                document.getElementById('tabSolicitudesBtn').style.display = 'none';
-                document.getElementById('tabJuegoBtn').style.display = 'block';
-                document.getElementById('configRecompensas').style.display = 'none';
-            }
+                document.getElementById('auth-screen').style.display = 'flex';
+                document.getElementById('main-app').style.display = 'none';
+                document.getElementById('solicitudesBadge').style.display = 'none';
 
-            if (esOwner) {
-                await db.ref(`usuarios_datos/${usernameClave}`).set({
-                    credits: 999999,
-                    days: 999999
-                });
-                currentCredits = 999999;
-                currentDays = 999999;
-                actualizarDisplayDatos();
-            } else {
-                await cargarDatosUsuario();
-            }
+                document.getElementById('loginEmail').value = '';
+                document.getElementById('loginPass').value = '';
 
-            await cargarCreditosUsuario();
-            cargarHistorialGen();
-            cargarHistorialLive();
-            cargarHistorialMasivo();
-
-            document.getElementById('generatedCount').textContent = generatedCardsList.length;
-            document.getElementById('massiveCount').textContent = generatedCardsList.length;
-
-            await cargarPerfilChat();
-            await cargarNota();
-            await cargarProgresoJuego();
-            await cargarRecompensas();
-
-            seleccionarPasarela('stripe');
-            switchTab('generator');
-
-            mostrarNotificacion(`✅ Bienvenido ${displayName}`, 'success');
+                setButtonLoading(btn, false);
+                btn.textContent = 'SALIR';
+                mostrarNotificacion('👋 Sesión cerrada correctamente', 'info');
+            }).catch((error) => {
+                console.error('Error al cerrar sesión:', error);
+                setButtonLoading(btn, false);
+                btn.textContent = 'SALIR';
+                mostrarNotificacion('❌ Error al cerrar sesión', 'error');
+            });
         }
 
         // ================================================================
@@ -2793,8 +2537,6 @@
                 solicitudesUnsubscribe();
                 solicitudesUnsubscribe = null;
             }
-
-            console.log('🔄 Escuchando solicitudes...');
 
             solicitudesUnsubscribe = db.ref('solicitudes').on('value', (snapshot) => {
                 const container = document.getElementById('solicitudesContainer');
@@ -2823,7 +2565,6 @@
                     }
                 });
 
-                // Actualizar badge
                 const badge = document.getElementById('solicitudesBadge');
                 if (pendientes > 0) {
                     badge.style.display = 'inline';
@@ -2832,7 +2573,6 @@
                     badge.style.display = 'none';
                 }
 
-                // Ordenar por fecha (más reciente primero)
                 solicitudes.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
 
                 if (solicitudes.length === 0) {
@@ -2893,19 +2633,16 @@
             try {
                 const nodo = limpiarClave(email);
                 
-                // Actualizar usuario a aprobado
                 await db.ref(`usuarios/${nodo}`).update({ 
                     aprobado: true,
                     fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
                 });
 
-                // Actualizar solicitud
                 await db.ref(`solicitudes/${key}`).update({ 
                     estado: 'aprobada',
                     fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
                 });
 
-                // Agregar créditos de bienvenida
                 await db.ref(`usuarios_datos/${nodo}`).set({
                     credits: promoCreditos,
                     days: promoDias
@@ -2921,13 +2658,6 @@
                 });
 
                 mostrarNotificacion(`✅ Usuario ${email} aprobado. Recibió ${promoDias} días y ${promoCreditos} créditos`, 'success');
-
-                // Notificar al usuario (en Firebase)
-                await db.ref('notificaciones_usuario/' + nodo).push({
-                    mensaje: `🎉 Tu cuenta ha sido aprobada por el administrador. ¡Bienvenido a SYS ANDY PRO!`,
-                    fecha: firebase.database.ServerValue.TIMESTAMP,
-                    leida: false
-                });
 
             } catch (error) {
                 console.error('Error al aprobar:', error);
@@ -2953,21 +2683,12 @@
             try {
                 const nodo = limpiarClave(email);
                 
-                // Actualizar solicitud
                 await db.ref(`solicitudes/${key}`).update({ 
                     estado: 'rechazada',
                     fechaRechazo: firebase.database.ServerValue.TIMESTAMP
                 });
 
-                // Eliminar usuario pendiente
                 await db.ref(`usuarios/${nodo}`).remove();
-
-                // Notificar al usuario (en Firebase)
-                await db.ref('notificaciones_usuario/' + nodo).push({
-                    mensaje: `❌ Tu solicitud de registro ha sido rechazada por el administrador.`,
-                    fecha: firebase.database.ServerValue.TIMESTAMP,
-                    leida: false
-                });
 
                 mostrarNotificacion(`✅ Solicitud de ${email} rechazada`, 'success');
 
@@ -2978,136 +2699,6 @@
 
             setButtonLoading(btn, false);
             btn.textContent = '❌ Rechazar';
-        }
-
-        // ================================================================
-        // CERRAR SESIÓN
-        // ================================================================
-        function cerrarSesion() {
-            if (usuariosUnsubscribe) {
-                usuariosUnsubscribe();
-                usuariosUnsubscribe = null;
-            }
-            if (chatUnsubscribe) {
-                chatUnsubscribe();
-                chatUnsubscribe = null;
-            }
-            if (salaUnsubscribe) {
-                salaUnsubscribe();
-                salaUnsubscribe = null;
-            }
-            if (registrosUnsubscribe) {
-                registrosUnsubscribe();
-                registrosUnsubscribe = null;
-            }
-            if (solicitudesUnsubscribe) {
-                solicitudesUnsubscribe();
-                solicitudesUnsubscribe = null;
-            }
-
-            const btn = document.getElementById('btnCerrarSesion');
-            setButtonLoading(btn, true);
-            btn.textContent = '⏳ Cerrando...';
-
-            auth.signOut().then(() => {
-                currentUser = null;
-                usernameClave = "";
-                currentCredits = 0;
-                currentDays = 0;
-                esOwner = false;
-                chatDisplayName = "";
-                chatAvatar = "🦁";
-                chatNameBloqueado = false;
-                salaActual = null;
-                salaCodigo = null;
-                generatedCardsList = [];
-                massiveResults = [];
-                mensajeRespondiendo = null;
-                mensajeRespondiendoSala = null;
-
-                totalVictorias = 0;
-                totalDerrotas = 0;
-                totalEmpates = 0;
-                misionesCompletadas = [false, false, false, false, false];
-                misionProgreso = [0, 0, 0, 0, 0];
-
-                document.getElementById('salaPrivadaCard').style.display = 'none';
-                document.getElementById('auth-screen').style.display = 'flex';
-                document.getElementById('main-app').style.display = 'none';
-                document.getElementById('solicitudesBadge').style.display = 'none';
-
-                document.getElementById('loginEmail').value = '';
-                document.getElementById('loginPass').value = '';
-
-                document.getElementById('chatDisplayName').value = '';
-                document.getElementById('chatAvatarSelector').textContent = '🦁';
-                document.getElementById('chatDisplayName').disabled = false;
-                document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
-                document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-                document.getElementById('chatProfileInfo').textContent = '💡 Elige un avatar y escribe tu nombre para chatear.';
-
-                document.getElementById('chatMessages').innerHTML = '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>';
-                document.getElementById('salaMessages').innerHTML = '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>';
-                document.getElementById('chatInput').value = '';
-                document.getElementById('salaChatInput').value = '';
-                document.getElementById('chatReplyPreview').style.display = 'none';
-                document.getElementById('salaReplyPreview').style.display = 'none';
-
-                document.getElementById('creditsDisplay').textContent = '💎 0 créditos';
-                document.getElementById('daysDisplay').textContent = '📅 0 días';
-                document.getElementById('creditsBalance').textContent = '0';
-                document.getElementById('daysBalance').textContent = '0';
-
-                document.getElementById('generatedCount').textContent = '0';
-                document.getElementById('massiveCount').textContent = '0';
-                document.getElementById('generatedCards').innerHTML = '<p style="color:#6688aa;text-align:center;padding:10px;font-size:0.8rem;">Genera tus tarjetas aquí (GRATIS)</p>';
-                document.getElementById('btnDownloadGen').disabled = true;
-                document.getElementById('actionButtons').style.display = 'none';
-
-                document.getElementById('notaContent').value = '';
-                document.getElementById('notaFecha').textContent = '📅 Sin fecha';
-                document.getElementById('notaUltimaActualizacion').textContent = '🔄 Última actualización: --';
-                document.getElementById('notaCharCount').textContent = '0 caracteres';
-                document.getElementById('notaEstadoText').textContent = 'Sin guardar';
-                document.getElementById('notaDot').className = 'dot unsaved';
-                document.getElementById('notaDotFooter').className = 'dot unsaved';
-                document.getElementById('notaStatusFooter').textContent = 'Nota sin guardar';
-                document.getElementById('notaStatsBox').classList.remove('show');
-
-                document.getElementById('jugadorEmoji').textContent = '🤚';
-                document.getElementById('cpuEmoji').textContent = '🤖';
-                document.getElementById('juegoResultado').textContent = '🎯 Elige una opción';
-                document.getElementById('juegoResultado').className = 'juego-resultado';
-                document.getElementById('juegoVictorias').textContent = '0';
-                document.getElementById('statVictorias').textContent = '0';
-                document.getElementById('statDerrotas').textContent = '0';
-                document.getElementById('statEmpates').textContent = '0';
-                document.getElementById('statTotal').textContent = '0';
-                document.getElementById('btnPiedra').disabled = false;
-                document.getElementById('btnPapel').disabled = false;
-                document.getElementById('btnTijera').disabled = false;
-
-                for (let i = 1; i <= 5; i++) {
-                    document.getElementById(`mision${i}Progreso`).textContent = '0';
-                    document.getElementById(`mision${i}Estado`).textContent = '⏳ Pendiente';
-                    document.getElementById(`mision${i}Estado`).className = 'mision-estado pendiente';
-                    document.getElementById(`mision${i}`).classList.remove('completada');
-                }
-
-                document.getElementById('tabAdminBtn').style.display = 'none';
-                document.getElementById('tabRegistrosBtn').style.display = 'none';
-                document.getElementById('tabSolicitudesBtn').style.display = 'none';
-
-                setButtonLoading(btn, false);
-                btn.textContent = 'SALIR';
-                mostrarNotificacion('👋 Sesión cerrada correctamente', 'info');
-                console.log('🔐 Sesión cerrada');
-            }).catch((error) => {
-                console.error('Error al cerrar sesión:', error);
-                setButtonLoading(btn, false);
-                btn.textContent = 'SALIR';
-                mostrarNotificacion('❌ Error al cerrar sesión', 'error');
-            });
         }
 
         // ================================================================
@@ -3323,8 +2914,6 @@
                 usuariosUnsubscribe = null;
             }
 
-            console.log('🔄 Escuchando usuarios...');
-            
             usuariosUnsubscribe = db.ref("usuarios").on("value", async (snapshot) => {
                 const container = document.getElementById("listaUsuariosContainer");
                 if (!container) return;
@@ -3357,8 +2946,6 @@
                         const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                         const bloqueado = user.bloqueado || false;
                         const aprobado = user.aprobado === true;
-                        const spam = user.spam || false;
-                        const ip = user.ip || 'N/A';
                         const email = user.email || user.key;
 
                         const div = document.createElement('div');
@@ -3370,13 +2957,11 @@
 
                         div.innerHTML = `
                             <div>
-                                <span class="user-email">${email} ${spam ? '🚫' : ''}</span>
+                                <span class="user-email">${email}</span>
                                 <div class="user-info">
                                     <span>💎 ${datos.credits || 0}</span>
                                     <span>📅 ${datos.days || 0}</span>
                                     <span class="badge ${estadoClass}">${estadoLabel}</span>
-                                    ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
-                                    <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
                                 </div>
                             </div>
                             <div class="user-actions">
@@ -3420,8 +3005,6 @@
                         const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
                         const bloqueado = data.bloqueado || false;
                         const aprobado = data.aprobado === true;
-                        const spam = data.spam || false;
-                        const ip = data.ip || 'N/A';
                         const div = document.createElement('div');
                         div.className = 'user-list-item';
                         const emailEscaped = email.replace(/'/g, "\\'");
@@ -3429,13 +3012,11 @@
                         const estadoClass = !aprobado ? 'pendiente' : bloqueado ? 'blocked' : 'active';
                         div.innerHTML = `
                             <div>
-                                <span class="user-email">${email} ${spam ? '🚫' : ''}</span>
+                                <span class="user-email">${email}</span>
                                 <div class="user-info">
                                     <span>💎 ${datos.credits || 0}</span>
                                     <span>📅 ${datos.days || 0}</span>
                                     <span class="badge ${estadoClass}">${estadoLabel}</span>
-                                    ${spam ? '<span class="badge blocked">🚫 SPAM</span>' : ''}
-                                    <span style="font-size:0.45rem;color:#6688aa;">IP: ${ip}</span>
                                 </div>
                             </div>
                             <div class="user-actions">
@@ -3498,7 +3079,6 @@
                         promesas.push(db.ref(`notas/${uid}`).remove());
                         promesas.push(db.ref(`juego/${uid}`).remove());
                         promesas.push(db.ref(`solicitudes/${uid}`).remove());
-                        promesas.push(db.ref(`salas_privadas_mensajes/${uid}`).remove());
                         eliminados++;
                     }
                 });
@@ -3597,16 +3177,14 @@
                 mostrar.forEach(reg => {
                     const div = document.createElement('div');
                     div.className = 'registro-item';
-                    const esSpam = reg.spam || false;
                     const email = reg.email || 'Desconocido';
                     const ip = reg.ip || '0.0.0.0';
                     const fecha = reg.fecha || new Date(reg.timestamp || Date.now()).toLocaleString();
                     
                     div.innerHTML = `
-                        <span class="registro-email">${email} ${esSpam ? '🚫' : ''}</span>
+                        <span class="registro-email">${email}</span>
                         <span class="registro-ip">🌐 ${ip}</span>
                         <span class="registro-fecha">${fecha}</span>
-                        ${esSpam ? '<span class="registro-spam">🚫 SPAM</span>' : ''}
                     `;
                     container.appendChild(div);
                 });
@@ -5557,29 +5135,11 @@
         // ================================================================
         // INICIALIZACIÓN
         // ================================================================
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                // Verificar si el usuario está aprobado antes de dejar entrar
-                const nodo = limpiarClave(user.email);
-                db.ref(`usuarios/${nodo}`).once('value').then((snap) => {
-                    if (snap.exists() && snap.val().aprobado === false) {
-                        mostrarNotificacion('⏳ Tu cuenta está pendiente de aprobación', 'warning');
-                        auth.signOut();
-                        return;
-                    }
-                    ingresarAlSistema(user.email, "User");
-                }).catch(() => {
-                    ingresarAlSistema(user.email, "User");
-                });
-            }
-        });
-
         console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CON SISTEMA DE APROBACIÓN');
         console.log('✅ Mensaje en ruso ELIMINADO');
         console.log('✅ Sistema de aprobación de usuarios activado');
         console.log('✅ Panel de solicitudes para administrador');
         console.log('✅ Configuración de bienvenida funcionando');
-        console.log('✅ Panel de ADMIN completamente funcional');
         console.log('📱 Funciona en cualquier navegador y país');
 
         cargarPromo();
