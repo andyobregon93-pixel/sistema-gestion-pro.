@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYS ANDY PRO - CHECKER COMPLETO</title>
+    <title>SYS ANDY PRO - CHECKER</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN COMPLETA CON TODAS LAS FUNCIONALIDADES    */
+        /* ESTILOS COMPLETOS                                              */
         /* ============================================================== */
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -39,9 +39,6 @@
             --text-bright: #ffffff;
             --admin-btn-bg: #1a2a4a;
             --admin-btn-hover: #2a4a6a;
-            --solicitud-pendiente: #ffaa44;
-            --solicitud-aprobada: #00ff88;
-            --solicitud-rechazada: #ff4444;
         }
 
         body.theme-day {
@@ -72,9 +69,6 @@
             --text-bright: #0a1a3a;
             --admin-btn-bg: #d4e4f7;
             --admin-btn-hover: #b8cce6;
-            --solicitud-pendiente: #cc8800;
-            --solicitud-aprobada: #00aa66;
-            --solicitud-rechazada: #cc0000;
         }
 
         html, body {
@@ -311,10 +305,6 @@
             background: #ff444433;
             color: #ff4444;
         }
-        .navbar .user-status.pendiente {
-            background: #ffaa4433;
-            color: #ffaa44;
-        }
         .navbar .nav-right {
             display: flex;
             align-items: center;
@@ -381,23 +371,6 @@
         }
         body.theme-day .btn-theme:hover {
             background: rgba(0, 0, 0, 0.1);
-        }
-
-        /* ===== NOTIFICACIÓN DE SOLICITUDES ===== */
-        .notification-badge {
-            background: #ff4444;
-            color: white;
-            border-radius: 50%;
-            padding: 2px 8px;
-            font-size: 0.6rem;
-            font-weight: bold;
-            margin-left: 4px;
-            animation: pulse-notification 1.5s ease-in-out infinite;
-        }
-
-        @keyframes pulse-notification {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
         }
 
         /* ===== TABS ===== */
@@ -606,51 +579,6 @@
         .item-card .info-box.registros { border-color: #00ccff; background: #00ccff06; }
         .item-card .info-box.solicitudes { border-color: #ffaa44; background: #ffaa4406; }
 
-        /* ===== SOLICITUDES ===== */
-        .solicitud-item {
-            padding: 8px 12px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 6px;
-            transition: background 0.3s;
-        }
-        .solicitud-item:hover { background: var(--hover-bg); }
-        .solicitud-item .solicitud-email {
-            font-size: 0.8rem;
-            color: var(--texto-principal);
-            font-weight: 600;
-        }
-        .solicitud-item .solicitud-fecha {
-            font-size: 0.6rem;
-            color: var(--text-muted);
-        }
-        .solicitud-item .solicitud-estado {
-            font-size: 0.6rem;
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-        }
-        .solicitud-item .solicitud-estado.pendiente {
-            background: rgba(255, 170, 68, 0.2);
-            color: var(--solicitud-pendiente);
-        }
-        .solicitud-item .solicitud-estado.aprobada {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--solicitud-aprobada);
-        }
-        .solicitud-item .solicitud-estado.rechazada {
-            background: rgba(255, 68, 68, 0.15);
-            color: var(--solicitud-rechazada);
-        }
-        .solicitud-item .solicitud-actions {
-            display: flex;
-            gap: 4px;
-            flex-wrap: wrap;
-        }
-
         /* ===== FORMULARIOS ===== */
         .form-group {
             margin-bottom: 8px;
@@ -784,14 +712,6 @@
             background: linear-gradient(135deg, #00aaff, #0066cc);
             box-shadow: 0 0 15px rgba(0, 170, 255, 0.2);
         }
-        .btn-block.btn-aprobar {
-            background: linear-gradient(135deg, #00cc88, #008866);
-            box-shadow: 0 0 20px rgba(0, 204, 136, 0.2);
-        }
-        .btn-block.btn-rechazar {
-            background: linear-gradient(135deg, #ff4444, #cc0000);
-            box-shadow: 0 0 20px rgba(255, 68, 68, 0.2);
-        }
 
         @keyframes pulse-live { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.12); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.25); } }
         @keyframes pulse-massive { 0%, 100% { box-shadow: 0 0 15px rgba(255, 136, 0, 0.12); } 50% { box-shadow: 0 0 30px rgba(255, 136, 0, 0.25); } }
@@ -851,10 +771,6 @@
         .btn-small.btn-admin.btn-unblock:hover { background: #00dd99; }
         .btn-small.btn-admin.btn-delete { background: #cc0000; }
         .btn-small.btn-admin.btn-delete:hover { background: #ff0000; }
-        .btn-small.btn-admin.btn-days-add { background: #ff8800; }
-        .btn-small.btn-admin.btn-days-add:hover { background: #ffaa44; }
-        .btn-small.btn-admin.btn-days-remove { background: #cc4444; }
-        .btn-small.btn-admin.btn-days-remove:hover { background: #ff6666; }
 
         /* ===== PASARELA CARDS ===== */
         .pasarela-grid {
@@ -880,33 +796,6 @@
         .pasarela-card .status { font-size: 0.6rem; color: var(--text-muted); margin-top: 2px; }
         .pasarela-card .status.active { color: #00ff88; }
 
-        /* ===== DIRECCIONES RESULT ===== */
-        .direccion-result {
-            background: var(--bg-result);
-            border: 2px solid #ffaa44;
-            border-radius: 12px;
-            padding: 12px 15px;
-            margin-top: 8px;
-            font-size: 0.9rem;
-            line-height: 1.8;
-        }
-        .direccion-result .label { color: var(--texto-secundario); font-weight: 600; min-width: 100px; display: inline-block; }
-        .direccion-result .value { color: var(--texto-principal); font-weight: 500; }
-        .direccion-result .copy-btn-dir {
-            margin-top: 10px;
-            background: linear-gradient(135deg, #00cc88, #008866);
-            border: none;
-            border-radius: 20px;
-            padding: 6px 16px;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.15s;
-            font-size: 0.75rem;
-        }
-        .direccion-result .copy-btn-dir:hover { transform: scale(1.05); }
-        .direccion-result .copy-btn-dir:active { transform: scale(0.95); }
-
         /* ===== RESULTADOS ===== */
         .result-box {
             background: var(--bg-result);
@@ -921,11 +810,6 @@
         }
         .result-box::-webkit-scrollbar { width: 4px; }
         .result-box::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
-
-        .status-valid { color: #00ff88; font-weight: bold; }
-        .status-pending { color: #ffaa44; font-weight: bold; }
-        .status-invalid { color: #ff4444; font-weight: bold; }
-        .status-cvv-invalid { color: #ff8800; font-weight: bold; }
 
         /* ===== TARJETAS GENERADAS ===== */
         .generated-cards {
@@ -971,57 +855,6 @@
         .info-badge.fecha { background: #1a6a4a; color: #88ffbb; }
         .info-badge.brand { background: #1a4a6a; color: #88bbff; }
         .info-badge.free-tag { background: #00cc88; color: #000; font-weight: bold; }
-
-        /* ===== HISTORIAL ===== */
-        .credit-history {
-            max-height: 100px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            padding: 4px 8px;
-            transition: background 0.3s;
-        }
-        body.theme-day .credit-history { background: rgba(0, 0, 0, 0.03); }
-        .credit-history::-webkit-scrollbar { width: 3px; }
-        .credit-history::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-        .credit-item { border-bottom: 1px solid var(--border-color); padding: 3px 0; font-size: 0.68rem; color: var(--texto-secundario); }
-        .credit-item:last-child { border-bottom: none; }
-
-        /* ===== USUARIOS LISTA (ADMIN) ===== */
-        .user-list-item {
-            padding: 6px 10px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-            transition: background 0.3s;
-        }
-        .user-list-item:hover { background: var(--hover-bg); }
-        .user-list-item .user-email { font-size: 0.7rem; color: var(--texto-principal); font-weight: 600; min-width: 120px; }
-        .user-list-item .user-info { font-size: 0.6rem; color: var(--text-muted); display: flex; gap: 6px; flex-wrap: wrap; }
-        .user-list-item .user-info .badge { padding: 1px 6px; border-radius: 10px; font-size: 0.5rem; font-weight: 600; }
-        .user-list-item .user-info .badge.active { background: #00cc8833; color: #00ff88; }
-        .user-list-item .user-info .badge.blocked { background: #ff444433; color: #ff4444; }
-        .user-list-item .user-info .badge.pendiente { background: #ffaa4433; color: #ffaa44; }
-        .user-list-item .user-actions { display: flex; gap: 3px; flex-wrap: wrap; align-items: center; }
-
-        /* ===== REGISTROS ===== */
-        .registro-item {
-            padding: 6px 10px;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 4px;
-            font-size: 0.7rem;
-        }
-        .registro-item .registro-email { color: var(--texto-principal); font-weight: 600; }
-        .registro-item .registro-ip { color: var(--text-muted); font-family: monospace; }
-        .registro-item .registro-fecha { color: var(--text-muted); font-size: 0.6rem; }
-        .registro-item .registro-spam { color: #ff4444; font-weight: 700; font-size: 0.55rem; padding: 1px 8px; border-radius: 10px; background: rgba(255, 68, 68, 0.15); }
 
         /* ===== BOTÓN PEDIR CRÉDITOS ===== */
         .btn-pedir-creditos {
@@ -1080,242 +913,6 @@
         .modal-overlay .modal-box .modal-botones .modal-btn.cerrar { background: var(--border-color); color: var(--texto-principal); }
 
         /* ============================================================== */
-        /* ===== CHAT ESTILOS TIPO WHATSAPP ===== */
-        /* ============================================================== */
-        .chat-profile-setup {
-            background: var(--bg-result);
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-            transition: background 0.3s, border-color 0.3s;
-        }
-        .chat-profile-setup .avatar-selector { font-size: 2.5rem; cursor: pointer; display: inline-block; padding: 5px 15px; border: 2px solid var(--border-color); border-radius: 50%; transition: 0.2s; background: var(--bg-inputs); user-select: none; }
-        .chat-profile-setup .avatar-selector:hover { border-color: var(--borde-neon); }
-        .chat-profile-setup .profile-name-input { background: var(--input-bg); border: 2px solid var(--border-color); border-radius: var(--border-radius); color: var(--texto-principal); padding: 6px 12px; font-size: 0.85rem; width: 100%; transition: 0.2s; }
-        .chat-profile-setup .profile-name-input:disabled { opacity: 0.6; cursor: not-allowed; border-color: #3a3a5a; }
-        .chat-profile-setup .profile-name-input:focus { border-color: var(--borde-neon); outline: none; }
-
-        .chat-messages {
-            background: var(--bg-result);
-            border-radius: 12px;
-            padding: 10px;
-            height: 350px;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            margin-bottom: 10px;
-            border: 1px solid var(--border-color);
-            transition: background 0.3s, border-color 0.3s;
-        }
-        .chat-messages .message { max-width: 85%; padding: 8px 12px; border-radius: 18px; font-size: 0.85rem; word-wrap: break-word; position: relative; animation: fadeIn 0.15s ease; }
-        .chat-messages .message.own { align-self: flex-end; background: var(--chat-msg-own); border-bottom-right-radius: 4px; color: #e1e9f0; }
-        .chat-messages .message.other { align-self: flex-start; background: var(--chat-msg-other); border-bottom-left-radius: 4px; color: var(--texto-principal); }
-        .chat-messages .message .msg-header { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: bold; margin-bottom: 2px; }
-        .chat-messages .message .msg-header .avatar { font-size: 1rem; }
-        .chat-messages .message .msg-header .name { color: var(--texto-secundario); transition: color 0.2s; }
-        .chat-messages .message .msg-header .time { color: var(--text-muted); font-weight: normal; font-size: 0.55rem; }
-        .chat-messages .message .msg-text { white-space: pre-wrap; }
-        .chat-messages .message .msg-image { max-width: 200px; max-height: 200px; border-radius: 10px; margin-top: 4px; cursor: pointer; }
-        .chat-messages .message .msg-sticker { font-size: 3rem; display: block; margin-top: 2px; }
-        .chat-messages .message .msg-reply { background: rgba(255, 255, 255, 0.05); border-left: 3px solid var(--reply-border); padding: 4px 8px; border-radius: 4px; margin-bottom: 4px; font-size: 0.7rem; color: var(--texto-secundario); }
-        .chat-messages .message .msg-reply .reply-author { font-weight: 600; color: var(--reply-border); }
-        .chat-messages .message .msg-actions { display: flex; gap: 4px; margin-top: 4px; justify-content: flex-end; flex-wrap: wrap; }
-        .chat-messages .message .msg-actions button { background: transparent; border: none; color: var(--text-muted); font-size: 0.55rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: 0.15s; }
-        .chat-messages .message .msg-actions button:hover { background: var(--border-color); color: var(--texto-principal); }
-        .chat-messages .message .msg-actions .whatsapp-btn { color: #25D366; }
-        .chat-messages .message .msg-actions .whatsapp-btn:hover { background: #25D366; color: white; }
-        .chat-messages .message .mention { color: var(--mention-color); font-weight: 600; cursor: pointer; }
-
-        .chat-input-area { display: flex; gap: 6px; align-items: flex-end; flex-wrap: wrap; }
-        .chat-input-area .chat-input { flex: 1; padding: 8px 12px; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 25px; color: var(--texto-principal); font-size: 0.85rem; resize: none; min-height: 38px; max-height: 100px; transition: background 0.3s, border-color 0.3s, color 0.3s; }
-        .chat-input-area .chat-input:focus { border-color: var(--borde-neon); outline: none; }
-        .chat-input-area .chat-btn { background: var(--border-color); border: none; border-radius: 50%; width: 38px; height: 38px; color: var(--texto-principal); font-size: 1.2rem; cursor: pointer; transition: 0.15s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .chat-input-area .chat-btn:hover { background: #2a5a8a; }
-        .chat-input-area .chat-btn.send { background: linear-gradient(135deg, #00cc88, #008866); color: white; }
-        .chat-input-area .chat-btn.send:hover { background: linear-gradient(135deg, #00dd99, #009977); }
-        .chat-input-area .chat-btn.mention-btn { background: #ffaa44; color: white; }
-        .chat-input-area .chat-btn.mention-btn:hover { background: #cc8800; }
-        .chat-input-area .chat-btn.reply-btn { background: #0088cc; color: white; }
-        .chat-input-area .chat-btn.reply-btn:hover { background: #006699; }
-        .chat-input-area .chat-btn.whatsapp-btn { background: #25D366; color: white; }
-        .chat-input-area .chat-btn.whatsapp-btn:hover { background: #1a9b4a; }
-
-        .chat-reply-preview { background: var(--bg-result); border-left: 3px solid var(--reply-border); padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; color: var(--texto-secundario); display: none; margin-bottom: 4px; width: 100%; }
-        .chat-reply-preview .reply-cancel { cursor: pointer; color: #ff4444; font-weight: bold; margin-left: 8px; }
-
-        .emoji-picker, .sticker-picker {
-            display: none;
-            background: var(--bg-panel);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            padding: 8px;
-            margin-top: 6px;
-            flex-wrap: wrap;
-            gap: 4px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        .emoji-picker.show, .sticker-picker.show { display: flex; }
-        .emoji-picker span, .sticker-picker span { font-size: 1.5rem; cursor: pointer; padding: 4px; border-radius: 8px; transition: 0.1s; user-select: none; }
-        .emoji-picker span:hover, .sticker-picker span:hover { background: var(--border-color); transform: scale(1.1); }
-        .sticker-picker span { font-size: 2.5rem; }
-
-        /* ============================================================== */
-        /* ===== NOTAS ===== */
-        /* ============================================================== */
-        .nota-container {
-            background: var(--nota-bg);
-            border: 2px solid var(--nota-border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 8px;
-            transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.05);
-        }
-        .nota-container .nota-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-        .nota-container .nota-header .nota-titulo { font-size: 1.1rem; font-weight: 700; color: var(--texto-principal); display: flex; align-items: center; gap: 8px; }
-        .nota-container .nota-header .nota-titulo span { font-size: 1.3rem; }
-        .nota-container .nota-header .nota-info { font-size: 0.65rem; color: var(--text-muted); display: flex; align-items: center; gap: 12px; }
-        .nota-container .nota-header .nota-info .nota-fecha { background: var(--bg-result); padding: 2px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
-        .nota-container .nota-editor { position: relative; }
-        .nota-container .nota-editor textarea { width: 100%; min-height: 280px; background: var(--bg-inputs); border: 2px solid var(--border-color); border-radius: 12px; color: var(--texto-principal); padding: 16px 18px; font-size: 0.95rem; font-family: 'Segoe UI', 'Roboto', Arial, sans-serif; resize: vertical; transition: background 0.3s, border-color 0.3s, color 0.3s; line-height: 1.7; }
-        .nota-container .nota-editor textarea:focus { border-color: var(--borde-neon); box-shadow: 0 0 25px rgba(0, 200, 255, 0.08); outline: none; }
-        .nota-container .nota-editor textarea::placeholder { color: var(--text-muted); font-style: italic; }
-        .nota-container .nota-editor .nota-char-count { position: absolute; bottom: 12px; right: 16px; font-size: 0.6rem; color: var(--text-muted); background: var(--bg-result); padding: 2px 10px; border-radius: 10px; border: 1px solid var(--border-color); pointer-events: none; }
-        .nota-container .nota-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-        .nota-container .nota-actions .btn-nota { padding: 8px 20px; border: none; border-radius: 25px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 6px; flex: 1; justify-content: center; min-width: 100px; }
-        .nota-container .nota-actions .btn-nota:hover { transform: scale(1.02); }
-        .nota-container .nota-actions .btn-nota:active { transform: scale(0.97); }
-        .nota-container .nota-actions .btn-nota.guardar { background: linear-gradient(135deg, #00cc88, #008866); color: white; box-shadow: 0 0 20px rgba(0, 204, 136, 0.15); }
-        .nota-container .nota-actions .btn-nota.guardar:hover { box-shadow: 0 0 30px rgba(0, 204, 136, 0.25); }
-        .nota-container .nota-actions .btn-nota.limpiar { background: linear-gradient(135deg, #ff4444, #cc0000); color: white; box-shadow: 0 0 20px rgba(255, 68, 68, 0.1); }
-        .nota-container .nota-actions .btn-nota.limpiar:hover { box-shadow: 0 0 30px rgba(255, 68, 68, 0.2); }
-        .nota-container .nota-actions .btn-nota.exportar { background: linear-gradient(135deg, #ffaa44, #cc8800); color: white; box-shadow: 0 0 20px rgba(255, 170, 68, 0.1); }
-        .nota-container .nota-actions .btn-nota.exportar:hover { box-shadow: 0 0 30px rgba(255, 170, 68, 0.2); }
-        .nota-container .nota-actions .btn-nota.copiar { background: linear-gradient(135deg, #0088cc, #006699); color: white; box-shadow: 0 0 20px rgba(0, 136, 204, 0.1); }
-        .nota-container .nota-actions .btn-nota.copiar:hover { box-shadow: 0 0 30px rgba(0, 136, 204, 0.2); }
-        .nota-container .nota-actions .btn-nota.stats { background: linear-gradient(135deg, #6772e5, #4a54c4); color: white; box-shadow: 0 0 20px rgba(103, 114, 229, 0.1); }
-        .nota-container .nota-actions .btn-nota.stats:hover { box-shadow: 0 0 30px rgba(103, 114, 229, 0.2); }
-        .nota-container .nota-footer { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 0.6rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 10px; }
-        .nota-container .nota-footer .nota-status { display: flex; align-items: center; gap: 6px; }
-        .nota-container .nota-footer .nota-status .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
-        .nota-container .nota-footer .nota-status .dot.saved { background: #00ff88; }
-        .nota-container .nota-footer .nota-status .dot.unsaved { background: #ffaa44; }
-        .nota-container .nota-footer .nota-status .dot.error { background: #ff4444; }
-        .nota-container .nota-stats-box { background: var(--bg-result); border-radius: 10px; padding: 12px 16px; margin-top: 10px; display: none; border: 1px solid var(--border-color); font-size: 0.8rem; }
-        .nota-container .nota-stats-box.show { display: block; animation: fadeIn 0.3s ease; }
-        .nota-container .nota-stats-box .stat-item { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border-color); }
-        .nota-container .nota-stats-box .stat-item:last-child { border-bottom: none; }
-        .nota-container .nota-stats-box .stat-item .stat-label { color: var(--texto-secundario); }
-        .nota-container .nota-stats-box .stat-item .stat-value { color: var(--texto-principal); font-weight: 600; }
-        .nota-container .nota-stats-box .stat-item .stat-value.palabras { color: #00ff88; }
-        .nota-container .nota-stats-box .stat-item .stat-value.caracteres { color: #66ddff; }
-        .nota-container .nota-stats-box .stat-item .stat-value.parrafos { color: #ffaa44; }
-        .nota-container .nota-stats-box .stat-item .stat-value.lineas { color: #ff88cc; }
-
-        /* ============================================================== */
-        /* ===== JUEGO - PIEDRA, PAPEL O TIJERA ===== */
-        /* ============================================================== */
-        .juego-container {
-            background: var(--card-bg);
-            border: 2px solid #ff6b35;
-            border-radius: 16px;
-            padding: 20px;
-            margin-top: 8px;
-            transition: background 0.3s, border-color 0.3s;
-        }
-        .juego-container .juego-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-        .juego-container .juego-header .juego-titulo { font-size: 1.2rem; font-weight: 700; color: #ff6b35; display: flex; align-items: center; gap: 8px; }
-        .juego-container .juego-header .juego-titulo span { font-size: 1.5rem; }
-        .juego-container .juego-header .juego-puntos { background: var(--bg-result); padding: 4px 14px; border-radius: 20px; border: 1px solid #ff6b35; font-size: 0.8rem; font-weight: 600; color: var(--texto-principal); }
-        .juego-container .juego-header .juego-puntos span { color: #ffd700; }
-
-        .juego-container .juego-area {
-            background: var(--bg-result);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            min-height: 200px;
-            border: 1px solid var(--border-color);
-        }
-        .juego-container .juego-area .juego-vs { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
-        .juego-container .juego-area .juego-vs .jugador { flex: 1; text-align: center; }
-        .juego-container .juego-area .juego-vs .jugador .emoji { font-size: 3.5rem; display: block; margin-bottom: 4px; transition: 0.3s; }
-        .juego-container .juego-area .juego-vs .jugador .nombre { font-size: 0.7rem; color: var(--text-muted); }
-        .juego-container .juego-area .juego-vs .jugador .nombre span { color: var(--texto-principal); font-weight: 600; }
-        .juego-container .juego-area .juego-vs .vs-texto { font-size: 1.8rem; font-weight: 800; color: #ff6b35; text-shadow: 0 0 20px rgba(255, 107, 53, 0.3); }
-        .juego-container .juego-area .juego-resultado { font-size: 1.2rem; font-weight: 700; padding: 8px; border-radius: 10px; margin: 8px 0; min-height: 50px; display: flex; align-items: center; justify-content: center; }
-        .juego-container .juego-area .juego-resultado.ganaste { color: #00ff88; background: rgba(0, 255, 136, 0.08); }
-        .juego-container .juego-area .juego-resultado.perdiste { color: #ff4444; background: rgba(255, 68, 68, 0.08); }
-        .juego-container .juego-area .juego-resultado.empate { color: #ffaa44; background: rgba(255, 170, 68, 0.08); }
-        .juego-container .juego-area .juego-opciones { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-        .juego-container .juego-area .juego-opciones .opcion-btn { font-size: 2.5rem; padding: 10px 20px; border: 2px solid var(--border-color); border-radius: 16px; background: var(--bg-inputs); cursor: pointer; transition: 0.2s; min-width: 70px; }
-        .juego-container .juego-area .juego-opciones .opcion-btn:hover { transform: scale(1.08); border-color: #ff6b35; box-shadow: 0 0 25px rgba(255, 107, 53, 0.2); }
-        .juego-container .juego-area .juego-opciones .opcion-btn:active { transform: scale(0.95); }
-        .juego-container .juego-area .juego-opciones .opcion-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-
-        .juego-container .juego-misiones { margin-top: 14px; }
-        .juego-container .juego-misiones .mision-item { background: var(--bg-result); border-radius: 10px; padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; border: 1px solid var(--border-color); transition: 0.2s; }
-        .juego-container .juego-misiones .mision-item.completada { border-color: #00ff88; background: rgba(0, 255, 136, 0.05); }
-        .juego-container .juego-misiones .mision-item .mision-info { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .juego-container .juego-misiones .mision-item .mision-info .mision-icon { font-size: 1rem; }
-        .juego-container .juego-misiones .mision-item .mision-info .mision-texto { font-size: 0.7rem; color: var(--texto-principal); }
-        .juego-container .juego-misiones .mision-item .mision-info .mision-texto .mision-progreso { color: var(--text-muted); font-size: 0.6rem; }
-        .juego-container .juego-misiones .mision-item .mision-recompensa { font-size: 0.6rem; font-weight: 600; color: #ffd700; background: rgba(255, 215, 0, 0.1); padding: 2px 8px; border-radius: 10px; border: 1px solid #ffd70033; }
-        .juego-container .juego-misiones .mision-item .mision-estado { font-size: 0.5rem; padding: 1px 8px; border-radius: 10px; }
-        .juego-container .juego-misiones .mision-item .mision-estado.pendiente { background: #ffaa4433; color: #ffaa44; }
-        .juego-container .juego-misiones .mision-item .mision-estado.completada { background: #00ff8833; color: #00ff88; }
-
-        .juego-container .juego-stats { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-        .juego-container .juego-stats .stat-box { background: var(--bg-result); border-radius: 8px; padding: 4px 12px; border: 1px solid var(--border-color); font-size: 0.6rem; color: var(--texto-secundario); display: flex; align-items: center; gap: 4px; }
-        .juego-container .juego-stats .stat-box span { font-weight: 700; color: #ffd700; }
-
-        /* ============================================================== */
-        /* ===== SALA PRIVADA ===== */
-        /* ============================================================== */
-        .sala-card {
-            background: var(--bg-result);
-            border: 2px solid #ff44aa;
-            border-radius: 12px;
-            padding: 12px;
-            margin-top: 8px;
-            transition: background 0.3s;
-        }
-        .sala-card .codigo-sala { font-size: 1.5rem; font-weight: bold; color: #ff88cc; letter-spacing: 4px; background: rgba(0, 0, 0, 0.2); padding: 8px 16px; border-radius: 10px; text-align: center; border: 1px dashed #ff44aa; margin: 6px 0; user-select: all; }
-        .sala-card .copy-btn-sala { background: #0088cc; border: none; border-radius: 8px; padding: 4px 12px; color: white; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
-        .sala-card .copy-btn-sala:hover { background: #00aaff; }
-
-        /* ============================================================== */
-        /* ===== LIVE MASIVO - RESULTADO MEJORADO ===== */
-        /* ============================================================== */
-        .resultado-masivo-item {
-            background: var(--bg-result);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 10px 12px;
-            margin-bottom: 8px;
-            transition: background 0.3s, border-color 0.3s;
-        }
-        .resultado-masivo-item:hover { border-color: var(--borde-neon); }
-        .resultado-masivo-item .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
-        .resultado-masivo-item .row .num { font-family: monospace; font-size: 0.7rem; color: #88ddff; font-weight: bold; letter-spacing: 0.5px; }
-        .resultado-masivo-item .row .estado { font-size: 0.6rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
-        .resultado-masivo-item .row .estado.approved { color: #00ff88; background: rgba(0, 255, 136, 0.1); }
-        .resultado-masivo-item .row .estado.insufficient { color: #ffaa44; background: rgba(255, 170, 68, 0.1); }
-        .resultado-masivo-item .row .estado.cvv_invalid { color: #ff8800; background: rgba(255, 136, 0, 0.1); }
-        .resultado-masivo-item .row .estado.invalid { color: #ff4444; background: rgba(255, 68, 68, 0.1); }
-        .resultado-masivo-item .row .estado.expired { color: #ff4444; background: rgba(255, 68, 68, 0.1); }
-        .resultado-masivo-item .row .estado.blocked { color: #ff4444; background: rgba(255, 68, 68, 0.1); }
-        .resultado-masivo-item .detalles { font-size: 0.6rem; color: var(--text-muted); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 10px; }
-        .resultado-masivo-item .detalles span { background: var(--bg-card); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
-        .resultado-masivo-item .detalles .cvv-ok { color: #00ff88; }
-        .resultado-masivo-item .detalles .cvv-fail { color: #ff4444; }
-        .resultado-masivo-item .btn-copy-result { padding: 2px 8px; font-size: 0.5rem; border: none; border-radius: 4px; background: #0088cc; color: white; cursor: pointer; transition: 0.1s; }
-        .resultado-masivo-item .btn-copy-result:hover { background: #00aaff; transform: scale(1.05); }
-
-        /* ============================================================== */
         /* RESPONSIVE */
         /* ============================================================== */
         @media (max-width: 768px) {
@@ -1332,13 +929,6 @@
             .auth-box { padding: 20px 18px; }
             .auth-box h2 { font-size: 1.3rem; }
             .pasarela-grid { grid-template-columns: 1fr 1fr 1fr; }
-            .chat-messages { height: 250px; }
-            .nota-container .nota-editor textarea { min-height: 200px; font-size: 0.85rem; }
-            .nota-container .nota-actions .btn-nota { font-size: 0.7rem; padding: 6px 14px; min-width: 70px; }
-            .juego-container .juego-area .juego-vs .jugador .emoji { font-size: 2.5rem; }
-            .juego-container .juego-area .juego-opciones .opcion-btn { font-size: 2rem; padding: 8px 14px; min-width: 55px; }
-            .user-list-item { flex-direction: column; align-items: flex-start; }
-            .user-list-item .user-actions { margin-top: 4px; width: 100%; justify-content: flex-start; }
         }
 
         @media (max-width: 500px) {
@@ -1368,24 +958,6 @@
             .auth-box h2 { font-size: 1.1rem; }
             .btn-pedir-creditos { font-size: 0.7rem; padding: 8px 14px; }
             .pasarela-grid { grid-template-columns: 1fr 1fr; }
-            .chat-messages { height: 200px; }
-            .chat-messages .message { max-width: 95%; font-size: 0.75rem; }
-            .chat-input-area .chat-input { font-size: 0.75rem; }
-            .chat-input-area .chat-btn { width: 32px; height: 32px; font-size: 1rem; }
-            .nota-container { padding: 12px; }
-            .nota-container .nota-editor textarea { min-height: 160px; font-size: 0.8rem; padding: 10px 12px; }
-            .nota-container .nota-actions .btn-nota { font-size: 0.6rem; padding: 5px 10px; min-width: 50px; }
-            .nota-container .nota-header .nota-titulo { font-size: 0.9rem; }
-            .nota-container .nota-header .nota-info { font-size: 0.55rem; }
-            .juego-container .juego-area .juego-vs .jugador .emoji { font-size: 2rem; }
-            .juego-container .juego-area .juego-opciones .opcion-btn { font-size: 1.5rem; padding: 6px 10px; min-width: 45px; }
-            .juego-container .juego-area .juego-vs .vs-texto { font-size: 1.2rem; }
-            .modal-overlay .modal-box { padding: 20px 16px; }
-            .user-list-item .user-email { font-size: 0.6rem; min-width: 80px; }
-            .user-list-item .user-info .badge { font-size: 0.45rem; padding: 1px 4px; }
-            .user-list-item .user-actions .btn-small.btn-admin { font-size: 0.4rem; padding: 1px 4px; }
-            .registro-item { font-size: 0.6rem; }
-            .solicitud-item { font-size: 0.7rem; }
         }
     </style>
 </head>
@@ -1413,7 +985,7 @@
     <!-- ============================================================== -->
     <div class="app-container">
 
-        <!-- ===== AUTH (LOGIN / REGISTRO) - SIN CREDENCIALES PRECARGADAS ===== -->
+        <!-- ===== AUTH (LOGIN / REGISTRO) ===== -->
         <div id="auth-screen">
             <div class="auth-box">
                 <h2>⚡ SYS ANDY PRO</h2>
@@ -1444,8 +1016,8 @@
                 <div id="auth-register" class="auth-panel">
                     <div class="register-info">
                         🎁 <strong>REGALO DE BIENVENIDA</strong><br>
-                        Al registrarte obtendrás <strong id="promoDaysDisplay">7</strong> días gratis y
-                        <strong id="promoCreditsDisplay">50</strong> créditos para usar en LIVE.<br>
+                        Al registrarte obtendrás <strong>7</strong> días gratis y
+                        <strong>50</strong> créditos para usar en LIVE.<br>
                         <span class="pendiente">⏳ Tu cuenta debe ser aprobada por el administrador antes de poder ingresar.</span>
                     </div>
                     <div class="form-group">
@@ -1469,7 +1041,7 @@
         </div>
 
         <!-- ============================================================== -->
-        <!-- APLICACIÓN PRINCIPAL - TODOS LOS PANELES COMPLETOS -->
+        <!-- APLICACIÓN PRINCIPAL -->
         <!-- ============================================================== -->
         <div id="main-app" style="display:none;">
 
@@ -1490,7 +1062,7 @@
                 </div>
             </div>
 
-            <!-- TABS - TODOS LOS PANELES -->
+            <!-- TABS -->
             <div class="tabs-container">
                 <button class="tab-btn active" onclick="switchTab('generator')">🎲 GENERADOR</button>
                 <button class="tab-btn" onclick="switchTab('live')">🔴 LIVE</button>
@@ -1507,12 +1079,10 @@
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
 
-            <!-- PANELS - TODOS COMPLETOS -->
+            <!-- PANELS -->
             <div class="panels-container">
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: GENERADOR ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-generator" class="panel active">
                     <h3>🎲 GENERADOR DE TARJETAS <span class="info-badge free-tag">GRATIS</span></h3>
                     <div class="item-card">
@@ -1522,8 +1092,6 @@
                             <br>Ejemplo: <strong>41691614x2xxxxx1</strong> (las X se reemplazan con números aleatorios).
                             <br><br>
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
-                            <br><br>
-                            <strong style="color:#00ff88;">🔄 FECHAS MEZCLADAS:</strong> Cada tarjeta genera su propia fecha aleatoria.
                         </div>
                         <div class="form-group">
                             <label>🔢 Ingresa los primeros dígitos (BIN) - usa X o x como comodín</label>
@@ -1552,15 +1120,9 @@
                             <p style="color:var(--text-muted);text-align:center;padding:10px;font-size:0.8rem;">Genera tus tarjetas aquí (GRATIS)</p>
                         </div>
                     </div>
-                    <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial</div>
-                        <div id="genHistory" class="credit-history"></div>
-                    </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: LIVE ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-live" class="panel">
                     <h3>🔴 LIVE INDIVIDUAL <span class="info-badge" style="background:#ff44aa;color:#fff;">2 créditos</span></h3>
                     <div class="item-card">
@@ -1580,15 +1142,9 @@
                     <div id="liveResultContainer">
                         <div class="result-box" id="liveResultBox"><span style="color:var(--text-muted);">Esperando verificación...</span></div>
                     </div>
-                    <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial LIVE</div>
-                        <div id="liveHistory" class="credit-history"></div>
-                    </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: MASIVO ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-massive" class="panel">
                     <h3>📊 LIVE MASIVO <span class="info-badge" style="background:#ff8800;color:#fff;">7 créditos</span></h3>
                     <div class="item-card">
@@ -1611,15 +1167,9 @@
                     <div id="massiveResultContainer">
                         <div class="result-box" id="massiveResultBox"><span style="color:var(--text-muted);">Esperando verificación masiva...</span></div>
                     </div>
-                    <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial MASIVO</div>
-                        <div id="massiveHistory" class="credit-history"></div>
-                    </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: PASARELA ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-pasarela" class="panel">
                     <h3>💳 PASARELA DE PAGO</h3>
                     <div class="item-card">
@@ -1639,9 +1189,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: DIRECCIONES ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-direcciones" class="panel">
                     <h3>📍 GENERADOR DE DIRECCIONES</h3>
                     <div class="item-card">
@@ -1666,9 +1214,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: CHAT ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-chat" class="panel">
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
                     <div class="chat-profile-setup" id="chatProfileSetup">
@@ -1682,20 +1228,14 @@
                         </div>
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
                     </div>
-                    <div class="chat-reply-preview" id="chatReplyPreview">
-                        <span>📩 Respondiendo a: <span id="replyPreviewText"></span></span>
-                        <span class="reply-cancel" onclick="cancelarRespuesta()">✕</span>
-                    </div>
                     <div class="chat-messages" id="chatMessages">
-                        <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>
+                        <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">No hay mensajes aún. ¡Sé el primero en chatear!</div>
                     </div>
                     <div class="chat-input-area">
                         <button class="chat-btn" onclick="toggleEmojiPicker()" title="Emojis">😊</button>
                         <button class="chat-btn" onclick="toggleStickerPicker()" title="Stickers">🎨</button>
-                        <button class="chat-btn" onclick="document.getElementById('chatImageInput').click()" title="Imagen">📷</button>
                         <button class="chat-btn mention-btn" onclick="insertarMencion()" title="Mencionar @">@</button>
                         <button class="chat-btn whatsapp-btn" onclick="abrirWhatsAppDirecto()" title="WhatsApp">📱</button>
-                        <input type="file" id="chatImageInput" accept="image/*" style="display:none;" onchange="enviarImagen(event)">
                         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Escribe un mensaje..."></textarea>
                         <button class="chat-btn send" onclick="enviarMensaje()">➤</button>
                     </div>
@@ -1722,9 +1262,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: SALA PRIVADA ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-sala" class="panel">
                     <h3>🔒 SALA PRIVADA <span class="info-badge" style="background:#ff44aa;color:#fff;">5 créditos</span></h3>
                     <div class="item-card">
@@ -1746,18 +1284,12 @@
                                 <button class="copy-btn-sala" onclick="copiarCodigoSala()">📋 Copiar código</button>
                                 <button class="btn-small btn-danger" onclick="salirDeSala()">🚪 Salir</button>
                             </div>
-                            <div class="chat-reply-preview" id="salaReplyPreview">
-                                <span>📩 Respondiendo a: <span id="salaReplyPreviewText"></span></span>
-                                <span class="reply-cancel" onclick="cancelarRespuestaSala()">✕</span>
-                            </div>
                             <div id="salaMessages" class="chat-messages" style="height:250px;margin-top:8px;">
                                 <div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>
                             </div>
                             <div class="chat-input-area" style="margin-top:6px;">
-                                <button class="chat-btn" onclick="document.getElementById('salaImageInput').click()" title="Imagen">📷</button>
                                 <button class="chat-btn mention-btn" onclick="insertarMencionSala()" title="Mencionar @">@</button>
                                 <button class="chat-btn whatsapp-btn" onclick="abrirWhatsAppSalaDirecto()" title="WhatsApp">📱</button>
-                                <input type="file" id="salaImageInput" accept="image/*" style="display:none;" onchange="enviarImagenSala(event)">
                                 <textarea class="chat-input" id="salaChatInput" rows="1" placeholder="Mensaje privado..."></textarea>
                                 <button class="chat-btn send" onclick="enviarMensajeSala()">➤</button>
                             </div>
@@ -1765,9 +1297,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: NOTAS ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-notas" class="panel">
                     <h3>📝 BLOG DE NOTAS <span class="info-badge free-tag">GRATIS</span></h3>
                     <div class="nota-container">
@@ -1805,9 +1335,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: JUEGO ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-juego" class="panel">
                     <h3>🎮 JUEGO - PIEDRA, PAPEL O TIJERA <span class="info-badge" style="background:#ff6b35;color:#fff;">GANAR CRÉDITOS</span></h3>
                     <div class="juego-container">
@@ -1837,9 +1365,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: ADMIN ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-admins" class="panel">
                     <h3>👑 PANEL DE ADMINISTRACIÓN</h3>
                     <div class="item-card" style="border:2px solid #ffaa44;">
@@ -1862,13 +1388,11 @@
                             <div style="color:#66ddff;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
                             <div id="listaUsuariosContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
-                        <button class="btn-block btn-spam" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos" style="margin-top:10px;">🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)</button>
+                        <button class="btn-block btn-danger" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos" style="margin-top:10px;">🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)</button>
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: SOLICITUDES ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-solicitudes" class="panel">
                     <h3>📨 SOLICITUDES DE REGISTRO</h3>
                     <div class="item-card">
@@ -1885,9 +1409,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: REGISTROS ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-registros" class="panel">
                     <h3>📋 REGISTROS DE USUARIOS <span class="info-badge" style="background:#00ccff;color:#fff;">ANTI-SPAM</span></h3>
                     <div class="item-card">
@@ -1907,9 +1429,7 @@
                     </div>
                 </div>
 
-                <!-- ========================================================== -->
                 <!-- ===== PANEL: CRÉDITOS ===== -->
-                <!-- ========================================================== -->
                 <div id="panel-credits" class="panel">
                     <h3>💎 MIS CRÉDITOS</h3>
                     <div class="item-card">
@@ -1926,37 +1446,144 @@
                     <div class="item-card" style="border:2px solid #25D366;">
                         <button class="btn-pedir-creditos" onclick="pedirCreditosWhatsApp()">📱 PEDIR CRÉDITOS AL ADMIN</button>
                     </div>
-                    <div class="item-card">
-                        <div style="color:#66ddff;font-weight:600;font-size:0.8rem;">📋 Historial</div>
-                        <div id="creditHistory" class="credit-history"><p style="color:var(--text-muted);">Sin movimientos</p></div>
-                    </div>
                 </div>
 
-            </div><!-- END panels-container -->
-        </div><!-- END main-app -->
-    </div><!-- END app-container -->
+            </div>
+        </div>
+    </div>
 
     <!-- ============================================================== -->
-    <!-- SCRIPTS -->
+    <!-- SCRIPTS - SIN FIREBASE -->
     <!-- ============================================================== -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-
     <script>
         // ================================================================
-        // CONFIGURACIÓN FIREBASE
+        // VERSIÓN SIN FIREBASE - TODO CON LOCALSTORAGE
         // ================================================================
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGE5GTlwIypuryIVnDYiTR9a2wyCgWkfs",
-            authDomain: "gestion-ventas-pro-f8de4.firebaseapp.com",
-            projectId: "gestion-ventas-pro-f8de4",
-            storageBucket: "gestion-ventas-pro-f8de4.firebasestorage.app",
-            messagingSenderId: "96449660649",
-            appId: "1:96449660649:web:d949eccf893c9705451278",
-            databaseURL: "https://gestion-ventas-pro-f8de4-default-rtdb.firebaseio.com/"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+
+        // ================================================================
+        // CREDENCIALES DEL ADMIN (FIJAS)
+        // ================================================================
+        const ADMIN_EMAIL = "andyobregon799@gmail.com";
+        const ADMIN_PASS = "Andyjoel12";
+
+        // ================================================================
+        // VARIABLES GLOBALES
+        // ================================================================
+        let currentUser = null;
+        let currentCredits = 0;
+        let currentDays = 0;
+        let esOwner = false;
+        let generatedCardsList = [];
+        let massiveResults = [];
+        let pasarelaSeleccionada = 'stripe';
+        let usuarios = [];
+        let solicitudes = [];
+        let registros = [];
+        let chatMensajes = [];
+        let salas = {};
+        let salaActual = null;
+        let salaCodigo = null;
+        let chatDisplayName = "";
+        let chatAvatar = "🦁";
+
+        // Juego
+        let totalVictorias = 0;
+        let totalDerrotas = 0;
+        let totalEmpates = 0;
+
+        // ================================================================
+        // INICIALIZAR DATOS DESDE LOCALSTORAGE
+        // ================================================================
+        function cargarDatosLocales() {
+            // Usuarios
+            const usersData = localStorage.getItem('sys_users');
+            if (usersData) {
+                usuarios = JSON.parse(usersData);
+            } else {
+                // Crear admin por defecto
+                usuarios = [{
+                    id: 'admin',
+                    email: ADMIN_EMAIL,
+                    pass: ADMIN_PASS,
+                    bloqueado: false,
+                    aprobado: true,
+                    credits: 999999,
+                    days: 999999
+                }];
+                localStorage.setItem('sys_users', JSON.stringify(usuarios));
+            }
+
+            // Solicitudes
+            const solData = localStorage.getItem('sys_solicitudes');
+            if (solData) {
+                solicitudes = JSON.parse(solData);
+            } else {
+                solicitudes = [];
+                localStorage.setItem('sys_solicitudes', JSON.stringify(solicitudes));
+            }
+
+            // Registros
+            const regData = localStorage.getItem('sys_registros');
+            if (regData) {
+                registros = JSON.parse(regData);
+            } else {
+                registros = [];
+                localStorage.setItem('sys_registros', JSON.stringify(registros));
+            }
+
+            // Chat
+            const chatData = localStorage.getItem('sys_chat');
+            if (chatData) {
+                chatMensajes = JSON.parse(chatData);
+            } else {
+                chatMensajes = [];
+                localStorage.setItem('sys_chat', JSON.stringify(chatMensajes));
+            }
+
+            // Salas
+            const salasData = localStorage.getItem('sys_salas');
+            if (salasData) {
+                salas = JSON.parse(salasData);
+            } else {
+                salas = {};
+                localStorage.setItem('sys_salas', JSON.stringify(salas));
+            }
+
+            // Perfil de chat
+            const perfilData = localStorage.getItem('sys_chat_perfil');
+            if (perfilData) {
+                const perfil = JSON.parse(perfilData);
+                chatDisplayName = perfil.name || '';
+                chatAvatar = perfil.avatar || '🦁';
+            }
+        }
+
+        function guardarUsuarios() {
+            localStorage.setItem('sys_users', JSON.stringify(usuarios));
+        }
+
+        function guardarSolicitudes() {
+            localStorage.setItem('sys_solicitudes', JSON.stringify(solicitudes));
+        }
+
+        function guardarRegistros() {
+            localStorage.setItem('sys_registros', JSON.stringify(registros));
+        }
+
+        function guardarChat() {
+            localStorage.setItem('sys_chat', JSON.stringify(chatMensajes));
+        }
+
+        function guardarSalas() {
+            localStorage.setItem('sys_salas', JSON.stringify(salas));
+        }
+
+        function guardarPerfilChat() {
+            localStorage.setItem('sys_chat_perfil', JSON.stringify({
+                name: chatDisplayName,
+                avatar: chatAvatar
+            }));
+        }
 
         // ================================================================
         // TEMA - DÍA/NOCHE
@@ -1979,48 +1606,8 @@
         })();
 
         // ================================================================
-        // VARIABLES GLOBALES
-        // ================================================================
-        let currentUser = null;
-        let usernameClave = "";
-        let currentCredits = 0;
-        let currentDays = 0;
-        let generatedCardsList = [];
-        let massiveResults = [];
-        let promoDias = 7;
-        let promoCreditos = 50;
-        let pasarelaSeleccionada = 'stripe';
-        let esOwner = false;
-        let usuariosUnsubscribe = null;
-        let registrosUnsubscribe = null;
-        let solicitudesUnsubscribe = null;
-
-        // Chat
-        let chatDisplayName = "";
-        let chatAvatar = "🦁";
-        let chatUnsubscribe = null;
-        let chatNameBloqueado = false;
-        let mensajeRespondiendo = null;
-        let mensajeRespondiendoSala = null;
-
-        // Sala Privada
-        let salaActual = null;
-        let salaUnsubscribe = null;
-        let salaCodigo = null;
-
-        // Juego
-        let totalVictorias = 0;
-        let totalDerrotas = 0;
-        let totalEmpates = 0;
-
-        // ================================================================
         // UTILIDADES
         // ================================================================
-        function limpiarClave(str) {
-            if (!str) return "";
-            return str.toLowerCase().trim().replace(/[\.\$\#\[\]\@]/g, "_");
-        }
-
         function mostrarNotificacion(msg, tipo = 'info') {
             const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444', warning: '#ffaa44' };
             const div = document.createElement('div');
@@ -2038,9 +1625,8 @@
             setTimeout(() => { div.style.opacity = '0'; div.style.transition = 'opacity 0.4s'; setTimeout(() => div.remove(), 500); }, 3000);
         }
 
-        function esUsuarioOwner(email) {
-            const owners = ['andyobregon799@gmail.com', 'andy'];
-            return owners.includes(email);
+        function generarId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2, 5);
         }
 
         function generarCodigoSala() {
@@ -2052,28 +1638,12 @@
             return codigo;
         }
 
-        function getUserColor(userId, userName) {
-            const str = userId || userName || 'default';
-            let hash = 0;
-            for (let i = 0; i < str.length; i++) {
-                hash = str.charCodeAt(i) + ((hash << 5) - hash);
-                hash = hash & hash;
-            }
-            const h = Math.abs(hash % 360);
-            const s = 65 + (hash % 20);
-            const l = 55 + (hash % 15);
-            return `hsl(${h}, ${s}%, ${l}%)`;
+        function obtenerUsuarioPorEmail(email) {
+            return usuarios.find(u => u.email.toLowerCase() === email.toLowerCase());
         }
 
-        function setButtonLoading(btn, loading = true) {
-            if (!btn) return;
-            if (loading) {
-                btn.classList.add('loading');
-                btn.disabled = true;
-            } else {
-                btn.classList.remove('loading');
-                btn.disabled = false;
-            }
+        function obtenerUsuarioPorId(id) {
+            return usuarios.find(u => u.id === id);
         }
 
         // ================================================================
@@ -2109,80 +1679,6 @@
         }
 
         // ================================================================
-        // CRÉDITOS Y DÍAS
-        // ================================================================
-        async function cargarDatosUsuario() {
-            if (!currentUser) return;
-            if (esOwner) {
-                currentCredits = 999999;
-                currentDays = 999999;
-                actualizarDisplayDatos();
-                return;
-            }
-            const ref = db.ref(`usuarios_datos/${currentUser.uid}`);
-            const snap = await ref.once('value');
-            if (snap.exists()) {
-                const data = snap.val();
-                currentCredits = data.credits || 0;
-                currentDays = data.days || 0;
-            } else {
-                currentCredits = 0;
-                currentDays = 0;
-                await ref.set({ credits: 0, days: 0 });
-            }
-            actualizarDisplayDatos();
-        }
-
-        function actualizarDisplayDatos() {
-            if (esOwner) {
-                document.getElementById('creditsDisplay').textContent = `💎 ∞ créditos`;
-                document.getElementById('daysDisplay').textContent = `📅 ∞ días`;
-                document.getElementById('creditsBalance').textContent = '∞';
-                document.getElementById('daysBalance').textContent = '∞';
-            } else {
-                document.getElementById('creditsDisplay').textContent = `💎 ${currentCredits} créditos`;
-                document.getElementById('daysDisplay').textContent = `📅 ${currentDays} días`;
-                document.getElementById('creditsBalance').textContent = currentCredits;
-                document.getElementById('daysBalance').textContent = currentDays;
-            }
-        }
-
-        async function guardarDatosUsuario() {
-            if (!currentUser || esOwner) return;
-            await db.ref(`usuarios_datos/${currentUser.uid}`).update({
-                credits: currentCredits,
-                days: currentDays
-            });
-        }
-
-        async function gastarCredito(cantidad, descripcion) {
-            if (esOwner) {
-                mostrarNotificacion(`👑 Owner: no gastas créditos (${descripcion})`, 'success');
-                return true;
-            }
-            if (currentDays <= 0) {
-                mostrarNotificacion(`❌ No tienes días activos.`, 'error');
-                return false;
-            }
-            if (currentCredits < cantidad) {
-                mostrarModalCreditos();
-                return false;
-            }
-            currentCredits -= cantidad;
-            await guardarDatosUsuario();
-            actualizarDisplayDatos();
-            return true;
-        }
-
-        function pedirCreditosWhatsApp() {
-            const numero = '593990434546';
-            const usuario = currentUser ? currentUser.email : 'Usuario';
-            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos. ¡Gracias!`;
-            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
-            mostrarNotificacion('📱 Abriendo WhatsApp...', 'info');
-        }
-
-        // ================================================================
         // AUTH - TABS
         // ================================================================
         function cambiarAuthTab(tab) {
@@ -2193,49 +1689,9 @@
         }
 
         // ================================================================
-        // PROMO
-        // ================================================================
-        async function cargarPromo() {
-            try {
-                const snap = await db.ref('promocion').once('value');
-                if (snap.exists()) {
-                    promoDias = snap.val().dias || 7;
-                    promoCreditos = snap.val().creditos || 50;
-                } else {
-                    await db.ref('promocion').set({ dias: 7, creditos: 50 });
-                }
-                document.getElementById('promoDaysDisplay').textContent = promoDias;
-                document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
-                document.getElementById('promoDaysActual').textContent = promoDias;
-                document.getElementById('promoCreditsActual').textContent = promoCreditos;
-                document.getElementById('promoDays').value = promoDias;
-                document.getElementById('promoCredits').value = promoCreditos;
-            } catch (e) {
-                console.error('Error cargando promo:', e);
-            }
-        }
-
-        async function guardarPromo() {
-            if (!currentUser || !esOwner) {
-                mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
-                return;
-            }
-            const dias = parseInt(document.getElementById('promoDays').value) || 7;
-            const credits = parseInt(document.getElementById('promoCredits').value) || 50;
-            await db.ref('promocion').set({ dias: dias, creditos: credits });
-            promoDias = dias;
-            promoCreditos = credits;
-            document.getElementById('promoDaysDisplay').textContent = dias;
-            document.getElementById('promoCreditsDisplay').textContent = credits;
-            document.getElementById('promoDaysActual').textContent = dias;
-            document.getElementById('promoCreditsActual').textContent = credits;
-            mostrarNotificacion(`✅ Promo: ${dias} días, ${credits} créditos`, 'success');
-        }
-
-        // ================================================================
         // REGISTRO
         // ================================================================
-        async function procesarRegistro() {
+        function procesarRegistro() {
             const email = document.getElementById('regEmail').value.trim().toLowerCase();
             const pass = document.getElementById('regPass').value.trim();
             const passConfirm = document.getElementById('regPassConfirm').value.trim();
@@ -2254,63 +1710,68 @@
             }
 
             const btn = document.getElementById('registerBtn');
-            setButtonLoading(btn, true);
+            btn.disabled = true;
             btn.textContent = '⏳ Solicitando...';
 
-            const nodo = limpiarClave(email);
-
-            try {
-                const exist = await db.ref(`usuarios/${nodo}`).once('value');
-                if (exist.exists()) {
-                    mostrarNotificacion('❌ Este correo ya está registrado', 'error');
-                    setButtonLoading(btn, false);
-                    btn.textContent = '📝 SOLICITAR REGISTRO';
-                    return;
-                }
-
-                await db.ref(`usuarios/${nodo}`).set({
-                    email: email,
-                    pass: pass,
-                    fechaRegistro: firebase.database.ServerValue.TIMESTAMP,
-                    bloqueado: false,
-                    aprobado: false
-                });
-
-                await db.ref(`solicitudes/${nodo}`).set({
-                    email: email,
-                    fecha: firebase.database.ServerValue.TIMESTAMP,
-                    estado: 'pendiente',
-                    pass: pass
-                });
-
-                await db.ref(`usuarios_datos/${nodo}`).set({
-                    credits: 0,
-                    days: 0
-                });
-
-                await db.ref('notificaciones_admin').push({
-                    mensaje: `📨 Nueva solicitud de registro: ${email}`,
-                    fecha: firebase.database.ServerValue.TIMESTAMP,
-                    leida: false
-                });
-
-                mostrarNotificacion(`✅ Solicitud enviada. Espera aprobación.`, 'success');
-                document.getElementById('regEmail').value = '';
-                document.getElementById('regPass').value = '';
-                document.getElementById('regPassConfirm').value = '';
-                cambiarAuthTab('login');
-
-            } catch (error) {
-                console.error('Error en registro:', error);
-                mostrarNotificacion(`❌ Error: ${error.message}`, 'error');
+            // Verificar si ya existe
+            if (obtenerUsuarioPorEmail(email)) {
+                mostrarNotificacion('❌ Este correo ya está registrado', 'error');
+                btn.disabled = false;
+                btn.textContent = '📝 SOLICITAR REGISTRO';
+                return;
             }
 
-            setButtonLoading(btn, false);
+            // Crear usuario (pendiente de aprobación)
+            const nuevoUsuario = {
+                id: generarId(),
+                email: email,
+                pass: pass,
+                fechaRegistro: new Date().toISOString(),
+                bloqueado: false,
+                aprobado: false,
+                credits: 0,
+                days: 0
+            };
+
+            usuarios.push(nuevoUsuario);
+            guardarUsuarios();
+
+            // Crear solicitud
+            solicitudes.push({
+                id: generarId(),
+                email: email,
+                fecha: new Date().toISOString(),
+                estado: 'pendiente',
+                usuarioId: nuevoUsuario.id
+            });
+            guardarSolicitudes();
+
+            // Registrar IP
+            registros.push({
+                id: generarId(),
+                email: email,
+                ip: '127.0.0.1',
+                fecha: new Date().toISOString()
+            });
+            guardarRegistros();
+
+            mostrarNotificacion(`✅ Solicitud enviada. Espera aprobación.`, 'success');
+            document.getElementById('regEmail').value = '';
+            document.getElementById('regPass').value = '';
+            document.getElementById('regPassConfirm').value = '';
+            cambiarAuthTab('login');
+
+            btn.disabled = false;
             btn.textContent = '📝 SOLICITAR REGISTRO';
+
+            // Actualizar lista de solicitudes si el admin está logueado
+            if (esOwner) {
+                actualizarListaSolicitudes();
+            }
         }
 
         // ================================================================
-        // LOGIN - ADMIN ENTRADA DIRECTA
+        // LOGIN
         // ================================================================
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -2322,658 +1783,519 @@
             }
 
             const btn = document.getElementById('loginBtn');
-            setButtonLoading(btn, true);
+            btn.disabled = true;
             btn.textContent = '⏳ Ingresando...';
 
-            // ADMIN - ENTRADA DIRECTA
-            if (emailInput === "andyobregon799@gmail.com" && passInput === "Andyjoel12") {
-                setButtonLoading(btn, false);
+            // Buscar usuario
+            const usuario = obtenerUsuarioPorEmail(emailInput);
+
+            if (!usuario) {
+                mostrarNotificacion('❌ Usuario no encontrado.', 'error');
+                btn.disabled = false;
                 btn.textContent = 'INGRESAR';
-                
-                const adminNodo = limpiarClave(emailInput);
-                db.ref(`usuarios/${adminNodo}`).once('value').then((snap) => {
-                    if (!snap.exists()) {
-                        db.ref(`usuarios/${adminNodo}`).set({
-                            email: emailInput,
-                            pass: passInput,
-                            fechaRegistro: Date.now(),
-                            bloqueado: false,
-                            aprobado: true
-                        });
-                        db.ref(`usuarios_datos/${adminNodo}`).set({
-                            credits: 999999,
-                            days: 999999
-                        });
-                    }
-                    ingresarAlSistema(emailInput, "Owner");
-                });
                 return;
             }
 
-            // Admin alternativo
-            if (emailInput === "andy" && passInput === "andy799") {
-                setButtonLoading(btn, false);
+            if (usuario.pass !== passInput) {
+                mostrarNotificacion('❌ Contraseña incorrecta.', 'error');
+                btn.disabled = false;
                 btn.textContent = 'INGRESAR';
-                const adminNodo = limpiarClave("andyobregon799@gmail.com");
-                db.ref(`usuarios/${adminNodo}`).once('value').then((snap) => {
-                    if (!snap.exists()) {
-                        db.ref(`usuarios/${adminNodo}`).set({
-                            email: "andyobregon799@gmail.com",
-                            pass: "Andyjoel12",
-                            fechaRegistro: Date.now(),
-                            bloqueado: false,
-                            aprobado: true
-                        });
-                        db.ref(`usuarios_datos/${adminNodo}`).set({
-                            credits: 999999,
-                            days: 999999
-                        });
-                    }
-                    ingresarAlSistema("andyobregon799@gmail.com", "Owner");
-                });
                 return;
             }
 
-            // USUARIOS NORMALES
-            const nodoBuscado = limpiarClave(emailInput);
-            db.ref("usuarios/" + nodoBuscado).once("value").then((snapshot) => {
-                setButtonLoading(btn, false);
+            if (usuario.bloqueado) {
+                mostrarNotificacion('⛔ Cuenta bloqueada.', 'error');
+                btn.disabled = false;
                 btn.textContent = 'INGRESAR';
+                return;
+            }
 
-                if (snapshot.exists()) {
-                    const data = snapshot.val();
-                    if (data.pass === passInput) {
-                        if (data.bloqueado === true) {
-                            mostrarNotificacion('⛔ Cuenta bloqueada.', 'error');
-                            return;
-                        }
-                        if (data.aprobado !== true) {
-                            mostrarNotificacion('⏳ Cuenta pendiente de aprobación.', 'warning');
-                            return;
-                        }
-                        ingresarAlSistema(data.email, "User");
-                    } else {
-                        mostrarNotificacion('❌ Contraseña incorrecta.', 'error');
-                    }
-                } else {
-                    mostrarNotificacion('❌ Usuario no encontrado.', 'error');
-                }
-            }).catch(err => {
-                setButtonLoading(btn, false);
+            if (!usuario.aprobado && emailInput !== ADMIN_EMAIL) {
+                mostrarNotificacion('⏳ Cuenta pendiente de aprobación.', 'warning');
+                btn.disabled = false;
                 btn.textContent = 'INGRESAR';
-                mostrarNotificacion('Error de conexión.', 'error');
-            });
+                return;
+            }
+
+            // Login exitoso
+            btn.disabled = false;
+            btn.textContent = 'INGRESAR';
+
+            const esAdmin = emailInput === ADMIN_EMAIL;
+            ingresarAlSistema(usuario, esAdmin);
         }
 
         // ================================================================
         // INGRESAR AL SISTEMA
         // ================================================================
-        async function ingresarAlSistema(email, elRol) {
-            try {
-                currentUser = { email: email, role: elRol, uid: limpiarClave(email) };
-                usernameClave = currentUser.uid;
-                esOwner = elRol === "Owner" || esUsuarioOwner(email);
+        function ingresarAlSistema(usuario, esAdmin) {
+            currentUser = usuario;
+            esOwner = esAdmin || usuario.email === ADMIN_EMAIL;
 
-                const userSnap = await db.ref(`usuarios/${usernameClave}`).once('value');
-                if (userSnap.exists() && userSnap.val().bloqueado === true) {
-                    mostrarNotificacion('⛔ Cuenta bloqueada.', 'error');
-                    return;
-                }
-
-                document.getElementById('auth-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
-
-                const displayName = email.split('@')[0];
-                document.getElementById('userDisplay').innerHTML = `
-                    👤 ${displayName} ${esOwner ? '👑' : ''}
-                    <span class="user-status active">✅ Activo</span>
-                `;
-
-                // Mostrar tabs según rol
-                if (esOwner) {
-                    document.getElementById('tabAdminBtn').style.display = 'block';
-                    document.getElementById('tabRegistrosBtn').style.display = 'block';
-                    document.getElementById('tabSolicitudesBtn').style.display = 'block';
-                    document.getElementById('tabJuegoBtn').style.display = 'none';
-                    escucharUsuarios();
-                    escucharRegistros();
-                    escucharSolicitudes();
-                    cargarPromo();
-                } else {
-                    document.getElementById('tabAdminBtn').style.display = 'none';
-                    document.getElementById('tabRegistrosBtn').style.display = 'none';
-                    document.getElementById('tabSolicitudesBtn').style.display = 'none';
-                    document.getElementById('tabJuegoBtn').style.display = 'block';
-                }
-
-                if (esOwner) {
-                    await db.ref(`usuarios_datos/${usernameClave}`).set({
-                        credits: 999999,
-                        days: 999999
-                    });
-                    currentCredits = 999999;
-                    currentDays = 999999;
-                    actualizarDisplayDatos();
-                } else {
-                    await cargarDatosUsuario();
-                }
-
-                await cargarCreditosUsuario();
-                cargarHistorialGen();
-                cargarHistorialLive();
-                cargarHistorialMasivo();
-
-                document.getElementById('generatedCount').textContent = generatedCardsList.length;
-                document.getElementById('massiveCount').textContent = generatedCardsList.length;
-
-                await cargarPerfilChat();
-                await cargarNota();
-
-                seleccionarPasarela('stripe');
-                switchTab('generator');
-
-                mostrarNotificacion(`✅ Bienvenido ${displayName}`, 'success');
-
-            } catch (error) {
-                console.error('Error al ingresar:', error);
-                mostrarNotificacion('❌ Error al iniciar sesión', 'error');
+            if (esOwner) {
+                currentCredits = 999999;
+                currentDays = 999999;
+            } else {
+                currentCredits = usuario.credits || 0;
+                currentDays = usuario.days || 0;
             }
+
+            // Mostrar interfaz
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('main-app').style.display = 'flex';
+
+            const displayName = usuario.email.split('@')[0];
+            document.getElementById('userDisplay').innerHTML = `
+                👤 ${displayName} ${esOwner ? '👑' : ''}
+                <span class="user-status active">✅ Activo</span>
+            `;
+
+            // Mostrar tabs según rol
+            if (esOwner) {
+                document.getElementById('tabAdminBtn').style.display = 'block';
+                document.getElementById('tabRegistrosBtn').style.display = 'block';
+                document.getElementById('tabSolicitudesBtn').style.display = 'block';
+                document.getElementById('tabJuegoBtn').style.display = 'none';
+                actualizarListaUsuarios();
+                actualizarListaSolicitudes();
+                actualizarListaRegistros();
+            } else {
+                document.getElementById('tabAdminBtn').style.display = 'none';
+                document.getElementById('tabRegistrosBtn').style.display = 'none';
+                document.getElementById('tabSolicitudesBtn').style.display = 'none';
+                document.getElementById('tabJuegoBtn').style.display = 'block';
+            }
+
+            actualizarDisplayDatos();
+            document.getElementById('generatedCount').textContent = generatedCardsList.length;
+            document.getElementById('massiveCount').textContent = generatedCardsList.length;
+
+            // Cargar perfil de chat
+            cargarPerfilChat();
+            // Cargar notas
+            cargarNota();
+            // Cargar mensajes del chat
+            actualizarChat();
+
+            seleccionarPasarela('stripe');
+            switchTab('generator');
+
+            mostrarNotificacion(`✅ Bienvenido ${displayName}`, 'success');
         }
 
         // ================================================================
         // CERRAR SESIÓN
         // ================================================================
         function cerrarSesion() {
-            if (usuariosUnsubscribe) { usuariosUnsubscribe(); usuariosUnsubscribe = null; }
-            if (registrosUnsubscribe) { registrosUnsubscribe(); registrosUnsubscribe = null; }
-            if (solicitudesUnsubscribe) { solicitudesUnsubscribe(); solicitudesUnsubscribe = null; }
-            if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
-            if (salaUnsubscribe) { salaUnsubscribe(); salaUnsubscribe = null; }
-
             currentUser = null;
-            usernameClave = "";
             currentCredits = 0;
             currentDays = 0;
             esOwner = false;
             generatedCardsList = [];
             massiveResults = [];
-            chatDisplayName = "";
-            chatAvatar = "🦁";
-            chatNameBloqueado = false;
             salaActual = null;
             salaCodigo = null;
-            mensajeRespondiendo = null;
-            mensajeRespondiendoSala = null;
-
-            document.getElementById('salaPrivadaCard').style.display = 'none';
 
             document.getElementById('auth-screen').style.display = 'flex';
             document.getElementById('main-app').style.display = 'none';
             document.getElementById('loginEmail').value = '';
             document.getElementById('loginPass').value = '';
-            document.getElementById('solicitudesBadge').style.display = 'none';
-
-            document.getElementById('chatDisplayName').value = '';
-            document.getElementById('chatAvatarSelector').textContent = '🦁';
-            document.getElementById('chatDisplayName').disabled = false;
-            document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
-            document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-            document.getElementById('chatProfileInfo').textContent = '💡 Elige un avatar y escribe tu nombre para chatear.';
-
-            document.getElementById('chatMessages').innerHTML = '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Cargando mensajes...</div>';
-            document.getElementById('salaMessages').innerHTML = '<div style="color:#6688aa;text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>';
+            document.getElementById('salaPrivadaCard').style.display = 'none';
 
             mostrarNotificacion('👋 Sesión cerrada', 'info');
         }
 
         // ================================================================
-        // SOLICITUDES
+        // CRÉDITOS Y DÍAS
         // ================================================================
-        function escucharSolicitudes() {
-            if (solicitudesUnsubscribe) { solicitudesUnsubscribe(); solicitudesUnsubscribe = null; }
-
-            solicitudesUnsubscribe = db.ref('solicitudes').on('value', (snapshot) => {
-                const container = document.getElementById('solicitudesContainer');
-                if (!container) return;
-                
-                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando solicitudes...</p>';
-                
-                if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay solicitudes pendientes</p>';
-                    document.getElementById('solicitudesBadge').style.display = 'none';
-                    return;
-                }
-
-                const solicitudes = [];
-                let pendientes = 0;
-                
-                snapshot.forEach(child => {
-                    const data = child.val();
-                    if (data && data.email) {
-                        solicitudes.push({ key: child.key, ...data });
-                        if (data.estado === 'pendiente') pendientes++;
-                    }
-                });
-
-                const badge = document.getElementById('solicitudesBadge');
-                if (pendientes > 0) {
-                    badge.style.display = 'inline';
-                    badge.textContent = pendientes;
-                } else {
-                    badge.style.display = 'none';
-                }
-
-                solicitudes.sort((a, b) => (b.fecha || 0) - (a.fecha || 0));
-                container.innerHTML = '';
-
-                solicitudes.forEach(sol => {
-                    const div = document.createElement('div');
-                    div.className = 'solicitud-item';
-                    
-                    const estadoClass = sol.estado === 'pendiente' ? 'pendiente' : 
-                                      sol.estado === 'aprobada' ? 'aprobada' : 'rechazada';
-                    const estadoText = sol.estado === 'pendiente' ? '🟡 Pendiente' : 
-                                     sol.estado === 'aprobada' ? '🟢 Aprobada' : '🔴 Rechazada';
-                    const fecha = sol.fecha ? new Date(sol.fecha).toLocaleString() : '';
-
-                    let acciones = '';
-                    if (sol.estado === 'pendiente' && esOwner) {
-                        acciones = `
-                            <button class="btn-small btn-success" onclick="aprobarSolicitud('${sol.key}', '${sol.email}', '${sol.pass || ''}')">✅ Aprobar</button>
-                            <button class="btn-small btn-danger" onclick="rechazarSolicitud('${sol.key}', '${sol.email}')">❌ Rechazar</button>
-                        `;
-                    }
-
-                    div.innerHTML = `
-                        <div>
-                            <span class="solicitud-email">${sol.email}</span>
-                            <span class="solicitud-fecha">📅 ${fecha}</span>
-                            <span class="solicitud-estado ${estadoClass}">${estadoText}</span>
-                        </div>
-                        <div class="solicitud-actions">${acciones}</div>
-                    `;
-                    container.appendChild(div);
-                });
-            });
+        function actualizarDisplayDatos() {
+            if (esOwner) {
+                document.getElementById('creditsDisplay').textContent = `💎 ∞ créditos`;
+                document.getElementById('daysDisplay').textContent = `📅 ∞ días`;
+                document.getElementById('creditsBalance').textContent = '∞';
+                document.getElementById('daysBalance').textContent = '∞';
+            } else {
+                document.getElementById('creditsDisplay').textContent = `💎 ${currentCredits} créditos`;
+                document.getElementById('daysDisplay').textContent = `📅 ${currentDays} días`;
+                document.getElementById('creditsBalance').textContent = currentCredits;
+                document.getElementById('daysBalance').textContent = currentDays;
+            }
         }
 
-        function recargarSolicitudes() {
-            mostrarNotificacion('🔄 Actualizando solicitudes...', 'info');
-            escucharSolicitudes();
+        function guardarDatosUsuario() {
+            if (!currentUser || esOwner) return;
+            const usuario = obtenerUsuarioPorId(currentUser.id);
+            if (usuario) {
+                usuario.credits = currentCredits;
+                usuario.days = currentDays;
+                guardarUsuarios();
+            }
         }
 
-        async function aprobarSolicitud(key, email, pass) {
-            if (!currentUser || !esOwner) {
-                mostrarNotificacion('❌ Solo el administrador', 'error');
+        function gastarCredito(cantidad, descripcion) {
+            if (esOwner) {
+                mostrarNotificacion(`👑 Owner: no gastas créditos (${descripcion})`, 'success');
+                return true;
+            }
+            if (currentDays <= 0) {
+                mostrarNotificacion(`❌ No tienes días activos.`, 'error');
+                return false;
+            }
+            if (currentCredits < cantidad) {
+                mostrarModalCreditos();
+                return false;
+            }
+            currentCredits -= cantidad;
+            guardarDatosUsuario();
+            actualizarDisplayDatos();
+            return true;
+        }
+
+        function pedirCreditosWhatsApp() {
+            const numero = '593990434546';
+            const usuario = currentUser ? currentUser.email : 'Usuario';
+            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos. ¡Gracias!`;
+            window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+            mostrarNotificacion('📱 Abriendo WhatsApp...', 'info');
+        }
+
+        // ================================================================
+        // ADMIN - USUARIOS
+        // ================================================================
+        function actualizarListaUsuarios() {
+            const container = document.getElementById('listaUsuariosContainer');
+            if (!container) return;
+
+            if (usuarios.length === 0) {
+                container.innerHTML = '<p style="color:#6688aa;padding:10px;">No hay usuarios</p>';
                 return;
             }
 
-            const btn = event.target;
-            setButtonLoading(btn, true);
-            btn.textContent = '⏳...';
+            container.innerHTML = '';
+            usuarios.forEach(user => {
+                const isOwner = user.email === ADMIN_EMAIL;
+                const div = document.createElement('div');
+                div.className = 'user-list-item';
 
-            try {
-                const nodo = limpiarClave(email);
-                
-                await db.ref(`usuarios/${nodo}`).update({ 
-                    aprobado: true,
-                    fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
-                });
+                const estadoLabel = !user.aprobado ? '⏳ Pendiente' : user.bloqueado ? '⛔ Bloqueado' : '✅ Activo';
+                const estadoClass = !user.aprobado ? 'pendiente' : user.bloqueado ? 'blocked' : 'active';
 
-                await db.ref(`solicitudes/${key}`).update({ 
-                    estado: 'aprobada',
-                    fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
-                });
-
-                await db.ref(`usuarios_datos/${nodo}`).set({
-                    credits: promoCreditos,
-                    days: promoDias
-                });
-
-                await db.ref(`creditos/${nodo}/historial`).push({
-                    tipo: 'recarga',
-                    monto: promoCreditos,
-                    descripcion: `🎁 Bienvenida: ${promoDias} días + ${promoCreditos} créditos`,
-                    fecha: Date.now()
-                });
-
-                mostrarNotificacion(`✅ Usuario ${email} aprobado.`, 'success');
-
-            } catch (error) {
-                console.error('Error:', error);
-                mostrarNotificacion('❌ Error al aprobar', 'error');
-            }
-
-            setButtonLoading(btn, false);
-            btn.textContent = '✅ Aprobar';
-        }
-
-        async function rechazarSolicitud(key, email) {
-            if (!currentUser || !esOwner) {
-                mostrarNotificacion('❌ Solo el administrador', 'error');
-                return;
-            }
-
-            if (!confirm(`⚠️ ¿Rechazar solicitud de ${email}?`)) return;
-
-            const btn = event.target;
-            setButtonLoading(btn, true);
-            btn.textContent = '⏳...';
-
-            try {
-                const nodo = limpiarClave(email);
-                
-                await db.ref(`solicitudes/${key}`).update({ 
-                    estado: 'rechazada',
-                    fechaRechazo: firebase.database.ServerValue.TIMESTAMP
-                });
-
-                await db.ref(`usuarios/${nodo}`).remove();
-                await db.ref(`usuarios_datos/${nodo}`).remove();
-
-                mostrarNotificacion(`✅ Solicitud de ${email} rechazada`, 'success');
-
-            } catch (error) {
-                console.error('Error:', error);
-                mostrarNotificacion('❌ Error al rechazar', 'error');
-            }
-
-            setButtonLoading(btn, false);
-            btn.textContent = '❌ Rechazar';
-        }
-
-        // ================================================================
-        // USUARIOS (ADMIN)
-        // ================================================================
-        function escucharUsuarios() {
-            if (usuariosUnsubscribe) { usuariosUnsubscribe(); usuariosUnsubscribe = null; }
-
-            usuariosUnsubscribe = db.ref("usuarios").on("value", async (snapshot) => {
-                const container = document.getElementById("listaUsuariosContainer");
-                if (!container) return;
-                container.innerHTML = "";
-
-                if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;">No hay usuarios</p>';
-                    return;
-                }
-
-                const users = [];
-                snapshot.forEach((hijo) => {
-                    const data = hijo.val();
-                    users.push({ key: hijo.key, ...data });
-                });
-
-                users.sort((a, b) => (b.fechaRegistro || 0) - (a.fechaRegistro || 0));
-
-                for (const user of users) {
-                    const datosSnap = await db.ref(`usuarios_datos/${user.key}`).once('value');
-                    const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
-                    const bloqueado = user.bloqueado || false;
-                    const aprobado = user.aprobado === true;
-                    const email = user.email || user.key;
-                    const isOwner = esUsuarioOwner(email);
-
-                    const div = document.createElement('div');
-                    div.className = 'user-list-item';
-
-                    const estadoLabel = !aprobado ? '⏳ Pendiente' : bloqueado ? '⛔ Bloqueado' : '✅ Activo';
-                    const estadoClass = !aprobado ? 'pendiente' : bloqueado ? 'blocked' : 'active';
-
-                    div.innerHTML = `
-                        <div>
-                            <span class="user-email">${email} ${isOwner ? '👑' : ''}</span>
-                            <div class="user-info">
-                                <span>💎 ${datos.credits || 0}</span>
-                                <span>📅 ${datos.days || 0}</span>
-                                <span class="badge ${estadoClass}">${estadoLabel}</span>
-                            </div>
+                div.innerHTML = `
+                    <div>
+                        <span class="user-email">${user.email} ${isOwner ? '👑' : ''}</span>
+                        <div class="user-info">
+                            <span>💎 ${user.credits || 0}</span>
+                            <span>📅 ${user.days || 0}</span>
+                            <span class="badge ${estadoClass}">${estadoLabel}</span>
                         </div>
-                        <div class="user-actions">
-                            <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${email}')" title="Sumar créditos">➕</button>
-                            <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${email}')" title="Restar créditos">➖</button>
-                            <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${email}')" title="Sumar días">📅+</button>
-                            <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${email}')" title="Restar días">📅-</button>
-                            ${aprobado ? (bloqueado 
-                                ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
-                                : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
+                    </div>
+                    <div class="user-actions">
+                        ${!isOwner ? `
+                            <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditos('${user.id}')" title="Sumar créditos">➕</button>
+                            <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditos('${user.id}')" title="Restar créditos">➖</button>
+                            <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDias('${user.id}')" title="Sumar días">📅+</button>
+                            <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDias('${user.id}')" title="Restar días">📅-</button>
+                            ${user.aprobado ? (user.bloqueado 
+                                ? `<button class="btn-small btn-admin btn-unblock" onclick="adminToggleBloquear('${user.id}')" title="Desbloquear">🔓</button>`
+                                : `<button class="btn-small btn-admin btn-block" onclick="adminToggleBloquear('${user.id}')" title="Bloquear">🔒</button>`
                             ) : ''}
-                            <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
-                        </div>
-                    `;
-                    container.appendChild(div);
-                }
+                            <button class="btn-small btn-admin btn-delete" onclick="adminEliminarUsuario('${user.id}')" title="Eliminar usuario">🗑️</button>
+                        ` : ''}
+                    </div>
+                `;
+                container.appendChild(div);
             });
         }
 
         function recargarUsuarios() {
-            mostrarNotificacion('🔄 Actualizando usuarios...', 'info');
-            escucharUsuarios();
+            actualizarListaUsuarios();
+            mostrarNotificacion('🔄 Usuarios actualizados', 'info');
         }
 
         function buscarUsuario() {
             const search = document.getElementById('searchUserInput').value.trim().toLowerCase();
             const container = document.getElementById('userSearchResult');
             if (!search) { container.innerHTML = ''; return; }
-            db.ref("usuarios").once('value').then(async (snapshot) => {
-                container.innerHTML = '';
-                let found = false;
-                snapshot.forEach(async (hijo) => {
-                    const data = hijo.val();
-                    const email = data.email || hijo.key;
-                    if (email.toLowerCase().includes(search)) {
-                        found = true;
-                        const datosSnap = await db.ref(`usuarios_datos/${hijo.key}`).once('value');
-                        const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
-                        const bloqueado = data.bloqueado || false;
-                        const aprobado = data.aprobado === true;
-                        const isOwner = esUsuarioOwner(email);
-                        const div = document.createElement('div');
-                        div.className = 'user-list-item';
-                        const estadoLabel = !aprobado ? '⏳ Pendiente' : bloqueado ? '⛔ Bloqueado' : '✅ Activo';
-                        const estadoClass = !aprobado ? 'pendiente' : bloqueado ? 'blocked' : 'active';
-                        div.innerHTML = `
-                            <div>
-                                <span class="user-email">${email} ${isOwner ? '👑' : ''}</span>
-                                <div class="user-info">
-                                    <span>💎 ${datos.credits || 0}</span>
-                                    <span>📅 ${datos.days || 0}</span>
-                                    <span class="badge ${estadoClass}">${estadoLabel}</span>
-                                </div>
-                            </div>
-                            <div class="user-actions">
-                                <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditosManual('${email}')" title="Sumar créditos">➕</button>
-                                <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditosManual('${email}')" title="Restar créditos">➖</button>
-                                <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDiasManual('${email}')" title="Sumar días">📅+</button>
-                                <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDiasManual('${email}')" title="Restar días">📅-</button>
-                                ${aprobado ? (bloqueado 
-                                    ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
-                                    : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
-                                ) : ''}
-                                <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
-                            </div>
-                        `;
-                        container.appendChild(div);
-                    }
-                });
-                if (!found) container.innerHTML = '<p style="color:#6688aa;padding:6px;">Usuario no encontrado</p>';
+
+            const encontrados = usuarios.filter(u => u.email.toLowerCase().includes(search));
+            if (encontrados.length === 0) {
+                container.innerHTML = '<p style="color:#6688aa;padding:6px;">Usuario no encontrado</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            encontrados.forEach(user => {
+                const isOwner = user.email === ADMIN_EMAIL;
+                const div = document.createElement('div');
+                div.className = 'user-list-item';
+                const estadoLabel = !user.aprobado ? '⏳ Pendiente' : user.bloqueado ? '⛔ Bloqueado' : '✅ Activo';
+                const estadoClass = !user.aprobado ? 'pendiente' : user.bloqueado ? 'blocked' : 'active';
+
+                div.innerHTML = `
+                    <div>
+                        <span class="user-email">${user.email} ${isOwner ? '👑' : ''}</span>
+                        <div class="user-info">
+                            <span>💎 ${user.credits || 0}</span>
+                            <span>📅 ${user.days || 0}</span>
+                            <span class="badge ${estadoClass}">${estadoLabel}</span>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
             });
         }
 
         // ================================================================
         // ADMIN - ACCIONES
         // ================================================================
-        async function toggleBloquearUsuario(email) {
-            if (!currentUser || !esOwner) return;
-            const nodo = limpiarClave(email);
-            const snap = await db.ref(`usuarios/${nodo}`).once('value');
-            if (!snap.exists()) { mostrarNotificacion('Usuario no encontrado', 'error'); return; }
-            const actual = snap.val().bloqueado || false;
-            await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
-            mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
-            escucharUsuarios();
+        function adminToggleBloquear(id) {
+            if (!esOwner) return;
+            const user = obtenerUsuarioPorId(id);
+            if (!user || user.email === ADMIN_EMAIL) return;
+            user.bloqueado = !user.bloqueado;
+            guardarUsuarios();
+            actualizarListaUsuarios();
+            mostrarNotificacion(`${user.bloqueado ? '⛔' : '✅'} Usuario ${user.bloqueado ? 'bloqueado' : 'desbloqueado'}`, 'success');
         }
 
-        async function eliminarUsuario(email) {
-            if (!currentUser || !esOwner) return;
-            if (email === currentUser.email) {
-                mostrarNotificacion('❌ No puedes eliminar tu propia cuenta', 'error');
-                return;
-            }
-            if (!confirm(`⚠️ ¿Eliminar al usuario ${email}?`)) return;
+        function adminEliminarUsuario(id) {
+            if (!esOwner) return;
+            const user = obtenerUsuarioPorId(id);
+            if (!user || user.email === ADMIN_EMAIL) return;
+            if (!confirm(`⚠️ ¿Eliminar al usuario ${user.email}?`)) return;
 
-            const nodo = limpiarClave(email);
-            try {
-                await db.ref(`usuarios/${nodo}`).remove();
-                await db.ref(`usuarios_datos/${nodo}`).remove();
-                await db.ref(`creditos/${nodo}`).remove();
-                await db.ref(`chat_profiles/${nodo}`).remove();
-                await db.ref(`notas/${nodo}`).remove();
-                await db.ref(`juego/${nodo}`).remove();
-                await db.ref(`solicitudes/${nodo}`).remove();
-                mostrarNotificacion(`✅ Usuario ${email} eliminado`, 'success');
-                escucharUsuarios();
-            } catch (e) {
-                mostrarNotificacion('❌ Error al eliminar usuario', 'error');
-            }
+            usuarios = usuarios.filter(u => u.id !== id);
+            solicitudes = solicitudes.filter(s => s.usuarioId !== id);
+            guardarUsuarios();
+            guardarSolicitudes();
+            actualizarListaUsuarios();
+            actualizarListaSolicitudes();
+            mostrarNotificacion(`✅ Usuario ${user.email} eliminado`, 'success');
         }
 
-        async function adminAgregarCreditosManual(email) {
-            if (!currentUser || !esOwner) return;
-            const cantidad = prompt(`¿Créditos a agregar a ${email}?`, '10');
+        function adminAgregarCreditos(id) {
+            if (!esOwner) return;
+            const user = obtenerUsuarioPorId(id);
+            if (!user || user.email === ADMIN_EMAIL) return;
+            const cantidad = prompt(`¿Créditos a agregar a ${user.email}?`, '10');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = (data.credits || 0) + parseInt(cantidad);
-            await ref.update({ credits: nuevo });
-            mostrarNotificacion(`✅ +${cantidad} créditos a ${email}`, 'success');
-            escucharUsuarios();
+            user.credits = (user.credits || 0) + parseInt(cantidad);
+            guardarUsuarios();
+            actualizarListaUsuarios();
+            mostrarNotificacion(`✅ +${cantidad} créditos a ${user.email}`, 'success');
         }
 
-        async function adminRestarCreditosManual(email) {
-            if (!currentUser || !esOwner) return;
-            const cantidad = prompt(`¿Créditos a restar a ${email}?`, '5');
+        function adminRestarCreditos(id) {
+            if (!esOwner) return;
+            const user = obtenerUsuarioPorId(id);
+            if (!user || user.email === ADMIN_EMAIL) return;
+            const cantidad = prompt(`¿Créditos a restar a ${user.email}?`, '5');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
-            await ref.update({ credits: nuevo });
-            mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
-            escucharUsuarios();
+            user.credits = Math.max(0, (user.credits || 0) - parseInt(cantidad));
+            guardarUsuarios();
+            actualizarListaUsuarios();
+            mostrarNotificacion(`✅ -${cantidad} créditos a ${user.email}`, 'success');
         }
 
-        async function adminAgregarDiasManual(email) {
-            if (!currentUser || !esOwner) return;
-            const cantidad = prompt(`¿Días a agregar a ${email}?`, '5');
+        function adminAgregarDias(id) {
+            if (!esOwner) return;
+            const user = obtenerUsuarioPorId(id);
+            if (!user || user.email === ADMIN_EMAIL) return;
+            const cantidad = prompt(`¿Días a agregar a ${user.email}?`, '5');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = (data.days || 0) + parseInt(cantidad);
-            await ref.update({ days: nuevo });
-            mostrarNotificacion(`✅ +${cantidad} días a ${email}`, 'success');
-            escucharUsuarios();
+            user.days = (user.days || 0) + parseInt(cantidad);
+            guardarUsuarios();
+            actualizarListaUsuarios();
+            mostrarNotificacion(`✅ +${cantidad} días a ${user.email}`, 'success');
         }
 
-        async function adminRestarDiasManual(email) {
-            if (!currentUser || !esOwner) return;
-            const cantidad = prompt(`¿Días a restar a ${email}?`, '3');
+        function adminRestarDias(id) {
+            if (!esOwner) return;
+            const user = obtenerUsuarioPorId(id);
+            if (!user || user.email === ADMIN_EMAIL) return;
+            const cantidad = prompt(`¿Días a restar a ${user.email}?`, '3');
             if (!cantidad || isNaN(cantidad) || parseInt(cantidad) < 1) return;
-            const uid = limpiarClave(email);
-            const ref = db.ref(`usuarios_datos/${uid}`);
-            const snap = await ref.once('value');
-            const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
-            const nuevo = Math.max(0, (data.days || 0) - parseInt(cantidad));
-            await ref.update({ days: nuevo });
-            mostrarNotificacion(`✅ -${cantidad} días a ${email}`, 'success');
-            escucharUsuarios();
+            user.days = Math.max(0, (user.days || 0) - parseInt(cantidad));
+            guardarUsuarios();
+            actualizarListaUsuarios();
+            mostrarNotificacion(`✅ -${cantidad} días a ${user.email}`, 'success');
         }
 
-        async function eliminarTodosLosUsuarios() {
-            if (!currentUser || !esOwner) {
+        function eliminarTodosLosUsuarios() {
+            if (!esOwner) {
                 mostrarNotificacion('❌ Solo el administrador', 'error');
                 return;
             }
             if (!confirm('🚨 ¿ELIMINAR TODOS LOS USUARIOS?')) return;
             if (!confirm('⚠️ ¿REALMENTE SEGURO?')) return;
 
-            const btn = document.getElementById('btnEliminarTodos');
-            setButtonLoading(btn, true);
-            btn.textContent = '⏳ Eliminando...';
-
-            try {
-                const snapshot = await db.ref('usuarios').once('value');
-                if (!snapshot.exists()) {
-                    mostrarNotificacion('ℹ️ No hay usuarios', 'info');
-                    setButtonLoading(btn, false);
-                    btn.textContent = '🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)';
-                    return;
-                }
-
-                let eliminados = 0;
-                const promesas = [];
-
-                snapshot.forEach(child => {
-                    const data = child.val();
-                    const email = data.email || child.key;
-                    const uid = child.key;
-
-                    if (email !== currentUser.email) {
-                        promesas.push(db.ref(`usuarios/${uid}`).remove());
-                        promesas.push(db.ref(`usuarios_datos/${uid}`).remove());
-                        promesas.push(db.ref(`creditos/${uid}`).remove());
-                        promesas.push(db.ref(`chat_profiles/${uid}`).remove());
-                        promesas.push(db.ref(`notas/${uid}`).remove());
-                        promesas.push(db.ref(`juego/${uid}`).remove());
-                        promesas.push(db.ref(`solicitudes/${uid}`).remove());
-                        eliminados++;
-                    }
-                });
-
-                if (eliminados === 0) {
-                    mostrarNotificacion('ℹ️ No hay usuarios para eliminar', 'info');
-                    setButtonLoading(btn, false);
-                    btn.textContent = '🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)';
-                    return;
-                }
-
-                await Promise.all(promesas);
-                mostrarNotificacion(`✅ ${eliminados} usuarios eliminados`, 'success');
-
-            } catch (e) {
-                console.error('Error:', e);
-                mostrarNotificacion('❌ Error al eliminar usuarios', 'error');
-            }
-
-            setButtonLoading(btn, false);
-            btn.textContent = '🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)';
+            usuarios = usuarios.filter(u => u.email === ADMIN_EMAIL);
+            solicitudes = [];
+            guardarUsuarios();
+            guardarSolicitudes();
+            actualizarListaUsuarios();
+            actualizarListaSolicitudes();
+            mostrarNotificacion('✅ Todos los usuarios eliminados (excepto tú)', 'success');
         }
 
         // ================================================================
-        // REGISTROS (Anti-SPAM)
+        // ADMIN - SOLICITUDES
         // ================================================================
-        async function cargarConfiguracionSpam() {
-            try {
-                const snap = await db.ref('config_spam').once('value');
-                if (snap.exists()) {
-                    const data = snap.val();
-                    spamConfig.limit = data.limit || 5;
-                    spamConfig.time = data.time || 60;
-                }
-                document.getElementById('spamLimit').value = spamConfig.limit;
-                document.getElementById('spamTime').value = spamConfig.time;
-            } catch (e) {
-                console.error('Error cargando spam:', e);
+        function actualizarListaSolicitudes() {
+            const container = document.getElementById('solicitudesContainer');
+            if (!container) return;
+
+            const pendientes = solicitudes.filter(s => s.estado === 'pendiente').length;
+            const badge = document.getElementById('solicitudesBadge');
+            if (pendientes > 0) {
+                badge.style.display = 'inline';
+                badge.textContent = pendientes;
+            } else {
+                badge.style.display = 'none';
             }
+
+            if (solicitudes.length === 0) {
+                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay solicitudes</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            solicitudes.forEach(sol => {
+                const div = document.createElement('div');
+                div.className = 'solicitud-item';
+
+                const estadoClass = sol.estado === 'pendiente' ? 'pendiente' : 
+                                  sol.estado === 'aprobada' ? 'aprobada' : 'rechazada';
+                const estadoText = sol.estado === 'pendiente' ? '🟡 Pendiente' : 
+                                 sol.estado === 'aprobada' ? '🟢 Aprobada' : '🔴 Rechazada';
+                const fecha = sol.fecha ? new Date(sol.fecha).toLocaleString() : '';
+
+                let acciones = '';
+                if (sol.estado === 'pendiente' && esOwner) {
+                    acciones = `
+                        <button class="btn-small btn-success" onclick="aprobarSolicitud('${sol.id}')">✅ Aprobar</button>
+                        <button class="btn-small btn-danger" onclick="rechazarSolicitud('${sol.id}')">❌ Rechazar</button>
+                    `;
+                }
+
+                div.innerHTML = `
+                    <div>
+                        <span class="solicitud-email">${sol.email}</span>
+                        <span class="solicitud-fecha">📅 ${fecha}</span>
+                        <span class="solicitud-estado ${estadoClass}">${estadoText}</span>
+                    </div>
+                    <div class="solicitud-actions">${acciones}</div>
+                `;
+                container.appendChild(div);
+            });
         }
+
+        function recargarSolicitudes() {
+            actualizarListaSolicitudes();
+            mostrarNotificacion('🔄 Solicitudes actualizadas', 'info');
+        }
+
+        function aprobarSolicitud(id) {
+            if (!esOwner) {
+                mostrarNotificacion('❌ Solo el administrador', 'error');
+                return;
+            }
+
+            const sol = solicitudes.find(s => s.id === id);
+            if (!sol) {
+                mostrarNotificacion('❌ Solicitud no encontrada', 'error');
+                return;
+            }
+
+            const user = obtenerUsuarioPorId(sol.usuarioId);
+            if (!user) {
+                mostrarNotificacion('❌ Usuario no encontrado', 'error');
+                return;
+            }
+
+            user.aprobado = true;
+            user.credits = 50;
+            user.days = 7;
+
+            sol.estado = 'aprobada';
+            sol.fechaAprobacion = new Date().toISOString();
+
+            guardarUsuarios();
+            guardarSolicitudes();
+            actualizarListaUsuarios();
+            actualizarListaSolicitudes();
+
+            mostrarNotificacion(`✅ Usuario ${user.email} aprobado. Recibió 7 días y 50 créditos`, 'success');
+        }
+
+        function rechazarSolicitud(id) {
+            if (!esOwner) {
+                mostrarNotificacion('❌ Solo el administrador', 'error');
+                return;
+            }
+
+            if (!confirm('⚠️ ¿Rechazar esta solicitud?')) return;
+
+            const sol = solicitudes.find(s => s.id === id);
+            if (!sol) {
+                mostrarNotificacion('❌ Solicitud no encontrada', 'error');
+                return;
+            }
+
+            const user = obtenerUsuarioPorId(sol.usuarioId);
+            if (user) {
+                usuarios = usuarios.filter(u => u.id !== user.id);
+            }
+
+            sol.estado = 'rechazada';
+            sol.fechaRechazo = new Date().toISOString();
+
+            guardarUsuarios();
+            guardarSolicitudes();
+            actualizarListaUsuarios();
+            actualizarListaSolicitudes();
+
+            mostrarNotificacion(`✅ Solicitud de ${sol.email} rechazada`, 'success');
+        }
+
+        // ================================================================
+        // ADMIN - REGISTROS
+        // ================================================================
+        function actualizarListaRegistros() {
+            const container = document.getElementById('registrosContainer');
+            if (!container) return;
+
+            if (registros.length === 0) {
+                container.innerHTML = '<p style="color:#6688aa;padding:10px;">📭 No hay registros</p>';
+                return;
+            }
+
+            container.innerHTML = '';
+            registros.slice(0, 50).forEach(reg => {
+                const div = document.createElement('div');
+                div.className = 'registro-item';
+                const fecha = reg.fecha ? new Date(reg.fecha).toLocaleString() : '';
+                div.innerHTML = `
+                    <span class="registro-email">${reg.email}</span>
+                    <span class="registro-ip">🌐 ${reg.ip || '127.0.0.1'}</span>
+                    <span class="registro-fecha">${fecha}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function recargarRegistros() {
+            actualizarListaRegistros();
+            mostrarNotificacion('🔄 Registros actualizados', 'info');
+        }
+
+        // ================================================================
+        // CONFIGURACIÓN SPAM
+        // ================================================================
+        let spamConfig = { limit: 5, time: 60 };
 
         function guardarConfiguracionSpam() {
-            if (!currentUser || !esOwner) {
+            if (!esOwner) {
                 mostrarNotificacion('❌ Solo el administrador', 'error');
                 return;
             }
@@ -2981,57 +2303,8 @@
             const time = parseInt(document.getElementById('spamTime').value) || 60;
             spamConfig.limit = limit;
             spamConfig.time = time;
-            db.ref('config_spam').set({ limit: limit, time: time });
+            localStorage.setItem('sys_spam_config', JSON.stringify(spamConfig));
             mostrarNotificacion('✅ Configuración anti-spam guardada', 'success');
-        }
-
-        function escucharRegistros() {
-            if (registrosUnsubscribe) { registrosUnsubscribe(); registrosUnsubscribe = null; }
-
-            registrosUnsubscribe = db.ref('registros').on('value', (snapshot) => {
-                const container = document.getElementById('registrosContainer');
-                if (!container) return;
-                
-                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando registros...</p>';
-                
-                if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros</p>';
-                    return;
-                }
-
-                const registros = [];
-                snapshot.forEach(child => {
-                    const data = child.val();
-                    if (data && data.email) {
-                        registros.push({ key: child.key, ...data });
-                    }
-                });
-
-                registros.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-                const mostrar = registros.slice(0, 50);
-                
-                container.innerHTML = '';
-
-                mostrar.forEach(reg => {
-                    const div = document.createElement('div');
-                    div.className = 'registro-item';
-                    const email = reg.email || 'Desconocido';
-                    const ip = reg.ip || '0.0.0.0';
-                    const fecha = reg.fecha || new Date(reg.timestamp || Date.now()).toLocaleString();
-                    
-                    div.innerHTML = `
-                        <span class="registro-email">${email}</span>
-                        <span class="registro-ip">🌐 ${ip}</span>
-                        <span class="registro-fecha">${fecha}</span>
-                    `;
-                    container.appendChild(div);
-                });
-            });
-        }
-
-        function recargarRegistros() {
-            mostrarNotificacion('🔄 Actualizando registros...', 'info');
-            escucharRegistros();
         }
 
         // ================================================================
@@ -3089,22 +2362,6 @@
                 alt = !alt;
             }
             return sum % 10 === 0;
-        }
-
-        async function obtenerInfoBIN(bin) {
-            try {
-                const response = await fetch(`https://binlist.io/lookup/${bin}`);
-                if (response.ok) {
-                    const data = await response.json();
-                    return {
-                        pais: data.country?.name || 'Desconocido',
-                        paisEmoji: data.country?.emoji || '🌍',
-                        banco: data.bank?.name || 'Desconocido',
-                        marca: data.scheme || 'Desconocida'
-                    };
-                }
-            } catch (e) { console.log('Error BIN:', e); }
-            return { pais: 'Desconocido', paisEmoji: '🌍', banco: 'Desconocido', marca: detectBrand(bin) };
         }
 
         function generarFechaAleatoria() {
@@ -3208,7 +2465,7 @@
             return cards;
         }
 
-        async function generarTarjetas() {
+        function generarTarjetas() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!esOwner && currentDays <= 0) { mostrarNotificacion('❌ Sin días activos.', 'error'); return; }
 
@@ -3233,9 +2490,6 @@
                 return;
             }
 
-            const binReal = cleanInput.slice(0, 6);
-            const infoBIN = await obtenerInfoBIN(binReal);
-
             const cards = generateUniqueCards(binInput, Math.min(count, 50), month, year);
             if (cards.length === 0) {
                 mostrarNotificacion('❌ No se pudieron generar tarjetas válidas', 'error');
@@ -3248,8 +2502,6 @@
             document.getElementById('actionButtons').style.display = 'flex';
             document.getElementById('generatedCount').textContent = cards.length;
             document.getElementById('massiveCount').textContent = cards.length;
-            guardarHistorialGen(binInput, cards.length, infoBIN);
-            cargarHistorialGen();
 
             mostrarNotificacion(`✅ ${cards.length} tarjetas generadas`, 'success');
         }
@@ -3314,87 +2566,9 @@
         }
 
         // ================================================================
-        // HISTORIALES
-        // ================================================================
-        function guardarHistorialGen(bin, count, infoBIN) {
-            if (!currentUser) return;
-            const key = `gen_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            history.unshift({ bin, count, fecha: new Date().toLocaleString() });
-            if (history.length > 50) history.length = 50;
-            localStorage.setItem(key, JSON.stringify(history));
-        }
-
-        function cargarHistorialGen() {
-            if (!currentUser) return;
-            const key = `gen_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const container = document.getElementById('genHistory');
-            container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin generaciones</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">🎲 ${h.bin} | ${h.count} tarjetas | ${h.fecha}</div>`).join('');
-        }
-
-        function guardarHistorialLive(number, brand, result) {
-            if (!currentUser) return;
-            const key = `live_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            history.unshift({ number, brand, estado: result.estado, mensaje: result.mensaje, fecha: new Date().toLocaleString() });
-            if (history.length > 50) history.length = 50;
-            localStorage.setItem(key, JSON.stringify(history));
-        }
-
-        function cargarHistorialLive() {
-            if (!currentUser) return;
-            const key = `live_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const container = document.getElementById('liveHistory');
-            container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin LIVE</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">🔴 ${h.number} | ${h.brand} | ${h.mensaje} | ${h.fecha}</div>`).join('');
-        }
-
-        function guardarHistorialMasivo(results) {
-            if (!currentUser) return;
-            const key = `massive_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const valid = results.filter(r => r.estado.includes('APROBADA') || r.estado.includes('VÁLIDA')).length;
-            const fondos = results.filter(r => r.estado.includes('CON FONDOS')).length;
-            history.unshift({ total: results.length, valid, fondos, fecha: new Date().toLocaleString() });
-            if (history.length > 30) history.length = 30;
-            localStorage.setItem(key, JSON.stringify(history));
-        }
-
-        function cargarHistorialMasivo() {
-            if (!currentUser) return;
-            const key = `massive_history_${currentUser.uid}`;
-            const history = JSON.parse(localStorage.getItem(key) || '[]');
-            const container = document.getElementById('massiveHistory');
-            container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin masivos</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">📊 ${h.total} | 🟢 ${h.fondos} | 🟡 ${h.valid} | ${h.fecha}</div>`).join('');
-        }
-
-        async function cargarCreditosUsuario() {
-            if (!currentUser) return;
-            if (esOwner) {
-                document.getElementById('creditHistory').innerHTML = '<div style="color:#ffaa44;font-size:0.8rem;">👑 Owner - Créditos infinitos</div>';
-                return;
-            }
-            const ref = db.ref(`creditos/${currentUser.uid}/historial`);
-            const snap = await ref.orderByChild('fecha').limitToLast(20).once('value');
-            const container = document.getElementById('creditHistory');
-            if (!snap.exists()) { container.innerHTML = '<p style="color:#6688aa;">Sin movimientos</p>'; return; }
-            const items = [];
-            snap.forEach(child => items.push(child.val()));
-            items.reverse();
-            container.innerHTML = items.map(item => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">${item.tipo === 'recarga' ? '➕' : '➖'} ${item.monto} | ${item.descripcion || ''} <span style="color:#6688aa;font-size:0.55rem;">${new Date(item.fecha).toLocaleString()}</span></div>`).join('');
-        }
-
-        // ================================================================
         // LIVE INDIVIDUAL
         // ================================================================
-        async function checkCardLive() {
+        function checkCardLive() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             
             const number = document.getElementById('liveCardNumber').value.replace(/\s/g, '');
@@ -3407,64 +2581,73 @@
                 return;
             }
 
-            if (!await gastarCredito(2, `LIVE: ${number}`)) return;
+            if (!gastarCredito(2, `LIVE: ${number}`)) return;
 
             const btn = document.getElementById('liveCheckBtn');
-            setButtonLoading(btn, true);
+            btn.disabled = true;
             btn.textContent = '⏳ Verificando...';
 
-            await new Promise(resolve => setTimeout(resolve, 1500));
+            setTimeout(() => {
+                const random = Math.random();
+                let mensaje;
+                if (random < 0.2) {
+                    mensaje = '🟢 APROBADA - Con fondos';
+                } else if (random < 0.4) {
+                    mensaje = '🟡 VÁLIDA - Sin fondos';
+                } else if (random < 0.6) {
+                    mensaje = '🟠 CVV INCORRECTO';
+                } else if (random < 0.8) {
+                    mensaje = '🔴 EXPIRADA';
+                } else {
+                    mensaje = '🔴 INVÁLIDA';
+                }
 
-            const random = Math.random();
-            let result;
-            if (random < 0.2) {
-                result = { estado: 'approved', mensaje: '🟢 APROBADA - Con fondos' };
-            } else if (random < 0.4) {
-                result = { estado: 'insufficient', mensaje: '🟡 VÁLIDA - Sin fondos' };
-            } else if (random < 0.6) {
-                result = { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO' };
-            } else if (random < 0.8) {
-                result = { estado: 'expired', mensaje: '🔴 EXPIRADA' };
-            } else {
-                result = { estado: 'invalid', mensaje: '🔴 INVÁLIDA' };
-            }
-
-            document.getElementById('liveResultBox').innerHTML = `
-                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
-                    <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;">${result.mensaje}</div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
-                        <div><span style="color:#88bbff;">🔢 Número:</span> ${number}</div>
-                        <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
-                        <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv}</div>
-                        <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaSeleccionada}</div>
+                document.getElementById('liveResultBox').innerHTML = `
+                    <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
+                        <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;">${mensaje}</div>
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
+                            <div><span style="color:#88bbff;">🔢 Número:</span> ${number}</div>
+                            <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
+                            <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv}</div>
+                            <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaSeleccionada}</div>
+                        </div>
                     </div>
-                </div>
-            `;
+                `;
 
-            guardarHistorialLive(number, detectBrand(number), result);
-            cargarHistorialLive();
-
-            setButtonLoading(btn, false);
-            btn.textContent = '🔴 VERIFICAR (2 créditos)';
+                btn.disabled = false;
+                btn.textContent = '🔴 VERIFICAR (2 créditos)';
+            }, 1500);
         }
 
         // ================================================================
         // LIVE MASIVO
         // ================================================================
-        async function liveMasivo() {
+        function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             const cards = generatedCardsList;
             if (cards.length === 0) { mostrarNotificacion('❌ No hay tarjetas generadas', 'error'); return; }
             switchTab('massive');
             const count = Math.min(cards.length, 10);
-            if (!await gastarCredito(7, `LIVE Masivo x${count}`)) return;
+            if (!gastarCredito(7, `LIVE Masivo x${count}`)) return;
             const btn = document.getElementById('massiveBtn');
-            setButtonLoading(btn, true);
+            btn.disabled = true;
             btn.textContent = '⏳ Verificando...';
             massiveResults = [];
-            for (let i = 0; i < count; i++) {
-                const card = cards[i];
-                await new Promise(resolve => setTimeout(resolve, 500));
+            
+            let index = 0;
+            function verificarSiguiente() {
+                if (index >= count) {
+                    mostrarResultadoMasivo(massiveResults);
+                    document.getElementById('btnDownloadMassive').disabled = false;
+                    btn.disabled = false;
+                    btn.textContent = '📊 LIVE MASIVO (7 créditos)';
+                    const fondos = massiveResults.filter(r => r.estado === 'approved').length;
+                    const cvvInvalid = massiveResults.filter(r => r.estado === 'cvv_invalid').length;
+                    mostrarNotificacion(`✅ ${fondos} con fondos | 🟠 ${cvvInvalid} con CVV incorrecto`, 'success');
+                    return;
+                }
+
+                const card = cards[index];
                 const random = Math.random();
                 let estado, mensaje;
                 if (random < 0.2) { estado = 'approved'; mensaje = '🟢 CON FONDOS'; }
@@ -3473,16 +2656,12 @@
                 else if (random < 0.8) { estado = 'expired'; mensaje = '🔴 EXPIRADA'; }
                 else { estado = 'invalid'; mensaje = '🔴 INVÁLIDA'; }
                 massiveResults.push({ number: card.number, estado, mensaje });
+                
+                index++;
+                setTimeout(verificarSiguiente, 400);
             }
-            mostrarResultadoMasivo(massiveResults);
-            document.getElementById('btnDownloadMassive').disabled = false;
-            guardarHistorialMasivo(massiveResults);
-            cargarHistorialMasivo();
-            setButtonLoading(btn, false);
-            btn.textContent = '📊 LIVE MASIVO (7 créditos)';
-            const fondos = massiveResults.filter(r => r.estado === 'approved').length;
-            const cvvInvalid = massiveResults.filter(r => r.estado === 'cvv_invalid').length;
-            mostrarNotificacion(`✅ ${fondos} con fondos | 🟠 ${cvvInvalid} con CVV incorrecto`, 'success');
+            
+            verificarSiguiente();
         }
 
         function liveMasivoDesdeGenerador() {
@@ -3595,7 +2774,7 @@
                 peru: '🇵🇪 Perú' };
             const paisNombre = nombrePais[pais] || pais;
 
-            const html = `
+            document.getElementById('direccionResultBox').innerHTML = `
                 <div style="border-bottom:1px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:0.9rem;">
                         <div><span class="label">📍 Dirección:</span> <span class="value">${entry.direccion}</span></div>
@@ -3610,7 +2789,6 @@
                     </div>
                 </div>
             `;
-            document.getElementById('direccionResultBox').innerHTML = html;
             window._ultimaDireccion = `📍 ${entry.direccion}\n🏙️ ${entry.ciudad}\n📌 ${entry.estado}\n📮 ${entry.zip}\n📞 ${telefono}\n🌍 ${paisNombre}`;
             mostrarNotificacion(`✅ Dirección generada para ${paisNombre}`, 'success');
         }
@@ -3621,7 +2799,7 @@
         }
 
         // ================================================================
-        // CHAT - FUNCIONES BÁSICAS
+        // CHAT
         // ================================================================
         function cambiarAvatarChat() {
             const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
@@ -3632,32 +2810,23 @@
             }
             document.getElementById('chatAvatarSelector').textContent = nuevo;
             chatAvatar = nuevo;
-            if (currentUser && chatDisplayName) {
-                db.ref(`chat_profiles/${currentUser.uid}`).update({ avatar: chatAvatar });
-            }
+            guardarPerfilChat();
         }
 
-        async function guardarPerfilChat() {
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
+        function guardarPerfilChat() {
+            if (!currentUser) {
+                mostrarNotificacion('❌ Inicia sesión', 'error');
+                return;
+            }
             const name = document.getElementById('chatDisplayName').value.trim();
-            if (!name) { mostrarNotificacion('❌ Escribe un nombre', 'error'); return; }
-
-            const snap = await db.ref(`chat_profiles/${currentUser.uid}`).once('value');
-            const existe = snap.exists();
-
-            if (existe && snap.val().name && !esOwner) {
-                mostrarNotificacion('❌ Ya tienes un nombre guardado, no puedes cambiarlo.', 'error');
-                document.getElementById('chatDisplayName').value = snap.val().name;
+            if (!name) {
+                mostrarNotificacion('❌ Escribe un nombre', 'error');
                 return;
             }
 
             chatDisplayName = name;
             chatAvatar = document.getElementById('chatAvatarSelector').textContent;
-            await db.ref(`chat_profiles/${currentUser.uid}`).set({
-                name: chatDisplayName,
-                avatar: chatAvatar
-            });
-            chatNameBloqueado = true;
+            guardarPerfilChat();
 
             if (!esOwner) {
                 document.getElementById('chatDisplayName').disabled = true;
@@ -3671,51 +2840,56 @@
                 document.getElementById('nombreBloqueadoMsg').style.display = 'none';
             }
 
-            mostrarNotificacion('✅ Perfil de chat guardado', 'success');
-
-            if (chatUnsubscribe) {
-                chatUnsubscribe();
-                chatUnsubscribe = null;
-                escucharMensajes();
-            }
+            mostrarNotificacion('✅ Perfil guardado', 'success');
         }
 
-        async function cargarPerfilChat() {
-            if (!currentUser) return;
-            const snap = await db.ref(`chat_profiles/${currentUser.uid}`).once('value');
-            if (snap.exists()) {
-                const data = snap.val();
-                chatDisplayName = data.name || currentUser.email.split('@')[0];
-                chatAvatar = data.avatar || '🦁';
-                if (data.name && !esOwner) {
-                    chatNameBloqueado = true;
+        function cargarPerfilChat() {
+            const perfilData = localStorage.getItem('sys_chat_perfil');
+            if (perfilData) {
+                const perfil = JSON.parse(perfilData);
+                chatDisplayName = perfil.name || '';
+                chatAvatar = perfil.avatar || '🦁';
+                document.getElementById('chatDisplayName').value = chatDisplayName;
+                document.getElementById('chatAvatarSelector').textContent = chatAvatar;
+
+                if (chatDisplayName && !esOwner) {
                     document.getElementById('chatDisplayName').disabled = true;
                     document.getElementById('btnGuardarPerfilChat').style.display = 'none';
                     document.getElementById('nombreBloqueadoMsg').style.display = 'inline';
                     document.getElementById('chatProfileInfo').textContent = '✅ Nombre guardado permanentemente.';
-                } else if (esOwner) {
-                    document.getElementById('chatDisplayName').disabled = false;
-                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
-                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-                    document.getElementById('chatProfileInfo').textContent = '👑 Owner - Puedes cambiar tu nombre cuando quieras.';
-                }
-            } else {
-                chatDisplayName = currentUser.email.split('@')[0];
-                chatAvatar = '🦁';
-                if (esOwner) {
-                    document.getElementById('chatDisplayName').disabled = false;
-                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
-                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-                    document.getElementById('chatProfileInfo').textContent = '👑 Owner - Elige tu nombre y avatar.';
-                } else {
-                    document.getElementById('chatDisplayName').disabled = false;
-                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
-                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-                    document.getElementById('chatProfileInfo').textContent = '💡 Elige un avatar y escribe tu nombre (solo se guarda una vez).';
                 }
             }
-            document.getElementById('chatDisplayName').value = chatDisplayName;
-            document.getElementById('chatAvatarSelector').textContent = chatAvatar;
+        }
+
+        function actualizarChat() {
+            const container = document.getElementById('chatMessages');
+            if (!container) return;
+
+            if (chatMensajes.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">No hay mensajes aún. ¡Sé el primero en chatear!</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            chatMensajes.forEach(msg => {
+                const isOwn = msg.userId === (currentUser ? currentUser.id : '');
+                const div = document.createElement('div');
+                div.className = `message ${isOwn ? 'own' : 'other'}`;
+
+                const time = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
+
+                div.innerHTML = `
+                    <div class="msg-header">
+                        <span class="avatar">${msg.avatar || '🦁'}</span>
+                        <span class="name">${msg.userName || 'Anónimo'}</span>
+                        <span class="time">${time}</span>
+                    </div>
+                    <div class="msg-text">${msg.text || ''}</div>
+                    ${msg.sticker ? `<span class="msg-sticker">${msg.sticker}</span>` : ''}
+                `;
+                container.appendChild(div);
+            });
+            container.scrollTop = container.scrollHeight;
         }
 
         function toggleEmojiPicker() {
@@ -3765,194 +2939,72 @@
         }
 
         function enviarSticker(sticker) {
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil primero', 'error'); return; }
-            db.ref('chat_messages').push({
-                userId: currentUser.uid,
+            if (!currentUser || !chatDisplayName) {
+                mostrarNotificacion('❌ Guarda tu perfil primero', 'error');
+                return;
+            }
+            chatMensajes.push({
+                id: generarId(),
+                userId: currentUser.id,
                 userName: chatDisplayName,
                 avatar: chatAvatar,
                 sticker: sticker,
                 timestamp: Date.now()
             });
+            guardarChat();
+            actualizarChat();
             document.getElementById('stickerPicker').classList.remove('show');
         }
 
-        function enviarImagen(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
-
-            if (file.size > 200 * 1024) {
-                mostrarNotificacion('❌ Imagen muy grande (máx 200KB)', 'error');
-                event.target.value = '';
+        function enviarMensaje() {
+            if (!currentUser || !chatDisplayName) {
+                mostrarNotificacion('❌ Guarda tu perfil primero', 'error');
                 return;
             }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                db.ref('chat_messages').push({
-                    userId: currentUser.uid,
-                    userName: chatDisplayName,
-                    avatar: chatAvatar,
-                    image: e.target.result,
-                    timestamp: Date.now()
-                });
-                mostrarNotificacion('📷 Imagen enviada', 'success');
-                event.target.value = '';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function enviarMensaje() {
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
             const input = document.getElementById('chatInput');
             const text = input.value.trim();
             if (!text) return;
 
-            const msgData = {
-                userId: currentUser.uid,
+            chatMensajes.push({
+                id: generarId(),
+                userId: currentUser.id,
                 userName: chatDisplayName,
                 avatar: chatAvatar,
                 text: text,
                 timestamp: Date.now()
-            };
-
-            if (mensajeRespondiendo) {
-                msgData.replyTo = mensajeRespondiendo;
-                msgData.replyText = mensajeRespondiendo.text || mensajeRespondiendo.sticker || '📷 Imagen';
-                msgData.replyAuthor = mensajeRespondiendo.userName || 'Anónimo';
-            }
-
-            db.ref('chat_messages').push(msgData);
+            });
+            guardarChat();
+            actualizarChat();
             input.value = '';
-            input.focus();
-            cancelarRespuesta();
             document.getElementById('emojiPicker').classList.remove('show');
             document.getElementById('stickerPicker').classList.remove('show');
-        }
-
-        function cancelarRespuesta() {
-            mensajeRespondiendo = null;
-            document.getElementById('chatReplyPreview').style.display = 'none';
-        }
-
-        function cancelarRespuestaSala() {
-            mensajeRespondiendoSala = null;
-            document.getElementById('salaReplyPreview').style.display = 'none';
-        }
-
-        function escucharMensajes() {
-            if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
-            const messagesRef = db.ref('chat_messages').orderByChild('timestamp').limitToLast(100);
-            chatUnsubscribe = messagesRef.on('child_added', function(snapshot) {
-                const msg = snapshot.val();
-                const container = document.getElementById('chatMessages');
-                if (container.querySelector('div[style*="color:#6688aa"]')) {
-                    container.innerHTML = '';
-                }
-                const isOwn = msg.userId === currentUser.uid;
-                const div = document.createElement('div');
-                div.className = `message ${isOwn ? 'own' : 'other'}`;
-
-                let content = '';
-
-                if (msg.replyTo) {
-                    content += `<div class="msg-reply">
-                        <span class="reply-author">${msg.replyAuthor || 'Anónimo'}</span>
-                        <span>${msg.replyText || 'Mensaje'}</span>
-                    </div>`;
-                }
-
-                if (msg.text) {
-                    let processedText = msg.text;
-                    const mentionRegex = /@(\w+)/g;
-                    const mentions = processedText.match(mentionRegex);
-                    if (mentions) {
-                        mentions.forEach(mention => {
-                            const user = mention.substring(1);
-                            processedText = processedText.replace(mention, `<span class="mention">@${user}</span>`);
-                        });
-                    }
-                    content += `<div class="msg-text">${processedText}</div>`;
-                }
-                if (msg.image) {
-                    content += `<img src="${msg.image}" class="msg-image" onclick="window.open('${msg.image}','_blank')" />`;
-                }
-                if (msg.sticker) {
-                    content += `<span class="msg-sticker">${msg.sticker}</span>`;
-                }
-
-                const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const userName = msg.userName || 'Anónimo';
-                const userId = msg.userId || 'default';
-                const color = getUserColor(userId, userName);
-
-                div.innerHTML = `
-                    <div class="msg-header">
-                        <span class="avatar">${msg.avatar || '🦁'}</span>
-                        <span class="name" style="color:${color};">${userName}</span>
-                        <span class="time">${time}</span>
-                    </div>
-                    ${content}
-                    <div class="msg-actions">
-                        <button onclick="responderMensaje('${msg.userId}', '${msg.userName}', '${msg.text || ''}')">💬 Responder</button>
-                        <button onclick="mencionarUsuario('${userName}')">@</button>
-                        <button class="whatsapp-btn" onclick="compartirWhatsApp('${userName}', '${msg.text || ''}')">📱</button>
-                    </div>
-                `;
-                container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
-            });
-        }
-
-        function responderMensaje(userId, userName, text) {
-            mensajeRespondiendo = { uid: userId, name: userName, text: text };
-            document.getElementById('replyPreviewText').textContent = `${userName}: "${text.substring(0, 30)}${text.length > 30 ? '...' : ''}"`;
-            document.getElementById('chatReplyPreview').style.display = 'flex';
-            document.getElementById('chatInput').focus();
-        }
-
-        function mencionarUsuario(name) {
-            const input = document.getElementById('chatInput');
-            input.value = `@${name} ${input.value}`;
-            input.focus();
-        }
-
-        function compartirWhatsApp(userName, text) {
-            const numero = prompt(`📱 Ingresa el número de teléfono de ${userName}:`, '593990434546');
-            if (!numero) return;
-            const numeroLimpio = numero.replace(/[^0-9]/g, '');
-            if (numeroLimpio.length < 7) { mostrarNotificacion('❌ Número inválido.', 'error'); return; }
-            window.open(`https://wa.me/${numeroLimpio}?text=${encodeURIComponent(text)}`, '_blank');
         }
 
         // ================================================================
         // SALA PRIVADA
         // ================================================================
-        async function crearSalaPrivada() {
+        function crearSalaPrivada() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil de chat primero', 'error'); return; }
 
-            if (!await gastarCredito(5, 'Creación de sala privada')) return;
+            if (!gastarCredito(5, 'Creación de sala privada')) return;
 
             const codigo = generarCodigoSala();
-            const salaRef = db.ref(`salas_privadas/${codigo}`);
-
-            const snap = await salaRef.once('value');
-            if (snap.exists()) {
-                mostrarNotificacion('❌ Código ya existe, intenta de nuevo', 'error');
+            
+            if (salas[codigo]) {
+                mostrarNotificacion('❌ Código ya existe', 'error');
                 return;
             }
 
-            await salaRef.set({
-                creador: currentUser.uid,
+            salas[codigo] = {
+                creador: currentUser.id,
                 creadorNombre: chatDisplayName,
                 creadorAvatar: chatAvatar,
                 creado: Date.now(),
-                activa: true
-            });
+                activa: true,
+                mensajes: []
+            };
+            guardarSalas();
 
             salaCodigo = codigo;
             salaActual = codigo;
@@ -3960,36 +3012,19 @@
             document.getElementById('salaPrivadaCard').style.display = 'block';
             document.getElementById('inputCodigoSala').value = '';
 
-            await db.ref(`salas_privadas_mensajes/${codigo}`).push({
-                userId: 'system',
-                userName: 'Sistema',
-                avatar: '🤖',
-                text: `🔒 Sala creada por ${chatDisplayName}. Código: ${codigo}`,
-                timestamp: Date.now()
-            });
-
-            escucharSalaPrivada();
+            actualizarSalaPrivada();
             mostrarNotificacion(`✅ Sala creada! Código: ${codigo}`, 'success');
         }
 
-        async function unirseASala() {
+        function unirseASala() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil de chat primero', 'error'); return; }
 
             const codigo = document.getElementById('inputCodigoSala').value.trim().toUpperCase();
             if (!codigo) { mostrarNotificacion('❌ Ingresa un código', 'error'); return; }
 
-            const salaRef = db.ref(`salas_privadas/${codigo}`);
-            const snap = await salaRef.once('value');
-
-            if (!snap.exists()) {
+            if (!salas[codigo] || !salas[codigo].activa) {
                 mostrarNotificacion('❌ Sala no encontrada.', 'error');
-                return;
-            }
-
-            const data = snap.val();
-            if (!data.activa) {
-                mostrarNotificacion('❌ Esta sala ya no está activa.', 'error');
                 return;
             }
 
@@ -3999,160 +3034,75 @@
             document.getElementById('salaPrivadaCard').style.display = 'block';
             document.getElementById('inputCodigoSala').value = '';
 
-            await db.ref(`salas_privadas_mensajes/${codigo}`).push({
-                userId: currentUser.uid,
-                userName: chatDisplayName,
-                avatar: chatAvatar,
-                text: `👋 ${chatDisplayName} se ha unido a la sala!`,
-                timestamp: Date.now()
-            });
-
-            escucharSalaPrivada();
+            actualizarSalaPrivada();
             mostrarNotificacion(`✅ Te has unido a la sala ${codigo}`, 'success');
         }
 
-        function escucharSalaPrivada() {
-            if (salaUnsubscribe) { salaUnsubscribe(); salaUnsubscribe = null; }
-            if (!salaActual) return;
+        function actualizarSalaPrivada() {
+            const container = document.getElementById('salaMessages');
+            if (!container || !salaActual) return;
 
-            const msgRef = db.ref(`salas_privadas_mensajes/${salaActual}`).orderByChild('timestamp').limitToLast(100);
-            salaUnsubscribe = msgRef.on('child_added', function(snapshot) {
-                const msg = snapshot.val();
-                const container = document.getElementById('salaMessages');
-                if (container.querySelector('div[style*="color:#6688aa"]')) {
-                    container.innerHTML = '';
-                }
+            const sala = salas[salaActual];
+            if (!sala || !sala.mensajes || sala.mensajes.length === 0) {
+                container.innerHTML = '<div style="color:var(--text-muted);text-align:center;padding:20px;font-size:0.8rem;">Mensajes de la sala privada...</div>';
+                return;
+            }
 
-                const isOwn = msg.userId === currentUser.uid;
+            container.innerHTML = '';
+            sala.mensajes.forEach(msg => {
+                const isOwn = msg.userId === currentUser.id;
                 const div = document.createElement('div');
                 div.className = `message ${isOwn ? 'own' : 'other'}`;
 
-                let content = '';
-
-                if (msg.replyTo) {
-                    content += `<div class="msg-reply">
-                        <span class="reply-author">${msg.replyAuthor || 'Anónimo'}</span>
-                        <span>${msg.replyText || 'Mensaje'}</span>
-                    </div>`;
-                }
-
-                if (msg.text) {
-                    let processedText = msg.text;
-                    const mentionRegex = /@(\w+)/g;
-                    const mentions = processedText.match(mentionRegex);
-                    if (mentions) {
-                        mentions.forEach(mention => {
-                            const user = mention.substring(1);
-                            processedText = processedText.replace(mention, `<span class="mention">@${user}</span>`);
-                        });
-                    }
-                    content += `<div class="msg-text">${processedText}</div>`;
-                }
-                if (msg.image) {
-                    content += `<img src="${msg.image}" class="msg-image" onclick="window.open('${msg.image}','_blank')" />`;
-                }
-                if (msg.sticker) {
-                    content += `<span class="msg-sticker">${msg.sticker}</span>`;
-                }
-
-                const time = new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                const userName = msg.userName || 'Anónimo';
-                const userId = msg.userId || 'default';
-                const color = getUserColor(userId, userName);
+                const time = msg.timestamp ? new Date(msg.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '';
 
                 div.innerHTML = `
                     <div class="msg-header">
                         <span class="avatar">${msg.avatar || '🦁'}</span>
-                        <span class="name" style="color:${color};">${userName}</span>
+                        <span class="name">${msg.userName || 'Anónimo'}</span>
                         <span class="time">${time}</span>
                     </div>
-                    ${content}
-                    <div class="msg-actions">
-                        <button onclick="responderMensajeSala('${msg.userId}', '${msg.userName}', '${msg.text || ''}')">💬 Responder</button>
-                        <button onclick="mencionarUsuarioSala('${userName}')">@</button>
-                        <button class="whatsapp-btn" onclick="compartirWhatsAppSala('${userName}', '${msg.text || ''}')">📱</button>
-                    </div>
+                    <div class="msg-text">${msg.text || ''}</div>
                 `;
                 container.appendChild(div);
-                container.scrollTop = container.scrollHeight;
             });
-        }
-
-        function responderMensajeSala(userId, userName, text) {
-            mensajeRespondiendoSala = { uid: userId, name: userName, text: text };
-            document.getElementById('salaReplyPreviewText').textContent = `${userName}: "${text.substring(0, 30)}${text.length > 30 ? '...' : ''}"`;
-            document.getElementById('salaReplyPreview').style.display = 'flex';
-            document.getElementById('salaChatInput').focus();
-        }
-
-        function mencionarUsuarioSala(name) {
-            const input = document.getElementById('salaChatInput');
-            input.value = `@${name} ${input.value}`;
-            input.focus();
-        }
-
-        function compartirWhatsAppSala(userName, text) {
-            const numero = prompt(`📱 Ingresa el número de teléfono de ${userName}:`, '593990434546');
-            if (!numero) return;
-            const numeroLimpio = numero.replace(/[^0-9]/g, '');
-            if (numeroLimpio.length < 7) { mostrarNotificacion('❌ Número inválido.', 'error'); return; }
-            window.open(`https://wa.me/${numeroLimpio}?text=${encodeURIComponent(text)}`, '_blank');
+            container.scrollTop = container.scrollHeight;
         }
 
         function enviarMensajeSala() {
-            if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
-            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
+            if (!currentUser || !chatDisplayName) {
+                mostrarNotificacion('❌ Guarda tu perfil primero', 'error');
+                return;
+            }
+            if (!salaActual) {
+                mostrarNotificacion('❌ No estás en una sala', 'error');
+                return;
+            }
 
             const input = document.getElementById('salaChatInput');
             const text = input.value.trim();
             if (!text) return;
 
-            const msgData = {
-                userId: currentUser.uid,
+            if (!salas[salaActual]) {
+                mostrarNotificacion('❌ Sala no existe', 'error');
+                return;
+            }
+
+            if (!salas[salaActual].mensajes) {
+                salas[salaActual].mensajes = [];
+            }
+
+            salas[salaActual].mensajes.push({
+                id: generarId(),
+                userId: currentUser.id,
                 userName: chatDisplayName,
                 avatar: chatAvatar,
                 text: text,
                 timestamp: Date.now()
-            };
-
-            if (mensajeRespondiendoSala) {
-                msgData.replyTo = mensajeRespondiendoSala;
-                msgData.replyText = mensajeRespondiendoSala.text || mensajeRespondiendoSala.sticker || '📷 Imagen';
-                msgData.replyAuthor = mensajeRespondiendoSala.userName || 'Anónimo';
-            }
-
-            db.ref(`salas_privadas_mensajes/${salaActual}`).push(msgData);
+            });
+            guardarSalas();
+            actualizarSalaPrivada();
             input.value = '';
-            input.focus();
-            cancelarRespuestaSala();
-        }
-
-        function enviarImagenSala(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
-            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil', 'error'); return; }
-
-            if (file.size > 200 * 1024) {
-                mostrarNotificacion('❌ Imagen muy grande (máx 200KB)', 'error');
-                event.target.value = '';
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                db.ref(`salas_privadas_mensajes/${salaActual}`).push({
-                    userId: currentUser.uid,
-                    userName: chatDisplayName,
-                    avatar: chatAvatar,
-                    image: e.target.result,
-                    timestamp: Date.now()
-                });
-                mostrarNotificacion('📷 Imagen enviada a sala', 'success');
-                event.target.value = '';
-            };
-            reader.readAsDataURL(file);
         }
 
         function copiarCodigoSala() {
@@ -4163,24 +3113,9 @@
         }
 
         function salirDeSala() {
-            if (!salaActual) return;
-
-            if (chatDisplayName) {
-                db.ref(`salas_privadas_mensajes/${salaActual}`).push({
-                    userId: 'system',
-                    userName: 'Sistema',
-                    avatar: '🤖',
-                    text: `🚪 ${chatDisplayName} ha salido de la sala.`,
-                    timestamp: Date.now()
-                });
-            }
-
-            if (salaUnsubscribe) { salaUnsubscribe(); salaUnsubscribe = null; }
             salaActual = null;
             salaCodigo = null;
             document.getElementById('salaPrivadaCard').style.display = 'none';
-            document.getElementById('salaReplyPreview').style.display = 'none';
-            mensajeRespondiendoSala = null;
             mostrarNotificacion('🚪 Has salido de la sala privada', 'info');
         }
 
@@ -4213,100 +3148,55 @@
             }
         }
 
-        function actualizarEstadoNota(guardado) {
-            const dot = document.getElementById('notaDot');
-            const dotFooter = document.getElementById('notaDotFooter');
-            const estadoText = document.getElementById('notaEstadoText');
-            const statusFooter = document.getElementById('notaStatusFooter');
-
-            if (guardado) {
-                dot.className = 'dot saved';
-                dotFooter.className = 'dot saved';
-                estadoText.textContent = '✅ Guardado';
-                statusFooter.textContent = '✅ Nota guardada correctamente';
-            } else {
-                dot.className = 'dot unsaved';
-                dotFooter.className = 'dot unsaved';
-                estadoText.textContent = '🔄 Sin guardar';
-                statusFooter.textContent = '🔄 Nota sin guardar';
-            }
-        }
-
-        function actualizarFechaNota() {
-            const ahora = new Date();
-            const fechaStr = ahora.toLocaleString('es-ES', {
-                day: '2-digit',
-                month: '2-digit',
-                year: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            });
-            document.getElementById('notaFecha').textContent = `📅 ${fechaStr}`;
-            document.getElementById('notaUltimaActualizacion').textContent = `🔄 Última actualización: ${fechaStr}`;
-        }
-
-        async function guardarNota() {
+        function guardarNota() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             const content = document.getElementById('notaContent').value;
             if (!content.trim()) {
-                mostrarNotificacion('⚠️ Escribe algo antes de guardar', 'warning');
+                mostrarNotificacion('⚠️ Escribe algo', 'warning');
                 return;
             }
 
-            try {
-                await db.ref(`notas/${currentUser.uid}`).set({
-                    content: content,
-                    updated: Date.now()
-                });
-                actualizarEstadoNota(true);
-                actualizarFechaNota();
-                mostrarNotificacion('✅ Nota guardada', 'success');
-            } catch (e) {
-                mostrarNotificacion('❌ Error al guardar', 'error');
-            }
+            const notas = JSON.parse(localStorage.getItem('sys_notas') || '{}');
+            notas[currentUser.id] = {
+                content: content,
+                updated: Date.now()
+            };
+            localStorage.setItem('sys_notas', JSON.stringify(notas));
+
+            document.getElementById('notaDot').className = 'dot saved';
+            document.getElementById('notaDotFooter').className = 'dot saved';
+            document.getElementById('notaEstadoText').textContent = '✅ Guardado';
+            document.getElementById('notaStatusFooter').textContent = '✅ Nota guardada';
+            document.getElementById('notaFecha').textContent = `📅 ${new Date().toLocaleString()}`;
+            document.getElementById('notaUltimaActualizacion').textContent = `🔄 Última actualización: ${new Date().toLocaleString()}`;
+
+            mostrarNotificacion('✅ Nota guardada', 'success');
         }
 
-        async function cargarNota() {
+        function cargarNota() {
             if (!currentUser) return;
-            try {
-                const snap = await db.ref(`notas/${currentUser.uid}`).once('value');
-                if (snap.exists()) {
-                    const data = snap.val();
-                    document.getElementById('notaContent').value = data.content || '';
-                    if (data.updated) {
-                        const fecha = new Date(data.updated);
-                        const fechaStr = fecha.toLocaleString('es-ES', {
-                            day: '2-digit',
-                            month: '2-digit',
-                            year: 'numeric',
-                            hour: '2-digit',
-                            minute: '2-digit',
-                            second: '2-digit'
-                        });
-                        document.getElementById('notaFecha').textContent = `📅 ${fechaStr}`;
-                        document.getElementById('notaUltimaActualizacion').textContent = `🔄 Última actualización: ${fechaStr}`;
-                    }
-                    actualizarEstadoNota(true);
-                    actualizarStatsNota();
-                } else {
-                    document.getElementById('notaContent').value = '';
-                    document.getElementById('notaFecha').textContent = '📅 Sin fecha';
-                    document.getElementById('notaUltimaActualizacion').textContent = '🔄 Última actualización: --';
-                    actualizarEstadoNota(false);
-                }
-            } catch (e) {
-                console.error('Error al cargar nota:', e);
+            const notas = JSON.parse(localStorage.getItem('sys_notas') || '{}');
+            const nota = notas[currentUser.id];
+            if (nota) {
+                document.getElementById('notaContent').value = nota.content || '';
+                document.getElementById('notaFecha').textContent = `📅 ${new Date(nota.updated).toLocaleString()}`;
+                document.getElementById('notaUltimaActualizacion').textContent = `🔄 Última actualización: ${new Date(nota.updated).toLocaleString()}`;
+                document.getElementById('notaDot').className = 'dot saved';
+                document.getElementById('notaDotFooter').className = 'dot saved';
+                document.getElementById('notaEstadoText').textContent = '✅ Guardado';
+                document.getElementById('notaStatusFooter').textContent = '✅ Nota guardada';
+                actualizarStatsNota();
             }
         }
 
         function limpiarNota() {
-            if (confirm('⚠️ ¿Estás seguro de limpiar la nota?')) {
+            if (confirm('⚠️ ¿Limpiar la nota?')) {
                 document.getElementById('notaContent').value = '';
-                actualizarEstadoNota(false);
+                document.getElementById('notaDot').className = 'dot unsaved';
+                document.getElementById('notaDotFooter').className = 'dot unsaved';
+                document.getElementById('notaEstadoText').textContent = '🔄 Sin guardar';
+                document.getElementById('notaStatusFooter').textContent = '🔄 Nota sin guardar';
                 actualizarStatsNota();
-                document.getElementById('notaFecha').textContent = '📅 Sin fecha';
-                document.getElementById('notaUltimaActualizacion').textContent = '🔄 Última actualización: --';
                 mostrarNotificacion('🗑️ Nota limpiada', 'info');
             }
         }
@@ -4338,32 +3228,8 @@
             });
         }
 
-        let autoSaveInterval = null;
-
-        function iniciarAutoGuardar() {
-            if (autoSaveInterval) clearInterval(autoSaveInterval);
-            autoSaveInterval = setInterval(() => {
-                if (currentUser && document.getElementById('notaContent').value.trim()) {
-                    guardarNota();
-                }
-            }, 30000);
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const notaTextarea = document.getElementById('notaContent');
-            if (notaTextarea) {
-                notaTextarea.addEventListener('input', function() {
-                    actualizarStatsNota();
-                    if (notaGuardada) {
-                        actualizarEstadoNota(false);
-                    }
-                });
-            }
-            iniciarAutoGuardar();
-        });
-
         // ================================================================
-        // JUEGO - PIEDRA, PAPEL O TIJERA
+        // JUEGO
         // ================================================================
         function jugar(opcionJugador) {
             document.getElementById('btnPiedra').disabled = true;
@@ -4424,6 +3290,40 @@
         }
 
         // ================================================================
+        // PROMO
+        // ================================================================
+        let promoDias = 7;
+        let promoCreditos = 50;
+
+        function guardarPromo() {
+            if (!esOwner) {
+                mostrarNotificacion('❌ Solo el administrador', 'error');
+                return;
+            }
+            promoDias = parseInt(document.getElementById('promoDays').value) || 7;
+            promoCreditos = parseInt(document.getElementById('promoCredits').value) || 50;
+            localStorage.setItem('sys_promo', JSON.stringify({ dias: promoDias, creditos: promoCreditos }));
+            document.getElementById('promoDaysActual').textContent = promoDias;
+            document.getElementById('promoCreditsActual').textContent = promoCreditos;
+            mostrarNotificacion(`✅ Promo: ${promoDias} días, ${promoCreditos} créditos`, 'success');
+        }
+
+        function cargarPromo() {
+            const promoData = localStorage.getItem('sys_promo');
+            if (promoData) {
+                const data = JSON.parse(promoData);
+                promoDias = data.dias || 7;
+                promoCreditos = data.creditos || 50;
+            }
+            document.getElementById('promoDaysDisplay').textContent = promoDias;
+            document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
+            document.getElementById('promoDaysActual').textContent = promoDias;
+            document.getElementById('promoCreditsActual').textContent = promoCreditos;
+            document.getElementById('promoDays').value = promoDias;
+            document.getElementById('promoCredits').value = promoCreditos;
+        }
+
+        // ================================================================
         // NAVEGACIÓN
         // ================================================================
         function switchTab(tabName) {
@@ -4453,25 +3353,15 @@
             );
             if (btn) btn.classList.add('active');
 
-            if (tabName === 'credits') cargarCreditosUsuario();
-            if (tabName === 'generator') {
-                cargarHistorialGen();
-                document.getElementById('generatedCount').textContent = generatedCardsList.length;
-            }
-            if (tabName === 'live') cargarHistorialLive();
-            if (tabName === 'massive') {
-                cargarHistorialMasivo();
-                document.getElementById('massiveCount').textContent = generatedCardsList.length;
-            }
             if (tabName === 'chat') {
                 cargarPerfilChat();
-                if (!chatUnsubscribe) escucharMensajes();
+                actualizarChat();
             }
             if (tabName === 'sala') {
                 if (salaActual) {
                     document.getElementById('salaCodigoDisplay').textContent = salaActual;
                     document.getElementById('salaPrivadaCard').style.display = 'block';
-                    if (!salaUnsubscribe) escucharSalaPrivada();
+                    actualizarSalaPrivada();
                 } else {
                     document.getElementById('salaPrivadaCard').style.display = 'none';
                 }
@@ -4481,40 +3371,33 @@
                 actualizarStatsNota();
             }
             if (tabName === 'admins') {
-                if (currentUser && esOwner) {
-                    cargarPromo();
+                if (esOwner) {
+                    actualizarListaUsuarios();
+                    actualizarListaSolicitudes();
+                    actualizarListaRegistros();
                 }
             }
-            if (tabName === 'pasarela') {
-                document.querySelectorAll('.pasarela-card').forEach(c => c.classList.remove('active'));
-                document.getElementById('pasarela-' + pasarelaSeleccionada).classList.add('active');
-                const nombres = {
-                    'stripe': 'Stripe',
-                    'zuora': 'Zuora',
-                    'auth': 'Auth',
-                    'braintree': 'Braintree',
-                    'ccn': 'CCN',
-                    'cvv': 'CVV',
-                    'braintreeauth': 'Braintree Auth'
-                };
-                document.getElementById('pasarelaSeleccionadaLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
-                document.getElementById('pasarelaLiveLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
-                document.getElementById('pasarelaMasivoLabel').textContent = nombres[pasarelaSeleccionada] || 'Stripe';
+            if (tabName === 'solicitudes' && esOwner) {
+                actualizarListaSolicitudes();
+            }
+            if (tabName === 'registros' && esOwner) {
+                actualizarListaRegistros();
             }
         }
 
         // ================================================================
         // INICIALIZACIÓN
         // ================================================================
-        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA');
-        console.log('🔐 Admin: andyobregon799@gmail.com / Andyjoel12');
-        console.log('📨 Sistema de solicitudes activado');
-        console.log('🎮 Juego disponible para usuarios normales');
-        console.log('💬 Chat en vivo con emojis y stickers');
-        console.log('📝 Notas personales con estadísticas');
-
+        cargarDatosLocales();
         cargarPromo();
         seleccionarPasarela('stripe');
+
+        console.log('⚡ SYS ANDY PRO - VERSIÓN SIN FIREBASE');
+        console.log('🔐 Admin: andyobregon799@gmail.com / Andyjoel12');
+        console.log('💾 Todos los datos guardados en LOCALSTORAGE');
+        console.log('📨 Sistema de solicitudes activado');
+        console.log('🎮 Juego disponible');
+        console.log('💬 Chat en vivo');
     </script>
 
 </body>
