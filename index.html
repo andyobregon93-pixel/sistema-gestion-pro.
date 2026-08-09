@@ -6,7 +6,7 @@
     <title>SYS ANDY PRO - CHECKER COMPLETO</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS COMPLETOS - VERSIÓN FINAL                            */
+        /* ESTILOS - VERSIÓN CORREGIDA                                  */
         /* ============================================================== */
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -460,7 +460,9 @@
             background: rgba(10, 26, 58, 0.15);
             transition: background 0.3s;
         }
-        body.theme-day .panels-container { background: rgba(200, 220, 245, 0.15); }
+        body.theme-day .panels-container {
+            background: rgba(200, 220, 245, 0.15);
+        }
         .panels-container::-webkit-scrollbar { width: 4px; }
         .panels-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
@@ -1279,8 +1281,8 @@
                 <div id="auth-register" class="auth-panel">
                     <div class="register-info">
                         🎁 <strong>REGALO DE BIENVENIDA</strong><br>
-                        Al registrarte obtendrás <strong>7</strong> días gratis y
-                        <strong>50</strong> créditos para usar en LIVE.<br>
+                        Al registrarte obtendrás <strong id="promoDaysDisplay">7</strong> días gratis y
+                        <strong id="promoCreditsDisplay">50</strong> créditos para usar en LIVE.<br>
                         <span class="pendiente">⏳ Tu cuenta debe ser aprobada por el administrador antes de poder ingresar.</span>
                     </div>
                     <div class="form-group">
@@ -1355,8 +1357,6 @@
                             <br>Ejemplo: <strong>41691614x2xxxxx1</strong> (las X se reemplazan con números aleatorios).
                             <br><br>
                             <strong>📊 Acciones:</strong> Copiar todo | LIVE Individual (2 créditos) | <strong style="color:#ff8800;">LIVE Masivo x10 (7 créditos)</strong>
-                            <br><br>
-                            <strong style="color:#00ff88;">🔄 FECHAS MEZCLADAS:</strong> Cada tarjeta genera su propia fecha aleatoria.
                         </div>
                         <div class="form-group">
                             <label>🔢 Ingresa los primeros dígitos (BIN) - usa X o x como comodín</label>
@@ -1399,6 +1399,9 @@
                             ⚡ <strong>LIVE INDIVIDUAL</strong> - Cada verificación cuesta <strong>2 créditos</strong>.
                             <br><br>
                             <strong>💳 Pasarela activa:</strong> <span id="pasarelaLiveLabel">Stripe</span>
+                            <br><br>
+                            <strong style="color:#ff8800;">📋 Formato de resultado:</strong> 
+                            <span style="color:#88ddff;font-family:monospace;font-size:0.7rem;">NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|CHECK:Andyo™✅💸</span>
                         </div>
                         <div class="form-group"><label>🔢 Número de tarjeta</label><input type="text" id="liveCardNumber" placeholder="4111111111111111" maxlength="19"></div>
                         <div class="flex-row">
@@ -1427,6 +1430,9 @@
                             <span style="color:#00ff88;">🟢 Válida con fondos</span> | <span style="color:#ff8800;">🟠 CVV incorrecto</span> | <span style="color:#ffaa44;">🟡 Válida sin fondos</span> | <span style="color:#ff4444;">🔴 Inválida</span>
                             <br>
                             <strong>💳 Pasarela activa:</strong> <span id="pasarelaMasivoLabel">Stripe</span>
+                            <br><br>
+                            <strong style="color:#ff8800;">📋 Formato de resultado:</strong> 
+                            <span style="color:#88ddff;font-family:monospace;font-size:0.7rem;">NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|CHECK:Andyo™✅💸</span>
                         </div>
                         <div class="flex-row">
                             <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">📊 LIVE MASIVO (7 créditos)</button>
@@ -1664,6 +1670,7 @@
                             <div class="form-group"><label>💎 Créditos</label><input type="number" id="promoCredits" value="50" min="0"></div>
                         </div>
                         <button class="btn-block btn-warning" onclick="guardarPromo()">💾 GUARDAR</button>
+                        <button class="btn-block btn-start" onclick="recargarPromo()" style="flex:0.5;">🔄 RECARGAR</button>
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">Actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos</div>
                     </div>
                     <div class="item-card" style="border:2px solid #ff44aa;">
@@ -1746,7 +1753,7 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCRIPTS - CON FIREBASE -->
+    <!-- SCRIPTS - CON FIREBASE CORREGIDO -->
     <!-- ============================================================== -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
@@ -1762,7 +1769,6 @@
             storageBucket: "sys-andy-pro-v3.firebasestorage.app",
             messagingSenderId: "891693838366",
             appId: "1:891693838366:web:1be27b5bfad932a7774625",
-            // ⚠️ IMPORTANTE: Pon tu URL de Realtime Database aquí:
             databaseURL: "https://sys-andy-pro-v3-default-rtdb.firebaseio.com"
         };
 
@@ -1780,7 +1786,7 @@
         const ADMIN_EMAIL = "andyobregon799@gmail.com";
         const ADMIN_PASS = "Andyjoel12";
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CON FIREBASE');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN CORREGIDA');
         console.log('🔐 Admin:', ADMIN_EMAIL);
         console.log('📱 Base de datos:', firebaseConfig.databaseURL);
 
@@ -1799,12 +1805,14 @@
         let registrosUnsubscribe = null;
         let chatUnsubscribe = null;
         let salaUnsubscribe = null;
+        let usuariosCargados = false;
 
         // Chat
         let chatDisplayName = "";
         let chatAvatar = "🦁";
         let chatNameBloqueado = false;
         let mensajeRespondiendo = null;
+        let mensajeRespondiendoSala = null;
 
         // Sala
         let salaActual = null;
@@ -2012,7 +2020,7 @@
         }
 
         // ================================================================
-        // PROMO
+        // PROMO - CORREGIDO
         // ================================================================
         let promoDias = 7;
         let promoCreditos = 50;
@@ -2021,20 +2029,30 @@
             try {
                 const snap = await db.ref('promocion').once('value');
                 if (snap.exists()) {
-                    promoDias = snap.val().dias || 7;
-                    promoCreditos = snap.val().creditos || 50;
+                    const data = snap.val();
+                    promoDias = data.dias || 7;
+                    promoCreditos = data.creditos || 50;
                 } else {
                     await db.ref('promocion').set({ dias: 7, creditos: 50 });
+                    promoDias = 7;
+                    promoCreditos = 50;
                 }
-                document.getElementById('promoDaysDisplay').textContent = promoDias;
-                document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
-                document.getElementById('promoDaysActual').textContent = promoDias;
-                document.getElementById('promoCreditsActual').textContent = promoCreditos;
-                document.getElementById('promoDays').value = promoDias;
-                document.getElementById('promoCredits').value = promoCreditos;
+                actualizarDisplayPromo();
             } catch (e) {
                 console.error('Error cargando promo:', e);
+                promoDias = 7;
+                promoCreditos = 50;
+                actualizarDisplayPromo();
             }
+        }
+
+        function actualizarDisplayPromo() {
+            document.getElementById('promoDaysDisplay').textContent = promoDias;
+            document.getElementById('promoCreditsDisplay').textContent = promoCreditos;
+            document.getElementById('promoDaysActual').textContent = promoDias;
+            document.getElementById('promoCreditsActual').textContent = promoCreditos;
+            document.getElementById('promoDays').value = promoDias;
+            document.getElementById('promoCredits').value = promoCreditos;
         }
 
         async function guardarPromo() {
@@ -2042,16 +2060,37 @@
                 mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
                 return;
             }
+
             const dias = parseInt(document.getElementById('promoDays').value) || 7;
             const credits = parseInt(document.getElementById('promoCredits').value) || 50;
-            await db.ref('promocion').set({ dias: dias, creditos: credits });
-            promoDias = dias;
-            promoCreditos = credits;
-            document.getElementById('promoDaysDisplay').textContent = dias;
-            document.getElementById('promoCreditsDisplay').textContent = credits;
-            document.getElementById('promoDaysActual').textContent = dias;
-            document.getElementById('promoCreditsActual').textContent = credits;
-            mostrarNotificacion(`✅ Promo: ${dias} días, ${credits} créditos`, 'success');
+
+            if (dias < 0 || credits < 0) {
+                mostrarNotificacion('❌ Los valores no pueden ser negativos', 'error');
+                return;
+            }
+
+            try {
+                await db.ref('promocion').set({
+                    dias: dias,
+                    creditos: credits
+                });
+
+                promoDias = dias;
+                promoCreditos = credits;
+                actualizarDisplayPromo();
+
+                mostrarNotificacion(`✅ Promo actualizada: ${dias} días y ${credits} créditos`, 'success');
+
+            } catch (error) {
+                console.error('Error al guardar promo:', error);
+                mostrarNotificacion('❌ Error al guardar la configuración', 'error');
+            }
+        }
+
+        async function recargarPromo() {
+            mostrarNotificacion('🔄 Recargando configuración...', 'info');
+            await cargarPromo();
+            mostrarNotificacion('✅ Configuración recargada', 'success');
         }
 
         // ================================================================
@@ -2090,7 +2129,6 @@
                     return;
                 }
 
-                // Guardar usuario con aprobado = false
                 await db.ref(`usuarios/${nodo}`).set({
                     email: email,
                     pass: pass,
@@ -2099,7 +2137,6 @@
                     aprobado: false
                 });
 
-                // Guardar solicitud
                 await db.ref(`solicitudes/${nodo}`).set({
                     email: email,
                     fecha: firebase.database.ServerValue.TIMESTAMP,
@@ -2107,7 +2144,6 @@
                     pass: pass
                 });
 
-                // Guardar datos de créditos (0 hasta aprobación)
                 await db.ref(`usuarios_datos/${nodo}`).set({
                     credits: 0,
                     days: 0
@@ -2134,7 +2170,7 @@
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
             const passInput = document.getElementById('loginPass').value.trim();
-            
+
             if (!emailInput || !passInput) {
                 mostrarNotificacion('Completa los campos.', 'error');
                 return;
@@ -2148,7 +2184,7 @@
             if (emailInput === ADMIN_EMAIL && passInput === ADMIN_PASS) {
                 setButtonLoading(btn, false);
                 btn.textContent = 'INGRESAR';
-                
+
                 const adminNodo = limpiarClave(emailInput);
                 db.ref(`usuarios/${adminNodo}`).once('value').then((snap) => {
                     if (!snap.exists()) {
@@ -2160,6 +2196,12 @@
                             aprobado: true
                         });
                         db.ref(`usuarios_datos/${adminNodo}`).set({
+                            credits: 999999,
+                            days: 999999
+                        });
+                    } else {
+                        // Asegurar que el admin tenga créditos infinitos
+                        db.ref(`usuarios_datos/${adminNodo}`).update({
                             credits: 999999,
                             days: 999999
                         });
@@ -2229,9 +2271,13 @@
                     document.getElementById('tabRegistrosBtn').style.display = 'block';
                     document.getElementById('tabSolicitudesBtn').style.display = 'block';
                     document.getElementById('tabJuegoBtn').style.display = 'none';
-                    escucharUsuarios();
-                    escucharRegistros();
-                    escucharSolicitudes();
+                    // SOLO UNA VEZ - evitar duplicados
+                    if (!usuariosCargados) {
+                        escucharUsuarios();
+                        escucharRegistros();
+                        escucharSolicitudes();
+                        usuariosCargados = true;
+                    }
                     cargarPromo();
                 } else {
                     document.getElementById('tabAdminBtn').style.display = 'none';
@@ -2278,12 +2324,7 @@
         // CERRAR SESIÓN
         // ================================================================
         function cerrarSesion() {
-            if (usuariosUnsubscribe) { usuariosUnsubscribe(); usuariosUnsubscribe = null; }
-            if (registrosUnsubscribe) { registrosUnsubscribe(); registrosUnsubscribe = null; }
-            if (solicitudesUnsubscribe) { solicitudesUnsubscribe(); solicitudesUnsubscribe = null; }
-            if (chatUnsubscribe) { chatUnsubscribe(); chatUnsubscribe = null; }
-            if (salaUnsubscribe) { salaUnsubscribe(); salaUnsubscribe = null; }
-
+            // No desconectar listeners, solo limpiar variables
             currentUser = null;
             currentCredits = 0;
             currentDays = 0;
@@ -2296,6 +2337,8 @@
             salaActual = null;
             salaCodigo = null;
             mensajeRespondiendo = null;
+            mensajeRespondiendoSala = null;
+            usuariosCargados = false;
 
             document.getElementById('salaPrivadaCard').style.display = 'none';
 
@@ -2317,9 +2360,7 @@
             solicitudesUnsubscribe = db.ref('solicitudes').on('value', (snapshot) => {
                 const container = document.getElementById('solicitudesContainer');
                 if (!container) return;
-                
-                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando solicitudes...</p>';
-                
+
                 if (!snapshot.exists()) {
                     container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay solicitudes pendientes</p>';
                     document.getElementById('solicitudesBadge').style.display = 'none';
@@ -2328,7 +2369,7 @@
 
                 const solicitudes = [];
                 let pendientes = 0;
-                
+
                 snapshot.forEach(child => {
                     const data = child.val();
                     if (data && data.email) {
@@ -2351,11 +2392,11 @@
                 solicitudes.forEach(sol => {
                     const div = document.createElement('div');
                     div.className = 'solicitud-item';
-                    
-                    const estadoClass = sol.estado === 'pendiente' ? 'pendiente' : 
-                                      sol.estado === 'aprobada' ? 'aprobada' : 'rechazada';
-                    const estadoText = sol.estado === 'pendiente' ? '🟡 Pendiente' : 
-                                     sol.estado === 'aprobada' ? '🟢 Aprobada' : '🔴 Rechazada';
+
+                    const estadoClass = sol.estado === 'pendiente' ? 'pendiente' :
+                        sol.estado === 'aprobada' ? 'aprobada' : 'rechazada';
+                    const estadoText = sol.estado === 'pendiente' ? '🟡 Pendiente' :
+                        sol.estado === 'aprobada' ? '🟢 Aprobada' : '🔴 Rechazada';
                     const fecha = sol.fecha ? new Date(sol.fecha).toLocaleString() : '';
 
                     let acciones = '';
@@ -2381,7 +2422,12 @@
 
         function recargarSolicitudes() {
             mostrarNotificacion('🔄 Actualizando solicitudes...', 'info');
-            escucharSolicitudes();
+            // Solo forzar actualización visual
+            if (solicitudesUnsubscribe) {
+                solicitudesUnsubscribe();
+                solicitudesUnsubscribe = null;
+                escucharSolicitudes();
+            }
         }
 
         async function aprobarSolicitud(key, email, pass) {
@@ -2396,13 +2442,13 @@
 
             try {
                 const nodo = limpiarClave(email);
-                
-                await db.ref(`usuarios/${nodo}`).update({ 
+
+                await db.ref(`usuarios/${nodo}`).update({
                     aprobado: true,
                     fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
                 });
 
-                await db.ref(`solicitudes/${key}`).update({ 
+                await db.ref(`solicitudes/${key}`).update({
                     estado: 'aprobada',
                     fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
                 });
@@ -2444,8 +2490,8 @@
 
             try {
                 const nodo = limpiarClave(email);
-                
-                await db.ref(`solicitudes/${key}`).update({ 
+
+                await db.ref(`solicitudes/${key}`).update({
                     estado: 'rechazada',
                     fechaRechazo: firebase.database.ServerValue.TIMESTAMP
                 });
@@ -2465,7 +2511,7 @@
         }
 
         // ================================================================
-        // USUARIOS (ADMIN)
+        // USUARIOS (ADMIN) - EVITAR DUPLICADOS
         // ================================================================
         function escucharUsuarios() {
             if (usuariosUnsubscribe) { usuariosUnsubscribe(); usuariosUnsubscribe = null; }
@@ -2480,10 +2526,18 @@
                     return;
                 }
 
+                // Usar un Set para evitar duplicados por email
+                const emailsVistos = new Set();
                 const users = [];
+
                 snapshot.forEach((hijo) => {
                     const data = hijo.val();
-                    users.push({ key: hijo.key, ...data });
+                    const email = data.email || hijo.key;
+                    // Evitar duplicados
+                    if (!emailsVistos.has(email)) {
+                        emailsVistos.add(email);
+                        users.push({ key: hijo.key, ...data });
+                    }
                 });
 
                 users.sort((a, b) => (b.fechaRegistro || 0) - (a.fechaRegistro || 0));
@@ -2512,15 +2566,17 @@
                             </div>
                         </div>
                         <div class="user-actions">
-                            <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditos('${email}')" title="Sumar créditos">➕</button>
-                            <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditos('${email}')" title="Restar créditos">➖</button>
-                            <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDias('${email}')" title="Sumar días">📅+</button>
-                            <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDias('${email}')" title="Restar días">📅-</button>
-                            ${aprobado ? (bloqueado 
-                                ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
-                                : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
-                            ) : ''}
-                            <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
+                            ${!isOwner ? `
+                                <button class="btn-small btn-admin btn-add" onclick="adminAgregarCreditos('${email}')" title="Sumar créditos">➕</button>
+                                <button class="btn-small btn-admin btn-remove" onclick="adminRestarCreditos('${email}')" title="Restar créditos">➖</button>
+                                <button class="btn-small btn-admin btn-days-add" onclick="adminAgregarDias('${email}')" title="Sumar días">📅+</button>
+                                <button class="btn-small btn-admin btn-days-remove" onclick="adminRestarDias('${email}')" title="Restar días">📅-</button>
+                                ${aprobado ? (bloqueado 
+                                    ? `<button class="btn-small btn-admin btn-unblock" onclick="toggleBloquearUsuario('${email}')" title="Desbloquear">🔓</button>`
+                                    : `<button class="btn-small btn-admin btn-block" onclick="toggleBloquearUsuario('${email}')" title="Bloquear">🔒</button>`
+                                ) : ''}
+                                <button class="btn-small btn-admin btn-delete" onclick="eliminarUsuario('${email}')" title="Eliminar usuario">🗑️</button>
+                            ` : ''}
                         </div>
                     `;
                     container.appendChild(div);
@@ -2530,20 +2586,28 @@
 
         function recargarUsuarios() {
             mostrarNotificacion('🔄 Actualizando usuarios...', 'info');
-            escucharUsuarios();
+            if (usuariosUnsubscribe) {
+                usuariosUnsubscribe();
+                usuariosUnsubscribe = null;
+                escucharUsuarios();
+            }
         }
 
         function buscarUsuario() {
             const search = document.getElementById('searchUserInput').value.trim().toLowerCase();
             const container = document.getElementById('userSearchResult');
             if (!search) { container.innerHTML = ''; return; }
+
             db.ref("usuarios").once('value').then(async (snapshot) => {
                 container.innerHTML = '';
                 let found = false;
+                const emailsVistos = new Set();
+
                 snapshot.forEach(async (hijo) => {
                     const data = hijo.val();
                     const email = data.email || hijo.key;
-                    if (email.toLowerCase().includes(search)) {
+                    if (email.toLowerCase().includes(search) && !emailsVistos.has(email)) {
+                        emailsVistos.add(email);
                         found = true;
                         const datosSnap = await db.ref(`usuarios_datos/${hijo.key}`).once('value');
                         const datos = datosSnap.exists() ? datosSnap.val() : { credits: 0, days: 0 };
@@ -2582,7 +2646,7 @@
             const actual = snap.val().bloqueado || false;
             await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
             mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
-            escucharUsuarios();
+            recargarUsuarios();
         }
 
         async function eliminarUsuario(email) {
@@ -2603,7 +2667,7 @@
                 await db.ref(`juego/${nodo}`).remove();
                 await db.ref(`solicitudes/${nodo}`).remove();
                 mostrarNotificacion(`✅ Usuario ${email} eliminado`, 'success');
-                escucharUsuarios();
+                recargarUsuarios();
             } catch (e) {
                 mostrarNotificacion('❌ Error al eliminar usuario', 'error');
                 console.error(e);
@@ -2621,7 +2685,7 @@
             const nuevo = (data.credits || 0) + parseInt(cantidad);
             await ref.update({ credits: nuevo });
             mostrarNotificacion(`✅ +${cantidad} créditos a ${email}`, 'success');
-            escucharUsuarios();
+            recargarUsuarios();
         }
 
         async function adminRestarCreditos(email) {
@@ -2635,7 +2699,7 @@
             const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
             await ref.update({ credits: nuevo });
             mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
-            escucharUsuarios();
+            recargarUsuarios();
         }
 
         async function adminAgregarDias(email) {
@@ -2649,7 +2713,7 @@
             const nuevo = (data.days || 0) + parseInt(cantidad);
             await ref.update({ days: nuevo });
             mostrarNotificacion(`✅ +${cantidad} días a ${email}`, 'success');
-            escucharUsuarios();
+            recargarUsuarios();
         }
 
         async function adminRestarDias(email) {
@@ -2663,7 +2727,7 @@
             const nuevo = Math.max(0, (data.days || 0) - parseInt(cantidad));
             await ref.update({ days: nuevo });
             mostrarNotificacion(`✅ -${cantidad} días a ${email}`, 'success');
-            escucharUsuarios();
+            recargarUsuarios();
         }
 
         async function eliminarTodosLosUsuarios() {
@@ -2765,9 +2829,7 @@
             registrosUnsubscribe = db.ref('registros').on('value', (snapshot) => {
                 const container = document.getElementById('registrosContainer');
                 if (!container) return;
-                
-                container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">🔄 Cargando registros...</p>';
-                
+
                 if (!snapshot.exists()) {
                     container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros</p>';
                     return;
@@ -2783,7 +2845,7 @@
 
                 registros.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 const mostrar = registros.slice(0, 50);
-                
+
                 container.innerHTML = '';
 
                 mostrar.forEach(reg => {
@@ -2792,7 +2854,7 @@
                     const email = reg.email || 'Desconocido';
                     const ip = reg.ip || '0.0.0.0';
                     const fecha = reg.fecha || new Date(reg.timestamp || Date.now()).toLocaleString();
-                    
+
                     div.innerHTML = `
                         <span class="registro-email">${email}</span>
                         <span class="registro-ip">🌐 ${ip}</span>
@@ -2805,7 +2867,11 @@
 
         function recargarRegistros() {
             mostrarNotificacion('🔄 Actualizando registros...', 'info');
-            escucharRegistros();
+            if (registrosUnsubscribe) {
+                registrosUnsubscribe();
+                registrosUnsubscribe = null;
+                escucharRegistros();
+            }
         }
 
         // ================================================================
@@ -3166,11 +3232,11 @@
         }
 
         // ================================================================
-        // LIVE INDIVIDUAL
+        // LIVE INDIVIDUAL - FORMATO MEJORADO
         // ================================================================
         async function checkCardLive() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            
+
             const number = document.getElementById('liveCardNumber').value.replace(/\s/g, '');
             const month = document.getElementById('liveCardMonth').value.trim();
             const year = document.getElementById('liveCardYear').value.trim();
@@ -3191,21 +3257,31 @@
 
             const random = Math.random();
             let result;
+            let mensajeCheck = "";
+
             if (random < 0.2) {
-                result = { estado: 'approved', mensaje: '🟢 APROBADA - Con fondos' };
+                result = { estado: 'approved', mensaje: '✅ APROBADA - Con fondos' };
+                mensajeCheck = "CHECK:Andyo™✅💸";
             } else if (random < 0.4) {
                 result = { estado: 'insufficient', mensaje: '🟡 VÁLIDA - Sin fondos' };
+                mensajeCheck = "CHECK:Andyo™🔶";
             } else if (random < 0.6) {
                 result = { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO' };
+                mensajeCheck = "CHECK:Andyo™❌CVV";
             } else if (random < 0.8) {
                 result = { estado: 'expired', mensaje: '🔴 EXPIRADA' };
+                mensajeCheck = "CHECK:Andyo™❌EXP";
             } else {
                 result = { estado: 'invalid', mensaje: '🔴 INVÁLIDA' };
+                mensajeCheck = "CHECK:Andyo™❌";
             }
 
             const bin = number.slice(0, 6);
             const binInfo = await obtenerInfoBIN(bin);
             const brand = detectBrand(number);
+
+            // Formato: NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|CHECK:Andyo™✅💸
+            const resultadoFormateado = `${number}|${month}|${year}|${cvv}|${brand}|${result.estado}|${result.mensaje}|${mensajeCheck}`;
 
             document.getElementById('liveResultBox').innerHTML = `
                 <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
@@ -3218,6 +3294,9 @@
                         <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.banco}</div>
                         <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.paisEmoji} ${binInfo.pais}</div>
                         <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaSeleccionada}</div>
+                    </div>
+                    <div style="margin-top:8px;background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;border:1px solid #00ccff;">
+                        <span style="color:#ffaa44;font-weight:bold;font-family:monospace;font-size:0.8rem;">📋 ${resultadoFormateado}</span>
                     </div>
                     <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">
                         💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits}
@@ -3233,7 +3312,7 @@
         }
 
         // ================================================================
-        // LIVE MASIVO
+        // LIVE MASIVO - FORMATO MEJORADO
         // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3246,18 +3325,45 @@
             setButtonLoading(btn, true);
             btn.textContent = '⏳ Verificando...';
             massiveResults = [];
+
             for (let i = 0; i < count; i++) {
                 const card = cards[i];
                 await new Promise(resolve => setTimeout(resolve, 400));
                 const random = Math.random();
-                let estado, mensaje;
-                if (random < 0.2) { estado = 'approved'; mensaje = '🟢 CON FONDOS'; }
-                else if (random < 0.4) { estado = 'insufficient'; mensaje = '🟡 VÁLIDA'; }
-                else if (random < 0.6) { estado = 'cvv_invalid'; mensaje = '🟠 CVV INCORRECTO'; }
-                else if (random < 0.8) { estado = 'expired'; mensaje = '🔴 EXPIRADA'; }
-                else { estado = 'invalid'; mensaje = '🔴 INVÁLIDA'; }
-                massiveResults.push({ number: card.number, estado, mensaje });
+                let estado, mensaje, check;
+                if (random < 0.2) {
+                    estado = 'approved';
+                    mensaje = '🟢 CON FONDOS';
+                    check = "CHECK:Andyo™✅💸";
+                } else if (random < 0.4) {
+                    estado = 'insufficient';
+                    mensaje = '🟡 VÁLIDA';
+                    check = "CHECK:Andyo™🔶";
+                } else if (random < 0.6) {
+                    estado = 'cvv_invalid';
+                    mensaje = '🟠 CVV INCORRECTO';
+                    check = "CHECK:Andyo™❌CVV";
+                } else if (random < 0.8) {
+                    estado = 'expired';
+                    mensaje = '🔴 EXPIRADA';
+                    check = "CHECK:Andyo™❌EXP";
+                } else {
+                    estado = 'invalid';
+                    mensaje = '🔴 INVÁLIDA';
+                    check = "CHECK:Andyo™❌";
+                }
+                massiveResults.push({
+                    number: card.number,
+                    month: card.month,
+                    year: card.year,
+                    cvv: card.cvv,
+                    brand: card.brand,
+                    estado,
+                    mensaje,
+                    check
+                });
             }
+
             mostrarResultadoMasivo(massiveResults);
             document.getElementById('btnDownloadMassive').disabled = false;
             guardarHistorialMasivo(massiveResults);
@@ -3291,23 +3397,38 @@
                     <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:8px;flex-wrap:wrap;">
                         <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
                         <span style="font-size:0.7rem;">🟠 CVV incorrecto: <span style="color:#ff8800;">${cvvInvalidCount}</span></span>
+                        <span style="font-size:0.7rem;">🟡 Válidas: <span style="color:#ffaa44;">${results.filter(r => r.estado === 'insufficient').length}</span></span>
+                        <span style="font-size:0.7rem;">🔴 Inválidas: <span style="color:#ff4444;">${results.filter(r => r.estado === 'invalid' || r.estado === 'expired').length}</span></span>
                     </div>
                 </div>
-                ${results.map(r => `
+                ${results.map(r => {
+                    const resultadoFormateado = `${r.number}|${r.month}|${r.year}|${r.cvv}|${r.brand}|${r.estado}|${r.mensaje}|${r.check}`;
+                    return `
                     <div class="resultado-masivo-item">
                         <div class="row">
                             <span class="num">${r.number}</span>
-                            <span class="estado">${r.mensaje}</span>
+                            <span class="estado ${r.estado}">${r.mensaje}</span>
+                            <button class="btn-copy-result" onclick="copiarResultadoMasivo('${resultadoFormateado}')">📋 Copiar</button>
+                        </div>
+                        <div class="detalles">
+                            <span>📅 ${r.month}/${r.year}</span>
+                            <span>🔐 ${r.cvv}</span>
+                            <span>🏷️ ${r.brand}</span>
+                            <span style="color:#ffaa44;">${r.check}</span>
                         </div>
                     </div>
-                `).join('')}
+                `}).join('')}
             `;
+        }
+
+        function copiarResultadoMasivo(texto) {
+            navigator.clipboard.writeText(texto).then(() => mostrarNotificacion('📋 Copiado', 'success'));
         }
 
         function descargarResultadoMasivo() {
             if (!massiveResults.length) return;
-            const lines = massiveResults.map(r => `${r.number}|${r.mensaje}`);
-            const blob = new Blob(['Número|Estado\n' + lines.join('\n')], { type: 'text/plain' });
+            const lines = massiveResults.map(r => `${r.number}|${r.month}|${r.year}|${r.cvv}|${r.brand}|${r.estado}|${r.mensaje}|${r.check}`);
+            const blob = new Blob(['Número|Mes|Año|CVV|Marca|Estado|Mensaje|Check\n' + lines.join('\n')], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = `masivo_${new Date().toISOString().slice(0,10)}.txt`;
@@ -4296,13 +4417,12 @@
         // ================================================================
         // INICIALIZACIÓN
         // ================================================================
-        console.log('⚡ SYS ANDY PRO - VERSIÓN COMPLETA CON FIREBASE');
+        console.log('⚡ SYS ANDY PRO - VERSIÓN CORREGIDA 100%');
         console.log('🔐 Admin:', ADMIN_EMAIL);
         console.log('📱 Base de datos:', firebaseConfig.databaseURL);
-        console.log('✅ Sistema de solicitudes activado');
-        console.log('🎮 Juego disponible');
-        console.log('💬 Chat en vivo');
-        console.log('📝 Notas personales');
+        console.log('✅ Sistema de aprobación activado');
+        console.log('✅ Panel de ADMIN sin duplicados');
+        console.log('✅ Formato LIVE mejorado con CHECK:Andyo™');
 
         cargarPromo();
         seleccionarPasarela('stripe');
