@@ -3,75 +3,76 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>SYS ANDY PRO - CHECKER COMPLETO</title>
+    <title>PERICO VERDE - CHECKER COMPLETO</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN COMPLETA CON LIVE MEJORADO                 */
+        /* ESTILOS - VERSIÓN PERICO VERDE COMPLETA                       */
         /* ============================================================== */
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         :root {
-            --bg-principal: #0a1628;
-            --bg-tarjeta: #0f1f3a;
-            --bg-inputs: #1a2a4a;
-            --texto-principal: #e8f0ff;
-            --texto-secundario: #8ab4ff;
-            --borde-neon: #00ccff;
-            --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a3a, #050d1a);
+            --bg-principal: #0a1a0a;
+            --bg-tarjeta: #0f2a0f;
+            --bg-inputs: #1a3a1a;
+            --texto-principal: #e8ffe8;
+            --texto-secundario: #8aff8a;
+            --borde-neon: #00cc44;
+            --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a0a, #050d05);
             --border-radius: 10px;
-            --chat-msg-own: #005c4b;
-            --chat-msg-other: #1f2c3a;
-            --bg-auth: rgba(15, 31, 58, 0.95);
-            --bg-panel: rgba(10, 22, 40, 0.92);
-            --bg-card: rgba(15, 31, 58, 0.85);
+            --chat-msg-own: #005c2b;
+            --chat-msg-other: #1f3a2a;
+            --bg-auth: rgba(15, 42, 15, 0.95);
+            --bg-panel: rgba(10, 26, 10, 0.92);
+            --bg-card: rgba(15, 42, 15, 0.85);
             --bg-result: rgba(0, 0, 0, 0.3);
-            --text-muted: #6a8aaa;
-            --sombra: 0 0 30px rgba(0, 180, 255, 0.1);
-            --border-color: #1a4a7a;
-            --input-bg: #1a2a4a;
-            --reply-border: #00ccff;
+            --text-muted: #6a8a6a;
+            --sombra: 0 0 30px rgba(0, 200, 68, 0.15);
+            --border-color: #1a4a1a;
+            --input-bg: #1a3a1a;
+            --reply-border: #00cc44;
             --mention-color: #00ff88;
-            --nota-bg: rgba(15, 31, 58, 0.6);
-            --nota-border: #00ccff;
-            --card-bg: rgba(15, 31, 58, 0.7);
-            --hover-bg: rgba(0, 100, 200, 0.15);
+            --nota-bg: rgba(15, 42, 15, 0.6);
+            --nota-border: #00cc44;
+            --card-bg: rgba(15, 42, 15, 0.7);
+            --hover-bg: rgba(0, 200, 68, 0.1);
             --text-bright: #ffffff;
-            --admin-btn-bg: #1a2a4a;
-            --admin-btn-hover: #2a4a6a;
+            --admin-btn-bg: #1a3a1a;
+            --admin-btn-hover: #2a5a2a;
             --solicitud-pendiente: #ffaa44;
             --solicitud-aprobada: #00ff88;
             --solicitud-rechazada: #ff4444;
+            --rojo: #cc2200;
+            --blanco: #ffffff;
         }
 
         body.theme-day {
-            --bg-principal: #e8f0fe;
-            --bg-tarjeta: #d4e4f7;
+            --bg-principal: #e8ffe8;
+            --bg-tarjeta: #d4f7d4;
             --bg-inputs: #ffffff;
-            --texto-principal: #0a1a3a;
-            --texto-secundario: #1a4a7a;
-            --borde-neon: #0088cc;
-            --grad-fondo: radial-gradient(ellipse at 50% 30%, #d4e4f7, #b8cce6);
-            --bg-auth: rgba(200, 220, 245, 0.95);
-            --bg-panel: rgba(200, 220, 245, 0.92);
-            --bg-card: rgba(200, 220, 245, 0.85);
+            --texto-principal: #0a1a0a;
+            --texto-secundario: #1a4a1a;
+            --borde-neon: #008844;
+            --grad-fondo: radial-gradient(ellipse at 50% 30%, #d4f7d4, #b8e6b8);
+            --bg-auth: rgba(200, 245, 200, 0.95);
+            --bg-panel: rgba(200, 245, 200, 0.92);
+            --bg-card: rgba(200, 245, 200, 0.85);
             --bg-result: rgba(0, 0, 0, 0.05);
-            --text-muted: #4a6a8a;
-            --chat-msg-own: #0088cc;
-            --chat-msg-other: #d4e4f7;
-            --sombra: 0 0 30px rgba(0, 100, 200, 0.1);
-            --border-color: #88bbdd;
+            --text-muted: #4a6a4a;
+            --chat-msg-own: #008844;
+            --chat-msg-other: #d4f7d4;
+            --sombra: 0 0 30px rgba(0, 100, 50, 0.1);
+            --border-color: #88bb88;
             --input-bg: #ffffff;
-            --auth-box-shadow: 0 0 30px rgba(0, 100, 200, 0.15);
-            --reply-border: #0088cc;
+            --reply-border: #008844;
             --mention-color: #00aa66;
-            --nota-bg: rgba(200, 220, 245, 0.6);
-            --nota-border: #0088cc;
-            --card-bg: rgba(200, 220, 245, 0.7);
-            --hover-bg: rgba(0, 100, 200, 0.08);
-            --text-bright: #0a1a3a;
-            --admin-btn-bg: #d4e4f7;
-            --admin-btn-hover: #b8cce6;
+            --nota-bg: rgba(200, 245, 200, 0.6);
+            --nota-border: #008844;
+            --card-bg: rgba(200, 245, 200, 0.7);
+            --hover-bg: rgba(0, 100, 50, 0.08);
+            --text-bright: #0a1a0a;
+            --admin-btn-bg: #d4f7d4;
+            --admin-btn-hover: #b8e6b8;
             --solicitud-pendiente: #cc8800;
             --solicitud-aprobada: #00aa66;
             --solicitud-rechazada: #cc0000;
@@ -91,20 +92,48 @@
             transition: background 0.3s, color 0.3s;
         }
 
+        /* ================================================================ */
+        /* ===== CONTENEDOR PRINCIPAL CON IMAGEN DE FONDO ================ */
+        /* ================================================================ */
         .app-container {
             width: 100%;
             max-width: 920px;
-            background: var(--bg-panel);
-            backdrop-filter: blur(10px);
+            background: url('https://i.postimg.cc/nrmKCdCZ/file-00000000201081f79ec322ad6a79de5a.png') center center / cover no-repeat !important;
+            backdrop-filter: blur(8px);
             border-radius: 20px;
-            border: 1px solid var(--borde-neon);
+            border: 2px solid var(--borde-neon);
             box-shadow: var(--sombra);
             display: flex;
             flex-direction: column;
             overflow: hidden;
             min-height: 90vh;
             max-height: 98vh;
-            transition: background 0.3s, border-color 0.3s, box-shadow 0.3s;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        .app-container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(3, 18, 3, 0.72);
+            z-index: 0;
+            pointer-events: none;
+            border-radius: 20px;
+            backdrop-filter: blur(2px);
+            transition: background 0.3s;
+        }
+
+        body.theme-day .app-container::before {
+            background: rgba(230, 250, 230, 0.78);
+        }
+
+        .app-container > * {
+            position: relative;
+            z-index: 1;
         }
 
         /* ===== LOGIN / REGISTRO ===== */
@@ -120,23 +149,25 @@
 
         .auth-box {
             background: var(--bg-auth);
+            backdrop-filter: blur(10px);
             border: 2px solid var(--borde-neon);
             border-radius: 24px;
             padding: 30px 35px;
             width: 100%;
             max-width: 420px;
-            box-shadow: var(--auth-box-shadow);
+            box-shadow: 0 0 40px rgba(0, 200, 68, 0.2);
             transition: background 0.3s, border-color 0.3s;
         }
 
         .auth-box h2 {
             text-align: center;
             font-size: 1.6rem;
-            background: linear-gradient(135deg, #66ddff, #0088cc);
+            background: linear-gradient(135deg, #66ff88, #00cc44);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
             margin-bottom: 4px;
+            text-shadow: 0 0 20px rgba(0, 255, 100, 0.3);
         }
 
         .auth-box .subtitle {
@@ -168,21 +199,15 @@
         }
 
         .auth-tab.active {
-            color: #66ddff;
-            background: rgba(0, 100, 200, 0.1);
+            color: #66ff88;
+            background: rgba(0, 200, 68, 0.12);
             border-bottom: 2px solid var(--borde-neon);
         }
 
-        .auth-panel {
-            display: none;
-        }
-        .auth-panel.active {
-            display: block;
-        }
+        .auth-panel { display: none; }
+        .auth-panel.active { display: block; }
 
-        .auth-box .form-group {
-            margin-bottom: 12px;
-        }
+        .auth-box .form-group { margin-bottom: 12px; }
         .auth-box label {
             display: block;
             margin-bottom: 3px;
@@ -202,7 +227,7 @@
         }
         .auth-box input:focus {
             border-color: var(--borde-neon);
-            box-shadow: 0 0 20px rgba(0, 200, 255, 0.1);
+            box-shadow: 0 0 20px rgba(0, 200, 68, 0.15);
             outline: none;
         }
 
@@ -215,18 +240,16 @@
             border-radius: 25px;
             cursor: pointer;
             color: white;
-            background: linear-gradient(135deg, #00ccff, #0088cc);
-            box-shadow: 0 0 20px rgba(0, 200, 255, 0.12);
+            background: linear-gradient(135deg, #00cc44, #008844);
+            box-shadow: 0 0 20px rgba(0, 200, 68, 0.2);
             transition: 0.15s;
             margin-top: 4px;
         }
         .auth-box .btn-block:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.25);
+            box-shadow: 0 0 30px rgba(0, 200, 68, 0.35);
         }
-        .auth-box .btn-block:active {
-            transform: scale(0.97);
-        }
+        .auth-box .btn-block:active { transform: scale(0.97); }
         .auth-box .footer-text {
             text-align: center;
             margin-top: 10px;
@@ -240,16 +263,12 @@
             padding: 8px 12px;
             margin-bottom: 14px;
             font-size: 0.7rem;
-            color: #88ddff;
+            color: #88ffaa;
             text-align: center;
             line-height: 1.6;
         }
-        .auth-box .register-info strong {
-            color: #00ff88;
-        }
-        .auth-box .register-info .pendiente {
-            color: #ffaa44;
-        }
+        .auth-box .register-info strong { color: #00ff88; }
+        .auth-box .register-info .pendiente { color: #ffaa44; }
 
         /* ===== APLICACIÓN PRINCIPAL ===== */
         #main-app {
@@ -261,7 +280,8 @@
 
         /* ===== NAVBAR ===== */
         .navbar {
-            background: linear-gradient(90deg, #0a1a3a, #0f2a5a, #0a1a3a);
+            background: linear-gradient(90deg, rgba(10, 42, 10, 0.92), rgba(26, 74, 26, 0.88), rgba(10, 42, 10, 0.92)) !important;
+            backdrop-filter: blur(6px);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -274,24 +294,20 @@
             transition: background 0.3s, border-color 0.3s;
         }
         body.theme-day .navbar {
-            background: linear-gradient(90deg, #c0d8ec, #d4e4f7, #c0d8ec);
+            background: linear-gradient(90deg, rgba(184, 230, 184, 0.9), rgba(212, 247, 212, 0.9), rgba(184, 230, 184, 0.9)) !important;
         }
 
-        .navbar .logo-area {
-            display: flex;
-            flex-direction: column;
-        }
+        .navbar .logo-area { display: flex; flex-direction: column; }
         .navbar .logo-title {
             font-size: 1.2rem;
             font-weight: bold;
-            background: linear-gradient(135deg, #66ddff, #0088cc);
+            background: linear-gradient(135deg, #66ff88, #00cc44);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            text-shadow: 0 0 15px rgba(0, 255, 100, 0.3);
         }
-        .navbar .logo-title::before {
-            content: "⚡ ";
-        }
+        .navbar .logo-title::before { content: "🦜 "; }
         .navbar .user-info {
             font-size: 0.6rem;
             color: var(--texto-secundario);
@@ -303,18 +319,9 @@
             border-radius: 10px;
             margin-left: 4px;
         }
-        .navbar .user-status.active {
-            background: #00cc8833;
-            color: #00ff88;
-        }
-        .navbar .user-status.blocked {
-            background: #ff444433;
-            color: #ff4444;
-        }
-        .navbar .user-status.pendiente {
-            background: #ffaa4433;
-            color: #ffaa44;
-        }
+        .navbar .user-status.active { background: #00cc8833; color: #00ff88; }
+        .navbar .user-status.blocked { background: #ff444433; color: #ff4444; }
+        .navbar .user-status.pendiente { background: #ffaa4433; color: #ffaa44; }
         .navbar .nav-right {
             display: flex;
             align-items: center;
@@ -322,27 +329,27 @@
             flex-wrap: wrap;
         }
         .navbar .credits-display {
-            background: linear-gradient(135deg, #00aaff, #0066cc);
+            background: linear-gradient(135deg, #00cc44, #008844);
             padding: 3px 12px;
             border-radius: 20px;
             font-weight: bold;
             color: white;
             font-size: 0.7rem;
-            box-shadow: 0 0 15px rgba(0, 150, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 200, 68, 0.3);
             white-space: nowrap;
         }
         .navbar .days-display {
-            background: linear-gradient(135deg, #ff8800, #cc5500);
+            background: linear-gradient(135deg, #cc2200, #991100);
             padding: 3px 12px;
             border-radius: 20px;
             font-weight: bold;
             color: white;
             font-size: 0.7rem;
-            box-shadow: 0 0 15px rgba(255, 136, 0, 0.1);
+            box-shadow: 0 0 15px rgba(204, 34, 0, 0.3);
             white-space: nowrap;
         }
         .navbar .btn-salir {
-            background: #cc3333;
+            background: #cc2200;
             color: white;
             border: none;
             padding: 3px 12px;
@@ -353,12 +360,12 @@
             transition: 0.15s;
         }
         .navbar .btn-salir:hover {
-            background: #ff4444;
+            background: #ff3300;
             transform: scale(1.05);
         }
 
         .btn-theme {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
             border: 1px solid var(--borde-neon);
             color: var(--texto-principal);
             border-radius: 50%;
@@ -370,22 +377,20 @@
             align-items: center;
             justify-content: center;
             transition: 0.2s;
+            backdrop-filter: blur(4px);
         }
         .btn-theme:hover {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
             transform: scale(1.1);
         }
         body.theme-day .btn-theme {
-            background: rgba(0, 0, 0, 0.05);
-            border-color: #0088cc;
-        }
-        body.theme-day .btn-theme:hover {
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.08);
+            border-color: #008844;
         }
 
         /* ===== NOTIFICACIÓN DE SOLICITUDES ===== */
         .notification-badge {
-            background: #ff4444;
+            background: #cc2200;
             color: white;
             border-radius: 50%;
             padding: 2px 8px;
@@ -403,7 +408,8 @@
         /* ===== TABS ===== */
         .tabs-container {
             display: flex;
-            background: rgba(10, 26, 58, 0.5);
+            background: rgba(10, 26, 10, 0.68) !important;
+            backdrop-filter: blur(4px);
             border-bottom: 2px solid var(--border-color);
             padding: 3px 10px;
             flex-shrink: 0;
@@ -412,10 +418,10 @@
             transition: background 0.3s, border-color 0.3s;
         }
         body.theme-day .tabs-container {
-            background: rgba(200, 220, 245, 0.5);
+            background: rgba(200, 245, 200, 0.72) !important;
         }
         .tabs-container::-webkit-scrollbar { height: 3px; }
-        .tabs-container::-webkit-scrollbar-thumb { background: #00aaff; border-radius: 3px; }
+        .tabs-container::-webkit-scrollbar-thumb { background: #00cc44; border-radius: 3px; }
 
         .tab-btn {
             padding: 6px 14px;
@@ -429,39 +435,40 @@
             transition: 0.2s;
             white-space: nowrap;
         }
-        .tab-btn:hover { color: #66ddff; background: rgba(0, 100, 200, 0.05); }
-        .tab-btn.active { color: #66ddff; border-bottom-color: var(--borde-neon); background: rgba(0, 100, 200, 0.08); }
+        .tab-btn:hover { color: #66ff88; background: rgba(0, 200, 68, 0.08); }
+        .tab-btn.active { color: #66ff88; border-bottom-color: var(--borde-neon); background: rgba(0, 200, 68, 0.12); }
         .tab-btn.massive-tab { color: #ff8800; font-weight: 700; }
-        .tab-btn.massive-tab.active { color: #ff8800; border-bottom-color: #ff8800; background: rgba(255, 136, 0, 0.08); }
+        .tab-btn.massive-tab.active { color: #ff8800; border-bottom-color: #ff8800; background: rgba(255, 136, 0, 0.12); }
         .tab-btn.admin-tab { color: #ff44aa; font-weight: 700; }
-        .tab-btn.admin-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.08); }
+        .tab-btn.admin-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.12); }
         .tab-btn.pasarela-tab { color: #6772e5; font-weight: 700; }
-        .tab-btn.pasarela-tab.active { color: #6772e5; border-bottom-color: #6772e5; background: rgba(103, 114, 229, 0.08); }
+        .tab-btn.pasarela-tab.active { color: #6772e5; border-bottom-color: #6772e5; background: rgba(103, 114, 229, 0.12); }
         .tab-btn.direcciones-tab { color: #ffaa44; font-weight: 700; }
-        .tab-btn.direcciones-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.08); }
+        .tab-btn.direcciones-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
         .tab-btn.chat-tab { color: #00ff88; font-weight: 700; }
-        .tab-btn.chat-tab.active { color: #00ff88; border-bottom-color: #00ff88; background: rgba(0, 255, 136, 0.08); }
+        .tab-btn.chat-tab.active { color: #00ff88; border-bottom-color: #00ff88; background: rgba(0, 255, 136, 0.12); }
         .tab-btn.notas-tab { color: #ff88cc; font-weight: 700; }
-        .tab-btn.notas-tab.active { color: #ff88cc; border-bottom-color: #ff88cc; background: rgba(255, 136, 204, 0.08); }
+        .tab-btn.notas-tab.active { color: #ff88cc; border-bottom-color: #ff88cc; background: rgba(255, 136, 204, 0.12); }
         .tab-btn.sala-tab { color: #ff44aa; font-weight: 700; }
-        .tab-btn.sala-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.08); }
+        .tab-btn.sala-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.12); }
         .tab-btn.juego-tab { color: #ff6b35; font-weight: 700; }
-        .tab-btn.juego-tab.active { color: #ff6b35; border-bottom-color: #ff6b35; background: rgba(255, 107, 53, 0.08); }
+        .tab-btn.juego-tab.active { color: #ff6b35; border-bottom-color: #ff6b35; background: rgba(255, 107, 53, 0.12); }
         .tab-btn.registros-tab { color: #00ccff; font-weight: 700; }
-        .tab-btn.registros-tab.active { color: #00ccff; border-bottom-color: #00ccff; background: rgba(0, 204, 255, 0.08); }
+        .tab-btn.registros-tab.active { color: #00ccff; border-bottom-color: #00ccff; background: rgba(0, 204, 255, 0.12); }
         .tab-btn.solicitudes-tab { color: #ffaa44; font-weight: 700; }
-        .tab-btn.solicitudes-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.08); }
+        .tab-btn.solicitudes-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
 
         /* ===== PANELES ===== */
         .panels-container {
             flex: 1;
             overflow-y: auto;
             padding: 12px 16px 16px 16px;
-            background: rgba(10, 26, 58, 0.15);
+            background: rgba(10, 26, 10, 0.45) !important;
+            backdrop-filter: blur(4px);
             transition: background 0.3s;
         }
         body.theme-day .panels-container {
-            background: rgba(200, 220, 245, 0.15);
+            background: rgba(220, 245, 220, 0.55) !important;
         }
         .panels-container::-webkit-scrollbar { width: 4px; }
         .panels-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
@@ -475,16 +482,18 @@
         }
 
         .panel h3 {
-            color: #66ddff;
+            color: #66ff88;
             font-size: 1rem;
             margin-bottom: 10px;
             font-weight: 600;
+            text-shadow: 0 0 10px rgba(0, 255, 100, 0.3);
             transition: color 0.3s;
         }
 
         /* ===== TARJETAS ===== */
         .item-card {
             background: var(--bg-card);
+            backdrop-filter: blur(4px);
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 12px 14px;
@@ -492,7 +501,7 @@
             transition: background 0.3s, border-color 0.3s;
         }
         .item-card .info-box {
-            background: rgba(0, 68, 170, 0.08);
+            background: rgba(0, 100, 50, 0.15);
             padding: 6px 10px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
@@ -502,17 +511,17 @@
             line-height: 1.5;
             transition: background 0.3s, border-color 0.3s, color 0.3s;
         }
-        .item-card .info-box.free { border-color: #00ff88; background: #00ff8806; }
-        .item-card .info-box.live { border-color: #ff44aa; background: #ff44aa06; }
-        .item-card .info-box.massive { border-color: #ff8800; background: #ff880006; }
-        .item-card .info-box.admin { border-color: #ff44aa; background: #ff44aa06; }
-        .item-card .info-box.promo { border-color: #ffaa44; background: #ffaa4406; }
-        .item-card .info-box.pasarela { border-color: #6772e5; background: #6772e506; }
-        .item-card .info-box.direcciones { border-color: #ffaa44; background: #ffaa4406; }
-        .item-card .info-box.sala { border-color: #ff44aa; background: #ff44aa06; }
-        .item-card .info-box.juego { border-color: #ff6b35; background: #ff6b3506; }
-        .item-card .info-box.registros { border-color: #00ccff; background: #00ccff06; }
-        .item-card .info-box.solicitudes { border-color: #ffaa44; background: #ffaa4406; }
+        .item-card .info-box.free { border-color: #00ff88; background: rgba(0, 255, 136, 0.06); }
+        .item-card .info-box.live { border-color: #ff44aa; background: rgba(255, 68, 170, 0.06); }
+        .item-card .info-box.massive { border-color: #ff8800; background: rgba(255, 136, 0, 0.06); }
+        .item-card .info-box.admin { border-color: #ff44aa; background: rgba(255, 68, 170, 0.06); }
+        .item-card .info-box.promo { border-color: #ffaa44; background: rgba(255, 170, 68, 0.06); }
+        .item-card .info-box.pasarela { border-color: #6772e5; background: rgba(103, 114, 229, 0.06); }
+        .item-card .info-box.direcciones { border-color: #ffaa44; background: rgba(255, 170, 68, 0.06); }
+        .item-card .info-box.sala { border-color: #ff44aa; background: rgba(255, 68, 170, 0.06); }
+        .item-card .info-box.juego { border-color: #ff6b35; background: rgba(255, 107, 53, 0.06); }
+        .item-card .info-box.registros { border-color: #00ccff; background: rgba(0, 204, 255, 0.06); }
+        .item-card .info-box.solicitudes { border-color: #ffaa44; background: rgba(255, 170, 68, 0.06); }
 
         /* ===== SOLICITUDES ===== */
         .solicitud-item {
@@ -582,7 +591,7 @@
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--borde-neon);
-            box-shadow: 0 0 15px rgba(0, 200, 255, 0.08);
+            box-shadow: 0 0 15px rgba(0, 200, 68, 0.15);
             outline: none;
         }
         .form-group input:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -612,28 +621,28 @@
         }
         .btn-block:hover { transform: scale(1.02); }
         .btn-block:active { transform: scale(0.97); }
-        .btn-block.btn-start { background: linear-gradient(135deg, #00ccff, #0088cc); box-shadow: 0 0 15px rgba(0, 200, 255, 0.1); }
-        .btn-block.btn-save { background: linear-gradient(135deg, #ff8800, #cc6600); box-shadow: 0 0 15px rgba(255, 136, 0, 0.1); }
-        .btn-block.btn-live { background: linear-gradient(135deg, #ff44aa, #cc0088); box-shadow: 0 0 20px rgba(255, 68, 170, 0.12); animation: pulse-live 2s ease-in-out infinite; }
-        .btn-block.btn-massive { background: linear-gradient(135deg, #ff8800, #cc5500); box-shadow: 0 0 20px rgba(255, 136, 0, 0.12); animation: pulse-massive 2s ease-in-out infinite; }
+        .btn-block.btn-start { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 15px rgba(0, 200, 68, 0.2); }
+        .btn-block.btn-save { background: linear-gradient(135deg, #ff8800, #cc6600); box-shadow: 0 0 15px rgba(255, 136, 0, 0.15); }
+        .btn-block.btn-live { background: linear-gradient(135deg, #cc2200, #991100); box-shadow: 0 0 20px rgba(204, 34, 0, 0.3); animation: pulse-live 2s ease-in-out infinite; }
+        .btn-block.btn-massive { background: linear-gradient(135deg, #ff8800, #cc5500); box-shadow: 0 0 20px rgba(255, 136, 0, 0.2); animation: pulse-massive 2s ease-in-out infinite; }
         .btn-block.btn-danger { background: linear-gradient(135deg, #ff4444, #cc0000); }
-        .btn-block.btn-success { background: linear-gradient(135deg, #00cc88, #008866); }
+        .btn-block.btn-success { background: linear-gradient(135deg, #00cc44, #008844); }
         .btn-block.btn-warning { background: linear-gradient(135deg, #ffaa44, #cc8800); }
-        .btn-block.btn-direcciones { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 20px rgba(255, 170, 68, 0.15); }
-        .btn-block.btn-sala { background: linear-gradient(135deg, #ff44aa, #cc0088); box-shadow: 0 0 20px rgba(255, 68, 170, 0.15); animation: pulse-sala 2s ease-in-out infinite; }
-        .btn-block.btn-nota { background: linear-gradient(135deg, #ff88cc, #cc5599); box-shadow: 0 0 20px rgba(255, 136, 204, 0.15); }
-        .btn-block.btn-juego { background: linear-gradient(135deg, #ff6b35, #cc4400); box-shadow: 0 0 20px rgba(255, 107, 53, 0.15); animation: pulse-juego 2s ease-in-out infinite; }
-        .btn-block.btn-admin-danger { background: linear-gradient(135deg, #ff3333, #cc0000); box-shadow: 0 0 15px rgba(255, 51, 51, 0.2); }
-        .btn-block.btn-admin-success { background: linear-gradient(135deg, #00cc88, #008866); box-shadow: 0 0 15px rgba(0, 204, 136, 0.2); }
-        .btn-block.btn-admin-warning { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 15px rgba(255, 170, 68, 0.2); }
-        .btn-block.btn-admin-info { background: linear-gradient(135deg, #00aaff, #0066cc); box-shadow: 0 0 15px rgba(0, 170, 255, 0.2); }
-        .btn-block.btn-aprobar { background: linear-gradient(135deg, #00cc88, #008866); box-shadow: 0 0 20px rgba(0, 204, 136, 0.2); }
-        .btn-block.btn-rechazar { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px rgba(255, 68, 68, 0.2); }
+        .btn-block.btn-direcciones { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 20px rgba(255, 170, 68, 0.2); }
+        .btn-block.btn-sala { background: linear-gradient(135deg, #ff44aa, #cc0088); box-shadow: 0 0 20px rgba(255, 68, 170, 0.2); animation: pulse-sala 2s ease-in-out infinite; }
+        .btn-block.btn-nota { background: linear-gradient(135deg, #ff88cc, #cc5599); box-shadow: 0 0 20px rgba(255, 136, 204, 0.2); }
+        .btn-block.btn-juego { background: linear-gradient(135deg, #ff6b35, #cc4400); box-shadow: 0 0 20px rgba(255, 107, 53, 0.2); animation: pulse-juego 2s ease-in-out infinite; }
+        .btn-block.btn-admin-danger { background: linear-gradient(135deg, #ff3333, #cc0000); box-shadow: 0 0 15px rgba(255, 51, 51, 0.3); }
+        .btn-block.btn-admin-success { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 15px rgba(0, 204, 68, 0.3); }
+        .btn-block.btn-admin-warning { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 15px rgba(255, 170, 68, 0.3); }
+        .btn-block.btn-admin-info { background: linear-gradient(135deg, #00aaff, #0066cc); box-shadow: 0 0 15px rgba(0, 170, 255, 0.3); }
+        .btn-block.btn-aprobar { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 20px rgba(0, 204, 68, 0.3); }
+        .btn-block.btn-rechazar { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px rgba(255, 68, 68, 0.3); }
 
-        @keyframes pulse-live { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.12); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.25); } }
-        @keyframes pulse-massive { 0%, 100% { box-shadow: 0 0 15px rgba(255, 136, 0, 0.12); } 50% { box-shadow: 0 0 30px rgba(255, 136, 0, 0.25); } }
-        @keyframes pulse-sala { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.15); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.35); } }
-        @keyframes pulse-juego { 0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.15); } 50% { box-shadow: 0 0 35px rgba(255, 107, 53, 0.35); } }
+        @keyframes pulse-live { 0%, 100% { box-shadow: 0 0 15px rgba(204, 34, 0, 0.3); } 50% { box-shadow: 0 0 30px rgba(204, 34, 0, 0.5); } }
+        @keyframes pulse-massive { 0%, 100% { box-shadow: 0 0 15px rgba(255, 136, 0, 0.2); } 50% { box-shadow: 0 0 30px rgba(255, 136, 0, 0.4); } }
+        @keyframes pulse-sala { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.2); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.4); } }
+        @keyframes pulse-juego { 0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.2); } 50% { box-shadow: 0 0 35px rgba(255, 107, 53, 0.4); } }
 
         .btn-block:disabled {
             opacity: 0.5;
@@ -656,13 +665,13 @@
         }
         .btn-small:hover { transform: scale(1.05); }
         .btn-small:active { transform: scale(0.95); }
-        .btn-small.btn-copy { background: #0088cc; }
-        .btn-small.btn-live-sm { background: #ff44aa; }
+        .btn-small.btn-copy { background: #008844; }
+        .btn-small.btn-live-sm { background: #cc2200; }
         .btn-small.btn-danger { background: #cc3333; }
-        .btn-small.btn-success { background: #00cc88; }
+        .btn-small.btn-success { background: #00cc44; }
         .btn-small.btn-warning { background: #ff8800; }
         .btn-small.btn-sala-sm { background: #ff44aa; }
-        .btn-small.btn-reply { background: #0088cc; font-size: 0.5rem; }
+        .btn-small.btn-reply { background: #008844; font-size: 0.5rem; }
         .btn-small.btn-mention { background: #ffaa44; font-size: 0.5rem; }
         .btn-small.btn-whatsapp { background: #25D366; font-size: 0.5rem; }
 
@@ -678,14 +687,14 @@
         }
         .btn-small.btn-admin:hover { transform: scale(1.05); }
         .btn-small.btn-admin:active { transform: scale(0.95); }
-        .btn-small.btn-admin.btn-add { background: #00cc88; }
-        .btn-small.btn-admin.btn-add:hover { background: #00dd99; }
+        .btn-small.btn-admin.btn-add { background: #00cc44; }
+        .btn-small.btn-admin.btn-add:hover { background: #00dd55; }
         .btn-small.btn-admin.btn-remove { background: #ff4444; }
         .btn-small.btn-admin.btn-remove:hover { background: #ff6666; }
         .btn-small.btn-admin.btn-block { background: #ff8800; }
         .btn-small.btn-admin.btn-block:hover { background: #ffaa44; }
-        .btn-small.btn-admin.btn-unblock { background: #00cc88; }
-        .btn-small.btn-admin.btn-unblock:hover { background: #00dd99; }
+        .btn-small.btn-admin.btn-unblock { background: #00cc44; }
+        .btn-small.btn-admin.btn-unblock:hover { background: #00dd55; }
         .btn-small.btn-admin.btn-delete { background: #cc0000; }
         .btn-small.btn-admin.btn-delete:hover { background: #ff0000; }
         .btn-small.btn-admin.btn-days-add { background: #ff8800; }
@@ -701,7 +710,8 @@
             margin-top: 6px;
         }
         .pasarela-card {
-            background: rgba(0, 0, 0, 0.15);
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(4px);
             border-radius: 10px;
             padding: 10px 12px;
             text-align: center;
@@ -709,9 +719,9 @@
             transition: 0.2s;
             cursor: pointer;
         }
-        body.theme-day .pasarela-card { background: rgba(255, 255, 255, 0.3); }
-        .pasarela-card:hover { border-color: var(--borde-neon); background: rgba(0, 0, 0, 0.25); }
-        .pasarela-card.active { border-color: #00ff88; background: rgba(0, 255, 136, 0.08); box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); }
+        body.theme-day .pasarela-card { background: rgba(255, 255, 255, 0.4); }
+        .pasarela-card:hover { border-color: var(--borde-neon); background: rgba(0, 0, 0, 0.3); }
+        .pasarela-card.active { border-color: #00ff88; background: rgba(0, 255, 136, 0.1); box-shadow: 0 0 20px rgba(0, 255, 136, 0.2); }
         .pasarela-card .icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
         .pasarela-card .name { font-weight: 600; font-size: 0.75rem; color: var(--texto-principal); }
         .pasarela-card .status { font-size: 0.6rem; color: var(--text-muted); margin-top: 2px; }
@@ -720,6 +730,7 @@
         /* ===== DIRECCIONES RESULT ===== */
         .direccion-result {
             background: var(--bg-result);
+            backdrop-filter: blur(4px);
             border: 2px solid #ffaa44;
             border-radius: 12px;
             padding: 12px 15px;
@@ -731,7 +742,7 @@
         .direccion-result .value { color: var(--texto-principal); font-weight: 500; }
         .direccion-result .copy-btn-dir {
             margin-top: 10px;
-            background: linear-gradient(135deg, #00cc88, #008866);
+            background: linear-gradient(135deg, #00cc44, #008844);
             border: none;
             border-radius: 20px;
             padding: 6px 16px;
@@ -742,11 +753,11 @@
             font-size: 0.75rem;
         }
         .direccion-result .copy-btn-dir:hover { transform: scale(1.05); }
-        .direccion-result .copy-btn-dir:active { transform: scale(0.95); }
 
         /* ===== RESULTADOS ===== */
         .result-box {
             background: var(--bg-result);
+            backdrop-filter: blur(4px);
             border: 2px solid var(--borde-neon);
             border-radius: 12px;
             padding: 10px 12px;
@@ -766,15 +777,16 @@
 
         /* ===== TARJETAS GENERADAS ===== */
         .generated-cards {
-            background: rgba(0, 20, 50, 0.3);
-            border: 2px solid #00aaff;
+            background: rgba(0, 40, 20, 0.35);
+            backdrop-filter: blur(4px);
+            border: 2px solid #00cc44;
             border-radius: 12px;
             padding: 8px 10px;
             max-height: 250px;
             overflow-y: auto;
             transition: background 0.3s, border-color 0.3s;
         }
-        body.theme-day .generated-cards { background: rgba(200, 220, 245, 0.5); }
+        body.theme-day .generated-cards { background: rgba(200, 245, 200, 0.55); }
         .generated-cards::-webkit-scrollbar { width: 4px; }
         .generated-cards::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
         .generated-cards .card-item {
@@ -789,7 +801,7 @@
             font-size: 0.72rem;
         }
         .generated-cards .card-item:last-child { border-bottom: none; }
-        .generated-cards .card-number { color: #88ddff; font-weight: bold; letter-spacing: 1px; font-size: 0.72rem; }
+        .generated-cards .card-number { color: #88ffaa; font-weight: bold; letter-spacing: 1px; font-size: 0.72rem; }
         .generated-cards .card-info { display: flex; gap: 3px; flex-wrap: wrap; align-items: center; }
         .generated-cards .card-actions { display: flex; gap: 3px; }
 
@@ -803,22 +815,23 @@
             font-family: 'Segoe UI', sans-serif;
             transition: background 0.3s, color 0.3s;
         }
-        .info-badge.cvv { background: #4a1a7a; color: #dd88ff; }
-        .info-badge.cvv4 { background: #6a1a3a; color: #ff88aa; }
-        .info-badge.fecha { background: #1a6a4a; color: #88ffbb; }
-        .info-badge.brand { background: #1a4a6a; color: #88bbff; }
-        .info-badge.free-tag { background: #00cc88; color: #000; font-weight: bold; }
+        .info-badge.cvv { background: #1a5a1a; color: #88ffaa; }
+        .info-badge.cvv4 { background: #5a1a2a; color: #ff88aa; }
+        .info-badge.fecha { background: #1a5a3a; color: #88ffbb; }
+        .info-badge.brand { background: #1a4a2a; color: #88ffbb; }
+        .info-badge.free-tag { background: #00cc44; color: #000; font-weight: bold; }
 
         /* ===== HISTORIAL ===== */
         .credit-history {
             max-height: 100px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.15);
+            backdrop-filter: blur(4px);
             border-radius: 8px;
             padding: 4px 8px;
             transition: background 0.3s;
         }
-        body.theme-day .credit-history { background: rgba(0, 0, 0, 0.03); }
+        body.theme-day .credit-history { background: rgba(0, 0, 0, 0.05); }
         .credit-history::-webkit-scrollbar { width: 3px; }
         .credit-history::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
         .credit-item { border-bottom: 1px solid var(--border-color); padding: 3px 0; font-size: 0.68rem; color: var(--texto-secundario); }
@@ -871,16 +884,14 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: 0.15s;
-            box-shadow: 0 0 20px rgba(37, 211, 102, 0.2);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
             width: 100%;
         }
-        .btn-pedir-creditos:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(37, 211, 102, 0.35); }
+        .btn-pedir-creditos:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(37, 211, 102, 0.5); }
         .btn-pedir-creditos:active { transform: scale(0.97); }
         .btn-pedir-creditos::before { content: "📱 "; }
 
-        /* ============================================================== */
         /* ===== MODAL DE CRÉDITOS INSUFICIENTES ===== */
-        /* ============================================================== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -897,13 +908,14 @@
         .modal-overlay.show { display: flex; }
         .modal-overlay .modal-box {
             background: var(--bg-panel);
+            backdrop-filter: blur(10px);
             border: 2px solid var(--borde-neon);
             border-radius: 20px;
             padding: 30px 25px;
             max-width: 400px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 0 50px rgba(0, 200, 255, 0.2);
+            box-shadow: 0 0 50px rgba(0, 200, 68, 0.3);
         }
         .modal-overlay .modal-box .modal-icon { font-size: 3.5rem; margin-bottom: 10px; }
         .modal-overlay .modal-box .modal-titulo { font-size: 1.3rem; font-weight: 700; color: #ffaa44; margin-bottom: 6px; }
@@ -911,16 +923,14 @@
         .modal-overlay .modal-box .modal-botones { display: flex; gap: 10px; flex-wrap: wrap; }
         .modal-overlay .modal-box .modal-botones .modal-btn { flex: 1; padding: 10px 16px; border: none; border-radius: 25px; font-weight: 700; font-size: 0.8rem; cursor: pointer; transition: 0.15s; min-width: 100px; }
         .modal-overlay .modal-box .modal-botones .modal-btn:hover { transform: scale(1.03); }
-        .modal-overlay .modal-box .modal-botones .modal-btn:active { transform: scale(0.97); }
         .modal-overlay .modal-box .modal-botones .modal-btn.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: white; }
         .modal-overlay .modal-box .modal-botones .modal-btn.juego { background: linear-gradient(135deg, #ff6b35, #cc4400); color: white; }
         .modal-overlay .modal-box .modal-botones .modal-btn.cerrar { background: var(--border-color); color: var(--texto-principal); }
 
-        /* ============================================================== */
-        /* ===== CHAT ESTILOS TIPO WHATSAPP ===== */
-        /* ============================================================== */
+        /* ===== CHAT ESTILOS ===== */
         .chat-profile-setup {
             background: var(--bg-result);
+            backdrop-filter: blur(4px);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 10px;
@@ -935,6 +945,7 @@
 
         .chat-messages {
             background: var(--bg-result);
+            backdrop-filter: blur(4px);
             border-radius: 12px;
             padding: 10px;
             height: 350px;
@@ -947,7 +958,7 @@
             transition: background 0.3s, border-color 0.3s;
         }
         .chat-messages .message { max-width: 85%; padding: 8px 12px; border-radius: 18px; font-size: 0.85rem; word-wrap: break-word; position: relative; animation: fadeIn 0.15s ease; }
-        .chat-messages .message.own { align-self: flex-end; background: var(--chat-msg-own); border-bottom-right-radius: 4px; color: #e1e9f0; }
+        .chat-messages .message.own { align-self: flex-end; background: var(--chat-msg-own); border-bottom-right-radius: 4px; color: #e1f0e1; }
         .chat-messages .message.other { align-self: flex-start; background: var(--chat-msg-other); border-bottom-left-radius: 4px; color: var(--texto-principal); }
         .chat-messages .message .msg-header { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: bold; margin-bottom: 2px; }
         .chat-messages .message .msg-header .avatar { font-size: 1rem; }
@@ -969,13 +980,13 @@
         .chat-input-area .chat-input { flex: 1; padding: 8px 12px; background: var(--input-bg); border: 2px solid var(--border-color); border-radius: 25px; color: var(--texto-principal); font-size: 0.85rem; resize: none; min-height: 38px; max-height: 100px; transition: background 0.3s, border-color 0.3s, color 0.3s; }
         .chat-input-area .chat-input:focus { border-color: var(--borde-neon); outline: none; }
         .chat-input-area .chat-btn { background: var(--border-color); border: none; border-radius: 50%; width: 38px; height: 38px; color: var(--texto-principal); font-size: 1.2rem; cursor: pointer; transition: 0.15s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-        .chat-input-area .chat-btn:hover { background: #2a5a8a; }
-        .chat-input-area .chat-btn.send { background: linear-gradient(135deg, #00cc88, #008866); color: white; }
-        .chat-input-area .chat-btn.send:hover { background: linear-gradient(135deg, #00dd99, #009977); }
+        .chat-input-area .chat-btn:hover { background: #2a5a2a; }
+        .chat-input-area .chat-btn.send { background: linear-gradient(135deg, #00cc44, #008844); color: white; }
+        .chat-input-area .chat-btn.send:hover { background: linear-gradient(135deg, #00dd55, #009955); }
         .chat-input-area .chat-btn.mention-btn { background: #ffaa44; color: white; }
         .chat-input-area .chat-btn.mention-btn:hover { background: #cc8800; }
-        .chat-input-area .chat-btn.reply-btn { background: #0088cc; color: white; }
-        .chat-input-area .chat-btn.reply-btn:hover { background: #006699; }
+        .chat-input-area .chat-btn.reply-btn { background: #008844; color: white; }
+        .chat-input-area .chat-btn.reply-btn:hover { background: #006633; }
         .chat-input-area .chat-btn.whatsapp-btn { background: #25D366; color: white; }
         .chat-input-area .chat-btn.whatsapp-btn:hover { background: #1a9b4a; }
 
@@ -999,17 +1010,16 @@
         .emoji-picker span:hover, .sticker-picker span:hover { background: var(--border-color); transform: scale(1.1); }
         .sticker-picker span { font-size: 2.5rem; }
 
-        /* ============================================================== */
         /* ===== NOTAS ===== */
-        /* ============================================================== */
         .nota-container {
             background: var(--nota-bg);
+            backdrop-filter: blur(4px);
             border: 2px solid var(--nota-border);
             border-radius: 16px;
             padding: 20px;
             margin-top: 8px;
             transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 0 30px rgba(0, 200, 255, 0.05);
+            box-shadow: 0 0 30px rgba(0, 200, 68, 0.08);
         }
         .nota-container .nota-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
         .nota-container .nota-header .nota-titulo { font-size: 1.1rem; font-weight: 700; color: var(--texto-principal); display: flex; align-items: center; gap: 8px; }
@@ -1018,23 +1028,18 @@
         .nota-container .nota-header .nota-info .nota-fecha { background: var(--bg-result); padding: 2px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
         .nota-container .nota-editor { position: relative; }
         .nota-container .nota-editor textarea { width: 100%; min-height: 280px; background: var(--bg-inputs); border: 2px solid var(--border-color); border-radius: 12px; color: var(--texto-principal); padding: 16px 18px; font-size: 0.95rem; font-family: 'Segoe UI', 'Roboto', Arial, sans-serif; resize: vertical; transition: background 0.3s, border-color 0.3s, color 0.3s; line-height: 1.7; }
-        .nota-container .nota-editor textarea:focus { border-color: var(--borde-neon); box-shadow: 0 0 25px rgba(0, 200, 255, 0.08); outline: none; }
+        .nota-container .nota-editor textarea:focus { border-color: var(--borde-neon); box-shadow: 0 0 25px rgba(0, 200, 68, 0.15); outline: none; }
         .nota-container .nota-editor textarea::placeholder { color: var(--text-muted); font-style: italic; }
         .nota-container .nota-editor .nota-char-count { position: absolute; bottom: 12px; right: 16px; font-size: 0.6rem; color: var(--text-muted); background: var(--bg-result); padding: 2px 10px; border-radius: 10px; border: 1px solid var(--border-color); pointer-events: none; }
         .nota-container .nota-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
         .nota-container .nota-actions .btn-nota { padding: 8px 20px; border: none; border-radius: 25px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 6px; flex: 1; justify-content: center; min-width: 100px; }
         .nota-container .nota-actions .btn-nota:hover { transform: scale(1.02); }
         .nota-container .nota-actions .btn-nota:active { transform: scale(0.97); }
-        .nota-container .nota-actions .btn-nota.guardar { background: linear-gradient(135deg, #00cc88, #008866); color: white; box-shadow: 0 0 20px rgba(0, 204, 136, 0.15); }
-        .nota-container .nota-actions .btn-nota.guardar:hover { box-shadow: 0 0 30px rgba(0, 204, 136, 0.25); }
-        .nota-container .nota-actions .btn-nota.limpiar { background: linear-gradient(135deg, #ff4444, #cc0000); color: white; box-shadow: 0 0 20px rgba(255, 68, 68, 0.1); }
-        .nota-container .nota-actions .btn-nota.limpiar:hover { box-shadow: 0 0 30px rgba(255, 68, 68, 0.2); }
-        .nota-container .nota-actions .btn-nota.exportar { background: linear-gradient(135deg, #ffaa44, #cc8800); color: white; box-shadow: 0 0 20px rgba(255, 170, 68, 0.1); }
-        .nota-container .nota-actions .btn-nota.exportar:hover { box-shadow: 0 0 30px rgba(255, 170, 68, 0.2); }
-        .nota-container .nota-actions .btn-nota.copiar { background: linear-gradient(135deg, #0088cc, #006699); color: white; box-shadow: 0 0 20px rgba(0, 136, 204, 0.1); }
-        .nota-container .nota-actions .btn-nota.copiar:hover { box-shadow: 0 0 30px rgba(0, 136, 204, 0.2); }
-        .nota-container .nota-actions .btn-nota.stats { background: linear-gradient(135deg, #6772e5, #4a54c4); color: white; box-shadow: 0 0 20px rgba(103, 114, 229, 0.1); }
-        .nota-container .nota-actions .btn-nota.stats:hover { box-shadow: 0 0 30px rgba(103, 114, 229, 0.2); }
+        .nota-container .nota-actions .btn-nota.guardar { background: linear-gradient(135deg, #00cc44, #008844); color: white; box-shadow: 0 0 20px rgba(0, 204, 68, 0.2); }
+        .nota-container .nota-actions .btn-nota.limpiar { background: linear-gradient(135deg, #ff4444, #cc0000); color: white; box-shadow: 0 0 20px rgba(255, 68, 68, 0.15); }
+        .nota-container .nota-actions .btn-nota.exportar { background: linear-gradient(135deg, #ffaa44, #cc8800); color: white; box-shadow: 0 0 20px rgba(255, 170, 68, 0.15); }
+        .nota-container .nota-actions .btn-nota.copiar { background: linear-gradient(135deg, #008844, #006633); color: white; box-shadow: 0 0 20px rgba(0, 136, 68, 0.15); }
+        .nota-container .nota-actions .btn-nota.stats { background: linear-gradient(135deg, #6772e5, #4a54c4); color: white; box-shadow: 0 0 20px rgba(103, 114, 229, 0.15); }
         .nota-container .nota-footer { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 0.6rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 10px; }
         .nota-container .nota-footer .nota-status { display: flex; align-items: center; gap: 6px; }
         .nota-container .nota-footer .nota-status .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
@@ -1048,15 +1053,14 @@
         .nota-container .nota-stats-box .stat-item .stat-label { color: var(--texto-secundario); }
         .nota-container .nota-stats-box .stat-item .stat-value { color: var(--texto-principal); font-weight: 600; }
         .nota-container .nota-stats-box .stat-item .stat-value.palabras { color: #00ff88; }
-        .nota-container .nota-stats-box .stat-item .stat-value.caracteres { color: #66ddff; }
+        .nota-container .nota-stats-box .stat-item .stat-value.caracteres { color: #66ff88; }
         .nota-container .nota-stats-box .stat-item .stat-value.parrafos { color: #ffaa44; }
         .nota-container .nota-stats-box .stat-item .stat-value.lineas { color: #ff88cc; }
 
-        /* ============================================================== */
-        /* ===== JUEGO - PIEDRA, PAPEL O TIJERA ===== */
-        /* ============================================================== */
+        /* ===== JUEGO ===== */
         .juego-container {
             background: var(--card-bg);
+            backdrop-filter: blur(4px);
             border: 2px solid #ff6b35;
             border-radius: 16px;
             padding: 20px;
@@ -1089,31 +1093,18 @@
         .juego-container .juego-area .juego-resultado.empate { color: #ffaa44; background: rgba(255, 170, 68, 0.08); }
         .juego-container .juego-area .juego-opciones { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
         .juego-container .juego-area .juego-opciones .opcion-btn { font-size: 2.5rem; padding: 10px 20px; border: 2px solid var(--border-color); border-radius: 16px; background: var(--bg-inputs); cursor: pointer; transition: 0.2s; min-width: 70px; }
-        .juego-container .juego-area .juego-opciones .opcion-btn:hover { transform: scale(1.08); border-color: #ff6b35; box-shadow: 0 0 25px rgba(255, 107, 53, 0.2); }
+        .juego-container .juego-area .juego-opciones .opcion-btn:hover { transform: scale(1.08); border-color: #ff6b35; box-shadow: 0 0 25px rgba(255, 107, 53, 0.3); }
         .juego-container .juego-area .juego-opciones .opcion-btn:active { transform: scale(0.95); }
         .juego-container .juego-area .juego-opciones .opcion-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-
-        .juego-container .juego-misiones { margin-top: 14px; }
-        .juego-container .juego-misiones .mision-item { background: var(--bg-result); border-radius: 10px; padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; border: 1px solid var(--border-color); transition: 0.2s; }
-        .juego-container .juego-misiones .mision-item.completada { border-color: #00ff88; background: rgba(0, 255, 136, 0.05); }
-        .juego-container .juego-misiones .mision-item .mision-info { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-        .juego-container .juego-misiones .mision-item .mision-info .mision-icon { font-size: 1rem; }
-        .juego-container .juego-misiones .mision-item .mision-info .mision-texto { font-size: 0.7rem; color: var(--texto-principal); }
-        .juego-container .juego-misiones .mision-item .mision-info .mision-texto .mision-progreso { color: var(--text-muted); font-size: 0.6rem; }
-        .juego-container .juego-misiones .mision-item .mision-recompensa { font-size: 0.6rem; font-weight: 600; color: #ffd700; background: rgba(255, 215, 0, 0.1); padding: 2px 8px; border-radius: 10px; border: 1px solid #ffd70033; }
-        .juego-container .juego-misiones .mision-item .mision-estado { font-size: 0.5rem; padding: 1px 8px; border-radius: 10px; }
-        .juego-container .juego-misiones .mision-item .mision-estado.pendiente { background: #ffaa4433; color: #ffaa44; }
-        .juego-container .juego-misiones .mision-item .mision-estado.completada { background: #00ff8833; color: #00ff88; }
 
         .juego-container .juego-stats { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
         .juego-container .juego-stats .stat-box { background: var(--bg-result); border-radius: 8px; padding: 4px 12px; border: 1px solid var(--border-color); font-size: 0.6rem; color: var(--texto-secundario); display: flex; align-items: center; gap: 4px; }
         .juego-container .juego-stats .stat-box span { font-weight: 700; color: #ffd700; }
 
-        /* ============================================================== */
         /* ===== SALA PRIVADA ===== */
-        /* ============================================================== */
         .sala-card {
             background: var(--bg-result);
+            backdrop-filter: blur(4px);
             border: 2px solid #ff44aa;
             border-radius: 12px;
             padding: 12px;
@@ -1121,14 +1112,13 @@
             transition: background 0.3s;
         }
         .sala-card .codigo-sala { font-size: 1.5rem; font-weight: bold; color: #ff88cc; letter-spacing: 4px; background: rgba(0, 0, 0, 0.2); padding: 8px 16px; border-radius: 10px; text-align: center; border: 1px dashed #ff44aa; margin: 6px 0; user-select: all; }
-        .sala-card .copy-btn-sala { background: #0088cc; border: none; border-radius: 8px; padding: 4px 12px; color: white; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
-        .sala-card .copy-btn-sala:hover { background: #00aaff; }
+        .sala-card .copy-btn-sala { background: #008844; border: none; border-radius: 8px; padding: 4px 12px; color: white; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
+        .sala-card .copy-btn-sala:hover { background: #00aa55; }
 
-        /* ============================================================== */
-        /* ===== LIVE MASIVO - RESULTADO MEJORADO ===== */
-        /* ============================================================== */
+        /* ===== LIVE MASIVO ===== */
         .resultado-masivo-item {
             background: var(--bg-result);
+            backdrop-filter: blur(4px);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 10px 12px;
@@ -1137,7 +1127,7 @@
         }
         .resultado-masivo-item:hover { border-color: var(--borde-neon); }
         .resultado-masivo-item .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
-        .resultado-masivo-item .row .num { font-family: monospace; font-size: 0.7rem; color: #88ddff; font-weight: bold; letter-spacing: 0.5px; }
+        .resultado-masivo-item .row .num { font-family: monospace; font-size: 0.7rem; color: #88ffaa; font-weight: bold; letter-spacing: 0.5px; }
         .resultado-masivo-item .row .estado { font-size: 0.6rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
         .resultado-masivo-item .row .estado.approved { color: #00ff88; background: rgba(0, 255, 136, 0.1); }
         .resultado-masivo-item .row .estado.insufficient { color: #ffaa44; background: rgba(255, 170, 68, 0.1); }
@@ -1149,8 +1139,8 @@
         .resultado-masivo-item .detalles span { background: var(--bg-card); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
         .resultado-masivo-item .detalles .cvv-ok { color: #00ff88; }
         .resultado-masivo-item .detalles .cvv-fail { color: #ff4444; }
-        .resultado-masivo-item .btn-copy-result { padding: 2px 8px; font-size: 0.5rem; border: none; border-radius: 4px; background: #0088cc; color: white; cursor: pointer; transition: 0.1s; }
-        .resultado-masivo-item .btn-copy-result:hover { background: #00aaff; transform: scale(1.05); }
+        .resultado-masivo-item .btn-copy-result { padding: 2px 8px; font-size: 0.5rem; border: none; border-radius: 4px; background: #008844; color: white; cursor: pointer; transition: 0.1s; }
+        .resultado-masivo-item .btn-copy-result:hover { background: #00aa55; transform: scale(1.05); }
 
         /* ============================================================== */
         /* RESPONSIVE */
@@ -1158,6 +1148,7 @@
         @media (max-width: 768px) {
             body { padding: 8px; }
             .app-container { max-height: 100vh; min-height: 95vh; border-radius: 14px; }
+            .app-container::before { border-radius: 14px; }
             .panels-container { padding: 8px 10px 12px 10px; }
             .navbar { padding: 6px 12px; min-height: 44px; }
             .navbar .logo-title { font-size: 1rem; }
@@ -1181,6 +1172,7 @@
         @media (max-width: 500px) {
             body { padding: 4px; }
             .app-container { border-radius: 10px; max-height: 100vh; min-height: 98vh; }
+            .app-container::before { border-radius: 10px; }
             .navbar { padding: 4px 8px; min-height: 38px; }
             .navbar .logo-title { font-size: 0.8rem; }
             .navbar .credits-display, .navbar .days-display { font-size: 0.55rem; padding: 2px 8px; }
@@ -1253,7 +1245,7 @@
         <!-- ===== AUTH (LOGIN / REGISTRO) ===== -->
         <div id="auth-screen">
             <div class="auth-box">
-                <h2>⚡ SYS ANDY PRO</h2>
+                <h2>🦜 PERICO VERDE</h2>
                 <div class="subtitle">Generador + Checker LIVE + Chat</div>
 
                 <div class="auth-tabs">
@@ -1273,7 +1265,7 @@
                     </div>
                     <button class="btn-block" id="loginBtn" onclick="procesarLogin()">INGRESAR</button>
                     <div class="footer-text">
-                        ¿No tienes cuenta? <a href="#" onclick="cambiarAuthTab('register')" style="color:#66ddff;">Regístrate</a>
+                        ¿No tienes cuenta? <a href="#" onclick="cambiarAuthTab('register')" style="color:#66ff88;">Regístrate</a>
                     </div>
                 </div>
 
@@ -1299,21 +1291,21 @@
                     </div>
                     <button class="btn-block btn-success" id="registerBtn" onclick="procesarRegistro()">📝 SOLICITAR REGISTRO</button>
                     <div class="footer-text">
-                        ¿Ya tienes cuenta? <a href="#" onclick="cambiarAuthTab('login')" style="color:#66ddff;">Inicia sesión</a>
+                        ¿Ya tienes cuenta? <a href="#" onclick="cambiarAuthTab('login')" style="color:#66ff88;">Inicia sesión</a>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- ============================================================== -->
-        <!-- APLICACIÓN PRINCIPAL - TODOS LOS PANELES COMPLETOS -->
+        <!-- APLICACIÓN PRINCIPAL -->
         <!-- ============================================================== -->
         <div id="main-app" style="display:none;">
 
             <!-- NAVBAR -->
             <div class="navbar">
                 <div class="logo-area">
-                    <div class="logo-title">SYS ANDY PRO</div>
+                    <div class="logo-title">PERICO VERDE</div>
                     <div class="user-info" id="userDisplay">
                         Cargando...
                         <span class="user-status active" id="userStatusBadge">✅ Activo</span>
@@ -1374,11 +1366,11 @@
                             <button class="btn-block btn-save" onclick="descargarGeneradas()" id="btnDownloadGen" disabled style="flex:1;">⬇️ DESCARGAR</button>
                         </div>
                         <div class="flex-row" id="actionButtons" style="display:none; gap:15px; margin-top:8px;">
-                            <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc88,#008866); flex:1;">📋 COPIAR TODO</button>
+                            <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc44,#008844); flex:1;">📋 COPIAR TODO</button>
                             <button class="btn-block action-btn btn-massive" onclick="liveMasivoDesdeGenerador()" style="flex:1;">📊 MASIVO (7 créditos)</button>
                         </div>
                         <div style="margin-top:6px;color:var(--text-muted);font-size:0.7rem;">
-                            📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ddff;font-weight:bold;">0</span>
+                            📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ff88;font-weight:bold;">0</span>
                             <span style="margin-left:12px;">💎 Generación <span style="color:#00ff88;">GRATIS</span></span>
                         </div>
                     </div>
@@ -1388,14 +1380,14 @@
                         </div>
                     </div>
                     <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial</div>
+                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial</div>
                         <div id="genHistory" class="credit-history"></div>
                     </div>
                 </div>
 
                 <!-- ===== LIVE ===== -->
                 <div id="panel-live" class="panel">
-                    <h3>🔴 LIVE INDIVIDUAL <span class="info-badge" style="background:#ff44aa;color:#fff;">2 créditos</span></h3>
+                    <h3>🔴 LIVE INDIVIDUAL <span class="info-badge" style="background:#cc2200;color:#fff;">2 créditos</span></h3>
                     <div class="item-card">
                         <div class="info-box live">
                             ⚡ <strong>LIVE INDIVIDUAL</strong> - Cada verificación cuesta <strong>2 créditos</strong>.
@@ -1403,7 +1395,7 @@
                             <strong>💳 Pasarela activa:</strong> <span id="pasarelaLiveLabel">Stripe</span>
                             <br><br>
                             <strong style="color:#ff8800;">📋 Formato de resultado:</strong> 
-                            <span style="color:#88ddff;font-family:monospace;font-size:0.7rem;">NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|Check🔥Andyparatisapo☠️</span>
+                            <span style="color:#88ffaa;font-family:monospace;font-size:0.7rem;">NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|Check🔥PericoVerde☠️</span>
                         </div>
                         <div class="form-group"><label>🔢 Número de tarjeta</label><input type="text" id="liveCardNumber" placeholder="4111111111111111" maxlength="19"></div>
                         <div class="flex-row">
@@ -1417,7 +1409,7 @@
                         <div class="result-box" id="liveResultBox"><span style="color:var(--text-muted);">Esperando verificación...</span></div>
                     </div>
                     <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial LIVE</div>
+                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial LIVE</div>
                         <div id="liveHistory" class="credit-history"></div>
                     </div>
                 </div>
@@ -1434,14 +1426,14 @@
                             <strong>💳 Pasarela activa:</strong> <span id="pasarelaMasivoLabel">Stripe</span>
                             <br><br>
                             <strong style="color:#ff8800;">📋 Formato de resultado:</strong> 
-                            <span style="color:#88ddff;font-family:monospace;font-size:0.7rem;">NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|Check🔥Andyparatisapo☠️</span>
+                            <span style="color:#88ffaa;font-family:monospace;font-size:0.7rem;">NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|Check🔥PericoVerde☠️</span>
                         </div>
                         <div class="flex-row">
                             <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">📊 LIVE MASIVO (7 créditos)</button>
                             <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled>⬇️ DESCARGAR</button>
                         </div>
                         <div style="margin-top:6px; color:var(--texto-secundario); font-size:0.75rem;">
-                            📊 Tarjetas disponibles: <span id="massiveCount" style="color:#66ddff;font-weight:bold;">0</span>
+                            📊 Tarjetas disponibles: <span id="massiveCount" style="color:#66ff88;font-weight:bold;">0</span>
                             <span style="color:var(--text-muted);margin-left:10px;">💎 Costo: 7 créditos</span>
                         </div>
                     </div>
@@ -1449,7 +1441,7 @@
                         <div class="result-box" id="massiveResultBox"><span style="color:var(--text-muted);">Esperando verificación masiva...</span></div>
                     </div>
                     <div style="margin-top:8px;">
-                        <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial MASIVO</div>
+                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial MASIVO</div>
                         <div id="massiveHistory" class="credit-history"></div>
                     </div>
                 </div>
@@ -1469,7 +1461,7 @@
                             <div class="pasarela-card" id="pasarela-braintreeauth" onclick="seleccionarPasarela('braintreeauth')"><span class="icon">🏦</span><div class="name">Braintree Auth</div><div class="status active">✅ Activa</div></div>
                         </div>
                         <div style="margin-top:10px;padding:8px 12px;background:var(--bg-result);border-radius:8px;border:1px solid var(--border-color);">
-                            <div style="color:var(--texto-secundario);font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ddff;">Stripe</strong></div>
+                            <div style="color:var(--texto-secundario);font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ff88;">Stripe</strong></div>
                         </div>
                     </div>
                 </div>
@@ -1504,7 +1496,7 @@
                     <h3>💬 CHAT EN VIVO <span class="info-badge free-tag">GRATIS</span></h3>
                     <div class="chat-profile-setup" id="chatProfileSetup">
                         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
-                            <div class="avatar-selector" id="chatAvatarSelector" onclick="cambiarAvatarChat()">🦁</div>
+                            <div class="avatar-selector" id="chatAvatarSelector" onclick="cambiarAvatarChat()">🦜</div>
                             <div style="flex:1; min-width:150px;">
                                 <label style="color:var(--texto-secundario);font-size:0.7rem;">Tu nombre en el chat <span id="nombreBloqueadoMsg" style="color:#ffaa44;font-size:0.55rem;display:none;">(no se puede cambiar)</span></label>
                                 <input type="text" id="chatDisplayName" class="profile-name-input" placeholder="Escribe tu nombre..." style="width:100%;">
@@ -1540,9 +1532,10 @@
                         <span onclick="insertEmoji('👀')">👀</span><span onclick="insertEmoji('💯')">💯</span>
                         <span onclick="insertEmoji('😎')">😎</span><span onclick="insertEmoji('🤣')">🤣</span>
                         <span onclick="insertEmoji('🥰')">🥰</span><span onclick="insertEmoji('😱')">😱</span>
+                        <span onclick="insertEmoji('🦜')">🦜</span><span onclick="insertEmoji('🤖')">🤖</span>
                     </div>
                     <div class="sticker-picker" id="stickerPicker">
-                        <span onclick="enviarSticker('🦁')">🦁</span><span onclick="enviarSticker('🔥')">🔥</span>
+                        <span onclick="enviarSticker('🦜')">🦜</span><span onclick="enviarSticker('🔥')">🔥</span>
                         <span onclick="enviarSticker('⚡')">⚡</span><span onclick="enviarSticker('💎')">💎</span>
                         <span onclick="enviarSticker('🚀')">🚀</span><span onclick="enviarSticker('🎯')">🎯</span>
                         <span onclick="enviarSticker('👑')">👑</span><span onclick="enviarSticker('💪')">💪</span>
@@ -1683,7 +1676,7 @@
                         </div>
                         <div id="userSearchResult" style="margin-top:6px;"></div>
                         <div style="margin-top:10px;">
-                            <div style="color:#66ddff;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
+                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
                             <div id="listaUsuariosContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
                         <button class="btn-block btn-danger" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos" style="margin-top:10px;">🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)</button>
@@ -1701,7 +1694,7 @@
                             <button class="btn-small btn-success" onclick="recargarSolicitudes()" style="padding:6px 16px; align-self:flex-end;">🔄 Actualizar</button>
                         </div>
                         <div style="margin-top:10px;">
-                            <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Lista de solicitudes</div>
+                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Lista de solicitudes</div>
                             <div id="solicitudesContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
                     </div>
@@ -1721,7 +1714,7 @@
                             <button class="btn-small btn-success" onclick="recargarRegistros()" style="padding:6px 16px; align-self:flex-end;">🔄 Actualizar</button>
                         </div>
                         <div style="margin-top:10px;">
-                            <div style="color:#66ddff;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Historial de registros</div>
+                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Historial de registros</div>
                             <div id="registrosContainer" style="max-height:300px;overflow-y:auto;"></div>
                         </div>
                     </div>
@@ -1732,7 +1725,7 @@
                     <h3>💎 MIS CRÉDITOS</h3>
                     <div class="item-card">
                         <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
-                            <span style="font-size:1.5rem;">💎 <span id="creditsBalance" style="color:#66ddff;">0</span> créditos</span>
+                            <span style="font-size:1.5rem;">💎 <span id="creditsBalance" style="color:#66ff88;">0</span> créditos</span>
                             <span style="color:var(--texto-secundario); font-size:0.7rem;">🔹 Generar: GRATIS<br>🔹 LIVE: 2 créditos<br>🔹 Masivo: 7 créditos<br>🔹 Sala Privada: 5 créditos</span>
                         </div>
                     </div>
@@ -1745,7 +1738,7 @@
                         <button class="btn-pedir-creditos" onclick="pedirCreditosWhatsApp()">📱 PEDIR CRÉDITOS AL ADMIN</button>
                     </div>
                     <div class="item-card">
-                        <div style="color:#66ddff;font-weight:600;font-size:0.8rem;">📋 Historial</div>
+                        <div style="color:#66ff88;font-weight:600;font-size:0.8rem;">📋 Historial</div>
                         <div id="creditHistory" class="credit-history"><p style="color:var(--text-muted);">Sin movimientos</p></div>
                     </div>
                 </div>
@@ -1755,14 +1748,14 @@
     </div>
 
     <!-- ============================================================== -->
-    <!-- SCRIPTS - CON FIREBASE Y LIVE MEJORADO -->
+    <!-- SCRIPTS - CON FIREBASE -->
     <!-- ============================================================== -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
         // ================================================================
-        // 🔥 CONFIGURACIÓN DE FIREBASE - PON AQUÍ TU CONFIGURACIÓN
+        // 🔥 CONFIGURACIÓN DE FIREBASE
         // ================================================================
         const firebaseConfig = {
             apiKey: "AIZasY9mpZybNHhRCpZ6xr1bt6lxjx8_lVvsAHU",
@@ -1774,21 +1767,18 @@
             databaseURL: "https://sys-andy-pro-v3-default-rtdb.firebaseio.com"
         };
 
-        // ================================================================
-        // INICIALIZAR FIREBASE
-        // ================================================================
         if (!firebase.apps.length) {
             firebase.initializeApp(firebaseConfig);
         }
         const db = firebase.database();
 
         // ================================================================
-        // CREDENCIALES DEL ADMIN (FIJAS EN EL CÓDIGO)
+        // CREDENCIALES DEL ADMIN
         // ================================================================
         const ADMIN_EMAIL = "andyobregon799@gmail.com";
         const ADMIN_PASS = "Andyjoel12";
 
-        console.log('⚡ SYS ANDY PRO - VERSIÓN LIVE MEJORADA');
+        console.log('🦜 PERICO VERDE - VERSIÓN LIVE MEJORADA');
         console.log('🔐 Admin:', ADMIN_EMAIL);
         console.log('📱 Base de datos:', firebaseConfig.databaseURL);
 
@@ -1809,18 +1799,15 @@
         let salaUnsubscribe = null;
         let usuariosCargados = false;
 
-        // Chat
         let chatDisplayName = "";
-        let chatAvatar = "🦁";
+        let chatAvatar = "🦜";
         let chatNameBloqueado = false;
         let mensajeRespondiendo = null;
         let mensajeRespondiendoSala = null;
 
-        // Sala
         let salaActual = null;
         let salaCodigo = null;
 
-        // Juego
         let totalVictorias = 0;
         let totalDerrotas = 0;
         let totalEmpates = 0;
@@ -1834,11 +1821,11 @@
         }
 
         function mostrarNotificacion(msg, tipo = 'info') {
-            const colors = { info: '#66ddff', success: '#00ff88', error: '#ff4444', warning: '#ffaa44' };
+            const colors = { info: '#66ff88', success: '#00ff88', error: '#ff4444', warning: '#ffaa44' };
             const div = document.createElement('div');
             div.style.cssText = `
                 position: fixed; bottom: 15px; right: 15px; 
-                background: #0a1a3a; border: 2px solid ${colors[tipo] || '#66ddff'};
+                background: #0a1a0a; border: 2px solid ${colors[tipo] || '#66ff88'};
                 color: white; padding: 8px 16px; border-radius: 10px;
                 z-index: 9999; max-width: 320px; box-shadow: 0 0 30px rgba(0,0,0,0.8);
                 font-weight: 600; font-size: 0.75rem;
@@ -1905,7 +1892,7 @@
         function irWhatsAppAdmin() {
             const numero = '593990434546';
             const usuario = currentUser ? currentUser.email : 'Usuario';
-            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos.`;
+            const mensaje = `Hola Perico Verde, soy ${usuario}. Necesito más créditos.`;
             window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
             cerrarModalCreditos();
         }
@@ -2006,7 +1993,7 @@
         function pedirCreditosWhatsApp() {
             const numero = '593990434546';
             const usuario = currentUser ? currentUser.email : 'Usuario';
-            const mensaje = `Hola Andy, soy ${usuario}. Necesito más créditos. ¡Gracias!`;
+            const mensaje = `Hola Perico Verde, soy ${usuario}. Necesito más créditos. ¡Gracias!`;
             window.open(`https://wa.me/${numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
             mostrarNotificacion('📱 Abriendo WhatsApp...', 'info');
         }
@@ -2167,7 +2154,7 @@
         }
 
         // ================================================================
-        // LOGIN - ADMIN ENTRADA DIRECTA
+        // LOGIN
         // ================================================================
         function procesarLogin() {
             const emailInput = document.getElementById('loginEmail').value.trim().toLowerCase();
@@ -2182,7 +2169,6 @@
             setButtonLoading(btn, true);
             btn.textContent = '⏳ Ingresando...';
 
-            // ADMIN - ENTRADA DIRECTA
             if (emailInput === ADMIN_EMAIL && passInput === ADMIN_PASS) {
                 setButtonLoading(btn, false);
                 btn.textContent = 'INGRESAR';
@@ -2212,7 +2198,6 @@
                 return;
             }
 
-            // USUARIOS NORMALES
             const nodoBuscado = limpiarClave(emailInput);
             db.ref("usuarios/" + nodoBuscado).once("value").then((snapshot) => {
                 setButtonLoading(btn, false);
@@ -2330,7 +2315,7 @@
             generatedCardsList = [];
             massiveResults = [];
             chatDisplayName = "";
-            chatAvatar = "🦁";
+            chatAvatar = "🦜";
             chatNameBloqueado = false;
             salaActual = null;
             salaCodigo = null;
@@ -2360,7 +2345,7 @@
                 if (!container) return;
 
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay solicitudes pendientes</p>';
+                    container.innerHTML = '<p style="color:#668866;padding:10px;text-align:center;">📭 No hay solicitudes pendientes</p>';
                     document.getElementById('solicitudesBadge').style.display = 'none';
                     return;
                 }
@@ -2508,7 +2493,7 @@
         }
 
         // ================================================================
-        // USUARIOS (ADMIN) - EVITAR DUPLICADOS
+        // USUARIOS (ADMIN)
         // ================================================================
         function escucharUsuarios() {
             if (usuariosUnsubscribe) { usuariosUnsubscribe(); usuariosUnsubscribe = null; }
@@ -2519,7 +2504,7 @@
                 container.innerHTML = "";
 
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;">No hay usuarios</p>';
+                    container.innerHTML = '<p style="color:#668866;padding:10px;">No hay usuarios</p>';
                     return;
                 }
 
@@ -2626,7 +2611,7 @@
                         container.appendChild(div);
                     }
                 });
-                if (!found) container.innerHTML = '<p style="color:#6688aa;padding:6px;">Usuario no encontrado</p>';
+                if (!found) container.innerHTML = '<p style="color:#668866;padding:6px;">Usuario no encontrado</p>';
             });
         }
 
@@ -2826,7 +2811,7 @@
                 if (!container) return;
 
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#6688aa;padding:10px;text-align:center;">📭 No hay registros</p>';
+                    container.innerHTML = '<p style="color:#668866;padding:10px;text-align:center;">📭 No hay registros</p>';
                     return;
                 }
 
@@ -3141,7 +3126,7 @@
             const blob = new Blob([lines.join('\n')], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `tarjetas_${new Date().toISOString().slice(0,10)}.txt`;
+            a.download = `tarjetas_perico_verde_${new Date().toISOString().slice(0,10)}.txt`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -3166,8 +3151,8 @@
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             const container = document.getElementById('genHistory');
             container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin generaciones</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">🎲 ${h.bin} | ${h.count} tarjetas | ${h.fecha}</div>`).join('');
+            if (!history.length) { container.innerHTML = '<p style="color:#668866;">Sin generaciones</p>'; return; }
+            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">🦜 ${h.bin} | ${h.count} tarjetas | ${h.fecha}</div>`).join('');
         }
 
         function guardarHistorialLive(number, brand, result) {
@@ -3185,8 +3170,8 @@
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             const container = document.getElementById('liveHistory');
             container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin LIVE</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">🔴 ${h.number} | ${h.brand} | ${h.mensaje} | ${h.fecha}</div>`).join('');
+            if (!history.length) { container.innerHTML = '<p style="color:#668866;">Sin LIVE</p>'; return; }
+            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">🔴 ${h.number} | ${h.brand} | ${h.mensaje} | ${h.fecha}</div>`).join('');
         }
 
         function guardarHistorialMasivo(results) {
@@ -3206,8 +3191,8 @@
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             const container = document.getElementById('massiveHistory');
             container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#6688aa;">Sin masivos</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">📊 ${h.total} | 🟢 ${h.fondos} | 🟡 ${h.valid} | ${h.fecha}</div>`).join('');
+            if (!history.length) { container.innerHTML = '<p style="color:#668866;">Sin masivos</p>'; return; }
+            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">📊 ${h.total} | 🟢 ${h.fondos} | 🟡 ${h.valid} | ${h.fecha}</div>`).join('');
         }
 
         async function cargarCreditosUsuario() {
@@ -3219,21 +3204,19 @@
             const ref = db.ref(`creditos/${currentUser.uid}/historial`);
             const snap = await ref.orderByChild('fecha').limitToLast(20).once('value');
             const container = document.getElementById('creditHistory');
-            if (!snap.exists()) { container.innerHTML = '<p style="color:#6688aa;">Sin movimientos</p>'; return; }
+            if (!snap.exists()) { container.innerHTML = '<p style="color:#668866;">Sin movimientos</p>'; return; }
             const items = [];
             snap.forEach(child => items.push(child.val()));
             items.reverse();
-            container.innerHTML = items.map(item => `<div style="border-bottom:1px solid #1a3a5a;padding:3px 0;font-size:0.68rem;color:#aaccee;">${item.tipo === 'recarga' ? '➕' : '➖'} ${item.monto} | ${item.descripcion || ''} <span style="color:#6688aa;font-size:0.55rem;">${new Date(item.fecha).toLocaleString()}</span></div>`).join('');
+            container.innerHTML = items.map(item => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">${item.tipo === 'recarga' ? '➕' : '➖'} ${item.monto} | ${item.descripcion || ''} <span style="color:#668866;font-size:0.55rem;">${new Date(item.fecha).toLocaleString()}</span></div>`).join('');
         }
 
         // ================================================================
-        // 🚀 LIVE MEJORADO - VERIFICACIÓN REAL POR PASARELA
+        // VERIFICACIÓN DE TARJETAS
         // ================================================================
         async function verificarTarjeta(number, month, year, cvv, pasarela = 'stripe') {
-            // Simular tiempo de respuesta real (800ms - 2500ms)
             await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 1700));
 
-            // Validar Luhn primero
             if (!luhnCheck(number)) {
                 return {
                     estado: 'invalid',
@@ -3241,560 +3224,92 @@
                     codigo: '14',
                     fondos: false,
                     cvv_ok: false,
-                    detalles: ['Número no válido (Luhn check falló)'],
-                    check: 'Check🔥Andyparatisapo☠️❌'
+                    check: 'Check🔥PericoVerde☠️❌'
                 };
             }
 
             const random = Math.random();
 
-            // ================================================================
-            // PASARELA STRIPE
-            // ================================================================
             if (pasarela === 'stripe') {
-                if (random < 0.18) {
-                    return {
-                        estado: 'approved',
-                        mensaje: '✅ APROBADA - Stripe: Payment succeeded',
-                        codigo: '200',
-                        fondos: true,
-                        cvv_ok: true,
-                        detalles: ['Charge successful', 'Fondos confirmados', 'CVV match ✅'],
-                        check: 'Check🔥Andyparatisapo☠️✅'
-                    };
-                } else if (random < 0.33) {
-                    return {
-                        estado: 'insufficient',
-                        mensaje: '⚠️ VÁLIDA - Stripe: Insufficient funds',
-                        codigo: '402',
-                        fondos: false,
-                        cvv_ok: true,
-                        detalles: ['Tarjeta válida', 'Fondos insuficientes', 'CVV correcto ✅'],
-                        check: 'Check🔥Andyparatisapo☠️🔶'
-                    };
-                } else if (random < 0.48) {
-                    return {
-                        estado: 'cvv_invalid',
-                        mensaje: '🟠 CVV INCORRECTO - Stripe: CVV mismatch',
-                        codigo: '402',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta válida', 'CVV verification failed ❌'],
-                        check: 'Check🔥Andyparatisapo☠️❌CVV'
-                    };
-                } else if (random < 0.63) {
-                    return {
-                        estado: 'expired',
-                        mensaje: '🔴 EXPIRADA - Stripe: Card expired',
-                        codigo: '400',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta expirada', 'Actualizar fecha de vencimiento'],
-                        check: 'Check🔥Andyparatisapo☠️❌EXP'
-                    };
-                } else if (random < 0.78) {
-                    return {
-                        estado: 'blocked',
-                        mensaje: '⛔ BLOQUEADA - Stripe: Card blocked',
-                        codigo: '403',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta bloqueada por seguridad', 'Contactar al banco'],
-                        check: 'Check🔥Andyparatisapo☠️⛔'
-                    };
-                } else {
-                    return {
-                        estado: 'invalid',
-                        mensaje: '❌ INVÁLIDA - Stripe: No such card',
-                        codigo: '404',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Número inválido o no registrado'],
-                        check: 'Check🔥Andyparatisapo☠️❌'
-                    };
-                }
+                if (random < 0.18) return { estado: 'approved', mensaje: '✅ APROBADA - Stripe: Payment succeeded', codigo: '200', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.33) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Stripe: Insufficient funds', codigo: '402', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.48) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Stripe: CVV mismatch', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.63) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Stripe: Card expired', codigo: '400', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.78) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Stripe: Card blocked', codigo: '403', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Stripe: No such card', codigo: '404', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            // ================================================================
-            // PASARELA ZUORA
-            // ================================================================
             if (pasarela === 'zuora') {
-                if (random < 0.15) {
-                    return {
-                        estado: 'approved',
-                        mensaje: '✅ APROBADA - Zuora: Success',
-                        codigo: '00',
-                        fondos: true,
-                        cvv_ok: true,
-                        detalles: ['Autorización aprobada', 'Con fondos', 'CVV match ✅'],
-                        check: 'Check🔥Andyparatisapo☠️✅'
-                    };
-                } else if (random < 0.30) {
-                    return {
-                        estado: 'insufficient',
-                        mensaje: '⚠️ VÁLIDA - Zuora: Insufficient funds',
-                        codigo: '51',
-                        fondos: false,
-                        cvv_ok: true,
-                        detalles: ['Tarjeta válida', 'Saldo insuficiente', 'CVV correcto ✅'],
-                        check: 'Check🔥Andyparatisapo☠️🔶'
-                    };
-                } else if (random < 0.45) {
-                    return {
-                        estado: 'cvv_invalid',
-                        mensaje: '🟠 CVV INCORRECTO - Zuora: CVV mismatch',
-                        codigo: '402',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['CVV no coincide con el registro ❌'],
-                        check: 'Check🔥Andyparatisapo☠️❌CVV'
-                    };
-                } else if (random < 0.55) {
-                    return {
-                        estado: 'expired',
-                        mensaje: '🔴 EXPIRADA - Zuora: Expired card',
-                        codigo: '54',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Fecha de expiración inválida'],
-                        check: 'Check🔥Andyparatisapo☠️❌EXP'
-                    };
-                } else if (random < 0.70) {
-                    return {
-                        estado: 'blocked',
-                        mensaje: '⛔ BLOQUEADA - Zuora: Card restricted',
-                        codigo: '57',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Transacción no permitida'],
-                        check: 'Check🔥Andyparatisapo☠️⛔'
-                    };
-                } else {
-                    return {
-                        estado: 'invalid',
-                        mensaje: '❌ INVÁLIDA - Zuora: Invalid card',
-                        codigo: '14',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Número no válido'],
-                        check: 'Check🔥Andyparatisapo☠️❌'
-                    };
-                }
+                if (random < 0.15) return { estado: 'approved', mensaje: '✅ APROBADA - Zuora: Success', codigo: '00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.30) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Zuora: Insufficient funds', codigo: '51', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.45) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Zuora: CVV mismatch', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.55) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Zuora: Expired card', codigo: '54', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Zuora: Card restricted', codigo: '57', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Zuora: Invalid card', codigo: '14', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            // ================================================================
-            // PASARELA AUTH.NET
-            // ================================================================
             if (pasarela === 'auth') {
-                if (random < 0.17) {
-                    return {
-                        estado: 'approved',
-                        mensaje: '✅ APROBADA - Auth.net: Success',
-                        codigo: '1',
-                        fondos: true,
-                        cvv_ok: true,
-                        detalles: ['Transaction approved', 'Fondos confirmados', 'CVV match ✅'],
-                        check: 'Check🔥Andyparatisapo☠️✅'
-                    };
-                } else if (random < 0.32) {
-                    return {
-                        estado: 'insufficient',
-                        mensaje: '⚠️ VÁLIDA - Auth.net: Insufficient funds',
-                        codigo: '2',
-                        fondos: false,
-                        cvv_ok: true,
-                        detalles: ['Tarjeta válida', 'Sin fondos suficientes', 'CVV correcto ✅'],
-                        check: 'Check🔥Andyparatisapo☠️🔶'
-                    };
-                } else if (random < 0.47) {
-                    return {
-                        estado: 'cvv_invalid',
-                        mensaje: '🟠 CVV INCORRECTO - Auth.net: CVV mismatch',
-                        codigo: '6',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['CVV no coincide ❌'],
-                        check: 'Check🔥Andyparatisapo☠️❌CVV'
-                    };
-                } else if (random < 0.62) {
-                    return {
-                        estado: 'expired',
-                        mensaje: '🔴 EXPIRADA - Auth.net: Expired card',
-                        codigo: '7',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Fecha de vencimiento inválida'],
-                        check: 'Check🔥Andyparatisapo☠️❌EXP'
-                    };
-                } else if (random < 0.77) {
-                    return {
-                        estado: 'blocked',
-                        mensaje: '⛔ BLOQUEADA - Auth.net: Card blocked',
-                        codigo: '8',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta bloqueada'],
-                        check: 'Check🔥Andyparatisapo☠️⛔'
-                    };
-                } else {
-                    return {
-                        estado: 'invalid',
-                        mensaje: '❌ INVÁLIDA - Auth.net: Invalid card',
-                        codigo: '3',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Número no válido'],
-                        check: 'Check🔥Andyparatisapo☠️❌'
-                    };
-                }
+                if (random < 0.17) return { estado: 'approved', mensaje: '✅ APROBADA - Auth.net: Success', codigo: '1', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.32) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Auth.net: Insufficient funds', codigo: '2', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.47) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Auth.net: CVV mismatch', codigo: '6', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.62) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Auth.net: Expired card', codigo: '7', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.77) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Auth.net: Card blocked', codigo: '8', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Auth.net: Invalid card', codigo: '3', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            // ================================================================
-            // PASARELA BRAINTREE
-            // ================================================================
             if (pasarela === 'braintree') {
-                if (random < 0.16) {
-                    return {
-                        estado: 'approved',
-                        mensaje: '✅ APROBADA - Braintree: Success',
-                        codigo: '1000',
-                        fondos: true,
-                        cvv_ok: true,
-                        detalles: ['Transacción aprobada', 'Con fondos', 'CVV match ✅'],
-                        check: 'Check🔥Andyparatisapo☠️✅'
-                    };
-                } else if (random < 0.31) {
-                    return {
-                        estado: 'insufficient',
-                        mensaje: '⚠️ VÁLIDA - Braintree: Insufficient funds',
-                        codigo: '1001',
-                        fondos: false,
-                        cvv_ok: true,
-                        detalles: ['Tarjeta válida', 'Sin fondos suficientes', 'CVV correcto ✅'],
-                        check: 'Check🔥Andyparatisapo☠️🔶'
-                    };
-                } else if (random < 0.46) {
-                    return {
-                        estado: 'cvv_invalid',
-                        mensaje: '🟠 CVV INCORRECTO - Braintree: CVV mismatch',
-                        codigo: '1002',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['CVV verification failed ❌'],
-                        check: 'Check🔥Andyparatisapo☠️❌CVV'
-                    };
-                } else if (random < 0.61) {
-                    return {
-                        estado: 'expired',
-                        mensaje: '🔴 EXPIRADA - Braintree: Card expired',
-                        codigo: '1003',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta expirada'],
-                        check: 'Check🔥Andyparatisapo☠️❌EXP'
-                    };
-                } else if (random < 0.76) {
-                    return {
-                        estado: 'blocked',
-                        mensaje: '⛔ BLOQUEADA - Braintree: Card blocked',
-                        codigo: '1004',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta bloqueada'],
-                        check: 'Check🔥Andyparatisapo☠️⛔'
-                    };
-                } else {
-                    return {
-                        estado: 'invalid',
-                        mensaje: '❌ INVÁLIDA - Braintree: Invalid card',
-                        codigo: '1005',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Número no válido'],
-                        check: 'Check🔥Andyparatisapo☠️❌'
-                    };
-                }
+                if (random < 0.16) return { estado: 'approved', mensaje: '✅ APROBADA - Braintree: Success', codigo: '1000', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.31) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Braintree: Insufficient funds', codigo: '1001', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.46) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Braintree: CVV mismatch', codigo: '1002', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.61) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Braintree: Card expired', codigo: '1003', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.76) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Braintree: Card blocked', codigo: '1004', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Braintree: Invalid card', codigo: '1005', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            // ================================================================
-            // PASARELA CCN
-            // ================================================================
             if (pasarela === 'ccn') {
-                if (random < 0.14) {
-                    return {
-                        estado: 'approved',
-                        mensaje: '✅ APROBADA - CCN: Success',
-                        codigo: '000',
-                        fondos: true,
-                        cvv_ok: true,
-                        detalles: ['CCN verificada', 'Con fondos', 'CVV match ✅'],
-                        check: 'Check🔥Andyparatisapo☠️✅'
-                    };
-                } else if (random < 0.28) {
-                    return {
-                        estado: 'insufficient',
-                        mensaje: '⚠️ VÁLIDA - CCN: Insufficient funds',
-                        codigo: '001',
-                        fondos: false,
-                        cvv_ok: true,
-                        detalles: ['Tarjeta válida', 'Sin fondos', 'CVV correcto ✅'],
-                        check: 'Check🔥Andyparatisapo☠️🔶'
-                    };
-                } else if (random < 0.42) {
-                    return {
-                        estado: 'cvv_invalid',
-                        mensaje: '🟠 CVV INCORRECTO - CCN: CVV mismatch',
-                        codigo: '002',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['CVV no coincide ❌'],
-                        check: 'Check🔥Andyparatisapo☠️❌CVV'
-                    };
-                } else if (random < 0.56) {
-                    return {
-                        estado: 'expired',
-                        mensaje: '🔴 EXPIRADA - CCN: Card expired',
-                        codigo: '003',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Fecha de vencimiento inválida'],
-                        check: 'Check🔥Andyparatisapo☠️❌EXP'
-                    };
-                } else if (random < 0.70) {
-                    return {
-                        estado: 'blocked',
-                        mensaje: '⛔ BLOQUEADA - CCN: Card blocked',
-                        codigo: '004',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta bloqueada'],
-                        check: 'Check🔥Andyparatisapo☠️⛔'
-                    };
-                } else {
-                    return {
-                        estado: 'invalid',
-                        mensaje: '❌ INVÁLIDA - CCN: Invalid card',
-                        codigo: '005',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Número no válido'],
-                        check: 'Check🔥Andyparatisapo☠️❌'
-                    };
-                }
+                if (random < 0.14) return { estado: 'approved', mensaje: '✅ APROBADA - CCN: Success', codigo: '000', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.28) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - CCN: Insufficient funds', codigo: '001', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.42) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - CCN: CVV mismatch', codigo: '002', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.56) return { estado: 'expired', mensaje: '🔴 EXPIRADA - CCN: Card expired', codigo: '003', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - CCN: Card blocked', codigo: '004', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - CCN: Invalid card', codigo: '005', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            // ================================================================
-            // PASARELA CVV
-            // ================================================================
             if (pasarela === 'cvv') {
-                if (random < 0.12) {
-                    return {
-                        estado: 'approved',
-                        mensaje: '✅ APROBADA - CVV Check: Success',
-                        codigo: 'CVV00',
-                        fondos: true,
-                        cvv_ok: true,
-                        detalles: ['CVV verificado correctamente', 'Con fondos', 'CVV match ✅'],
-                        check: 'Check🔥Andyparatisapo☠️✅'
-                    };
-                } else if (random < 0.26) {
-                    return {
-                        estado: 'insufficient',
-                        mensaje: '⚠️ VÁLIDA - CVV Check: Insufficient funds',
-                        codigo: 'CVV01',
-                        fondos: false,
-                        cvv_ok: true,
-                        detalles: ['CVV correcto ✅', 'Sin fondos suficientes'],
-                        check: 'Check🔥Andyparatisapo☠️🔶'
-                    };
-                } else if (random < 0.40) {
-                    return {
-                        estado: 'cvv_invalid',
-                        mensaje: '🟠 CVV INCORRECTO - CVV Check: CVV mismatch',
-                        codigo: 'CVV02',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['CVV no coincide con el banco ❌'],
-                        check: 'Check🔥Andyparatisapo☠️❌CVV'
-                    };
-                } else if (random < 0.54) {
-                    return {
-                        estado: 'expired',
-                        mensaje: '🔴 EXPIRADA - CVV Check: Card expired',
-                        codigo: 'CVV03',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta expirada'],
-                        check: 'Check🔥Andyparatisapo☠️❌EXP'
-                    };
-                } else if (random < 0.68) {
-                    return {
-                        estado: 'blocked',
-                        mensaje: '⛔ BLOQUEADA - CVV Check: Card blocked',
-                        codigo: 'CVV04',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta bloqueada'],
-                        check: 'Check🔥Andyparatisapo☠️⛔'
-                    };
-                } else {
-                    return {
-                        estado: 'invalid',
-                        mensaje: '❌ INVÁLIDA - CVV Check: Invalid card',
-                        codigo: 'CVV05',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Número no válido'],
-                        check: 'Check🔥Andyparatisapo☠️❌'
-                    };
-                }
+                if (random < 0.12) return { estado: 'approved', mensaje: '✅ APROBADA - CVV Check: Success', codigo: 'CVV00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.26) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - CVV Check: Insufficient funds', codigo: 'CVV01', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.40) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - CVV Check: CVV mismatch', codigo: 'CVV02', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.54) return { estado: 'expired', mensaje: '🔴 EXPIRADA - CVV Check: Card expired', codigo: 'CVV03', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.68) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - CVV Check: Card blocked', codigo: 'CVV04', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - CVV Check: Invalid card', codigo: 'CVV05', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            // ================================================================
-            // PASARELA BRAINTREE AUTH
-            // ================================================================
             if (pasarela === 'braintreeauth') {
-                if (random < 0.17) {
-                    return {
-                        estado: 'approved',
-                        mensaje: '✅ APROBADA - Braintree Auth: Success',
-                        codigo: 'AUTH00',
-                        fondos: true,
-                        cvv_ok: true,
-                        detalles: ['Autenticación Braintree exitosa', 'Con fondos', 'CVV match ✅'],
-                        check: 'Check🔥Andyparatisapo☠️✅'
-                    };
-                } else if (random < 0.32) {
-                    return {
-                        estado: 'insufficient',
-                        mensaje: '⚠️ VÁLIDA - Braintree Auth: Insufficient funds',
-                        codigo: 'AUTH01',
-                        fondos: false,
-                        cvv_ok: true,
-                        detalles: ['Autenticación válida', 'Sin fondos', 'CVV correcto ✅'],
-                        check: 'Check🔥Andyparatisapo☠️🔶'
-                    };
-                } else if (random < 0.47) {
-                    return {
-                        estado: 'cvv_invalid',
-                        mensaje: '🟠 CVV INCORRECTO - Braintree Auth: CVV mismatch',
-                        codigo: 'AUTH02',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['CVV no coincide ❌', 'Autenticación fallida'],
-                        check: 'Check🔥Andyparatisapo☠️❌CVV'
-                    };
-                } else if (random < 0.62) {
-                    return {
-                        estado: 'expired',
-                        mensaje: '🔴 EXPIRADA - Braintree Auth: Card expired',
-                        codigo: 'AUTH03',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta expirada'],
-                        check: 'Check🔥Andyparatisapo☠️❌EXP'
-                    };
-                } else if (random < 0.77) {
-                    return {
-                        estado: 'blocked',
-                        mensaje: '⛔ BLOQUEADA - Braintree Auth: Card blocked',
-                        codigo: 'AUTH04',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Tarjeta bloqueada'],
-                        check: 'Check🔥Andyparatisapo☠️⛔'
-                    };
-                } else {
-                    return {
-                        estado: 'invalid',
-                        mensaje: '❌ INVÁLIDA - Braintree Auth: Invalid card',
-                        codigo: 'AUTH05',
-                        fondos: false,
-                        cvv_ok: false,
-                        detalles: ['Número no válido'],
-                        check: 'Check🔥Andyparatisapo☠️❌'
-                    };
-                }
+                if (random < 0.17) return { estado: 'approved', mensaje: '✅ APROBADA - Braintree Auth: Success', codigo: 'AUTH00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.32) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Braintree Auth: Insufficient funds', codigo: 'AUTH01', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.47) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Braintree Auth: CVV mismatch', codigo: 'AUTH02', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.62) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Braintree Auth: Card expired', codigo: 'AUTH03', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.77) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Braintree Auth: Card blocked', codigo: 'AUTH04', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Braintree Auth: Invalid card', codigo: 'AUTH05', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            // ================================================================
-            // PASARELA POR DEFECTO (FALLBACK)
-            // ================================================================
-            if (random < 0.15) {
-                return {
-                    estado: 'approved',
-                    mensaje: '✅ APROBADA - Transacción exitosa',
-                    codigo: '00',
-                    fondos: true,
-                    cvv_ok: true,
-                    detalles: ['Autorización aprobada', 'Con fondos', 'CVV match ✅'],
-                    check: 'Check🔥Andyparatisapo☠️✅'
-                };
-            } else if (random < 0.30) {
-                return {
-                    estado: 'insufficient',
-                    mensaje: '⚠️ VÁLIDA - Fondos insuficientes',
-                    codigo: '51',
-                    fondos: false,
-                    cvv_ok: true,
-                    detalles: ['Tarjeta válida', 'Sin fondos', 'CVV correcto ✅'],
-                    check: 'Check🔥Andyparatisapo☠️🔶'
-                };
-            } else if (random < 0.45) {
-                return {
-                    estado: 'cvv_invalid',
-                    mensaje: '🟠 CVV INCORRECTO - CVV incorrecto',
-                    codigo: '402',
-                    fondos: false,
-                    cvv_ok: false,
-                    detalles: ['CVV no coincide ❌'],
-                    check: 'Check🔥Andyparatisapo☠️❌CVV'
-                };
-            } else if (random < 0.55) {
-                return {
-                    estado: 'expired',
-                    mensaje: '🔴 EXPIRADA - Fecha inválida',
-                    codigo: '54',
-                    fondos: false,
-                    cvv_ok: false,
-                    detalles: ['Tarjeta expirada'],
-                    check: 'Check🔥Andyparatisapo☠️❌EXP'
-                };
-            } else if (random < 0.70) {
-                return {
-                    estado: 'blocked',
-                    mensaje: '⛔ BLOQUEADA - Tarjeta restringida',
-                    codigo: '57',
-                    fondos: false,
-                    cvv_ok: false,
-                    detalles: ['Tarjeta bloqueada'],
-                    check: 'Check🔥Andyparatisapo☠️⛔'
-                };
-            } else {
-                return {
-                    estado: 'invalid',
-                    mensaje: '❌ INVÁLIDA - Tarjeta no existe',
-                    codigo: '14',
-                    fondos: false,
-                    cvv_ok: false,
-                    detalles: ['Número inválido'],
-                    check: 'Check🔥Andyparatisapo☠️❌'
-                };
-            }
+            if (random < 0.15) return { estado: 'approved', mensaje: '✅ APROBADA - Transacción exitosa', codigo: '00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+            else if (random < 0.30) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Fondos insuficientes', codigo: '51', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+            else if (random < 0.45) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - CVV incorrecto', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+            else if (random < 0.55) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Fecha inválida', codigo: '54', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+            else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Tarjeta restringida', codigo: '57', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+            else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Tarjeta no existe', codigo: '14', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
         }
 
-        // ================================================================
-        // 📋 FORMATO DE RESULTADO MEJORADO
-        // ================================================================
         function formatearResultadoLive(number, month, year, cvv, brand, result) {
             const estado = result.estado || 'invalid';
             const mensaje = result.mensaje || '❌ INVÁLIDA';
-            const check = result.check || 'Check🔥Andyparatisapo☠️❌';
+            const check = result.check || 'Check🔥PericoVerde☠️❌';
             return `${number}|${month}|${year}|${cvv}|${brand}|${estado}|${mensaje}|${check}`;
         }
 
         // ================================================================
-        // 🔴 LIVE INDIVIDUAL MEJORADO
+        // 🔴 LIVE INDIVIDUAL
         // ================================================================
         async function checkCardLive() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3838,22 +3353,22 @@
                                    result.estado === 'expired' ? '#ff4444' : '#ff4444';
 
                 document.getElementById('liveResultBox').innerHTML = `
-                    <div style="border-bottom:2px solid #1a4a7a;padding-bottom:10px;margin-bottom:10px;">
+                    <div style="border-bottom:2px solid #1a4a1a;padding-bottom:10px;margin-bottom:10px;">
                         <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;color:${estadoColor};">${result.mensaje}</div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
-                            <div><span style="color:#88bbff;">🔢 Número:</span> ${number}</div>
-                            <div><span style="color:#88bbff;">🏷️ Marca:</span> ${brand}</div>
-                            <div><span style="color:#88bbff;">📅 Expira:</span> ${month}/${year}</div>
-                            <div><span style="color:#88bbff;">🔐 CVV:</span> ${cvv} ${result.cvv_ok ? '✅' : '❌'}</div>
-                            <div><span style="color:#88bbff;">🏦 Banco:</span> ${binInfo.banco}</div>
-                            <div><span style="color:#88bbff;">🌍 País:</span> ${binInfo.paisEmoji} ${binInfo.pais}</div>
-                            <div><span style="color:#88bbff;">💳 Pasarela:</span> ${pasarelaSeleccionada}</div>
-                            <div><span style="color:#88bbff;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
+                            <div><span style="color:#88ffaa;">🔢 Número:</span> ${number}</div>
+                            <div><span style="color:#88ffaa;">🏷️ Marca:</span> ${brand}</div>
+                            <div><span style="color:#88ffaa;">📅 Expira:</span> ${month}/${year}</div>
+                            <div><span style="color:#88ffaa;">🔐 CVV:</span> ${cvv} ${result.cvv_ok ? '✅' : '❌'}</div>
+                            <div><span style="color:#88ffaa;">🏦 Banco:</span> ${binInfo.banco}</div>
+                            <div><span style="color:#88ffaa;">🌍 País:</span> ${binInfo.paisEmoji} ${binInfo.pais}</div>
+                            <div><span style="color:#88ffaa;">💳 Pasarela:</span> ${pasarelaSeleccionada}</div>
+                            <div><span style="color:#88ffaa;">📊 Código:</span> ${result.codigo || 'N/A'}</div>
                         </div>
-                        <div style="margin-top:8px;background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;border:1px solid #00ccff;">
+                        <div style="margin-top:8px;background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;border:1px solid #00cc44;">
                             <span style="color:#ffaa44;font-weight:bold;font-family:monospace;font-size:0.8rem;">📋 ${resultadoFormateado}</span>
                         </div>
-                        <div style="margin-top:6px;color:#6688aa;font-size:0.65rem;border-top:1px solid #1a3a5a;padding-top:5px;">
+                        <div style="margin-top:6px;color:#668866;font-size:0.65rem;border-top:1px solid #1a3a1a;padding-top:5px;">
                             💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits} | Pasarela: ${pasarelaSeleccionada}
                         </div>
                     </div>
@@ -3872,7 +3387,7 @@
         }
 
         // ================================================================
-        // 📊 LIVE MASIVO MEJORADO
+        // 📊 LIVE MASIVO
         // ================================================================
         async function liveMasivo() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
@@ -3892,7 +3407,7 @@
                     const bin = card.number.slice(0, 6);
                     const binInfo = await obtenerInfoBIN(bin);
                     const brand = binInfo.marca || card.brand || detectBrand(card.number);
-                    
+
                     const cvvLength = getCVVLength(brand);
                     const cvvUsar = card.cvv || generarCVV(brand);
                     if (cvvUsar.length !== cvvLength) {
@@ -3901,7 +3416,7 @@
 
                     const result = await verificarTarjeta(card.number, card.month, card.year, card.cvv, pasarelaSeleccionada);
                     const resultadoFormateado = formatearResultadoLive(card.number, card.month, card.year, card.cvv, brand, result);
-                    
+
                     massiveResults.push({
                         number: card.number,
                         month: card.month,
@@ -3923,8 +3438,8 @@
                         brand: 'Desconocida',
                         estado: 'invalid',
                         mensaje: '❌ ERROR DE VERIFICACIÓN',
-                        check: 'Check🔥Andyparatisapo☠️❌',
-                        resultadoFormateado: `${card.number}|${card.month}|${card.year}|${card.cvv}|Desconocida|invalid|❌ ERROR DE VERIFICACIÓN|Check🔥Andyparatisapo☠️❌`
+                        check: 'Check🔥PericoVerde☠️❌',
+                        resultadoFormateado: `${card.number}|${card.month}|${card.year}|${card.cvv}|Desconocida|invalid|❌ ERROR DE VERIFICACIÓN|Check🔥PericoVerde☠️❌`
                     });
                 }
             }
@@ -3961,8 +3476,8 @@
             const invalidCount = results.filter(r => r.estado === 'invalid').length;
 
             container.innerHTML = `
-                <div style="border-bottom:2px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
-                    <div style="font-size:0.9rem;font-weight:bold;color:#66ddff;">📊 RESULTADOS (${results.length})</div>
+                <div style="border-bottom:2px solid #1a4a1a;padding-bottom:8px;margin-bottom:8px;">
+                    <div style="font-size:0.9rem;font-weight:bold;color:#66ff88;">📊 RESULTADOS (${results.length})</div>
                     <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.15);margin-bottom:8px;flex-wrap:wrap;">
                         <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
                         <span style="font-size:0.7rem;">🟠 CVV incorrecto: <span style="color:#ff8800;">${cvvInvalidCount}</span></span>
@@ -4000,7 +3515,7 @@
             const blob = new Blob(['Número|Mes|Año|CVV|Marca|Estado|Mensaje|Check\n' + lines.join('\n')], { type: 'text/plain' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `masivo_${new Date().toISOString().slice(0,10)}.txt`;
+            a.download = `masivo_perico_verde_${new Date().toISOString().slice(0,10)}.txt`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -4071,13 +3586,13 @@
             const paisNombre = nombrePais[pais] || pais;
 
             document.getElementById('direccionResultBox').innerHTML = `
-                <div style="border-bottom:1px solid #1a4a7a;padding-bottom:8px;margin-bottom:8px;">
+                <div style="border-bottom:1px solid #1a4a1a;padding-bottom:8px;margin-bottom:8px;">
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:0.9rem;">
                         <div><span class="label">📍 Dirección:</span> <span class="value">${entry.direccion}</span></div>
                         <div><span class="label">🏙️ Ciudad:</span> <span class="value">${entry.ciudad}</span></div>
                         <div><span class="label">📌 Estado:</span> <span class="value">${entry.estado}</span></div>
                         <div><span class="label">📮 Código Postal:</span> <span class="value">${entry.zip}</span></div>
-                        <div><span class="label">📞 Teléfono:</span> <span class="value" style="color:#88ddff;">${telefono}</span></div>
+                        <div><span class="label">📞 Teléfono:</span> <span class="value" style="color:#88ffaa;">${telefono}</span></div>
                         <div><span class="label">🌍 País:</span> <span class="value" style="color:#ffaa44;font-weight:bold;">${paisNombre}</span></div>
                     </div>
                     <div style="margin-top:8px;">
@@ -4098,7 +3613,7 @@
         // CHAT
         // ================================================================
         function cambiarAvatarChat() {
-            const avatares = ['🦁', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
+            const avatares = ['🦜', '🔥', '⚡', '💎', '🚀', '🎯', '👑', '💪', '🤖', '👾', '😎', '🦊', '🐺', '🐉', '⭐', '🌈'];
             const actual = document.getElementById('chatAvatarSelector').textContent;
             let nuevo = actual;
             while (nuevo === actual) {
@@ -4160,7 +3675,7 @@
             if (snap.exists()) {
                 const data = snap.val();
                 chatDisplayName = data.name || currentUser.email.split('@')[0];
-                chatAvatar = data.avatar || '🦁';
+                chatAvatar = data.avatar || '🦜';
                 if (data.name && !esOwner) {
                     chatNameBloqueado = true;
                     document.getElementById('chatDisplayName').disabled = true;
@@ -4175,7 +3690,7 @@
                 }
             } else {
                 chatDisplayName = currentUser.email.split('@')[0];
-                chatAvatar = '🦁';
+                chatAvatar = '🦜';
                 if (esOwner) {
                     document.getElementById('chatDisplayName').disabled = false;
                     document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
@@ -4341,7 +3856,7 @@
             chatUnsubscribe = messagesRef.on('child_added', function(snapshot) {
                 const msg = snapshot.val();
                 const container = document.getElementById('chatMessages');
-                if (container.querySelector('div[style*="color:#6688aa"]')) {
+                if (container.querySelector('div[style*="color:#668866"]')) {
                     container.innerHTML = '';
                 }
                 const isOwn = msg.userId === currentUser.uid;
@@ -4391,7 +3906,7 @@
 
                 div.innerHTML = `
                     <div class="msg-header">
-                        <span class="avatar">${msg.avatar || '🦁'}</span>
+                        <span class="avatar">${msg.avatar || '🦜'}</span>
                         <span class="name" style="color:${color};">${userName}</span>
                         <span class="time">${time}</span>
                     </div>
@@ -4510,7 +4025,7 @@
             salaUnsubscribe = msgRef.on('child_added', function(snapshot) {
                 const msg = snapshot.val();
                 const container = document.getElementById('salaMessages');
-                if (container.querySelector('div[style*="color:#6688aa"]')) {
+                if (container.querySelector('div[style*="color:#668866"]')) {
                     container.innerHTML = '';
                 }
 
@@ -4553,7 +4068,7 @@
 
                 div.innerHTML = `
                     <div class="msg-header">
-                        <span class="avatar">${msg.avatar || '🦁'}</span>
+                        <span class="avatar">${msg.avatar || '🦜'}</span>
                         <span class="name" style="color:${color};">${userName}</span>
                         <span class="time">${time}</span>
                     </div>
@@ -4685,6 +4200,11 @@
             document.getElementById('salaReplyPreview').style.display = 'none';
             mensajeRespondiendoSala = null;
             mostrarNotificacion('🚪 Has salido de la sala privada', 'info');
+        }
+
+        function cancelarRespuestaSala() {
+            mensajeRespondiendoSala = null;
+            document.getElementById('salaReplyPreview').style.display = 'none';
         }
 
         // ================================================================
@@ -4824,7 +4344,7 @@
             const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = `nota_${new Date().toISOString().slice(0,10)}.txt`;
+            a.download = `nota_perico_verde_${new Date().toISOString().slice(0,10)}.txt`;
             document.body.appendChild(a);
             a.click();
             a.remove();
@@ -4906,6 +4426,10 @@
         // ================================================================
         // NAVEGACIÓN
         // ================================================================
+        function toggleTheme() {
+            document.body.classList.toggle('theme-day');
+        }
+
         function switchTab(tabName) {
             document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
@@ -4963,6 +4487,12 @@
             if (tabName === 'admins') {
                 if (currentUser && esOwner) {
                     cargarPromo();
+                    cargarConfiguracionSpam();
+                }
+            }
+            if (tabName === 'registros') {
+                if (currentUser && esOwner) {
+                    cargarConfiguracionSpam();
                 }
             }
             if (tabName === 'pasarela') {
@@ -4986,15 +4516,17 @@
         // ================================================================
         // INICIALIZACIÓN
         // ================================================================
-        console.log('⚡ SYS ANDY PRO - VERSIÓN LIVE MEJORADA 100%');
+        console.log('🦜 PERICO VERDE - VERSIÓN COMPLETA');
         console.log('🔐 Admin:', ADMIN_EMAIL);
         console.log('📱 Base de datos:', firebaseConfig.databaseURL);
-        console.log('✅ Sistema de aprobación activado');
-        console.log('✅ LIVE con 7 pasarelas reales');
-        console.log('✅ Formato: NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|Check🔥Andyparatisapo☠️');
+        console.log('✅ Registro con aprobación');
+        console.log('✅ Sistema de créditos y días');
+        console.log('✅ Panel admin completo');
+        console.log('✅ Formato: NÚMERO|MES|AÑO|CVV|MARCA|ESTADO|MENSAJE|Check🔥PericoVerde☠️');
 
         cargarPromo();
         seleccionarPasarela('stripe');
+        cargarConfiguracionSpam();
     </script>
 </body>
 </html>
