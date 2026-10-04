@@ -5,10 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>PERICO VERDE - CHECKER COMPLETO</title>
     <style>
-        /* ============================================================== */
-        /* PERICO VERDE - 100% TRANSPARENTE SIN CUADROS NI SOMBRAS       */
-        /* ============================================================== */
-
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         :root {
@@ -50,7 +46,6 @@
         }
 
         .app-container::before { content: none; }
-
         .app-container > * { position: relative; z-index: 1; }
 
         #auth-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; min-height: 80vh; padding: 20px; }
@@ -65,23 +60,11 @@
             box-shadow: 0 0 25px rgba(0, 255, 100, 0.4), inset 0 0 15px rgba(0, 0, 0, 0.15);
         }
 
-        .auth-box h2 {
-            text-align: center;
-            font-size: 1.6rem;
-            font-weight: 900;
-            color: #66ff88;
-            margin-bottom: 4px;
-            text-shadow: 0 0 12px rgba(0, 255, 100, 1), 0 0 4px #000, 0 3px 6px #000, 0 0 2px #000;
-        }
-
+        .auth-box h2 { text-align: center; font-size: 1.6rem; font-weight: 900; color: #66ff88; margin-bottom: 4px; text-shadow: 0 0 12px rgba(0, 255, 100, 1), 0 0 4px #000, 0 3px 6px #000, 0 0 2px #000; }
         .auth-box .subtitle { text-align: center; color: #ffffff; font-size: 0.75rem; margin-bottom: 18px; font-weight: 600; text-shadow: 0 0 4px #000, 0 2px 6px #000, 0 1px 2px #000; }
-
         .auth-tabs { display: flex; gap: 10px; margin-bottom: 18px; border-bottom: 1px solid rgba(0, 255, 100, 0.5); padding-bottom: 8px; }
-
         .auth-tab { flex: 1; background: transparent; border: none; color: #b0ffb0; font-weight: 700; padding: 6px; cursor: pointer; border-radius: 8px; font-size: 0.85rem; text-shadow: 0 0 4px #000, 0 2px 6px #000; }
-
         .auth-tab.active { color: #66ff88; background: rgba(0, 200, 68, 0.25); border-bottom: 2px solid #00cc44; }
-
         .auth-panel { display: none; }
         .auth-panel.active { display: block; }
 
@@ -101,7 +84,6 @@
         #main-app { display: none; flex-direction: column; height: 100%; width: 100%; }
 
         .navbar { background: transparent; display: flex; justify-content: space-between; align-items: center; padding: 8px 18px; border-bottom: 2px solid rgba(0, 255, 100, 0.8); flex-shrink: 0; min-height: 52px; flex-wrap: wrap; gap: 4px; }
-
         .navbar .logo-area { display: flex; flex-direction: column; }
         .navbar .logo-title { font-size: 1.2rem; font-weight: 900; color: #66ff88; text-shadow: 0 0 12px rgba(0, 255, 100, 1), 0 0 4px #000, 0 3px 6px #000; }
         .navbar .logo-title::before { content: "🦜 "; }
@@ -118,7 +100,6 @@
         .btn-theme { background: rgba(0, 0, 0, 0.4); border: 1px solid #00cc44; color: #ffffff; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; font-size: 1rem; display: flex; align-items: center; justify-content: center; text-shadow: 0 0 4px #000, 0 1px 3px #000; }
 
         .notification-badge { background: #cc2200; color: white; border-radius: 50%; padding: 2px 8px; font-size: 0.6rem; font-weight: bold; margin-left: 4px; animation: pulse-notification 1.5s ease-in-out infinite; text-shadow: 0 1px 3px #000; }
-
         @keyframes pulse-notification { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
 
         .tabs-container { display: flex; background: transparent; border-bottom: 2px solid rgba(0, 255, 100, 0.8); padding: 3px 10px; flex-shrink: 0; gap: 3px; overflow-x: auto; }
@@ -154,9 +135,7 @@
 
         .panel { display: none; animation: fadeIn 0.2s ease; }
         .panel.active { display: block; }
-
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
         .panel h3 { color: #ffffff; font-size: 1rem; margin-bottom: 10px; font-weight: 900; text-shadow: 0 0 12px rgba(0, 255, 100, 1), 0 0 4px #000, 0 3px 6px #000; }
 
         .item-card { background: transparent; border: 2px solid rgba(0, 255, 100, 0.75); border-radius: 12px; padding: 12px 14px; margin-bottom: 10px; box-shadow: 0 0 15px rgba(0, 255, 100, 0.35), inset 0 0 20px rgba(0, 0, 0, 0.1); }
@@ -217,7 +196,7 @@
         @keyframes pulse-live { 0%, 100% { box-shadow: 0 0 15px rgba(255, 50, 0, 0.7); } 50% { box-shadow: 0 0 30px rgba(255, 50, 0, 0.95); } }
         @keyframes pulse-massive { 0%, 100% { box-shadow: 0 0 15px rgba(255, 136, 0, 0.6); } 50% { box-shadow: 0 0 30px rgba(255, 136, 0, 0.9); } }
         @keyframes pulse-sala { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.6); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.9); } }
-        @keyframes pulse-juego { 0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.6); } 50% { box-shadow: 0 0 30px rgba(255, 107, 53, 0.9); } }
+        @keyframes pulse-juego { 0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.6); } 50% { box-shadow: 0 0 35px rgba(255, 107, 53, 0.9); } }
 
         .btn-block:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; animation: none !important; }
         .flex-row .btn-block { flex: 1; min-width: 90px; }
@@ -233,7 +212,6 @@
         .btn-small.btn-reply { background: #008844; font-size: 0.5rem; }
         .btn-small.btn-mention { background: #ffaa44; font-size: 0.5rem; }
         .btn-small.btn-whatsapp { background: #25D366; font-size: 0.5rem; }
-
         .btn-small.btn-admin { font-size: 0.55rem; padding: 3px 7px; border-radius: 5px; color: white; font-weight: 700; border: none; cursor: pointer; text-shadow: 0 1px 3px #000; }
         .btn-small.btn-admin.btn-add { background: #00cc44; }
         .btn-small.btn-admin.btn-remove { background: #ff4444; }
@@ -310,6 +288,15 @@
         .modal-overlay .modal-box .modal-botones .modal-btn.whatsapp { background: linear-gradient(135deg, #25D366, #128C7E); color: white; }
         .modal-overlay .modal-box .modal-botones .modal-btn.juego { background: linear-gradient(135deg, #ff6b35, #cc4400); color: white; }
         .modal-overlay .modal-box .modal-botones .modal-btn.cerrar { background: #1a4a1a; color: #ffffff; }
+
+        /* MODAL SELECTOR DE WHATSAPP (3 números) */
+        .wa-list { display: flex; flex-direction: column; gap: 8px; margin: 12px 0; }
+        .wa-btn { display: flex; align-items: center; gap: 10px; padding: 12px 14px; background: linear-gradient(135deg, rgba(37, 211, 102, 0.3), rgba(18, 140, 126, 0.3)); border: 2px solid #25D366; border-radius: 12px; color: #ffffff; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; text-align: left; text-shadow: 0 0 4px #000, 0 1px 3px #000; width: 100%; }
+        .wa-btn:hover, .wa-btn:active { background: linear-gradient(135deg, #25D366, #128C7E); transform: scale(1.02); box-shadow: 0 0 20px rgba(37, 211, 102, 0.7); }
+        .wa-btn .wa-icon { font-size: 1.6rem; flex-shrink: 0; }
+        .wa-btn .wa-info { flex: 1; display: flex; flex-direction: column; }
+        .wa-btn .wa-num { font-family: monospace; font-size: 0.8rem; color: #ffffff; font-weight: 800; }
+        .wa-btn .wa-name { font-size: 0.65rem; color: #b0ffb0; font-weight: 600; margin-top: 2px; }
 
         .chat-profile-setup { background: transparent; border: 2px solid rgba(0, 255, 100, 0.6); border-radius: 12px; padding: 15px; margin-bottom: 10px; box-shadow: 0 0 15px rgba(0, 255, 100, 0.3), inset 0 0 20px rgba(0, 0, 0, 0.1); }
         .chat-profile-setup .avatar-selector { font-size: 2.5rem; cursor: pointer; display: inline-block; padding: 5px 15px; border: 2px solid #00cc44; border-radius: 50%; background: rgba(0, 0, 0, 0.4); user-select: none; }
@@ -492,20 +479,36 @@
             .user-list-item .user-actions .btn-small.btn-admin { font-size: 0.4rem; padding: 1px 4px; }
             .registro-item { font-size: 0.6rem; }
             .solicitud-item { font-size: 0.7rem; }
+            .wa-btn { padding: 10px 12px; font-size: 0.75rem; }
+            .wa-btn .wa-num { font-size: 0.7rem; }
         }
     </style>
 </head>
 <body>
 
+    <!-- MODAL CRÉDITOS INSUFICIENTES -->
     <div class="modal-overlay" id="modalCreditos">
         <div class="modal-box">
             <div class="modal-icon">😱</div>
             <div class="modal-titulo">¡Sin créditos!</div>
             <div class="modal-texto">No tienes créditos suficientes.<br><strong>¿Qué quieres hacer?</strong></div>
             <div class="modal-botones">
-                <button class="modal-btn whatsapp" onclick="irWhatsAppAdmin()">📱 Pedir al Admin</button>
+                <button class="modal-btn whatsapp" onclick="cerrarModalCreditos(); pedirCreditosWhatsApp();">📱 Pedir al Admin</button>
                 <button class="modal-btn juego" onclick="irAlJuego()">🎮 Jugar y ganar</button>
                 <button class="modal-btn cerrar" onclick="cerrarModalCreditos()">✕ Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL SELECTOR DE ADMIN (3 números) -->
+    <div class="modal-overlay" id="modalWhatsApp">
+        <div class="modal-box">
+            <div class="modal-icon">📱</div>
+            <div class="modal-titulo">Elige un Admin</div>
+            <div class="modal-texto">Selecciona a cuál dueño le quieres pedir créditos:</div>
+            <div class="wa-list" id="waList"></div>
+            <div class="modal-botones">
+                <button class="modal-btn cerrar" onclick="cerrarModalWhatsApp()" style="flex:1;padding:10px;border:none;border-radius:25px;font-weight:800;font-size:0.8rem;cursor:pointer;text-shadow:0 1px 3px #000;">✕ Cerrar</button>
             </div>
         </div>
     </div>
@@ -523,18 +526,10 @@
                 </div>
 
                 <div id="auth-login" class="auth-panel active">
-                    <div class="form-group">
-                        <label>Usuario o Correo</label>
-                        <input type="text" id="loginEmail" placeholder="usuario@ejemplo.com">
-                    </div>
-                    <div class="form-group">
-                        <label>Contraseña</label>
-                        <input type="password" id="loginPass" placeholder="••••••••">
-                    </div>
+                    <div class="form-group"><label>Usuario o Correo</label><input type="text" id="loginEmail" placeholder="usuario@ejemplo.com"></div>
+                    <div class="form-group"><label>Contraseña</label><input type="password" id="loginPass" placeholder="••••••••"></div>
                     <button class="btn-block" id="loginBtn" onclick="procesarLogin()">INGRESAR</button>
-                    <div class="footer-text">
-                        ¿No tienes cuenta? <a href="#" onclick="cambiarAuthTab('register')" style="color:#66ff88;">Regístrate</a>
-                    </div>
+                    <div class="footer-text">¿No tienes cuenta? <a href="#" onclick="cambiarAuthTab('register')" style="color:#66ff88;">Regístrate</a></div>
                 </div>
 
                 <div id="auth-register" class="auth-panel">
@@ -548,9 +543,7 @@
                     <div class="form-group"><label>Contraseña</label><input type="password" id="regPass" placeholder="mínimo 4 caracteres"></div>
                     <div class="form-group"><label>Confirmar Contraseña</label><input type="password" id="regPassConfirm" placeholder="repita contraseña"></div>
                     <button class="btn-block btn-success" id="registerBtn" onclick="procesarRegistro()">📝 SOLICITAR REGISTRO</button>
-                    <div class="footer-text">
-                        ¿Ya tienes cuenta? <a href="#" onclick="cambiarAuthTab('login')" style="color:#66ff88;">Inicia sesión</a>
-                    </div>
+                    <div class="footer-text">¿Ya tienes cuenta? <a href="#" onclick="cambiarAuthTab('login')" style="color:#66ff88;">Inicia sesión</a></div>
                 </div>
             </div>
         </div>
@@ -560,9 +553,7 @@
             <div class="navbar">
                 <div class="logo-area">
                     <div class="logo-title">PERICO VERDE</div>
-                    <div class="user-info" id="userDisplay">
-                        Cargando... <span class="user-status active" id="userStatusBadge">✅ Activo</span>
-                    </div>
+                    <div class="user-info" id="userDisplay">Cargando... <span class="user-status active" id="userStatusBadge">✅ Activo</span></div>
                 </div>
                 <div class="nav-right">
                     <button class="btn-theme" onclick="toggleTheme()">🌓</button>
@@ -980,7 +971,15 @@
             { email: "pericoverde840519@gmail.com", pass: "masterperico2026@1" }
         ];
 
-        // Compatibilidad: el primer admin siempre será el principal
+        // ================================================================
+        // 📱 LISTA DE NÚMEROS WHATSAPP PARA PEDIR CRÉDITOS (3 NÚMEROS)
+        // ================================================================
+        const WHATSAPP_NUMBERS = [
+            { numero: "593990434546", nombre: "Admin Principal 🇪🇨" },
+            { numero: "522461756965", nombre: "Admin México 1 🇲🇽" },
+            { numero: "522411323564", nombre: "Admin México 2 🇲🇽" }
+        ];
+
         const ADMIN_EMAIL = ADMINS[0].email;
         const ADMIN_PASS = ADMINS[0].pass;
 
@@ -1014,18 +1013,12 @@
             return codigo;
         }
 
-        // ================================================================
-        // VERIFICAR SI UN EMAIL ES OWNER/ADMIN
-        // ================================================================
         function esUsuarioOwner(email) {
             if (!email) return false;
             const emailLow = email.toLowerCase().trim();
             return ADMINS.some(a => a.email.toLowerCase() === emailLow);
         }
 
-        // ================================================================
-        // VERIFICAR CREDENCIALES DE ADMIN
-        // ================================================================
         function esAdminValido(email, pass) {
             if (!email || !pass) return false;
             const emailLow = email.toLowerCase().trim();
@@ -1047,11 +1040,40 @@
 
         function mostrarModalCreditos() { document.getElementById('modalCreditos').classList.add('show'); }
         function cerrarModalCreditos() { document.getElementById('modalCreditos').classList.remove('show'); }
+
+        // ================================================================
+        // SELECTOR DE WHATSAPP (3 NÚMEROS)
+        // ================================================================
+        function abrirSelectorWhatsApp(mensaje) {
+            const list = document.getElementById('waList');
+            list.innerHTML = '';
+            WHATSAPP_NUMBERS.forEach((w, i) => {
+                const btn = document.createElement('button');
+                btn.className = 'wa-btn';
+                btn.onclick = () => {
+                    window.open(`https://wa.me/${w.numero}?text=${encodeURIComponent(mensaje)}`, '_blank');
+                    cerrarModalWhatsApp();
+                };
+                btn.innerHTML = `
+                    <span class="wa-icon">📱</span>
+                    <span class="wa-info">
+                        <span class="wa-num">+${w.numero}</span>
+                        <span class="wa-name">${w.nombre}</span>
+                    </span>
+                `;
+                list.appendChild(btn);
+            });
+            document.getElementById('modalWhatsApp').classList.add('show');
+        }
+
+        function cerrarModalWhatsApp() { document.getElementById('modalWhatsApp').classList.remove('show'); }
+
         function irWhatsAppAdmin() {
             const u = currentUser ? currentUser.email : 'Usuario';
-            window.open(`https://wa.me/593990434546?text=${encodeURIComponent('Hola Perico Verde, soy '+u+'. Necesito más créditos.')}`, '_blank');
+            abrirSelectorWhatsApp(`Hola Perico Verde, soy ${u}. Necesito más créditos.`);
             cerrarModalCreditos();
         }
+
         function irAlJuego() { cerrarModalCreditos(); switchTab('juego'); }
 
         async function cargarDatosUsuario() {
@@ -1099,9 +1121,12 @@
             await db.ref(`creditos/${currentUser.uid}/historial`).push({ tipo, monto, descripcion, fecha: Date.now(), saldo_actual: currentCredits, dias_actuales: currentDays });
         }
 
+        // ================================================================
+        // PEDIR CRÉDITOS - AHORA ABRE SELECTOR DE 3 NÚMEROS
+        // ================================================================
         function pedirCreditosWhatsApp() {
             const u = currentUser ? currentUser.email : 'Usuario';
-            window.open(`https://wa.me/593990434546?text=${encodeURIComponent('Hola Perico Verde, soy '+u+'. Necesito más créditos.')}`, '_blank');
+            abrirSelectorWhatsApp(`Hola Perico Verde, soy ${u}. Necesito más créditos. ¡Gracias!`);
         }
 
         function cambiarAuthTab(tab) {
@@ -1171,9 +1196,6 @@
             const btn = document.getElementById('loginBtn');
             setButtonLoading(btn, true); btn.textContent = '⏳...';
 
-            // =========================================================
-            // VERIFICAR SI ES UNO DE LOS 3 ADMINS/DUEÑOS
-            // =========================================================
             if (esAdminValido(emailInput, passInput)) {
                 setButtonLoading(btn, false); btn.textContent = 'INGRESAR';
                 const adminNodo = limpiarClave(emailInput);
@@ -1999,8 +2021,17 @@
         function insertEmoji(e) { const i = document.getElementById('chatInput'); i.value += e; i.focus(); document.getElementById('emojiPicker').classList.remove('show'); }
         function insertarMencion() { const i = document.getElementById('chatInput'); i.value += '@'; i.focus(); }
         function insertarMencionSala() { const i = document.getElementById('salaChatInput'); i.value += '@'; i.focus(); }
-        function abrirWhatsAppDirecto() { const n = prompt('📱 Número:', '593990434546'); if (!n) return; const nl = n.replace(/[^0-9]/g,''); if (nl.length < 7) return; window.open(`https://wa.me/${nl}`, '_blank'); }
-        function abrirWhatsAppSalaDirecto() { if (!salaActual) return; const n = prompt('📱 Número:', '593990434546'); if (!n) return; const nl = n.replace(/[^0-9]/g,''); if (nl.length < 7) return; window.open(`https://wa.me/${nl}`, '_blank'); }
+
+        // ================================================================
+        // WHATSAPP DIRECTO - TAMBIÉN CON SELECTOR DE 3 NÚMEROS
+        // ================================================================
+        function abrirWhatsAppDirecto() {
+            abrirSelectorWhatsApp('Hola Perico Verde, te escribo desde el chat.');
+        }
+        function abrirWhatsAppSalaDirecto() {
+            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
+            abrirSelectorWhatsApp(`Hola, te escribo desde la sala privada ${salaActual}.`);
+        }
 
         function enviarSticker(s) {
             if (!currentUser || !chatDisplayName) { mostrarNotificacion('❌ Guarda perfil', 'error'); return; }
@@ -2067,7 +2098,7 @@
         }
 
         function mencionarUsuario(n) { const i = document.getElementById('chatInput'); i.value += `@${n} `; i.focus(); }
-        function abrirWhatsAppUsuario(n) { const num = prompt(`📱 Número de ${n}:`, '593'); if (!num) return; const nl = num.replace(/[^0-9]/g,''); if (nl.length < 7) return; window.open(`https://wa.me/${nl}`, '_blank'); }
+        function abrirWhatsAppUsuario(n) { abrirSelectorWhatsApp(`Hola ${n}, te escribo desde Perico Verde.`); }
 
         async function crearSalaPrivada() {
             if (!currentUser || !chatDisplayName) { mostrarNotificacion('❌ Guarda perfil', 'error'); return; }
@@ -2129,7 +2160,7 @@
 
         function responderMensajeSala(msg) { if (!msg) return; mensajeRespondiendoSala = msg; document.getElementById('salaReplyPreviewText').textContent = `${msg.userName}: ${msg.text || msg.sticker || '📷'}`; document.getElementById('salaReplyPreview').style.display = 'flex'; document.getElementById('salaChatInput').focus(); }
         function mencionarUsuarioSala(n) { const i = document.getElementById('salaChatInput'); i.value += `@${n} `; i.focus(); }
-        function abrirWhatsAppSala(n) { if (!salaActual) return; const num = prompt(`📱 Número de ${n}:`, '593'); if (!num) return; const nl = num.replace(/[^0-9]/g,''); if (nl.length < 7) return; window.open(`https://wa.me/${nl}`, '_blank'); }
+        function abrirWhatsAppSala(n) { abrirSelectorWhatsApp(`Hola ${n}, te escribo desde la sala ${salaActual}.`); }
 
         function enviarMensajeSala() {
             if (!currentUser || !salaActual || !chatDisplayName) return;
@@ -2290,8 +2321,9 @@
             }
         }
 
-        console.log('🦜 PERICO VERDE - 3 DUEÑOS ACTIVOS');
+        console.log('🦜 PERICO VERDE - 3 DUEÑOS + 3 NÚMEROS WHATSAPP');
         console.log('👑 Admins:', ADMINS.map(a => a.email).join(', '));
+        console.log('📱 WhatsApp:', WHATSAPP_NUMBERS.map(w => '+' + w.numero).join(', '));
         cargarPromo();
         seleccionarPasarela('stripe');
         cargarConfiguracionSpam();
