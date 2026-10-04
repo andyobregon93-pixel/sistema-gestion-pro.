@@ -6,7 +6,7 @@
     <title>PERICO VERDE - CHECKER COMPLETO</title>
     <style>
         /* ============================================================== */
-        /* ESTILOS - VERSIÓN PERICO VERDE - IMAGEN VISIBLE Y NÍTIDA     */
+        /* ESTILOS - VERSIÓN PERICO VERDE MODO CRISTAL TOTAL             */
         /* ============================================================== */
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -20,22 +20,22 @@
             --borde-neon: #00cc44;
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #0a1a0a, #050d05);
             --border-radius: 10px;
-            --chat-msg-own: #005c2b;
-            --chat-msg-other: #1f3a2a;
-            --bg-auth: rgba(5, 25, 5, 0.82);
+            --chat-msg-own: rgba(0, 92, 43, 0.85);
+            --chat-msg-other: rgba(31, 58, 42, 0.75);
+            --bg-auth: rgba(5, 25, 5, 0.45);
             --bg-panel: rgba(10, 26, 10, 0.92);
-            --bg-card: rgba(10, 30, 10, 0.55);
-            --bg-result: rgba(0, 15, 5, 0.55);
-            --text-muted: #6a8a6a;
+            --bg-card: rgba(10, 30, 10, 0.22);
+            --bg-result: rgba(0, 15, 5, 0.35);
+            --text-muted: #8aaa8a;
             --sombra: 0 0 30px rgba(0, 200, 68, 0.15);
-            --border-color: #1a4a1a;
-            --input-bg: #1a3a1a;
+            --border-color: rgba(0, 204, 68, 0.45);
+            --input-bg: rgba(10, 30, 10, 0.55);
             --reply-border: #00cc44;
             --mention-color: #00ff88;
-            --nota-bg: rgba(10, 35, 15, 0.55);
+            --nota-bg: rgba(10, 35, 15, 0.28);
             --nota-border: #00cc44;
-            --card-bg: rgba(10, 30, 15, 0.55);
-            --hover-bg: rgba(0, 200, 68, 0.1);
+            --card-bg: rgba(10, 30, 15, 0.28);
+            --hover-bg: rgba(0, 200, 68, 0.2);
             --text-bright: #ffffff;
             --admin-btn-bg: #1a3a1a;
             --admin-btn-hover: #2a5a2a;
@@ -54,22 +54,22 @@
             --texto-secundario: #1a4a1a;
             --borde-neon: #008844;
             --grad-fondo: radial-gradient(ellipse at 50% 30%, #d4f7d4, #b8e6b8);
-            --bg-auth: rgba(255, 255, 255, 0.82);
+            --bg-auth: rgba(255, 255, 255, 0.5);
             --bg-panel: rgba(200, 245, 200, 0.92);
-            --bg-card: rgba(255, 255, 255, 0.55);
-            --bg-result: rgba(255, 255, 255, 0.55);
+            --bg-card: rgba(255, 255, 255, 0.28);
+            --bg-result: rgba(255, 255, 255, 0.35);
             --text-muted: #4a6a4a;
-            --chat-msg-own: #008844;
-            --chat-msg-other: #d4f7d4;
+            --chat-msg-own: rgba(0, 136, 68, 0.85);
+            --chat-msg-other: rgba(212, 247, 212, 0.7);
             --sombra: 0 0 30px rgba(0, 100, 50, 0.1);
-            --border-color: #88bb88;
-            --input-bg: #ffffff;
+            --border-color: rgba(0, 136, 68, 0.5);
+            --input-bg: rgba(255, 255, 255, 0.55);
             --reply-border: #008844;
             --mention-color: #00aa66;
-            --nota-bg: rgba(255, 255, 255, 0.6);
+            --nota-bg: rgba(255, 255, 255, 0.4);
             --nota-border: #008844;
-            --card-bg: rgba(255, 255, 255, 0.6);
-            --hover-bg: rgba(0, 100, 50, 0.08);
+            --card-bg: rgba(255, 255, 255, 0.35);
+            --hover-bg: rgba(0, 100, 50, 0.15);
             --text-bright: #0a1a0a;
             --admin-btn-bg: #d4f7d4;
             --admin-btn-hover: #b8e6b8;
@@ -93,7 +93,7 @@
         }
 
         /* ================================================================ */
-        /* ===== CONTENEDOR PRINCIPAL CON IMAGEN NÍTIDA =================== */
+        /* ===== CONTENEDOR PRINCIPAL CON IMAGEN VISIBLE ================== */
         /* ================================================================ */
         .app-container {
             width: 100%;
@@ -111,7 +111,6 @@
             position: relative;
         }
 
-        /* Capa oscura suave para ver la imagen sin taparla */
         .app-container::before {
             content: "";
             position: absolute;
@@ -119,7 +118,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0, 8, 0, 0.35);
+            background: rgba(0, 5, 0, 0.12);
             z-index: 0;
             pointer-events: none;
             border-radius: 20px;
@@ -127,7 +126,7 @@
         }
 
         body.theme-day .app-container::before {
-            background: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         .app-container > * {
@@ -148,13 +147,14 @@
 
         .auth-box {
             background: var(--bg-auth);
-            backdrop-filter: blur(12px);
-            border: 2px solid var(--borde-neon);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border: 2px solid rgba(0, 204, 68, 0.6);
             border-radius: 24px;
             padding: 30px 35px;
             width: 100%;
             max-width: 420px;
-            box-shadow: 0 0 40px rgba(0, 200, 68, 0.3);
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
             transition: background 0.3s, border-color 0.3s;
         }
 
@@ -166,7 +166,7 @@
             background-clip: text;
             color: transparent;
             margin-bottom: 4px;
-            text-shadow: 0 0 20px rgba(0, 255, 100, 0.3);
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.95));
         }
 
         .auth-box .subtitle {
@@ -174,6 +174,7 @@
             color: var(--texto-secundario);
             font-size: 0.75rem;
             margin-bottom: 18px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
 
         .auth-tabs {
@@ -195,11 +196,12 @@
             border-radius: 8px;
             transition: 0.2s;
             font-size: 0.85rem;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
 
         .auth-tab.active {
             color: #66ff88;
-            background: rgba(0, 200, 68, 0.12);
+            background: rgba(0, 200, 68, 0.25);
             border-bottom: 2px solid var(--borde-neon);
         }
 
@@ -213,11 +215,14 @@
             color: var(--texto-secundario);
             font-weight: 600;
             font-size: 0.75rem;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
         .auth-box input {
             width: 100%;
             padding: 9px 12px;
             background-color: var(--input-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 2px solid var(--border-color);
             border-radius: var(--border-radius);
             color: var(--texto-principal);
@@ -226,7 +231,7 @@
         }
         .auth-box input:focus {
             border-color: var(--borde-neon);
-            box-shadow: 0 0 20px rgba(0, 200, 68, 0.15);
+            box-shadow: 0 0 20px rgba(0, 200, 68, 0.4);
             outline: none;
         }
 
@@ -240,13 +245,13 @@
             cursor: pointer;
             color: white;
             background: linear-gradient(135deg, #00cc44, #008844);
-            box-shadow: 0 0 20px rgba(0, 200, 68, 0.2);
+            box-shadow: 0 0 20px rgba(0, 200, 68, 0.4);
             transition: 0.15s;
             margin-top: 4px;
         }
         .auth-box .btn-block:hover {
             transform: scale(1.02);
-            box-shadow: 0 0 30px rgba(0, 200, 68, 0.35);
+            box-shadow: 0 0 30px rgba(0, 200, 68, 0.6);
         }
         .auth-box .btn-block:active { transform: scale(0.97); }
         .auth-box .footer-text {
@@ -254,18 +259,20 @@
             margin-top: 10px;
             font-size: 0.65rem;
             color: var(--text-muted);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
         .auth-box .register-info {
-            background: rgba(0, 255, 136, 0.08);
-            border: 1px solid #00ff8833;
+            background: rgba(0, 255, 136, 0.12);
+            backdrop-filter: blur(10px);
+            border: 1px solid #00ff8844;
             border-radius: 8px;
             padding: 8px 12px;
             margin-bottom: 14px;
             font-size: 0.7rem;
-            color: #88ffaa;
+            color: #aaffcc;
             text-align: center;
             line-height: 1.6;
-            backdrop-filter: blur(4px);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
         .auth-box .register-info strong { color: #00ff88; }
         .auth-box .register-info .pendiente { color: #ffaa44; }
@@ -280,24 +287,29 @@
 
         /* ===== NAVBAR ===== */
         .navbar {
-            background: linear-gradient(90deg, rgba(10, 42, 10, 0.55), rgba(26, 74, 26, 0.45), rgba(10, 42, 10, 0.55)) !important;
-            backdrop-filter: blur(8px);
+            background: rgba(10, 42, 10, 0.35);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 8px 18px;
-            border-bottom: 2px solid var(--borde-neon);
+            border-bottom: 2px solid rgba(0, 204, 68, 0.6);
             flex-shrink: 0;
             min-height: 52px;
             flex-wrap: wrap;
             gap: 4px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
             transition: background 0.3s, border-color 0.3s;
         }
         body.theme-day .navbar {
-            background: linear-gradient(90deg, rgba(184, 230, 184, 0.55), rgba(212, 247, 212, 0.45), rgba(184, 230, 184, 0.55)) !important;
+            background: rgba(200, 245, 200, 0.35);
         }
 
-        .navbar .logo-area { display: flex; flex-direction: column; }
+        .navbar .logo-area {
+            display: flex;
+            flex-direction: column;
+        }
         .navbar .logo-title {
             font-size: 1.2rem;
             font-weight: bold;
@@ -305,13 +317,16 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 15px rgba(0, 255, 100, 0.4);
+            filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.98));
         }
-        .navbar .logo-title::before { content: "🦜 "; }
+        .navbar .logo-title::before {
+            content: "🦜 ";
+        }
         .navbar .user-info {
             font-size: 0.6rem;
             color: var(--texto-secundario);
             margin-top: -2px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98);
         }
         .navbar .user-status {
             font-size: 0.55rem;
@@ -319,9 +334,18 @@
             border-radius: 10px;
             margin-left: 4px;
         }
-        .navbar .user-status.active { background: #00cc8833; color: #00ff88; }
-        .navbar .user-status.blocked { background: #ff444433; color: #ff4444; }
-        .navbar .user-status.pendiente { background: #ffaa4433; color: #ffaa44; }
+        .navbar .user-status.active {
+            background: #00cc8833;
+            color: #00ff88;
+        }
+        .navbar .user-status.blocked {
+            background: #ff444433;
+            color: #ff4444;
+        }
+        .navbar .user-status.pendiente {
+            background: #ffaa4433;
+            color: #ffaa44;
+        }
         .navbar .nav-right {
             display: flex;
             align-items: center;
@@ -335,7 +359,7 @@
             font-weight: bold;
             color: white;
             font-size: 0.7rem;
-            box-shadow: 0 0 15px rgba(0, 200, 68, 0.4);
+            box-shadow: 0 0 15px rgba(0, 200, 68, 0.5);
             white-space: nowrap;
         }
         .navbar .days-display {
@@ -345,7 +369,7 @@
             font-weight: bold;
             color: white;
             font-size: 0.7rem;
-            box-shadow: 0 0 15px rgba(204, 34, 0, 0.4);
+            box-shadow: 0 0 15px rgba(204, 34, 0, 0.5);
             white-space: nowrap;
         }
         .navbar .btn-salir {
@@ -358,7 +382,7 @@
             font-weight: bold;
             font-size: 0.7rem;
             transition: 0.15s;
-            box-shadow: 0 0 15px rgba(204, 34, 0, 0.4);
+            box-shadow: 0 0 15px rgba(204, 34, 0, 0.5);
         }
         .navbar .btn-salir:hover {
             background: #ff3300;
@@ -366,7 +390,8 @@
         }
 
         .btn-theme {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
             border: 1px solid var(--borde-neon);
             color: var(--texto-principal);
             border-radius: 50%;
@@ -378,18 +403,16 @@
             align-items: center;
             justify-content: center;
             transition: 0.2s;
-            backdrop-filter: blur(4px);
         }
         .btn-theme:hover {
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.4);
             transform: scale(1.1);
         }
         body.theme-day .btn-theme {
-            background: rgba(0, 0, 0, 0.08);
-            border-color: #008844;
+            background: rgba(0, 0, 0, 0.1);
         }
 
-        /* ===== NOTIFICACIÓN DE SOLICITUDES ===== */
+        /* ===== NOTIFICACIÓN ===== */
         .notification-badge {
             background: #cc2200;
             color: white;
@@ -409,17 +432,19 @@
         /* ===== TABS ===== */
         .tabs-container {
             display: flex;
-            background: rgba(10, 26, 10, 0.45) !important;
-            backdrop-filter: blur(6px);
+            background: rgba(10, 26, 10, 0.3);
+            backdrop-filter: blur(18px) saturate(180%);
+            -webkit-backdrop-filter: blur(18px) saturate(180%);
             border-bottom: 2px solid var(--border-color);
             padding: 3px 10px;
             flex-shrink: 0;
             gap: 3px;
             overflow-x: auto;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.25);
             transition: background 0.3s, border-color 0.3s;
         }
         body.theme-day .tabs-container {
-            background: rgba(200, 245, 200, 0.5) !important;
+            background: rgba(200, 245, 200, 0.3);
         }
         .tabs-container::-webkit-scrollbar { height: 3px; }
         .tabs-container::-webkit-scrollbar-thumb { background: #00cc44; border-radius: 3px; }
@@ -435,41 +460,38 @@
             border-bottom: 3px solid transparent;
             transition: 0.2s;
             white-space: nowrap;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98);
         }
-        .tab-btn:hover { color: #66ff88; background: rgba(0, 200, 68, 0.08); }
-        .tab-btn.active { color: #66ff88; border-bottom-color: var(--borde-neon); background: rgba(0, 200, 68, 0.12); }
+        .tab-btn:hover { color: #66ff88; background: rgba(0, 200, 68, 0.15); }
+        .tab-btn.active { color: #66ff88; border-bottom-color: var(--borde-neon); background: rgba(0, 200, 68, 0.22); }
         .tab-btn.massive-tab { color: #ff8800; font-weight: 700; }
-        .tab-btn.massive-tab.active { color: #ff8800; border-bottom-color: #ff8800; background: rgba(255, 136, 0, 0.12); }
+        .tab-btn.massive-tab.active { color: #ff8800; border-bottom-color: #ff8800; background: rgba(255, 136, 0, 0.22); }
         .tab-btn.admin-tab { color: #ff44aa; font-weight: 700; }
-        .tab-btn.admin-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.12); }
-        .tab-btn.pasarela-tab { color: #6772e5; font-weight: 700; }
-        .tab-btn.pasarela-tab.active { color: #6772e5; border-bottom-color: #6772e5; background: rgba(103, 114, 229, 0.12); }
+        .tab-btn.admin-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.22); }
+        .tab-btn.pasarela-tab { color: #99aaff; font-weight: 700; }
+        .tab-btn.pasarela-tab.active { color: #99aaff; border-bottom-color: #99aaff; background: rgba(103, 114, 229, 0.22); }
         .tab-btn.direcciones-tab { color: #ffaa44; font-weight: 700; }
-        .tab-btn.direcciones-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
+        .tab-btn.direcciones-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.22); }
         .tab-btn.chat-tab { color: #00ff88; font-weight: 700; }
-        .tab-btn.chat-tab.active { color: #00ff88; border-bottom-color: #00ff88; background: rgba(0, 255, 136, 0.12); }
+        .tab-btn.chat-tab.active { color: #00ff88; border-bottom-color: #00ff88; background: rgba(0, 255, 136, 0.22); }
         .tab-btn.notas-tab { color: #ff88cc; font-weight: 700; }
-        .tab-btn.notas-tab.active { color: #ff88cc; border-bottom-color: #ff88cc; background: rgba(255, 136, 204, 0.12); }
+        .tab-btn.notas-tab.active { color: #ff88cc; border-bottom-color: #ff88cc; background: rgba(255, 136, 204, 0.22); }
         .tab-btn.sala-tab { color: #ff44aa; font-weight: 700; }
-        .tab-btn.sala-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.12); }
+        .tab-btn.sala-tab.active { color: #ff44aa; border-bottom-color: #ff44aa; background: rgba(255, 68, 170, 0.22); }
         .tab-btn.juego-tab { color: #ff6b35; font-weight: 700; }
-        .tab-btn.juego-tab.active { color: #ff6b35; border-bottom-color: #ff6b35; background: rgba(255, 107, 53, 0.12); }
+        .tab-btn.juego-tab.active { color: #ff6b35; border-bottom-color: #ff6b35; background: rgba(255, 107, 53, 0.22); }
         .tab-btn.registros-tab { color: #00ccff; font-weight: 700; }
-        .tab-btn.registros-tab.active { color: #00ccff; border-bottom-color: #00ccff; background: rgba(0, 204, 255, 0.12); }
+        .tab-btn.registros-tab.active { color: #00ccff; border-bottom-color: #00ccff; background: rgba(0, 204, 255, 0.22); }
         .tab-btn.solicitudes-tab { color: #ffaa44; font-weight: 700; }
-        .tab-btn.solicitudes-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
+        .tab-btn.solicitudes-tab.active { color: #ffaa44; border-bottom-color: #ffaa44; background: rgba(255, 170, 68, 0.22); }
 
         /* ===== PANELES ===== */
         .panels-container {
             flex: 1;
             overflow-y: auto;
             padding: 12px 16px 16px 16px;
-            background: rgba(10, 26, 10, 0.15) !important;
-            backdrop-filter: blur(2px);
+            background: transparent !important;
             transition: background 0.3s;
-        }
-        body.theme-day .panels-container {
-            background: rgba(220, 245, 220, 0.2) !important;
         }
         .panels-container::-webkit-scrollbar { width: 4px; }
         .panels-container::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
@@ -486,51 +508,56 @@
             color: #66ff88;
             font-size: 1rem;
             margin-bottom: 10px;
-            font-weight: 600;
-            text-shadow: 0 0 10px rgba(0, 255, 100, 0.5), 0 2px 4px rgba(0, 0, 0, 0.8);
+            font-weight: 700;
+            text-shadow: 0 0 10px rgba(0, 255, 100, 0.8), 0 2px 6px rgba(0, 0, 0, 1);
             transition: color 0.3s;
         }
 
-        /* ===== TARJETAS ===== */
+        /* ===== TARJETAS - CRISTAL ===== */
         .item-card {
-            background: rgba(10, 30, 10, 0.55);
-            backdrop-filter: blur(6px);
-            border: 1px solid var(--border-color);
+            background: rgba(10, 30, 10, 0.22);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
+            border: 1px solid rgba(0, 204, 68, 0.45);
             border-radius: 12px;
             padding: 12px 14px;
             margin-bottom: 10px;
             transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.12);
         }
         body.theme-day .item-card {
-            background: rgba(255, 255, 255, 0.55);
+            background: rgba(255, 255, 255, 0.28);
+            border-color: rgba(0, 136, 68, 0.45);
         }
         .item-card .info-box {
-            background: rgba(0, 40, 20, 0.5);
+            background: rgba(0, 40, 20, 0.28);
+            backdrop-filter: blur(14px) saturate(150%);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
             padding: 6px 10px;
             border-radius: 8px;
-            border: 1px solid var(--border-color);
+            border: 1px solid rgba(0, 204, 68, 0.35);
             margin-bottom: 10px;
             font-size: 0.75rem;
             color: var(--texto-secundario);
             line-height: 1.5;
             transition: background 0.3s, border-color 0.3s, color 0.3s;
-            backdrop-filter: blur(4px);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98);
         }
         body.theme-day .item-card .info-box {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.35);
+            text-shadow: none;
         }
-        .item-card .info-box.free { border-color: #00ff88; background: rgba(0, 255, 136, 0.08); }
-        .item-card .info-box.live { border-color: #ff44aa; background: rgba(255, 68, 170, 0.08); }
-        .item-card .info-box.massive { border-color: #ff8800; background: rgba(255, 136, 0, 0.08); }
-        .item-card .info-box.admin { border-color: #ff44aa; background: rgba(255, 68, 170, 0.08); }
-        .item-card .info-box.promo { border-color: #ffaa44; background: rgba(255, 170, 68, 0.08); }
-        .item-card .info-box.pasarela { border-color: #6772e5; background: rgba(103, 114, 229, 0.08); }
-        .item-card .info-box.direcciones { border-color: #ffaa44; background: rgba(255, 170, 68, 0.08); }
-        .item-card .info-box.sala { border-color: #ff44aa; background: rgba(255, 68, 170, 0.08); }
-        .item-card .info-box.juego { border-color: #ff6b35; background: rgba(255, 107, 53, 0.08); }
-        .item-card .info-box.registros { border-color: #00ccff; background: rgba(0, 204, 255, 0.08); }
-        .item-card .info-box.solicitudes { border-color: #ffaa44; background: rgba(255, 170, 68, 0.08); }
+        .item-card .info-box.free { border-color: #00ff88; background: rgba(0, 255, 136, 0.12); }
+        .item-card .info-box.live { border-color: #ff44aa; background: rgba(255, 68, 170, 0.12); }
+        .item-card .info-box.massive { border-color: #ff8800; background: rgba(255, 136, 0, 0.12); }
+        .item-card .info-box.admin { border-color: #ff44aa; background: rgba(255, 68, 170, 0.12); }
+        .item-card .info-box.promo { border-color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
+        .item-card .info-box.pasarela { border-color: #6772e5; background: rgba(103, 114, 229, 0.12); }
+        .item-card .info-box.direcciones { border-color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
+        .item-card .info-box.sala { border-color: #ff44aa; background: rgba(255, 68, 170, 0.12); }
+        .item-card .info-box.juego { border-color: #ff6b35; background: rgba(255, 107, 53, 0.12); }
+        .item-card .info-box.registros { border-color: #00ccff; background: rgba(0, 204, 255, 0.12); }
+        .item-card .info-box.solicitudes { border-color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
 
         /* ===== SOLICITUDES ===== */
         .solicitud-item {
@@ -542,23 +569,23 @@
             flex-wrap: wrap;
             gap: 6px;
             transition: background 0.3s;
-            background: rgba(0, 15, 5, 0.4);
-            backdrop-filter: blur(3px);
+            background: rgba(0, 15, 5, 0.28);
+            backdrop-filter: blur(12px);
             border-radius: 6px;
             margin-bottom: 4px;
         }
-        body.theme-day .solicitud-item {
-            background: rgba(255, 255, 255, 0.4);
-        }
+        body.theme-day .solicitud-item { background: rgba(255, 255, 255, 0.3); }
         .solicitud-item:hover { background: var(--hover-bg); }
         .solicitud-item .solicitud-email {
             font-size: 0.8rem;
             color: var(--texto-principal);
             font-weight: 600;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98);
         }
         .solicitud-item .solicitud-fecha {
             font-size: 0.6rem;
             color: var(--text-muted);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98);
         }
         .solicitud-item .solicitud-estado {
             font-size: 0.6rem;
@@ -567,15 +594,15 @@
             font-weight: 600;
         }
         .solicitud-item .solicitud-estado.pendiente {
-            background: rgba(255, 170, 68, 0.2);
+            background: rgba(255, 170, 68, 0.3);
             color: var(--solicitud-pendiente);
         }
         .solicitud-item .solicitud-estado.aprobada {
-            background: rgba(0, 255, 136, 0.15);
+            background: rgba(0, 255, 136, 0.25);
             color: var(--solicitud-aprobada);
         }
         .solicitud-item .solicitud-estado.rechazada {
-            background: rgba(255, 68, 68, 0.15);
+            background: rgba(255, 68, 68, 0.25);
             color: var(--solicitud-rechazada);
         }
         .solicitud-item .solicitud-actions {
@@ -593,28 +620,25 @@
             font-weight: 600;
             font-size: 0.7rem;
             letter-spacing: 0.3px;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98);
         }
+        body.theme-day .form-group label { text-shadow: none; }
         .form-group input, .form-group select, .form-group textarea {
             width: 100%;
             padding: 7px 10px;
-            background: rgba(10, 30, 10, 0.85);
-            border: 2px solid var(--border-color);
+            background: var(--input-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 2px solid rgba(0, 204, 68, 0.45);
             border-radius: var(--border-radius);
             color: var(--texto-principal);
             font-size: 0.85rem;
             transition: 0.2s;
             font-family: inherit;
-            backdrop-filter: blur(4px);
-        }
-        body.theme-day .form-group input,
-        body.theme-day .form-group select,
-        body.theme-day .form-group textarea {
-            background: rgba(255, 255, 255, 0.85);
         }
         .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
             border-color: var(--borde-neon);
-            box-shadow: 0 0 15px rgba(0, 200, 68, 0.3);
+            box-shadow: 0 0 15px rgba(0, 200, 68, 0.5);
             outline: none;
         }
         .form-group input:disabled { opacity: 0.6; cursor: not-allowed; }
@@ -644,28 +668,28 @@
         }
         .btn-block:hover { transform: scale(1.02); }
         .btn-block:active { transform: scale(0.97); }
-        .btn-block.btn-start { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 15px rgba(0, 200, 68, 0.3); }
-        .btn-block.btn-save { background: linear-gradient(135deg, #ff8800, #cc6600); box-shadow: 0 0 15px rgba(255, 136, 0, 0.25); }
-        .btn-block.btn-live { background: linear-gradient(135deg, #cc2200, #991100); box-shadow: 0 0 20px rgba(204, 34, 0, 0.4); animation: pulse-live 2s ease-in-out infinite; }
-        .btn-block.btn-massive { background: linear-gradient(135deg, #ff8800, #cc5500); box-shadow: 0 0 20px rgba(255, 136, 0, 0.3); animation: pulse-massive 2s ease-in-out infinite; }
+        .btn-block.btn-start { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 15px rgba(0, 200, 68, 0.5); }
+        .btn-block.btn-save { background: linear-gradient(135deg, #ff8800, #cc6600); box-shadow: 0 0 15px rgba(255, 136, 0, 0.45); }
+        .btn-block.btn-live { background: linear-gradient(135deg, #cc2200, #991100); box-shadow: 0 0 20px rgba(204, 34, 0, 0.6); animation: pulse-live 2s ease-in-out infinite; }
+        .btn-block.btn-massive { background: linear-gradient(135deg, #ff8800, #cc5500); box-shadow: 0 0 20px rgba(255, 136, 0, 0.5); animation: pulse-massive 2s ease-in-out infinite; }
         .btn-block.btn-danger { background: linear-gradient(135deg, #ff4444, #cc0000); }
         .btn-block.btn-success { background: linear-gradient(135deg, #00cc44, #008844); }
         .btn-block.btn-warning { background: linear-gradient(135deg, #ffaa44, #cc8800); }
-        .btn-block.btn-direcciones { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 20px rgba(255, 170, 68, 0.3); }
-        .btn-block.btn-sala { background: linear-gradient(135deg, #ff44aa, #cc0088); box-shadow: 0 0 20px rgba(255, 68, 170, 0.3); animation: pulse-sala 2s ease-in-out infinite; }
-        .btn-block.btn-nota { background: linear-gradient(135deg, #ff88cc, #cc5599); box-shadow: 0 0 20px rgba(255, 136, 204, 0.3); }
-        .btn-block.btn-juego { background: linear-gradient(135deg, #ff6b35, #cc4400); box-shadow: 0 0 20px rgba(255, 107, 53, 0.3); animation: pulse-juego 2s ease-in-out infinite; }
-        .btn-block.btn-admin-danger { background: linear-gradient(135deg, #ff3333, #cc0000); box-shadow: 0 0 15px rgba(255, 51, 51, 0.3); }
-        .btn-block.btn-admin-success { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 15px rgba(0, 204, 68, 0.3); }
-        .btn-block.btn-admin-warning { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 15px rgba(255, 170, 68, 0.3); }
-        .btn-block.btn-admin-info { background: linear-gradient(135deg, #00aaff, #0066cc); box-shadow: 0 0 15px rgba(0, 170, 255, 0.3); }
-        .btn-block.btn-aprobar { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 20px rgba(0, 204, 68, 0.3); }
-        .btn-block.btn-rechazar { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px rgba(255, 68, 68, 0.3); }
+        .btn-block.btn-direcciones { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 20px rgba(255, 170, 68, 0.5); }
+        .btn-block.btn-sala { background: linear-gradient(135deg, #ff44aa, #cc0088); box-shadow: 0 0 20px rgba(255, 68, 170, 0.5); animation: pulse-sala 2s ease-in-out infinite; }
+        .btn-block.btn-nota { background: linear-gradient(135deg, #ff88cc, #cc5599); box-shadow: 0 0 20px rgba(255, 136, 204, 0.5); }
+        .btn-block.btn-juego { background: linear-gradient(135deg, #ff6b35, #cc4400); box-shadow: 0 0 20px rgba(255, 107, 53, 0.5); animation: pulse-juego 2s ease-in-out infinite; }
+        .btn-block.btn-admin-danger { background: linear-gradient(135deg, #ff3333, #cc0000); box-shadow: 0 0 15px rgba(255, 51, 51, 0.5); }
+        .btn-block.btn-admin-success { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 15px rgba(0, 204, 68, 0.5); }
+        .btn-block.btn-admin-warning { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 15px rgba(255, 170, 68, 0.5); }
+        .btn-block.btn-admin-info { background: linear-gradient(135deg, #00aaff, #0066cc); box-shadow: 0 0 15px rgba(0, 170, 255, 0.5); }
+        .btn-block.btn-aprobar { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 20px rgba(0, 204, 68, 0.5); }
+        .btn-block.btn-rechazar { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px rgba(255, 68, 68, 0.5); }
 
-        @keyframes pulse-live { 0%, 100% { box-shadow: 0 0 15px rgba(204, 34, 0, 0.3); } 50% { box-shadow: 0 0 30px rgba(204, 34, 0, 0.5); } }
-        @keyframes pulse-massive { 0%, 100% { box-shadow: 0 0 15px rgba(255, 136, 0, 0.2); } 50% { box-shadow: 0 0 30px rgba(255, 136, 0, 0.4); } }
-        @keyframes pulse-sala { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.2); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.4); } }
-        @keyframes pulse-juego { 0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.2); } 50% { box-shadow: 0 0 35px rgba(255, 107, 53, 0.4); } }
+        @keyframes pulse-live { 0%, 100% { box-shadow: 0 0 15px rgba(204, 34, 0, 0.5); } 50% { box-shadow: 0 0 30px rgba(204, 34, 0, 0.7); } }
+        @keyframes pulse-massive { 0%, 100% { box-shadow: 0 0 15px rgba(255, 136, 0, 0.4); } 50% { box-shadow: 0 0 30px rgba(255, 136, 0, 0.6); } }
+        @keyframes pulse-sala { 0%, 100% { box-shadow: 0 0 15px rgba(255, 68, 170, 0.4); } 50% { box-shadow: 0 0 30px rgba(255, 68, 170, 0.6); } }
+        @keyframes pulse-juego { 0%, 100% { box-shadow: 0 0 15px rgba(255, 107, 53, 0.4); } 50% { box-shadow: 0 0 35px rgba(255, 107, 53, 0.6); } }
 
         .btn-block:disabled {
             opacity: 0.5;
@@ -711,21 +735,14 @@
         .btn-small.btn-admin:hover { transform: scale(1.05); }
         .btn-small.btn-admin:active { transform: scale(0.95); }
         .btn-small.btn-admin.btn-add { background: #00cc44; }
-        .btn-small.btn-admin.btn-add:hover { background: #00dd55; }
         .btn-small.btn-admin.btn-remove { background: #ff4444; }
-        .btn-small.btn-admin.btn-remove:hover { background: #ff6666; }
         .btn-small.btn-admin.btn-block { background: #ff8800; }
-        .btn-small.btn-admin.btn-block:hover { background: #ffaa44; }
         .btn-small.btn-admin.btn-unblock { background: #00cc44; }
-        .btn-small.btn-admin.btn-unblock:hover { background: #00dd55; }
         .btn-small.btn-admin.btn-delete { background: #cc0000; }
-        .btn-small.btn-admin.btn-delete:hover { background: #ff0000; }
         .btn-small.btn-admin.btn-days-add { background: #ff8800; }
-        .btn-small.btn-admin.btn-days-add:hover { background: #ffaa44; }
         .btn-small.btn-admin.btn-days-remove { background: #cc4444; }
-        .btn-small.btn-admin.btn-days-remove:hover { background: #ff6666; }
 
-        /* ===== PASARELA CARDS ===== */
+        /* ===== PASARELA ===== */
         .pasarela-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -733,38 +750,39 @@
             margin-top: 6px;
         }
         .pasarela-card {
-            background: rgba(0, 15, 5, 0.55);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 15, 5, 0.28);
+            backdrop-filter: blur(14px) saturate(150%);
+            -webkit-backdrop-filter: blur(14px) saturate(150%);
             border-radius: 10px;
             padding: 10px 12px;
             text-align: center;
-            border: 2px solid var(--border-color);
+            border: 2px solid rgba(0, 204, 68, 0.35);
             transition: 0.2s;
             cursor: pointer;
         }
-        body.theme-day .pasarela-card { background: rgba(255, 255, 255, 0.55); }
-        .pasarela-card:hover { border-color: var(--borde-neon); background: rgba(0, 0, 0, 0.3); }
-        .pasarela-card.active { border-color: #00ff88; background: rgba(0, 255, 136, 0.12); box-shadow: 0 0 20px rgba(0, 255, 136, 0.3); }
+        body.theme-day .pasarela-card { background: rgba(255, 255, 255, 0.28); }
+        .pasarela-card:hover { border-color: var(--borde-neon); background: rgba(0, 0, 0, 0.35); }
+        .pasarela-card.active { border-color: #00ff88; background: rgba(0, 255, 136, 0.18); box-shadow: 0 0 20px rgba(0, 255, 136, 0.5); }
         .pasarela-card .icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
-        .pasarela-card .name { font-weight: 600; font-size: 0.75rem; color: var(--texto-principal); }
-        .pasarela-card .status { font-size: 0.6rem; color: var(--text-muted); margin-top: 2px; }
+        .pasarela-card .name { font-weight: 600; font-size: 0.75rem; color: var(--texto-principal); text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98); }
+        .pasarela-card .status { font-size: 0.6rem; color: var(--text-muted); margin-top: 2px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98); }
         .pasarela-card .status.active { color: #00ff88; }
 
-        /* ===== DIRECCIONES RESULT ===== */
+        /* ===== DIRECCIONES ===== */
         .direccion-result {
-            background: rgba(0, 15, 5, 0.6);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 15, 5, 0.28);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
             border: 2px solid #ffaa44;
             border-radius: 12px;
             padding: 12px 15px;
             margin-top: 8px;
             font-size: 0.9rem;
             line-height: 1.8;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
-        body.theme-day .direccion-result {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        body.theme-day .direccion-result { background: rgba(255, 255, 255, 0.3); text-shadow: none; }
         .direccion-result .label { color: var(--texto-secundario); font-weight: 600; min-width: 100px; display: inline-block; }
         .direccion-result .value { color: var(--texto-principal); font-weight: 500; }
         .direccion-result .copy-btn-dir {
@@ -783,8 +801,9 @@
 
         /* ===== RESULTADOS ===== */
         .result-box {
-            background: rgba(0, 15, 5, 0.6);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 15, 5, 0.35);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
             border: 2px solid var(--borde-neon);
             border-radius: 12px;
             padding: 10px 12px;
@@ -793,11 +812,10 @@
             overflow-y: auto;
             font-size: 0.82rem;
             transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
-        body.theme-day .result-box {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        body.theme-day .result-box { background: rgba(255, 255, 255, 0.35); text-shadow: none; }
         .result-box::-webkit-scrollbar { width: 4px; }
         .result-box::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
 
@@ -808,17 +826,18 @@
 
         /* ===== TARJETAS GENERADAS ===== */
         .generated-cards {
-            background: rgba(0, 25, 10, 0.55);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 25, 10, 0.35);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
             border: 2px solid #00cc44;
             border-radius: 12px;
             padding: 8px 10px;
             max-height: 250px;
             overflow-y: auto;
             transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        body.theme-day .generated-cards { background: rgba(255, 255, 255, 0.55); }
+        body.theme-day .generated-cards { background: rgba(255, 255, 255, 0.35); }
         .generated-cards::-webkit-scrollbar { width: 4px; }
         .generated-cards::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
         .generated-cards .card-item {
@@ -833,7 +852,7 @@
             font-size: 0.72rem;
         }
         .generated-cards .card-item:last-child { border-bottom: none; }
-        .generated-cards .card-number { color: #88ffaa; font-weight: bold; letter-spacing: 1px; font-size: 0.72rem; text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8); }
+        .generated-cards .card-number { color: #88ffaa; font-weight: bold; letter-spacing: 1px; font-size: 0.72rem; text-shadow: 0 1px 4px rgba(0, 0, 0, 1); }
         .generated-cards .card-info { display: flex; gap: 3px; flex-wrap: wrap; align-items: center; }
         .generated-cards .card-actions { display: flex; gap: 3px; }
 
@@ -857,19 +876,21 @@
         .credit-history {
             max-height: 100px;
             overflow-y: auto;
-            background: rgba(0, 15, 5, 0.55);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 15, 5, 0.3);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border-radius: 8px;
             padding: 4px 8px;
             transition: background 0.3s;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
-        body.theme-day .credit-history { background: rgba(255, 255, 255, 0.55); }
+        body.theme-day .credit-history { background: rgba(255, 255, 255, 0.3); text-shadow: none; }
         .credit-history::-webkit-scrollbar { width: 3px; }
         .credit-history::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
         .credit-item { border-bottom: 1px solid var(--border-color); padding: 3px 0; font-size: 0.68rem; color: var(--texto-secundario); }
         .credit-item:last-child { border-bottom: none; }
 
-        /* ===== USUARIOS LISTA (ADMIN) ===== */
+        /* ===== USUARIOS LISTA ===== */
         .user-list-item {
             padding: 6px 10px;
             border-bottom: 1px solid var(--border-color);
@@ -879,17 +900,15 @@
             flex-wrap: wrap;
             gap: 4px;
             transition: background 0.3s;
-            background: rgba(0, 15, 5, 0.45);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 15, 5, 0.28);
+            backdrop-filter: blur(12px);
             border-radius: 6px;
             margin-bottom: 4px;
         }
-        body.theme-day .user-list-item {
-            background: rgba(255, 255, 255, 0.45);
-        }
+        body.theme-day .user-list-item { background: rgba(255, 255, 255, 0.3); }
         .user-list-item:hover { background: var(--hover-bg); }
-        .user-list-item .user-email { font-size: 0.7rem; color: var(--texto-principal); font-weight: 600; min-width: 120px; }
-        .user-list-item .user-info { font-size: 0.6rem; color: var(--text-muted); display: flex; gap: 6px; flex-wrap: wrap; }
+        .user-list-item .user-email { font-size: 0.7rem; color: var(--texto-principal); font-weight: 600; min-width: 120px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98); }
+        .user-list-item .user-info { font-size: 0.6rem; color: var(--text-muted); display: flex; gap: 6px; flex-wrap: wrap; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98); }
         .user-list-item .user-info .badge { padding: 1px 6px; border-radius: 10px; font-size: 0.5rem; font-weight: 600; }
         .user-list-item .user-info .badge.active { background: #00cc8833; color: #00ff88; }
         .user-list-item .user-info .badge.blocked { background: #ff444433; color: #ff4444; }
@@ -906,14 +925,13 @@
             flex-wrap: wrap;
             gap: 4px;
             font-size: 0.7rem;
-            background: rgba(0, 15, 5, 0.4);
-            backdrop-filter: blur(3px);
+            background: rgba(0, 15, 5, 0.28);
+            backdrop-filter: blur(12px);
             border-radius: 6px;
             margin-bottom: 4px;
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.98);
         }
-        body.theme-day .registro-item {
-            background: rgba(255, 255, 255, 0.4);
-        }
+        body.theme-day .registro-item { background: rgba(255, 255, 255, 0.3); text-shadow: none; }
         .registro-item .registro-email { color: var(--texto-principal); font-weight: 600; }
         .registro-item .registro-ip { color: var(--text-muted); font-family: monospace; }
         .registro-item .registro-fecha { color: var(--text-muted); font-size: 0.6rem; }
@@ -930,14 +948,14 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: 0.15s;
-            box-shadow: 0 0 20px rgba(37, 211, 102, 0.3);
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.4);
             width: 100%;
         }
-        .btn-pedir-creditos:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(37, 211, 102, 0.5); }
+        .btn-pedir-creditos:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(37, 211, 102, 0.6); }
         .btn-pedir-creditos:active { transform: scale(0.97); }
         .btn-pedir-creditos::before { content: "📱 "; }
 
-        /* ===== MODAL DE CRÉDITOS INSUFICIENTES ===== */
+        /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -945,7 +963,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0, 0, 0, 0.85);
             z-index: 99999;
             justify-content: center;
             align-items: center;
@@ -953,19 +971,17 @@
         }
         .modal-overlay.show { display: flex; }
         .modal-overlay .modal-box {
-            background: rgba(5, 25, 5, 0.95);
-            backdrop-filter: blur(12px);
+            background: rgba(5, 25, 5, 0.9);
+            backdrop-filter: blur(24px);
             border: 2px solid var(--borde-neon);
             border-radius: 20px;
             padding: 30px 25px;
             max-width: 400px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 0 50px rgba(0, 200, 68, 0.3);
+            box-shadow: 0 0 50px rgba(0, 200, 68, 0.5);
         }
-        body.theme-day .modal-overlay .modal-box {
-            background: rgba(255, 255, 255, 0.95);
-        }
+        body.theme-day .modal-overlay .modal-box { background: rgba(255, 255, 255, 0.9); }
         .modal-overlay .modal-box .modal-icon { font-size: 3.5rem; margin-bottom: 10px; }
         .modal-overlay .modal-box .modal-titulo { font-size: 1.3rem; font-weight: 700; color: #ffaa44; margin-bottom: 6px; }
         .modal-overlay .modal-box .modal-texto { font-size: 0.85rem; color: var(--texto-secundario); margin-bottom: 16px; line-height: 1.6; }
@@ -976,30 +992,28 @@
         .modal-overlay .modal-box .modal-botones .modal-btn.juego { background: linear-gradient(135deg, #ff6b35, #cc4400); color: white; }
         .modal-overlay .modal-box .modal-botones .modal-btn.cerrar { background: var(--border-color); color: var(--texto-principal); }
 
-        /* ===== CHAT ESTILOS ===== */
+        /* ===== CHAT ===== */
         .chat-profile-setup {
-            background: rgba(0, 15, 5, 0.55);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 15, 5, 0.28);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border-radius: 12px;
             padding: 15px;
             margin-bottom: 10px;
             border: 1px solid var(--border-color);
             transition: background 0.3s, border-color 0.3s;
         }
-        body.theme-day .chat-profile-setup {
-            background: rgba(255, 255, 255, 0.55);
-        }
-        .chat-profile-setup .avatar-selector { font-size: 2.5rem; cursor: pointer; display: inline-block; padding: 5px 15px; border: 2px solid var(--border-color); border-radius: 50%; transition: 0.2s; background: rgba(10, 30, 10, 0.85); user-select: none; }
-        body.theme-day .chat-profile-setup .avatar-selector { background: rgba(255, 255, 255, 0.85); }
+        body.theme-day .chat-profile-setup { background: rgba(255, 255, 255, 0.3); }
+        .chat-profile-setup .avatar-selector { font-size: 2.5rem; cursor: pointer; display: inline-block; padding: 5px 15px; border: 2px solid var(--border-color); border-radius: 50%; transition: 0.2s; background: rgba(10, 30, 10, 0.6); user-select: none; }
         .chat-profile-setup .avatar-selector:hover { border-color: var(--borde-neon); }
-        .chat-profile-setup .profile-name-input { background: rgba(10, 30, 10, 0.85); border: 2px solid var(--border-color); border-radius: var(--border-radius); color: var(--texto-principal); padding: 6px 12px; font-size: 0.85rem; width: 100%; transition: 0.2s; }
-        body.theme-day .chat-profile-setup .profile-name-input { background: rgba(255, 255, 255, 0.85); }
+        .chat-profile-setup .profile-name-input { background: rgba(10, 30, 10, 0.6); border: 2px solid var(--border-color); border-radius: var(--border-radius); color: var(--texto-principal); padding: 6px 12px; font-size: 0.85rem; width: 100%; transition: 0.2s; }
         .chat-profile-setup .profile-name-input:disabled { opacity: 0.6; cursor: not-allowed; border-color: #3a5a3a; }
         .chat-profile-setup .profile-name-input:focus { border-color: var(--borde-neon); outline: none; }
 
         .chat-messages {
-            background: rgba(0, 15, 5, 0.55);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 15, 5, 0.35);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
             border-radius: 12px;
             padding: 10px;
             height: 350px;
@@ -1010,14 +1024,12 @@
             margin-bottom: 10px;
             border: 1px solid var(--border-color);
             transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        body.theme-day .chat-messages {
-            background: rgba(255, 255, 255, 0.55);
-        }
-        .chat-messages .message { max-width: 85%; padding: 8px 12px; border-radius: 18px; font-size: 0.85rem; word-wrap: break-word; position: relative; animation: fadeIn 0.15s ease; }
-        .chat-messages .message.own { align-self: flex-end; background: var(--chat-msg-own); border-bottom-right-radius: 4px; color: #e1f0e1; }
-        .chat-messages .message.other { align-self: flex-start; background: var(--chat-msg-other); border-bottom-left-radius: 4px; color: var(--texto-principal); }
+        body.theme-day .chat-messages { background: rgba(255, 255, 255, 0.3); }
+        .chat-messages .message { max-width: 85%; padding: 8px 12px; border-radius: 18px; font-size: 0.85rem; word-wrap: break-word; position: relative; animation: fadeIn 0.15s ease; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9); }
+        .chat-messages .message.own { align-self: flex-end; background: var(--chat-msg-own); border-bottom-right-radius: 4px; color: #e1f0e1; backdrop-filter: blur(8px); }
+        .chat-messages .message.other { align-self: flex-start; background: var(--chat-msg-other); border-bottom-left-radius: 4px; color: var(--texto-principal); backdrop-filter: blur(8px); }
         .chat-messages .message .msg-header { display: flex; align-items: center; gap: 6px; font-size: 0.65rem; font-weight: bold; margin-bottom: 2px; }
         .chat-messages .message .msg-header .avatar { font-size: 1rem; }
         .chat-messages .message .msg-header .name { color: var(--texto-secundario); transition: color 0.2s; }
@@ -1025,7 +1037,7 @@
         .chat-messages .message .msg-text { white-space: pre-wrap; }
         .chat-messages .message .msg-image { max-width: 200px; max-height: 200px; border-radius: 10px; margin-top: 4px; cursor: pointer; }
         .chat-messages .message .msg-sticker { font-size: 3rem; display: block; margin-top: 2px; }
-        .chat-messages .message .msg-reply { background: rgba(255, 255, 255, 0.08); border-left: 3px solid var(--reply-border); padding: 4px 8px; border-radius: 4px; margin-bottom: 4px; font-size: 0.7rem; color: var(--texto-secundario); }
+        .chat-messages .message .msg-reply { background: rgba(255, 255, 255, 0.1); border-left: 3px solid var(--reply-border); padding: 4px 8px; border-radius: 4px; margin-bottom: 4px; font-size: 0.7rem; color: var(--texto-secundario); }
         .chat-messages .message .msg-reply .reply-author { font-weight: 600; color: var(--reply-border); }
         .chat-messages .message .msg-actions { display: flex; gap: 4px; margin-top: 4px; justify-content: flex-end; flex-wrap: wrap; }
         .chat-messages .message .msg-actions button { background: transparent; border: none; color: var(--text-muted); font-size: 0.55rem; cursor: pointer; padding: 2px 6px; border-radius: 4px; transition: 0.15s; }
@@ -1035,8 +1047,7 @@
         .chat-messages .message .mention { color: var(--mention-color); font-weight: 600; cursor: pointer; }
 
         .chat-input-area { display: flex; gap: 6px; align-items: flex-end; flex-wrap: wrap; }
-        .chat-input-area .chat-input { flex: 1; padding: 8px 12px; background: rgba(10, 30, 10, 0.85); border: 2px solid var(--border-color); border-radius: 25px; color: var(--texto-principal); font-size: 0.85rem; resize: none; min-height: 38px; max-height: 100px; transition: background 0.3s, border-color 0.3s, color 0.3s; }
-        body.theme-day .chat-input-area .chat-input { background: rgba(255, 255, 255, 0.85); }
+        .chat-input-area .chat-input { flex: 1; padding: 8px 12px; background: rgba(10, 30, 10, 0.6); backdrop-filter: blur(10px); border: 2px solid var(--border-color); border-radius: 25px; color: var(--texto-principal); font-size: 0.85rem; resize: none; min-height: 38px; max-height: 100px; transition: background 0.3s, border-color 0.3s, color 0.3s; }
         .chat-input-area .chat-input:focus { border-color: var(--borde-neon); outline: none; }
         .chat-input-area .chat-btn { background: var(--border-color); border: none; border-radius: 50%; width: 38px; height: 38px; color: var(--texto-principal); font-size: 1.2rem; cursor: pointer; transition: 0.15s; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
         .chat-input-area .chat-btn:hover { background: #2a5a2a; }
@@ -1049,13 +1060,13 @@
         .chat-input-area .chat-btn.whatsapp-btn { background: #25D366; color: white; }
         .chat-input-area .chat-btn.whatsapp-btn:hover { background: #1a9b4a; }
 
-        .chat-reply-preview { background: rgba(0, 15, 5, 0.6); border-left: 3px solid var(--reply-border); padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; color: var(--texto-secundario); display: none; margin-bottom: 4px; width: 100%; backdrop-filter: blur(4px); }
+        .chat-reply-preview { background: rgba(0, 15, 5, 0.5); border-left: 3px solid var(--reply-border); padding: 4px 10px; border-radius: 8px; font-size: 0.7rem; color: var(--texto-secundario); display: none; margin-bottom: 4px; width: 100%; backdrop-filter: blur(8px); }
         .chat-reply-preview .reply-cancel { cursor: pointer; color: #ff4444; font-weight: bold; margin-left: 8px; }
 
         .emoji-picker, .sticker-picker {
             display: none;
-            background: rgba(5, 25, 5, 0.95);
-            backdrop-filter: blur(8px);
+            background: rgba(5, 25, 5, 0.85);
+            backdrop-filter: blur(20px);
             border: 2px solid var(--border-color);
             border-radius: 12px;
             padding: 8px;
@@ -1065,9 +1076,6 @@
             max-height: 150px;
             overflow-y: auto;
         }
-        body.theme-day .emoji-picker, body.theme-day .sticker-picker {
-            background: rgba(255, 255, 255, 0.95);
-        }
         .emoji-picker.show, .sticker-picker.show { display: flex; }
         .emoji-picker span, .sticker-picker span { font-size: 1.5rem; cursor: pointer; padding: 4px; border-radius: 8px; transition: 0.1s; user-select: none; }
         .emoji-picker span:hover, .sticker-picker span:hover { background: var(--border-color); transform: scale(1.1); }
@@ -1075,47 +1083,43 @@
 
         /* ===== NOTAS ===== */
         .nota-container {
-            background: rgba(10, 35, 15, 0.55);
-            backdrop-filter: blur(8px);
+            background: rgba(10, 35, 15, 0.28);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
             border: 2px solid var(--nota-border);
             border-radius: 16px;
             padding: 20px;
             margin-top: 8px;
             transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        body.theme-day .nota-container {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        body.theme-day .nota-container { background: rgba(255, 255, 255, 0.3); }
         .nota-container .nota-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
-        .nota-container .nota-header .nota-titulo { font-size: 1.1rem; font-weight: 700; color: var(--texto-principal); display: flex; align-items: center; gap: 8px; }
+        .nota-container .nota-header .nota-titulo { font-size: 1.1rem; font-weight: 700; color: var(--texto-principal); display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95); }
         .nota-container .nota-header .nota-titulo span { font-size: 1.3rem; }
-        .nota-container .nota-header .nota-info { font-size: 0.65rem; color: var(--text-muted); display: flex; align-items: center; gap: 12px; }
+        .nota-container .nota-header .nota-info { font-size: 0.65rem; color: var(--text-muted); display: flex; align-items: center; gap: 12px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95); }
         .nota-container .nota-header .nota-info .nota-fecha { background: rgba(0, 15, 5, 0.5); padding: 2px 10px; border-radius: 12px; border: 1px solid var(--border-color); }
-        body.theme-day .nota-container .nota-header .nota-info .nota-fecha { background: rgba(255, 255, 255, 0.5); }
         .nota-container .nota-editor { position: relative; }
-        .nota-container .nota-editor textarea { width: 100%; min-height: 280px; background: rgba(10, 30, 10, 0.85); border: 2px solid var(--border-color); border-radius: 12px; color: var(--texto-principal); padding: 16px 18px; font-size: 0.95rem; font-family: 'Segoe UI', 'Roboto', Arial, sans-serif; resize: vertical; transition: background 0.3s, border-color 0.3s, color 0.3s; line-height: 1.7; }
-        body.theme-day .nota-container .nota-editor textarea { background: rgba(255, 255, 255, 0.85); }
-        .nota-container .nota-editor textarea:focus { border-color: var(--borde-neon); box-shadow: 0 0 25px rgba(0, 200, 68, 0.2); outline: none; }
+        .nota-container .nota-editor textarea { width: 100%; min-height: 280px; background: rgba(10, 30, 10, 0.6); border: 2px solid var(--border-color); border-radius: 12px; color: var(--texto-principal); padding: 16px 18px; font-size: 0.95rem; font-family: 'Segoe UI', 'Roboto', Arial, sans-serif; resize: vertical; transition: background 0.3s, border-color 0.3s, color 0.3s; line-height: 1.7; }
+        .nota-container .nota-editor textarea:focus { border-color: var(--borde-neon); box-shadow: 0 0 25px rgba(0, 200, 68, 0.3); outline: none; }
         .nota-container .nota-editor textarea::placeholder { color: var(--text-muted); font-style: italic; }
         .nota-container .nota-editor .nota-char-count { position: absolute; bottom: 12px; right: 16px; font-size: 0.6rem; color: var(--text-muted); background: rgba(0, 15, 5, 0.7); padding: 2px 10px; border-radius: 10px; border: 1px solid var(--border-color); pointer-events: none; }
         .nota-container .nota-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
-        .nota-container .nota-actions .btn-nota { padding: 8px 20px; border: none; border-radius: 25px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 6px; flex: 1; justify-content: center; min-width: 100px; }
+        .nota-container .nota-actions .btn-nota { padding: 8px 20px; border: none; border-radius: 25px; font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: 0.15s; display: flex; align-items: center; gap: 6px; flex: 1; justify-content: center; min-width: 100px; color: white; }
         .nota-container .nota-actions .btn-nota:hover { transform: scale(1.02); }
         .nota-container .nota-actions .btn-nota:active { transform: scale(0.97); }
-        .nota-container .nota-actions .btn-nota.guardar { background: linear-gradient(135deg, #00cc44, #008844); color: white; box-shadow: 0 0 20px rgba(0, 204, 68, 0.3); }
-        .nota-container .nota-actions .btn-nota.limpiar { background: linear-gradient(135deg, #ff4444, #cc0000); color: white; box-shadow: 0 0 20px rgba(255, 68, 68, 0.25); }
-        .nota-container .nota-actions .btn-nota.exportar { background: linear-gradient(135deg, #ffaa44, #cc8800); color: white; box-shadow: 0 0 20px rgba(255, 170, 68, 0.25); }
-        .nota-container .nota-actions .btn-nota.copiar { background: linear-gradient(135deg, #008844, #006633); color: white; box-shadow: 0 0 20px rgba(0, 136, 68, 0.25); }
-        .nota-container .nota-actions .btn-nota.stats { background: linear-gradient(135deg, #6772e5, #4a54c4); color: white; box-shadow: 0 0 20px rgba(103, 114, 229, 0.25); }
-        .nota-container .nota-footer { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 0.6rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 10px; }
+        .nota-container .nota-actions .btn-nota.guardar { background: linear-gradient(135deg, #00cc44, #008844); box-shadow: 0 0 20px rgba(0, 204, 68, 0.4); }
+        .nota-container .nota-actions .btn-nota.limpiar { background: linear-gradient(135deg, #ff4444, #cc0000); box-shadow: 0 0 20px rgba(255, 68, 68, 0.3); }
+        .nota-container .nota-actions .btn-nota.exportar { background: linear-gradient(135deg, #ffaa44, #cc8800); box-shadow: 0 0 20px rgba(255, 170, 68, 0.3); }
+        .nota-container .nota-actions .btn-nota.copiar { background: linear-gradient(135deg, #008844, #006633); box-shadow: 0 0 20px rgba(0, 136, 68, 0.3); }
+        .nota-container .nota-actions .btn-nota.stats { background: linear-gradient(135deg, #6772e5, #4a54c4); box-shadow: 0 0 20px rgba(103, 114, 229, 0.3); }
+        .nota-container .nota-footer { margin-top: 12px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; font-size: 0.6rem; color: var(--text-muted); border-top: 1px solid var(--border-color); padding-top: 10px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95); }
         .nota-container .nota-footer .nota-status { display: flex; align-items: center; gap: 6px; }
         .nota-container .nota-footer .nota-status .dot { width: 6px; height: 6px; border-radius: 50%; display: inline-block; }
         .nota-container .nota-footer .nota-status .dot.saved { background: #00ff88; }
         .nota-container .nota-footer .nota-status .dot.unsaved { background: #ffaa44; }
         .nota-container .nota-footer .nota-status .dot.error { background: #ff4444; }
-        .nota-container .nota-stats-box { background: rgba(0, 15, 5, 0.55); border-radius: 10px; padding: 12px 16px; margin-top: 10px; display: none; border: 1px solid var(--border-color); font-size: 0.8rem; backdrop-filter: blur(4px); }
-        body.theme-day .nota-container .nota-stats-box { background: rgba(255, 255, 255, 0.55); }
+        .nota-container .nota-stats-box { background: rgba(0, 15, 5, 0.5); border-radius: 10px; padding: 12px 16px; margin-top: 10px; display: none; border: 1px solid var(--border-color); font-size: 0.8rem; backdrop-filter: blur(8px); }
         .nota-container .nota-stats-box.show { display: block; animation: fadeIn 0.3s ease; }
         .nota-container .nota-stats-box .stat-item { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid var(--border-color); }
         .nota-container .nota-stats-box .stat-item:last-child { border-bottom: none; }
@@ -1128,103 +1132,82 @@
 
         /* ===== JUEGO ===== */
         .juego-container {
-            background: rgba(10, 30, 15, 0.55);
-            backdrop-filter: blur(8px);
+            background: rgba(10, 30, 15, 0.28);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
             border: 2px solid #ff6b35;
             border-radius: 16px;
             padding: 20px;
             margin-top: 8px;
             transition: background 0.3s, border-color 0.3s;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        body.theme-day .juego-container {
-            background: rgba(255, 255, 255, 0.6);
-        }
+        body.theme-day .juego-container { background: rgba(255, 255, 255, 0.3); }
         .juego-container .juego-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px; }
-        .juego-container .juego-header .juego-titulo { font-size: 1.2rem; font-weight: 700; color: #ff6b35; display: flex; align-items: center; gap: 8px; }
+        .juego-container .juego-header .juego-titulo { font-size: 1.2rem; font-weight: 700; color: #ff6b35; display: flex; align-items: center; gap: 8px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95); }
         .juego-container .juego-header .juego-titulo span { font-size: 1.5rem; }
-        .juego-container .juego-header .juego-puntos { background: rgba(0, 15, 5, 0.55); padding: 4px 14px; border-radius: 20px; border: 1px solid #ff6b35; font-size: 0.8rem; font-weight: 600; color: var(--texto-principal); }
+        .juego-container .juego-header .juego-puntos { background: rgba(0, 15, 5, 0.5); padding: 4px 14px; border-radius: 20px; border: 1px solid #ff6b35; font-size: 0.8rem; font-weight: 600; color: var(--texto-principal); text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95); }
         .juego-container .juego-header .juego-puntos span { color: #ffd700; }
-
-        .juego-container .juego-area {
-            background: rgba(0, 15, 5, 0.5);
-            backdrop-filter: blur(4px);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            min-height: 200px;
-            border: 1px solid var(--border-color);
-        }
-        body.theme-day .juego-container .juego-area {
-            background: rgba(255, 255, 255, 0.5);
-        }
+        .juego-container .juego-area { background: rgba(0, 15, 5, 0.4); backdrop-filter: blur(12px); border-radius: 12px; padding: 20px; text-align: center; min-height: 200px; border: 1px solid var(--border-color); }
         .juego-container .juego-area .juego-vs { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 12px; }
         .juego-container .juego-area .juego-vs .jugador { flex: 1; text-align: center; }
         .juego-container .juego-area .juego-vs .jugador .emoji { font-size: 3.5rem; display: block; margin-bottom: 4px; transition: 0.3s; }
-        .juego-container .juego-area .juego-vs .jugador .nombre { font-size: 0.7rem; color: var(--text-muted); }
+        .juego-container .juego-area .juego-vs .jugador .nombre { font-size: 0.7rem; color: var(--text-muted); text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95); }
         .juego-container .juego-area .juego-vs .jugador .nombre span { color: var(--texto-principal); font-weight: 600; }
-        .juego-container .juego-area .juego-vs .vs-texto { font-size: 1.8rem; font-weight: 800; color: #ff6b35; text-shadow: 0 0 20px rgba(255, 107, 53, 0.3); }
+        .juego-container .juego-area .juego-vs .vs-texto { font-size: 1.8rem; font-weight: 800; color: #ff6b35; text-shadow: 0 0 20px rgba(255, 107, 53, 0.5); }
         .juego-container .juego-area .juego-resultado { font-size: 1.2rem; font-weight: 700; padding: 8px; border-radius: 10px; margin: 8px 0; min-height: 50px; display: flex; align-items: center; justify-content: center; }
-        .juego-container .juego-area .juego-resultado.ganaste { color: #00ff88; background: rgba(0, 255, 136, 0.12); }
-        .juego-container .juego-area .juego-resultado.perdiste { color: #ff4444; background: rgba(255, 68, 68, 0.12); }
-        .juego-container .juego-area .juego-resultado.empate { color: #ffaa44; background: rgba(255, 170, 68, 0.12); }
+        .juego-container .juego-area .juego-resultado.ganaste { color: #00ff88; background: rgba(0, 255, 136, 0.15); }
+        .juego-container .juego-area .juego-resultado.perdiste { color: #ff4444; background: rgba(255, 68, 68, 0.15); }
+        .juego-container .juego-area .juego-resultado.empate { color: #ffaa44; background: rgba(255, 170, 68, 0.15); }
         .juego-container .juego-area .juego-opciones { display: flex; gap: 12px; justify-content: center; margin-top: 10px; flex-wrap: wrap; }
-        .juego-container .juego-area .juego-opciones .opcion-btn { font-size: 2.5rem; padding: 10px 20px; border: 2px solid var(--border-color); border-radius: 16px; background: rgba(10, 30, 10, 0.85); cursor: pointer; transition: 0.2s; min-width: 70px; }
-        body.theme-day .juego-container .juego-area .juego-opciones .opcion-btn { background: rgba(255, 255, 255, 0.85); }
-        .juego-container .juego-area .juego-opciones .opcion-btn:hover { transform: scale(1.08); border-color: #ff6b35; box-shadow: 0 0 25px rgba(255, 107, 53, 0.3); }
+        .juego-container .juego-area .juego-opciones .opcion-btn { font-size: 2.5rem; padding: 10px 20px; border: 2px solid var(--border-color); border-radius: 16px; background: rgba(10, 30, 10, 0.6); cursor: pointer; transition: 0.2s; min-width: 70px; }
+        .juego-container .juego-area .juego-opciones .opcion-btn:hover { transform: scale(1.08); border-color: #ff6b35; box-shadow: 0 0 25px rgba(255, 107, 53, 0.4); }
         .juego-container .juego-area .juego-opciones .opcion-btn:active { transform: scale(0.95); }
         .juego-container .juego-area .juego-opciones .opcion-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
-
         .juego-container .juego-stats { margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
-        .juego-container .juego-stats .stat-box { background: rgba(0, 15, 5, 0.55); border-radius: 8px; padding: 4px 12px; border: 1px solid var(--border-color); font-size: 0.6rem; color: var(--texto-secundario); display: flex; align-items: center; gap: 4px; }
+        .juego-container .juego-stats .stat-box { background: rgba(0, 15, 5, 0.5); border-radius: 8px; padding: 4px 12px; border: 1px solid var(--border-color); font-size: 0.6rem; color: var(--texto-secundario); display: flex; align-items: center; gap: 4px; text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95); }
         .juego-container .juego-stats .stat-box span { font-weight: 700; color: #ffd700; }
 
         /* ===== SALA PRIVADA ===== */
         .sala-card {
-            background: rgba(0, 15, 5, 0.6);
-            backdrop-filter: blur(6px);
+            background: rgba(0, 15, 5, 0.4);
+            backdrop-filter: blur(22px) saturate(180%);
+            -webkit-backdrop-filter: blur(22px) saturate(180%);
             border: 2px solid #ff44aa;
             border-radius: 12px;
             padding: 12px;
             margin-top: 8px;
             transition: background 0.3s;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
-        body.theme-day .sala-card {
-            background: rgba(255, 255, 255, 0.6);
-        }
-        .sala-card .codigo-sala { font-size: 1.5rem; font-weight: bold; color: #ff88cc; letter-spacing: 4px; background: rgba(0, 0, 0, 0.3); padding: 8px 16px; border-radius: 10px; text-align: center; border: 1px dashed #ff44aa; margin: 6px 0; user-select: all; }
+        .sala-card .codigo-sala { font-size: 1.5rem; font-weight: bold; color: #ff88cc; letter-spacing: 4px; background: rgba(0, 0, 0, 0.4); padding: 8px 16px; border-radius: 10px; text-align: center; border: 1px dashed #ff44aa; margin: 6px 0; user-select: all; }
         .sala-card .copy-btn-sala { background: #008844; border: none; border-radius: 8px; padding: 4px 12px; color: white; font-weight: bold; cursor: pointer; font-size: 0.7rem; }
         .sala-card .copy-btn-sala:hover { background: #00aa55; }
 
-        /* ===== LIVE MASIVO ===== */
+        /* ===== RESULTADO MASIVO ===== */
         .resultado-masivo-item {
-            background: rgba(0, 15, 5, 0.55);
-            backdrop-filter: blur(4px);
+            background: rgba(0, 15, 5, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid var(--border-color);
             border-radius: 10px;
             padding: 10px 12px;
             margin-bottom: 8px;
             transition: background 0.3s, border-color 0.3s;
-        }
-        body.theme-day .resultado-masivo-item {
-            background: rgba(255, 255, 255, 0.55);
+            text-shadow: 0 1px 4px rgba(0, 0, 0, 0.95);
         }
         .resultado-masivo-item:hover { border-color: var(--borde-neon); }
         .resultado-masivo-item .row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 4px; }
-        .resultado-masivo-item .row .num { font-family: monospace; font-size: 0.7rem; color: #88ffaa; font-weight: bold; letter-spacing: 0.5px; }
+        .resultado-masivo-item .row .num { font-family: monospace; font-size: 0.7rem; color: #88ffaa; font-weight: bold; letter-spacing: 0.5px; text-shadow: 0 1px 4px rgba(0, 0, 0, 1); }
         .resultado-masivo-item .row .estado { font-size: 0.6rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; }
-        .resultado-masivo-item .row .estado.approved { color: #00ff88; background: rgba(0, 255, 136, 0.15); }
-        .resultado-masivo-item .row .estado.insufficient { color: #ffaa44; background: rgba(255, 170, 68, 0.15); }
-        .resultado-masivo-item .row .estado.cvv_invalid { color: #ff8800; background: rgba(255, 136, 0, 0.15); }
-        .resultado-masivo-item .row .estado.invalid { color: #ff4444; background: rgba(255, 68, 68, 0.15); }
-        .resultado-masivo-item .row .estado.expired { color: #ff4444; background: rgba(255, 68, 68, 0.15); }
-        .resultado-masivo-item .row .estado.blocked { color: #ff4444; background: rgba(255, 68, 68, 0.15); }
+        .resultado-masivo-item .row .estado.approved { color: #00ff88; background: rgba(0, 255, 136, 0.2); }
+        .resultado-masivo-item .row .estado.insufficient { color: #ffaa44; background: rgba(255, 170, 68, 0.2); }
+        .resultado-masivo-item .row .estado.cvv_invalid { color: #ff8800; background: rgba(255, 136, 0, 0.2); }
+        .resultado-masivo-item .row .estado.invalid,
+        .resultado-masivo-item .row .estado.expired,
+        .resultado-masivo-item .row .estado.blocked { color: #ff4444; background: rgba(255, 68, 68, 0.2); }
         .resultado-masivo-item .detalles { font-size: 0.6rem; color: var(--text-muted); margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px 10px; }
-        .resultado-masivo-item .detalles span { background: rgba(10, 30, 10, 0.7); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
-        body.theme-day .resultado-masivo-item .detalles span { background: rgba(255, 255, 255, 0.7); }
-        .resultado-masivo-item .detalles .cvv-ok { color: #00ff88; }
-        .resultado-masivo-item .detalles .cvv-fail { color: #ff4444; }
+        .resultado-masivo-item .detalles span { background: rgba(10, 30, 10, 0.5); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--border-color); }
         .resultado-masivo-item .btn-copy-result { padding: 2px 8px; font-size: 0.5rem; border: none; border-radius: 4px; background: #008844; color: white; cursor: pointer; transition: 0.1s; }
         .resultado-masivo-item .btn-copy-result:hover { background: #00aa55; transform: scale(1.05); }
 
@@ -1306,7 +1289,6 @@
 </head>
 <body>
 
-    <!-- ===== MODAL DE CRÉDITOS INSUFICIENTES ===== -->
     <div class="modal-overlay" id="modalCreditos">
         <div class="modal-box">
             <div class="modal-icon">😱</div>
@@ -1323,12 +1305,8 @@
         </div>
     </div>
 
-    <!-- ============================================================== -->
-    <!-- CONTENEDOR PRINCIPAL -->
-    <!-- ============================================================== -->
     <div class="app-container">
 
-        <!-- ===== AUTH (LOGIN / REGISTRO) ===== -->
         <div id="auth-screen">
             <div class="auth-box">
                 <h2>🦜 PERICO VERDE</h2>
@@ -1339,7 +1317,6 @@
                     <button class="auth-tab" data-auth="register" onclick="cambiarAuthTab('register')">📝 Registrarse</button>
                 </div>
 
-                <!-- ===== LOGIN ===== -->
                 <div id="auth-login" class="auth-panel active">
                     <div class="form-group">
                         <label>Usuario o Correo</label>
@@ -1355,7 +1332,6 @@
                     </div>
                 </div>
 
-                <!-- ===== REGISTRO ===== -->
                 <div id="auth-register" class="auth-panel">
                     <div class="register-info">
                         🎁 <strong>REGALO DE BIENVENIDA</strong><br>
@@ -1383,12 +1359,8 @@
             </div>
         </div>
 
-        <!-- ============================================================== -->
-        <!-- APLICACIÓN PRINCIPAL -->
-        <!-- ============================================================== -->
         <div id="main-app" style="display:none;">
 
-            <!-- NAVBAR -->
             <div class="navbar">
                 <div class="logo-area">
                     <div class="logo-title">PERICO VERDE</div>
@@ -1405,7 +1377,6 @@
                 </div>
             </div>
 
-            <!-- TABS -->
             <div class="tabs-container">
                 <button class="tab-btn active" onclick="switchTab('generator')">🎲 GENERADOR</button>
                 <button class="tab-btn" onclick="switchTab('live')">🔴 LIVE</button>
@@ -1422,7 +1393,6 @@
                 <button class="tab-btn" onclick="switchTab('credits')">💎 CRÉDITOS</button>
             </div>
 
-            <!-- PANELS -->
             <div class="panels-container">
 
                 <!-- ===== GENERADOR ===== -->
@@ -1455,7 +1425,7 @@
                             <button class="btn-block action-btn" onclick="copiarTodo()" style="background:linear-gradient(135deg,#00cc44,#008844); flex:1;">📋 COPIAR TODO</button>
                             <button class="btn-block action-btn btn-massive" onclick="liveMasivoDesdeGenerador()" style="flex:1;">📊 MASIVO (7 créditos)</button>
                         </div>
-                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.7rem;">
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.7rem;text-shadow:0 1px 4px rgba(0,0,0,0.95);">
                             📊 Tarjetas disponibles: <span id="generatedCount" style="color:#66ff88;font-weight:bold;">0</span>
                             <span style="margin-left:12px;">💎 Generación <span style="color:#00ff88;">GRATIS</span></span>
                         </div>
@@ -1466,7 +1436,7 @@
                         </div>
                     </div>
                     <div style="margin-top:8px;">
-                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial</div>
+                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📜 Historial</div>
                         <div id="genHistory" class="credit-history"></div>
                     </div>
                 </div>
@@ -1495,7 +1465,7 @@
                         <div class="result-box" id="liveResultBox"><span style="color:var(--text-muted);">Esperando verificación...</span></div>
                     </div>
                     <div style="margin-top:8px;">
-                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial LIVE</div>
+                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📜 Historial LIVE</div>
                         <div id="liveHistory" class="credit-history"></div>
                     </div>
                 </div>
@@ -1518,7 +1488,7 @@
                             <button class="btn-block btn-massive" onclick="liveMasivoDesdePanel()" id="massiveBtn">📊 LIVE MASIVO (7 créditos)</button>
                             <button class="btn-block btn-save" onclick="descargarResultadoMasivo()" id="btnDownloadMassive" disabled>⬇️ DESCARGAR</button>
                         </div>
-                        <div style="margin-top:6px; color:var(--texto-secundario); font-size:0.75rem;">
+                        <div style="margin-top:6px; color:var(--texto-secundario); font-size:0.75rem;text-shadow:0 1px 4px rgba(0,0,0,0.95);">
                             📊 Tarjetas disponibles: <span id="massiveCount" style="color:#66ff88;font-weight:bold;">0</span>
                             <span style="color:var(--text-muted);margin-left:10px;">💎 Costo: 7 créditos</span>
                         </div>
@@ -1527,7 +1497,7 @@
                         <div class="result-box" id="massiveResultBox"><span style="color:var(--text-muted);">Esperando verificación masiva...</span></div>
                     </div>
                     <div style="margin-top:8px;">
-                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;">📜 Historial MASIVO</div>
+                        <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:3px;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📜 Historial MASIVO</div>
                         <div id="massiveHistory" class="credit-history"></div>
                     </div>
                 </div>
@@ -1546,8 +1516,8 @@
                             <div class="pasarela-card" id="pasarela-cvv" onclick="seleccionarPasarela('cvv')"><span class="icon">🔑</span><div class="name">CVV</div><div class="status active">✅ Activa</div></div>
                             <div class="pasarela-card" id="pasarela-braintreeauth" onclick="seleccionarPasarela('braintreeauth')"><span class="icon">🏦</span><div class="name">Braintree Auth</div><div class="status active">✅ Activa</div></div>
                         </div>
-                        <div style="margin-top:10px;padding:8px 12px;background:rgba(0, 15, 5, 0.55);border-radius:8px;border:1px solid var(--border-color);backdrop-filter:blur(4px);">
-                            <div style="color:var(--texto-secundario);font-size:0.7rem;">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ff88;">Stripe</strong></div>
+                        <div style="margin-top:10px;padding:8px 12px;background:rgba(0,15,5,0.5);backdrop-filter:blur(12px);border-radius:8px;border:1px solid var(--border-color);">
+                            <div style="color:var(--texto-secundario);font-size:0.7rem;text-shadow:0 1px 4px rgba(0,0,0,0.95);">🔗 Pasarela seleccionada: <strong id="pasarelaSeleccionadaLabel" style="color:#66ff88;">Stripe</strong></div>
                         </div>
                     </div>
                 </div>
@@ -1584,12 +1554,12 @@
                         <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
                             <div class="avatar-selector" id="chatAvatarSelector" onclick="cambiarAvatarChat()">🦜</div>
                             <div style="flex:1; min-width:150px;">
-                                <label style="color:var(--texto-secundario);font-size:0.7rem;">Tu nombre en el chat <span id="nombreBloqueadoMsg" style="color:#ffaa44;font-size:0.55rem;display:none;">(no se puede cambiar)</span></label>
+                                <label style="color:var(--texto-secundario);font-size:0.7rem;text-shadow:0 1px 4px rgba(0,0,0,0.95);">Tu nombre en el chat <span id="nombreBloqueadoMsg" style="color:#ffaa44;font-size:0.55rem;display:none;">(no se puede cambiar)</span></label>
                                 <input type="text" id="chatDisplayName" class="profile-name-input" placeholder="Escribe tu nombre..." style="width:100%;">
                             </div>
                             <button class="btn-small btn-success" onclick="guardarPerfilChat()" id="btnGuardarPerfilChat" style="padding:6px 16px;">💾 Guardar</button>
                         </div>
-                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.6rem;" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.6rem;text-shadow:0 1px 4px rgba(0,0,0,0.95);" id="chatProfileInfo">💡 Elige un avatar y escribe tu nombre para chatear.</div>
                     </div>
                     <div class="chat-reply-preview" id="chatReplyPreview">
                         <span>📩 Respondiendo a: <span id="replyPreviewText"></span></span>
@@ -1649,7 +1619,7 @@
                     <div id="salaPrivadaContainer">
                         <div class="sala-card" id="salaPrivadaCard" style="display:none;">
                             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
-                                <span style="color:#ff88cc;font-weight:bold;">🔒 Sala privada</span>
+                                <span style="color:#ff88cc;font-weight:bold;text-shadow:0 1px 4px rgba(0,0,0,0.95);">🔒 Sala privada</span>
                                 <span style="color:var(--text-muted);font-size:0.7rem;">Código: <strong id="salaCodigoDisplay" style="color:#ff88cc;letter-spacing:2px;">---</strong></span>
                                 <button class="copy-btn-sala" onclick="copiarCodigoSala()">📋 Copiar código</button>
                                 <button class="btn-small btn-danger" onclick="salirDeSala()">🚪 Salir</button>
@@ -1752,7 +1722,7 @@
                         </div>
                         <button class="btn-block btn-warning" onclick="guardarPromo()">💾 GUARDAR</button>
                         <button class="btn-block btn-start" onclick="recargarPromo()" style="flex:0.5;">🔄 RECARGAR</button>
-                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;">Actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos</div>
+                        <div style="margin-top:6px;color:var(--text-muted);font-size:0.65rem;text-shadow:0 1px 4px rgba(0,0,0,0.95);">Actual: <span id="promoDaysActual">7</span> días y <span id="promoCreditsActual">50</span> créditos</div>
                     </div>
                     <div class="item-card" style="border:2px solid #ff44aa;">
                         <div class="info-box admin">👥 <strong>GESTIÓN DE USUARIOS</strong></div>
@@ -1762,7 +1732,7 @@
                         </div>
                         <div id="userSearchResult" style="margin-top:6px;"></div>
                         <div style="margin-top:10px;">
-                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;">📋 Todos los usuarios</div>
+                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📋 Todos los usuarios</div>
                             <div id="listaUsuariosContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
                         <button class="btn-block btn-danger" onclick="eliminarTodosLosUsuarios()" id="btnEliminarTodos" style="margin-top:10px;">🗑️ ELIMINAR TODOS LOS USUARIOS (EXCEPTO TÚ)</button>
@@ -1780,7 +1750,7 @@
                             <button class="btn-small btn-success" onclick="recargarSolicitudes()" style="padding:6px 16px; align-self:flex-end;">🔄 Actualizar</button>
                         </div>
                         <div style="margin-top:10px;">
-                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Lista de solicitudes</div>
+                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:6px;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📋 Lista de solicitudes</div>
                             <div id="solicitudesContainer" style="max-height:400px;overflow-y:auto;"></div>
                         </div>
                     </div>
@@ -1800,7 +1770,7 @@
                             <button class="btn-small btn-success" onclick="recargarRegistros()" style="padding:6px 16px; align-self:flex-end;">🔄 Actualizar</button>
                         </div>
                         <div style="margin-top:10px;">
-                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:6px;">📋 Historial de registros</div>
+                            <div style="color:#66ff88;font-size:0.8rem;font-weight:600;margin-bottom:6px;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📋 Historial de registros</div>
                             <div id="registrosContainer" style="max-height:300px;overflow-y:auto;"></div>
                         </div>
                     </div>
@@ -1810,13 +1780,13 @@
                 <div id="panel-credits" class="panel">
                     <h3>💎 MIS CRÉDITOS</h3>
                     <div class="item-card">
-                        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+                        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;text-shadow:0 1px 4px rgba(0,0,0,0.95);">
                             <span style="font-size:1.5rem;">💎 <span id="creditsBalance" style="color:#66ff88;">0</span> créditos</span>
                             <span style="color:var(--texto-secundario); font-size:0.7rem;">🔹 Generar: GRATIS<br>🔹 LIVE: 2 créditos<br>🔹 Masivo: 7 créditos<br>🔹 Sala Privada: 5 créditos</span>
                         </div>
                     </div>
                     <div class="item-card">
-                        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;">
+                        <div style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px;text-shadow:0 1px 4px rgba(0,0,0,0.95);">
                             <span style="font-size:1.3rem;">📅 <span id="daysBalance" style="color:#ffaa44;">0</span> días</span>
                         </div>
                     </div>
@@ -1824,7 +1794,7 @@
                         <button class="btn-pedir-creditos" onclick="pedirCreditosWhatsApp()">📱 PEDIR CRÉDITOS AL ADMIN</button>
                     </div>
                     <div class="item-card">
-                        <div style="color:#66ff88;font-weight:600;font-size:0.8rem;">📋 Historial</div>
+                        <div style="color:#66ff88;font-weight:600;font-size:0.8rem;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📋 Historial</div>
                         <div id="creditHistory" class="credit-history"><p style="color:var(--text-muted);">Sin movimientos</p></div>
                     </div>
                 </div>
@@ -1833,15 +1803,12 @@
         </div>
     </div>
 
-    <!-- ============================================================== -->
-    <!-- SCRIPTS - CON FIREBASE -->
-    <!-- ============================================================== -->
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
     <script>
         // ================================================================
-        // 🔥 CONFIGURACIÓN DE FIREBASE
+        // FIREBASE
         // ================================================================
         const firebaseConfig = {
             apiKey: "AIZasY9mpZybNHhRCpZ6xr1bt6lxjx8_lVvsAHU",
@@ -1853,19 +1820,11 @@
             databaseURL: "https://sys-andy-pro-v3-default-rtdb.firebaseio.com"
         };
 
-        if (!firebase.apps.length) {
-            firebase.initializeApp(firebaseConfig);
-        }
+        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // ================================================================
-        // CREDENCIALES DEL ADMIN
-        // ================================================================
         const ADMIN_EMAIL = "andyobregon799@gmail.com";
         const ADMIN_PASS = "Andyjoel12";
-
-        console.log('🦜 PERICO VERDE - VERSIÓN IMAGEN NÍTIDA');
-        console.log('🔐 Admin:', ADMIN_EMAIL);
 
         // ================================================================
         // VARIABLES GLOBALES
@@ -1984,6 +1943,13 @@
             mostrarNotificacion('🎮 ¡Ve al juego y gana créditos!', 'success');
         }
 
+        function verificarCreditos(cantidadNecesaria) {
+            if (esOwner) return true;
+            if (currentCredits >= cantidadNecesaria) return true;
+            mostrarModalCreditos();
+            return false;
+        }
+
         // ================================================================
         // CRÉDITOS
         // ================================================================
@@ -2033,7 +1999,7 @@
 
         async function gastarCredito(cantidad, descripcion) {
             if (esOwner) {
-                mostrarNotificacion(`👑 Owner: no gastas créditos`, 'success');
+                mostrarNotificacion(`👑 Owner: no gastas créditos (${descripcion})`, 'success');
                 return true;
             }
             if (currentDays <= 0) {
@@ -2122,12 +2088,15 @@
                 mostrarNotificacion('❌ Solo el administrador puede hacer esto', 'error');
                 return;
             }
+
             const dias = parseInt(document.getElementById('promoDays').value) || 7;
             const credits = parseInt(document.getElementById('promoCredits').value) || 50;
+
             if (dias < 0 || credits < 0) {
                 mostrarNotificacion('❌ Los valores no pueden ser negativos', 'error');
                 return;
             }
+
             try {
                 await db.ref('promocion').set({ dias: dias, creditos: credits });
                 promoDias = dias;
@@ -2135,7 +2104,7 @@
                 actualizarDisplayPromo();
                 mostrarNotificacion(`✅ Promo actualizada: ${dias} días y ${credits} créditos`, 'success');
             } catch (error) {
-                mostrarNotificacion('❌ Error al guardar la configuración', 'error');
+                mostrarNotificacion('❌ Error al guardar', 'error');
             }
         }
 
@@ -2387,7 +2356,7 @@
                 if (!container) return;
 
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#668866;padding:10px;text-align:center;">📭 No hay solicitudes pendientes</p>';
+                    container.innerHTML = '<p style="color:#88aa88;padding:10px;text-align:center;">📭 No hay solicitudes pendientes</p>';
                     document.getElementById('solicitudesBadge').style.display = 'none';
                     return;
                 }
@@ -2459,31 +2428,38 @@
                 mostrarNotificacion('❌ Solo el administrador', 'error');
                 return;
             }
+
             const btn = event.target;
             setButtonLoading(btn, true);
             btn.textContent = '⏳...';
 
             try {
                 const nodo = limpiarClave(email);
+
                 await db.ref(`usuarios/${nodo}`).update({
                     aprobado: true,
                     fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
                 });
+
                 await db.ref(`solicitudes/${key}`).update({
                     estado: 'aprobada',
                     fechaAprobacion: firebase.database.ServerValue.TIMESTAMP
                 });
+
                 await db.ref(`usuarios_datos/${nodo}`).set({
                     credits: promoCreditos,
                     days: promoDias
                 });
+
                 await db.ref(`creditos/${nodo}/historial`).push({
                     tipo: 'recarga',
                     monto: promoCreditos,
                     descripcion: `🎁 Bienvenida: ${promoDias} días + ${promoCreditos} créditos`,
                     fecha: Date.now()
                 });
-                mostrarNotificacion(`✅ Usuario ${email} aprobado`, 'success');
+
+                mostrarNotificacion(`✅ Usuario ${email} aprobado. Recibió ${promoDias} días y ${promoCreditos} créditos`, 'success');
+
             } catch (error) {
                 mostrarNotificacion('❌ Error al aprobar', 'error');
             }
@@ -2497,6 +2473,7 @@
                 mostrarNotificacion('❌ Solo el administrador', 'error');
                 return;
             }
+
             if (!confirm(`⚠️ ¿Rechazar solicitud de ${email}?`)) return;
 
             const btn = event.target;
@@ -2505,13 +2482,17 @@
 
             try {
                 const nodo = limpiarClave(email);
+
                 await db.ref(`solicitudes/${key}`).update({
                     estado: 'rechazada',
                     fechaRechazo: firebase.database.ServerValue.TIMESTAMP
                 });
+
                 await db.ref(`usuarios/${nodo}`).remove();
                 await db.ref(`usuarios_datos/${nodo}`).remove();
-                mostrarNotificacion(`✅ Solicitud rechazada`, 'success');
+
+                mostrarNotificacion(`✅ Solicitud de ${email} rechazada`, 'success');
+
             } catch (error) {
                 mostrarNotificacion('❌ Error al rechazar', 'error');
             }
@@ -2532,7 +2513,7 @@
                 container.innerHTML = "";
 
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#668866;padding:10px;">No hay usuarios</p>';
+                    container.innerHTML = '<p style="color:#88aa88;padding:10px;">No hay usuarios</p>';
                     return;
                 }
 
@@ -2639,7 +2620,7 @@
                         container.appendChild(div);
                     }
                 });
-                if (!found) container.innerHTML = '<p style="color:#668866;padding:6px;">Usuario no encontrado</p>';
+                if (!found) container.innerHTML = '<p style="color:#88aa88;padding:6px;">Usuario no encontrado</p>';
             });
         }
 
@@ -2647,7 +2628,7 @@
             if (!currentUser || !esOwner) return;
             const nodo = limpiarClave(email);
             const snap = await db.ref(`usuarios/${nodo}`).once('value');
-            if (!snap.exists()) return;
+            if (!snap.exists()) { mostrarNotificacion('Usuario no encontrado', 'error'); return; }
             const actual = snap.val().bloqueado || false;
             await db.ref(`usuarios/${nodo}`).update({ bloqueado: !actual });
             mostrarNotificacion(`${!actual ? '⛔' : '✅'} Usuario ${!actual ? 'bloqueado' : 'desbloqueado'}`, 'success');
@@ -2674,7 +2655,7 @@
                 mostrarNotificacion(`✅ Usuario ${email} eliminado`, 'success');
                 recargarUsuarios();
             } catch (e) {
-                mostrarNotificacion('❌ Error al eliminar', 'error');
+                mostrarNotificacion('❌ Error al eliminar usuario', 'error');
             }
         }
 
@@ -2702,7 +2683,7 @@
             const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
             const nuevo = Math.max(0, (data.credits || 0) - parseInt(cantidad));
             await ref.update({ credits: nuevo });
-            mostrarNotificacion(`✅ -${cantidad} créditos`, 'success');
+            mostrarNotificacion(`✅ -${cantidad} créditos a ${email}`, 'success');
             recargarUsuarios();
         }
 
@@ -2716,7 +2697,7 @@
             const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
             const nuevo = (data.days || 0) + parseInt(cantidad);
             await ref.update({ days: nuevo });
-            mostrarNotificacion(`✅ +${cantidad} días`, 'success');
+            mostrarNotificacion(`✅ +${cantidad} días a ${email}`, 'success');
             recargarUsuarios();
         }
 
@@ -2730,12 +2711,15 @@
             const data = snap.exists() ? snap.val() : { credits: 0, days: 0 };
             const nuevo = Math.max(0, (data.days || 0) - parseInt(cantidad));
             await ref.update({ days: nuevo });
-            mostrarNotificacion(`✅ -${cantidad} días`, 'success');
+            mostrarNotificacion(`✅ -${cantidad} días a ${email}`, 'success');
             recargarUsuarios();
         }
 
         async function eliminarTodosLosUsuarios() {
-            if (!currentUser || !esOwner) return;
+            if (!currentUser || !esOwner) {
+                mostrarNotificacion('❌ Solo el administrador', 'error');
+                return;
+            }
             if (!confirm('🚨 ¿ELIMINAR TODOS LOS USUARIOS?')) return;
             if (!confirm('⚠️ ¿REALMENTE SEGURO?')) return;
 
@@ -2828,7 +2812,7 @@
                 if (!container) return;
 
                 if (!snapshot.exists()) {
-                    container.innerHTML = '<p style="color:#668866;padding:10px;text-align:center;">📭 No hay registros</p>';
+                    container.innerHTML = '<p style="color:#88aa88;padding:10px;text-align:center;">📭 No hay registros</p>';
                     return;
                 }
 
@@ -2842,6 +2826,7 @@
 
                 registros.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
                 const mostrar = registros.slice(0, 50);
+
                 container.innerHTML = '';
 
                 mostrar.forEach(reg => {
@@ -2850,6 +2835,7 @@
                     const email = reg.email || 'Desconocido';
                     const ip = reg.ip || '0.0.0.0';
                     const fecha = reg.fecha || new Date(reg.timestamp || Date.now()).toLocaleString();
+
                     div.innerHTML = `
                         <span class="registro-email">${email}</span>
                         <span class="registro-ip">🌐 ${ip}</span>
@@ -2877,8 +2863,12 @@
             document.querySelectorAll('.pasarela-card').forEach(c => c.classList.remove('active'));
             document.getElementById('pasarela-' + pasarela).classList.add('active');
             const nombres = {
-                'stripe': 'Stripe', 'zuora': 'Zuora', 'auth': 'Auth',
-                'braintree': 'Braintree', 'ccn': 'CCN', 'cvv': 'CVV',
+                'stripe': 'Stripe',
+                'zuora': 'Zuora',
+                'auth': 'Auth',
+                'braintree': 'Braintree',
+                'ccn': 'CCN',
+                'cvv': 'CVV',
                 'braintreeauth': 'Braintree Auth'
             };
             const label = nombres[pasarela] || 'Stripe';
@@ -2934,7 +2924,7 @@
                         marca: data.scheme || 'Desconocida'
                     };
                 }
-            } catch (e) {}
+            } catch (e) { console.log('Error BIN:', e); }
             return { pais: 'Desconocido', paisEmoji: '🌍', banco: 'Desconocido', marca: detectBrand(bin) };
         }
 
@@ -2971,10 +2961,19 @@
                         const series = candidate.slice(-4);
                         if (!usedSeries.has(series) && luhnCheck(candidate)) {
                             usedSeries.add(series);
-                            let fecha = usarFechaFija ? { month: month.padStart(2, '0'), year: year.padStart(2, '0') } : generarFechaAleatoria();
+                            let fecha;
+                            if (usarFechaFija) {
+                                fecha = { month: month.padStart(2, '0'), year: year.padStart(2, '0') };
+                            } else {
+                                fecha = generarFechaAleatoria();
+                            }
                             cards.push({
-                                number: candidate, month: fecha.month, year: fecha.year,
-                                brand: brand, cvv: generarCVV(brand), cvvLength: cvvLen
+                                number: candidate,
+                                month: fecha.month,
+                                year: fecha.year,
+                                brand: brand,
+                                cvv: generarCVV(brand),
+                                cvvLength: cvvLen
                             });
                             break;
                         }
@@ -3009,10 +3008,19 @@
                     const series = candidate.slice(-4);
                     if (!usedSeries.has(series) && luhnCheck(candidate)) {
                         usedSeries.add(series);
-                        let fecha = usarFechaFija ? { month: month.padStart(2, '0'), year: year.padStart(2, '0') } : generarFechaAleatoria();
+                        let fecha;
+                        if (usarFechaFija) {
+                            fecha = { month: month.padStart(2, '0'), year: year.padStart(2, '0') };
+                        } else {
+                            fecha = generarFechaAleatoria();
+                        }
                         cards.push({
-                            number: candidate, month: fecha.month, year: fecha.year,
-                            brand: brand, cvv: generarCVV(brand), cvvLength: cvvLen
+                            number: candidate,
+                            month: fecha.month,
+                            year: fecha.year,
+                            brand: brand,
+                            cvv: generarCVV(brand),
+                            cvvLength: cvvLen
                         });
                         break;
                     }
@@ -3144,8 +3152,8 @@
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             const container = document.getElementById('genHistory');
             container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#668866;">Sin generaciones</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">🦜 ${h.bin} | ${h.count} tarjetas | ${h.fecha}</div>`).join('');
+            if (!history.length) { container.innerHTML = '<p style="color:#88aa88;">Sin generaciones</p>'; return; }
+            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid var(--border-color);padding:3px 0;font-size:0.68rem;color:#aaffaa;">🦜 ${h.bin} | ${h.count} tarjetas | ${h.fecha}</div>`).join('');
         }
 
         function guardarHistorialLive(number, brand, result) {
@@ -3163,8 +3171,8 @@
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             const container = document.getElementById('liveHistory');
             container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#668866;">Sin LIVE</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">🔴 ${h.number} | ${h.brand} | ${h.mensaje} | ${h.fecha}</div>`).join('');
+            if (!history.length) { container.innerHTML = '<p style="color:#88aa88;">Sin LIVE</p>'; return; }
+            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid var(--border-color);padding:3px 0;font-size:0.68rem;color:#aaffaa;">🔴 ${h.number} | ${h.brand} | ${h.mensaje} | ${h.fecha}</div>`).join('');
         }
 
         function guardarHistorialMasivo(results) {
@@ -3184,8 +3192,8 @@
             const history = JSON.parse(localStorage.getItem(key) || '[]');
             const container = document.getElementById('massiveHistory');
             container.innerHTML = '';
-            if (!history.length) { container.innerHTML = '<p style="color:#668866;">Sin masivos</p>'; return; }
-            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">📊 ${h.total} | 🟢 ${h.fondos} | 🟡 ${h.valid} | ${h.fecha}</div>`).join('');
+            if (!history.length) { container.innerHTML = '<p style="color:#88aa88;">Sin masivos</p>'; return; }
+            container.innerHTML = history.map(h => `<div style="border-bottom:1px solid var(--border-color);padding:3px 0;font-size:0.68rem;color:#aaffaa;">📊 ${h.total} | 🟢 ${h.fondos} | 🟡 ${h.valid} | ${h.fecha}</div>`).join('');
         }
 
         async function cargarCreditosUsuario() {
@@ -3197,11 +3205,11 @@
             const ref = db.ref(`creditos/${currentUser.uid}/historial`);
             const snap = await ref.orderByChild('fecha').limitToLast(20).once('value');
             const container = document.getElementById('creditHistory');
-            if (!snap.exists()) { container.innerHTML = '<p style="color:#668866;">Sin movimientos</p>'; return; }
+            if (!snap.exists()) { container.innerHTML = '<p style="color:#88aa88;">Sin movimientos</p>'; return; }
             const items = [];
             snap.forEach(child => items.push(child.val()));
             items.reverse();
-            container.innerHTML = items.map(item => `<div style="border-bottom:1px solid #1a3a1a;padding:3px 0;font-size:0.68rem;color:#aaffaa;">${item.tipo === 'recarga' ? '➕' : '➖'} ${item.monto} | ${item.descripcion || ''} <span style="color:#668866;font-size:0.55rem;">${new Date(item.fecha).toLocaleString()}</span></div>`).join('');
+            container.innerHTML = items.map(item => `<div style="border-bottom:1px solid var(--border-color);padding:3px 0;font-size:0.68rem;color:#aaffaa;">${item.tipo === 'recarga' ? '➕' : '➖'} ${item.monto} | ${item.descripcion || ''} <span style="color:#88aa88;font-size:0.55rem;">${new Date(item.fecha).toLocaleString()}</span></div>`).join('');
         }
 
         // ================================================================
@@ -3222,72 +3230,72 @@
             if (pasarela === 'stripe') {
                 if (random < 0.18) return { estado: 'approved', mensaje: '✅ APROBADA - Stripe: Payment succeeded', codigo: '200', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
                 else if (random < 0.33) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Stripe: Insufficient funds', codigo: '402', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
-                else if (random < 0.48) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Stripe: CVV mismatch', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-                else if (random < 0.63) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Stripe: Card expired', codigo: '400', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
-                else if (random < 0.78) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Stripe: Card blocked', codigo: '403', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Stripe: No such card', codigo: '404', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+                else if (random < 0.48) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Stripe', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.63) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Stripe', codigo: '400', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.78) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Stripe', codigo: '403', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Stripe', codigo: '404', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
             if (pasarela === 'zuora') {
-                if (random < 0.15) return { estado: 'approved', mensaje: '✅ APROBADA - Zuora: Success', codigo: '00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
-                else if (random < 0.30) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Zuora: Insufficient funds', codigo: '51', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
-                else if (random < 0.45) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Zuora: CVV mismatch', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-                else if (random < 0.55) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Zuora: Expired card', codigo: '54', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
-                else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Zuora: Card restricted', codigo: '57', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Zuora: Invalid card', codigo: '14', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+                if (random < 0.15) return { estado: 'approved', mensaje: '✅ APROBADA - Zuora', codigo: '00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.30) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Zuora: Sin fondos', codigo: '51', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.45) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Zuora', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.55) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Zuora', codigo: '54', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Zuora', codigo: '57', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Zuora', codigo: '14', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
             if (pasarela === 'auth') {
-                if (random < 0.17) return { estado: 'approved', mensaje: '✅ APROBADA - Auth.net: Success', codigo: '1', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
-                else if (random < 0.32) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Auth.net: Insufficient funds', codigo: '2', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
-                else if (random < 0.47) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Auth.net: CVV mismatch', codigo: '6', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-                else if (random < 0.62) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Auth.net: Expired card', codigo: '7', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
-                else if (random < 0.77) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Auth.net: Card blocked', codigo: '8', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Auth.net: Invalid card', codigo: '3', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+                if (random < 0.17) return { estado: 'approved', mensaje: '✅ APROBADA - Auth.net', codigo: '1', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.32) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Auth.net: Sin fondos', codigo: '2', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.47) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Auth.net', codigo: '6', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.62) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Auth.net', codigo: '7', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.77) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Auth.net', codigo: '8', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Auth.net', codigo: '3', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
             if (pasarela === 'braintree') {
-                if (random < 0.16) return { estado: 'approved', mensaje: '✅ APROBADA - Braintree: Success', codigo: '1000', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
-                else if (random < 0.31) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Braintree: Insufficient funds', codigo: '1001', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
-                else if (random < 0.46) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Braintree: CVV mismatch', codigo: '1002', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-                else if (random < 0.61) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Braintree: Card expired', codigo: '1003', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
-                else if (random < 0.76) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Braintree: Card blocked', codigo: '1004', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Braintree: Invalid card', codigo: '1005', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+                if (random < 0.16) return { estado: 'approved', mensaje: '✅ APROBADA - Braintree', codigo: '1000', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.31) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Braintree: Sin fondos', codigo: '1001', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.46) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Braintree', codigo: '1002', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.61) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Braintree', codigo: '1003', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.76) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Braintree', codigo: '1004', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Braintree', codigo: '1005', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
             if (pasarela === 'ccn') {
-                if (random < 0.14) return { estado: 'approved', mensaje: '✅ APROBADA - CCN: Success', codigo: '000', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
-                else if (random < 0.28) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - CCN: Insufficient funds', codigo: '001', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
-                else if (random < 0.42) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - CCN: CVV mismatch', codigo: '002', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-                else if (random < 0.56) return { estado: 'expired', mensaje: '🔴 EXPIRADA - CCN: Card expired', codigo: '003', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
-                else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - CCN: Card blocked', codigo: '004', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - CCN: Invalid card', codigo: '005', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+                if (random < 0.14) return { estado: 'approved', mensaje: '✅ APROBADA - CCN', codigo: '000', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.28) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - CCN: Sin fondos', codigo: '001', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.42) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - CCN', codigo: '002', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.56) return { estado: 'expired', mensaje: '🔴 EXPIRADA - CCN', codigo: '003', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - CCN', codigo: '004', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - CCN', codigo: '005', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
             if (pasarela === 'cvv') {
-                if (random < 0.12) return { estado: 'approved', mensaje: '✅ APROBADA - CVV Check: Success', codigo: 'CVV00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
-                else if (random < 0.26) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - CVV Check: Insufficient funds', codigo: 'CVV01', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
-                else if (random < 0.40) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - CVV Check: CVV mismatch', codigo: 'CVV02', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-                else if (random < 0.54) return { estado: 'expired', mensaje: '🔴 EXPIRADA - CVV Check: Card expired', codigo: 'CVV03', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
-                else if (random < 0.68) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - CVV Check: Card blocked', codigo: 'CVV04', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - CVV Check: Invalid card', codigo: 'CVV05', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+                if (random < 0.12) return { estado: 'approved', mensaje: '✅ APROBADA - CVV Check', codigo: 'CVV00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.26) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - CVV: Sin fondos', codigo: 'CVV01', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.40) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - CVV Check', codigo: 'CVV02', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.54) return { estado: 'expired', mensaje: '🔴 EXPIRADA - CVV Check', codigo: 'CVV03', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.68) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - CVV Check', codigo: 'CVV04', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - CVV Check', codigo: 'CVV05', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
             if (pasarela === 'braintreeauth') {
-                if (random < 0.17) return { estado: 'approved', mensaje: '✅ APROBADA - Braintree Auth: Success', codigo: 'AUTH00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
-                else if (random < 0.32) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Braintree Auth: Insufficient funds', codigo: 'AUTH01', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
-                else if (random < 0.47) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Braintree Auth: CVV mismatch', codigo: 'AUTH02', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-                else if (random < 0.62) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Braintree Auth: Card expired', codigo: 'AUTH03', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
-                else if (random < 0.77) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Braintree Auth: Card blocked', codigo: 'AUTH04', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Braintree Auth: Invalid card', codigo: 'AUTH05', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+                if (random < 0.17) return { estado: 'approved', mensaje: '✅ APROBADA - Braintree Auth', codigo: 'AUTH00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+                else if (random < 0.32) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Braintree Auth: Sin fondos', codigo: 'AUTH01', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+                else if (random < 0.47) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO - Braintree Auth', codigo: 'AUTH02', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
+                else if (random < 0.62) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Braintree Auth', codigo: 'AUTH03', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+                else if (random < 0.77) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA - Braintree Auth', codigo: 'AUTH04', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
+                else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Braintree Auth', codigo: 'AUTH05', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
             }
 
-            if (random < 0.15) return { estado: 'approved', mensaje: '✅ APROBADA - Transacción exitosa', codigo: '00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
-            else if (random < 0.30) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Fondos insuficientes', codigo: '51', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
+            if (random < 0.15) return { estado: 'approved', mensaje: '✅ APROBADA', codigo: '00', fondos: true, cvv_ok: true, check: 'Check🔥PericoVerde☠️✅' };
+            else if (random < 0.30) return { estado: 'insufficient', mensaje: '⚠️ VÁLIDA - Sin fondos', codigo: '51', fondos: false, cvv_ok: true, check: 'Check🔥PericoVerde☠️🔶' };
             else if (random < 0.45) return { estado: 'cvv_invalid', mensaje: '🟠 CVV INCORRECTO', codigo: '402', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌CVV' };
-            else if (random < 0.55) return { estado: 'expired', mensaje: '🔴 EXPIRADA - Fecha inválida', codigo: '54', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
+            else if (random < 0.55) return { estado: 'expired', mensaje: '🔴 EXPIRADA', codigo: '54', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌EXP' };
             else if (random < 0.70) return { estado: 'blocked', mensaje: '⛔ BLOQUEADA', codigo: '57', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️⛔' };
-            else return { estado: 'invalid', mensaje: '❌ INVÁLIDA - Tarjeta no existe', codigo: '14', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
+            else return { estado: 'invalid', mensaje: '❌ INVÁLIDA', codigo: '14', fondos: false, cvv_ok: false, check: 'Check🔥PericoVerde☠️❌' };
         }
 
         function formatearResultadoLive(number, month, year, cvv, brand, result) {
@@ -3342,8 +3350,8 @@
                                    result.estado === 'expired' ? '#ff4444' : '#ff4444';
 
                 document.getElementById('liveResultBox').innerHTML = `
-                    <div style="border-bottom:2px solid #1a4a1a;padding-bottom:10px;margin-bottom:10px;">
-                        <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;color:${estadoColor};text-shadow:0 1px 3px rgba(0,0,0,0.8);">${result.mensaje}</div>
+                    <div style="border-bottom:2px solid var(--border-color);padding-bottom:10px;margin-bottom:10px;">
+                        <div style="font-size:0.95rem;font-weight:bold;margin-bottom:8px;color:${estadoColor};text-shadow:0 1px 4px rgba(0,0,0,0.95);">${result.mensaje}</div>
                         <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px 10px;font-size:0.78rem;">
                             <div><span style="color:#88ffaa;">🔢 Número:</span> ${number}</div>
                             <div><span style="color:#88ffaa;">🏷️ Marca:</span> ${brand}</div>
@@ -3357,7 +3365,7 @@
                         <div style="margin-top:8px;background:rgba(0,0,0,0.4);padding:8px;border-radius:6px;border:1px solid #00cc44;">
                             <span style="color:#ffaa44;font-weight:bold;font-family:monospace;font-size:0.8rem;">📋 ${resultadoFormateado}</span>
                         </div>
-                        <div style="margin-top:6px;color:#88aa88;font-size:0.65rem;border-top:1px solid #1a3a1a;padding-top:5px;">
+                        <div style="margin-top:6px;color:#88aa88;font-size:0.65rem;border-top:1px solid var(--border-color);padding-top:5px;">
                             💎 Costo: 2 créditos | Saldo: ${esOwner ? '∞' : currentCredits} | Pasarela: ${pasarelaSeleccionada}
                         </div>
                     </div>
@@ -3365,6 +3373,7 @@
 
                 guardarHistorialLive(number, brand, result);
                 cargarHistorialLive();
+
             } catch (error) {
                 mostrarNotificacion('❌ Error al verificar tarjeta', 'error');
             }
@@ -3405,14 +3414,25 @@
                     const resultadoFormateado = formatearResultadoLive(card.number, card.month, card.year, card.cvv, brand, result);
 
                     massiveResults.push({
-                        number: card.number, month: card.month, year: card.year, cvv: card.cvv,
-                        brand: brand, estado: result.estado, mensaje: result.mensaje,
-                        check: result.check, resultadoFormateado: resultadoFormateado
+                        number: card.number,
+                        month: card.month,
+                        year: card.year,
+                        cvv: card.cvv,
+                        brand: brand,
+                        estado: result.estado,
+                        mensaje: result.mensaje,
+                        check: result.check,
+                        resultadoFormateado: resultadoFormateado
                     });
                 } catch (error) {
                     massiveResults.push({
-                        number: card.number, month: card.month, year: card.year, cvv: card.cvv,
-                        brand: 'Desconocida', estado: 'invalid', mensaje: '❌ ERROR DE VERIFICACIÓN',
+                        number: card.number,
+                        month: card.month,
+                        year: card.year,
+                        cvv: card.cvv,
+                        brand: 'Desconocida',
+                        estado: 'invalid',
+                        mensaje: '❌ ERROR DE VERIFICACIÓN',
                         check: 'Check🔥PericoVerde☠️❌',
                         resultadoFormateado: `${card.number}|${card.month}|${card.year}|${card.cvv}|Desconocida|invalid|❌ ERROR DE VERIFICACIÓN|Check🔥PericoVerde☠️❌`
                     });
@@ -3451,8 +3471,8 @@
             const invalidCount = results.filter(r => r.estado === 'invalid').length;
 
             container.innerHTML = `
-                <div style="border-bottom:2px solid #1a4a1a;padding-bottom:8px;margin-bottom:8px;">
-                    <div style="font-size:0.9rem;font-weight:bold;color:#66ff88;text-shadow:0 1px 3px rgba(0,0,0,0.8);">📊 RESULTADOS (${results.length})</div>
+                <div style="border-bottom:2px solid var(--border-color);padding-bottom:8px;margin-bottom:8px;">
+                    <div style="font-size:0.9rem;font-weight:bold;color:#66ff88;text-shadow:0 1px 4px rgba(0,0,0,0.95);">📊 RESULTADOS (${results.length})</div>
                     <div style="display:flex;gap:10px;padding:4px 8px;border-radius:6px;background:rgba(0,0,0,0.3);margin-bottom:8px;flex-wrap:wrap;">
                         <span style="font-size:0.7rem;">🟢 Con fondos: <span style="color:#00ff88;">${fondosCount}</span></span>
                         <span style="font-size:0.7rem;">🟠 CVV incorrecto: <span style="color:#ff8800;">${cvvInvalidCount}</span></span>
@@ -3561,7 +3581,7 @@
             const paisNombre = nombrePais[pais] || pais;
 
             document.getElementById('direccionResultBox').innerHTML = `
-                <div style="border-bottom:1px solid #1a4a1a;padding-bottom:8px;margin-bottom:8px;">
+                <div style="border-bottom:1px solid var(--border-color);padding-bottom:8px;margin-bottom:8px;">
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:4px 12px; font-size:0.9rem;">
                         <div><span class="label">📍 Dirección:</span> <span class="value">${entry.direccion}</span></div>
                         <div><span class="label">🏙️ Ciudad:</span> <span class="value">${entry.ciudad}</span></div>
@@ -3576,7 +3596,7 @@
                 </div>
             `;
             window._ultimaDireccion = `📍 ${entry.direccion}\n🏙️ ${entry.ciudad}\n📌 ${entry.estado}\n📮 ${entry.zip}\n📞 ${telefono}\n🌍 ${paisNombre}`;
-            mostrarNotificacion(`✅ Dirección generada`, 'success');
+            mostrarNotificacion(`✅ Dirección generada para ${paisNombre}`, 'success');
         }
 
         function copiarDireccionCompleta() {
@@ -3610,7 +3630,7 @@
             const existe = snap.exists();
 
             if (existe && snap.val().name && !esOwner) {
-                mostrarNotificacion('❌ Ya tienes un nombre guardado.', 'error');
+                mostrarNotificacion('❌ Ya tienes un nombre guardado, no puedes cambiarlo.', 'error');
                 document.getElementById('chatDisplayName').value = snap.val().name;
                 return;
             }
@@ -3618,7 +3638,8 @@
             chatDisplayName = name;
             chatAvatar = document.getElementById('chatAvatarSelector').textContent;
             await db.ref(`chat_profiles/${currentUser.uid}`).set({
-                name: chatDisplayName, avatar: chatAvatar
+                name: chatDisplayName,
+                avatar: chatAvatar
             });
             chatNameBloqueado = true;
 
@@ -3628,10 +3649,13 @@
                 document.getElementById('nombreBloqueadoMsg').style.display = 'inline';
                 document.getElementById('chatProfileInfo').textContent = '✅ Nombre guardado permanentemente.';
             } else {
-                document.getElementById('chatProfileInfo').textContent = '👑 Owner - Puedes cambiar tu nombre.';
+                document.getElementById('chatProfileInfo').textContent = '👑 Owner - Puedes cambiar tu nombre cuando quieras.';
+                document.getElementById('chatDisplayName').disabled = false;
+                document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                document.getElementById('nombreBloqueadoMsg').style.display = 'none';
             }
 
-            mostrarNotificacion('✅ Perfil guardado', 'success');
+            mostrarNotificacion('✅ Perfil de chat guardado', 'success');
 
             if (chatUnsubscribe) {
                 chatUnsubscribe();
@@ -3657,15 +3681,22 @@
                     document.getElementById('chatDisplayName').disabled = false;
                     document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
                     document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-                    document.getElementById('chatProfileInfo').textContent = '👑 Owner - Puedes cambiar tu nombre.';
+                    document.getElementById('chatProfileInfo').textContent = '👑 Owner - Puedes cambiar tu nombre cuando quieras.';
                 }
             } else {
                 chatDisplayName = currentUser.email.split('@')[0];
                 chatAvatar = '🦜';
-                document.getElementById('chatDisplayName').disabled = false;
-                document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
-                document.getElementById('nombreBloqueadoMsg').style.display = 'none';
-                document.getElementById('chatProfileInfo').textContent = esOwner ? '👑 Owner - Elige tu nombre.' : '💡 Elige avatar y nombre.';
+                if (esOwner) {
+                    document.getElementById('chatDisplayName').disabled = false;
+                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+                    document.getElementById('chatProfileInfo').textContent = '👑 Owner - Elige tu nombre y avatar.';
+                } else {
+                    document.getElementById('chatDisplayName').disabled = false;
+                    document.getElementById('btnGuardarPerfilChat').style.display = 'inline-block';
+                    document.getElementById('nombreBloqueadoMsg').style.display = 'none';
+                    document.getElementById('chatProfileInfo').textContent = '💡 Elige un avatar y escribe tu nombre (solo se guarda una vez).';
+                }
             }
             document.getElementById('chatDisplayName').value = chatDisplayName;
             document.getElementById('chatAvatarSelector').textContent = chatAvatar;
@@ -3710,7 +3741,7 @@
 
         function abrirWhatsAppSalaDirecto() {
             if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
-            const numero = prompt('📱 Ingresa el número:', '593990434546');
+            const numero = prompt('📱 Ingresa el número de teléfono:', '593990434546');
             if (!numero) return;
             const numeroLimpio = numero.replace(/[^0-9]/g, '');
             if (numeroLimpio.length < 7) { mostrarNotificacion('❌ Número inválido.', 'error'); return; }
@@ -3721,8 +3752,11 @@
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil primero', 'error'); return; }
             const msgData = {
-                userId: currentUser.uid, userName: chatDisplayName,
-                avatar: chatAvatar, sticker: sticker, timestamp: Date.now()
+                userId: currentUser.uid,
+                userName: chatDisplayName,
+                avatar: chatAvatar,
+                sticker: sticker,
+                timestamp: Date.now()
             };
             if (mensajeRespondiendo) {
                 msgData.replyTo = mensajeRespondiendo;
@@ -3749,8 +3783,11 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const msgData = {
-                    userId: currentUser.uid, userName: chatDisplayName,
-                    avatar: chatAvatar, image: e.target.result, timestamp: Date.now()
+                    userId: currentUser.uid,
+                    userName: chatDisplayName,
+                    avatar: chatAvatar,
+                    image: e.target.result,
+                    timestamp: Date.now()
                 };
                 if (mensajeRespondiendo) {
                     msgData.replyTo = mensajeRespondiendo;
@@ -3773,8 +3810,11 @@
             if (!text) return;
 
             const msgData = {
-                userId: currentUser.uid, userName: chatDisplayName,
-                avatar: chatAvatar, text: text, timestamp: Date.now()
+                userId: currentUser.uid,
+                userName: chatDisplayName,
+                avatar: chatAvatar,
+                text: text,
+                timestamp: Date.now()
             };
             if (mensajeRespondiendo) {
                 msgData.replyTo = mensajeRespondiendo;
@@ -3797,6 +3837,7 @@
                 `${msg.userName || 'Anónimo'}: ${msg.text || msg.sticker || '📷 Imagen'}`;
             document.getElementById('chatReplyPreview').style.display = 'flex';
             document.getElementById('chatInput').focus();
+            mostrarNotificacion('📩 Respondiendo mensaje', 'info');
         }
 
         function cancelarRespuesta() {
@@ -3810,7 +3851,7 @@
             chatUnsubscribe = messagesRef.on('child_added', function(snapshot) {
                 const msg = snapshot.val();
                 const container = document.getElementById('chatMessages');
-                if (container.querySelector('div[style*="color:#668866"]')) {
+                if (container.querySelector('div[style*="color:#88aa88"]')) {
                     container.innerHTML = '';
                 }
                 const isOwn = msg.userId === currentUser.uid;
@@ -3876,14 +3917,16 @@
             const input = document.getElementById('chatInput');
             input.value += `@${nombre} `;
             input.focus();
+            mostrarNotificacion(`✏️ Mencionando a ${nombre}`, 'info');
         }
 
         function abrirWhatsAppUsuario(nombre) {
-            const numero = prompt(`📱 Ingresa el número de ${nombre}:`, '593');
+            const numero = prompt(`📱 Ingresa el número de teléfono de ${nombre}:`, '593');
             if (!numero) return;
             const numeroLimpio = numero.replace(/[^0-9]/g, '');
             if (numeroLimpio.length < 7) { mostrarNotificacion('❌ Número inválido.', 'error'); return; }
             window.open(`https://wa.me/${numeroLimpio}`, '_blank');
+            mostrarNotificacion(`📱 Abriendo WhatsApp con ${nombre}...`, 'success');
         }
 
         // ================================================================
@@ -3892,6 +3935,7 @@
         async function crearSalaPrivada() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
             if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil de chat primero', 'error'); return; }
+
             if (!await gastarCredito(5, 'Creación de sala privada')) return;
 
             const codigo = generarCodigoSala();
@@ -3899,13 +3943,16 @@
 
             const snap = await salaRef.once('value');
             if (snap.exists()) {
-                mostrarNotificacion('❌ Código ya existe', 'error');
+                mostrarNotificacion('❌ Código ya existe, intenta de nuevo', 'error');
                 return;
             }
 
             await salaRef.set({
-                creador: currentUser.uid, creadorNombre: chatDisplayName,
-                creadorAvatar: chatAvatar, creado: Date.now(), activa: true
+                creador: currentUser.uid,
+                creadorNombre: chatDisplayName,
+                creadorAvatar: chatAvatar,
+                creado: Date.now(),
+                activa: true
             });
 
             salaCodigo = codigo;
@@ -3915,7 +3962,9 @@
             document.getElementById('inputCodigoSala').value = '';
 
             await db.ref(`salas_privadas_mensajes/${codigo}`).push({
-                userId: 'system', userName: 'Sistema', avatar: '🤖',
+                userId: 'system',
+                userName: 'Sistema',
+                avatar: '🤖',
                 text: `🔒 Sala creada por ${chatDisplayName}. Código: ${codigo}`,
                 timestamp: Date.now()
             });
@@ -3926,7 +3975,7 @@
 
         async function unirseASala() {
             if (!currentUser) { mostrarNotificacion('❌ Inicia sesión', 'error'); return; }
-            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil primero', 'error'); return; }
+            if (!chatDisplayName) { mostrarNotificacion('❌ Guarda tu perfil de chat primero', 'error'); return; }
 
             const codigo = document.getElementById('inputCodigoSala').value.trim().toUpperCase();
             if (!codigo) { mostrarNotificacion('❌ Ingresa un código', 'error'); return; }
@@ -3952,8 +4001,10 @@
             document.getElementById('inputCodigoSala').value = '';
 
             await db.ref(`salas_privadas_mensajes/${codigo}`).push({
-                userId: currentUser.uid, userName: chatDisplayName,
-                avatar: chatAvatar, text: `👋 ${chatDisplayName} se ha unido!`,
+                userId: currentUser.uid,
+                userName: chatDisplayName,
+                avatar: chatAvatar,
+                text: `👋 ${chatDisplayName} se ha unido a la sala!`,
                 timestamp: Date.now()
             });
 
@@ -3969,7 +4020,7 @@
             salaUnsubscribe = msgRef.on('child_added', function(snapshot) {
                 const msg = snapshot.val();
                 const container = document.getElementById('salaMessages');
-                if (container.querySelector('div[style*="color:#668866"]')) {
+                if (container.querySelector('div[style*="color:#88aa88"]')) {
                     container.innerHTML = '';
                 }
 
@@ -4035,21 +4086,24 @@
                 `${msg.userName || 'Anónimo'}: ${msg.text || msg.sticker || '📷 Imagen'}`;
             document.getElementById('salaReplyPreview').style.display = 'flex';
             document.getElementById('salaChatInput').focus();
+            mostrarNotificacion('📩 Respondiendo mensaje en sala', 'info');
         }
 
         function mencionarUsuarioSala(nombre) {
             const input = document.getElementById('salaChatInput');
             input.value += `@${nombre} `;
             input.focus();
+            mostrarNotificacion(`✏️ Mencionando a ${nombre} en sala`, 'info');
         }
 
         function abrirWhatsAppSala(nombre) {
-            if (!salaActual) return;
-            const numero = prompt(`📱 Ingresa el número de ${nombre}:`, '593');
+            if (!salaActual) { mostrarNotificacion('❌ No estás en una sala', 'error'); return; }
+            const numero = prompt(`📱 Ingresa el número de teléfono de ${nombre}:`, '593');
             if (!numero) return;
             const numeroLimpio = numero.replace(/[^0-9]/g, '');
             if (numeroLimpio.length < 7) { mostrarNotificacion('❌ Número inválido.', 'error'); return; }
             window.open(`https://wa.me/${numeroLimpio}`, '_blank');
+            mostrarNotificacion(`📱 Abriendo WhatsApp con ${nombre}...`, 'success');
         }
 
         function enviarMensajeSala() {
@@ -4062,8 +4116,11 @@
             if (!text) return;
 
             const msgData = {
-                userId: currentUser.uid, userName: chatDisplayName,
-                avatar: chatAvatar, text: text, timestamp: Date.now()
+                userId: currentUser.uid,
+                userName: chatDisplayName,
+                avatar: chatAvatar,
+                text: text,
+                timestamp: Date.now()
             };
             if (mensajeRespondiendoSala) {
                 msgData.replyTo = mensajeRespondiendoSala;
@@ -4092,8 +4149,11 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 const msgData = {
-                    userId: currentUser.uid, userName: chatDisplayName,
-                    avatar: chatAvatar, image: e.target.result, timestamp: Date.now()
+                    userId: currentUser.uid,
+                    userName: chatDisplayName,
+                    avatar: chatAvatar,
+                    image: e.target.result,
+                    timestamp: Date.now()
                 };
                 if (mensajeRespondiendoSala) {
                     msgData.replyTo = mensajeRespondiendoSala;
@@ -4102,7 +4162,7 @@
                 }
                 db.ref(`salas_privadas_mensajes/${salaActual}`).push(msgData);
                 cancelarRespuestaSala();
-                mostrarNotificacion('📷 Imagen enviada', 'success');
+                mostrarNotificacion('📷 Imagen enviada a sala', 'success');
                 event.target.value = '';
             };
             reader.readAsDataURL(file);
@@ -4120,8 +4180,10 @@
 
             if (chatDisplayName) {
                 db.ref(`salas_privadas_mensajes/${salaActual}`).push({
-                    userId: 'system', userName: 'Sistema', avatar: '🤖',
-                    text: `🚪 ${chatDisplayName} ha salido.`,
+                    userId: 'system',
+                    userName: 'Sistema',
+                    avatar: '🤖',
+                    text: `🚪 ${chatDisplayName} ha salido de la sala.`,
                     timestamp: Date.now()
                 });
             }
@@ -4132,7 +4194,7 @@
             document.getElementById('salaPrivadaCard').style.display = 'none';
             document.getElementById('salaReplyPreview').style.display = 'none';
             mensajeRespondiendoSala = null;
-            mostrarNotificacion('🚪 Has salido de la sala', 'info');
+            mostrarNotificacion('🚪 Has salido de la sala privada', 'info');
         }
 
         function cancelarRespuestaSala() {
@@ -4208,7 +4270,8 @@
 
             try {
                 await db.ref(`notas/${currentUser.uid}`).set({
-                    content: content, updated: Date.now()
+                    content: content,
+                    updated: Date.now()
                 });
                 actualizarEstadoNota(true);
                 actualizarFechaNota();
@@ -4284,6 +4347,7 @@
             document.getElementById('btnPiedra').disabled = true;
             document.getElementById('btnPapel').disabled = true;
             document.getElementById('btnTijera').disabled = true;
+
             document.getElementById('jugadorEmoji').textContent = '⏳';
 
             setTimeout(() => {
@@ -4323,6 +4387,7 @@
 
                 document.getElementById('juegoResultado').textContent = resultado;
                 document.getElementById('juegoResultado').className = `juego-resultado ${resultadoClass}`;
+
                 document.getElementById('juegoVictorias').textContent = totalVictorias;
                 document.getElementById('statVictorias').textContent = totalVictorias;
                 document.getElementById('statDerrotas').textContent = totalDerrotas;
@@ -4332,6 +4397,7 @@
                 document.getElementById('btnPiedra').disabled = false;
                 document.getElementById('btnPapel').disabled = false;
                 document.getElementById('btnTijera').disabled = false;
+
             }, 500);
         }
 
@@ -4347,11 +4413,19 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
 
             const panelMap = {
-                'generator': 'panel-generator', 'live': 'panel-live', 'massive': 'panel-massive',
-                'pasarela': 'panel-pasarela', 'direcciones': 'panel-direcciones', 'chat': 'panel-chat',
-                'sala': 'panel-sala', 'notas': 'panel-notas', 'juego': 'panel-juego',
-                'admins': 'panel-admins', 'registros': 'panel-registros',
-                'solicitudes': 'panel-solicitudes', 'credits': 'panel-credits'
+                'generator': 'panel-generator',
+                'live': 'panel-live',
+                'massive': 'panel-massive',
+                'pasarela': 'panel-pasarela',
+                'direcciones': 'panel-direcciones',
+                'chat': 'panel-chat',
+                'sala': 'panel-sala',
+                'notas': 'panel-notas',
+                'juego': 'panel-juego',
+                'admins': 'panel-admins',
+                'registros': 'panel-registros',
+                'solicitudes': 'panel-solicitudes',
+                'credits': 'panel-credits'
             };
             const panel = document.getElementById(panelMap[tabName]);
             if (panel) panel.classList.add('active');
@@ -4416,9 +4490,9 @@
         // ================================================================
         // INICIALIZACIÓN
         // ================================================================
-        console.log('🦜 PERICO VERDE - VERSIÓN COMPLETA CON IMAGEN NÍTIDA');
+        console.log('🦜 PERICO VERDE - VERSIÓN COMPLETA CRISTAL');
         console.log('🔐 Admin:', ADMIN_EMAIL);
-        console.log('✅ Imagen de fondo visible');
+        console.log('✅ Todas las funciones activas');
 
         cargarPromo();
         seleccionarPasarela('stripe');
